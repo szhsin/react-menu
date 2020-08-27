@@ -1,0 +1,15 @@
+@use 'sass:color';
+
+$font-size: 1rem !default;
+
+$color: #212529 !default;
+
+$border-color: color.change($color, $alpha: 0.5) !default;
+
+$background-color: #fff !default;
+
+$background-color-hover: color.scale($background-color, $lightness: -8%) !default;
+
+$background-color-active: color.scale($background-color-hover, $lightness: -10%) !default;
+
+$font-weight: 400;

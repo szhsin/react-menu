@@ -6,9 +6,21 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  height: 2000px;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+button {
+  margin: 2rem;
+  color: green;
+}
+
+.container {
+  position: absolute;
+  left: 100px;
+  top: 200px;
 }

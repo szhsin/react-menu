@@ -1,1 +1,2 @@
-export { default } from './components/Menu'
+export * from './components/Menu'
+export * from './components/MenuItem'
