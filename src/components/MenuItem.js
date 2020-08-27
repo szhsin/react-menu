@@ -1,8 +1,12 @@
 import React from 'react';
 import './styles/index.scss';
+import { bem, menuClass, menuItemClass } from '../utils';
 
 export const MenuItem = (props) => {
     return (
-        <li className="rc-menu__item" role="menuitem">{props.children}</li>
+        <li className={bem(menuClass, menuItemClass)}
+            role="menuitem">
+            {props.children}
+        </li>
     );
 }

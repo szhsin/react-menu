@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useRef, useEffect } from 'react';
 import './styles/index.scss';
-import { classSet } from '../utils';
+import { bem, menuContainerClass, menuClass } from '../utils';
 
 export const Menu = (props) => {
     const [position, setPosition] = useState({ x: 0, y: 0 });
@@ -30,13 +30,13 @@ export const Menu = (props) => {
     }
 
     return (
-        <div className={classSet({'rc-menu-container': true, 'rc-menu-container--open': isOpen})} 
-        role="presentation" ref={containerRef}>
+        <div className={bem(menuContainerClass, null, ['open', isOpen])}
+            role="presentation" ref={containerRef}>
             {props.renderButton &&
                 props.renderButton({ onClick: handleMenuButtonClick }, buttonRef)}
 
             {isOpen &&
-                <ul className="rc-menu" role="menu" tabIndex="0" ref={menuRef}
+                <ul className={bem(menuClass)} role="menu" tabIndex="0" ref={menuRef}
                     onBlur={handleBlur}
                     style={{
                         left: position.x,
@@ -48,12 +48,4 @@ export const Menu = (props) => {
     );
 }
 
-export const MenuButton = React.memo(React.forwardRef((props, ref) => {
-    console.log('render MenuButton');
-    return (
-        <button ref={ref} className="rc-menu-button"
-            onClick={props.onClick} >
-            {props.children}
-        </button>
-    );
-}));
+
