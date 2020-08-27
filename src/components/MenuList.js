@@ -12,10 +12,24 @@ export const MenuList = ({ isOpen, containerRef, anchorRef, children, direction,
             menuRef.current.focus();
             const containerRect = containerRef.current.getBoundingClientRect();
             const anchorRect = anchorRef.current.getBoundingClientRect();
-            setPosition({
-                x: anchorRect.left - containerRect.left,
-                y: anchorRect.top + anchorRect.height - containerRect.top
-            });
+
+            let newPosition;
+            switch (direction) {
+                case 'inline-end':
+                    newPosition = {
+                        x: anchorRect.right - containerRect.left,
+                        y: anchorRect.top - containerRect.top
+                    };
+                    break;
+
+                case 'block-end':
+                default:
+                    newPosition = {
+                        x: anchorRect.left - containerRect.left,
+                        y: anchorRect.bottom - containerRect.top
+                    };
+            }
+            setPosition(newPosition);
         }
     }, [isOpen]);
 

@@ -30,6 +30,10 @@
         padding: .6rem 1.5rem;
         @include mixins.background-color;
     }
+
+    &__submenu--open {
+        position: relative;
+    }
 }
 
 .rc-menu-button {

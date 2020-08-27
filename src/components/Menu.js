@@ -1,7 +1,7 @@
-import React, { useState, useCallback, useRef, useLayoutEffect } from 'react';
+import React, { useState, useCallback, useRef } from 'react';
 import './styles/index.scss';
-import { MenuList } from './MenuList'
 import { bem, menuContainerClass } from '../utils';
+import { MenuList } from './MenuList'
 
 export const Menu = (props) => {
     const [isOpen, setIsOpen] = useState(false);
@@ -13,10 +13,10 @@ export const Menu = (props) => {
         setIsOpen(o => !o);
     }, []);
 
-    function handleBlur(e) {
-        setIsOpen(false);
+    const handleBlur = useCallback(e => {
+        // setIsOpen(false);
         // buttonRef.current.focus();
-    }
+    }, []);
 
     return (
         <div className={bem(menuContainerClass, null, ['open', isOpen])}

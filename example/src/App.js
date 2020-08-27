@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Menu, MenuItem, MenuButton } from '@szhsin/react-menu'
+import { Menu, MenuItem, MenuButton, SubMenu } from '@szhsin/react-menu'
 import '@szhsin/react-menu/dist/index.css'
 
 const App = () => {
@@ -11,7 +11,15 @@ const App = () => {
       <Menu renderButton={(props, ref) => <MenuButton {...props} ref={ref}>Open menu</MenuButton>}>
         <MenuItem>item 1</MenuItem>
         <MenuItem>item 2</MenuItem>
-        <MenuItem>item 3</MenuItem>
+        <SubMenu label="item 3">
+          <MenuItem>item 3.1</MenuItem>
+          <SubMenu label="item 3.2">
+            <MenuItem>item 3.2.1</MenuItem>
+            <MenuItem>item 3.2.2</MenuItem>
+            <MenuItem>item 3.2.3</MenuItem>
+          </SubMenu>
+          <MenuItem>item 3.3</MenuItem>
+        </SubMenu>
         <MenuItem>item 4</MenuItem>
       </Menu>
 
