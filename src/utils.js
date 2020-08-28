@@ -1,8 +1,12 @@
+import React from 'react';
+
 export const menuContainerClass = 'rc-menu-container';
 export const menuClass = 'rc-menu';
 export const menuButtonClass = 'rc-menu-button';
 export const menuItemClass = 'item';
 export const subMenuClass = 'submenu';
+
+export const ActiveContext = React.createContext(0);
 
 export const classSet = (classes) => {
     let className = '';
@@ -14,7 +18,7 @@ export const classSet = (classes) => {
 }
 
 export const bem = (block, element, ...modifiers) => {
-    let blockElement = element ? `${block}__${element}`: block;
+    let blockElement = element ? `${block}__${element}` : block;
     let className = blockElement;
     for (const [name, value] of modifiers) {
         if (value) {

@@ -1,11 +1,35 @@
-import React, { useState, useLayoutEffect, useRef } from 'react';
+import React, { useState, useLayoutEffect, useRef, useMemo } from 'react';
 import './styles/index.scss';
-import { bem, menuClass } from '../utils';
+import { bem, menuClass, ActiveContext } from '../utils';
+
 
 export const MenuList = ({ isOpen, containerRef, anchorRef, children, direction, onBlur, onMouseLeave }) => {
 
     const [position, setPosition] = useState({ x: 0, y: 0 });
+    const [active, setActive] = useState(0);
     const menuRef = useRef(null);
+
+    const menuItems = useMemo(() => {
+        console.log(`MenuList re-create children ${isOpen}`);
+        return isOpen && React.Children.map(children, (child, index) =>
+            React.cloneElement(child, { index })
+        )
+    }, [children, isOpen]);
+
+    function handleKeyDown(e) {
+        const childrenCount = React.Children.count(children);
+        switch (e.key) {
+            case 'ArrowUp':
+                setActive(a => Math.max(0, a - 1));
+                break;
+            case 'ArrowDown':
+                setActive(a => Math.min(childrenCount - 1, a + 1));
+                break;
+        }
+
+        e.preventDefault();
+        e.stopPropagation();
+    }
 
     useLayoutEffect(() => {
         if (isOpen) {
@@ -38,11 +62,14 @@ export const MenuList = ({ isOpen, containerRef, anchorRef, children, direction,
             {isOpen && <ul className={bem(menuClass)} role="menu" tabIndex="-1" ref={menuRef}
                 onBlur={onBlur}
                 onMouseLeave={onMouseLeave}
+                onKeyDown={handleKeyDown}
                 style={{
                     left: position.x,
                     top: position.y
                 }}>
-                {children}
+                <ActiveContext.Provider value={active}>
+                    {menuItems}
+                </ActiveContext.Provider>
             </ul>}
         </React.Fragment>
     );

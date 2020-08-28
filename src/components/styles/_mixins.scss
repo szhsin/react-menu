@@ -8,7 +8,7 @@
 
 @mixin background-color {
     background-color: var.$background-color;
-    &:hover {
+    &:hover, &--active {
         background-color: var.$background-color-hover;
     }
     &:active {

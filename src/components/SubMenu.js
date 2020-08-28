@@ -1,9 +1,9 @@
-import React, { useState, useCallback, useRef } from 'react';
+import React, { useState, useCallback, useRef, useContext } from 'react';
 import './styles/index.scss';
-import { bem, menuClass, subMenuClass, menuItemClass } from '../utils';
+import { bem, menuClass, subMenuClass, menuItemClass, ActiveContext } from '../utils';
 import { MenuList } from './MenuList'
 
-export const SubMenu = (props) => {
+export const SubMenu = ({label, index, children}) => {
     const [isOpen, setIsOpen] = useState(false);
     const containerRef = useRef(null);
 
@@ -12,16 +12,18 @@ export const SubMenu = (props) => {
             || !containerRef.current.contains(e.relatedTarget)) {
             setIsOpen(false);
         }
-    });
+    }, []);
+
+    const active = useContext(ActiveContext);
 
     return (
         <li className={bem(menuClass, subMenuClass, ['open', isOpen])}
             role="presentation" ref={containerRef}>
-            <div className={bem(menuClass, menuItemClass)}
+            <div className={bem(menuClass, menuItemClass, ['active', active === index])}
                 role="menuitem" aria-haspopup="true" aria-expanded="false"
                 onMouseEnter={e => setIsOpen(true)}
                 onMouseLeave={handleMouseLeave}>
-                {props.label}
+                {label}
             </div>
 
             <MenuList
@@ -30,7 +32,7 @@ export const SubMenu = (props) => {
                 anchorRef={containerRef}
                 direction="inline-end"
                 onMouseLeave={handleMouseLeave}>
-                {props.children}
+                {children}
             </MenuList>
         </li>
     );

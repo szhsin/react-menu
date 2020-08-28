@@ -3,7 +3,7 @@
 
 .rc-menu-container {
     position: static;
-    
+
     &--open {
         position: relative;
         z-index: 100;
@@ -19,7 +19,7 @@
     box-shadow: rgba(0, 0, 0, 0.133) 0px 3.2px 7.2px 0px, rgba(0, 0, 0, 0.11) 0px 0.6px 1.8px 0px;
     position: absolute;
     min-width: 10rem;
-    padding: .5rem 0;
+    padding: 0.5rem 0;
 
     &:focus {
         outline: none;
@@ -27,12 +27,14 @@
 
     &__item {
         font-weight: var.$font-weight;
-        padding: .6rem 1.5rem;
+        padding: 0.6rem 1.5rem;
         @include mixins.background-color;
     }
 
-    &__submenu--open {
-        position: relative;
+    &__submenu {
+        &--open {
+            position: relative;
+        }
     }
 }
 
@@ -42,7 +44,7 @@
     font-weight: var.$font-weight;
     color: var.$color;
     line-height: 1.5;
-    padding: .375rem .75rem;
+    padding: 0.375rem 0.75rem;
     border: 1px solid var.$border-color;
     border-radius: 0.25rem;
     @include mixins.background-color;
