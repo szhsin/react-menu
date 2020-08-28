@@ -8,7 +8,7 @@ const App = () => {
     <div className="container">
       <div><input /></div>
 
-      <Menu renderButton={(props, ref) => <MenuButton {...props} ref={ref}>Open menu</MenuButton>}>
+      <Menu menuButton={<MenuButton>Open menu</MenuButton>}>
         <MenuItem>item 1</MenuItem>
         <MenuItem>item 2</MenuItem>
         <SubMenu label="item 3">
@@ -25,7 +25,7 @@ const App = () => {
 
       <div><input /></div>
 
-      <Menu renderButton={(props, ref) => <button {...props} ref={ref}>Customisable button</button>}>
+      <Menu menuButton={<button>Customisable button</button>}>
         <MenuItem>item 1</MenuItem>
         <MenuItem>item 2</MenuItem>
         <MenuItem>item 3</MenuItem>

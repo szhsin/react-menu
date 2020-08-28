@@ -2,7 +2,7 @@ import React, { useState, useLayoutEffect, useRef } from 'react';
 import './styles/index.scss';
 import { bem, menuClass } from '../utils';
 
-export const MenuList = ({ isOpen, containerRef, anchorRef, children, direction, onBlur }) => {
+export const MenuList = ({ isOpen, containerRef, anchorRef, children, direction, onBlur, onMouseLeave }) => {
 
     const [position, setPosition] = useState({ x: 0, y: 0 });
     const menuRef = useRef(null);
@@ -31,12 +31,13 @@ export const MenuList = ({ isOpen, containerRef, anchorRef, children, direction,
             }
             setPosition(newPosition);
         }
-    }, [isOpen]);
+    }, [isOpen, containerRef, anchorRef, direction]);
 
     return (
         <React.Fragment>
-            {isOpen && <ul className={bem(menuClass)} role="menu" tabIndex="0" ref={menuRef}
+            {isOpen && <ul className={bem(menuClass)} role="menu" tabIndex="-1" ref={menuRef}
                 onBlur={onBlur}
+                onMouseLeave={onMouseLeave}
                 style={{
                     left: position.x,
                     top: position.y

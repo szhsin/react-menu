@@ -7,20 +7,20 @@ export const SubMenu = (props) => {
     const [isOpen, setIsOpen] = useState(false);
     const containerRef = useRef(null);
 
-    const handleSubMenuClick = useCallback(e => {
-        setIsOpen(o => !o);
-    }, []);
-
-    const handleBlur = useCallback(e => {
-        // setIsOpen(false);
-        // buttonRef.current.focus();
-    }, []);
+    const handleMouseLeave = useCallback(e => {
+        if (!(e.relatedTarget instanceof Node)
+            || !containerRef.current.contains(e.relatedTarget)) {
+            setIsOpen(false);
+        }
+    });
 
     return (
-        <li className={bem(menuClass, subMenuClass, ['open', isOpen])} role="presentation" ref={containerRef}>
+        <li className={bem(menuClass, subMenuClass, ['open', isOpen])}
+            role="presentation" ref={containerRef}>
             <div className={bem(menuClass, menuItemClass)}
                 role="menuitem" aria-haspopup="true" aria-expanded="false"
-                onClick={handleSubMenuClick}>
+                onMouseEnter={e => setIsOpen(true)}
+                onMouseLeave={handleMouseLeave}>
                 {props.label}
             </div>
 
@@ -29,7 +29,7 @@ export const SubMenu = (props) => {
                 containerRef={containerRef}
                 anchorRef={containerRef}
                 direction="inline-end"
-                onBlur={handleBlur}>
+                onMouseLeave={handleMouseLeave}>
                 {props.children}
             </MenuList>
         </li>

@@ -1,9 +1,9 @@
-import React, { useState, useCallback, useRef } from 'react';
+import React, { useState, useCallback, useRef, useMemo } from 'react';
 import './styles/index.scss';
 import { bem, menuContainerClass } from '../utils';
 import { MenuList } from './MenuList'
 
-export const Menu = (props) => {
+export const Menu = ({ menuButton, children }) => {
     const [isOpen, setIsOpen] = useState(false);
 
     const containerRef = useRef(null);
@@ -14,19 +14,24 @@ export const Menu = (props) => {
     }, []);
 
     const handleBlur = useCallback(e => {
-        // setIsOpen(false);
+        if (!containerRef.current.contains(e.relatedTarget)) setIsOpen(false);
         // buttonRef.current.focus();
     }, []);
+
+    const button = useMemo(() => (
+        menuButton &&
+        React.cloneElement(menuButton,
+            { ref: buttonRef, onClick: handleMenuButtonClick })
+    ), [menuButton, handleMenuButtonClick]);
 
     return (
         <div className={bem(menuContainerClass, null, ['open', isOpen])}
             role="presentation" ref={containerRef}>
-            {props.renderButton &&
-                props.renderButton({ onClick: handleMenuButtonClick }, buttonRef)}
+            {button}
 
             <MenuList isOpen={isOpen} containerRef={containerRef}
                 anchorRef={buttonRef} onBlur={handleBlur}>
-                {props.children}
+                {children}
             </MenuList>
         </div>
     );
