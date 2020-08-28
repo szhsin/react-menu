@@ -3,7 +3,7 @@ import './styles/index.scss';
 import { bem, menuClass, subMenuClass, menuItemClass, ActiveContext } from '../utils';
 import { MenuList } from './MenuList'
 
-export const SubMenu = ({label, index, children}) => {
+export const SubMenu = React.memo(({ label, index, children, onMouseEnter }) => {
     const [isOpen, setIsOpen] = useState(false);
     const containerRef = useRef(null);
 
@@ -14,14 +14,18 @@ export const SubMenu = ({label, index, children}) => {
         }
     }, []);
 
-    const active = useContext(ActiveContext);
+    const handleMouseEnter = e => {
+        setIsOpen(true);
+        onMouseEnter(index, e);
+    }
 
     return (
         <li className={bem(menuClass, subMenuClass, ['open', isOpen])}
             role="presentation" ref={containerRef}>
-            <div className={bem(menuClass, menuItemClass, ['active', active === index])}
+            <div className={bem(menuClass, menuItemClass,
+                ['active', useContext(ActiveContext) === index])}
                 role="menuitem" aria-haspopup="true" aria-expanded="false"
-                onMouseEnter={e => setIsOpen(true)}
+                onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}>
                 {label}
             </div>
@@ -36,4 +40,4 @@ export const SubMenu = ({label, index, children}) => {
             </MenuList>
         </li>
     );
-}
+});

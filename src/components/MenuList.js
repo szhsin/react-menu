@@ -3,16 +3,21 @@ import './styles/index.scss';
 import { bem, menuClass, ActiveContext } from '../utils';
 
 
-export const MenuList = ({ isOpen, containerRef, anchorRef, children, direction, onBlur, onMouseLeave }) => {
+export const MenuList = React.memo(({ isOpen, containerRef, anchorRef, children,
+    direction, onBlur, onMouseLeave }) => {
 
     const [position, setPosition] = useState({ x: 0, y: 0 });
     const [active, setActive] = useState(0);
     const menuRef = useRef(null);
 
+    const handleMouseEnter = (index) => {
+        setActive(index);
+    }
+
     const menuItems = useMemo(() => {
         console.log(`MenuList re-create children ${isOpen}`);
         return isOpen && React.Children.map(children, (child, index) =>
-            React.cloneElement(child, { index })
+            React.cloneElement(child, { index, onMouseEnter: handleMouseEnter })
         )
     }, [children, isOpen]);
 
@@ -73,4 +78,4 @@ export const MenuList = ({ isOpen, containerRef, anchorRef, children, direction,
             </ul>}
         </React.Fragment>
     );
-}
+});

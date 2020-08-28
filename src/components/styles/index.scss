@@ -28,7 +28,10 @@
     &__item {
         font-weight: var.$font-weight;
         padding: 0.6rem 1.5rem;
-        @include mixins.background-color;
+        background-color: var.$background-color;
+        &--active {
+            background-color: var.$background-color-hover;
+        }
     }
 
     &__submenu {
@@ -47,5 +50,11 @@
     padding: 0.375rem 0.75rem;
     border: 1px solid var.$border-color;
     border-radius: 0.25rem;
-    @include mixins.background-color;
+    background-color: var.$background-color;
+    &:hover {
+        background-color: var.$background-color-hover;
+    }
+    &:active {
+        background-color: var.$background-color-active;
+    }
 }
