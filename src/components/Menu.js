@@ -13,9 +13,9 @@ export const Menu = ({ menuButton, children }) => {
         setIsOpen(o => !o);
     }, []);
 
-    const handleClose = useCallback(e => {
+    const handleClose = useCallback(restoreFocus => {
         setIsOpen(false);
-        // buttonRef.current.focus();
+        if (restoreFocus) buttonRef.current.focus();
     }, []);
 
     const button = useMemo(() => (

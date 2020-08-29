@@ -2,7 +2,7 @@ import React, { useState, useCallback, useRef, useContext, useEffect } from 'rea
 import './styles/index.scss';
 import {
     bem, menuClass, subMenuClass, menuItemClass,
-    ActiveIndexContext, KeyEventContext
+    ActiveIndexContext, KeyEventContext, keyCodes
 } from '../utils';
 import { MenuList } from './MenuList'
 
@@ -11,9 +11,9 @@ export const SubMenu = React.memo(({ label, index, children, onMouseEnter, onClo
     const containerRef = useRef(null);
     const timeoutId = useRef();
 
-    const closeMenu = useCallback(() => {
+    const closeMenu = useCallback((restoreFocus) => {
         setIsOpen(false);
-        onClose();
+        onClose(restoreFocus);
     }, [onClose]);
 
     const handleMouseEnter = e => {
@@ -32,10 +32,13 @@ export const SubMenu = React.memo(({ label, index, children, onMouseEnter, onClo
     const keyEvent = useContext(KeyEventContext);
 
     useEffect(() => {
-        if (keyEvent.key === 'ArrowRight' && isActive) {
+        if (isActive
+            && (keyEvent.keyCode === keyCodes.SPACE
+                || keyEvent.keyCode === keyCodes.RETURN
+                || keyEvent.keyCode === keyCodes.RIGHT)) {
             setIsOpen(true);
         } else if (!isActive) {
-            closeMenu();
+            closeMenu(true);
         }
     }, [keyEvent, isActive, closeMenu]);
 

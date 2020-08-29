@@ -32,7 +32,6 @@
     }
 
     &__submenu {
-        @include mixins.remove-focus;
         &--open {
             position: relative;
         }
