@@ -23,11 +23,6 @@ export const SubMenu = React.memo(({ label, index, children, onMouseEnter }) => 
 
     const handleMouseLeave = useCallback(e => {
         clearTimeout(timeoutId.current);
-
-        if (!(e.relatedTarget instanceof Node)
-            || !containerRef.current.contains(e.relatedTarget)) {
-            closeMenu();
-        }
     }, []);
 
     const handleKeyDown = e => {
@@ -59,6 +54,8 @@ export const SubMenu = React.memo(({ label, index, children, onMouseEnter }) => 
     useLayoutEffect(() => {
         if (isActive) {
             containerRef.current.focus();
+        } else {
+            closeMenu();
         }
     }, [isActive]);
 
@@ -78,8 +75,7 @@ export const SubMenu = React.memo(({ label, index, children, onMouseEnter }) => 
                 isOpen={isOpen}
                 containerRef={containerRef}
                 anchorRef={containerRef}
-                direction="inline-end"
-                onMouseLeave={handleMouseLeave}>
+                direction="inline-end">
                 {children}
             </MenuList>
         </li>

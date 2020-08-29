@@ -4,7 +4,7 @@ import { bem, menuClass, ActiveIndexContext } from '../utils';
 
 
 export const MenuList = React.memo(({ isOpen, containerRef, anchorRef, children,
-    direction, onBlur, onMouseLeave }) => {
+    direction, onBlur }) => {
 
     const [position, setPosition] = useState({ x: 0, y: 0 });
     const [activeIndex, setActiveIndex] = useState(-1);
@@ -24,7 +24,7 @@ export const MenuList = React.memo(({ isOpen, containerRef, anchorRef, children,
     function handleKeyDown(e) {
         const childrenCount = React.Children.count(children);
         let handled = false;
-        
+
         switch (e.key) {
             case 'ArrowUp':
                 setActiveIndex(i => {
@@ -80,18 +80,18 @@ export const MenuList = React.memo(({ isOpen, containerRef, anchorRef, children,
 
     return (
         <React.Fragment>
-            {isOpen && <ul className={bem(menuClass)} role="menu" tabIndex="-1" ref={menuRef}
-                onBlur={onBlur}
-                onMouseLeave={onMouseLeave}
-                onKeyDown={handleKeyDown}
-                style={{
-                    left: position.x,
-                    top: position.y
-                }}>
-                <ActiveIndexContext.Provider value={activeIndex}>
-                    {menuItems}
-                </ActiveIndexContext.Provider>
-            </ul>}
+            {isOpen &&
+                <ul className={bem(menuClass)} role="menu" tabIndex="-1" ref={menuRef}
+                    onBlur={onBlur}
+                    onKeyDown={handleKeyDown}
+                    style={{
+                        left: position.x,
+                        top: position.y
+                    }}>
+                    <ActiveIndexContext.Provider value={activeIndex}>
+                        {menuItems}
+                    </ActiveIndexContext.Provider>
+                </ul>}
         </React.Fragment>
     );
 });
