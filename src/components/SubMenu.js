@@ -1,69 +1,48 @@
-import React, { useState, useCallback, useRef, useContext, useLayoutEffect } from 'react';
+import React, { useState, useCallback, useRef, useContext, useEffect } from 'react';
 import './styles/index.scss';
-import { bem, menuClass, subMenuClass, menuItemClass, ActiveIndexContext } from '../utils';
+import {
+    bem, menuClass, subMenuClass, menuItemClass,
+    ActiveIndexContext, KeyEventContext
+} from '../utils';
 import { MenuList } from './MenuList'
 
-export const SubMenu = React.memo(({ label, index, children, onMouseEnter }) => {
+export const SubMenu = React.memo(({ label, index, children, onMouseEnter, onClose }) => {
     const [isOpen, setIsOpen] = useState(false);
     const containerRef = useRef(null);
     const timeoutId = useRef();
 
-    const closeMenu = () => {
+    const closeMenu = useCallback(() => {
         setIsOpen(false);
-        containerRef.current.focus();
-    }
+        onClose();
+    }, [onClose]);
 
     const handleMouseEnter = e => {
         onMouseEnter(index, e);
-        
+
         timeoutId.current = setTimeout(() => {
             setIsOpen(true);
         }, 300);
     }
 
-    const handleMouseLeave = useCallback(e => {
+    const handleMouseLeave = e => {
         clearTimeout(timeoutId.current);
-    }, []);
-
-    const handleKeyDown = e => {
-        let handled = false;
-
-        switch (e.key) {
-            case 'ArrowLeft':
-                if (isOpen) {
-                    closeMenu();
-                    handled = true;
-                }
-                break;
-            case 'ArrowRight':
-                if (isActive) {
-                    setIsOpen(true);
-                    handled = true;
-                }
-                break;
-        }
-
-        if (handled) {
-            e.preventDefault();
-            e.stopPropagation();
-        }
-    }
+    };
 
     const isActive = useContext(ActiveIndexContext) === index;
+    const keyEvent = useContext(KeyEventContext);
 
-    useLayoutEffect(() => {
-        if (isActive) {
-            containerRef.current.focus();
-        } else {
+    useEffect(() => {
+        if (keyEvent.key === 'ArrowRight' && isActive) {
+            setIsOpen(true);
+        } else if (!isActive) {
             closeMenu();
         }
-    }, [isActive]);
+    }, [keyEvent, isActive, closeMenu]);
 
     return (
         <li className={bem(menuClass, subMenuClass, ['open', isOpen])}
-            role="presentation" ref={containerRef}
-            onKeyDown={handleKeyDown}
-            tabIndex="-1">
+            role="presentation" ref={containerRef}>
+
             <div className={bem(menuClass, menuItemClass, ['active', isActive])}
                 role="menuitem" aria-haspopup="true" aria-expanded={isOpen}
                 onMouseEnter={handleMouseEnter}
@@ -75,7 +54,8 @@ export const SubMenu = React.memo(({ label, index, children, onMouseEnter }) => 
                 isOpen={isOpen}
                 containerRef={containerRef}
                 anchorRef={containerRef}
-                direction="inline-end">
+                direction="inline-end"
+                onClose={closeMenu}>
                 {children}
             </MenuList>
         </li>

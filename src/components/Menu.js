@@ -13,8 +13,8 @@ export const Menu = ({ menuButton, children }) => {
         setIsOpen(o => !o);
     }, []);
 
-    const handleBlur = useCallback(e => {
-        if (!containerRef.current.contains(e.relatedTarget)) setIsOpen(false);
+    const handleClose = useCallback(e => {
+        setIsOpen(false);
         // buttonRef.current.focus();
     }, []);
 
@@ -30,7 +30,7 @@ export const Menu = ({ menuButton, children }) => {
             {button}
 
             <MenuList isOpen={isOpen} containerRef={containerRef}
-                anchorRef={buttonRef} onBlur={handleBlur}>
+                anchorRef={buttonRef} onClose={handleClose}>
                 {children}
             </MenuList>
         </div>
