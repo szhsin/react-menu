@@ -5,3 +5,9 @@
     padding: 0;
     list-style: none;
 }
+
+@mixin remove-focus {
+    &:focus {
+        outline: none;
+    }
+}

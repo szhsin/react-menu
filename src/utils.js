@@ -6,7 +6,7 @@ export const menuButtonClass = 'rc-menu-button';
 export const menuItemClass = 'item';
 export const subMenuClass = 'submenu';
 
-export const ActiveContext = React.createContext(0);
+export const ActiveIndexContext = React.createContext(0);
 
 export const classSet = (classes) => {
     let className = '';

@@ -1,21 +1,21 @@
 import React, { useState, useLayoutEffect, useRef, useMemo } from 'react';
 import './styles/index.scss';
-import { bem, menuClass, ActiveContext } from '../utils';
+import { bem, menuClass, ActiveIndexContext } from '../utils';
 
 
 export const MenuList = React.memo(({ isOpen, containerRef, anchorRef, children,
     direction, onBlur, onMouseLeave }) => {
 
     const [position, setPosition] = useState({ x: 0, y: 0 });
-    const [active, setActive] = useState(0);
+    const [activeIndex, setActiveIndex] = useState(-1);
     const menuRef = useRef(null);
 
     const handleMouseEnter = (index) => {
-        setActive(index);
+        setActiveIndex(index);
     }
 
     const menuItems = useMemo(() => {
-        console.log(`MenuList re-create children ${isOpen}`);
+        // console.log(`MenuList re-create children ${isOpen}`);
         return isOpen && React.Children.map(children, (child, index) =>
             React.cloneElement(child, { index, onMouseEnter: handleMouseEnter })
         )
@@ -23,17 +23,31 @@ export const MenuList = React.memo(({ isOpen, containerRef, anchorRef, children,
 
     function handleKeyDown(e) {
         const childrenCount = React.Children.count(children);
+        let handled = false;
+        
         switch (e.key) {
             case 'ArrowUp':
-                setActive(a => Math.max(0, a - 1));
+                setActiveIndex(i => {
+                    i--;
+                    if (i < 0) i = childrenCount - 1;
+                    return i;
+                });
+                handled = true;
                 break;
             case 'ArrowDown':
-                setActive(a => Math.min(childrenCount - 1, a + 1));
+                setActiveIndex(i => {
+                    i++;
+                    if (i >= childrenCount) i = 0;
+                    return i;
+                });
+                handled = true;
                 break;
         }
 
-        e.preventDefault();
-        e.stopPropagation();
+        if (handled) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
     }
 
     useLayoutEffect(() => {
@@ -59,6 +73,8 @@ export const MenuList = React.memo(({ isOpen, containerRef, anchorRef, children,
                     };
             }
             setPosition(newPosition);
+        } else {
+            setActiveIndex(-1);
         }
     }, [isOpen, containerRef, anchorRef, direction]);
 
@@ -72,9 +88,9 @@ export const MenuList = React.memo(({ isOpen, containerRef, anchorRef, children,
                     left: position.x,
                     top: position.y
                 }}>
-                <ActiveContext.Provider value={active}>
+                <ActiveIndexContext.Provider value={activeIndex}>
                     {menuItems}
-                </ActiveContext.Provider>
+                </ActiveIndexContext.Provider>
             </ul>}
         </React.Fragment>
     );
