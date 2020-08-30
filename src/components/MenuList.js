@@ -1,31 +1,29 @@
 import React, { useState, useLayoutEffect, useRef, useMemo } from 'react';
 import './styles/index.scss';
-import { bem, menuClass, ActiveIndexContext, KeyEventContext, keyCodes } from '../utils';
+import { bem, menuClass, ActiveIndexContext, keyCodes } from '../utils';
 
 
-export const MenuList = React.memo(({ isOpen, containerRef, anchorRef, children,
-    direction, onClose }) => {
+export const MenuList = React.memo(({
+    isOpen,
+    containerRef, 
+    anchorRef, 
+    children,
+    direction }) => {
 
     const [position, setPosition] = useState({ x: 0, y: 0 });
     const [activeIndex, setActiveIndex] = useState(-1);
-    const [keyEvent, setKeyEvent] = useState({ keyCode: '' });
     const menuRef = useRef(null);
 
     const handleMouseEnter = (index) => {
         setActiveIndex(index);
     }
 
-    const handleSubMenuClose = (restoreFocus) => {
-        restoreFocus && menuRef.current && menuRef.current.focus();
-    }
-
     const menuItems = useMemo(() => {
-        isOpen && console.log(`MenuList re-create children`);
+        // isOpen && console.log(`MenuList re-create children`);
         return isOpen && React.Children.map(children, (child, index) => {
             return React.cloneElement(child, {
                 index,
-                onMouseEnter: handleMouseEnter,
-                onClose: handleSubMenuClose
+                onMouseEnter: handleMouseEnter
             })
         });
     }, [children, isOpen]);
@@ -52,35 +50,10 @@ export const MenuList = React.memo(({ isOpen, containerRef, anchorRef, children,
                 });
                 handled = true;
                 break;
-
-            case keyCodes.LEFT:
-            case keyCodes.ESC:
-                // notify parent submenu, which close its menu list 
-                // and notify its parent menu list to re-set focus
-                onClose && onClose(true);
-
-                if (e.keyCode === keyCodes.LEFT) handled = true;
-                break;
-
-            case keyCodes.SPACE:
-            case keyCodes.RETURN:
-            case keyCodes.RIGHT:
-                handled = true;
-                break;
         }
 
         if (handled) {
-            // pass down a new object to trigger re-render submenu even if key code hasn't changed
-            setKeyEvent({ keyCode: e.keyCode });
             e.preventDefault();
-            e.stopPropagation();
-        }
-    }
-
-    const handleBlur = e => {
-        if (!menuRef.current.contains(e.relatedTarget)) {
-            onClose && onClose(false);
-        } else {
             e.stopPropagation();
         }
     }
@@ -117,16 +90,13 @@ export const MenuList = React.memo(({ isOpen, containerRef, anchorRef, children,
         <React.Fragment>
             {isOpen &&
                 <ul className={bem(menuClass)} role="menu" tabIndex="-1" ref={menuRef}
-                    onBlur={handleBlur}
                     onKeyDown={handleKeyDown}
                     style={{
                         left: position.x,
                         top: position.y
                     }}>
                     <ActiveIndexContext.Provider value={activeIndex}>
-                        <KeyEventContext.Provider value={keyEvent}>
-                            {menuItems}
-                        </KeyEventContext.Provider>
+                        {menuItems}
                     </ActiveIndexContext.Provider>
                 </ul>}
         </React.Fragment>

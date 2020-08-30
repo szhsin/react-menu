@@ -6,11 +6,11 @@ import '@szhsin/react-menu/dist/index.css'
 const App = () => {
   return (
     <div className="container">
-      <div><input /></div>
+      <div><textarea rows="5" /></div>
 
       <Menu menuButton={<MenuButton>Open menu</MenuButton>}>
         <MenuItem>item 1</MenuItem>
-        <MenuItem>item 2</MenuItem>
+        <MenuItem onClick={e => console.log('item 2 clicked')}>item 2</MenuItem>
         <SubMenu label="item 3">
           <MenuItem>item 3.1</MenuItem>
           <SubMenu label="item 3.2">
@@ -30,6 +30,8 @@ const App = () => {
         <MenuItem>item 2</MenuItem>
         <MenuItem>item 3</MenuItem>
       </Menu>
+
+      <button onClick={e => console.log('Button clicked')}>Click me</button>
 
     </div>
   );

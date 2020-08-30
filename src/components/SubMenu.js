@@ -2,19 +2,21 @@ import React, { useState, useCallback, useRef, useContext, useEffect } from 'rea
 import './styles/index.scss';
 import {
     bem, menuClass, subMenuClass, menuItemClass,
-    ActiveIndexContext, KeyEventContext, keyCodes
+    ActiveIndexContext, keyCodes
 } from '../utils';
 import { MenuList } from './MenuList'
 
-export const SubMenu = React.memo(({ label, index, children, onMouseEnter, onClose }) => {
+
+export const SubMenu = React.memo(({ label, index, children, onMouseEnter }) => {
     const [isOpen, setIsOpen] = useState(false);
     const containerRef = useRef(null);
+    const itemRef = useRef(null);
     const timeoutId = useRef();
 
     const closeMenu = useCallback((restoreFocus) => {
         setIsOpen(false);
-        onClose(restoreFocus);
-    }, [onClose]);
+        if (restoreFocus) itemRef.current.focus();
+    }, []);
 
     const handleMouseEnter = e => {
         onMouseEnter(index, e);
@@ -28,37 +30,71 @@ export const SubMenu = React.memo(({ label, index, children, onMouseEnter, onClo
         clearTimeout(timeoutId.current);
     };
 
+    const handleClick = e => {
+        setIsOpen(o => !o);
+        e.stopPropagation();
+    }
+
+    const handleKeyDown = e => {
+        let handled = false;
+
+        switch (e.keyCode) {
+            // For both LEFT and ESC keys,
+            // notify parent submenu, which close its menu list 
+            // and notify its parent menu list to re-set focus
+            case keyCodes.LEFT:
+                if (isOpen) {
+                    closeMenu(true);
+                    handled = true;
+                }
+                break;
+
+            case keyCodes.SPACE:
+            case keyCodes.RETURN:
+            case keyCodes.RIGHT:
+                setIsOpen(true);
+                handled = true;
+                break;
+        }
+
+        if (handled) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+    }
+
     const isActive = useContext(ActiveIndexContext) === index;
-    const keyEvent = useContext(KeyEventContext);
 
     useEffect(() => {
-        if (isActive
-            && (keyEvent.keyCode === keyCodes.SPACE
-                || keyEvent.keyCode === keyCodes.RETURN
-                || keyEvent.keyCode === keyCodes.RIGHT)) {
-            setIsOpen(true);
-        } else if (!isActive) {
-            closeMenu(true);
+        if (isActive) {
+            itemRef.current.focus();
+        } else {
+            closeMenu(false);
         }
-    }, [keyEvent, isActive, closeMenu]);
+    }, [isActive, closeMenu]);
+
+    // console.log(`render Submenu: ${label}`)
 
     return (
         <li className={bem(menuClass, subMenuClass, ['open', isOpen])}
-            role="presentation" ref={containerRef}>
+            role="presentation" ref={containerRef}
+            onKeyDown={handleKeyDown}>
 
             <div className={bem(menuClass, menuItemClass, ['active', isActive])}
                 role="menuitem" aria-haspopup="true" aria-expanded={isOpen}
+                tabIndex={isActive && !isOpen ? 0 : -1}
+                ref={itemRef}
                 onMouseEnter={handleMouseEnter}
-                onMouseLeave={handleMouseLeave}>
+                onMouseLeave={handleMouseLeave}
+                onClick={handleClick}>
                 {label}
             </div>
 
             <MenuList
                 isOpen={isOpen}
                 containerRef={containerRef}
-                anchorRef={containerRef}
-                direction="inline-end"
-                onClose={closeMenu}>
+                anchorRef={itemRef}
+                direction="inline-end">
                 {children}
             </MenuList>
         </li>

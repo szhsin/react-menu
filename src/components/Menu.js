@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useRef, useMemo } from 'react';
 import './styles/index.scss';
-import { bem, menuContainerClass } from '../utils';
+import { bem, menuContainerClass, keyCodes } from '../utils';
 import { MenuList } from './MenuList'
 
 export const Menu = ({ menuButton, children }) => {
@@ -13,10 +13,20 @@ export const Menu = ({ menuButton, children }) => {
         setIsOpen(o => !o);
     }, []);
 
-    const handleClose = useCallback(restoreFocus => {
-        setIsOpen(false);
-        if (restoreFocus) buttonRef.current.focus();
-    }, []);
+    const handleKeyDown = e => {
+        switch (e.keyCode) {
+            case keyCodes.ESC:
+                setIsOpen(false);
+                buttonRef.current.focus();
+                break;
+        }
+    }
+
+    const handleBlur = e => {
+        if (!containerRef.current.contains(e.relatedTarget)) {
+            setIsOpen(false);
+        }
+    }
 
     const button = useMemo(() => (
         menuButton &&
@@ -26,11 +36,13 @@ export const Menu = ({ menuButton, children }) => {
 
     return (
         <div className={bem(menuContainerClass, null, ['open', isOpen])}
-            role="presentation" ref={containerRef}>
+            role="presentation" ref={containerRef}
+            onKeyDown={handleKeyDown}
+            onBlur={handleBlur}>
             {button}
 
             <MenuList isOpen={isOpen} containerRef={containerRef}
-                anchorRef={buttonRef} onClose={handleClose}>
+                anchorRef={buttonRef}>
                 {children}
             </MenuList>
         </div>

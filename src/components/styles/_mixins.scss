@@ -8,6 +8,6 @@
 
 @mixin remove-focus {
     &:focus {
-        outline: none;
+        // outline: none;
     }
 }

@@ -23,6 +23,7 @@
     padding: 0.5rem 0;
 
     &__item {
+        @include mixins.remove-focus;
         font-weight: var.$font-weight;
         padding: 0.6rem 1.5rem;
         background-color: var.$background-color;
