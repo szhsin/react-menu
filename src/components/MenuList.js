@@ -5,8 +5,8 @@ import { bem, menuClass, ActiveIndexContext, keyCodes } from '../utils';
 
 export const MenuList = React.memo(({
     isOpen,
-    containerRef, 
-    anchorRef, 
+    containerRef,
+    anchorRef,
     children,
     direction }) => {
 
@@ -49,6 +49,12 @@ export const MenuList = React.memo(({
                     return i;
                 });
                 handled = true;
+                break;
+
+            // prevent browser from scrolling the page when pressing SPACE or RETURN
+            case keyCodes.SPACE:
+            case keyCodes.RETURN:
+                if (e.currentTarget.contains(e.target)) e.preventDefault();
                 break;
         }
 

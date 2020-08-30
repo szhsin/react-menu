@@ -7,7 +7,7 @@ export const menuItemClass = 'item';
 export const subMenuClass = 'submenu';
 
 export const ActiveIndexContext = React.createContext(-1);
-export const KeyEventContext = React.createContext({ keyCode: '' });
+export const EventHandlersContext = React.createContext({});
 
 export const keyCodes = Object.freeze({
     'RETURN': 13,

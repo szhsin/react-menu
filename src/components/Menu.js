@@ -1,9 +1,9 @@
 import React, { useState, useCallback, useRef, useMemo } from 'react';
 import './styles/index.scss';
-import { bem, menuContainerClass, keyCodes } from '../utils';
+import { bem, menuContainerClass, keyCodes, EventHandlersContext } from '../utils';
 import { MenuList } from './MenuList'
 
-export const Menu = ({ menuButton, children }) => {
+export const Menu = React.memo(({ menuButton, children, onClick }) => {
     const [isOpen, setIsOpen] = useState(false);
 
     const containerRef = useRef(null);
@@ -12,6 +12,20 @@ export const Menu = ({ menuButton, children }) => {
     const handleMenuButtonClick = useCallback(e => {
         setIsOpen(o => !o);
     }, []);
+
+    const button = useMemo(() => (
+        menuButton &&
+        React.cloneElement(menuButton,
+            { ref: buttonRef, onClick: handleMenuButtonClick })
+    ), [menuButton, handleMenuButtonClick]);
+
+    const eventHandlers = useMemo(() => ({
+        handleClick(eventValue, isStopPropagation, isKeyEvent) {
+            if (!isStopPropagation) onClick && onClick(eventValue);
+            setIsOpen(false);
+            if (isKeyEvent) buttonRef.current.focus();
+        }
+    }), [onClick]);
 
     const handleKeyDown = e => {
         switch (e.keyCode) {
@@ -28,12 +42,6 @@ export const Menu = ({ menuButton, children }) => {
         }
     }
 
-    const button = useMemo(() => (
-        menuButton &&
-        React.cloneElement(menuButton,
-            { ref: buttonRef, onClick: handleMenuButtonClick })
-    ), [menuButton, handleMenuButtonClick]);
-
     return (
         <div className={bem(menuContainerClass, null, ['open', isOpen])}
             role="presentation" ref={containerRef}
@@ -41,12 +49,12 @@ export const Menu = ({ menuButton, children }) => {
             onBlur={handleBlur}>
             {button}
 
-            <MenuList isOpen={isOpen} containerRef={containerRef}
-                anchorRef={buttonRef}>
-                {children}
-            </MenuList>
+            <EventHandlersContext.Provider value={eventHandlers}>
+                <MenuList isOpen={isOpen} containerRef={containerRef}
+                    anchorRef={buttonRef}>
+                    {children}
+                </MenuList>
+            </EventHandlersContext.Provider>
         </div>
     );
-}
-
-
+});

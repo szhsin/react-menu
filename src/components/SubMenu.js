@@ -39,9 +39,6 @@ export const SubMenu = React.memo(({ label, index, children, onMouseEnter }) => 
         let handled = false;
 
         switch (e.keyCode) {
-            // For both LEFT and ESC keys,
-            // notify parent submenu, which close its menu list 
-            // and notify its parent menu list to re-set focus
             case keyCodes.LEFT:
                 if (isOpen) {
                     closeMenu(true);
@@ -52,8 +49,10 @@ export const SubMenu = React.memo(({ label, index, children, onMouseEnter }) => 
             case keyCodes.SPACE:
             case keyCodes.RETURN:
             case keyCodes.RIGHT:
-                setIsOpen(true);
-                handled = true;
+                if (!isOpen) {
+                    setIsOpen(true);
+                    handled = true;
+                }
                 break;
         }
 
