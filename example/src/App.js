@@ -1,11 +1,14 @@
-import React from 'react'
+import React, { useState } from 'react'
 
-import { Menu, MenuItem, MenuButton, SubMenu } from '@szhsin/react-menu'
+import { Menu, MenuItem, SubMenu, MenuButton } from '@szhsin/react-menu'
 import '@szhsin/react-menu/dist/index.css'
 
 const App = () => {
+  const [count, setCount] = useState(0);
+
   return (
     <div className="container">
+      <button onClick={() => setCount(c => c + 1)}>count: {count}</button>
       <div><textarea rows="5" /></div>
 
       <Menu menuButton={<MenuButton>Open menu</MenuButton>}
@@ -38,9 +41,7 @@ const App = () => {
       <div><input /></div>
 
       <Menu menuButton={<button>Customisable button</button>}>
-        <MenuItem>item 1</MenuItem>
-        <MenuItem>item 2</MenuItem>
-        <MenuItem>item 3</MenuItem>
+        {[1, 2, 3, 4].map(i => <MenuItem key={i}>{`Item ${i}`}</MenuItem>)}
       </Menu>
 
       <button onClick={e => console.log('Button clicked')}>Click me</button>

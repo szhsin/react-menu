@@ -1,17 +1,23 @@
-import React, { useState, useCallback, useRef, useMemo } from 'react';
+import React, { useCallback, useRef, useMemo, useEffect } from 'react';
 import './styles/index.scss';
-import { bem, menuContainerClass, keyCodes, EventHandlersContext } from '../utils';
+import {
+    bem, menuContainerClass, keyCodes, EventHandlersContext,
+    useMenuState
+} from '../utils';
 import { MenuList } from './MenuList'
 
-export const Menu = React.memo(({ menuButton, children, onClick }) => {
-    const [isOpen, setIsOpen] = useState(false);
 
+export const Menu = React.memo(({ menuButton, children, onClick }) => {
+
+    // console.log(`Menu render`);
+    const { isMounted, isOpen, closeMenu, toggleMenu } = useMenuState();
     const containerRef = useRef(null);
     const buttonRef = useRef(null);
 
     const handleMenuButtonClick = useCallback(e => {
-        setIsOpen(o => !o);
-    }, []);
+        // console.log(e.detail);
+        toggleMenu();
+    }, [toggleMenu]);
 
     const button = useMemo(() => (
         menuButton &&
@@ -21,16 +27,16 @@ export const Menu = React.memo(({ menuButton, children, onClick }) => {
 
     const eventHandlers = useMemo(() => ({
         handleClick(eventValue, isStopPropagation, isKeyEvent) {
-            if (!isStopPropagation) onClick && onClick(eventValue);
-            setIsOpen(false);
+            closeMenu();
             if (isKeyEvent) buttonRef.current.focus();
+            if (!isStopPropagation) onClick && onClick(eventValue);
         }
-    }), [onClick]);
+    }), [onClick, closeMenu]);
 
     const handleKeyDown = e => {
         switch (e.keyCode) {
             case keyCodes.ESC:
-                setIsOpen(false);
+                closeMenu();
                 buttonRef.current.focus();
                 break;
         }
@@ -38,7 +44,7 @@ export const Menu = React.memo(({ menuButton, children, onClick }) => {
 
     const handleBlur = e => {
         if (!containerRef.current.contains(e.relatedTarget)) {
-            setIsOpen(false);
+            closeMenu();
         }
     }
 
@@ -50,7 +56,10 @@ export const Menu = React.memo(({ menuButton, children, onClick }) => {
             {button}
 
             <EventHandlersContext.Provider value={eventHandlers}>
-                <MenuList isOpen={isOpen} containerRef={containerRef}
+                <MenuList
+                    isMounted={isMounted}
+                    isOpen={isOpen}
+                    containerRef={containerRef}
                     anchorRef={buttonRef}>
                     {children}
                 </MenuList>

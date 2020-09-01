@@ -13,6 +13,7 @@
 .rc-menu {
     @include mixins.reset-list;
     @include mixins.remove-focus;
+    display: none;
     font-size: var.$font-size;
     color: var.$color;
     background-color: var.$background-color;
@@ -21,6 +22,10 @@
     position: absolute;
     min-width: 10rem;
     padding: 0.5rem 0;
+
+    &--open {
+        display: block;
+    }
 
     &__item {
         @include mixins.remove-focus;

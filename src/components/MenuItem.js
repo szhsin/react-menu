@@ -7,7 +7,7 @@ import {
 
 
 export const MenuItem = React.memo(({ index, children, onMouseEnter, eventValue, onClick }) => {
-    // console.log(`render MenuItem: ${index}`)
+    // console.log(`render MenuItem: ${children}`)
 
     const itemRef = useRef(null);
     const isActive = useContext(ActiveIndexContext) === index;

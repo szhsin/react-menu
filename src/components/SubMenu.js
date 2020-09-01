@@ -1,28 +1,24 @@
-import React, { useState, useCallback, useRef, useContext, useEffect } from 'react';
+import React, { useRef, useContext, useEffect } from 'react';
 import './styles/index.scss';
 import {
     bem, menuClass, subMenuClass, menuItemClass,
-    ActiveIndexContext, keyCodes
+    ActiveIndexContext, keyCodes, useMenuState
 } from '../utils';
 import { MenuList } from './MenuList'
 
 
 export const SubMenu = React.memo(({ label, index, children, onMouseEnter }) => {
-    const [isOpen, setIsOpen] = useState(false);
+
+    const { isMounted, isOpen, openMenu, closeMenu, toggleMenu } = useMenuState();
     const containerRef = useRef(null);
     const itemRef = useRef(null);
     const timeoutId = useRef();
-
-    const closeMenu = useCallback((restoreFocus) => {
-        setIsOpen(false);
-        if (restoreFocus) itemRef.current.focus();
-    }, []);
 
     const handleMouseEnter = e => {
         onMouseEnter(index, e);
 
         timeoutId.current = setTimeout(() => {
-            setIsOpen(true);
+            openMenu();
         }, 300);
     }
 
@@ -31,8 +27,7 @@ export const SubMenu = React.memo(({ label, index, children, onMouseEnter }) => 
     };
 
     const handleClick = e => {
-        setIsOpen(o => !o);
-        e.stopPropagation();
+        toggleMenu();
     }
 
     const handleKeyDown = e => {
@@ -41,7 +36,8 @@ export const SubMenu = React.memo(({ label, index, children, onMouseEnter }) => 
         switch (e.keyCode) {
             case keyCodes.LEFT:
                 if (isOpen) {
-                    closeMenu(true);
+                    closeMenu();
+                    itemRef.current.focus();
                     handled = true;
                 }
                 break;
@@ -50,7 +46,7 @@ export const SubMenu = React.memo(({ label, index, children, onMouseEnter }) => 
             case keyCodes.RETURN:
             case keyCodes.RIGHT:
                 if (!isOpen) {
-                    setIsOpen(true);
+                    openMenu();
                     handled = true;
                 }
                 break;
@@ -64,15 +60,15 @@ export const SubMenu = React.memo(({ label, index, children, onMouseEnter }) => 
 
     const isActive = useContext(ActiveIndexContext) === index;
 
+    // console.log(`Submenu render: ${label}`)
+
     useEffect(() => {
         if (isActive) {
             itemRef.current.focus();
         } else {
-            closeMenu(false);
+            closeMenu();
         }
     }, [isActive, closeMenu]);
-
-    // console.log(`render Submenu: ${label}`)
 
     return (
         <li className={bem(menuClass, subMenuClass, ['open', isOpen])}
@@ -80,7 +76,9 @@ export const SubMenu = React.memo(({ label, index, children, onMouseEnter }) => 
             onKeyDown={handleKeyDown}>
 
             <div className={bem(menuClass, menuItemClass, ['active', isActive])}
-                role="menuitem" aria-haspopup="true" aria-expanded={isOpen}
+                role="menuitem"
+                aria-haspopup="true"
+                aria-expanded={isOpen}
                 tabIndex={isActive && !isOpen ? 0 : -1}
                 ref={itemRef}
                 onMouseEnter={handleMouseEnter}
@@ -90,6 +88,7 @@ export const SubMenu = React.memo(({ label, index, children, onMouseEnter }) => 
             </div>
 
             <MenuList
+                isMounted={isMounted}
                 isOpen={isOpen}
                 containerRef={containerRef}
                 anchorRef={itemRef}

@@ -1,32 +1,35 @@
-import React, { useState, useLayoutEffect, useRef, useMemo } from 'react';
+import React, { useState, useLayoutEffect, useRef, useMemo, useCallback } from 'react';
 import './styles/index.scss';
 import { bem, menuClass, ActiveIndexContext, keyCodes } from '../utils';
 
 
 export const MenuList = React.memo(({
     isOpen,
+    isMounted,
     containerRef,
     anchorRef,
     children,
     direction }) => {
 
+    // console.log(`MenuList render`);
     const [position, setPosition] = useState({ x: 0, y: 0 });
     const [activeIndex, setActiveIndex] = useState(-1);
     const menuRef = useRef(null);
 
-    const handleMouseEnter = (index) => {
+    const handleMouseEnter = useCallback((index) => {
         setActiveIndex(index);
-    }
+    }, []);
 
     const menuItems = useMemo(() => {
-        // isOpen && console.log(`MenuList re-create children`);
-        return isOpen && React.Children.map(children, (child, index) => {
-            return React.cloneElement(child, {
-                index,
-                onMouseEnter: handleMouseEnter
-            })
-        });
-    }, [children, isOpen]);
+        // isMounted && console.log(`MenuList re-create children`);
+        return isMounted
+            && React.Children.map(children, (child, index) => {
+                return React.cloneElement(child, {
+                    index,
+                    onMouseEnter: handleMouseEnter
+                })
+            });
+    }, [isMounted, children, handleMouseEnter]);
 
     const handleKeyDown = e => {
         const childrenCount = React.Children.count(children);
@@ -94,8 +97,9 @@ export const MenuList = React.memo(({
 
     return (
         <React.Fragment>
-            {isOpen &&
-                <ul className={bem(menuClass)} role="menu" tabIndex="-1" ref={menuRef}
+            {isMounted &&
+                <ul className={bem(menuClass, null, ['open', isOpen])}
+                    role="menu" tabIndex="-1" ref={menuRef}
                     onKeyDown={handleKeyDown}
                     style={{
                         left: position.x,
