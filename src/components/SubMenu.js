@@ -1,4 +1,4 @@
-import React, { useRef, useContext, useEffect } from 'react';
+import React, { useState, useRef, useContext, useEffect } from 'react';
 import './styles/index.scss';
 import {
     bem, menuClass, subMenuClass, menuItemClass,
@@ -10,6 +10,7 @@ import { MenuList } from './MenuList'
 export const SubMenu = React.memo(({ label, index, children, onMouseEnter }) => {
 
     const { isMounted, isOpen, openMenu, closeMenu, toggleMenu } = useMenuState();
+    const [isKeyboardEvent, setIsKeyboardEvent] = useState(false);
     const containerRef = useRef(null);
     const itemRef = useRef(null);
     const timeoutId = useRef();
@@ -18,6 +19,7 @@ export const SubMenu = React.memo(({ label, index, children, onMouseEnter }) => 
         onMouseEnter(index, e);
 
         timeoutId.current = setTimeout(() => {
+            setIsKeyboardEvent(false);
             openMenu();
         }, 300);
     }
@@ -27,6 +29,7 @@ export const SubMenu = React.memo(({ label, index, children, onMouseEnter }) => 
     };
 
     const handleClick = e => {
+        setIsKeyboardEvent(false);
         toggleMenu();
     }
 
@@ -46,6 +49,7 @@ export const SubMenu = React.memo(({ label, index, children, onMouseEnter }) => 
             case keyCodes.RETURN:
             case keyCodes.RIGHT:
                 if (!isOpen) {
+                    setIsKeyboardEvent(true);
                     openMenu();
                     handled = true;
                 }
@@ -90,6 +94,7 @@ export const SubMenu = React.memo(({ label, index, children, onMouseEnter }) => 
             <MenuList
                 isMounted={isMounted}
                 isOpen={isOpen}
+                isKeyboardEvent={isKeyboardEvent}
                 containerRef={containerRef}
                 anchorRef={itemRef}
                 direction="inline-end">

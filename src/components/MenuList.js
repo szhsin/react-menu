@@ -6,6 +6,7 @@ import { bem, menuClass, ActiveIndexContext, keyCodes } from '../utils';
 export const MenuList = React.memo(({
     isOpen,
     isMounted,
+    isKeyboardEvent,
     containerRef,
     anchorRef,
     children,
@@ -90,6 +91,7 @@ export const MenuList = React.memo(({
                     };
             }
             setPosition(newPosition);
+            if (isKeyboardEvent) setActiveIndex(0);
         } else {
             setActiveIndex(-1);
         }

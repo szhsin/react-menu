@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useMemo, useEffect } from 'react';
+import React, { useCallback, useRef, useMemo, useState } from 'react';
 import './styles/index.scss';
 import {
     bem, menuContainerClass, keyCodes, EventHandlersContext,
@@ -11,11 +11,12 @@ export const Menu = React.memo(({ menuButton, children, onClick }) => {
 
     // console.log(`Menu render`);
     const { isMounted, isOpen, closeMenu, toggleMenu } = useMenuState();
+    const [isKeyboardEvent, setIsKeyboardEvent] = useState(false);
     const containerRef = useRef(null);
     const buttonRef = useRef(null);
 
     const handleMenuButtonClick = useCallback(e => {
-        // console.log(e.detail);
+        setIsKeyboardEvent(e.detail === 0);
         toggleMenu();
     }, [toggleMenu]);
 
@@ -59,6 +60,7 @@ export const Menu = React.memo(({ menuButton, children, onClick }) => {
                 <MenuList
                     isMounted={isMounted}
                     isOpen={isOpen}
+                    isKeyboardEvent={isKeyboardEvent}
                     containerRef={containerRef}
                     anchorRef={buttonRef}>
                     {children}
