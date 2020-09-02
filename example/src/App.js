@@ -8,16 +8,17 @@ const App = () => {
   const [checkBoxs, setCheckBoxs] = useState([true, false]);
 
   const handleMenuClick = (e) => {
-    switch (e.key) {
+    switch (e.value) {
       case 'check1':
-        setCheckBoxs(c => [e.value.checked, c[1]]);
+        setCheckBoxs(c => [e.checked, c[1]]);
         break;
 
       case 'check2':
-        setCheckBoxs(c => [c[0], e.value.checked]);
+        setCheckBoxs(c => [c[0], e.checked]);
         break;
 
       default:
+        console.log(e.value);
         break;
     }
   }
@@ -35,24 +36,24 @@ const App = () => {
           <MenuItem>item 3.1</MenuItem>
           <SubMenu label="item 3.2">
             <MenuItem
-              eventValue="foo"
+              value="foo"
               onClick={e => console.log(`item 3.2.1 clicked: ${e}`)}>
               item 3.2.1
             </MenuItem>
             <MenuItem
-              eventValue="bar"
+              value="bar"
               onClick={e => {
                 console.log(`item 3.2.2 clicked: ${e}`);
                 return false;
               }}>
               item 3.2.2
             </MenuItem>
-            <MenuItem eventValue={323}>item 3.2.3</MenuItem>
+            <MenuItem value={323}>item 3.2.3</MenuItem>
           </SubMenu>
           <MenuItem>item 3.3</MenuItem>
         </SubMenu>
-        <MenuItem type="checkbox" eventKey={'check1'} checked={checkBoxs[0]}>Bold</MenuItem>
-        <MenuItem type="checkbox" eventKey={'check2'} checked={checkBoxs[1]}>Italic</MenuItem>
+        <MenuItem type="checkbox" value={'check1'} checked={checkBoxs[0]}>Bold</MenuItem>
+        <MenuItem type="checkbox" value={'check2'} checked={checkBoxs[1]}>Italic</MenuItem>
         <MenuItem type="radio" checked={true}>item 4</MenuItem>
       </Menu>
 
