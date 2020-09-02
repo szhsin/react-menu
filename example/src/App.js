@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-import { Menu, MenuItem, SubMenu, MenuButton } from '@szhsin/react-menu'
+import { Menu, MenuItem, SubMenu, MenuButton, MenuRadioGroup } from '@szhsin/react-menu'
 import '@szhsin/react-menu/dist/index.css'
 
 const App = () => {
@@ -60,6 +60,11 @@ const App = () => {
 
       <Menu menuButton={<button>Customisable button</button>}>
         {[1, 2, 3, 4].map(i => <MenuItem key={i}>{`Item ${i}`}</MenuItem>)}
+        <MenuRadioGroup>
+          <MenuItem checked={true}>radio 1</MenuItem>
+          <MenuItem >radio 2</MenuItem>
+        </MenuRadioGroup>
+        <MenuItem>item 5</MenuItem>
       </Menu>
 
       <button onClick={e => console.log('Button clicked')}>Click me</button>

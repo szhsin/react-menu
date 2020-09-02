@@ -13,7 +13,7 @@ export const MenuItem = React.memo(({ type, checked, index, children, onMouseEnt
     const isActive = useContext(ActiveIndexContext) === index;
     const eventHandlers = useContext(EventHandlersContext);
 
-    const handleClick = (isKeyEvent) => {
+    const handleClick = (isKeyboardEvent) => {
         let isStopPropagation = false;
         const event = { key: eventKey };
         if (type === 'checkbox') {
@@ -24,7 +24,7 @@ export const MenuItem = React.memo(({ type, checked, index, children, onMouseEnt
             isStopPropagation = onClick(event) === false;
         }
 
-        eventHandlers.handleClick(event, isStopPropagation, isKeyEvent);
+        eventHandlers.handleClick(event, isStopPropagation, isKeyboardEvent);
     }
 
     const handleKeyDown = e => {

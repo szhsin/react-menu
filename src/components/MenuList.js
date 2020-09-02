@@ -1,6 +1,7 @@
 import React, { useState, useLayoutEffect, useRef, useMemo, useCallback } from 'react';
 import './styles/index.scss';
 import { bem, menuClass, ActiveIndexContext, keyCodes } from '../utils';
+import { MenuRadioGroup } from './MenuRadioGroup'
 
 
 export const MenuList = React.memo(({
@@ -16,6 +17,7 @@ export const MenuList = React.memo(({
     const [position, setPosition] = useState({ x: 0, y: 0 });
     const [activeIndex, setActiveIndex] = useState(-1);
     const menuRef = useRef(null);
+    const menuItemsCount = useRef(0);
 
     const handleMouseEnter = useCallback((index) => {
         setActiveIndex(index);
@@ -23,24 +25,34 @@ export const MenuList = React.memo(({
 
     const menuItems = useMemo(() => {
         // isMounted && console.log(`MenuList re-create children`);
-        return isMounted
-            && React.Children.map(children, (child, index) => {
-                return React.cloneElement(child, {
-                    index,
-                    onMouseEnter: handleMouseEnter
-                })
+        let index = 0;
+        const items = isMounted &&
+            React.Children.map(children, (child) => {
+                if (child.type === MenuRadioGroup) {
+                    const radioItems = React.Children.map(child.props.children,
+                        (radioItem) =>
+                            React.cloneElement(radioItem,
+                                { index: index++, onMouseEnter: handleMouseEnter, type: 'radio' })
+                    );
+
+                    return React.cloneElement(child, { children: radioItems });
+                } else {
+                    return React.cloneElement(child,
+                        { index: index++, onMouseEnter: handleMouseEnter });
+                }
             });
+        menuItemsCount.current = index;
+        return items;
     }, [isMounted, children, handleMouseEnter]);
 
     const handleKeyDown = e => {
-        const childrenCount = React.Children.count(children);
         let handled = false;
 
         switch (e.keyCode) {
             case keyCodes.UP:
                 setActiveIndex(i => {
                     i--;
-                    if (i < 0) i = childrenCount - 1;
+                    if (i < 0) i = menuItemsCount.current - 1;
                     return i;
                 });
                 handled = true;
@@ -49,7 +61,7 @@ export const MenuList = React.memo(({
             case keyCodes.DOWN:
                 setActiveIndex(i => {
                     i++;
-                    if (i >= childrenCount) i = 0;
+                    if (i >= menuItemsCount.current) i = 0;
                     return i;
                 });
                 handled = true;
@@ -95,7 +107,7 @@ export const MenuList = React.memo(({
         } else {
             setActiveIndex(-1);
         }
-    }, [isOpen, containerRef, anchorRef, direction]);
+    }, [isOpen, isKeyboardEvent, containerRef, anchorRef, direction]);
 
     return (
         <React.Fragment>
