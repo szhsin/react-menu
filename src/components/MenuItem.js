@@ -6,7 +6,7 @@ import {
 } from '../utils';
 
 
-export const MenuItem = React.memo(({ index, children, onMouseEnter, eventValue, onClick }) => {
+export const MenuItem = React.memo(({ type, checked, index, children, onMouseEnter, eventValue, onClick }) => {
     // console.log(`render MenuItem: ${children}`)
 
     const itemRef = useRef(null);
@@ -39,7 +39,10 @@ export const MenuItem = React.memo(({ index, children, onMouseEnter, eventValue,
     }, [isActive]);
 
     return (
-        <li className={bem(menuClass, menuItemClass, ['active', isActive])}
+        <li className={bem(menuClass, menuItemClass,
+            ['active', isActive],
+            ['type', type],
+            ['checked', checked])}
             role="menuitem"
             tabIndex={isActive ? 0 : -1}
             ref={itemRef}

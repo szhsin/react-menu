@@ -22,6 +22,7 @@
     position: absolute;
     min-width: 10rem;
     padding: 0.5rem 0;
+    width: max-content;
 
     &--open {
         display: block;
@@ -29,15 +30,39 @@
 
     &__item {
         @include mixins.remove-focus;
+        position: relative;
         font-weight: var.$font-weight;
         padding: 0.6rem 1.5rem;
         background-color: var.$background-color;
         &--active {
             background-color: var.$background-color-hover;
         }
+
+        &--type-radio#{&}--checked::before {
+            content: "\25cf";
+            position: absolute;
+            left: 0.45rem;
+            top: 0.7rem;
+            font-size: 0.75rem;
+        }
+
+        &--type-checkbox#{&}--checked::before {
+            content: "\2714";
+            position: absolute;
+            left: 0.45rem;
+        }
     }
 
     &__submenu {
+        > .rc-menu__item {
+            padding-right: 2.5rem;
+            &::after {
+                content: "\276f";
+                position: absolute;
+                right: 1rem;
+            }
+        }
+
         &--open {
             position: relative;
         }

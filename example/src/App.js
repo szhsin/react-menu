@@ -14,8 +14,8 @@ const App = () => {
       <Menu menuButton={<MenuButton>Open menu</MenuButton>}
         onClick={e => console.log(`menu clicked: ${e}`)}>
         <MenuItem>item 1</MenuItem>
-        <MenuItem >item 2</MenuItem>
-        <SubMenu label="item 3">
+        <MenuItem>item 2</MenuItem>
+        <SubMenu label="item 3 (A long item)">
           <MenuItem>item 3.1</MenuItem>
           <SubMenu label="item 3.2">
             <MenuItem
@@ -35,7 +35,8 @@ const App = () => {
           </SubMenu>
           <MenuItem>item 3.3</MenuItem>
         </SubMenu>
-        <MenuItem>item 4</MenuItem>
+        <MenuItem type="checkbox" checked>item 4</MenuItem>
+        <MenuItem type="radio" checked={true}>item 4</MenuItem>
       </Menu>
 
       <div><input /></div>
