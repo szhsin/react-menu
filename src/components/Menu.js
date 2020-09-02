@@ -27,10 +27,10 @@ export const Menu = React.memo(({ menuButton, children, onClick }) => {
     ), [menuButton, handleMenuButtonClick]);
 
     const eventHandlers = useMemo(() => ({
-        handleClick(eventValue, isStopPropagation, isKeyEvent) {
+        handleClick(event, isStopPropagation, isKeyEvent) {
             closeMenu();
             if (isKeyEvent) buttonRef.current.focus();
-            if (!isStopPropagation) onClick && onClick(eventValue);
+            if (!isStopPropagation) onClick && onClick(event);
         }
     }), [onClick, closeMenu]);
 

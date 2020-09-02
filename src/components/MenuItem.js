@@ -6,7 +6,7 @@ import {
 } from '../utils';
 
 
-export const MenuItem = React.memo(({ type, checked, index, children, onMouseEnter, eventValue, onClick }) => {
+export const MenuItem = React.memo(({ type, checked, index, children, onMouseEnter, eventKey, onClick }) => {
     // console.log(`render MenuItem: ${children}`)
 
     const itemRef = useRef(null);
@@ -15,12 +15,16 @@ export const MenuItem = React.memo(({ type, checked, index, children, onMouseEnt
 
     const handleClick = (isKeyEvent) => {
         let isStopPropagation = false;
-
-        if (onClick) {
-            isStopPropagation = onClick(eventValue) === false;
+        const event = { key: eventKey };
+        if (type === 'checkbox') {
+            event.value = { checked: !checked };
         }
 
-        eventHandlers.handleClick(eventValue, isStopPropagation, isKeyEvent);
+        if (onClick) {
+            isStopPropagation = onClick(event) === false;
+        }
+
+        eventHandlers.handleClick(event, isStopPropagation, isKeyEvent);
     }
 
     const handleKeyDown = e => {

@@ -5,6 +5,22 @@ import '@szhsin/react-menu/dist/index.css'
 
 const App = () => {
   const [count, setCount] = useState(0);
+  const [checkBoxs, setCheckBoxs] = useState([true, false]);
+
+  const handleMenuClick = (e) => {
+    switch (e.key) {
+      case 'check1':
+        setCheckBoxs(c => [e.value.checked, c[1]]);
+        break;
+
+      case 'check2':
+        setCheckBoxs(c => [c[0], e.value.checked]);
+        break;
+
+      default:
+        break;
+    }
+  }
 
   return (
     <div className="container">
@@ -12,7 +28,7 @@ const App = () => {
       <div><textarea rows="5" /></div>
 
       <Menu menuButton={<MenuButton>Open menu</MenuButton>}
-        onClick={e => console.log(`menu clicked: ${e}`)}>
+        onClick={handleMenuClick}>
         <MenuItem>item 1</MenuItem>
         <MenuItem>item 2</MenuItem>
         <SubMenu label="item 3 (A long item)">
@@ -35,7 +51,8 @@ const App = () => {
           </SubMenu>
           <MenuItem>item 3.3</MenuItem>
         </SubMenu>
-        <MenuItem type="checkbox" checked>item 4</MenuItem>
+        <MenuItem type="checkbox" eventKey={'check1'} checked={checkBoxs[0]}>Bold</MenuItem>
+        <MenuItem type="checkbox" eventKey={'check2'} checked={checkBoxs[1]}>Italic</MenuItem>
         <MenuItem type="radio" checked={true}>item 4</MenuItem>
       </Menu>
 
