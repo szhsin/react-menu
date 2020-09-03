@@ -2,7 +2,8 @@ import React, { useContext, useEffect, useRef } from 'react';
 import './styles/index.scss';
 import {
     bem, menuClass, menuItemClass,
-    ActiveIndexContext, EventHandlersContext, keyCodes
+    ActiveIndexContext, EventHandlersContext, RadioGroupContext,
+    keyCodes
 } from '../utils';
 
 
@@ -12,6 +13,7 @@ export const MenuItem = React.memo(({ type, checked, index, children, onMouseEnt
     const itemRef = useRef(null);
     const isActive = useContext(ActiveIndexContext) === index;
     const eventHandlers = useContext(EventHandlersContext);
+    const radioGroup = useContext(RadioGroupContext);
 
     const handleClick = (isKeyboardEvent) => {
         let isStopPropagation = false;
@@ -20,7 +22,10 @@ export const MenuItem = React.memo(({ type, checked, index, children, onMouseEnt
             event.checked = !checked;
         }
 
-        if (onClick) {
+        if (type === 'radio') {
+            isStopPropagation = true;
+            radioGroup.onChange && radioGroup.onChange(event);
+        } else if (onClick) {
             isStopPropagation = onClick(event) === false;
         }
 
@@ -46,7 +51,7 @@ export const MenuItem = React.memo(({ type, checked, index, children, onMouseEnt
         <li className={bem(menuClass, menuItemClass,
             ['active', isActive],
             ['type', type],
-            ['checked', checked])}
+            ['checked', type === 'radio' ? radioGroup.value === value : checked])}
             role="menuitem"
             tabIndex={isActive ? 0 : -1}
             ref={itemRef}

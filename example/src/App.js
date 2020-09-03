@@ -6,6 +6,7 @@ import '@szhsin/react-menu/dist/index.css'
 const App = () => {
   const [count, setCount] = useState(0);
   const [checkBoxs, setCheckBoxs] = useState([true, false]);
+  const [radioValue, setRadioValue] = useState(2);
 
   const handleMenuClick = (e) => {
     switch (e.value) {
@@ -22,6 +23,8 @@ const App = () => {
         break;
     }
   }
+
+
 
   return (
     <div className="container">
@@ -54,17 +57,18 @@ const App = () => {
         </SubMenu>
         <MenuItem type="checkbox" value={'check1'} checked={checkBoxs[0]}>Bold</MenuItem>
         <MenuItem type="checkbox" value={'check2'} checked={checkBoxs[1]}>Italic</MenuItem>
-        <MenuItem type="radio" checked={true}>item 4</MenuItem>
+        <MenuItem type="radi2o">item 4</MenuItem>
       </Menu>
 
       <div><input /></div>
 
-      <Menu menuButton={<button>Customisable button</button>}>
+      <Menu menuButton={<button>Customisable button</button>} onClick={handleMenuClick}>
         {[1, 2, 3, 4].map(i => <MenuItem key={i}>{`Item ${i}`}</MenuItem>)}
-        <MenuRadioGroup>
-          <MenuItem checked={true}>radio 1</MenuItem>
-          <MenuItem >radio 2</MenuItem>
-        </MenuRadioGroup>
+        <SubMenu label="font size">
+          <MenuRadioGroup value={radioValue} onChange={(e) => setRadioValue(e.value)}>
+            {[1, 2, 3].map(i => <MenuItem value={i} key={i} type="checkbox">{`Radio Item ${i}`}</MenuItem>)}
+          </MenuRadioGroup>
+        </SubMenu>
         <MenuItem>item 5</MenuItem>
       </Menu>
 

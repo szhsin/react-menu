@@ -5,9 +5,11 @@ export const menuClass = 'rc-menu';
 export const menuButtonClass = 'rc-menu-button';
 export const menuItemClass = 'item';
 export const subMenuClass = 'submenu';
+export const radioGroupClass = 'radio-group';
 
 export const ActiveIndexContext = React.createContext(-1);
 export const EventHandlersContext = React.createContext({});
+export const RadioGroupContext = React.createContext({});
 
 export const keyCodes = Object.freeze({
     'RETURN': 13,
@@ -80,7 +82,7 @@ const menuStateReducer = (state, { type, isPersistent }) => {
 }
 
 // Setting isPersistent as true will keep elements in DOM but hide them using CSS style when menu is closed
-export const useMenuState = (isPersistent = false) => {
+export const useMenuState = (isPersistent = true) => {
     const [menuState, dispatch] = useReducer(menuStateReducer, menuStates.UNMOUNTED);
 
     return {
