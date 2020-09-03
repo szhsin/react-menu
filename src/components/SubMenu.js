@@ -1,13 +1,13 @@
 import React, { useState, useRef, useContext, useEffect } from 'react';
 import './styles/index.scss';
 import {
-    bem, menuClass, subMenuClass, menuItemClass,
+    defineName, bem, menuClass, subMenuClass, menuItemClass,
     ActiveIndexContext, keyCodes, useMenuState
 } from '../utils';
 import { MenuList } from './MenuList'
 
 
-export const SubMenu = React.memo(({ label, disabled, index, children, onMouseEnter }) => {
+export const SubMenu = defineName(React.memo(({ label, disabled, index, children, onMouseEnter }) => {
 
     const { isMounted, isOpen, openMenu, closeMenu, toggleMenu } = useMenuState();
     const [isKeyboardEvent, setIsKeyboardEvent] = useState(false);
@@ -105,4 +105,4 @@ export const SubMenu = React.memo(({ label, disabled, index, children, onMouseEn
             </MenuList>
         </li>
     );
-});
+}), 'SubMenu');

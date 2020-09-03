@@ -1,13 +1,13 @@
 import React, { useContext, useEffect, useRef } from 'react';
 import './styles/index.scss';
 import {
-    bem, menuClass, menuItemClass,
+    defineName, bem, menuClass, menuItemClass,
     ActiveIndexContext, EventHandlersContext, RadioGroupContext,
     keyCodes
 } from '../utils';
 
 
-export const MenuItem = React.memo(({ type, checked, disabled, index,
+export const MenuItem = defineName(React.memo(({ type, checked, disabled, index,
     children, onMouseEnter, value, onClick }) => {
     // console.log(`render MenuItem: ${children}`)
 
@@ -70,4 +70,4 @@ export const MenuItem = React.memo(({ type, checked, disabled, index,
             {children}
         </li>
     );
-});
+}), 'MenuItem');

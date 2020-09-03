@@ -24,6 +24,9 @@ export const keyCodes = Object.freeze({
     'DOWN': 40
 });
 
+export const defineName = (component, name) =>
+    Object.defineProperty(component, '__name__', { value: name, writable: false });
+
 export const classSet = (classes) => {
     let className = '';
     for (const c of Object.keys(classes)) {

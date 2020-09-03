@@ -1,9 +1,9 @@
 import React, { useMemo } from 'react';
 import './styles/index.scss';
-import { bem, menuClass, radioGroupClass, RadioGroupContext } from '../utils';
+import { defineName, bem, menuClass, radioGroupClass, RadioGroupContext } from '../utils';
 
 
-export const MenuRadioGroup = React.memo(({ children, name, value, onChange }) => {
+export const MenuRadioGroup = defineName(React.memo(({ children, name, value, onChange }) => {
 
     const contextValue = useMemo(() => ({ value, onChange }), [value, onChange]);
 
@@ -18,6 +18,4 @@ export const MenuRadioGroup = React.memo(({ children, name, value, onChange }) =
             </ul>
         </li>
     );
-});
-
-MenuRadioGroup.__name__ = 'MenuRadioGroup';
+}), 'MenuRadioGroup');

@@ -1,9 +1,9 @@
 import React, { useState, useLayoutEffect, useRef, useMemo, useCallback } from 'react';
 import './styles/index.scss';
-import { bem, menuClass, ActiveIndexContext, keyCodes } from '../utils';
+import { defineName, bem, menuClass, ActiveIndexContext, keyCodes } from '../utils';
 
 
-export const MenuList = React.memo(({
+export const MenuList = defineName(React.memo(({
     isOpen,
     isMounted,
     isKeyboardEvent,
@@ -139,4 +139,4 @@ export const MenuList = React.memo(({
                 </ul>}
         </React.Fragment>
     );
-});
+}), 'MenuList');
