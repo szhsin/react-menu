@@ -23,38 +23,55 @@ export const MenuList = defineName(React.memo(({
     }, []);
 
     const menuItems = useMemo(() => {
-        // isMounted && console.log(`MenuList re-create children`);
+        if (!isMounted) return null;
+        // console.log(`MenuList re-create children`);
+
         let index = 0;
-        const items = isMounted &&
-            React.Children.map(children, (child) => {
+        const permittedChildren = ['MenuDivider', 'MenuItem', 'MenuRadioGroup', 'SubMenu'];
+        const validateChildren = (parent, child, permitted) => {
+            if (!permitted.includes(child.type && child.type.__name__)) {
+                console.warn(`${child.type || child} is ignored.\n`,
+                    `The permitted children inside a ${parent} are ${permitted.join(', ')}.`);
+                return false;
+            }
 
-                if (child.type.__name__ === 'MenuRadioGroup') {
-                    const props = { type: 'radio' };
-                    const radioItems = React.Children.map(child.props.children,
-                        (radioItem) =>
-                            radioItem.props.disabled
-                                ? React.cloneElement(radioItem, props)
-                                : React.cloneElement(radioItem, {
-                                    ...props,
-                                    index: index++,
-                                    onMouseEnter: handleMouseEnter
-                                })
-                    );
+            return true;
+        }
 
-                    return React.cloneElement(child, { children: radioItems });
-                } else {
-                    if (child.type.__name__ === 'MenuDivider') {
-                        return child;
-                    }
+        const items = React.Children.map(children, (child) => {
+            if (!validateChildren('Menu or SubMenu', child, permittedChildren)) return null;
 
-                    if (child.props.type === 'radio') {
-                        throw new Error('Radio menu items should be wrapped in a MenuRadioGroup component.');
-                    }
+            if (child.type.__name__ === 'MenuRadioGroup') {
+                const permittedChildren = ['MenuDivider', 'MenuItem'];
+                const props = { type: 'radio' };
+                
+                const radioItems = React.Children.map(child.props.children,
+                    (radioChild) => {
+                        if (!validateChildren('MenuRadioGroup', radioChild, permittedChildren)) return null;
 
-                    return child.props.disabled ? child : React.cloneElement(child,
-                        { index: index++, onMouseEnter: handleMouseEnter });
+                        return radioChild.props.disabled
+                            ? React.cloneElement(radioChild, props)
+                            : React.cloneElement(radioChild, {
+                                ...props,
+                                index: index++,
+                                onMouseEnter: handleMouseEnter
+                            })
+                    });
+
+                return React.cloneElement(child, { children: radioItems });
+            } else {
+                if (child.type.__name__ === 'MenuDivider') {
+                    return child;
                 }
-            });
+
+                if (child.props.type === 'radio') {
+                    throw new Error('Radio menu items should be wrapped in a MenuRadioGroup component.');
+                }
+
+                return child.props.disabled ? child : React.cloneElement(child,
+                    { index: index++, onMouseEnter: handleMouseEnter });
+            }
+        });
         menuItemsCount.current = index;
         return items;
     }, [isMounted, children, handleMouseEnter]);
