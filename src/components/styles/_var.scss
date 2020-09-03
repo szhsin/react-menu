@@ -6,6 +6,8 @@ $color: #212529 !default;
 
 $color-disabled: #aaa !default;
 
+$color-divider: rgba(0, 0, 0, 0.12) !default;
+
 $border-color: color.change($color, $alpha: 0.5) !default;
 
 $background-color: #fff !default;

@@ -78,6 +78,12 @@
     &__radio-group {
         @include mixins.reset-list;
     }
+
+    &__divider {
+        height: 1px;
+        margin: 0.5rem 0;
+        background-color: var.$color-divider;
+    }
 }
 
 .rc-menu-button {

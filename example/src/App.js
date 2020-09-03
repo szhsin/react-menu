@@ -1,6 +1,9 @@
 import React, { useState } from 'react'
 
-import { Menu, MenuItem, SubMenu, MenuButton, MenuRadioGroup } from '@szhsin/react-menu'
+import {
+  Menu, MenuItem, SubMenu, MenuButton,
+  MenuRadioGroup, MenuDivider
+} from '@szhsin/react-menu'
 import '@szhsin/react-menu/dist/index.css'
 
 const App = () => {
@@ -25,8 +28,6 @@ const App = () => {
     }
   }
 
-
-
   return (
     <div className="container">
       <button onClick={() => setCount(c => c + 1)}>count: {count}</button>
@@ -40,6 +41,7 @@ const App = () => {
         <MenuItem disabled>item (disabled)</MenuItem>
         <SubMenu label="item 3">
           <MenuItem disabled={disabled}>item 3.1</MenuItem>
+          <MenuDivider />
           <SubMenu label="item 3.2" disabled={disabled}>
             <MenuItem
               value="foo"
@@ -58,11 +60,13 @@ const App = () => {
           </SubMenu>
           <MenuItem>item 3.3</MenuItem>
         </SubMenu>
+        <MenuDivider />
         <MenuItem type="checkbox" value={'check1'} checked={checkBoxs[0]}>Bold</MenuItem>
         <MenuItem type="checkbox" value={'check2'}
           checked={checkBoxs[1]} disabled={disabled}>
           Italic
-          </MenuItem>
+        </MenuItem>
+        <MenuDivider />
         <MenuItem type="radi2o">item 4</MenuItem>
       </Menu>
 

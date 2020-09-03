@@ -4,6 +4,7 @@ export const menuContainerClass = 'rc-menu-container';
 export const menuClass = 'rc-menu';
 export const menuButtonClass = 'rc-menu-button';
 export const menuItemClass = 'item';
+export const menuDividerClass = 'divider';
 export const subMenuClass = 'submenu';
 export const radioGroupClass = 'radio-group';
 

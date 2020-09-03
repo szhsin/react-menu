@@ -19,3 +19,5 @@ export const MenuRadioGroup = React.memo(({ children, name, value, onChange }) =
         </li>
     );
 });
+
+MenuRadioGroup.__name__ = 'MenuRadioGroup';

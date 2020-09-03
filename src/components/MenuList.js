@@ -1,7 +1,6 @@
 import React, { useState, useLayoutEffect, useRef, useMemo, useCallback } from 'react';
 import './styles/index.scss';
 import { bem, menuClass, ActiveIndexContext, keyCodes } from '../utils';
-import { MenuRadioGroup } from './MenuRadioGroup'
 
 
 export const MenuList = React.memo(({
@@ -29,7 +28,7 @@ export const MenuList = React.memo(({
         const items = isMounted &&
             React.Children.map(children, (child) => {
 
-                if (child.type === MenuRadioGroup) {
+                if (child.type.__name__ === 'MenuRadioGroup') {
                     const props = { type: 'radio' };
                     const radioItems = React.Children.map(child.props.children,
                         (radioItem) =>
@@ -44,6 +43,10 @@ export const MenuList = React.memo(({
 
                     return React.cloneElement(child, { children: radioItems });
                 } else {
+                    if (child.type.__name__ === 'MenuDivider') {
+                        return child;
+                    }
+
                     if (child.props.type === 'radio') {
                         throw new Error('Radio menu items should be wrapped in a MenuRadioGroup component.');
                     }
