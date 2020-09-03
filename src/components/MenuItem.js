@@ -7,7 +7,8 @@ import {
 } from '../utils';
 
 
-export const MenuItem = React.memo(({ type, checked, index, children, onMouseEnter, value, onClick }) => {
+export const MenuItem = React.memo(({ type, checked, disabled, index,
+    children, onMouseEnter, value, onClick }) => {
     // console.log(`render MenuItem: ${children}`)
 
     const itemRef = useRef(null);
@@ -16,6 +17,8 @@ export const MenuItem = React.memo(({ type, checked, index, children, onMouseEnt
     const radioGroup = useContext(RadioGroupContext);
 
     const handleClick = (isKeyboardEvent) => {
+        if (disabled) return;
+
         let isStopPropagation = false;
         const event = { value };
         if (type === 'checkbox') {
@@ -41,6 +44,11 @@ export const MenuItem = React.memo(({ type, checked, index, children, onMouseEnt
         }
     }
 
+    const handleMouseEnter = e => {
+        if (disabled) return;
+        onMouseEnter(index, e);
+    }
+
     useEffect(() => {
         if (isActive) {
             itemRef.current.focus();
@@ -51,11 +59,12 @@ export const MenuItem = React.memo(({ type, checked, index, children, onMouseEnt
         <li className={bem(menuClass, menuItemClass,
             ['active', isActive],
             ['type', type],
-            ['checked', type === 'radio' ? radioGroup.value === value : checked])}
+            ['checked', type === 'radio' ? radioGroup.value === value : checked],
+            ['disabled', disabled])}
             role="menuitem"
             tabIndex={isActive ? 0 : -1}
             ref={itemRef}
-            onMouseEnter={(e) => onMouseEnter(index, e)}
+            onMouseEnter={handleMouseEnter}
             onClick={() => handleClick(false)}
             onKeyDown={handleKeyDown}>
             {children}

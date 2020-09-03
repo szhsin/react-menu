@@ -23,6 +23,8 @@
     min-width: 10rem;
     padding: 0.5rem 0;
     width: max-content;
+    cursor: default;
+    user-select: none;
 
     &--open {
         display: block;
@@ -34,8 +36,13 @@
         font-weight: var.$font-weight;
         padding: 0.6rem 1.5rem;
         background-color: var.$background-color;
+
         &--active {
             background-color: var.$background-color-hover;
+        }
+
+        &--disabled {
+            color: var.$color-disabled;
         }
 
         &--type-radio#{&}--checked::before {

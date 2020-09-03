@@ -30,10 +30,16 @@ export const MenuList = React.memo(({
             React.Children.map(children, (child) => {
 
                 if (child.type === MenuRadioGroup) {
+                    const props = { type: 'radio' };
                     const radioItems = React.Children.map(child.props.children,
                         (radioItem) =>
-                            React.cloneElement(radioItem,
-                                { index: index++, onMouseEnter: handleMouseEnter, type: 'radio' })
+                            radioItem.props.disabled
+                                ? React.cloneElement(radioItem, props)
+                                : React.cloneElement(radioItem, {
+                                    ...props,
+                                    index: index++,
+                                    onMouseEnter: handleMouseEnter
+                                })
                     );
 
                     return React.cloneElement(child, { children: radioItems });
@@ -41,7 +47,8 @@ export const MenuList = React.memo(({
                     if (child.props.type === 'radio') {
                         throw new Error('Radio menu items should be wrapped in a MenuRadioGroup component.');
                     }
-                    return React.cloneElement(child,
+
+                    return child.props.disabled ? child : React.cloneElement(child,
                         { index: index++, onMouseEnter: handleMouseEnter });
                 }
             });

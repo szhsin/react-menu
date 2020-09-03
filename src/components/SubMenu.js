@@ -7,7 +7,7 @@ import {
 import { MenuList } from './MenuList'
 
 
-export const SubMenu = React.memo(({ label, index, children, onMouseEnter }) => {
+export const SubMenu = React.memo(({ label, disabled, index, children, onMouseEnter }) => {
 
     const { isMounted, isOpen, openMenu, closeMenu, toggleMenu } = useMenuState();
     const [isKeyboardEvent, setIsKeyboardEvent] = useState(false);
@@ -16,8 +16,8 @@ export const SubMenu = React.memo(({ label, index, children, onMouseEnter }) => 
     const timeoutId = useRef();
 
     const handleMouseEnter = e => {
+        if (disabled) return;
         onMouseEnter(index, e);
-
         timeoutId.current = setTimeout(() => {
             setIsKeyboardEvent(false);
             openMenu();
@@ -29,6 +29,7 @@ export const SubMenu = React.memo(({ label, index, children, onMouseEnter }) => 
     };
 
     const handleClick = e => {
+        if (disabled) return;
         setIsKeyboardEvent(false);
         toggleMenu();
     }
@@ -48,7 +49,7 @@ export const SubMenu = React.memo(({ label, index, children, onMouseEnter }) => 
             case keyCodes.SPACE:
             case keyCodes.RETURN:
             case keyCodes.RIGHT:
-                if (!isOpen) {
+                if (!isOpen && !disabled) {
                     setIsKeyboardEvent(true);
                     openMenu();
                     handled = true;
@@ -79,7 +80,9 @@ export const SubMenu = React.memo(({ label, index, children, onMouseEnter }) => 
             role="presentation" ref={containerRef}
             onKeyDown={handleKeyDown}>
 
-            <div className={bem(menuClass, menuItemClass, ['active', isActive])}
+            <div className={bem(menuClass, menuItemClass,
+                ['active', isActive],
+                ['disabled', disabled])}
                 role="menuitem"
                 aria-haspopup="true"
                 aria-expanded={isOpen}
