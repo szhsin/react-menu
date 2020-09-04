@@ -27,7 +27,8 @@ export const MenuList = defineName(React.memo(({
         // console.log(`MenuList re-create children`);
 
         let index = 0;
-        const permittedChildren = ['MenuDivider', 'MenuItem', 'MenuRadioGroup', 'SubMenu'];
+        const permittedChildren = ['MenuDivider', 'MenuHeader', 'MenuItem',
+            'MenuRadioGroup', 'SubMenu'];
         const validateChildren = (parent, child, permitted) => {
             if (!permitted.includes(child.type && child.type.__name__)) {
                 console.warn(`${child.type || child} is ignored.\n`,
@@ -41,7 +42,8 @@ export const MenuList = defineName(React.memo(({
         const items = React.Children.map(children, (child) => {
             if (!validateChildren('Menu or SubMenu', child, permittedChildren)) return null;
 
-            if (child.type.__name__ === 'MenuDivider') {
+            if (child.type.__name__ === 'MenuDivider'
+                || child.type.__name__ === 'MenuHeader') {
                 return child;
             } else if (child.type.__name__ === 'MenuRadioGroup') {
                 const permittedChildren = ['MenuItem'];

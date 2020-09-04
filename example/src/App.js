@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 
 import {
   Menu, MenuItem, SubMenu, MenuButton,
-  MenuRadioGroup, MenuDivider
+  MenuRadioGroup, MenuDivider, MenuHeader
 } from '@szhsin/react-menu'
 import '@szhsin/react-menu/dist/index.css'
 
@@ -66,6 +66,12 @@ const App = () => {
           checked={checkBoxs[1]} disabled={disabled}>
           Italic
         </MenuItem>
+        <MenuDivider />
+        <MenuHeader>Font size</MenuHeader>
+        <MenuRadioGroup value={radioValue} onChange={(e) => setRadioValue(e.value)}>
+          {[16, 24, 32].map((i) =>
+            <MenuItem value={i} key={i}>{`${i}px`}</MenuItem>)}
+        </MenuRadioGroup>
         <MenuDivider />
         <MenuItem type="radi2o">item 4</MenuItem>
       </Menu>
