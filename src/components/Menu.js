@@ -1,5 +1,4 @@
 import React, { useCallback, useRef, useMemo, useState } from 'react';
-import './styles/index.scss';
 import {
     bem, menuContainerClass, keyCodes, EventHandlersContext,
     useMenuState

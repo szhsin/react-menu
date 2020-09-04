@@ -1,5 +1,4 @@
 import React from 'react';
-import './styles/index.scss';
 import { bem, menuButtonClass } from '../utils';
 
 

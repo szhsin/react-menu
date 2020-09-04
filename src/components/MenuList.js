@@ -1,5 +1,4 @@
 import React, { useState, useLayoutEffect, useRef, useMemo, useCallback } from 'react';
-import './styles/index.scss';
 import { defineName, bem, menuClass, ActiveIndexContext, keyCodes } from '../utils';
 
 

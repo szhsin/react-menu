@@ -1,5 +1,4 @@
 import React, { useMemo } from 'react';
-import './styles/index.scss';
 import { defineName, bem, menuClass, radioGroupClass, RadioGroupContext } from '../utils';
 
 

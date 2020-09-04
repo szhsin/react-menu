@@ -1,10 +1,9 @@
 import React, { useState, useRef, useContext, useEffect } from 'react';
-import './styles/index.scss';
 import {
     defineName, bem, menuClass, subMenuClass, menuItemClass,
     ActiveIndexContext, keyCodes, useMenuState, useActiveState
 } from '../utils';
-import { MenuList } from './MenuList'
+import { MenuList } from './MenuList';
 
 
 export const SubMenu = defineName(React.memo(({ label, disabled, index, children, onMouseEnter }) => {

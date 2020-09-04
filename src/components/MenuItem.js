@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useRef } from 'react';
-import './styles/index.scss';
 import {
     defineName, bem, menuClass, menuItemClass,
     ActiveIndexContext, EventHandlersContext, RadioGroupContext,
