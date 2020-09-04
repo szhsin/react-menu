@@ -1,9 +1,9 @@
-import React, { useContext, useEffect, useRef } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import './styles/index.scss';
 import {
     defineName, bem, menuClass, menuItemClass,
     ActiveIndexContext, EventHandlersContext, RadioGroupContext,
-    keyCodes
+    keyCodes, useActiveState
 } from '../utils';
 
 
@@ -15,6 +15,7 @@ export const MenuItem = defineName(React.memo(({ type, checked, disabled, index,
     const isActive = useContext(ActiveIndexContext) === index;
     const eventHandlers = useContext(EventHandlersContext);
     const radioGroup = useContext(RadioGroupContext);
+    const { active, onKeyUp, ...activeStateHandlers } = useActiveState();
 
     const handleClick = (isKeyboardEvent) => {
         if (disabled) return;
@@ -35,7 +36,11 @@ export const MenuItem = defineName(React.memo(({ type, checked, disabled, index,
         eventHandlers.handleClick(event, isStopPropagation, isKeyboardEvent);
     }
 
-    const handleKeyDown = e => {
+    const handleKeyUp = e => {
+        // Check 'active' to skip KeyUp when corresponding KeyDown was initiated in another menu item
+        if (!active) return;
+        
+        onKeyUp(e);
         switch (e.keyCode) {
             case keyCodes.SPACE:
             case keyCodes.RETURN:
@@ -57,7 +62,8 @@ export const MenuItem = defineName(React.memo(({ type, checked, disabled, index,
 
     return (
         <li className={bem(menuClass, menuItemClass,
-            ['active', isActive],
+            ['hover', isActive],
+            ['active', active && !disabled],
             ['type', type],
             ['checked', type === 'radio' ? radioGroup.value === value : checked],
             ['disabled', disabled])}
@@ -66,7 +72,8 @@ export const MenuItem = defineName(React.memo(({ type, checked, disabled, index,
             ref={itemRef}
             onMouseEnter={handleMouseEnter}
             onClick={() => handleClick(false)}
-            onKeyDown={handleKeyDown}>
+            onKeyUp={handleKeyUp}
+            {...activeStateHandlers}>
             {children}
         </li>
     );

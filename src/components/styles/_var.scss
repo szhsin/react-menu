@@ -14,6 +14,10 @@ $background-color: #fff !default;
 
 $background-color-hover: color.scale($background-color, $lightness: -8%) !default;
 
-$background-color-active: color.scale($background-color-hover, $lightness: -10%) !default;
+$btn-background-color-active: color.scale($background-color-hover, $lightness: -10%) !default;
+
+$color-active: #fff !default;
+
+$background-color-active: #007bff !default;
 
 $font-weight: 400;

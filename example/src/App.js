@@ -36,7 +36,7 @@ const App = () => {
 
       <Menu menuButton={<MenuButton>Open menu</MenuButton>}
         onClick={handleMenuClick}>
-        <MenuItem>item 1</MenuItem>
+        <MenuItem value="1">item 1</MenuItem>
         <MenuItem disabled={disabled}>item 2 (A long item)</MenuItem>
         <MenuItem disabled>item (disabled)</MenuItem>
         <SubMenu label="item 3">

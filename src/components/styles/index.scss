@@ -37,8 +37,13 @@
         padding: 0.6rem 1.5rem;
         background-color: var.$background-color;
 
-        &--active {
+        &--hover {
             background-color: var.$background-color-hover;
+        }
+
+        &--active {
+            color: var.$color-active;
+            background-color: var.$background-color-active;
         }
 
         &--disabled {
@@ -100,6 +105,6 @@
         background-color: var.$background-color-hover;
     }
     &:active {
-        background-color: var.$background-color-active;
+        background-color: var.$btn-background-color-active;
     }
 }

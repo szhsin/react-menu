@@ -41,10 +41,12 @@ export const MenuList = defineName(React.memo(({
         const items = React.Children.map(children, (child) => {
             if (!validateChildren('Menu or SubMenu', child, permittedChildren)) return null;
 
-            if (child.type.__name__ === 'MenuRadioGroup') {
-                const permittedChildren = ['MenuDivider', 'MenuItem'];
+            if (child.type.__name__ === 'MenuDivider') {
+                return child;
+            } else if (child.type.__name__ === 'MenuRadioGroup') {
+                const permittedChildren = ['MenuItem'];
                 const props = { type: 'radio' };
-                
+
                 const radioItems = React.Children.map(child.props.children,
                     (radioChild) => {
                         if (!validateChildren('MenuRadioGroup', radioChild, permittedChildren)) return null;
@@ -60,18 +62,11 @@ export const MenuList = defineName(React.memo(({
 
                 return React.cloneElement(child, { children: radioItems });
             } else {
-                if (child.type.__name__ === 'MenuDivider') {
-                    return child;
-                }
-
-                if (child.props.type === 'radio') {
-                    throw new Error('Radio menu items should be wrapped in a MenuRadioGroup component.');
-                }
-
                 return child.props.disabled ? child : React.cloneElement(child,
                     { index: index++, onMouseEnter: handleMouseEnter });
             }
         });
+
         menuItemsCount.current = index;
         return items;
     }, [isMounted, children, handleMouseEnter]);
@@ -98,7 +93,7 @@ export const MenuList = defineName(React.memo(({
                 handled = true;
                 break;
 
-            // prevent browser from scrolling the page when pressing SPACE or RETURN
+            // prevent browser from scrolling the page when SPACE or RETURN is pressed
             case keyCodes.SPACE:
             case keyCodes.RETURN:
                 if (e.currentTarget.contains(e.target)) e.preventDefault();
@@ -121,7 +116,7 @@ export const MenuList = defineName(React.memo(({
             switch (direction) {
                 case 'inline-end':
                     newPosition = {
-                        x: anchorRect.right - containerRect.left,
+                        x: anchorRect.right - containerRect.left + 1,
                         y: anchorRect.top - containerRect.top
                     };
                     break;

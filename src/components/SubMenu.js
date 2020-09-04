@@ -2,7 +2,7 @@ import React, { useState, useRef, useContext, useEffect } from 'react';
 import './styles/index.scss';
 import {
     defineName, bem, menuClass, subMenuClass, menuItemClass,
-    ActiveIndexContext, keyCodes, useMenuState
+    ActiveIndexContext, keyCodes, useMenuState, useActiveState
 } from '../utils';
 import { MenuList } from './MenuList'
 
@@ -14,6 +14,7 @@ export const SubMenu = defineName(React.memo(({ label, disabled, index, children
     const containerRef = useRef(null);
     const itemRef = useRef(null);
     const timeoutId = useRef();
+    const { active, onKeyUp, ...activeStateHandlers } = useActiveState(keyCodes.RIGHT);
 
     const handleMouseEnter = e => {
         if (disabled) return;
@@ -38,6 +39,7 @@ export const SubMenu = defineName(React.memo(({ label, disabled, index, children
         let handled = false;
 
         switch (e.keyCode) {
+            // LEFT key is bubbled up from submenu items
             case keyCodes.LEFT:
                 if (isOpen) {
                     closeMenu();
@@ -46,20 +48,30 @@ export const SubMenu = defineName(React.memo(({ label, disabled, index, children
                 }
                 break;
 
-            case keyCodes.SPACE:
-            case keyCodes.RETURN:
+            // prevent browser from scrolling page to the right
             case keyCodes.RIGHT:
-                if (!isOpen && !disabled) {
-                    setIsKeyboardEvent(true);
-                    openMenu();
-                    handled = true;
-                }
+                if (!isOpen) handled = true;
                 break;
         }
 
         if (handled) {
             e.preventDefault();
             e.stopPropagation();
+        }
+    }
+
+    const handleKeyUp = e => {
+        // Check 'active' to skip KeyUp when corresponding KeyDown was initiated in another menu item
+        if (!active) return;
+
+        onKeyUp(e);
+        switch (e.keyCode) {
+            case keyCodes.SPACE:
+            case keyCodes.RETURN:
+            case keyCodes.RIGHT:
+                setIsKeyboardEvent(true);
+                openMenu();
+                break;
         }
     }
 
@@ -81,7 +93,8 @@ export const SubMenu = defineName(React.memo(({ label, disabled, index, children
             onKeyDown={handleKeyDown}>
 
             <div className={bem(menuClass, menuItemClass,
-                ['active', isActive],
+                ['hover', isActive],
+                ['active', active && !disabled],
                 ['disabled', disabled])}
                 role="menuitem"
                 aria-haspopup="true"
@@ -90,7 +103,9 @@ export const SubMenu = defineName(React.memo(({ label, disabled, index, children
                 ref={itemRef}
                 onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}
-                onClick={handleClick}>
+                onClick={handleClick}
+                onKeyUp={handleKeyUp}
+                {...activeStateHandlers}>
                 {label}
             </div>
 
