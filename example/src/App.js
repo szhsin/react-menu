@@ -23,7 +23,7 @@ const App = () => {
         break;
 
       default:
-        console.log(e.value);
+        console.log('Menu click:', e.value);
         break;
     }
   }
@@ -37,7 +37,8 @@ const App = () => {
       <Menu menuButton={<MenuButton>Open menu</MenuButton>}
         onClick={handleMenuClick}>
         <MenuItem value="1">item 1</MenuItem>
-        <MenuItem disabled={disabled}>item 2 (A long item)</MenuItem>
+        <MenuItem href="https://www.google.com/" target="_blank" value="google">Google</MenuItem>
+        <MenuItem href="#" value="#" disabled={disabled}>item 2 (A long item)</MenuItem>
         <MenuItem disabled>item (disabled)</MenuItem>
         <SubMenu label="item 3">
           <MenuItem disabled={disabled}>item 3.1</MenuItem>
@@ -58,7 +59,7 @@ const App = () => {
             </MenuItem>
             <MenuItem value={323}>item 3.2.3</MenuItem>
           </SubMenu>
-          <MenuItem>item 3.3</MenuItem>
+          <MenuItem href="https://github.com">Github</MenuItem>
         </SubMenu>
         <MenuDivider />
         <MenuItem type="checkbox" value={'check1'} checked={checkBoxs[0]}>Bold</MenuItem>

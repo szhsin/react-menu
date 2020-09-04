@@ -37,6 +37,10 @@
         padding: 0.6rem 1.5rem;
         background-color: var.$background-color;
 
+        &--anchor {
+            display: block;
+        }
+
         &--hover {
             background-color: var.$background-color-hover;
         }

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef } from 'react';
 import './styles/index.scss';
 import {
     defineName, bem, menuClass, menuItemClass,
@@ -7,8 +7,8 @@ import {
 } from '../utils';
 
 
-export const MenuItem = defineName(React.memo(({ type, checked, disabled, index,
-    children, onMouseEnter, value, onClick }) => {
+export const MenuItem = defineName(React.memo(({ type, checked, disabled, href, index,
+    children, onMouseEnter, value, onClick, ...restProps }) => {
     // console.log(`render MenuItem: ${children}`)
 
     const itemRef = useRef(null);
@@ -16,17 +16,20 @@ export const MenuItem = defineName(React.memo(({ type, checked, disabled, index,
     const eventHandlers = useContext(EventHandlersContext);
     const radioGroup = useContext(RadioGroupContext);
     const { active, onKeyUp, ...activeStateHandlers } = useActiveState();
+    const isRadio = type === 'radio';
+    const isCheckBox = type === 'checkbox';
+    const isAnchor = href && !disabled && !isRadio && !isCheckBox;
 
     const handleClick = (isKeyboardEvent) => {
         if (disabled) return;
 
         let isStopPropagation = false;
         const event = { value };
-        if (type === 'checkbox') {
+        if (isCheckBox) {
             event.checked = !checked;
         }
 
-        if (type === 'radio') {
+        if (isRadio) {
             isStopPropagation = true;
             radioGroup.onChange && radioGroup.onChange(event);
         } else if (onClick) {
@@ -39,12 +42,16 @@ export const MenuItem = defineName(React.memo(({ type, checked, disabled, index,
     const handleKeyUp = e => {
         // Check 'active' to skip KeyUp when corresponding KeyDown was initiated in another menu item
         if (!active) return;
-        
+
         onKeyUp(e);
         switch (e.keyCode) {
             case keyCodes.SPACE:
             case keyCodes.RETURN:
-                handleClick(true);
+                if (isAnchor) {
+                    itemRef.current.click();
+                } else {
+                    handleClick(true);
+                }
                 break;
         }
     }
@@ -60,21 +67,36 @@ export const MenuItem = defineName(React.memo(({ type, checked, disabled, index,
         }
     }, [isActive]);
 
-    return (
-        <li className={bem(menuClass, menuItemClass,
+    const menuItemProps = {
+        className: bem(menuClass, menuItemClass,
             ['hover', isActive],
             ['active', active && !disabled],
             ['type', type],
-            ['checked', type === 'radio' ? radioGroup.value === value : checked],
-            ['disabled', disabled])}
-            role="menuitem"
-            tabIndex={isActive ? 0 : -1}
-            ref={itemRef}
-            onMouseEnter={handleMouseEnter}
-            onClick={() => handleClick(false)}
-            onKeyUp={handleKeyUp}
-            {...activeStateHandlers}>
-            {children}
-        </li>
-    );
+            ['checked', isRadio ? radioGroup.value === value : checked],
+            ['disabled', disabled],
+            ['anchor', isAnchor]),
+        role: "menuitem",
+        tabIndex: isActive ? 0 : -1,
+        ref: itemRef,
+        onMouseEnter: handleMouseEnter,
+        onClick: () => handleClick(false),
+        onKeyUp: handleKeyUp,
+        ...activeStateHandlers
+    };
+
+    if (isAnchor) {
+        return (
+            <li role="presentation">
+                <a {...restProps} href={href} {...menuItemProps} >
+                    {children}
+                </a>
+            </li>
+        );
+    } else {
+        return (
+            <li {...menuItemProps}>
+                {children}
+            </li>
+        );
+    }
 }), 'MenuItem');
