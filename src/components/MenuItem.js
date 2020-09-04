@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useRef } from 'react';
 import {
     defineName, bem, menuClass, menuItemClass,
-    ActiveIndexContext, EventHandlersContext, RadioGroupContext,
+    HoverIndexContext, EventHandlersContext, RadioGroupContext,
     keyCodes, useActiveState
 } from '../utils';
 
@@ -11,7 +11,7 @@ export const MenuItem = defineName(React.memo(({ type, checked, disabled, href, 
     // console.log(`render MenuItem: ${children}`)
 
     const itemRef = useRef(null);
-    const isActive = useContext(ActiveIndexContext) === index;
+    const isHovering = useContext(HoverIndexContext) === index;
     const eventHandlers = useContext(EventHandlersContext);
     const radioGroup = useContext(RadioGroupContext);
     const { active, onKeyUp, ...activeStateHandlers } = useActiveState();
@@ -61,21 +61,21 @@ export const MenuItem = defineName(React.memo(({ type, checked, disabled, href, 
     }
 
     useEffect(() => {
-        if (isActive) {
+        if (isHovering) {
             itemRef.current.focus();
         }
-    }, [isActive]);
+    }, [isHovering]);
 
     const menuItemProps = {
         className: bem(menuClass, menuItemClass,
-            ['hover', isActive],
+            ['hover', isHovering],
             ['active', active && !disabled],
             ['type', type],
             ['checked', isRadio ? radioGroup.value === value : checked],
             ['disabled', disabled],
             ['anchor', isAnchor]),
         role: "menuitem",
-        tabIndex: isActive ? 0 : -1,
+        tabIndex: isHovering ? 0 : -1,
         ref: itemRef,
         onMouseEnter: handleMouseEnter,
         onClick: () => handleClick(false),

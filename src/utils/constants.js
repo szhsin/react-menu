@@ -9,7 +9,8 @@ export const menuHeaderClass = 'header';
 export const subMenuClass = 'submenu';
 export const radioGroupClass = 'radio-group';
 
-export const ActiveIndexContext = React.createContext(-1);
+export const initialHoverIndex = -1;
+export const HoverIndexContext = React.createContext(initialHoverIndex);
 export const EventHandlersContext = React.createContext({});
 export const RadioGroupContext = React.createContext({});
 

@@ -1,7 +1,7 @@
 import React, { useState, useRef, useContext, useEffect } from 'react';
 import {
     defineName, bem, menuClass, subMenuClass, menuItemClass,
-    ActiveIndexContext, keyCodes, useMenuState, useActiveState
+    HoverIndexContext, keyCodes, useMenuState, useActiveState
 } from '../utils';
 import { MenuList } from './MenuList';
 
@@ -9,12 +9,13 @@ import { MenuList } from './MenuList';
 export const SubMenu = defineName(React.memo(({ label, disabled, index, children, onMouseEnter }) => {
 
     const { isMounted, isOpen, openMenu, closeMenu, toggleMenu } = useMenuState();
+    const { active, onKeyUp, ...activeStateHandlers } = useActiveState(keyCodes.RIGHT);
     const [isKeyboardEvent, setIsKeyboardEvent] = useState(false);
     const containerRef = useRef(null);
     const itemRef = useRef(null);
     const timeoutId = useRef();
-    const { active, onKeyUp, ...activeStateHandlers } = useActiveState(keyCodes.RIGHT);
-
+    const isHovering = useContext(HoverIndexContext) === index;
+    
     const handleMouseEnter = e => {
         if (disabled) return;
         onMouseEnter(index, e);
@@ -74,17 +75,15 @@ export const SubMenu = defineName(React.memo(({ label, disabled, index, children
         }
     }
 
-    const isActive = useContext(ActiveIndexContext) === index;
-
     // console.log(`Submenu render: ${label}`)
 
     useEffect(() => {
-        if (isActive) {
+        if (isHovering) {
             itemRef.current.focus();
         } else {
             closeMenu();
         }
-    }, [isActive, closeMenu]);
+    }, [isHovering, closeMenu]);
 
     return (
         <li className={bem(menuClass, subMenuClass, ['open', isOpen])}
@@ -92,13 +91,13 @@ export const SubMenu = defineName(React.memo(({ label, disabled, index, children
             onKeyDown={handleKeyDown}>
 
             <div className={bem(menuClass, menuItemClass,
-                ['hover', isActive],
+                ['hover', isHovering],
                 ['active', active && !disabled],
                 ['disabled', disabled])}
                 role="menuitem"
                 aria-haspopup="true"
                 aria-expanded={isOpen}
-                tabIndex={isActive && !isOpen ? 0 : -1}
+                tabIndex={isHovering && !isOpen ? 0 : -1}
                 ref={itemRef}
                 onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}

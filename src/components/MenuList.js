@@ -1,5 +1,8 @@
 import React, { useState, useLayoutEffect, useRef, useMemo, useCallback } from 'react';
-import { defineName, bem, menuClass, ActiveIndexContext, keyCodes } from '../utils';
+import {
+    defineName, bem, menuClass,
+    HoverIndexContext, initialHoverIndex, keyCodes
+} from '../utils';
 
 
 export const MenuList = defineName(React.memo(({
@@ -13,12 +16,12 @@ export const MenuList = defineName(React.memo(({
 
     // console.log(`MenuList render`);
     const [position, setPosition] = useState({ x: 0, y: 0 });
-    const [activeIndex, setActiveIndex] = useState(-1);
+    const [hoverIndex, setHoverIndex] = useState(initialHoverIndex);
     const menuRef = useRef(null);
     const menuItemsCount = useRef(0);
 
     const handleMouseEnter = useCallback((index) => {
-        setActiveIndex(index);
+        setHoverIndex(index);
     }, []);
 
     const menuItems = useMemo(() => {
@@ -68,6 +71,7 @@ export const MenuList = defineName(React.memo(({
             }
         });
 
+        // Store the count of menu items in a ref to avoid updating state during render
         menuItemsCount.current = index;
         return items;
     }, [isMounted, children, handleMouseEnter]);
@@ -77,7 +81,7 @@ export const MenuList = defineName(React.memo(({
 
         switch (e.keyCode) {
             case keyCodes.UP:
-                setActiveIndex(i => {
+                setHoverIndex(i => {
                     i--;
                     if (i < 0) i = menuItemsCount.current - 1;
                     return i;
@@ -86,7 +90,7 @@ export const MenuList = defineName(React.memo(({
                 break;
 
             case keyCodes.DOWN:
-                setActiveIndex(i => {
+                setHoverIndex(i => {
                     i++;
                     if (i >= menuItemsCount.current) i = 0;
                     return i;
@@ -130,9 +134,9 @@ export const MenuList = defineName(React.memo(({
                     };
             }
             setPosition(newPosition);
-            if (isKeyboardEvent) setActiveIndex(0);
+            if (isKeyboardEvent) setHoverIndex(0);
         } else {
-            setActiveIndex(-1);
+            setHoverIndex(initialHoverIndex);
         }
     }, [isOpen, isKeyboardEvent, containerRef, anchorRef, direction]);
 
@@ -146,9 +150,9 @@ export const MenuList = defineName(React.memo(({
                         left: position.x,
                         top: position.y
                     }}>
-                    <ActiveIndexContext.Provider value={activeIndex}>
+                    <HoverIndexContext.Provider value={hoverIndex}>
                         {menuItems}
-                    </ActiveIndexContext.Provider>
+                    </HoverIndexContext.Provider>
                 </ul>}
         </React.Fragment>
     );
