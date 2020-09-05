@@ -55,5 +55,5 @@ export const useMenuState = (isPersistent = true) => {
 
         toggleMenu: useCallback(() =>
             dispatch({ type: menuStateActionType.TOGGLE, isPersistent }), [isPersistent])
-    };
+    }
 }

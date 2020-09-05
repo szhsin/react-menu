@@ -8,6 +8,7 @@ import { MenuList } from './MenuList';
 
 export const SubMenu = defineName(React.memo(({ label, disabled, index, children, onMouseEnter }) => {
 
+    // console.log(`Submenu render: ${label}`)
     const { isMounted, isOpen, openMenu, closeMenu, toggleMenu } = useMenuState();
     const { active, onKeyUp, ...activeStateHandlers } = useActiveState(keyCodes.RIGHT);
     const [isKeyboardEvent, setIsKeyboardEvent] = useState(false);
@@ -15,7 +16,7 @@ export const SubMenu = defineName(React.memo(({ label, disabled, index, children
     const itemRef = useRef(null);
     const timeoutId = useRef();
     const isHovering = useContext(HoverIndexContext) === index;
-    
+
     const handleMouseEnter = e => {
         if (disabled) return;
         onMouseEnter(index, e);
@@ -27,7 +28,7 @@ export const SubMenu = defineName(React.memo(({ label, disabled, index, children
 
     const handleMouseLeave = e => {
         clearTimeout(timeoutId.current);
-    };
+    }
 
     const handleClick = e => {
         if (disabled) return;
@@ -74,8 +75,6 @@ export const SubMenu = defineName(React.memo(({ label, disabled, index, children
                 break;
         }
     }
-
-    // console.log(`Submenu render: ${label}`)
 
     useEffect(() => {
         if (isHovering) {
