@@ -35,7 +35,7 @@ const App = () => {
       <div><textarea rows="5" /></div>
 
       <Menu menuButton={<MenuButton>Open menu</MenuButton>}
-        onClick={handleMenuClick}>
+        onClick={handleMenuClick} direction="bottom">
         <MenuItem value="1">item 1</MenuItem>
         <MenuItem href="https://www.google.com/" target="_blank" value="google">Google</MenuItem>
         <MenuItem href="#" value="#" disabled={disabled}>item 2 (A long item)</MenuItem>
@@ -79,7 +79,7 @@ const App = () => {
 
       <div><input /></div>
 
-      <Menu menuButton={<button>Customisable button</button>} onClick={handleMenuClick}>
+      <Menu menuButton={<button>Customisable button</button>} onClick={handleMenuClick} direction={'top'}>
         {[1, 2, 3, 4].map(i => <MenuItem key={i}>{`Item ${i}`}</MenuItem>)}
         <SubMenu label="font size">
           <MenuRadioGroup value={radioValue} onChange={(e) => setRadioValue(e.value)}>

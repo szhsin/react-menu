@@ -6,7 +6,7 @@ import {
 import { MenuList } from './MenuList'
 
 
-export const Menu = React.memo(({ menuButton, children, onClick }) => {
+export const Menu = React.memo(({ menuButton, direction, children, onClick }) => {
 
     // console.log(`Menu render`);
     const { isMounted, isOpen, closeMenu, toggleMenu } = useMenuState();
@@ -61,7 +61,8 @@ export const Menu = React.memo(({ menuButton, children, onClick }) => {
                     isOpen={isOpen}
                     isKeyboardEvent={isKeyboardEvent}
                     containerRef={containerRef}
-                    anchorRef={buttonRef}>
+                    anchorRef={buttonRef}
+                    direction={direction}>
                     {children}
                 </MenuList>
             </EventHandlersContext.Provider>

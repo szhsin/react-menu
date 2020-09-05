@@ -112,7 +112,7 @@ export const SubMenu = defineName(React.memo(({ label, disabled, index, children
                 isKeyboardEvent={isKeyboardEvent}
                 containerRef={containerRef}
                 anchorRef={itemRef}
-                direction="right">
+                direction={'right'}>
                 {children}
             </MenuList>
         </li>
