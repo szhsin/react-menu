@@ -1,4 +1,4 @@
-// import './components/styles/index.scss';
+import './components/styles/index.scss';
 export * from './components/Menu';
 export * from './components/MenuItem';
 export * from './components/MenuButton';

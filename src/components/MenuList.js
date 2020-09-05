@@ -114,27 +114,79 @@ export const MenuList = defineName(React.memo(({
     useLayoutEffect(() => {
         if (isOpen) {
             menuRef.current.focus();
+            if (isKeyboardEvent) setHoverIndex(0);
+
+            const menuRect = menuRef.current.getBoundingClientRect();
             const containerRect = containerRef.current.getBoundingClientRect();
             const anchorRect = anchorRef.current.getBoundingClientRect();
+            const viewportWidth = document.documentElement.clientWidth;
+            const viewportHeight = document.documentElement.clientHeight;
 
-            let newPosition;
+            const scrollIntoView = y => {
+                const bottomOverflow = containerRect.top + y + menuRect.height - viewportHeight;
+                if (bottomOverflow > 0) {
+                    window.scrollBy({ left: 0, top: bottomOverflow, behavior: 'smooth' });
+                }
+            }
+
+            let newPosition, x, y;
             switch (direction) {
-                case 'inline-end':
-                    newPosition = {
-                        x: anchorRect.right - containerRect.left + 1,
-                        y: anchorRect.top - containerRect.top
-                    };
+                case 'right': {
+                    x = anchorRect.right - containerRect.left + 1;
+                    y = anchorRect.top - containerRect.top;
+
+                    const rightOverflow = containerRect.left + x + menuRect.width - viewportWidth;
+                    if (rightOverflow > 0) {
+                        // if menu overflows to the right side, 
+                        // try to reposition it to the left of the anchor.
+                        let adjustedX = anchorRect.left - menuRect.width - containerRect.left - 1;
+
+                        // if menu overflows to the left side after repositioning,
+                        // choose a side which has less overflow,
+                        // and adjust x to have the menu contained within the viewport.
+                        const leftOverflow = containerRect.left + adjustedX;
+                        if (leftOverflow < 0) {
+                            if (-leftOverflow < rightOverflow) {
+                                adjustedX -= leftOverflow;
+                                x = adjustedX;
+                            } else {
+                                x -= rightOverflow;
+                            }
+                        } else {
+                            x = adjustedX;
+                        }
+                    }
+
+                    newPosition = { x, y };
+                    scrollIntoView(y);
+                }
                     break;
 
-                case 'block-end':
-                default:
-                    newPosition = {
-                        x: anchorRect.left - containerRect.left,
-                        y: anchorRect.bottom - containerRect.top
-                    };
+                case 'bottom':
+                default: {
+                    x = anchorRect.left - containerRect.left;
+                    y = anchorRect.bottom - containerRect.top;
+
+                    // First check whether menu overflows to the right side,
+                    // then check the left side,
+                    // and adjust x to have the menu contained within the viewport.
+                    const rightOverflow = containerRect.left + x + menuRect.width - viewportWidth;
+                    if (rightOverflow > 0) {
+                        x -= rightOverflow;
+                    } else {
+                        const leftOverflow = containerRect.left + x;
+                        if (leftOverflow < 0) {
+                            x -= leftOverflow;
+                        }
+                    }
+
+                    newPosition = { x, y };
+                    scrollIntoView(y);
+                }
+                    break;
             }
+
             setPosition(newPosition);
-            if (isKeyboardEvent) setHoverIndex(0);
         } else {
             setHoverIndex(initialHoverIndex);
         }
@@ -147,8 +199,8 @@ export const MenuList = defineName(React.memo(({
                     role="menu" tabIndex="-1" ref={menuRef}
                     onKeyDown={handleKeyDown}
                     style={{
-                        left: position.x,
-                        top: position.y
+                        left: `${position.x}px`,
+                        top: `${position.y}px`
                     }}>
                     <HoverIndexContext.Provider value={hoverIndex}>
                         {menuItems}

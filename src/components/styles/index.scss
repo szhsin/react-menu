@@ -2,12 +2,7 @@
 @use 'mixins';
 
 .rc-menu-container {
-    position: static;
-
-    &--open {
-        position: relative;
-        z-index: 100;
-    }
+    position: relative;
 }
 
 .rc-menu {
@@ -20,6 +15,7 @@
     border-radius: 0.25rem;
     box-shadow: rgba(0, 0, 0, 0.133) 0px 3.2px 7.2px 0px, rgba(0, 0, 0, 0.11) 0px 0.6px 1.8px 0px;
     position: absolute;
+    z-index: 100;
     min-width: 10rem;
     padding: 0.5rem 0;
     width: max-content;
@@ -70,6 +66,8 @@
     }
 
     &__submenu {
+        position: relative;
+
         > .rc-menu__item {
             padding-right: 2.5rem;
             &::after {
@@ -77,10 +75,6 @@
                 position: absolute;
                 right: 1rem;
             }
-        }
-
-        &--open {
-            position: relative;
         }
     }
 
