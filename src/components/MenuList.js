@@ -13,6 +13,7 @@ export const MenuList = defineName(React.memo(({
     anchorRef,
     anchorPoint,
     children,
+    align,
     direction }) => {
 
     // console.log(`MenuList render`);
@@ -195,7 +196,15 @@ export const MenuList = defineName(React.memo(({
 
         const placeTopY = anchorRect.top - containerRect.top - menuRect.height - 1;
         const placeBottomY = anchorRect.bottom - containerRect.top + 1;
-        const placeToporBottomX = anchorRect.left - containerRect.left;
+        let placeToporBottomX;
+        if (align === 'end') {
+            placeToporBottomX = anchorRect.right - containerRect.left - menuRect.width;
+        } else if (align === 'center') {
+            placeToporBottomX = anchorRect.left - containerRect.left
+                - (menuRect.width - anchorRect.width) / 2;
+        } else {
+            placeToporBottomX = anchorRect.left - containerRect.left;
+        }
 
         let newPosition, x, y;
         switch (direction) {
@@ -318,7 +327,7 @@ export const MenuList = defineName(React.memo(({
         }
 
         setPosition(newPosition);
-    }, [isOpen, anchorPoint, positionHelpers, direction]);
+    }, [isOpen, anchorPoint, positionHelpers, align, direction]);
 
     // handle context menu positioning
     useLayoutEffect(() => {
