@@ -33,6 +33,7 @@ const App = () => {
   useEffect(() => {
     const handleContextMenu = (e) => {
       e.preventDefault();
+      console.log('contextmenu', 'x:', e.clientX, 'y:', e.clientY);
       setAnchorPoint({ x: e.clientX, y: e.clientY });
       setOpen(true);
     }

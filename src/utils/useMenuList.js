@@ -25,7 +25,7 @@ export const useMenuList = (onClick, onClose) => {
         if (!containerRef.current.contains(e.relatedTarget)) {
             onClose();
         }
-    }, [onClick]);
+    }, [onClose]);
 
     return {
         containerRef, eventHandlers,
