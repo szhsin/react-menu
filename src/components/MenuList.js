@@ -11,6 +11,7 @@ export const MenuList = defineName(React.memo(({
     isKeyboardEvent,
     containerRef,
     anchorRef,
+    anchorPoint,
     children,
     direction }) => {
 
@@ -115,6 +116,8 @@ export const MenuList = defineName(React.memo(({
         if (isOpen) {
             menuRef.current.focus();
             if (isKeyboardEvent) setHoverIndex(0);
+
+            if (anchorPoint) return;
 
             const menuRect = menuRef.current.getBoundingClientRect();
             const containerRect = containerRef.current.getBoundingClientRect();
@@ -255,6 +258,18 @@ export const MenuList = defineName(React.memo(({
             setHoverIndex(initialHoverIndex);
         }
     }, [isOpen, isKeyboardEvent, containerRef, anchorRef, direction]);
+
+    useLayoutEffect(() => {
+        if (!isOpen || !anchorPoint) return;
+
+        const menuRect = menuRef.current.getBoundingClientRect();
+        const containerRect = containerRef.current.getBoundingClientRect();
+        let newPosition, x, y;
+        x = anchorPoint.x - containerRect.left;
+        y = anchorPoint.y - containerRect.top;
+        newPosition = { x, y };
+        setPosition(newPosition);
+    }, [isOpen, anchorPoint]);
 
     return (
         <React.Fragment>

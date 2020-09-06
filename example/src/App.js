@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 
 import {
   Menu, MenuItem, SubMenu, MenuButton,
-  MenuRadioGroup, MenuDivider, MenuHeader
+  MenuRadioGroup, MenuDivider, MenuHeader, ContextMenu
 } from '@szhsin/react-menu'
 import '@szhsin/react-menu/dist/index.css'
 
@@ -11,6 +11,8 @@ const App = () => {
   const [disabled, setDisabled] = useState(false);
   const [checkBoxs, setCheckBoxs] = useState([true, false]);
   const [radioValue, setRadioValue] = useState(1);
+  const [isOpen, setOpen] = useState(false);
+  const [anchorPoint, setAnchorPoint] = useState({ x: 0, y: 0 });
 
   const handleMenuClick = (e) => {
     switch (e.value) {
@@ -28,8 +30,14 @@ const App = () => {
     }
   }
 
+  const handleContextMenu = (e) => {
+    e.preventDefault();
+    setAnchorPoint({ x: e.clientX, y: e.clientY });
+    setOpen(true);
+  }
+
   return (
-    <div className="container">
+    <div className="container" onContextMenu={handleContextMenu}>
       <button onClick={() => setCount(c => c + 1)}>count: {count}</button>
       <button onClick={() => setDisabled(d => !d)}>Toggle disabled</button>
       <div><textarea rows="5" /></div>
@@ -76,6 +84,10 @@ const App = () => {
         <MenuDivider />
         <MenuItem type="radi2o">item 4</MenuItem>
       </Menu>
+
+      <ContextMenu isOpen={isOpen} anchorPoint={anchorPoint} onClose={e => setOpen(false)} >
+        {[1, 2, 3, 4].map(i => <MenuItem key={i}>{`Item ${i}`}</MenuItem>)}
+      </ContextMenu>
 
       <div><input /></div>
 
