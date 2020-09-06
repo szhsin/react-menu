@@ -3,6 +3,11 @@
 
 .rc-menu-container {
     position: relative;
+
+    &--context-menu {
+        width: 0px;
+        height: 0px;
+    }
 }
 
 .rc-menu {

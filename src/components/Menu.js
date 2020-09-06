@@ -6,7 +6,12 @@ import {
 import { MenuList } from './MenuList'
 
 
-export const Menu = React.memo(({ menuButton, align, direction, children, onClick }) => {
+export const Menu = React.memo(({
+    menuButton,
+    align,
+    direction,
+    children,
+    onClick }) => {
 
     // console.log(`Menu render`);
     const { isMounted, isOpen, closeMenu, toggleMenu } = useMenuState();
@@ -32,7 +37,7 @@ export const Menu = React.memo(({ menuButton, align, direction, children, onClic
     ), [menuButton, toggleMenu]);
 
     return (
-        <div className={bem(menuContainerClass, null, ['open', isOpen])}
+        <div className={bem(menuContainerClass)}
             role="presentation" ref={containerRef} {...otherHandlers}>
             {button}
 

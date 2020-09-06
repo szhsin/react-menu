@@ -6,14 +6,18 @@ import {
 import { MenuList } from './MenuList'
 
 
-export const ContextMenu = React.memo(({ anchorPoint, isOpen, isKeyboardEvent, children, onClick, onClose }) => {
-
-    // console.log(`ContextMenu render`);
+export const ContextMenu = React.memo(({
+    anchorPoint,
+    isOpen,
+    isKeyboardEvent,
+    children,
+    onClick,
+    onClose }) => {
 
     const { containerRef, eventHandlers, ...otherHandlers } = useMenuList(onClick, onClose);
 
     return (
-        <div className={bem(menuContainerClass, null, ['open', isOpen])}
+        <div className={bem(menuContainerClass, null, ['context-menu', true])}
             role="presentation" ref={containerRef} {...otherHandlers}>
 
             <EventHandlersContext.Provider value={eventHandlers}>

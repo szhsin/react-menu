@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 
 import {
   Menu, MenuItem, SubMenu, MenuButton,
@@ -13,6 +13,7 @@ const App = () => {
   const [radioValue, setRadioValue] = useState(1);
   const [isOpen, setOpen] = useState(false);
   const [anchorPoint, setAnchorPoint] = useState({ x: 0, y: 0 });
+  const btnRef = useRef(null);
 
   const handleMenuClick = (e) => {
     switch (e.value) {
@@ -97,7 +98,11 @@ const App = () => {
         <MenuItem type="radi2o">item 4</MenuItem>
       </Menu>
 
-      <ContextMenu isOpen={isOpen} anchorPoint={anchorPoint} onClose={e => setOpen(false)}
+      <ContextMenu isOpen={isOpen} anchorPoint={anchorPoint}
+        onClose={isKeyboardEvent => {
+          setOpen(false);
+          if (isKeyboardEvent) btnRef.current.focus();
+        }}
         onClick={e => console.log('Context menu click:', e.value)}>
         <SubMenu label="more...">
           {[1, 2, 3, 4].map(i => <MenuItem key={i} value={i}>{`Item ${i}`}</MenuItem>)}
@@ -110,8 +115,9 @@ const App = () => {
 
       <div><input /></div>
 
-      <Menu menuButton={<button>Customisable button Customisable button Customisable button</button>} onClick={handleMenuClick}
-        direction={'top'} align="sta">
+      <Menu menuButton={<button>Customisable button Customisable button Customisable button</button>}
+        onClick={handleMenuClick}
+        direction={'top'} align="center">
         {[1, 2, 3, 4].map(i => <MenuItem key={i}>{`Item ${i}`}</MenuItem>)}
         <SubMenu label="font size">
           <MenuRadioGroup value={radioValue} onChange={(e) => setRadioValue(e.value)}>
@@ -121,7 +127,7 @@ const App = () => {
         <MenuItem>item 5</MenuItem>
       </Menu>
 
-      <button onClick={e => console.log('Button clicked')}>Click me</button>
+      <button onClick={e => console.log('Button clicked')} ref={btnRef}>Click me</button>
 
     </div>
   );
