@@ -22,6 +22,6 @@ button {
 
 .container {
   position: absolute;
-  /* left: 100px;
-  top: 200px; */
+  left: 100px;
+  top: 200px;
 }

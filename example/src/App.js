@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 
 import {
   Menu, MenuItem, SubMenu, MenuButton,
@@ -30,14 +30,22 @@ const App = () => {
     }
   }
 
-  const handleContextMenu = (e) => {
-    e.preventDefault();
-    setAnchorPoint({ x: e.clientX, y: e.clientY });
-    setOpen(true);
-  }
+  useEffect(() => {
+    const handleContextMenu = (e) => {
+      e.preventDefault();
+      setAnchorPoint({ x: e.clientX, y: e.clientY });
+      setOpen(true);
+    }
+
+    window.addEventListener('contextmenu', handleContextMenu);
+
+    return () => {
+      window.removeEventListener('contextmenu', handleContextMenu);
+    }
+  }, []);
 
   return (
-    <div className="container" onContextMenu={handleContextMenu}>
+    <div className="container">
       <button onClick={() => setCount(c => c + 1)}>count: {count}</button>
       <button onClick={() => setDisabled(d => !d)}>Toggle disabled</button>
       <div><textarea rows="5" /></div>
