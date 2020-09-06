@@ -7,8 +7,8 @@ export const useMenuList = (onClick, onClose) => {
     const containerRef = useRef(null);
 
     const eventHandlers = useMemo(() => ({
-        handleClick(event, isStopPropagation, isKeyEvent) {
-            onClose(isKeyEvent);
+        handleClick(event, isStopPropagation, isKeyboardEvent) {
+            onClose(isKeyboardEvent);
             if (!isStopPropagation) onClick && onClick(event);
         }
     }), [onClick, onClose]);

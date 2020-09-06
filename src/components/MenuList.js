@@ -183,8 +183,8 @@ export const MenuList = defineName(React.memo(({
         const placeRightX = anchorRect.right - containerRect.left + 1;
         const placeLeftorRightY = anchorRect.top - containerRect.top;
 
-        const placeTopY = anchorRect.top - containerRect.top - menuRect.height;
-        const placeBottomY = anchorRect.bottom - containerRect.top;
+        const placeTopY = anchorRect.top - containerRect.top - menuRect.height - 1;
+        const placeBottomY = anchorRect.bottom - containerRect.top + 1;
         const placeToporBottomX = anchorRect.left - containerRect.left;
 
         let newPosition, x, y;

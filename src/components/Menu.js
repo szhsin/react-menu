@@ -1,7 +1,7 @@
 import React, { useCallback, useRef, useMemo, useState } from 'react';
 import {
-    bem, menuContainerClass, keyCodes, EventHandlersContext,
-    useMenuState
+    bem, menuContainerClass, EventHandlersContext,
+    useMenuState, useMenuList
 } from '../utils';
 import { MenuList } from './MenuList'
 
@@ -11,48 +11,29 @@ export const Menu = React.memo(({ menuButton, direction, children, onClick }) =>
     // console.log(`Menu render`);
     const { isMounted, isOpen, closeMenu, toggleMenu } = useMenuState();
     const [isKeyboardEvent, setIsKeyboardEvent] = useState(false);
-    const containerRef = useRef(null);
     const buttonRef = useRef(null);
 
-    const handleMenuButtonClick = useCallback(e => {
-        setIsKeyboardEvent(e.detail === 0);
-        toggleMenu();
-    }, [toggleMenu]);
+    const handleClose = useCallback(isKeyboardEvent => {
+        closeMenu();
+        if (isKeyboardEvent) buttonRef.current.focus();
+    }, [closeMenu]);
+
+    const { containerRef, eventHandlers, ...otherHandlers } = useMenuList(onClick, handleClose);
 
     const button = useMemo(() => (
         menuButton &&
-        React.cloneElement(menuButton,
-            { ref: buttonRef, onClick: handleMenuButtonClick })
-    ), [menuButton, handleMenuButtonClick]);
-
-    const eventHandlers = useMemo(() => ({
-        handleClick(event, isStopPropagation, isKeyEvent) {
-            closeMenu();
-            if (isKeyEvent) buttonRef.current.focus();
-            if (!isStopPropagation) onClick && onClick(event);
-        }
-    }), [onClick, closeMenu]);
-
-    const handleKeyDown = e => {
-        switch (e.keyCode) {
-            case keyCodes.ESC:
-                closeMenu();
-                buttonRef.current.focus();
-                break;
-        }
-    }
-
-    const handleBlur = e => {
-        if (!containerRef.current.contains(e.relatedTarget)) {
-            closeMenu();
-        }
-    }
+        React.cloneElement(menuButton, {
+            ref: buttonRef,
+            onClick: e => {
+                setIsKeyboardEvent(e.detail === 0);
+                toggleMenu();
+            }
+        })
+    ), [menuButton, toggleMenu]);
 
     return (
         <div className={bem(menuContainerClass, null, ['open', isOpen])}
-            role="presentation" ref={containerRef}
-            onKeyDown={handleKeyDown}
-            onBlur={handleBlur}>
+            role="presentation" ref={containerRef} {...otherHandlers}>
             {button}
 
             <EventHandlersContext.Provider value={eventHandlers}>

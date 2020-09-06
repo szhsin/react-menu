@@ -33,7 +33,6 @@ const App = () => {
   useEffect(() => {
     const handleContextMenu = (e) => {
       e.preventDefault();
-      console.log('contextmenu', 'x:', e.clientX, 'y:', e.clientY);
       setAnchorPoint({ x: e.clientX, y: e.clientY });
       setOpen(true);
     }
@@ -74,9 +73,13 @@ const App = () => {
               }}>
               item 3.2.2
             </MenuItem>
+            <SubMenu label="more...">
+              {[7, 8, 9].map(i => <MenuItem key={i} value={i}>{`Item ${i}`}</MenuItem>)}
+            </SubMenu>
             <MenuItem value={323}>item 3.2.3</MenuItem>
           </SubMenu>
           <MenuItem href="https://github.com">Github</MenuItem>
+          {[4, 5, 6].map(i => <MenuItem key={i} value={i}>{`Item ${i}`}</MenuItem>)}
         </SubMenu>
         <MenuDivider />
         <MenuItem type="checkbox" value={'check1'} checked={checkBoxs[0]}>Bold</MenuItem>
@@ -94,13 +97,20 @@ const App = () => {
         <MenuItem type="radi2o">item 4</MenuItem>
       </Menu>
 
-      <ContextMenu isOpen={isOpen} anchorPoint={anchorPoint} onClose={e => setOpen(false)} >
-        {[1, 2, 3, 4].map(i => <MenuItem key={i}>{`Item ${i}`}</MenuItem>)}
+      <ContextMenu isOpen={isOpen} anchorPoint={anchorPoint} onClose={e => setOpen(false)}
+        onClick={e => console.log('Context menu click:', e.value)}>
+        <SubMenu label="more...">
+          {[1, 2, 3, 4].map(i => <MenuItem key={i} value={i}>{`Item ${i}`}</MenuItem>)}
+        </SubMenu>
+        <MenuItem>Copy</MenuItem>
+        <MenuItem>Cut</MenuItem>
+        <MenuItem>Paste</MenuItem>
+
       </ContextMenu>
 
       <div><input /></div>
 
-      <Menu menuButton={<button>Customisable button</button>} onClick={handleMenuClick} direction={'top'}>
+      <Menu menuButton={<button>Customisable button</button>} onClick={handleMenuClick} direction={'right'}>
         {[1, 2, 3, 4].map(i => <MenuItem key={i}>{`Item ${i}`}</MenuItem>)}
         <SubMenu label="font size">
           <MenuRadioGroup value={radioValue} onChange={(e) => setRadioValue(e.value)}>
