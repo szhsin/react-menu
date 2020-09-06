@@ -110,7 +110,7 @@ const App = () => {
 
       <div><input /></div>
 
-      <Menu menuButton={<button>Customisable button</button>} onClick={handleMenuClick} direction={'right'}>
+      <Menu menuButton={<button>Customisable button</button>} onClick={handleMenuClick} direction={'top'}>
         {[1, 2, 3, 4].map(i => <MenuItem key={i}>{`Item ${i}`}</MenuItem>)}
         <SubMenu label="font size">
           <MenuRadioGroup value={radioValue} onChange={(e) => setRadioValue(e.value)}>

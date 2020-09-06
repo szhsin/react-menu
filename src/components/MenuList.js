@@ -125,16 +125,10 @@ export const MenuList = defineName(React.memo(({
         const getTopOverflow = y => containerRect.top + y;
         const getBottomOverflow = y => containerRect.top + y + menuRect.height - viewportHeight;
 
-        const scrollIntoView = y => {
-            const bottomOverflow = getBottomOverflow(y);
-            if (bottomOverflow > 0) {
-                window.scrollBy({ left: 0, top: bottomOverflow, behavior: 'smooth' });
-            }
-        }
-
         const confineHorizontally = x => {
-            // First check whether menu overflows to the right side,
-            // then check the left side,
+            // If menu overflows to the right side, adjust x to have the menu contained within the viewport
+            // and there is no need to check the left side;
+            // if it doesn't overflow right, then check the left side,
             // and adjust x to have the menu contained within the viewport.
             const rightOverflow = getRightOverflow(x);
             if (rightOverflow > 0) {
@@ -149,6 +143,21 @@ export const MenuList = defineName(React.memo(({
             return x;
         }
 
+        const confineVertically = y => {
+            // Similar logic to confineHorizontally above
+            const bottomOverflow = getBottomOverflow(y);
+            if (bottomOverflow > 0) {
+                y -= bottomOverflow;
+            } else {
+                const topOverflow = getTopOverflow(y);
+                if (topOverflow < 0) {
+                    y -= topOverflow;
+                }
+            }
+
+            return y;
+        }
+
         return {
             menuRect,
             containerRect,
@@ -159,8 +168,8 @@ export const MenuList = defineName(React.memo(({
             getRightOverflow,
             getTopOverflow,
             getBottomOverflow,
-            scrollIntoView,
-            confineHorizontally
+            confineHorizontally,
+            confineVertically
         };
     }, [containerRef, anchorRef]);
 
@@ -175,8 +184,9 @@ export const MenuList = defineName(React.memo(({
             getLeftOverflow,
             getRightOverflow,
             getTopOverflow,
-            scrollIntoView,
-            confineHorizontally
+            getBottomOverflow,
+            confineHorizontally,
+            confineVertically
         } = positionHelpers();
 
         const placeLeftX = anchorRect.left - containerRect.left - menuRect.width - 1;
@@ -192,6 +202,7 @@ export const MenuList = defineName(React.memo(({
             case 'left': {
                 x = placeLeftX;
                 y = placeLeftorRightY;
+                y = confineVertically(y);
 
                 const leftOverflow = getLeftOverflow(x);
                 if (leftOverflow < 0) {
@@ -216,23 +227,19 @@ export const MenuList = defineName(React.memo(({
                 }
 
                 newPosition = { x, y };
-                scrollIntoView(y);
             }
                 break;
 
             case 'right': {
                 x = placeRightX;
                 y = placeLeftorRightY;
+                y = confineVertically(y);
 
+                // Opposite logic to the 'left' direction above
                 const rightOverflow = getRightOverflow(x);
                 if (rightOverflow > 0) {
-                    // if menu overflows to the right side, 
-                    // try to reposition it to the left of the anchor.
                     let adjustedX = placeLeftX;
 
-                    // if menu overflows to the left side after repositioning,
-                    // choose a side which has less overflow,
-                    // and adjust x to have the menu contained within the viewport.
                     const leftOverflow = getLeftOverflow(adjustedX);
                     if (leftOverflow < 0) {
                         if (-leftOverflow < rightOverflow) {
@@ -247,18 +254,34 @@ export const MenuList = defineName(React.memo(({
                 }
 
                 newPosition = { x, y };
-                scrollIntoView(y);
             }
                 break;
 
             case 'top': {
                 x = placeToporBottomX;
                 y = placeTopY;
-
                 x = confineHorizontally(x);
+
                 const topOverflow = getTopOverflow(y);
                 if (topOverflow < 0) {
-                    y -= topOverflow;
+                    // if menu overflows to the top, 
+                    // try to reposition it to the bottom of the anchor.
+                    let adjustedY = placeBottomY;
+
+                    // if menu overflows to the bottom after repositioning,
+                    // choose a side which has less overflow,
+                    // and adjust y to have the menu contained within the viewport.
+                    const bottomOverflow = getBottomOverflow(adjustedY);
+                    if (bottomOverflow > 0) {
+                        if (-topOverflow > bottomOverflow) {
+                            adjustedY -= bottomOverflow;
+                            y = adjustedY;
+                        } else {
+                            y -= topOverflow;
+                        }
+                    } else {
+                        y = adjustedY;
+                    }
                 }
 
                 newPosition = { x, y };
@@ -269,10 +292,27 @@ export const MenuList = defineName(React.memo(({
             default: {
                 x = placeToporBottomX;
                 y = placeBottomY;
-
                 x = confineHorizontally(x);
+
+                // Opposite logic to the 'top' direction above
+                const bottomOverflow = getBottomOverflow(y);
+                if (bottomOverflow > 0) {
+                    let adjustedY = placeTopY;
+
+                    const topOverflow = getTopOverflow(adjustedY);
+                    if (topOverflow < 0) {
+                        if (-topOverflow < bottomOverflow) {
+                            adjustedY -= topOverflow;
+                            y = adjustedY;
+                        } else {
+                            y -= bottomOverflow;
+                        }
+                    } else {
+                        y = adjustedY;
+                    }
+                }
+
                 newPosition = { x, y };
-                scrollIntoView(y);
             }
                 break;
         }
@@ -315,7 +355,7 @@ export const MenuList = defineName(React.memo(({
             }
         }
 
-        // Similar logic as the left and right side above.
+        // Similar logic to the left and right side above.
         const bottomOverflow = getBottomOverflow(y);
         if (bottomOverflow > 0) {
             const adjustedY = y - menuRect.height;
