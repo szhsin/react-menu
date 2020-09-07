@@ -1,5 +1,7 @@
 @use 'var';
 @use 'mixins';
+@use 'animations';
+@use 'sass:map';
 
 .rc-menu-container {
     position: relative;
@@ -13,7 +15,6 @@
 .rc-menu {
     @include mixins.reset-list;
     @include mixins.remove-focus;
-    display: none;
     font-size: var.$font-size;
     color: var.$color;
     background-color: var.$background-color;
@@ -26,9 +27,16 @@
     width: max-content;
     cursor: default;
     user-select: none;
+    visibility: hidden;
+    transition: visibility 0s animations.$duration;
 
     &--open {
-        display: block;
+        visibility: visible;
+        transition: visibility 0s;
+    }
+
+    @each $dir in map.keys(animations.$directions) {
+        @include animations.slide($dir);
     }
 
     &__item {

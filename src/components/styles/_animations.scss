@@ -1,0 +1,52 @@
+@use 'sass:list';
+
+$duration: 0.15s;
+$directions: (
+    "left": "X" 1,
+    "right": "X" -1,
+    "top": "Y" 1,
+    "bottom": "Y" -1,
+);
+
+@mixin slide($dir) {
+    &--dir-#{$dir} {
+        animation: slide-#{$dir}-out $duration ease;
+    }
+
+    &--open#{&}--dir-#{$dir} {
+        animation: slide-#{$dir}-in $duration ease;
+    }
+}
+
+@mixin slide-start($axis, $sign) {
+    opacity: 0;
+    transform: translate#{$axis }($sign * 0.75rem);
+}
+
+@mixin slide-end {
+    opacity: 1;
+    transform: none;
+}
+
+@each $dir, $value in $directions {
+    $axis: list.nth($value, 1);
+    $sign: list.nth($value, 2);
+
+    @keyframes slide-#{$dir}-in {
+        from {
+            @include slide-start($axis, $sign);
+        }
+        to {
+            @include slide-end;
+        }
+    }
+
+    @keyframes slide-#{$dir}-out {
+        from {
+            @include slide-end;
+        }
+        to {
+            @include slide-start($axis, $sign);
+        }
+    }
+}

@@ -19,6 +19,7 @@ export const MenuList = defineName(React.memo(({
     // console.log(`MenuList render`);
     const [position, setPosition] = useState({ x: 0, y: 0 });
     const [hoverIndex, setHoverIndex] = useState(initialHoverIndex);
+    const [expandedDirection, setExpandedDirection] = useState(direction);
     const menuRef = useRef(null);
     const menuItemsCount = useRef(0);
 
@@ -207,6 +208,7 @@ export const MenuList = defineName(React.memo(({
         }
 
         let newPosition, x, y;
+        let expandedDirection = direction;
         switch (direction) {
             case 'left': {
                 x = placeLeftX;
@@ -227,11 +229,13 @@ export const MenuList = defineName(React.memo(({
                         if (-leftOverflow > rightOverflow) {
                             adjustedX -= rightOverflow;
                             x = adjustedX;
+                            expandedDirection = 'right';
                         } else {
                             x -= leftOverflow;
                         }
                     } else {
                         x = adjustedX;
+                        expandedDirection = 'right';
                     }
                 }
 
@@ -254,11 +258,13 @@ export const MenuList = defineName(React.memo(({
                         if (-leftOverflow < rightOverflow) {
                             adjustedX -= leftOverflow;
                             x = adjustedX;
+                            expandedDirection = 'left';
                         } else {
                             x -= rightOverflow;
                         }
                     } else {
                         x = adjustedX;
+                        expandedDirection = 'left';
                     }
                 }
 
@@ -285,11 +291,13 @@ export const MenuList = defineName(React.memo(({
                         if (-topOverflow > bottomOverflow) {
                             adjustedY -= bottomOverflow;
                             y = adjustedY;
+                            expandedDirection = 'bottom';
                         } else {
                             y -= topOverflow;
                         }
                     } else {
                         y = adjustedY;
+                        expandedDirection = 'bottom';
                     }
                 }
 
@@ -313,11 +321,13 @@ export const MenuList = defineName(React.memo(({
                         if (-topOverflow < bottomOverflow) {
                             adjustedY -= topOverflow;
                             y = adjustedY;
+                            expandedDirection = 'top';
                         } else {
                             y -= bottomOverflow;
                         }
                     } else {
                         y = adjustedY;
+                        expandedDirection = 'top';
                     }
                 }
 
@@ -327,6 +337,7 @@ export const MenuList = defineName(React.memo(({
         }
 
         setPosition(newPosition);
+        setExpandedDirection(expandedDirection);
     }, [isOpen, anchorPoint, positionHelpers, align, direction]);
 
     // handle context menu positioning
@@ -364,9 +375,12 @@ export const MenuList = defineName(React.memo(({
             }
         }
 
+        let expandedDirection = 'bottom';
         // Similar logic to the left and right side above.
         const bottomOverflow = getBottomOverflow(y);
         if (bottomOverflow > 0) {
+            expandedDirection = 'top';
+
             const adjustedY = y - menuRect.height;
             const topOverflow = getTopOverflow(adjustedY);
             if (topOverflow < 0) {
@@ -377,6 +391,7 @@ export const MenuList = defineName(React.memo(({
         }
 
         setPosition({ x, y });
+        setExpandedDirection(expandedDirection);
     }, [isOpen, anchorPoint, positionHelpers]);
 
     useEffect(() => {
@@ -393,7 +408,9 @@ export const MenuList = defineName(React.memo(({
     return (
         <React.Fragment>
             {isMounted &&
-                <ul className={bem(menuClass, null, ['open', isOpen])}
+                <ul className={bem(menuClass, null,
+                    ['open', isOpen],
+                    ['dir', expandedDirection])}
                     role="menu" tabIndex="-1" ref={menuRef}
                     onKeyDown={handleKeyDown}
                     style={{

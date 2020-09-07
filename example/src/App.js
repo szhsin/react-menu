@@ -33,7 +33,7 @@ const App = () => {
 
   useEffect(() => {
     const handleContextMenu = (e) => {
-      // e.preventDefault();
+      e.preventDefault();
       setAnchorPoint({ x: e.clientX, y: e.clientY });
       setOpen(true);
     }
@@ -117,7 +117,7 @@ const App = () => {
 
       <Menu menuButton={<button>Customisable button Customisable button Customisable button</button>}
         onClick={handleMenuClick}
-        direction={'top'} align="center">
+        direction={'bottom'} align="center">
         {[1, 2, 3, 4].map(i => <MenuItem key={i}>{`Item ${i}`}</MenuItem>)}
         <SubMenu label="font size">
           <MenuRadioGroup value={radioValue} onChange={(e) => setRadioValue(e.value)}>
