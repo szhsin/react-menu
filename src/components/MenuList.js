@@ -1,6 +1,14 @@
-import React, { useState, useLayoutEffect, useRef, useMemo, useCallback, useEffect } from 'react';
+import React, {
+    useState,
+    useEffect,
+    useLayoutEffect,
+    useRef,
+    useMemo,
+    useCallback,
+    useContext
+} from 'react';
 import {
-    defineName, bem, menuClass,
+    defineName, bem, menuClass, SettingsContext,
     HoverIndexContext, initialHoverIndex, keyCodes
 } from '../utils';
 
@@ -20,6 +28,7 @@ export const MenuList = defineName(React.memo(({
     const [position, setPosition] = useState({ x: 0, y: 0 });
     const [hoverIndex, setHoverIndex] = useState(initialHoverIndex);
     const [expandedDirection, setExpandedDirection] = useState(direction);
+    const { animation } = useContext(SettingsContext);
     const menuRef = useRef(null);
     const menuItemsCount = useRef(0);
 
@@ -410,7 +419,8 @@ export const MenuList = defineName(React.memo(({
             {isMounted &&
                 <ul className={bem(menuClass, null,
                     ['open', isOpen],
-                    ['dir', expandedDirection])}
+                    ['animation', animation],
+                    ['dir', animation && expandedDirection])}
                     role="menu" tabIndex="-1" ref={menuRef}
                     onKeyDown={handleKeyDown}
                     style={{

@@ -28,10 +28,16 @@
     cursor: default;
     user-select: none;
     visibility: hidden;
-    transition: visibility 0s animations.$duration;
 
     &--open {
         visibility: visible;
+    }
+
+    &--animation {
+        transition: visibility 0s animations.$duration;
+    }
+
+    &--open#{&}--animation {
         transition: visibility 0s;
     }
 
@@ -45,10 +51,13 @@
         font-weight: var.$font-weight;
         padding: 0.6rem 1.5rem;
         background-color: var.$background-color;
-        transition: {
-            property: background-color, color;
-            duration: 0.2s;
-            timing-function: ease;
+
+        .rc-menu--animation & {
+            transition: {
+                property: background-color, color;
+                duration: 0.2s;
+                timing-function: ease;
+            }
         }
 
         &--anchor {

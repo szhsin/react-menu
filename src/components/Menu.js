@@ -1,6 +1,7 @@
 import React, { useCallback, useRef, useMemo, useState } from 'react';
 import {
-    bem, menuContainerClass, EventHandlersContext,
+    bem, menuContainerClass,
+    SettingsContext, EventHandlersContext,
     useMenuState, useMenuList
 } from '../utils';
 import { MenuList } from './MenuList'
@@ -10,6 +11,7 @@ export const Menu = React.memo(({
     menuButton,
     align,
     direction,
+    animation,
     children,
     onClick }) => {
 
@@ -23,7 +25,12 @@ export const Menu = React.memo(({
         if (isKeyboardEvent) buttonRef.current.focus();
     }, [closeMenu]);
 
-    const { containerRef, eventHandlers, ...otherHandlers } = useMenuList(onClick, handleClose);
+    const {
+        containerRef,
+        settings,
+        eventHandlers,
+        ...otherHandlers }
+        = useMenuList(animation, onClick, handleClose);
 
     const button = useMemo(() => (
         menuButton &&
@@ -41,18 +48,20 @@ export const Menu = React.memo(({
             role="presentation" ref={containerRef} {...otherHandlers}>
             {button}
 
-            <EventHandlersContext.Provider value={eventHandlers}>
-                <MenuList
-                    isMounted={isMounted}
-                    isOpen={isOpen}
-                    isKeyboardEvent={isKeyboardEvent}
-                    containerRef={containerRef}
-                    anchorRef={buttonRef}
-                    align={align}
-                    direction={direction}>
-                    {children}
-                </MenuList>
-            </EventHandlersContext.Provider>
+            <SettingsContext.Provider value={settings}>
+                <EventHandlersContext.Provider value={eventHandlers}>
+                    <MenuList
+                        isMounted={isMounted}
+                        isOpen={isOpen}
+                        isKeyboardEvent={isKeyboardEvent}
+                        containerRef={containerRef}
+                        anchorRef={buttonRef}
+                        align={align}
+                        direction={direction}>
+                        {children}
+                    </MenuList>
+                </EventHandlersContext.Provider>
+            </SettingsContext.Provider>
         </div>
     );
 });

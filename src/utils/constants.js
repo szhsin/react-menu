@@ -13,6 +13,7 @@ export const initialHoverIndex = -1;
 export const HoverIndexContext = React.createContext(initialHoverIndex);
 export const EventHandlersContext = React.createContext({});
 export const RadioGroupContext = React.createContext({});
+export const SettingsContext = React.createContext({});
 
 export const keyCodes = Object.freeze({
     'RETURN': 13,

@@ -52,7 +52,7 @@ const App = () => {
       <div><textarea rows="5" /></div>
 
       <Menu menuButton={<MenuButton>Open menu</MenuButton>}
-        onClick={handleMenuClick} direction="bottom" >
+        onClick={handleMenuClick} direction="bottom" animation>
         <MenuItem value="1">item 1</MenuItem>
         <MenuItem href="https://www.google.com/" target="_blank" value="google">Google</MenuItem>
         <MenuItem href="#" value="#" disabled={disabled}>item 2 (A long item)</MenuItem>
@@ -103,7 +103,7 @@ const App = () => {
           setOpen(false);
           if (isKeyboardEvent) btnRef.current.focus();
         }}
-        onClick={e => console.log('Context menu click:', e.value)}>
+        onClick={e => console.log('Context menu click:', e.value)} animation>
         <SubMenu label="more...">
           {[1, 2, 3, 4].map(i => <MenuItem key={i} value={i}>{`Item ${i}`}</MenuItem>)}
         </SubMenu>

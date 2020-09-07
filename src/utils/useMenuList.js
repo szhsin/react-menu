@@ -2,9 +2,13 @@ import { useRef, useCallback, useMemo } from 'react';
 import { keyCodes } from './constants';
 
 
-export const useMenuList = (onClick, onClose) => {
+export const useMenuList = (animation, onClick, onClose) => {
 
     const containerRef = useRef(null);
+
+    const settings = useMemo(() => ({
+        animation
+    }), [animation]);
 
     const eventHandlers = useMemo(() => ({
         handleClick(event, isStopPropagation, isKeyboardEvent) {
@@ -28,7 +32,7 @@ export const useMenuList = (onClick, onClose) => {
     }, [onClose]);
 
     return {
-        containerRef, eventHandlers,
+        containerRef, settings, eventHandlers,
         onKeyDown: handleKeyDown, onBlur: handleBlur
     };
 }
