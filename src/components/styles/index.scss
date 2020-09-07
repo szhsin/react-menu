@@ -45,6 +45,11 @@
         font-weight: var.$font-weight;
         padding: 0.6rem 1.5rem;
         background-color: var.$background-color;
+        transition: {
+            property: background-color, color;
+            duration: 0.2s;
+            timing-function: ease;
+        }
 
         &--anchor {
             display: block;
