@@ -55,8 +55,8 @@
         .rc-menu--animation & {
             transition: {
                 property: background-color, color;
-                duration: 0.2s;
-                timing-function: ease;
+                duration: animations.$duration;
+                timing-function: ease-in-out;
             }
         }
 

@@ -10,11 +10,11 @@ $directions: (
 
 @mixin slide($dir) {
     &--dir-#{$dir} {
-        animation: slide-#{$dir}-out $duration ease;
+        animation: slide-in-#{$dir} $duration ease-in;
     }
 
     &--open#{&}--dir-#{$dir} {
-        animation: slide-#{$dir}-in $duration ease;
+        animation: slide-out-#{$dir} $duration ease-out;
     }
 }
 
@@ -32,7 +32,7 @@ $directions: (
     $axis: list.nth($value, 1);
     $sign: list.nth($value, 2);
 
-    @keyframes slide-#{$dir}-in {
+    @keyframes slide-out-#{$dir} {
         from {
             @include slide-start($axis, $sign);
         }
@@ -41,7 +41,7 @@ $directions: (
         }
     }
 
-    @keyframes slide-#{$dir}-out {
+    @keyframes slide-in-#{$dir} {
         from {
             @include slide-end;
         }
