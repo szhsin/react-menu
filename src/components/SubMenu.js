@@ -6,7 +6,7 @@ import {
 import { MenuList } from './MenuList';
 
 
-export const SubMenu = defineName(React.memo(({ label, disabled, index, children, onMouseEnter }) => {
+export const SubMenu = defineName(React.memo(({ className, menuClassName, label, disabled, index, children, onMouseEnter }) => {
 
     // console.log(`Submenu render: ${label}`)
     const { isMounted, isOpen, openMenu, closeMenu, toggleMenu } = useMenuState();
@@ -85,14 +85,15 @@ export const SubMenu = defineName(React.memo(({ label, disabled, index, children
     }, [isHovering, closeMenu]);
 
     return (
-        <li className={bem(menuClass, subMenuClass, ['open', isOpen])}
+        <li className={bem(menuClass, subMenuClass)()}
             role="presentation" ref={containerRef}
             onKeyDown={handleKeyDown}>
 
-            <div className={bem(menuClass, menuItemClass,
-                ['hover', isHovering],
-                ['active', active && !disabled],
-                ['disabled', disabled])}
+            <div className={bem(menuClass, menuItemClass, {
+                hover: isHovering,
+                active: active && !disabled,
+                disabled
+            })(className)}
                 role="menuitem"
                 aria-haspopup="true"
                 aria-expanded={isOpen}
@@ -107,6 +108,7 @@ export const SubMenu = defineName(React.memo(({ label, disabled, index, children
             </div>
 
             <MenuList
+                className={menuClassName}
                 isMounted={isMounted}
                 isOpen={isOpen}
                 isKeyboardEvent={isKeyboardEvent}

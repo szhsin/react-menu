@@ -6,7 +6,7 @@ import {
 } from '../utils';
 
 
-export const MenuItem = defineName(React.memo(({ type, checked, disabled, href, index,
+export const MenuItem = defineName(React.memo(({ className, type, checked, disabled, href, index,
     children, onMouseEnter, value, onClick, ...restProps }) => {
     // console.log(`render MenuItem: ${children}`)
 
@@ -67,14 +67,15 @@ export const MenuItem = defineName(React.memo(({ type, checked, disabled, href, 
     }, [isHovering]);
 
     const menuItemProps = {
-        className: bem(menuClass, menuItemClass,
-            ['hover', isHovering],
-            ['active', active && !disabled],
-            ['type', type],
-            ['checked', isRadio ? radioGroup.value === value : checked],
-            ['disabled', disabled],
-            ['anchor', isAnchor]),
-        role: "menuitem",
+        className: bem(menuClass, menuItemClass, {
+            type,
+            disabled,
+            hover: isHovering,
+            active: active && !disabled,
+            checked: isRadio ? radioGroup.value === value : checked,
+            anchor: isAnchor
+        })(className),
+        role: 'menuitem',
         tabIndex: isHovering ? 0 : -1,
         ref: itemRef,
         onMouseEnter: handleMouseEnter,

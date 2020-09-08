@@ -8,6 +8,7 @@ import { MenuList } from './MenuList'
 
 
 export const ContextMenu = React.memo(({
+    className,
     anchorPoint,
     isOpen,
     isKeyboardEvent,
@@ -24,12 +25,13 @@ export const ContextMenu = React.memo(({
         = useMenuList(animation, onClick, onClose);
 
     return (
-        <div className={bem(menuContainerClass, null, ['context-menu', true])}
+        <div className={bem(menuContainerClass, null, { 'context-menu': true })()}
             role="presentation" ref={containerRef} {...otherHandlers}>
 
             <SettingsContext.Provider value={settings}>
                 <EventHandlersContext.Provider value={eventHandlers}>
                     <MenuList
+                        className={className}
                         isMounted={true}
                         isOpen={isOpen}
                         isKeyboardEvent={isKeyboardEvent}

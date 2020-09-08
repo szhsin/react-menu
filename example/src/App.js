@@ -5,6 +5,7 @@ import {
   MenuRadioGroup, MenuDivider, MenuHeader, ContextMenu
 } from '@szhsin/react-menu'
 import '@szhsin/react-menu/dist/index.css'
+import './index.css'
 
 const App = () => {
   const [count, setCount] = useState(0);
@@ -45,19 +46,25 @@ const App = () => {
     }
   }, []);
 
+  const specialClass = ({ active, hover }) => {
+    if (active) return 'special-item-active';
+    if (hover) return 'special-item-hover';
+    return 'special-item';
+  }
+
   return (
     <div className="container">
       <button onClick={() => setCount(c => c + 1)}>count: {count}</button>
       <button onClick={() => setDisabled(d => !d)}>Toggle disabled</button>
       <div><textarea rows="5" /></div>
 
-      <Menu menuButton={<MenuButton>Open menu</MenuButton>}
+      <Menu menuButton={<MenuButton className="my-button">Open menu</MenuButton>}
         onClick={handleMenuClick} direction="bottom" animation>
-        <MenuItem value="1">item 1</MenuItem>
-        <MenuItem href="https://www.google.com/" target="_blank" value="google">Google</MenuItem>
+        <MenuItem value="1" className="special-item">item 1</MenuItem>
+        <MenuItem className={specialClass} href="https://www.google.com/" target="_blank" value="google">Google</MenuItem>
         <MenuItem href="#" value="#" disabled={disabled}>item 2 (A long item)</MenuItem>
         <MenuItem disabled>item (disabled)</MenuItem>
-        <SubMenu label="item 3">
+        <SubMenu label="item 3" className={specialClass} menuClassName="my-menu">
           <MenuItem disabled={disabled}>item 3.1</MenuItem>
           <MenuDivider />
           <SubMenu label="item 3.2" disabled={disabled}>
@@ -95,10 +102,10 @@ const App = () => {
             <MenuItem value={i} key={i}>{`${i}px`}</MenuItem>)}
         </MenuRadioGroup>
         <MenuDivider />
-        <MenuItem type="radi2o">item 4</MenuItem>
+        <MenuItem className={specialClass}>item 4 9</MenuItem>
       </Menu>
 
-      <ContextMenu isOpen={isOpen} anchorPoint={anchorPoint}
+      <ContextMenu isOpen={isOpen} anchorPoint={anchorPoint} className="my-menu"
         onClose={isKeyboardEvent => {
           setOpen(false);
           if (isKeyboardEvent) btnRef.current.focus();
@@ -108,7 +115,7 @@ const App = () => {
           {[1, 2, 3, 4].map(i => <MenuItem key={i} value={i}>{`Item ${i}`}</MenuItem>)}
         </SubMenu>
         <MenuItem>Copy</MenuItem>
-        <MenuItem>Cut</MenuItem>
+        <MenuItem className={specialClass}>Cut</MenuItem>
         <MenuItem>Paste</MenuItem>
 
       </ContextMenu>
@@ -117,7 +124,7 @@ const App = () => {
 
       <Menu menuButton={<button>Customisable button Customisable button Customisable button</button>}
         onClick={handleMenuClick}
-        direction={'bottom'} align="center">
+        direction={'right'} align="center" animation>
         {[1, 2, 3, 4].map(i => <MenuItem key={i}>{`Item ${i}`}</MenuItem>)}
         <SubMenu label="font size">
           <MenuRadioGroup value={radioValue} onChange={(e) => setRadioValue(e.value)}>

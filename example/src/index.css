@@ -25,3 +25,31 @@ button {
   left: 100px;
   top: 200px;
 }
+
+.special-item {
+  color: green;
+  background-color: lightblue;
+  text-decoration: none;
+}
+
+.special-item-hover {
+  color: yellow;
+  background-color: lightcoral;
+}
+
+.special-item-active {
+  color: red;
+  background-color: yellow;
+}
+
+.my-menu {
+  border-radius: 0;
+  box-shadow: none;
+  border: 2px solid red;
+  padding: 0;
+}
+
+.my-button {
+  border-radius: 0;
+  border: 1px solid blue;
+}

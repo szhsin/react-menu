@@ -14,6 +14,7 @@ import {
 
 
 export const MenuList = defineName(React.memo(({
+    className,
     isOpen,
     isMounted,
     isKeyboardEvent,
@@ -417,10 +418,11 @@ export const MenuList = defineName(React.memo(({
     return (
         <React.Fragment>
             {isMounted &&
-                <ul className={bem(menuClass, null,
-                    ['open', isOpen],
-                    ['animation', animation],
-                    ['dir', animation && expandedDirection])}
+                <ul className={bem(menuClass, null, {
+                    open: isOpen,
+                    animation,
+                    dir: animation && expandedDirection
+                })(className)}
                     role="menu" tabIndex="-1" ref={menuRef}
                     onKeyDown={handleKeyDown}
                     style={{

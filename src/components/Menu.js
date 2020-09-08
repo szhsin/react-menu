@@ -8,6 +8,7 @@ import { MenuList } from './MenuList'
 
 
 export const Menu = React.memo(({
+    className,
     menuButton,
     align,
     direction,
@@ -44,13 +45,14 @@ export const Menu = React.memo(({
     ), [menuButton, toggleMenu]);
 
     return (
-        <div className={bem(menuContainerClass)}
+        <div className={bem(menuContainerClass)()}
             role="presentation" ref={containerRef} {...otherHandlers}>
             {button}
 
             <SettingsContext.Provider value={settings}>
                 <EventHandlersContext.Provider value={eventHandlers}>
                     <MenuList
+                        className={className}
                         isMounted={isMounted}
                         isOpen={isOpen}
                         isKeyboardEvent={isKeyboardEvent}
