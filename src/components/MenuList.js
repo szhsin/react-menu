@@ -9,7 +9,7 @@ import React, {
 } from 'react';
 import {
     defineName, bem, menuClass, SettingsContext,
-    HoverIndexContext, initialHoverIndex, keyCodes
+    MenuListContext, initialHoverIndex, keyCodes
 } from '../utils';
 
 
@@ -32,10 +32,6 @@ export const MenuList = defineName(React.memo(({
     const { animation } = useContext(SettingsContext);
     const menuRef = useRef(null);
     const menuItemsCount = useRef(0);
-
-    const handleMouseEnter = useCallback((index) => {
-        setHoverIndex(index);
-    }, []);
 
     const menuItems = useMemo(() => {
         if (!isMounted) return null;
@@ -72,22 +68,23 @@ export const MenuList = defineName(React.memo(({
                             ? React.cloneElement(radioChild, props)
                             : React.cloneElement(radioChild, {
                                 ...props,
-                                index: index++,
-                                onMouseEnter: handleMouseEnter
+                                index: index++
                             })
                     });
 
                 return React.cloneElement(child, { children: radioItems });
             } else {
-                return child.props.disabled ? child : React.cloneElement(child,
-                    { index: index++, onMouseEnter: handleMouseEnter });
+                return child.props.disabled
+                    ? child
+                    : React.cloneElement(child, { index: index++ });
             }
         });
 
-        // Store the count of menu items in a ref to avoid updating state during render
+        // Store the count of menu items in a ref rather than a local state
+        // to avoid updating state during render
         menuItemsCount.current = index;
         return items;
-    }, [isMounted, children, handleMouseEnter]);
+    }, [isMounted, children]);
 
     const handleKeyDown = e => {
         let handled = false;
@@ -405,15 +402,26 @@ export const MenuList = defineName(React.memo(({
     }, [isOpen, anchorPoint, positionHelpers]);
 
     useEffect(() => {
-        if (isOpen) {
-            setTimeout(() => {
-                menuRef.current.focus()
-                if (isKeyboardEvent) setHoverIndex(0);
-            }, 10);
-        } else {
-            setHoverIndex(initialHoverIndex);
-        }
+        if (!isOpen) setHoverIndex(initialHoverIndex);
+
+        const id = setTimeout(() => {
+            // We are seeing the old isOpen value when closure was created
+            // However it should not be a issue since the timeout is cleared whenever isOpen changes
+            // Don't set focus when menu is closed, otherwise focus will be lost
+            // and onBlur event will be fired with relatedTarget setting as null.
+            if (!isOpen) return;
+            menuRef.current.focus();
+            if (isKeyboardEvent) setHoverIndex(0);
+        }, 100);
+
+        return () => clearTimeout(id);
     }, [isOpen, isKeyboardEvent]);
+
+    const context = useMemo(() => ({
+        isParentOpen: isOpen,
+        hoverIndex,
+        setHoverIndex
+    }), [isOpen, hoverIndex, setHoverIndex]);
 
     return (
         <React.Fragment>
@@ -429,9 +437,9 @@ export const MenuList = defineName(React.memo(({
                         left: `${position.x}px`,
                         top: `${position.y}px`
                     }}>
-                    <HoverIndexContext.Provider value={hoverIndex}>
+                    <MenuListContext.Provider value={context}>
                         {menuItems}
-                    </HoverIndexContext.Provider>
+                    </MenuListContext.Provider>
                 </ul>}
         </React.Fragment>
     );

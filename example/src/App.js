@@ -60,7 +60,7 @@ const App = () => {
 
       <Menu menuButton={<MenuButton className="my-button">Open menu</MenuButton>}
         onClick={handleMenuClick} direction="bottom" animation>
-        <MenuItem value="1" className="special-item">item 1</MenuItem>
+        <MenuItem value="1">item 1</MenuItem>
         <MenuItem className={specialClass} href="https://www.google.com/" target="_blank" value="google">Google</MenuItem>
         <MenuItem href="#" value="#" disabled={disabled}>item 2 (A long item)</MenuItem>
         <MenuItem disabled>item (disabled)</MenuItem>

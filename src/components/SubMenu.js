@@ -1,12 +1,12 @@
 import React, { useState, useRef, useContext, useEffect } from 'react';
 import {
     defineName, bem, menuClass, subMenuClass, menuItemClass,
-    HoverIndexContext, keyCodes, useMenuState, useActiveState
+    MenuListContext, keyCodes, useMenuState, useActiveState
 } from '../utils';
 import { MenuList } from './MenuList';
 
 
-export const SubMenu = defineName(React.memo(({ className, menuClassName, label, disabled, index, children, onMouseEnter }) => {
+export const SubMenu = defineName(React.memo(({ className, menuClassName, label, disabled, index, children }) => {
 
     // console.log(`Submenu render: ${label}`)
     const { isMounted, isOpen, openMenu, closeMenu, toggleMenu } = useMenuState();
@@ -15,11 +15,12 @@ export const SubMenu = defineName(React.memo(({ className, menuClassName, label,
     const containerRef = useRef(null);
     const itemRef = useRef(null);
     const timeoutId = useRef();
-    const isHovering = useContext(HoverIndexContext) === index;
+    const { isParentOpen, hoverIndex, setHoverIndex } = useContext(MenuListContext);
+    const isHovering = hoverIndex === index;
 
     const handleMouseEnter = e => {
         if (disabled) return;
-        onMouseEnter(index, e);
+        setHoverIndex(index);
         timeoutId.current = setTimeout(() => {
             setIsKeyboardEvent(false);
             openMenu();
@@ -77,12 +78,12 @@ export const SubMenu = defineName(React.memo(({ className, menuClassName, label,
     }
 
     useEffect(() => {
-        if (isHovering) {
+        if (isHovering && isParentOpen) {
             itemRef.current.focus();
         } else {
             closeMenu();
         }
-    }, [isHovering, closeMenu]);
+    }, [isHovering, isParentOpen, closeMenu]);
 
     return (
         <li className={bem(menuClass, subMenuClass)()}

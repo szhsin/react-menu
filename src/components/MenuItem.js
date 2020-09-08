@@ -1,17 +1,18 @@
 import React, { useContext, useEffect, useRef } from 'react';
 import {
     defineName, bem, menuClass, menuItemClass,
-    HoverIndexContext, EventHandlersContext, RadioGroupContext,
+    MenuListContext, EventHandlersContext, RadioGroupContext,
     keyCodes, useActiveState
 } from '../utils';
 
 
 export const MenuItem = defineName(React.memo(({ className, type, checked, disabled, href, index,
-    children, onMouseEnter, value, onClick, ...restProps }) => {
+    children, value, onClick, ...restProps }) => {
     // console.log(`render MenuItem: ${children}`)
 
     const itemRef = useRef(null);
-    const isHovering = useContext(HoverIndexContext) === index;
+    const { isParentOpen, hoverIndex, setHoverIndex } = useContext(MenuListContext);
+    const isHovering = hoverIndex === index;
     const eventHandlers = useContext(EventHandlersContext);
     const radioGroup = useContext(RadioGroupContext);
     const { active, onKeyUp, ...activeStateHandlers } = useActiveState();
@@ -57,14 +58,16 @@ export const MenuItem = defineName(React.memo(({ className, type, checked, disab
 
     const handleMouseEnter = e => {
         if (disabled) return;
-        onMouseEnter(index, e);
+        setHoverIndex(index);
     }
 
     useEffect(() => {
-        if (isHovering) {
+        // Don't set focus when parent menu is closed, otherwise focus will be lost
+        // and onBlur event will be fired with relatedTarget setting as null.
+        if (isHovering && isParentOpen) {
             itemRef.current.focus();
         }
-    }, [isHovering]);
+    }, [isHovering, isParentOpen]);
 
     const menuItemProps = {
         className: bem(menuClass, menuItemClass, {
