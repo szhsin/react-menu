@@ -9,7 +9,7 @@ import { MenuList } from './MenuList';
 export const SubMenu = defineName(React.memo(({ className, menuClassName, label, disabled, index, children }) => {
 
     // console.log(`Submenu render: ${label}`)
-    const { isMounted, isOpen, openMenu, closeMenu, toggleMenu } = useMenuState();
+    const { isMounted, isOpen, openMenu, closeMenu } = useMenuState();
     const { active, onKeyUp, ...activeStateHandlers } = useActiveState(keyCodes.RIGHT);
     const [isKeyboardEvent, setIsKeyboardEvent] = useState(false);
     const containerRef = useRef(null);
@@ -22,6 +22,7 @@ export const SubMenu = defineName(React.memo(({ className, menuClassName, label,
         if (disabled) return;
         setHoverIndex(index);
         timeoutId.current = setTimeout(() => {
+            timeoutId.current = null;
             setIsKeyboardEvent(false);
             openMenu();
         }, 300);
@@ -34,7 +35,7 @@ export const SubMenu = defineName(React.memo(({ className, menuClassName, label,
     const handleClick = e => {
         if (disabled) return;
         setIsKeyboardEvent(false);
-        toggleMenu();
+        openMenu();
     }
 
     const handleKeyDown = e => {
