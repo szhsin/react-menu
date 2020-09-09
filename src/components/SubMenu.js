@@ -11,7 +11,7 @@ export const SubMenu = defineName(React.memo(({ className, menuClassName, label,
 
     // console.log(`Submenu render: ${label}`)
     const { isMounted, isOpen, openMenu, closeMenu } = useMenuState();
-    const { active, onKeyUp, ...activeStateHandlers } = useActiveState(keyCodes.RIGHT);
+    const { active, onKeyUp, onBlur, ...activeStateHandlers } = useActiveState(keyCodes.RIGHT);
     const [isKeyboardEvent, setIsKeyboardEvent] = useState(false);
     const containerRef = useRef(null);
     const itemRef = useRef(null);
@@ -79,6 +79,21 @@ export const SubMenu = defineName(React.memo(({ className, menuClassName, label,
         }
     }
 
+    const handleBlur = e => {
+        onBlur(e);
+        // Check if something which is not in the subtree get focus.
+        // It handles situation such as clicking on a sibling disabled menu item
+        if (!e.currentTarget.contains(e.relatedTarget)) {
+            closeMenu();
+            hoverIndexDispatch({ type: hoverIndexActionType.UNSET, index });
+        } else if (itemRef.current === e.relatedTarget) {
+            // This handles clicking on submenu item when it's open
+            // First close the submenu and then let subsequent onClick event to re-open it
+            // for maintaining the correct focus
+            closeMenu();
+        }
+    }
+
     useEffect(() => {
         if (isHovering && isParentOpen) {
             itemRef.current.focus();
@@ -90,7 +105,8 @@ export const SubMenu = defineName(React.memo(({ className, menuClassName, label,
     return (
         <li className={bem(menuClass, subMenuClass)()}
             role="presentation" ref={containerRef}
-            onKeyDown={handleKeyDown}>
+            onKeyDown={handleKeyDown}
+            onBlur={handleBlur}>
 
             <div className={bem(menuClass, menuItemClass, {
                 hover: isHovering,

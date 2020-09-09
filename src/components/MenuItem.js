@@ -15,7 +15,7 @@ export const MenuItem = defineName(React.memo(({ className, type, checked, disab
     const isHovering = hoverIndex === index;
     const eventHandlers = useContext(EventHandlersContext);
     const radioGroup = useContext(RadioGroupContext);
-    const { active, onKeyUp, ...activeStateHandlers } = useActiveState();
+    const { active, onKeyUp, onBlur, ...activeStateHandlers } = useActiveState();
     const isRadio = type === 'radio';
     const isCheckBox = type === 'checkbox';
     const isAnchor = href && !disabled && !isRadio && !isCheckBox;
@@ -61,6 +61,12 @@ export const MenuItem = defineName(React.memo(({ className, type, checked, disab
         hoverIndexDispatch({ type: hoverIndexActionType.SET, index });
     }
 
+    const handleBlur = e => {
+        onBlur(e);
+        // It handles situation such as clicking on a sibling disabled menu item
+        hoverIndexDispatch({ type: hoverIndexActionType.UNSET, index });
+    }
+
     useEffect(() => {
         // Don't set focus when parent menu is closed, otherwise focus will be lost
         // and onBlur event will be fired with relatedTarget setting as null.
@@ -84,6 +90,7 @@ export const MenuItem = defineName(React.memo(({ className, type, checked, disab
         onMouseEnter: handleMouseEnter,
         onClick: () => handleClick(false),
         onKeyUp: handleKeyUp,
+        onBlur: handleBlur,
         ...activeStateHandlers
     };
 

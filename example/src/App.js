@@ -47,9 +47,10 @@ const App = () => {
   }, []);
 
   const specialClass = ({ active, hover }) => {
-    if (active) return 'special-item-active';
-    if (hover) return 'special-item-hover';
-    return 'special-item';
+    // if (active) return 'special-item-active';
+    // if (hover) return 'special-item-hover';
+    // return 'special-item';
+    return '';
   }
 
   return (

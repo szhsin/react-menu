@@ -26,8 +26,7 @@ export const useMenuList = (animation, onClick, onClose) => {
     }, [onClose]);
 
     const handleBlur = useCallback(e => {
-        if (!containerRef.current.contains(e.relatedTarget)) {
-            console.log(e.relatedTarget);
+        if (!e.currentTarget.contains(e.relatedTarget)) {
             onClose();
         }
     }, [onClose]);
