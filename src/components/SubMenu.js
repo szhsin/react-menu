@@ -1,13 +1,22 @@
 import React, { useState, useRef, useContext, useEffect } from 'react';
 import {
-    defineName, bem, menuClass, subMenuClass, menuItemClass,
+    defineName, bem, flatStyles,
+    menuClass, subMenuClass, menuItemClass,
     MenuListContext, keyCodes, hoverIndexActionType,
     useMenuState, useActiveState
 } from '../utils';
 import { MenuList } from './MenuList';
 
 
-export const SubMenu = defineName(React.memo(({ className, menuClassName, label, disabled, index, children }) => {
+export const SubMenu = defineName(React.memo(({
+    className,
+    menuClassName,
+    styles,
+    menuStyles,
+    label,
+    disabled,
+    index,
+    children }) => {
 
     // console.log(`Submenu render: ${label}`)
     const { isMounted, isOpen, openMenu, closeMenu } = useMenuState();
@@ -102,17 +111,21 @@ export const SubMenu = defineName(React.memo(({ className, menuClassName, label,
         }
     }, [isHovering, isParentOpen, closeMenu]);
 
+    const modifiers = {
+        open: isOpen,
+        hover: isHovering,
+        active: active && !disabled,
+        disabled
+    };
+
     return (
         <li className={bem(menuClass, subMenuClass)()}
             role="presentation" ref={containerRef}
             onKeyDown={handleKeyDown}
             onBlur={handleBlur}>
 
-            <div className={bem(menuClass, menuItemClass, {
-                hover: isHovering,
-                active: active && !disabled,
-                disabled
-            })(className)}
+            <div className={bem(menuClass, menuItemClass, modifiers)(className)}
+                style={flatStyles(styles, modifiers)}
                 role="menuitem"
                 aria-haspopup="true"
                 aria-expanded={isOpen}
@@ -128,6 +141,7 @@ export const SubMenu = defineName(React.memo(({ className, menuClassName, label,
 
             <MenuList
                 className={menuClassName}
+                styles={menuStyles}
                 isMounted={isMounted}
                 isOpen={isOpen}
                 isKeyboardEvent={isKeyboardEvent}

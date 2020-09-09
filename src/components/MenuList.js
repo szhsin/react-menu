@@ -9,14 +9,15 @@ import React, {
     useContext
 } from 'react';
 import {
-    defineName, bem, menuClass, SettingsContext,
-    MenuListContext, initialHoverIndex,
+    defineName, bem, flatStyles, menuClass,
+    SettingsContext, MenuListContext, initialHoverIndex,
     keyCodes, hoverIndexActionType
 } from '../utils';
 
 
 export const MenuList = defineName(React.memo(({
     className,
+    styles,
     isOpen,
     isMounted,
     isKeyboardEvent,
@@ -454,17 +455,22 @@ export const MenuList = defineName(React.memo(({
         hoverIndexDispatch
     }), [isOpen, hoverIndex]);
 
+    const modifiers = {
+        open: isOpen,
+        animation,
+        dir: animation && expandedDirection
+    };
+
+    const userModifiers = { ...modifiers, dir: expandedDirection };
+
     return (
         <React.Fragment>
             {isMounted &&
-                <ul className={bem(menuClass, null, {
-                    open: isOpen,
-                    animation,
-                    dir: animation && expandedDirection
-                })(className)}
+                <ul className={bem(menuClass, null, modifiers)(className, userModifiers)}
                     role="menu" tabIndex="-1" ref={menuRef}
                     onKeyDown={handleKeyDown}
                     style={{
+                        ...flatStyles(styles, userModifiers),
                         left: `${position.x}px`,
                         top: `${position.y}px`
                     }}>

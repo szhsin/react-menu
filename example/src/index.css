@@ -42,14 +42,18 @@ button {
   background-color: yellow;
 }
 
-/* .my-menu {
+.my-menu {
   border-radius: 0;
   box-shadow: none;
   border: 2px solid red;
   padding: 0;
-} */
+}
 
 .my-button {
   border-radius: 0;
   border: 1px solid blue;
+}
+
+.rc-menu__submenu > .submenu-open::after {
+  content: "<";
 }

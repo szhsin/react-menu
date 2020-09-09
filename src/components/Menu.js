@@ -9,6 +9,7 @@ import { MenuList } from './MenuList'
 
 export const Menu = React.memo(({
     className,
+    styles,
     menuButton,
     align,
     direction,
@@ -53,6 +54,7 @@ export const Menu = React.memo(({
                 <EventHandlersContext.Provider value={eventHandlers}>
                     <MenuList
                         className={className}
+                        styles={styles}
                         isMounted={isMounted}
                         isOpen={isOpen}
                         isKeyboardEvent={isKeyboardEvent}

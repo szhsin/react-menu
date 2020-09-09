@@ -1,9 +1,10 @@
 import React, { useMemo } from 'react';
-import { defineName, bem, menuClass, radioGroupClass, RadioGroupContext } from '../utils';
+import { defineName, bem, flatStyles, menuClass, radioGroupClass, RadioGroupContext } from '../utils';
 
 
 export const MenuRadioGroup = defineName(React.memo(({
     className,
+    styles,
     children,
     name,
     value,
@@ -14,6 +15,7 @@ export const MenuRadioGroup = defineName(React.memo(({
     return (
         <li role="presentation">
             <ul className={bem(menuClass, radioGroupClass)(className)}
+                style={flatStyles(styles)}
                 role="group"
                 aria-label={name}>
                 <RadioGroupContext.Provider value={contextValue}>

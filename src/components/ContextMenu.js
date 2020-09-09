@@ -9,6 +9,7 @@ import { MenuList } from './MenuList'
 
 export const ContextMenu = React.memo(({
     className,
+    styles,
     anchorPoint,
     isOpen,
     isKeyboardEvent,
@@ -32,6 +33,7 @@ export const ContextMenu = React.memo(({
                 <EventHandlersContext.Provider value={eventHandlers}>
                     <MenuList
                         className={className}
+                        styles={styles}
                         isMounted={true}
                         isOpen={isOpen}
                         isKeyboardEvent={isKeyboardEvent}

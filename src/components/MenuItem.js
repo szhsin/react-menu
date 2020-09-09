@@ -1,13 +1,23 @@
 import React, { useContext, useEffect, useRef } from 'react';
 import {
-    defineName, bem, menuClass, menuItemClass,
+    defineName, bem, flatStyles, menuClass, menuItemClass,
     MenuListContext, EventHandlersContext, RadioGroupContext,
     keyCodes, hoverIndexActionType, useActiveState
 } from '../utils';
 
 
-export const MenuItem = defineName(React.memo(({ className, type, checked, disabled, href, index,
-    children, value, onClick, ...restProps }) => {
+export const MenuItem = defineName(React.memo(({
+    className,
+    styles,
+    type,
+    checked,
+    disabled,
+    href,
+    index,
+    value,
+    children,
+    onClick,
+    ...restProps }) => {
     // console.log(`render MenuItem: ${children}`)
 
     const itemRef = useRef(null);
@@ -75,15 +85,18 @@ export const MenuItem = defineName(React.memo(({ className, type, checked, disab
         }
     }, [isHovering, isParentOpen]);
 
+    const modifiers = {
+        type,
+        disabled,
+        hover: isHovering,
+        active: active && !disabled,
+        checked: isRadio ? radioGroup.value === value : checked,
+        anchor: isAnchor
+    };
+
     const menuItemProps = {
-        className: bem(menuClass, menuItemClass, {
-            type,
-            disabled,
-            hover: isHovering,
-            active: active && !disabled,
-            checked: isRadio ? radioGroup.value === value : checked,
-            anchor: isAnchor
-        })(className),
+        className: bem(menuClass, menuItemClass, modifiers)(className),
+        style: flatStyles(styles, modifiers),
         role: 'menuitem',
         tabIndex: isHovering ? 0 : -1,
         ref: itemRef,

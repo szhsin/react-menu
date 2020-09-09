@@ -59,7 +59,7 @@ const App = () => {
       <button onClick={() => setDisabled(d => !d)}>Toggle disabled</button>
       <div><textarea rows="5" /></div>
 
-      <Menu menuButton={<MenuButton className="my-button">Open menu</MenuButton>}
+      <Menu style={{ color: 'blue' }} menuButton={<MenuButton className="my-button">Open menu</MenuButton>}
         onClick={handleMenuClick} direction="bottom" animation>
         <MenuItem value="1">item 1</MenuItem>
         <MenuItem className={specialClass} href="https://www.google.com/" target="_blank" value="google">Google</MenuItem>
@@ -100,19 +100,40 @@ const App = () => {
         <MenuHeader>Font size</MenuHeader>
         <MenuRadioGroup value={radioValue} onChange={(e) => setRadioValue(e.value)}>
           {[16, 24, 32].map((i) =>
-            <MenuItem value={i} key={i}>{`${i}px`}</MenuItem>)}
+            <MenuItem styles={{
+              color: 'blue',
+              type: { radio: { color: 'red' } },
+              backgroundColor: 'yellow',
+              hover: {
+                backgroundColor: '#bd7810'
+              },
+              active: {
+                backgroundColor: '#333',
+                color: 'yellow'
+              }
+            }} value={i} key={i}>{`${i}px`}</MenuItem>)}
         </MenuRadioGroup>
         <MenuDivider />
-        <MenuItem className={specialClass}>item 4 9</MenuItem>
+        <MenuItem className={specialClass} styles={{
+          color: 'blue',
+          backgroundColor: 'yellow',
+          hover: {
+            backgroundColor: '#bd7810'
+          },
+          active: {
+            backgroundColor: '#333',
+            color: 'yellow'
+          }
+        }}>item 4 9</MenuItem>
       </Menu>
 
-      <ContextMenu isOpen={isOpen} anchorPoint={anchorPoint} className="my-menu"
+      <ContextMenu isOpen={isOpen} anchorPoint={anchorPoint}
         onClose={isKeyboardEvent => {
           setOpen(false);
           if (isKeyboardEvent) btnRef.current.focus();
         }}
         onClick={e => console.log('Context menu click:', e.value)} animation>
-        <SubMenu label="more...">
+        <SubMenu label="more..." menuClassName="my-menu">
           {[1, 2, 3, 4].map(i => <MenuItem key={i} value={i}>{`Item ${i}`}</MenuItem>)}
         </SubMenu>
         <MenuItem>Copy</MenuItem>
@@ -127,7 +148,9 @@ const App = () => {
         onClick={handleMenuClick}
         direction={'right'} align="center" animation>
         {[1, 2, 3, 4].map(i => <MenuItem key={i}>{`Item ${i}`}</MenuItem>)}
-        <SubMenu label="font size">
+        <SubMenu label="font size" className={({ open }) => open ? 'submenu-open' : ''}
+          styles={{ active: { color: 'red' } }}
+          menuStyles={{ border: '2px dashed green' }}>
           <MenuRadioGroup value={radioValue} onChange={(e) => setRadioValue(e.value)}>
             {[1, 2, 3].map(i => <MenuItem disabled={i === 1} value={i} key={i}>{`Radio Item ${i}`}</MenuItem>)}
           </MenuRadioGroup>
