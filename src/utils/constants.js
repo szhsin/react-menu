@@ -26,3 +26,13 @@ export const keyCodes = Object.freeze({
     'RIGHT': 39,
     'DOWN': 40
 });
+
+export const hoverIndexActionType = Object.freeze({
+    'RESET': 0,
+    'SET': 1,
+    'UNSET': 2,
+    'INCREASE': 3,
+    'DECREASE': 4,
+    'FIRST': 5,
+    'LAST': 6
+});

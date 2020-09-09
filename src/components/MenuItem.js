@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useRef } from 'react';
 import {
     defineName, bem, menuClass, menuItemClass,
     MenuListContext, EventHandlersContext, RadioGroupContext,
-    keyCodes, useActiveState
+    keyCodes, hoverIndexActionType, useActiveState
 } from '../utils';
 
 
@@ -11,7 +11,7 @@ export const MenuItem = defineName(React.memo(({ className, type, checked, disab
     // console.log(`render MenuItem: ${children}`)
 
     const itemRef = useRef(null);
-    const { isParentOpen, hoverIndex, setHoverIndex } = useContext(MenuListContext);
+    const { isParentOpen, hoverIndex, hoverIndexDispatch } = useContext(MenuListContext);
     const isHovering = hoverIndex === index;
     const eventHandlers = useContext(EventHandlersContext);
     const radioGroup = useContext(RadioGroupContext);
@@ -58,7 +58,7 @@ export const MenuItem = defineName(React.memo(({ className, type, checked, disab
 
     const handleMouseEnter = e => {
         if (disabled) return;
-        setHoverIndex(index);
+        hoverIndexDispatch({ type: hoverIndexActionType.SET, index });
     }
 
     useEffect(() => {

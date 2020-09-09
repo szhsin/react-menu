@@ -1,7 +1,8 @@
 import React, { useState, useRef, useContext, useEffect } from 'react';
 import {
     defineName, bem, menuClass, subMenuClass, menuItemClass,
-    MenuListContext, keyCodes, useMenuState, useActiveState
+    MenuListContext, keyCodes, hoverIndexActionType,
+    useMenuState, useActiveState
 } from '../utils';
 import { MenuList } from './MenuList';
 
@@ -15,12 +16,12 @@ export const SubMenu = defineName(React.memo(({ className, menuClassName, label,
     const containerRef = useRef(null);
     const itemRef = useRef(null);
     const timeoutId = useRef();
-    const { isParentOpen, hoverIndex, setHoverIndex } = useContext(MenuListContext);
+    const { isParentOpen, hoverIndex, hoverIndexDispatch } = useContext(MenuListContext);
     const isHovering = hoverIndex === index;
 
     const handleMouseEnter = e => {
         if (disabled) return;
-        setHoverIndex(index);
+        hoverIndexDispatch({ type: hoverIndexActionType.SET, index });
         timeoutId.current = setTimeout(() => {
             timeoutId.current = null;
             setIsKeyboardEvent(false);

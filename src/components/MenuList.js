@@ -1,5 +1,6 @@
 import React, {
     useState,
+    useReducer,
     useEffect,
     useLayoutEffect,
     useRef,
@@ -9,7 +10,8 @@ import React, {
 } from 'react';
 import {
     defineName, bem, menuClass, SettingsContext,
-    MenuListContext, initialHoverIndex, keyCodes
+    MenuListContext, initialHoverIndex,
+    keyCodes, hoverIndexActionType
 } from '../utils';
 
 
@@ -27,11 +29,48 @@ export const MenuList = defineName(React.memo(({
 
     // console.log(`MenuList render`);
     const [position, setPosition] = useState({ x: 0, y: 0 });
-    const [hoverIndex, setHoverIndex] = useState(initialHoverIndex);
     const [expandedDirection, setExpandedDirection] = useState(direction);
     const { animation } = useContext(SettingsContext);
     const menuRef = useRef(null);
     const menuItemsCount = useRef(0);
+    const [hoverIndex, hoverIndexDispatch] = useReducer(hoverIndexReducer, initialHoverIndex);
+
+    function hoverIndexReducer(state, { type, index }) {
+        switch (type) {
+            case hoverIndexActionType.RESET:
+                return initialHoverIndex;
+
+            case hoverIndexActionType.SET:
+                return index;
+
+            case hoverIndexActionType.UNSET:
+                return state === index ? initialHoverIndex : state;
+
+            case hoverIndexActionType.DECREASE: {
+                let i = state;
+                i--;
+                if (i < 0) i = menuItemsCount.current - 1;
+                return i;
+            }
+
+            case hoverIndexActionType.INCREASE: {
+                let i = state;
+                i++;
+                if (i >= menuItemsCount.current) i = 0;
+                return i;
+            }
+
+            case hoverIndexActionType.FIRST:
+                return menuItemsCount.current > 0 ? 0 : initialHoverIndex;
+
+            case hoverIndexActionType.LAST:
+                return menuItemsCount.current > 0
+                    ? menuItemsCount.current - 1 : initialHoverIndex;
+
+            default:
+                throw new Error('hoverIndexReducer: unknown action type');
+        }
+    }
 
     const menuItems = useMemo(() => {
         if (!isMounted) return null;
@@ -91,20 +130,12 @@ export const MenuList = defineName(React.memo(({
 
         switch (e.keyCode) {
             case keyCodes.UP:
-                setHoverIndex(i => {
-                    i--;
-                    if (i < 0) i = menuItemsCount.current - 1;
-                    return i;
-                });
+                hoverIndexDispatch({ type: hoverIndexActionType.DECREASE });
                 handled = true;
                 break;
 
             case keyCodes.DOWN:
-                setHoverIndex(i => {
-                    i++;
-                    if (i >= menuItemsCount.current) i = 0;
-                    return i;
-                });
+                hoverIndexDispatch({ type: hoverIndexActionType.INCREASE });
                 handled = true;
                 break;
 
@@ -402,7 +433,7 @@ export const MenuList = defineName(React.memo(({
     }, [isOpen, anchorPoint, positionHelpers]);
 
     useEffect(() => {
-        if (!isOpen) setHoverIndex(initialHoverIndex);
+        if (!isOpen) hoverIndexDispatch({ type: hoverIndexActionType.RESET });
 
         const id = setTimeout(() => {
             // We are seeing the old isOpen value when closure was created
@@ -411,7 +442,7 @@ export const MenuList = defineName(React.memo(({
             // and onBlur event will be fired with relatedTarget setting as null.
             if (!isOpen) return;
             menuRef.current.focus();
-            if (isKeyboardEvent) setHoverIndex(0);
+            if (isKeyboardEvent) hoverIndexDispatch({ type: hoverIndexActionType.FIRST });
         }, 100);
 
         return () => clearTimeout(id);
@@ -420,8 +451,8 @@ export const MenuList = defineName(React.memo(({
     const context = useMemo(() => ({
         isParentOpen: isOpen,
         hoverIndex,
-        setHoverIndex
-    }), [isOpen, hoverIndex, setHoverIndex]);
+        hoverIndexDispatch
+    }), [isOpen, hoverIndex]);
 
     return (
         <React.Fragment>
