@@ -24,9 +24,9 @@ export const Menu = React.memo(({
         = useState(FocusingMenuItemPositions.INITIAL);
     const buttonRef = useRef(null);
 
-    const handleClose = useCallback(isKeyboardEvent => {
+    const handleClose = useCallback(e => {
         closeMenu();
-        if (isKeyboardEvent) buttonRef.current.focus();
+        if (e.keyCode) buttonRef.current.focus();
     }, [closeMenu]);
 
     const {

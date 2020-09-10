@@ -59,7 +59,8 @@ const App = () => {
       <button onClick={() => setDisabled(d => !d)}>Toggle disabled</button>
       <div><textarea rows="5" /></div>
 
-      <Menu style={{ color: 'blue' }} menuButton={<MenuButton className="my-button">Open menu</MenuButton>}
+      <Menu styles={{ border: '2px dashed purple' }}
+        menuButton={({ isOpen }) => <MenuButton className="my-button">{isOpen ? 'Close' : 'Open'}</MenuButton>}
         onClick={handleMenuClick} direction="bottom" animation>
         <MenuItem value="1">item 1</MenuItem>
         <MenuItem className={specialClass} href="https://www.google.com/" target="_blank" value="google">Google</MenuItem>
@@ -127,16 +128,16 @@ const App = () => {
         }}>item 4 9</MenuItem>
       </Menu>
 
-      <ContextMenu isOpen={isOpen} anchorPoint={anchorPoint}
-        onClose={isKeyboardEvent => {
+      <ContextMenu isOpen={isOpen} anchorPoint={anchorPoint} styles={{ border: '2px dashed green' }}
+        onClose={e => {
           setOpen(false);
-          if (isKeyboardEvent) btnRef.current.focus();
+          if (e.keyCode) btnRef.current.focus();
         }}
         onClick={e => console.log('Context menu click:', e.value)} animation>
         <SubMenu label="more..." menuClassName="my-menu">
           {[1, 2, 3, 4].map(i => <MenuItem key={i} value={i}>{`Item ${i}`}</MenuItem>)}
         </SubMenu>
-        <MenuItem>Copy</MenuItem>
+        <MenuItem styles={({ hover }) => hover ? { backgroundColor: '#980943' } : null}>Copy</MenuItem>
         <MenuItem className={specialClass}>Cut</MenuItem>
         <MenuItem>Paste</MenuItem>
 
@@ -144,10 +145,10 @@ const App = () => {
 
       <div><input /></div>
 
-      <Menu menuButton={<button>Customisable button Customisable button Customisable button</button>}
+      <Menu menuButton={({ isOpen }) => <button>{isOpen ? 'Close' : 'Open'}</button>}
         onClick={handleMenuClick}
         direction={'right'} align="center" animation>
-        {[1, 2, 3, 4].map(i => <MenuItem key={i}>{`Item ${i}`}</MenuItem>)}
+        {[1, 2, 3].map(i => <MenuItem key={i}>{`Item ${i}`}</MenuItem>)}
         <SubMenu label="font size" className={({ open }) => open ? 'submenu-open' : ''}
           styles={{ active: { color: 'red' } }}
           menuStyles={{ border: '2px dashed green' }}>
@@ -155,7 +156,6 @@ const App = () => {
             {[1, 2, 3].map(i => <MenuItem disabled={i === 1} value={i} key={i}>{`Radio Item ${i}`}</MenuItem>)}
           </MenuRadioGroup>
         </SubMenu>
-        <MenuItem>item 5</MenuItem>
       </Menu>
 
       <button onClick={e => console.log('Button clicked')} ref={btnRef}>Click me</button>

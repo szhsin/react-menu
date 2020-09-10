@@ -30,11 +30,11 @@ export const MenuItem = defineName(React.memo(({
     const isCheckBox = type === 'checkbox';
     const isAnchor = href && !disabled && !isRadio && !isCheckBox;
 
-    const handleClick = (isKeyboardEvent) => {
+    const handleClick = (keyCode) => {
         if (disabled) return;
 
         let isStopPropagation = false;
-        const event = { value };
+        const event = { value, keyCode };
         if (isCheckBox) {
             event.checked = !checked;
         }
@@ -46,7 +46,10 @@ export const MenuItem = defineName(React.memo(({
             isStopPropagation = onClick(event) === false;
         }
 
-        eventHandlers.handleClick(event, isStopPropagation, isKeyboardEvent);
+        eventHandlers.handleClick(
+            event,
+            isStopPropagation,
+            isCheckBox || isRadio);
     }
 
     const handleKeyUp = e => {
@@ -60,7 +63,7 @@ export const MenuItem = defineName(React.memo(({
                 if (isAnchor) {
                     itemRef.current.click();
                 } else {
-                    handleClick(true);
+                    handleClick(e.keyCode);
                 }
                 break;
         }
@@ -101,7 +104,7 @@ export const MenuItem = defineName(React.memo(({
         tabIndex: isHovering ? 0 : -1,
         ref: itemRef,
         onMouseEnter: handleMouseEnter,
-        onClick: () => handleClick(false),
+        onClick: () => handleClick(),
         onKeyUp: handleKeyUp,
         onBlur: handleBlur,
         ...activeStateHandlers
