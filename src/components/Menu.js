@@ -34,21 +34,28 @@ export const Menu = React.memo(({
         ...otherHandlers }
         = useMenuList(animation, onClick, handleClose);
 
-    const button = useMemo(() => (
-        menuButton &&
-        React.cloneElement(menuButton, {
+    let button;
+    if (typeof menuButton === 'function') {
+        button = menuButton({ isOpen })
+    } else {
+        button = menuButton;
+    }
+
+    const renderButton = useMemo(() => (
+        button &&
+        React.cloneElement(button, {
             ref: buttonRef,
             onClick: e => {
                 setIsKeyboardEvent(e.detail === 0);
                 toggleMenu();
             }
         })
-    ), [menuButton, toggleMenu]);
+    ), [button, toggleMenu]);
 
     return (
         <div className={bem(menuContainerClass)()}
             role="presentation" ref={containerRef} {...otherHandlers}>
-            {button}
+            {renderButton}
 
             <SettingsContext.Provider value={settings}>
                 <EventHandlersContext.Provider value={eventHandlers}>
