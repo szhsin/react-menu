@@ -26,7 +26,7 @@ export const ContextMenu = React.memo(({
         = useMenuList(animation, onClick, onClose);
 
     return (
-        <div className={bem(menuContainerClass, null, { 'context-menu': true })()}
+        <div className={bem(menuContainerClass, null, { contextMenu: true })()}
             role="presentation" ref={containerRef} {...otherHandlers}>
 
             <SettingsContext.Provider value={settings}>

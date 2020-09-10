@@ -58,6 +58,7 @@ Example style:
 */
 
 export const flatStyles = (styles, modifiers) => {
+    if (typeof styles === 'function') return styles(modifiers);
     if (!isObject(styles)) return undefined;
     if (!modifiers) return styles;
 
