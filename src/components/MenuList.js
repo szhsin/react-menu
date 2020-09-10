@@ -11,7 +11,7 @@ import React, {
 import {
     defineName, bem, flatStyles, menuClass,
     SettingsContext, MenuListContext, initialHoverIndex,
-    keyCodes, hoverIndexActionType
+    KeyCodes, FocusingMenuItemPositions, HoverIndexActionTypes
 } from '../utils';
 
 
@@ -20,7 +20,7 @@ export const MenuList = defineName(React.memo(({
     styles,
     isOpen,
     isMounted,
-    isKeyboardEvent,
+    focusingMenuItemPosition,
     containerRef,
     anchorRef,
     anchorPoint,
@@ -38,33 +38,33 @@ export const MenuList = defineName(React.memo(({
 
     function hoverIndexReducer(state, { type, index }) {
         switch (type) {
-            case hoverIndexActionType.RESET:
+            case HoverIndexActionTypes.RESET:
                 return initialHoverIndex;
 
-            case hoverIndexActionType.SET:
+            case HoverIndexActionTypes.SET:
                 return index;
 
-            case hoverIndexActionType.UNSET:
+            case HoverIndexActionTypes.UNSET:
                 return state === index ? initialHoverIndex : state;
 
-            case hoverIndexActionType.DECREASE: {
+            case HoverIndexActionTypes.DECREASE: {
                 let i = state;
                 i--;
                 if (i < 0) i = menuItemsCount.current - 1;
                 return i;
             }
 
-            case hoverIndexActionType.INCREASE: {
+            case HoverIndexActionTypes.INCREASE: {
                 let i = state;
                 i++;
                 if (i >= menuItemsCount.current) i = 0;
                 return i;
             }
 
-            case hoverIndexActionType.FIRST:
+            case HoverIndexActionTypes.FIRST:
                 return menuItemsCount.current > 0 ? 0 : initialHoverIndex;
 
-            case hoverIndexActionType.LAST:
+            case HoverIndexActionTypes.LAST:
                 return menuItemsCount.current > 0
                     ? menuItemsCount.current - 1 : initialHoverIndex;
 
@@ -130,19 +130,19 @@ export const MenuList = defineName(React.memo(({
         let handled = false;
 
         switch (e.keyCode) {
-            case keyCodes.UP:
-                hoverIndexDispatch({ type: hoverIndexActionType.DECREASE });
+            case KeyCodes.UP:
+                hoverIndexDispatch({ type: HoverIndexActionTypes.DECREASE });
                 handled = true;
                 break;
 
-            case keyCodes.DOWN:
-                hoverIndexDispatch({ type: hoverIndexActionType.INCREASE });
+            case KeyCodes.DOWN:
+                hoverIndexDispatch({ type: HoverIndexActionTypes.INCREASE });
                 handled = true;
                 break;
 
             // prevent browser from scrolling the page when SPACE or RETURN is pressed
-            case keyCodes.SPACE:
-            case keyCodes.RETURN:
+            case KeyCodes.SPACE:
+            case KeyCodes.RETURN:
                 if (e.currentTarget.contains(e.target)) e.preventDefault();
                 break;
         }
@@ -434,7 +434,7 @@ export const MenuList = defineName(React.memo(({
     }, [isOpen, anchorPoint, positionHelpers]);
 
     useEffect(() => {
-        if (!isOpen) hoverIndexDispatch({ type: hoverIndexActionType.RESET });
+        if (!isOpen) hoverIndexDispatch({ type: HoverIndexActionTypes.RESET });
 
         const id = setTimeout(() => {
             // We are seeing the old isOpen value when closure was created
@@ -443,11 +443,15 @@ export const MenuList = defineName(React.memo(({
             // and onBlur event will be fired with relatedTarget setting as null.
             if (!isOpen) return;
             menuRef.current.focus();
-            if (isKeyboardEvent) hoverIndexDispatch({ type: hoverIndexActionType.FIRST });
+            if (focusingMenuItemPosition === FocusingMenuItemPositions.FIRST) {
+                hoverIndexDispatch({ type: HoverIndexActionTypes.FIRST });
+            } else if (focusingMenuItemPosition === FocusingMenuItemPositions.LAST) {
+                hoverIndexDispatch({ type: HoverIndexActionTypes.LAST });
+            }
         }, 100);
 
         return () => clearTimeout(id);
-    }, [isOpen, isKeyboardEvent]);
+    }, [isOpen, focusingMenuItemPosition]);
 
     const context = useMemo(() => ({
         isParentOpen: isOpen,

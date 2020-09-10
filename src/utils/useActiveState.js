@@ -1,12 +1,12 @@
 import { useState, useCallback, useMemo } from 'react';
-import { keyCodes } from './constants';
+import { KeyCodes } from './constants';
 
 // This function receive custom KeyCode as a single value rather than an array;
 // It's intentional for keeping the argument's identity stable across each render.
 export const useActiveState = (customKeyCode) => {
     const [active, setActive] = useState(false);
     const activeKeyCodes = useMemo(() =>
-        [keyCodes.SPACE, keyCodes.RETURN,
+        [KeyCodes.SPACE, KeyCodes.RETURN,
         ...(customKeyCode ? [customKeyCode] : [])],
         [customKeyCode]);
 

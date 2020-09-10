@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useRef } from 'react';
 import {
     defineName, bem, flatStyles, menuClass, menuItemClass,
     MenuListContext, EventHandlersContext, RadioGroupContext,
-    keyCodes, hoverIndexActionType, useActiveState
+    KeyCodes, HoverIndexActionTypes, useActiveState
 } from '../utils';
 
 
@@ -55,8 +55,8 @@ export const MenuItem = defineName(React.memo(({
 
         onKeyUp(e);
         switch (e.keyCode) {
-            case keyCodes.SPACE:
-            case keyCodes.RETURN:
+            case KeyCodes.SPACE:
+            case KeyCodes.RETURN:
                 if (isAnchor) {
                     itemRef.current.click();
                 } else {
@@ -68,13 +68,13 @@ export const MenuItem = defineName(React.memo(({
 
     const handleMouseEnter = e => {
         if (disabled) return;
-        hoverIndexDispatch({ type: hoverIndexActionType.SET, index });
+        hoverIndexDispatch({ type: HoverIndexActionTypes.SET, index });
     }
 
     const handleBlur = e => {
         onBlur(e);
         // It handles situation such as clicking on a sibling disabled menu item
-        hoverIndexDispatch({ type: hoverIndexActionType.UNSET, index });
+        hoverIndexDispatch({ type: HoverIndexActionTypes.UNSET, index });
     }
 
     useEffect(() => {

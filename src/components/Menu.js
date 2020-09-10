@@ -2,7 +2,8 @@ import React, { useCallback, useRef, useMemo, useState } from 'react';
 import {
     bem, menuContainerClass,
     SettingsContext, EventHandlersContext,
-    useMenuState, useMenuList
+    KeyCodes, FocusingMenuItemPositions,
+    useMenuState, useMenuList,
 } from '../utils';
 import { MenuList } from './MenuList'
 
@@ -18,8 +19,9 @@ export const Menu = React.memo(({
     onClick }) => {
 
     // console.log(`Menu render`);
-    const { isMounted, isOpen, closeMenu, toggleMenu } = useMenuState();
-    const [isKeyboardEvent, setIsKeyboardEvent] = useState(false);
+    const { isMounted, isOpen, openMenu, closeMenu, toggleMenu } = useMenuState();
+    const [focusingMenuItemPosition, setFocusingMenuItemPosition]
+        = useState(FocusingMenuItemPositions.INITIAL);
     const buttonRef = useRef(null);
 
     const handleClose = useCallback(isKeyboardEvent => {
@@ -41,16 +43,41 @@ export const Menu = React.memo(({
         button = menuButton;
     }
 
+    const handleClick = useCallback(e => {
+        // Focus (hover) the first menu item when onClick event is trigger by keyboard
+        setFocusingMenuItemPosition(e.detail === 0
+            ? FocusingMenuItemPositions.FIRST : FocusingMenuItemPositions.INITIAL);
+        toggleMenu();
+    }, [toggleMenu]);
+
+    const handleKeyDown = useCallback(e => {
+        let handled = false;
+
+        switch (e.keyCode) {
+            case KeyCodes.UP:
+                setFocusingMenuItemPosition(FocusingMenuItemPositions.LAST);
+                openMenu();
+                handled = true;
+                break;
+
+            case KeyCodes.DOWN:
+                setFocusingMenuItemPosition(FocusingMenuItemPositions.FIRST);
+                openMenu();
+                handled = true;
+                break;
+        }
+
+        if (handled) e.preventDefault();
+    }, [openMenu]);
+
     const renderButton = useMemo(() => (
         button &&
         React.cloneElement(button, {
             ref: buttonRef,
-            onClick: e => {
-                setIsKeyboardEvent(e.detail === 0);
-                toggleMenu();
-            }
+            onClick: handleClick,
+            onKeyDown: handleKeyDown
         })
-    ), [button, toggleMenu]);
+    ), [button, handleClick, handleKeyDown]);
 
     return (
         <div className={bem(menuContainerClass)()}
@@ -64,7 +91,7 @@ export const Menu = React.memo(({
                         styles={styles}
                         isMounted={isMounted}
                         isOpen={isOpen}
-                        isKeyboardEvent={isKeyboardEvent}
+                        focusingMenuItemPosition={focusingMenuItemPosition}
                         containerRef={containerRef}
                         anchorRef={buttonRef}
                         align={align}

@@ -3,14 +3,16 @@ import { bem, flatStyles, menuButtonClass } from '../utils';
 
 
 export const MenuButton = React.memo(
-    React.forwardRef(({ className, styles, onClick, children }, ref) => {
+    React.forwardRef(({ className, styles, onClick, onKeyDown, children }, ref) => {
         // console.log('render MenuButton');
         return (
             <button className={bem(menuButtonClass)(className)}
                 style={flatStyles(styles)}
                 ref={ref}
-                onClick={onClick} >
+                onClick={onClick}
+                onKeyDown={onKeyDown} >
                 {children}
             </button>
         );
     }));
+    

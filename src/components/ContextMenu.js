@@ -2,7 +2,7 @@ import React from 'react';
 import {
     bem, menuContainerClass,
     EventHandlersContext, SettingsContext,
-    useMenuList
+    FocusingMenuItemPositions, useMenuList
 } from '../utils';
 import { MenuList } from './MenuList'
 
@@ -36,7 +36,8 @@ export const ContextMenu = React.memo(({
                         styles={styles}
                         isMounted={true}
                         isOpen={isOpen}
-                        isKeyboardEvent={isKeyboardEvent}
+                        focusingMenuItemPosition={isKeyboardEvent
+                            ? FocusingMenuItemPositions.FIRST : FocusingMenuItemPositions.INITIAL}
                         containerRef={containerRef}
                         anchorPoint={anchorPoint}>
                         {children}

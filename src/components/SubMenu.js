@@ -2,7 +2,7 @@ import React, { useState, useRef, useContext, useEffect } from 'react';
 import {
     defineName, bem, flatStyles,
     menuClass, subMenuClass, menuItemClass,
-    MenuListContext, keyCodes, hoverIndexActionType,
+    MenuListContext, KeyCodes, HoverIndexActionTypes,
     useMenuState, useActiveState
 } from '../utils';
 import { MenuList } from './MenuList';
@@ -20,7 +20,7 @@ export const SubMenu = defineName(React.memo(({
 
     // console.log(`Submenu render: ${label}`)
     const { isMounted, isOpen, openMenu, closeMenu } = useMenuState();
-    const { active, onKeyUp, onBlur, ...activeStateHandlers } = useActiveState(keyCodes.RIGHT);
+    const { active, onKeyUp, onBlur, ...activeStateHandlers } = useActiveState(KeyCodes.RIGHT);
     const [isKeyboardEvent, setIsKeyboardEvent] = useState(false);
     const containerRef = useRef(null);
     const itemRef = useRef(null);
@@ -30,7 +30,7 @@ export const SubMenu = defineName(React.memo(({
 
     const handleMouseEnter = e => {
         if (disabled) return;
-        hoverIndexDispatch({ type: hoverIndexActionType.SET, index });
+        hoverIndexDispatch({ type: HoverIndexActionTypes.SET, index });
         timeoutId.current = setTimeout(() => {
             timeoutId.current = null;
             setIsKeyboardEvent(false);
@@ -53,7 +53,7 @@ export const SubMenu = defineName(React.memo(({
 
         switch (e.keyCode) {
             // LEFT key is bubbled up from submenu items
-            case keyCodes.LEFT:
+            case KeyCodes.LEFT:
                 if (isOpen) {
                     closeMenu();
                     itemRef.current.focus();
@@ -62,7 +62,7 @@ export const SubMenu = defineName(React.memo(({
                 break;
 
             // prevent browser from scrolling page to the right
-            case keyCodes.RIGHT:
+            case KeyCodes.RIGHT:
                 if (!isOpen) handled = true;
                 break;
         }
@@ -79,9 +79,9 @@ export const SubMenu = defineName(React.memo(({
 
         onKeyUp(e);
         switch (e.keyCode) {
-            case keyCodes.SPACE:
-            case keyCodes.RETURN:
-            case keyCodes.RIGHT:
+            case KeyCodes.SPACE:
+            case KeyCodes.RETURN:
+            case KeyCodes.RIGHT:
                 setIsKeyboardEvent(true);
                 openMenu();
                 break;
@@ -94,7 +94,7 @@ export const SubMenu = defineName(React.memo(({
         // It handles situation such as clicking on a sibling disabled menu item
         if (!e.currentTarget.contains(e.relatedTarget)) {
             closeMenu();
-            hoverIndexDispatch({ type: hoverIndexActionType.UNSET, index });
+            hoverIndexDispatch({ type: HoverIndexActionTypes.UNSET, index });
         } else if (itemRef.current === e.relatedTarget) {
             // This handles clicking on submenu item when it's open
             // First close the submenu and then let subsequent onClick event to re-open it

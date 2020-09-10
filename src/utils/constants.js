@@ -15,7 +15,7 @@ export const EventHandlersContext = React.createContext({});
 export const RadioGroupContext = React.createContext({});
 export const SettingsContext = React.createContext({});
 
-export const keyCodes = Object.freeze({
+export const KeyCodes = Object.freeze({
     'RETURN': 13,
     'ESC': 27,
     'SPACE': 32,
@@ -27,7 +27,7 @@ export const keyCodes = Object.freeze({
     'DOWN': 40
 });
 
-export const hoverIndexActionType = Object.freeze({
+export const HoverIndexActionTypes = Object.freeze({
     'RESET': 0,
     'SET': 1,
     'UNSET': 2,
@@ -35,4 +35,10 @@ export const hoverIndexActionType = Object.freeze({
     'DECREASE': 4,
     'FIRST': 5,
     'LAST': 6
+});
+
+export const FocusingMenuItemPositions = Object.freeze({
+    'INITIAL': 0,
+    'FIRST': 1,
+    'LAST': 2
 });

@@ -1,5 +1,5 @@
 import { useRef, useCallback, useMemo } from 'react';
-import { keyCodes } from './constants';
+import { KeyCodes } from './constants';
 
 
 export const useMenuList = (animation, onClick, onClose) => {
@@ -19,7 +19,7 @@ export const useMenuList = (animation, onClick, onClose) => {
 
     const handleKeyDown = useCallback(e => {
         switch (e.keyCode) {
-            case keyCodes.ESC:
+            case KeyCodes.ESC:
                 onClose(true);
                 break;
         }
