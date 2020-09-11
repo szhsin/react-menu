@@ -11,6 +11,7 @@ export const classSet = (classes) => {
     return className.trim();
 }
 
+// Modifier value can be one of the following types: boolean, string, undefined
 export const bem = (block, element, modifiers = {}) => (userClassName, userModifiers) => {
     let blockElement = element ? `${block}__${element}` : block;
     let className = blockElement;
@@ -36,8 +37,8 @@ const isObject = obj => obj && typeof obj === 'object';
 
 /* 
 Flatten up to two levels of nesting styles.
-Modifier value can be two types: boolean and string.
-For string modifiers, go one level deeper than the boolean modifiers.
+Modifier value can be one of the following types: boolean, string, undefined
+For string type modifiers, go one level deeper than other types of modifiers.
 
 Example style:
 {

@@ -129,12 +129,13 @@ const App = () => {
       </Menu>
 
       <ContextMenu isOpen={isOpen} anchorPoint={anchorPoint} styles={{ border: '2px dashed green' }}
+        aria-label="Commands"
         onClose={e => {
           setOpen(false);
           if (e.keyCode) btnRef.current.focus();
         }}
         onClick={e => console.log('Context menu click:', e.value)} animation>
-        <SubMenu label="more..." menuClassName="my-menu">
+        <SubMenu label="more..." menuClassName="my-menu" aria-label="more commands">
           {[1, 2, 3, 4].map(i => <MenuItem key={i} value={i}>{`Item ${i}`}</MenuItem>)}
         </SubMenu>
         <MenuItem styles={({ hover }) => hover ? { backgroundColor: '#980943' } : null}>Copy</MenuItem>
@@ -146,6 +147,7 @@ const App = () => {
       <div><input /></div>
 
       <Menu menuButton={({ isOpen }) => <button>{isOpen ? 'Close' : 'Open'}</button>}
+        aria-label="My menu"
         onClick={handleMenuClick}
         direction={'right'} align="center" animation>
         {[1, 2, 3].map(i => <MenuItem key={i}>{`Item ${i}`}</MenuItem>)}

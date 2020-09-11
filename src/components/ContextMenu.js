@@ -8,6 +8,7 @@ import { MenuList } from './MenuList'
 
 
 export const ContextMenu = React.memo(({
+    'aria-label': ariaLabel,
     className,
     styles,
     anchorPoint,
@@ -32,6 +33,7 @@ export const ContextMenu = React.memo(({
             <SettingsContext.Provider value={settings}>
                 <EventHandlersContext.Provider value={eventHandlers}>
                     <MenuList
+                        ariaLabel={ariaLabel || 'Context menu'}
                         className={className}
                         styles={styles}
                         isMounted={true}

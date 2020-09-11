@@ -11,7 +11,7 @@ export const useActiveState = (customKeyCode) => {
         [customKeyCode]);
 
     return {
-        active,
+        isActive: active,
 
         onPointerDown: useCallback(e => {
             e.currentTarget.setPointerCapture(e.pointerId);

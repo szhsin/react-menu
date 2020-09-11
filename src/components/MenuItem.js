@@ -25,13 +25,14 @@ export const MenuItem = defineName(React.memo(({
     const isHovering = hoverIndex === index;
     const eventHandlers = useContext(EventHandlersContext);
     const radioGroup = useContext(RadioGroupContext);
-    const { active, onKeyUp, onBlur, ...activeStateHandlers } = useActiveState();
+    const { isActive, onKeyUp, onBlur, ...activeStateHandlers } = useActiveState();
     const isRadio = type === 'radio';
     const isCheckBox = type === 'checkbox';
-    const isAnchor = href && !disabled && !isRadio && !isCheckBox;
+    const isDisabled = disabled ? true : undefined;
+    const isAnchor = href && !isDisabled && !isRadio && !isCheckBox;
 
     const handleClick = (keyCode) => {
-        if (disabled) return;
+        if (isDisabled) return;
 
         let isStopPropagation = false;
         const event = { value, keyCode };
@@ -53,8 +54,8 @@ export const MenuItem = defineName(React.memo(({
     }
 
     const handleKeyUp = e => {
-        // Check 'active' to skip KeyUp when corresponding KeyDown was initiated in another menu item
-        if (!active) return;
+        // Check 'isActive' to skip KeyUp when corresponding KeyDown was initiated in another menu item
+        if (!isActive) return;
 
         onKeyUp(e);
         switch (e.keyCode) {
@@ -70,7 +71,7 @@ export const MenuItem = defineName(React.memo(({
     }
 
     const handleMouseEnter = e => {
-        if (disabled) return;
+        if (isDisabled) return;
         hoverIndexDispatch({ type: HoverIndexActionTypes.SET, index });
     }
 
@@ -90,17 +91,19 @@ export const MenuItem = defineName(React.memo(({
 
     const modifiers = {
         type,
-        disabled,
+        disabled: isDisabled,
         hover: isHovering,
-        active: active && !disabled,
-        checked: isRadio ? radioGroup.value === value : checked,
+        active: isActive && !isDisabled,
+        checked: isRadio ? radioGroup.value === value : (isCheckBox ? !!checked : undefined),
         anchor: isAnchor
     };
 
     const menuItemProps = {
         className: bem(menuClass, menuItemClass, modifiers)(className),
         style: flatStyles(styles, modifiers),
-        role: 'menuitem',
+        role: isRadio ? 'menuitemradio' : (isCheckBox ? 'menuitemcheckbox' : 'menuitem'),
+        'aria-checked': modifiers.checked,
+        'aria-disabled': isDisabled,
         tabIndex: isHovering ? 0 : -1,
         ref: itemRef,
         onMouseEnter: handleMouseEnter,

@@ -9,6 +9,7 @@ import { MenuList } from './MenuList';
 
 
 export const SubMenu = defineName(React.memo(({
+    'aria-label': ariaLabel,
     className,
     menuClassName,
     styles,
@@ -20,16 +21,17 @@ export const SubMenu = defineName(React.memo(({
 
     // console.log(`Submenu render: ${label}`)
     const { isMounted, isOpen, openMenu, closeMenu } = useMenuState();
-    const { active, onKeyUp, onBlur, ...activeStateHandlers } = useActiveState(KeyCodes.RIGHT);
+    const { isActive, onKeyUp, onBlur, ...activeStateHandlers } = useActiveState(KeyCodes.RIGHT);
     const [isKeyboardEvent, setIsKeyboardEvent] = useState(false);
     const containerRef = useRef(null);
     const itemRef = useRef(null);
     const timeoutId = useRef();
     const { isParentOpen, hoverIndex, hoverIndexDispatch } = useContext(MenuListContext);
     const isHovering = hoverIndex === index;
+    const isDisabled = disabled ? true : undefined;
 
     const handleMouseEnter = e => {
-        if (disabled) return;
+        if (isDisabled) return;
         hoverIndexDispatch({ type: HoverIndexActionTypes.SET, index });
         timeoutId.current = setTimeout(() => {
             timeoutId.current = null;
@@ -43,7 +45,7 @@ export const SubMenu = defineName(React.memo(({
     }
 
     const handleClick = e => {
-        if (disabled) return;
+        if (isDisabled) return;
         setIsKeyboardEvent(false);
         openMenu();
     }
@@ -74,8 +76,8 @@ export const SubMenu = defineName(React.memo(({
     }
 
     const handleKeyUp = e => {
-        // Check 'active' to skip KeyUp when corresponding KeyDown was initiated in another menu item
-        if (!active) return;
+        // Check 'isActive' to skip KeyUp when corresponding KeyDown was initiated in another menu item
+        if (!isActive) return;
 
         onKeyUp(e);
         switch (e.keyCode) {
@@ -114,8 +116,8 @@ export const SubMenu = defineName(React.memo(({
     const modifiers = {
         open: isOpen,
         hover: isHovering,
-        active: active && !disabled,
-        disabled
+        active: isActive && !isDisabled,
+        disabled: isDisabled
     };
 
     return (
@@ -129,6 +131,7 @@ export const SubMenu = defineName(React.memo(({
                 role="menuitem"
                 aria-haspopup="true"
                 aria-expanded={isOpen}
+                aria-disabled={isDisabled}
                 tabIndex={isHovering && !isOpen ? 0 : -1}
                 ref={itemRef}
                 onMouseEnter={handleMouseEnter}
@@ -140,10 +143,12 @@ export const SubMenu = defineName(React.memo(({
             </div>
 
             <MenuList
+                ariaLabel={ariaLabel || (typeof label === 'string' ? label : 'Submenu')}
                 className={menuClassName}
                 styles={menuStyles}
                 isMounted={isMounted}
                 isOpen={isOpen}
+                isDisabled={isDisabled}
                 isKeyboardEvent={isKeyboardEvent}
                 containerRef={containerRef}
                 anchorRef={itemRef}

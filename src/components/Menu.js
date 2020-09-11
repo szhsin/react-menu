@@ -9,6 +9,7 @@ import { MenuList } from './MenuList'
 
 
 export const Menu = React.memo(({
+    'aria-label': ariaLabel,
     className,
     styles,
     menuButton,
@@ -87,6 +88,11 @@ export const Menu = React.memo(({
             <SettingsContext.Provider value={settings}>
                 <EventHandlersContext.Provider value={eventHandlers}>
                     <MenuList
+                        ariaLabel={
+                            ariaLabel ||
+                            (typeof button.props.children === 'string'
+                                ? button.props.children
+                                : 'Menu')}
                         className={className}
                         styles={styles}
                         isMounted={isMounted}

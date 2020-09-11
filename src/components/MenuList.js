@@ -16,10 +16,12 @@ import {
 
 
 export const MenuList = defineName(React.memo(({
+    ariaLabel,
     className,
     styles,
     isOpen,
     isMounted,
+    isDisabled,
     focusingMenuItemPosition,
     containerRef,
     anchorRef,
@@ -471,7 +473,11 @@ export const MenuList = defineName(React.memo(({
         <React.Fragment>
             {isMounted &&
                 <ul className={bem(menuClass, null, modifiers)(className, userModifiers)}
-                    role="menu" tabIndex="-1" ref={menuRef}
+                    role="menu"
+                    tabIndex="-1"
+                    aria-disabled={isDisabled}
+                    aria-label={ariaLabel}
+                    ref={menuRef}
                     onKeyDown={handleKeyDown}
                     style={{
                         ...flatStyles(styles, userModifiers),
