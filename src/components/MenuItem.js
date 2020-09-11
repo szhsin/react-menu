@@ -41,6 +41,7 @@ export const MenuItem = defineName(React.memo(({
         }
 
         if (isRadio) {
+            event.name = radioGroup.name;
             isStopPropagation = true;
             radioGroup.onChange && radioGroup.onChange(event);
         } else if (onClick) {

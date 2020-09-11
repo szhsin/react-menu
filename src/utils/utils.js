@@ -24,9 +24,12 @@ export const bem = (block, element, modifiers = {}) => (userClassName, userModif
     }
 
     if (typeof userClassName === 'function') {
-        className += ` ${userClassName(userModifiers || modifiers)}`;
-    } else if (userClassName && typeof userClassName === 'string') {
-        className += ` ${userClassName.trim()}`;
+        userClassName = userClassName(userModifiers || modifiers);
+    }
+
+    if (typeof userClassName === 'string') {
+        userClassName = userClassName.trim();
+        if (userClassName) className += ` ${userClassName}`;
     }
 
     return className;

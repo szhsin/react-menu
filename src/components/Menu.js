@@ -71,14 +71,19 @@ export const Menu = React.memo(({
         if (handled) e.preventDefault();
     }, [openMenu]);
 
-    const renderButton = useMemo(() => (
-        button &&
-        React.cloneElement(button, {
+    const renderButton = useMemo(() => {
+        if (!button) return null;
+
+        const buttonProps = {
             ref: buttonRef,
             onClick: handleClick,
             onKeyDown: handleKeyDown
-        })
-    ), [button, handleClick, handleKeyDown]);
+        };
+        if (button.type.__name__ === 'MenuButton') {
+            buttonProps.isOpen = isOpen;
+        }
+        return React.cloneElement(button, buttonProps);
+    }, [button, isOpen, handleClick, handleKeyDown]);
 
     return (
         <div className={bem(menuContainerClass)()}

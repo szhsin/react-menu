@@ -47,10 +47,9 @@ const App = () => {
   }, []);
 
   const specialClass = ({ active, hover }) => {
-    // if (active) return 'special-item-active';
-    // if (hover) return 'special-item-hover';
-    // return 'special-item';
-    return '';
+    if (active) return 'special-item-active';
+    if (hover) return 'special-item-hover';
+    return 'special-item';
   }
 
   return (
@@ -99,7 +98,9 @@ const App = () => {
         </MenuItem>
         <MenuDivider />
         <MenuHeader>Font size</MenuHeader>
-        <MenuRadioGroup value={radioValue} onChange={(e) => setRadioValue(e.value)}>
+        <MenuRadioGroup value={radioValue}
+          aria-label="Text color"
+          name="color" onChange={(e) => setRadioValue(e.value)}>
           {[16, 24, 32].map((i) =>
             <MenuItem styles={{
               color: 'blue',
