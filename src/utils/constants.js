@@ -36,9 +36,3 @@ export const HoverIndexActionTypes = Object.freeze({
     'FIRST': 5,
     'LAST': 6
 });
-
-export const FocusingMenuItemPositions = Object.freeze({
-    'INITIAL': 0,
-    'FIRST': 1,
-    'LAST': 2
-});

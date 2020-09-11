@@ -2,7 +2,7 @@ import React, { useCallback, useRef, useMemo, useState } from 'react';
 import {
     bem, menuContainerClass,
     SettingsContext, EventHandlersContext,
-    KeyCodes, FocusingMenuItemPositions,
+    KeyCodes, FocusPositions,
     useMenuState, useMenuList,
 } from '../utils';
 import { MenuList } from './MenuList'
@@ -20,9 +20,7 @@ export const Menu = React.memo(({
     onClick }) => {
 
     // console.log(`Menu render`);
-    const { isMounted, isOpen, openMenu, closeMenu, toggleMenu } = useMenuState();
-    const [focusingMenuItemPosition, setFocusingMenuItemPosition]
-        = useState(FocusingMenuItemPositions.INITIAL);
+    const { isMounted, isOpen, menuItemFocus, openMenu, closeMenu, toggleMenu } = useMenuState();
     const buttonRef = useRef(null);
 
     const handleClose = useCallback(e => {
@@ -46,9 +44,9 @@ export const Menu = React.memo(({
 
     const handleClick = useCallback(e => {
         // Focus (hover) the first menu item when onClick event is trigger by keyboard
-        setFocusingMenuItemPosition(e.detail === 0
-            ? FocusingMenuItemPositions.FIRST : FocusingMenuItemPositions.INITIAL);
-        toggleMenu();
+        toggleMenu(e.detail === 0
+            ? FocusPositions.FIRST
+            : FocusPositions.INITIAL);
     }, [toggleMenu]);
 
     const handleKeyDown = useCallback(e => {
@@ -56,14 +54,12 @@ export const Menu = React.memo(({
 
         switch (e.keyCode) {
             case KeyCodes.UP:
-                setFocusingMenuItemPosition(FocusingMenuItemPositions.LAST);
-                openMenu();
+                openMenu(FocusPositions.LAST);
                 handled = true;
                 break;
 
             case KeyCodes.DOWN:
-                setFocusingMenuItemPosition(FocusingMenuItemPositions.FIRST);
-                openMenu();
+                openMenu(FocusPositions.FIRST);
                 handled = true;
                 break;
         }
@@ -102,7 +98,7 @@ export const Menu = React.memo(({
                         styles={styles}
                         isMounted={isMounted}
                         isOpen={isOpen}
-                        focusingMenuItemPosition={focusingMenuItemPosition}
+                        menuItemFocus={menuItemFocus}
                         containerRef={containerRef}
                         anchorRef={buttonRef}
                         align={align}

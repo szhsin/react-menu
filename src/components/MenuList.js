@@ -11,7 +11,7 @@ import React, {
 import {
     defineName, bem, flatStyles, menuClass,
     SettingsContext, MenuListContext, initialHoverIndex,
-    KeyCodes, FocusingMenuItemPositions, HoverIndexActionTypes
+    KeyCodes, FocusPositions, HoverIndexActionTypes
 } from '../utils';
 
 
@@ -22,7 +22,7 @@ export const MenuList = defineName(React.memo(({
     isOpen,
     isMounted,
     isDisabled,
-    focusingMenuItemPosition,
+    menuItemFocus,
     containerRef,
     anchorRef,
     anchorPoint,
@@ -249,7 +249,7 @@ export const MenuList = defineName(React.memo(({
         }
 
         let newPosition, x, y;
-        let expandedDirection = direction;
+        let computedDirection = direction;
         switch (direction) {
             case 'left': {
                 x = placeLeftX;
@@ -270,13 +270,13 @@ export const MenuList = defineName(React.memo(({
                         if (-leftOverflow > rightOverflow) {
                             adjustedX -= rightOverflow;
                             x = adjustedX;
-                            expandedDirection = 'right';
+                            computedDirection = 'right';
                         } else {
                             x -= leftOverflow;
                         }
                     } else {
                         x = adjustedX;
-                        expandedDirection = 'right';
+                        computedDirection = 'right';
                     }
                 }
 
@@ -299,13 +299,13 @@ export const MenuList = defineName(React.memo(({
                         if (-leftOverflow < rightOverflow) {
                             adjustedX -= leftOverflow;
                             x = adjustedX;
-                            expandedDirection = 'left';
+                            computedDirection = 'left';
                         } else {
                             x -= rightOverflow;
                         }
                     } else {
                         x = adjustedX;
-                        expandedDirection = 'left';
+                        computedDirection = 'left';
                     }
                 }
 
@@ -332,13 +332,13 @@ export const MenuList = defineName(React.memo(({
                         if (-topOverflow > bottomOverflow) {
                             adjustedY -= bottomOverflow;
                             y = adjustedY;
-                            expandedDirection = 'bottom';
+                            computedDirection = 'bottom';
                         } else {
                             y -= topOverflow;
                         }
                     } else {
                         y = adjustedY;
-                        expandedDirection = 'bottom';
+                        computedDirection = 'bottom';
                     }
                 }
 
@@ -362,13 +362,13 @@ export const MenuList = defineName(React.memo(({
                         if (-topOverflow < bottomOverflow) {
                             adjustedY -= topOverflow;
                             y = adjustedY;
-                            expandedDirection = 'top';
+                            computedDirection = 'top';
                         } else {
                             y -= bottomOverflow;
                         }
                     } else {
                         y = adjustedY;
-                        expandedDirection = 'top';
+                        computedDirection = 'top';
                     }
                 }
 
@@ -378,7 +378,7 @@ export const MenuList = defineName(React.memo(({
         }
 
         setPosition(newPosition);
-        setExpandedDirection(expandedDirection);
+        setExpandedDirection(computedDirection);
     }, [isOpen, anchorPoint, positionHelpers, align, direction]);
 
     // handle context menu positioning
@@ -416,11 +416,11 @@ export const MenuList = defineName(React.memo(({
             }
         }
 
-        let expandedDirection = 'bottom';
+        let computedDirection = 'bottom';
         // Similar logic to the left and right side above.
         const bottomOverflow = getBottomOverflow(y);
         if (bottomOverflow > 0) {
-            expandedDirection = 'top';
+            computedDirection = 'top';
 
             const adjustedY = y - menuRect.height;
             const topOverflow = getTopOverflow(adjustedY);
@@ -432,7 +432,7 @@ export const MenuList = defineName(React.memo(({
         }
 
         setPosition({ x, y });
-        setExpandedDirection(expandedDirection);
+        setExpandedDirection(computedDirection);
     }, [isOpen, anchorPoint, positionHelpers]);
 
     useEffect(() => {
@@ -445,15 +445,15 @@ export const MenuList = defineName(React.memo(({
             // and onBlur event will be fired with relatedTarget setting as null.
             if (!isOpen) return;
             menuRef.current.focus();
-            if (focusingMenuItemPosition === FocusingMenuItemPositions.FIRST) {
+            if (menuItemFocus === FocusPositions.FIRST) {
                 hoverIndexDispatch({ type: HoverIndexActionTypes.FIRST });
-            } else if (focusingMenuItemPosition === FocusingMenuItemPositions.LAST) {
+            } else if (menuItemFocus === FocusPositions.LAST) {
                 hoverIndexDispatch({ type: HoverIndexActionTypes.LAST });
             }
         }, 100);
 
         return () => clearTimeout(id);
-    }, [isOpen, focusingMenuItemPosition]);
+    }, [isOpen, menuItemFocus]);
 
     const context = useMemo(() => ({
         isParentOpen: isOpen,

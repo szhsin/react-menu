@@ -2,7 +2,8 @@ import React, { useState, useRef, useContext, useEffect } from 'react';
 import {
     defineName, bem, flatStyles,
     menuClass, subMenuClass, menuItemClass,
-    MenuListContext, KeyCodes, HoverIndexActionTypes,
+    MenuListContext, KeyCodes, 
+    HoverIndexActionTypes, FocusPositions,
     useMenuState, useActiveState
 } from '../utils';
 import { MenuList } from './MenuList';
@@ -20,9 +21,8 @@ export const SubMenu = defineName(React.memo(({
     children }) => {
 
     // console.log(`Submenu render: ${label}`)
-    const { isMounted, isOpen, openMenu, closeMenu } = useMenuState();
+    const { isMounted, isOpen, menuItemFocus, openMenu, closeMenu } = useMenuState();
     const { isActive, onKeyUp, onBlur, ...activeStateHandlers } = useActiveState(KeyCodes.RIGHT);
-    const [isKeyboardEvent, setIsKeyboardEvent] = useState(false);
     const containerRef = useRef(null);
     const itemRef = useRef(null);
     const timeoutId = useRef();
@@ -35,7 +35,6 @@ export const SubMenu = defineName(React.memo(({
         hoverIndexDispatch({ type: HoverIndexActionTypes.SET, index });
         timeoutId.current = setTimeout(() => {
             timeoutId.current = null;
-            setIsKeyboardEvent(false);
             openMenu();
         }, 300);
     }
@@ -46,7 +45,6 @@ export const SubMenu = defineName(React.memo(({
 
     const handleClick = e => {
         if (isDisabled) return;
-        setIsKeyboardEvent(false);
         openMenu();
     }
 
@@ -84,8 +82,7 @@ export const SubMenu = defineName(React.memo(({
             case KeyCodes.SPACE:
             case KeyCodes.RETURN:
             case KeyCodes.RIGHT:
-                setIsKeyboardEvent(true);
-                openMenu();
+                openMenu(FocusPositions.FIRST);
                 break;
         }
     }
@@ -149,7 +146,7 @@ export const SubMenu = defineName(React.memo(({
                 isMounted={isMounted}
                 isOpen={isOpen}
                 isDisabled={isDisabled}
-                isKeyboardEvent={isKeyboardEvent}
+                menuItemFocus={menuItemFocus}
                 containerRef={containerRef}
                 anchorRef={itemRef}
                 direction={'right'}>

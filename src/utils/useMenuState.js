@@ -1,4 +1,10 @@
-import { useReducer, useCallback } from 'react';
+import { useState, useReducer, useCallback } from 'react';
+
+export const FocusPositions = Object.freeze({
+    'INITIAL': 0,
+    'FIRST': 1,
+    'LAST': 2
+});
 
 export const MenuStates = Object.freeze({
     'UNMOUNTED': 0, // remove DOM elements when menu is closed
@@ -39,6 +45,7 @@ const menuStateReducer = (state, { type, isPersistent }) => {
 // Setting isPersistent as true will keep elements in DOM but hide them using CSS style when menu is closed
 export const useMenuState = (isPersistent = true) => {
     const [menuState, dispatch] = useReducer(menuStateReducer, MenuStates.UNMOUNTED);
+    const [menuItemFocus, setMenuItemFocus] = useState(FocusPositions.INITIAL);
 
     return {
         menuState,
@@ -47,13 +54,19 @@ export const useMenuState = (isPersistent = true) => {
 
         isOpen: menuState === MenuStates.OPEN,
 
-        openMenu: useCallback(() =>
-            dispatch({ type: MenuStateActionType.OPEN }), []),
+        menuItemFocus,
+
+        openMenu: useCallback((menuItemFocus = FocusPositions.INITIAL) => {
+            setMenuItemFocus(menuItemFocus);
+            dispatch({ type: MenuStateActionType.OPEN });
+        }, []),
 
         closeMenu: useCallback(() =>
             dispatch({ type: MenuStateActionType.CLOSE, isPersistent }), [isPersistent]),
 
-        toggleMenu: useCallback(() =>
-            dispatch({ type: MenuStateActionType.TOGGLE, isPersistent }), [isPersistent])
+        toggleMenu: useCallback((menuItemFocus = FocusPositions.INITIAL) => {
+            setMenuItemFocus(menuItemFocus);
+            dispatch({ type: MenuStateActionType.TOGGLE, isPersistent });
+        }, [isPersistent])
     }
 }
