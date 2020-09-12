@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 export const menuContainerClass = 'rc-menu-container';
 export const menuClass = 'rc-menu';
@@ -36,3 +37,23 @@ export const HoverIndexActionTypes = Object.freeze({
     'FIRST': 5,
     'LAST': 6
 });
+
+export const stylePropTypes = {
+    className: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.func
+    ]),
+    styles: PropTypes.oneOfType([
+        PropTypes.object,
+        PropTypes.func
+    ]),
+};
+
+export const menuPropTypesBase = {
+    ...stylePropTypes,
+    'aria-label': PropTypes.string,
+    animation: PropTypes.bool,
+    align: PropTypes.oneOf(['start', 'center', 'end']),
+    direction: PropTypes.oneOf(['left', 'right', 'top', 'bottom']),
+    onClick: PropTypes.func
+};

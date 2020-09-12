@@ -1,23 +1,24 @@
 import React, { useContext, useEffect, useRef } from 'react';
+import PropTypes from 'prop-types';
 import {
     defineName, bem, flatStyles, menuClass, menuItemClass,
     MenuListContext, EventHandlersContext, RadioGroupContext,
-    KeyCodes, HoverIndexActionTypes, useActiveState
+    KeyCodes, HoverIndexActionTypes, useActiveState, stylePropTypes
 } from '../utils';
 
 
-export const MenuItem = defineName(React.memo(({
+export const MenuItem = defineName(React.memo(function MenuItem({
     className,
     styles,
+    value,
+    href,
     type,
     checked,
     disabled,
-    href,
     index,
-    value,
     children,
     onClick,
-    ...restProps }) => {
+    ...restProps }) {
     // console.log(`render MenuItem: ${children}`)
 
     const itemRef = useRef(null);
@@ -133,3 +134,17 @@ export const MenuItem = defineName(React.memo(({
         );
     }
 }), 'MenuItem');
+
+MenuItem.propTypes = {
+    ...stylePropTypes,
+    value: PropTypes.any,
+    href: PropTypes.string,
+    type: PropTypes.oneOf(['checkbox', 'radio']),
+    checked: PropTypes.bool,
+    disabled: PropTypes.bool,
+    children: PropTypes.oneOfType([
+        PropTypes.node,
+        PropTypes.func
+    ]),
+    onClick: PropTypes.func
+};

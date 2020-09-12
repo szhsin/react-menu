@@ -1,24 +1,25 @@
-import React, { useState, useRef, useContext, useEffect } from 'react';
+import React, { useRef, useContext, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import {
     defineName, bem, flatStyles,
     menuClass, subMenuClass, menuItemClass,
     MenuListContext, KeyCodes,
     HoverIndexActionTypes, FocusPositions,
-    useMenuState, useActiveState
+    useMenuState, useActiveState, stylePropTypes
 } from '../utils';
 import { MenuList } from './MenuList';
 
 
-export const SubMenu = defineName(React.memo(({
+export const SubMenu = defineName(React.memo(function SubMenu({
     'aria-label': ariaLabel,
     className,
     menuClassName,
     styles,
     menuStyles,
-    label,
     disabled,
+    label,
     index,
-    children }) => {
+    children }) {
 
     // console.log(`Submenu render: ${label}`)
     const { isMounted, isOpen, menuItemFocus, openMenu, closeMenu } = useMenuState();
@@ -145,15 +146,33 @@ export const SubMenu = defineName(React.memo(({
                 ariaLabel={ariaLabel || (typeof label === 'string' ? label : 'Submenu')}
                 className={menuClassName}
                 styles={menuStyles}
-                isMounted={isMounted}
-                isOpen={isOpen}
-                isDisabled={isDisabled}
-                menuItemFocus={menuItemFocus}
-                containerRef={containerRef}
                 anchorRef={itemRef}
-                direction={'right'}>
+                containerRef={containerRef}
+                direction={'right'}
+                isOpen={isOpen}
+                isMounted={isMounted}
+                isDisabled={isDisabled}
+                menuItemFocus={menuItemFocus}>
                 {children}
             </MenuList>
         </li>
     );
 }), 'SubMenu');
+
+SubMenu.propTypes = {
+    ...stylePropTypes,
+    'aria-label': PropTypes.string,
+    menuClassName: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.func
+    ]),
+    menuStyles: PropTypes.oneOfType([
+        PropTypes.object,
+        PropTypes.func
+    ]),
+    disabled: PropTypes.bool,
+    label: PropTypes.oneOfType([
+        PropTypes.node,
+        PropTypes.func
+    ])
+};

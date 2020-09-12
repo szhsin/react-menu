@@ -1,14 +1,15 @@
 import React from 'react';
-import { defineName, bem, flatStyles, menuButtonClass } from '../utils';
+import PropTypes from 'prop-types';
+import { defineName, bem, flatStyles, menuButtonClass, stylePropTypes } from '../utils';
 
 
-export const MenuButton = defineName(React.memo(React.forwardRef(({
+export const MenuButton = defineName(React.memo(React.forwardRef(function MenuButton({
     className,
     styles,
     isOpen,
+    children,
     onClick,
-    onKeyDown,
-    children }, ref) => {
+    onKeyDown }, ref) {
     // console.log('render MenuButton');
     return (
         <button className={bem(menuButtonClass)(className)}
@@ -22,3 +23,10 @@ export const MenuButton = defineName(React.memo(React.forwardRef(({
         </button>
     );
 })), 'MenuButton');
+
+MenuButton.propTypes = {
+    ...stylePropTypes,
+    isOpen: PropTypes.bool,
+    onClick: PropTypes.func,
+    onKeyDown: PropTypes.func
+};

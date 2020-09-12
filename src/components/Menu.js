@@ -1,23 +1,25 @@
-import React, { useCallback, useRef, useMemo, useState } from 'react';
+import React, { useRef, useCallback, useMemo } from 'react';
+import PropTypes from 'prop-types';
 import {
     bem, menuContainerClass,
     SettingsContext, EventHandlersContext,
     KeyCodes, FocusPositions,
     useMenuState, useMenuList,
+    menuPropTypesBase
 } from '../utils';
 import { MenuList } from './MenuList'
 
 
-export const Menu = React.memo(({
+export const Menu = React.memo(function Menu({
     'aria-label': ariaLabel,
     className,
     styles,
-    menuButton,
+    animation,
     align,
     direction,
-    animation,
+    menuButton,
     children,
-    onClick }) => {
+    onClick }) {
 
     // console.log(`Menu render`);
     const { isMounted, isOpen, menuItemFocus, openMenu, closeMenu, toggleMenu } = useMenuState();
@@ -93,13 +95,13 @@ export const Menu = React.memo(({
                                 : 'Menu')}
                         className={className}
                         styles={styles}
-                        isMounted={isMounted}
-                        isOpen={isOpen}
-                        menuItemFocus={menuItemFocus}
-                        containerRef={containerRef}
                         anchorRef={buttonRef}
+                        containerRef={containerRef}
                         align={align}
-                        direction={direction}>
+                        direction={direction}
+                        isOpen={isOpen}
+                        isMounted={isMounted}
+                        menuItemFocus={menuItemFocus}>
                         {children}
                     </MenuList>
                 </EventHandlersContext.Provider>
@@ -107,3 +109,15 @@ export const Menu = React.memo(({
         </div>
     );
 });
+
+Menu.propTypes = {
+    ...menuPropTypesBase,
+    menuButton: PropTypes.oneOfType([
+        PropTypes.element,
+        PropTypes.func
+    ]).isRequired
+};
+
+Menu.defaultProps = {
+    animation: true
+};

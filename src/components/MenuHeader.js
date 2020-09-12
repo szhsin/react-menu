@@ -1,11 +1,14 @@
 import React from 'react';
 import {
     defineName, bem, flatStyles,
-    menuClass, menuHeaderClass
+    menuClass, menuHeaderClass, stylePropTypes
 } from '../utils';
 
 
-export const MenuHeader = defineName(({ className, styles, children }) => {
+export const MenuHeader = defineName(function MenuHeader({
+    className,
+    styles,
+    children }) {
 
     return (
         <li className={bem(menuClass, menuHeaderClass)(className)}
@@ -15,3 +18,7 @@ export const MenuHeader = defineName(({ className, styles, children }) => {
         </li>
     );
 }, 'MenuHeader');
+
+MenuHeader.propTypes = {
+    ...stylePropTypes
+};

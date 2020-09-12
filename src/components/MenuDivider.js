@@ -1,11 +1,13 @@
 import React from 'react';
 import {
     defineName, bem, flatStyles,
-    menuClass, menuDividerClass
+    menuClass, menuDividerClass, stylePropTypes
 } from '../utils';
 
 
-export const MenuDivider = defineName(({ className, styles }) => {
+export const MenuDivider = defineName(function MenuDivider({
+    className,
+    styles }) {
 
     return (
         <li className={bem(menuClass, menuDividerClass)(className)}
@@ -13,3 +15,7 @@ export const MenuDivider = defineName(({ className, styles }) => {
             role="separator" />
     );
 }, 'MenuDivider');
+
+MenuDivider.propTypes = {
+    ...stylePropTypes
+};

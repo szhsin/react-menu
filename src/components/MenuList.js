@@ -15,22 +15,22 @@ import {
 } from '../utils';
 
 
-export const MenuList = defineName(React.memo(({
+export const MenuList = defineName(React.memo(function MenuList({
     ariaLabel,
     className,
     styles,
+    anchorPoint,
+    anchorRef,
+    containerRef,
+    align,
+    direction,
     isOpen,
     isMounted,
     isDisabled,
     menuItemFocus,
-    containerRef,
-    anchorRef,
-    anchorPoint,
-    align,
-    direction,
-    onKeyDown,
     children,
-    ...restProps }) => {
+    onKeyDown,
+    ...restProps }) {
 
     // console.log(`MenuList render ${ariaLabel}`);
     const [position, setPosition] = useState({ x: 0, y: 0 });

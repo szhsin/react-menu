@@ -1,15 +1,19 @@
 import React, { useMemo } from 'react';
-import { defineName, bem, flatStyles, menuClass, radioGroupClass, RadioGroupContext } from '../utils';
+import PropTypes from 'prop-types';
+import {
+    defineName, bem, flatStyles, stylePropTypes,
+    menuClass, radioGroupClass, RadioGroupContext
+} from '../utils';
 
 
-export const MenuRadioGroup = defineName(React.memo(({
+export const MenuRadioGroup = defineName(React.memo(function MenuRadioGroup({
     'aria-label': ariaLabel,
     className,
     styles,
-    children,
     name,
     value,
-    onChange }) => {
+    children,
+    onChange }) {
 
     const contextValue = useMemo(() => ({ name, value, onChange }),
         [name, value, onChange]);
@@ -27,3 +31,11 @@ export const MenuRadioGroup = defineName(React.memo(({
         </li>
     );
 }), 'MenuRadioGroup');
+
+MenuRadioGroup.propTypes = {
+    ...stylePropTypes,
+    'aria-label': PropTypes.string,
+    name: PropTypes.string,
+    value: PropTypes.any,
+    onChange: PropTypes.func
+};

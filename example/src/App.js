@@ -63,7 +63,7 @@ const App = () => {
 
       <Menu styles={{ border: '2px dashed purple' }}
         menuButton={({ open }) => <MenuButton className="my-button">{open ? 'Close' : 'Open'}</MenuButton>}
-        onClick={handleMenuClick} direction="bottom" animation>
+        onClick={handleMenuClick} direction="bottom">
         <MenuItem value="1">item 1</MenuItem>
         <MenuItem className={specialClass} href="https://www.google.com/" target="_blank" value="google">Google</MenuItem>
         <MenuItem href="#" value="#" disabled={disabled}>item 2 (A long item)</MenuItem>
@@ -138,7 +138,7 @@ const App = () => {
           setOpen(false);
           if (e.keyCode) btnRef.current.focus();
         }}
-        onClick={e => console.log('Context menu click:', e.value)} animation>
+        onClick={e => console.log('Context menu click:', e.value)}>
         <SubMenu label="more..." menuClassName="my-menu" aria-label="more commands">
           {[1, 2, 3, 4].map(i => <MenuItem key={i} value={i}>{`Item ${i}`}</MenuItem>)}
         </SubMenu>
@@ -154,7 +154,7 @@ const App = () => {
         menuButton={({ open }) => <button>{open ? 'Close' : 'Open'}</button>}
         aria-label="My menu"
         onClick={handleMenuClick}
-        direction={'bottom'} align="center" animation>
+        align="center" animation={false}>
         {new Array(5).fill(0).map((e, i) => <MenuItem key={i}>{`Item ${i}`}</MenuItem>)}
         <SubMenu label={({ open }) => open ? 'font size' : 'close'} className={({ open }) => open ? 'submenu-open' : ''}
           styles={{ active: { color: 'red' } }}
@@ -169,8 +169,9 @@ const App = () => {
         onMouseLeave={e => timeoutId.current = setTimeout(() => setOpen1(false), 300)}
         ref={btnRef}>Hover me</div>
 
-      <ControlledMenu isOpen={isOpen1} isMounted={false} anchorRef={btnRef}
-        onClose={() => setOpen1(false)} animation
+      <ControlledMenu isOpen={isOpen1}
+        anchorRef={btnRef}
+        onClose={() => setOpen1(false)}
         onMouseEnter={() => clearTimeout(timeoutId.current)}
         onMouseLeave={e => setOpen1(false)}
         onKeyDown={(e) => e.key === 'x' && setOpen1(false)}>
