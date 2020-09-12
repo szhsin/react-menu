@@ -134,6 +134,16 @@ export const MenuList = defineName(React.memo(({
         let handled = false;
 
         switch (e.keyCode) {
+            case KeyCodes.HOME:
+                hoverIndexDispatch({ type: HoverIndexActionTypes.FIRST });
+                handled = true;
+                break;
+
+            case KeyCodes.END:
+                hoverIndexDispatch({ type: HoverIndexActionTypes.LAST });
+                handled = true;
+                break;
+
             case KeyCodes.UP:
                 hoverIndexDispatch({ type: HoverIndexActionTypes.DECREASE });
                 handled = true;
