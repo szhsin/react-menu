@@ -112,12 +112,12 @@ export const SubMenu = defineName(React.memo(({
         }
     }, [isHovering, isParentOpen, closeMenu]);
 
-    const modifiers = {
+    const modifiers = Object.freeze({
         open: isOpen,
         hover: isHovering,
         active: isActive && !isDisabled,
         disabled: isDisabled
-    };
+    });
 
     return (
         <li className={bem(menuClass, subMenuClass)()}
@@ -138,7 +138,7 @@ export const SubMenu = defineName(React.memo(({
                 onClick={handleClick}
                 onKeyUp={handleKeyUp}
                 {...activeStateHandlers}>
-                {label}
+                {typeof label === 'function' ? label(modifiers) : label}
             </div>
 
             <MenuList

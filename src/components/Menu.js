@@ -35,13 +35,6 @@ export const Menu = React.memo(({
         ...otherHandlers }
         = useMenuList(animation, onClick, handleClose);
 
-    let button;
-    if (typeof menuButton === 'function') {
-        button = menuButton({ isOpen })
-    } else {
-        button = menuButton;
-    }
-
     const handleClick = useCallback(e => {
         // Focus (hover) the first menu item when onClick event is trigger by keyboard
         toggleMenu(e.detail === 0
@@ -66,6 +59,10 @@ export const Menu = React.memo(({
 
         if (handled) e.preventDefault();
     }, [openMenu]);
+
+    const button = typeof menuButton === 'function'
+        ? menuButton({ open: isOpen })
+        : menuButton;
 
     const renderButton = useMemo(() => {
         if (!button) return null;

@@ -348,6 +348,7 @@ export const MenuList = defineName(React.memo(({
 
             case 'bottom':
             default: {
+                computedDirection = 'bottom';
                 x = placeToporBottomX;
                 y = placeBottomY;
                 x = confineHorizontally(x);
@@ -467,7 +468,7 @@ export const MenuList = defineName(React.memo(({
         dir: animation && expandedDirection
     };
 
-    const userModifiers = { ...modifiers, dir: expandedDirection };
+    const userModifiers = Object.freeze({ ...modifiers, dir: expandedDirection });
 
     return (
         <React.Fragment>

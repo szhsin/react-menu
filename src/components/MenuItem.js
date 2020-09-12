@@ -90,14 +90,14 @@ export const MenuItem = defineName(React.memo(({
         }
     }, [isHovering, isParentOpen]);
 
-    const modifiers = {
+    const modifiers = Object.freeze({
         type,
         disabled: isDisabled,
         hover: isHovering,
         active: isActive && !isDisabled,
         checked: isRadio ? radioGroup.value === value : (isCheckBox ? !!checked : undefined),
         anchor: isAnchor
-    };
+    });
 
     const menuItemProps = {
         className: bem(menuClass, menuItemClass, modifiers)(className),
@@ -114,18 +114,21 @@ export const MenuItem = defineName(React.memo(({
         ...activeStateHandlers
     };
 
+    const renderChildren =
+        typeof children === 'function' ? children(modifiers) : children;
+
     if (isAnchor) {
         return (
             <li role="presentation">
                 <a {...restProps} href={href} {...menuItemProps} >
-                    {children}
+                    {renderChildren}
                 </a>
             </li>
         );
     } else {
         return (
             <li {...menuItemProps}>
-                {children}
+                {renderChildren}
             </li>
         );
     }
