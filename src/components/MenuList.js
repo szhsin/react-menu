@@ -9,7 +9,7 @@ import React, {
     useContext
 } from 'react';
 import {
-    defineName, bem, flatStyles, menuClass,
+    defineName, safeCall, bem, flatStyles, menuClass,
     SettingsContext, MenuListContext, initialHoverIndex,
     KeyCodes, FocusPositions, HoverIndexActionTypes
 } from '../utils';
@@ -26,9 +26,11 @@ export const MenuList = defineName(React.memo(({
     containerRef,
     anchorRef,
     anchorPoint,
-    children,
     align,
-    direction }) => {
+    direction,
+    onKeyDown,
+    children,
+    ...restProps }) => {
 
     // console.log(`MenuList render ${ariaLabel}`);
     const [position, setPosition] = useState({ x: 0, y: 0 });
@@ -153,12 +155,14 @@ export const MenuList = defineName(React.memo(({
             e.preventDefault();
             e.stopPropagation();
         }
+
+        // Invoke client code defined event handle when it's used as ControlledMenu
+        safeCall(onKeyDown, e);
     }
 
     const positionHelpers = useCallback(() => {
         const menuRect = menuRef.current.getBoundingClientRect();
         const containerRect = containerRef.current.getBoundingClientRect();
-        const anchorRect = anchorRef && anchorRef.current.getBoundingClientRect();
 
         const viewportWidth = document.documentElement.clientWidth;
         const viewportHeight = document.documentElement.clientHeight;
@@ -204,7 +208,6 @@ export const MenuList = defineName(React.memo(({
         return {
             menuRect,
             containerRect,
-            anchorRect,
             viewportWidth,
             viewportHeight,
             getLeftOverflow,
@@ -214,16 +217,15 @@ export const MenuList = defineName(React.memo(({
             confineHorizontally,
             confineVertically
         };
-    }, [containerRef, anchorRef]);
+    }, [containerRef]);
 
     // handle menu positioning
     useLayoutEffect(() => {
-        if (!isOpen || anchorPoint) return;
+        if (!isOpen || anchorPoint || !anchorRef) return;
 
         const {
             menuRect,
             containerRect,
-            anchorRect,
             getLeftOverflow,
             getRightOverflow,
             getTopOverflow,
@@ -232,6 +234,7 @@ export const MenuList = defineName(React.memo(({
             confineVertically
         } = positionHelpers();
 
+        const anchorRect = anchorRef.current.getBoundingClientRect();
         const placeLeftX = anchorRect.left - containerRect.left - menuRect.width - 1;
         const placeRightX = anchorRect.right - containerRect.left + 1;
         const placeLeftorRightY = anchorRect.top - containerRect.top;
@@ -380,7 +383,7 @@ export const MenuList = defineName(React.memo(({
 
         setPosition(newPosition);
         setExpandedDirection(computedDirection);
-    }, [isOpen, anchorPoint, positionHelpers, align, direction]);
+    }, [isOpen, anchorPoint, anchorRef, positionHelpers, align, direction]);
 
     // handle context menu positioning
     useLayoutEffect(() => {
@@ -473,7 +476,8 @@ export const MenuList = defineName(React.memo(({
     return (
         <React.Fragment>
             {isMounted &&
-                <ul className={bem(menuClass, null, modifiers)(className, userModifiers)}
+                <ul {...restProps}
+                    className={bem(menuClass, null, modifiers)(className, userModifiers)}
                     role="menu"
                     tabIndex="-1"
                     aria-disabled={isDisabled}

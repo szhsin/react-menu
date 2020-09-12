@@ -2,22 +2,19 @@ import React, { useMemo } from 'react';
 import {
     bem, menuContainerClass,
     EventHandlersContext, SettingsContext,
-    FocusPositions, useMenuList
+    useMenuList
 } from '../utils';
 import { MenuList } from './MenuList'
 
 
-export const ContextMenu = React.memo(({
+export const ControlledMenu = React.memo(({
     'aria-label': ariaLabel,
-    className,
-    styles,
-    anchorPoint,
-    isOpen,
-    isKeyboardEvent,
+    menuItemFocus,
     animation,
     children,
     onClick,
-    onClose }) => {
+    onClose,
+    ...restProps }) => {
 
     const {
         containerRef,
@@ -27,23 +24,18 @@ export const ContextMenu = React.memo(({
         = useMenuList(animation, onClick, onClose);
 
     return (
-        <div className={bem(menuContainerClass, null, { contextMenu: true })()}
+        <div className={bem(menuContainerClass, null, { controlled: true })()}
             role="presentation" ref={containerRef} {...otherHandlers}>
 
             <SettingsContext.Provider value={settings}>
                 <EventHandlersContext.Provider value={eventHandlers}>
                     <MenuList
-                        ariaLabel={ariaLabel || 'Context menu'}
-                        className={className}
-                        styles={styles}
+                        {...restProps}
+                        ariaLabel={ariaLabel || 'Menu'}
                         isMounted={true}
-                        isOpen={isOpen}
-                        menuItemFocus={useMemo(() => isKeyboardEvent
-                            ? { position: FocusPositions.FIRST }
-                            : { position: FocusPositions.INITIAL },
-                            [isKeyboardEvent])}
-                        containerRef={containerRef}
-                        anchorPoint={anchorPoint}>
+                        menuItemFocus={useMemo(() =>
+                            ({ position: menuItemFocus }), [menuItemFocus])}
+                        containerRef={containerRef}>
                         {children}
                     </MenuList>
                 </EventHandlersContext.Provider>

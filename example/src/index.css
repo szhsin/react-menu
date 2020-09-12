@@ -57,3 +57,8 @@ button {
 .rc-menu__submenu > .submenu-open::after {
   content: "<";
 }
+
+.controlled-menu {
+  border: 1px solid;
+  padding: 1rem;
+}

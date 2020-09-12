@@ -6,4 +6,4 @@ export * from './components/MenuDivider';
 export * from './components/MenuHeader';
 export * from './components/MenuRadioGroup';
 export * from './components/SubMenu';
-export * from './components/ContextMenu';
+export * from './components/ControlledMenu';
