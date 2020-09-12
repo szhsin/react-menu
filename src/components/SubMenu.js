@@ -2,7 +2,7 @@ import React, { useState, useRef, useContext, useEffect } from 'react';
 import {
     defineName, bem, flatStyles,
     menuClass, subMenuClass, menuItemClass,
-    MenuListContext, KeyCodes, 
+    MenuListContext, KeyCodes,
     HoverIndexActionTypes, FocusPositions,
     useMenuState, useActiveState
 } from '../utils';
@@ -103,6 +103,8 @@ export const SubMenu = defineName(React.memo(({
     }
 
     useEffect(() => {
+        // Don't set focus when parent menu is closed, otherwise focus will be lost
+        // and onBlur event will be fired with relatedTarget setting as null.
         if (isHovering && isParentOpen) {
             itemRef.current.focus();
         } else {

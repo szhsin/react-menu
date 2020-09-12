@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import {
     bem, menuContainerClass,
     EventHandlersContext, SettingsContext,
@@ -38,8 +38,10 @@ export const ContextMenu = React.memo(({
                         styles={styles}
                         isMounted={true}
                         isOpen={isOpen}
-                        focusingMenuItemPosition={isKeyboardEvent
-                            ? FocusPositions.FIRST : FocusPositions.INITIAL}
+                        menuItemFocus={useMemo(() => isKeyboardEvent
+                            ? { position: FocusPositions.FIRST }
+                            : { position: FocusPositions.INITIAL },
+                            [isKeyboardEvent])}
                         containerRef={containerRef}
                         anchorPoint={anchorPoint}>
                         {children}

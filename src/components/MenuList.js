@@ -30,7 +30,7 @@ export const MenuList = defineName(React.memo(({
     align,
     direction }) => {
 
-    // console.log(`MenuList render`);
+    // console.log(`MenuList render ${ariaLabel}`);
     const [position, setPosition] = useState({ x: 0, y: 0 });
     const [expandedDirection, setExpandedDirection] = useState(direction);
     const { animation } = useContext(SettingsContext);
@@ -445,9 +445,9 @@ export const MenuList = defineName(React.memo(({
             // and onBlur event will be fired with relatedTarget setting as null.
             if (!isOpen) return;
             menuRef.current.focus();
-            if (menuItemFocus === FocusPositions.FIRST) {
+            if (menuItemFocus.position === FocusPositions.FIRST) {
                 hoverIndexDispatch({ type: HoverIndexActionTypes.FIRST });
-            } else if (menuItemFocus === FocusPositions.LAST) {
+            } else if (menuItemFocus.position === FocusPositions.LAST) {
                 hoverIndexDispatch({ type: HoverIndexActionTypes.LAST });
             }
         }, 100);
