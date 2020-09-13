@@ -20,6 +20,7 @@ export const Menu = React.memo(function Menu({
     className,
     styles,
     animation,
+    keepMounted,
     align,
     direction,
     menuButton,
@@ -30,7 +31,7 @@ export const Menu = React.memo(function Menu({
     const {
         isMounted, isOpen, menuItemFocus,
         openMenu, closeMenu, toggleMenu
-    } = useMenuState();
+    } = useMenuState(keepMounted);
 
     const handleClose = useCallback(e => {
         closeMenu();
@@ -117,6 +118,7 @@ export const Menu = React.memo(function Menu({
 
 Menu.propTypes = {
     ...menuPropTypesBase,
+    keepMounted: PropTypes.bool,
     menuButton: PropTypes.oneOfType([
         PropTypes.element,
         PropTypes.func
@@ -124,5 +126,6 @@ Menu.propTypes = {
 };
 
 Menu.defaultProps = {
-    animation: true
+    animation: true,
+    keepMounted: true
 };

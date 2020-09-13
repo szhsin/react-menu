@@ -1,9 +1,10 @@
 import './components/styles/index.scss';
-export * from './components/Menu';
-export * from './components/MenuItem';
-export * from './components/MenuButton';
-export * from './components/MenuDivider';
-export * from './components/MenuHeader';
-export * from './components/MenuRadioGroup';
-export * from './components/SubMenu';
-export * from './components/ControlledMenu';
+export { FocusPositions, useMenuState } from './utils';
+export { MenuButton } from './components/MenuButton';
+export { Menu } from './components/Menu';
+export { ControlledMenu } from './components/ControlledMenu';
+export { SubMenu } from './components/SubMenu';
+export { MenuItem } from './components/MenuItem';
+export { MenuDivider } from './components/MenuDivider';
+export { MenuHeader } from './components/MenuHeader';
+export { MenuRadioGroup } from './components/MenuRadioGroup';

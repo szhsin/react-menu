@@ -26,11 +26,12 @@ export const SubMenu = defineName(React.memo(function SubMenu({
     styles,
     menuStyles,
     disabled,
+    keepMounted,
     label,
     index,
     children }) {
 
-    const { isMounted, isOpen, menuItemFocus, openMenu, closeMenu } = useMenuState();
+    const { isMounted, isOpen, menuItemFocus, openMenu, closeMenu } = useMenuState(keepMounted);
     const { isActive, onKeyUp, onBlur, ...activeStateHandlers } = useActiveState(KeyCodes.RIGHT);
     const { isParentOpen, hoverIndex, hoverIndexDispatch } = useContext(MenuListContext);
     const containerRef = useRef(null);
@@ -179,8 +180,13 @@ SubMenu.propTypes = {
         PropTypes.func
     ]),
     disabled: PropTypes.bool,
+    keepMounted: PropTypes.bool,
     label: PropTypes.oneOfType([
         PropTypes.node,
         PropTypes.func
     ])
+};
+
+SubMenu.defaultProps = {
+    keepMounted: true
 };

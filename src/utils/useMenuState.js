@@ -18,36 +18,37 @@ const MenuStateActionType = Object.freeze({
     'TOGGLE': 2
 });
 
-const menuStateReducer = (state, { type, isPersistent }) => {
-    switch (type) {
-        case MenuStateActionType.OPEN:
-            return MenuStates.OPEN;
+// Setting keepMounted as true will keep elements in DOM but hide them using CSS style when menu is closed
+export const useMenuState = (keepMounted = true) => {
 
-        case MenuStateActionType.CLOSE:
-            if (state === MenuStates.OPEN) {
-                return isPersistent ? MenuStates.CLOSED : MenuStates.UNMOUNTED;
-            } else {
-                return state;
-            }
-
-        case MenuStateActionType.TOGGLE:
-            if (state === MenuStates.OPEN) {
-                return isPersistent ? MenuStates.CLOSED : MenuStates.UNMOUNTED;
-            } else {
-                return MenuStates.OPEN;
-            }
-
-        default:
-            throw new Error('menuStateReducer: unknown action type');
-    }
-}
-
-// Setting isPersistent as true will keep elements in DOM but hide them using CSS style when menu is closed
-export const useMenuState = (isPersistent = true) => {
-    const [menuState, dispatch] = useReducer(menuStateReducer, MenuStates.UNMOUNTED);
     // Using object type for menuItemFocus state is intentional 
     // for forcing update even if focus position doesn't change
     const [menuItemFocus, setMenuItemFocus] = useState({ position: FocusPositions.INITIAL });
+    const [menuState, dispatch] = useReducer(menuStateReducer, MenuStates.UNMOUNTED);
+
+    function menuStateReducer(state, { type }) {
+        switch (type) {
+            case MenuStateActionType.OPEN:
+                return MenuStates.OPEN;
+
+            case MenuStateActionType.CLOSE:
+                if (state === MenuStates.OPEN) {
+                    return keepMounted ? MenuStates.CLOSED : MenuStates.UNMOUNTED;
+                } else {
+                    return state;
+                }
+
+            case MenuStateActionType.TOGGLE:
+                if (state === MenuStates.OPEN) {
+                    return keepMounted ? MenuStates.CLOSED : MenuStates.UNMOUNTED;
+                } else {
+                    return MenuStates.OPEN;
+                }
+
+            default:
+                throw new Error('menuStateReducer: unknown action type');
+        }
+    }
 
     return {
         menuState,
@@ -64,11 +65,11 @@ export const useMenuState = (isPersistent = true) => {
         }, []),
 
         closeMenu: useCallback(() =>
-            dispatch({ type: MenuStateActionType.CLOSE, isPersistent }), [isPersistent]),
+            dispatch({ type: MenuStateActionType.CLOSE }), []),
 
         toggleMenu: useCallback((menuItemFocus = FocusPositions.INITIAL) => {
             setMenuItemFocus({ position: menuItemFocus });
-            dispatch({ type: MenuStateActionType.TOGGLE, isPersistent });
-        }, [isPersistent])
+            dispatch({ type: MenuStateActionType.TOGGLE });
+        }, [])
     }
 }

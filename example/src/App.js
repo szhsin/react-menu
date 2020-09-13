@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 
 import {
-  Menu, MenuItem, SubMenu, MenuButton,
+  useMenuState, FocusPositions, Menu, MenuItem, SubMenu, MenuButton,
   MenuRadioGroup, MenuDivider, MenuHeader, ControlledMenu
 } from '@szhsin/react-menu'
 import '@szhsin/react-menu/dist/index.css'
@@ -13,7 +13,9 @@ const App = () => {
   const [checkBoxs, setCheckBoxs] = useState([true, false]);
   const [radioValue, setRadioValue] = useState(1);
   const [isOpen, setOpen] = useState(false);
-  const [isOpen1, setOpen1] = useState(false);
+  const {
+    openMenu, closeMenu, toggleMenu, ...menuProps
+  } = useMenuState(false);
   const [anchorPoint, setAnchorPoint] = useState({ x: 0, y: 0 });
   const btnRef = useRef(null);
   const inputRef = useRef(null);
@@ -61,14 +63,14 @@ const App = () => {
       <button onClick={() => setDisabled(d => !d)}>Toggle disabled</button>
       <div><textarea ref={inputRef} rows="5" /></div>
 
-      <Menu styles={{ border: '2px dashed purple' }}
+      <Menu styles={{ border: '2px dashed purple' }} keepMounted={false}
         menuButton={({ open }) => <MenuButton className="my-button">{open ? 'Close' : 'Open'}</MenuButton>}
         onClick={handleMenuClick} direction="bottom">
         <MenuItem value="1">item 1</MenuItem>
         <MenuItem className={specialClass} href="https://www.google.com/" target="_blank" value="google">Google</MenuItem>
         <MenuItem href="#" value="#" disabled={disabled}>item 2 (A long item)</MenuItem>
         <MenuItem disabled>item (disabled)</MenuItem>
-        <SubMenu label="item 3" className={specialClass} menuClassName="my-menu">
+        <SubMenu keepMounted={false} label="item 3" className={specialClass} menuClassName="my-menu">
           <MenuItem disabled={disabled}>item 3.1</MenuItem>
           <MenuDivider />
           <SubMenu label="item 3.2" disabled={disabled}>
@@ -165,16 +167,16 @@ const App = () => {
         </SubMenu>
       </Menu>
 
-      <div className="controlled-menu" onMouseEnter={e => setOpen1(true)}
-        onMouseLeave={e => timeoutId.current = setTimeout(() => setOpen1(false), 300)}
+      <div className="controlled-menu" onMouseEnter={e => openMenu(FocusPositions.LAST)}
+        onMouseLeave={e => timeoutId.current = setTimeout(() => closeMenu(), 300)}
         ref={btnRef}>Hover me</div>
 
-      <ControlledMenu isOpen={isOpen1}
+      <ControlledMenu {...menuProps}
         anchorRef={btnRef}
-        onClose={() => setOpen1(false)}
+        onClose={() => closeMenu()}
         onMouseEnter={() => clearTimeout(timeoutId.current)}
-        onMouseLeave={e => setOpen1(false)}
-        onKeyDown={(e) => e.key === 'x' && setOpen1(false)}>
+        onMouseLeave={e => closeMenu()}
+        onKeyDown={(e) => e.key === 'x' && closeMenu()}>
         {[1, 2, 3].map(i => <MenuItem key={i} value={i}>{`Controlled ${i}`}</MenuItem>)}
         <SubMenu label="more...">
           {[1, 2, 3, 4].map(i => <MenuItem key={i} value={i}>{`Item ${i}`}</MenuItem>)}
