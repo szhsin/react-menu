@@ -1,7 +1,11 @@
 import React from 'react';
 import {
-    defineName, bem, flatStyles,
-    menuClass, menuDividerClass, stylePropTypes
+    defineName,
+    bem,
+    flatStyles,
+    menuClass,
+    menuDividerClass,
+    stylePropTypes
 } from '../utils';
 
 

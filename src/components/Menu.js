@@ -1,11 +1,16 @@
 import React, { useRef, useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import {
-    bem, menuContainerClass,
-    SettingsContext, EventHandlersContext,
-    KeyCodes, FocusPositions,
-    useMenuState, useMenuList,
-    menuPropTypesBase
+    safeCall,
+    bem,
+    menuContainerClass,
+    menuPropTypesBase,
+    EventHandlersContext,
+    SettingsContext,
+    KeyCodes,
+    FocusPositions,
+    useMenuState,
+    useMenuList
 } from '../utils';
 import { MenuList } from './MenuList'
 
@@ -21,9 +26,11 @@ export const Menu = React.memo(function Menu({
     children,
     onClick }) {
 
-    // console.log(`Menu render`);
-    const { isMounted, isOpen, menuItemFocus, openMenu, closeMenu, toggleMenu } = useMenuState();
     const buttonRef = useRef(null);
+    const {
+        isMounted, isOpen, menuItemFocus,
+        openMenu, closeMenu, toggleMenu
+    } = useMenuState();
 
     const handleClose = useCallback(e => {
         closeMenu();
@@ -34,8 +41,8 @@ export const Menu = React.memo(function Menu({
         containerRef,
         settings,
         eventHandlers,
-        ...otherHandlers }
-        = useMenuList(animation, onClick, handleClose);
+        ...otherHandlers
+    } = useMenuList(animation, onClick, handleClose);
 
     const handleClick = useCallback(e => {
         // Focus (hover) the first menu item when onClick event is trigger by keyboard
@@ -62,9 +69,7 @@ export const Menu = React.memo(function Menu({
         if (handled) e.preventDefault();
     }, [openMenu]);
 
-    const button = typeof menuButton === 'function'
-        ? menuButton({ open: isOpen })
-        : menuButton;
+    const button = safeCall(menuButton, { open: isOpen });
 
     const renderButton = useMemo(() => {
         if (!button) return null;

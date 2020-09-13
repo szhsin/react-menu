@@ -1,9 +1,19 @@
 import React, { useContext, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import {
-    defineName, bem, flatStyles, menuClass, menuItemClass,
-    MenuListContext, EventHandlersContext, RadioGroupContext,
-    KeyCodes, HoverIndexActionTypes, useActiveState, stylePropTypes
+    defineName,
+    safeCall,
+    bem,
+    flatStyles,
+    stylePropTypes,
+    menuClass,
+    menuItemClass,
+    MenuListContext,
+    EventHandlersContext,
+    RadioGroupContext,
+    KeyCodes,
+    HoverIndexActionTypes,
+    useActiveState
 } from '../utils';
 
 
@@ -19,14 +29,13 @@ export const MenuItem = defineName(React.memo(function MenuItem({
     children,
     onClick,
     ...restProps }) {
-    // console.log(`render MenuItem: ${children}`)
 
     const itemRef = useRef(null);
     const { isParentOpen, hoverIndex, hoverIndexDispatch } = useContext(MenuListContext);
-    const isHovering = hoverIndex === index;
     const eventHandlers = useContext(EventHandlersContext);
     const radioGroup = useContext(RadioGroupContext);
     const { isActive, onKeyUp, onBlur, ...activeStateHandlers } = useActiveState();
+    const isHovering = hoverIndex === index;
     const isRadio = type === 'radio';
     const isCheckBox = type === 'checkbox';
     const isDisabled = disabled ? true : undefined;
@@ -44,9 +53,9 @@ export const MenuItem = defineName(React.memo(function MenuItem({
         if (isRadio) {
             event.name = radioGroup.name;
             isStopPropagation = true;
-            radioGroup.onChange && radioGroup.onChange(event);
-        } else if (onClick) {
-            isStopPropagation = onClick(event) === false;
+            safeCall(radioGroup.onChange, event);
+        } else {
+            isStopPropagation = safeCall(onClick, event) === false;
         }
 
         eventHandlers.handleClick(
@@ -109,14 +118,13 @@ export const MenuItem = defineName(React.memo(function MenuItem({
         tabIndex: isHovering ? 0 : -1,
         ref: itemRef,
         onMouseEnter: handleMouseEnter,
-        onClick: () => handleClick(),
         onKeyUp: handleKeyUp,
         onBlur: handleBlur,
+        onClick: () => handleClick(),
         ...activeStateHandlers
     };
 
-    const renderChildren =
-        typeof children === 'function' ? children(modifiers) : children;
+    const renderChildren = safeCall(children, modifiers);
 
     if (isAnchor) {
         return (

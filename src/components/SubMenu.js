@@ -1,11 +1,20 @@
 import React, { useRef, useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import {
-    defineName, bem, flatStyles,
-    menuClass, subMenuClass, menuItemClass,
-    MenuListContext, KeyCodes,
-    HoverIndexActionTypes, FocusPositions,
-    useMenuState, useActiveState, stylePropTypes
+    defineName,
+    safeCall,
+    bem,
+    flatStyles,
+    stylePropTypes,
+    menuClass,
+    subMenuClass,
+    menuItemClass,
+    MenuListContext,
+    KeyCodes,
+    HoverIndexActionTypes,
+    FocusPositions,
+    useMenuState,
+    useActiveState
 } from '../utils';
 import { MenuList } from './MenuList';
 
@@ -21,13 +30,12 @@ export const SubMenu = defineName(React.memo(function SubMenu({
     index,
     children }) {
 
-    // console.log(`Submenu render: ${label}`)
     const { isMounted, isOpen, menuItemFocus, openMenu, closeMenu } = useMenuState();
     const { isActive, onKeyUp, onBlur, ...activeStateHandlers } = useActiveState(KeyCodes.RIGHT);
+    const { isParentOpen, hoverIndex, hoverIndexDispatch } = useContext(MenuListContext);
     const containerRef = useRef(null);
     const itemRef = useRef(null);
     const timeoutId = useRef();
-    const { isParentOpen, hoverIndex, hoverIndexDispatch } = useContext(MenuListContext);
     const isHovering = hoverIndex === index;
     const isDisabled = disabled ? true : undefined;
 
@@ -139,7 +147,7 @@ export const SubMenu = defineName(React.memo(function SubMenu({
                 onClick={handleClick}
                 onKeyUp={handleKeyUp}
                 {...activeStateHandlers}>
-                {typeof label === 'function' ? label(modifiers) : label}
+                {safeCall(label, modifiers)}
             </div>
 
             <MenuList

@@ -1,9 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
-    bem, menuContainerClass,
-    EventHandlersContext, SettingsContext,
-    useMenuList, menuPropTypesBase, FocusPositions
+    bem,
+    menuContainerClass,
+    menuPropTypesBase,
+    EventHandlersContext,
+    SettingsContext,
+    FocusPositions,
+    useMenuList,
 } from '../utils';
 import { MenuList } from './MenuList'
 
@@ -29,8 +33,8 @@ export const ControlledMenu = React.memo(function ControlledMenu({
         containerRef,
         settings,
         eventHandlers,
-        ...otherHandlers }
-        = useMenuList(animation, onClick, onClose);
+        ...otherHandlers
+    } = useMenuList(animation, onClick, onClose);
 
     return (
         <div className={bem(menuContainerClass, null, { controlled: true })()}

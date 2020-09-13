@@ -13,6 +13,7 @@ export const classSet = (classes) => {
     return className.trim();
 }
 
+// Generate className following BEM methodology: http://getbem.com/naming/
 // Modifier value can be one of the following types: boolean, string, undefined
 export const bem = (block, element, modifiers = {}) => (userClassName, userModifiers) => {
     let blockElement = element ? `${block}__${element}` : block;

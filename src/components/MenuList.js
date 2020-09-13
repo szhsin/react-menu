@@ -9,9 +9,17 @@ import React, {
     useContext
 } from 'react';
 import {
-    defineName, safeCall, bem, flatStyles, menuClass,
-    SettingsContext, MenuListContext, initialHoverIndex,
-    KeyCodes, FocusPositions, HoverIndexActionTypes
+    defineName,
+    safeCall,
+    bem,
+    flatStyles,
+    menuClass,
+    SettingsContext,
+    MenuListContext,
+    initialHoverIndex,
+    KeyCodes,
+    FocusPositions,
+    HoverIndexActionTypes
 } from '../utils';
 
 
@@ -32,7 +40,6 @@ export const MenuList = defineName(React.memo(function MenuList({
     onKeyDown,
     ...restProps }) {
 
-    // console.log(`MenuList render ${ariaLabel}`);
     const [position, setPosition] = useState({ x: 0, y: 0 });
     const [expandedDirection, setExpandedDirection] = useState(direction);
     const { animation } = useContext(SettingsContext);
@@ -79,7 +86,6 @@ export const MenuList = defineName(React.memo(function MenuList({
 
     const menuItems = useMemo(() => {
         if (!isMounted) return null;
-        // console.log(`MenuList re-create children`);
 
         let index = 0;
         const permittedChildren = ['MenuDivider', 'MenuHeader', 'MenuItem',
@@ -486,7 +492,7 @@ export const MenuList = defineName(React.memo(function MenuList({
     return (
         <React.Fragment>
             {isMounted &&
-                <ul {...restProps}
+                <ul {...restProps} // Only for passing through client code defined event handlers from ControlledMenu
                     className={bem(menuClass, null, modifiers)(className, userModifiers)}
                     role="menu"
                     tabIndex="-1"

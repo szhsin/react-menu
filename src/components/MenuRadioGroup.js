@@ -1,8 +1,13 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import {
-    defineName, bem, flatStyles, stylePropTypes,
-    menuClass, radioGroupClass, RadioGroupContext
+    defineName,
+    bem,
+    flatStyles,
+    stylePropTypes,
+    menuClass,
+    radioGroupClass,
+    RadioGroupContext
 } from '../utils';
 
 

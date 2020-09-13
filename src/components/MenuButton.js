@@ -1,6 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { defineName, bem, flatStyles, menuButtonClass, stylePropTypes } from '../utils';
+import {
+    defineName,
+    bem,
+    flatStyles,
+    menuButtonClass,
+    stylePropTypes
+} from '../utils';
 
 
 export const MenuButton = defineName(React.memo(React.forwardRef(function MenuButton({
@@ -10,7 +16,7 @@ export const MenuButton = defineName(React.memo(React.forwardRef(function MenuBu
     children,
     onClick,
     onKeyDown }, ref) {
-    // console.log('render MenuButton');
+
     return (
         <button className={bem(menuButtonClass)(className)}
             style={flatStyles(styles)}
