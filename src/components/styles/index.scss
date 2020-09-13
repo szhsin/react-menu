@@ -77,18 +77,30 @@
             color: var.$color-disabled;
         }
 
+        &--type-radio {
+            padding-left: 2.2rem;
+            &::before {
+                content: "\25cb";
+                position: absolute;
+                left: 0.8rem;
+                font-size: 0.9rem;
+            }
+        }
+
         &--type-radio#{&}--checked::before {
             content: "\25cf";
-            position: absolute;
-            left: 0.45rem;
-            top: 0.7rem;
-            font-size: 0.75rem;
+        }
+
+        &--type-checkbox {
+            padding-left: 2.2rem;
+            &::before {
+                position: absolute;
+                left: 0.8rem;
+            }
         }
 
         &--type-checkbox#{&}--checked::before {
             content: "\2714";
-            position: absolute;
-            left: 0.45rem;
         }
     }
 
