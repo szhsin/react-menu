@@ -1,5 +1,5 @@
 import { useRef, useCallback, useMemo } from 'react';
-import { KeyCodes } from './constants';
+import { CloseReason, KeyCodes } from './constants';
 import { safeCall } from './utils';
 
 
@@ -17,7 +17,7 @@ export const useMenuList = (animation, debugging, onClick, onClose) => {
             // According to WAI-ARIA Authoring Practices 1.1
             // Keep menu open when check or radio is invoked by SPACE key
             if (!isCheckorRadio || event.keyCode !== KeyCodes.SPACE) {
-                safeCall(onClose, event);
+                safeCall(onClose, { ...event, reason: CloseReason.CLICK });
             }
 
             if (!isStopPropagation) safeCall(onClick, event);
@@ -27,14 +27,14 @@ export const useMenuList = (animation, debugging, onClick, onClose) => {
     const handleKeyDown = useCallback(({ keyCode }) => {
         switch (keyCode) {
             case KeyCodes.ESC:
-                safeCall(onClose, { keyCode });
+                safeCall(onClose, { keyCode, reason: CloseReason.CANCEL });
                 break;
         }
     }, [onClose]);
 
     const handleBlur = useCallback(e => {
         if (!e.currentTarget.contains(e.relatedTarget) && !debugging) {
-            safeCall(onClose, {});
+            safeCall(onClose, { reason: CloseReason.BLUR });
         }
     }, [debugging, onClose]);
 

@@ -7,6 +7,7 @@ import {
     menuPropTypesBase,
     EventHandlersContext,
     SettingsContext,
+    CloseReason,
     KeyCodes,
     FocusPositions,
     useMenuState,
@@ -26,18 +27,26 @@ export const Menu = React.memo(function Menu({
     direction,
     menuButton,
     children,
+    onOpen,
+    onClose,
     onClick }) {
 
     const buttonRef = useRef(null);
     const {
         isMounted, isOpen, menuItemFocus,
-        openMenu, closeMenu, toggleMenu
+        openMenu, closeMenu
     } = useMenuState(keepMounted);
 
-    const handleClose = useCallback(e => {
+    const handleOpen = useCallback((menuItemFocus, e = {}) => {
+        safeCall(onOpen, e);
+        openMenu(menuItemFocus);
+    }, [openMenu, onOpen]);
+
+    const handleClose = useCallback((e = {}) => {
         closeMenu();
         if (e.keyCode) buttonRef.current.focus();
-    }, [closeMenu]);
+        safeCall(onClose, e);
+    }, [closeMenu, onClose]);
 
     const {
         containerRef,
@@ -47,29 +56,33 @@ export const Menu = React.memo(function Menu({
     } = useMenuList(animation, debugging, onClick, handleClose);
 
     const handleClick = useCallback(e => {
-        // Focus (hover) the first menu item when onClick event is trigger by keyboard
-        toggleMenu(e.detail === 0
-            ? FocusPositions.FIRST
-            : FocusPositions.INITIAL);
-    }, [toggleMenu]);
+        if (isOpen) {
+            handleClose({ reason: CloseReason.BUTTON });
+        } else {
+            // Focus (hover) the first menu item when onClick event is trigger by keyboard
+            handleOpen(e.detail === 0
+                ? FocusPositions.FIRST
+                : FocusPositions.INITIAL);
+        }
+    }, [isOpen, handleOpen, handleClose]);
 
     const handleKeyDown = useCallback(e => {
         let handled = false;
 
         switch (e.keyCode) {
             case KeyCodes.UP:
-                openMenu(FocusPositions.LAST);
+                handleOpen(FocusPositions.LAST);
                 handled = true;
                 break;
 
             case KeyCodes.DOWN:
-                openMenu(FocusPositions.FIRST);
+                handleOpen(FocusPositions.FIRST);
                 handled = true;
                 break;
         }
 
         if (handled) e.preventDefault();
-    }, [openMenu]);
+    }, [handleOpen]);
 
     const button = safeCall(menuButton, { open: isOpen });
 
@@ -123,7 +136,8 @@ Menu.propTypes = {
     menuButton: PropTypes.oneOfType([
         PropTypes.element,
         PropTypes.func
-    ]).isRequired
+    ]).isRequired,
+    onOpen: PropTypes.func
 };
 
 Menu.defaultProps = {

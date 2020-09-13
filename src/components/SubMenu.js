@@ -1,4 +1,4 @@
-import React, { useRef, useContext, useEffect } from 'react';
+import React, { useRef, useContext, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import {
     defineName,
@@ -30,7 +30,9 @@ export const SubMenu = defineName(React.memo(function SubMenu({
     keepMounted,
     label,
     index,
-    children }) {
+    children,
+    onOpen,
+    onClose }) {
 
     const { isMounted, isOpen, menuItemFocus, openMenu, closeMenu } = useMenuState(keepMounted);
     const { isActive, onKeyUp, onBlur, ...activeStateHandlers } = useActiveState(KeyCodes.RIGHT);
@@ -42,12 +44,22 @@ export const SubMenu = defineName(React.memo(function SubMenu({
     const isHovering = hoverIndex === index;
     const isDisabled = disabled ? true : undefined;
 
+    const handleOpen = useCallback((menuItemFocus, e = {}) => {
+        safeCall(onOpen, e);
+        openMenu(menuItemFocus);
+    }, [openMenu, onOpen]);
+
+    const handleClose = useCallback((e = {}) => {
+        closeMenu();
+        safeCall(onClose, e);
+    }, [closeMenu, onClose]);
+
     const handleMouseEnter = e => {
         if (isDisabled) return;
         hoverIndexDispatch({ type: HoverIndexActionTypes.SET, index });
         timeoutId.current = setTimeout(() => {
             timeoutId.current = null;
-            openMenu();
+            handleOpen();
         }, 300);
     }
 
@@ -57,7 +69,7 @@ export const SubMenu = defineName(React.memo(function SubMenu({
 
     const handleClick = e => {
         if (isDisabled) return;
-        openMenu();
+        handleOpen();
     }
 
     const handleKeyDown = e => {
@@ -67,7 +79,7 @@ export const SubMenu = defineName(React.memo(function SubMenu({
             // LEFT key is bubbled up from submenu items
             case KeyCodes.LEFT:
                 if (isOpen) {
-                    closeMenu();
+                    handleClose();
                     itemRef.current.focus();
                     handled = true;
                 }
@@ -94,7 +106,7 @@ export const SubMenu = defineName(React.memo(function SubMenu({
             case KeyCodes.SPACE:
             case KeyCodes.RETURN:
             case KeyCodes.RIGHT:
-                openMenu(FocusPositions.FIRST);
+                handleOpen(FocusPositions.FIRST);
                 break;
         }
     }
@@ -108,13 +120,13 @@ export const SubMenu = defineName(React.memo(function SubMenu({
         // Check if something which is not in the subtree get focus.
         // It handles situation such as clicking on a sibling disabled menu item
         if (!e.currentTarget.contains(e.relatedTarget)) {
-            closeMenu();
+            handleClose();
             hoverIndexDispatch({ type: HoverIndexActionTypes.UNSET, index });
         } else if (itemRef.current === e.relatedTarget) {
             // This handles clicking on submenu item when it's open
             // First close the submenu and then let subsequent onClick event to re-open it
             // for maintaining the correct focus
-            closeMenu();
+            handleClose();
         }
     }
 
@@ -124,9 +136,9 @@ export const SubMenu = defineName(React.memo(function SubMenu({
         if (isHovering && isParentOpen) {
             itemRef.current.focus();
         } else {
-            closeMenu();
+            handleClose();
         }
-    }, [isHovering, isParentOpen, closeMenu]);
+    }, [isHovering, isParentOpen, handleClose]);
 
     const modifiers = Object.freeze({
         open: isOpen,
@@ -190,7 +202,9 @@ SubMenu.propTypes = {
     label: PropTypes.oneOfType([
         PropTypes.node,
         PropTypes.func
-    ])
+    ]),
+    onOpen: PropTypes.func,
+    onClose: PropTypes.func
 };
 
 SubMenu.defaultProps = {

@@ -38,6 +38,13 @@ export const HoverIndexActionTypes = Object.freeze({
     'LAST': 6
 });
 
+export const CloseReason = Object.freeze({
+    'CLICK': 'click',
+    'CANCEL': 'cancel',
+    'BLUR': 'blur',
+    'BUTTON': 'button'
+});
+
 export const stylePropTypes = {
     className: PropTypes.oneOfType([
         PropTypes.string,
@@ -56,5 +63,6 @@ export const menuPropTypesBase = {
     debugging: PropTypes.bool,
     align: PropTypes.oneOf(['start', 'center', 'end']),
     direction: PropTypes.oneOf(['left', 'right', 'top', 'bottom']),
-    onClick: PropTypes.func
+    onClick: PropTypes.func,
+    onClose: PropTypes.func
 };
