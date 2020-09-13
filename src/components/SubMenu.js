@@ -10,6 +10,7 @@ import {
     subMenuClass,
     menuItemClass,
     MenuListContext,
+    SettingsContext,
     KeyCodes,
     HoverIndexActionTypes,
     FocusPositions,
@@ -34,6 +35,7 @@ export const SubMenu = defineName(React.memo(function SubMenu({
     const { isMounted, isOpen, menuItemFocus, openMenu, closeMenu } = useMenuState(keepMounted);
     const { isActive, onKeyUp, onBlur, ...activeStateHandlers } = useActiveState(KeyCodes.RIGHT);
     const { isParentOpen, hoverIndex, hoverIndexDispatch } = useContext(MenuListContext);
+    const { debugging } = useContext(SettingsContext);
     const containerRef = useRef(null);
     const itemRef = useRef(null);
     const timeoutId = useRef();
@@ -99,6 +101,10 @@ export const SubMenu = defineName(React.memo(function SubMenu({
 
     const handleBlur = e => {
         onBlur(e);
+
+        // In debugging mode, neither close menu nor reset hoverIndex.
+        if (debugging) return;
+
         // Check if something which is not in the subtree get focus.
         // It handles situation such as clicking on a sibling disabled menu item
         if (!e.currentTarget.contains(e.relatedTarget)) {

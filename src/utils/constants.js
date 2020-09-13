@@ -53,6 +53,7 @@ export const menuPropTypesBase = {
     ...stylePropTypes,
     'aria-label': PropTypes.string,
     animation: PropTypes.bool,
+    debugging: PropTypes.bool,
     align: PropTypes.oneOf(['start', 'center', 'end']),
     direction: PropTypes.oneOf(['left', 'right', 'top', 'bottom']),
     onClick: PropTypes.func

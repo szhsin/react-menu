@@ -3,13 +3,14 @@ import { KeyCodes } from './constants';
 import { safeCall } from './utils';
 
 
-export const useMenuList = (animation, onClick, onClose) => {
+export const useMenuList = (animation, debugging, onClick, onClose) => {
 
     const containerRef = useRef(null);
 
     const settings = useMemo(() => ({
-        animation
-    }), [animation]);
+        animation,
+        debugging
+    }), [animation, debugging]);
 
     const eventHandlers = useMemo(() => ({
         handleClick(event, isStopPropagation, isCheckorRadio) {
@@ -32,10 +33,10 @@ export const useMenuList = (animation, onClick, onClose) => {
     }, [onClose]);
 
     const handleBlur = useCallback(e => {
-        if (!e.currentTarget.contains(e.relatedTarget)) {
+        if (!e.currentTarget.contains(e.relatedTarget) && !debugging) {
             safeCall(onClose, {});
         }
-    }, [onClose]);
+    }, [debugging, onClose]);
 
     return {
         containerRef, settings, eventHandlers,

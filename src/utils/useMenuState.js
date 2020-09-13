@@ -51,8 +51,6 @@ export const useMenuState = (keepMounted = true) => {
     }
 
     return {
-        menuState,
-
         isMounted: menuState !== MenuStates.UNMOUNTED,
 
         isOpen: menuState === MenuStates.OPEN,

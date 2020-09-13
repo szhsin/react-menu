@@ -20,6 +20,7 @@ export const Menu = React.memo(function Menu({
     className,
     styles,
     animation,
+    debugging,
     keepMounted,
     align,
     direction,
@@ -43,7 +44,7 @@ export const Menu = React.memo(function Menu({
         settings,
         eventHandlers,
         ...otherHandlers
-    } = useMenuList(animation, onClick, handleClose);
+    } = useMenuList(animation, debugging, onClick, handleClose);
 
     const handleClick = useCallback(e => {
         // Focus (hover) the first menu item when onClick event is trigger by keyboard

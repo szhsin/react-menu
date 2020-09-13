@@ -17,6 +17,7 @@ export const ControlledMenu = React.memo(function ControlledMenu({
     className,
     styles,
     animation,
+    debugging,
     anchorPoint,
     anchorRef,
     align,
@@ -34,7 +35,7 @@ export const ControlledMenu = React.memo(function ControlledMenu({
         settings,
         eventHandlers,
         ...otherHandlers
-    } = useMenuList(animation, onClick, onClose);
+    } = useMenuList(animation, debugging, onClick, onClose);
 
     return (
         <div className={bem(menuContainerClass, null, { controlled: true })()}
