@@ -63,6 +63,5 @@ export const menuPropTypesBase = {
     debugging: PropTypes.bool,
     align: PropTypes.oneOf(['start', 'center', 'end']),
     direction: PropTypes.oneOf(['left', 'right', 'top', 'bottom']),
-    onClick: PropTypes.func,
-    onClose: PropTypes.func
+    onClick: PropTypes.func
 };

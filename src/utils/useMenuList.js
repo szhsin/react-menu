@@ -3,7 +3,7 @@ import { CloseReason, KeyCodes } from './constants';
 import { safeCall } from './utils';
 
 
-export const useMenuList = (animation, debugging, onClick, onClose) => {
+export const useMenuList = (animation, debugging, onClick, onClose, buttonRef) => {
 
     const containerRef = useRef(null);
 
@@ -17,7 +17,7 @@ export const useMenuList = (animation, debugging, onClick, onClose) => {
             // According to WAI-ARIA Authoring Practices 1.1
             // Keep menu open when check or radio is invoked by SPACE key
             if (!isCheckorRadio || event.keyCode !== KeyCodes.SPACE) {
-                safeCall(onClose, { ...event, reason: CloseReason.CLICK });
+                safeCall(onClose, { keyCode: event.keyCode, reason: CloseReason.CLICK });
             }
 
             if (!isStopPropagation) safeCall(onClick, event);

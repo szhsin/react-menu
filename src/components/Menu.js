@@ -1,4 +1,4 @@
-import React, { useRef, useCallback, useMemo } from 'react';
+import React, { useRef, useCallback, useMemo, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import {
     safeCall,
@@ -7,7 +7,6 @@ import {
     menuPropTypesBase,
     EventHandlersContext,
     SettingsContext,
-    CloseReason,
     KeyCodes,
     FocusPositions,
     useMenuState,
@@ -27,26 +26,19 @@ export const Menu = React.memo(function Menu({
     direction,
     menuButton,
     children,
-    onOpen,
-    onClose,
-    onClick }) {
+    onClick,
+    onChange }) {
 
     const buttonRef = useRef(null);
     const {
         isMounted, isOpen, menuItemFocus,
-        openMenu, closeMenu
+        openMenu, closeMenu, toggleMenu
     } = useMenuState(keepMounted);
 
-    const handleOpen = useCallback((menuItemFocus, e = {}) => {
-        safeCall(onOpen, e);
-        openMenu(menuItemFocus);
-    }, [openMenu, onOpen]);
-
-    const handleClose = useCallback((e = {}) => {
+    const handleClose = useCallback(e => {
         closeMenu();
         if (e.keyCode) buttonRef.current.focus();
-        safeCall(onClose, e);
-    }, [closeMenu, onClose]);
+    }, [closeMenu]);
 
     const {
         containerRef,
@@ -56,33 +48,29 @@ export const Menu = React.memo(function Menu({
     } = useMenuList(animation, debugging, onClick, handleClose);
 
     const handleClick = useCallback(e => {
-        if (isOpen) {
-            handleClose({ reason: CloseReason.BUTTON });
-        } else {
-            // Focus (hover) the first menu item when onClick event is trigger by keyboard
-            handleOpen(e.detail === 0
-                ? FocusPositions.FIRST
-                : FocusPositions.INITIAL);
-        }
-    }, [isOpen, handleOpen, handleClose]);
+        // Focus (hover) the first menu item when onClick event is trigger by keyboard
+        toggleMenu(e.detail === 0
+            ? FocusPositions.FIRST
+            : FocusPositions.INITIAL);
+    }, [toggleMenu]);
 
     const handleKeyDown = useCallback(e => {
         let handled = false;
 
         switch (e.keyCode) {
             case KeyCodes.UP:
-                handleOpen(FocusPositions.LAST);
+                openMenu(FocusPositions.LAST);
                 handled = true;
                 break;
 
             case KeyCodes.DOWN:
-                handleOpen(FocusPositions.FIRST);
+                openMenu(FocusPositions.FIRST);
                 handled = true;
                 break;
         }
 
         if (handled) e.preventDefault();
-    }, [handleOpen]);
+    }, [openMenu]);
 
     const button = safeCall(menuButton, { open: isOpen });
 
@@ -99,6 +87,10 @@ export const Menu = React.memo(function Menu({
         }
         return React.cloneElement(button, buttonProps);
     }, [button, isOpen, handleClick, handleKeyDown]);
+
+    useEffect(() => {
+        safeCall(onChange, { open: isOpen });
+    }, [onChange, isOpen]);
 
     return (
         <div className={bem(menuContainerClass)()}
@@ -137,7 +129,7 @@ Menu.propTypes = {
         PropTypes.element,
         PropTypes.func
     ]).isRequired,
-    onOpen: PropTypes.func
+    onChange: PropTypes.func
 };
 
 Menu.defaultProps = {

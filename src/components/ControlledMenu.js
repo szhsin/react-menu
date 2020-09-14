@@ -75,7 +75,8 @@ ControlledMenu.propTypes = {
     isMounted: PropTypes.bool,
     menuItemFocus: PropTypes.exact({
         position: PropTypes.number
-    })
+    }),
+    onClose: PropTypes.func
 };
 
 ControlledMenu.defaultProps = {
