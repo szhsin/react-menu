@@ -5,11 +5,8 @@
 
 .rc-menu-container {
     position: relative;
-
-    &--controlled {
-        width: 0px;
-        height: 0px;
-    }
+    width: 0px;
+    height: 0px;
 }
 
 .rc-menu {

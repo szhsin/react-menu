@@ -1,15 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
-    bem,
-    menuContainerClass,
     menuPropTypesBase,
-    EventHandlersContext,
-    SettingsContext,
-    FocusPositions,
-    useMenuList,
+    FocusPositions
 } from '../utils';
-import { MenuList } from './MenuList'
+import { useMenuList } from './useMenuList'
 
 
 export const ControlledMenu = React.memo(function ControlledMenu({
@@ -22,46 +17,33 @@ export const ControlledMenu = React.memo(function ControlledMenu({
     anchorRef,
     align,
     direction,
-    isMounted,
     isOpen,
+    isMounted,
     menuItemFocus,
     children,
     onClick,
     onClose,
     ...restProps }) {
 
-    const {
-        containerRef,
-        settings,
-        eventHandlers,
-        ...otherHandlers
-    } = useMenuList(animation, debugging, onClick, onClose);
-
-    return (
-        <div className={bem(menuContainerClass, null, { controlled: true })()}
-            role="presentation" ref={containerRef} {...otherHandlers}>
-
-            <SettingsContext.Provider value={settings}>
-                <EventHandlersContext.Provider value={eventHandlers}>
-                    <MenuList
-                        {...restProps} // restProps for passing through client code defined event handlers
-                        ariaLabel={ariaLabel || 'Menu'}
-                        className={className}
-                        styles={styles}
-                        anchorPoint={anchorPoint}
-                        anchorRef={anchorRef}
-                        containerRef={containerRef}
-                        align={align}
-                        direction={direction}
-                        isOpen={isOpen}
-                        isMounted={isMounted}
-                        menuItemFocus={menuItemFocus}>
-                        {children}
-                    </MenuList>
-                </EventHandlersContext.Provider>
-            </SettingsContext.Provider>
-        </div>
-    );
+    return useMenuList(
+        {
+            ...restProps, // restProps for passing through client code defined event handlers
+            ariaLabel: ariaLabel || 'Menu',
+            className,
+            styles,
+            anchorPoint,
+            anchorRef,
+            align,
+            direction,
+            isOpen,
+            isMounted,
+            menuItemFocus
+        },
+        animation,
+        debugging,
+        children,
+        onClick,
+        onClose);
 });
 
 ControlledMenu.propTypes = {

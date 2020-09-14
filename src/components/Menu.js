@@ -2,17 +2,12 @@ import React, { useRef, useCallback, useMemo, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import {
     safeCall,
-    bem,
-    menuContainerClass,
     menuPropTypesBase,
-    EventHandlersContext,
-    SettingsContext,
     KeyCodes,
     FocusPositions,
-    useMenuState,
-    useMenuList
+    useMenuState
 } from '../utils';
-import { MenuList } from './MenuList'
+import { useMenuList } from './useMenuList'
 
 
 export const Menu = React.memo(function Menu({
@@ -29,30 +24,23 @@ export const Menu = React.memo(function Menu({
     onClick,
     onChange }) {
 
-    const buttonRef = useRef(null);
     const {
         isMounted, isOpen, menuItemFocus,
-        openMenu, closeMenu, toggleMenu
+        openMenu, closeMenu
     } = useMenuState(keepMounted);
 
+    const buttonRef = useRef(null);
     const handleClose = useCallback(e => {
         closeMenu();
         if (e.keyCode) buttonRef.current.focus();
     }, [closeMenu]);
 
-    const {
-        containerRef,
-        settings,
-        eventHandlers,
-        ...otherHandlers
-    } = useMenuList(animation, debugging, onClick, handleClose);
-
     const handleClick = useCallback(e => {
         // Focus (hover) the first menu item when onClick event is trigger by keyboard
-        toggleMenu(e.detail === 0
+        openMenu(e.detail === 0
             ? FocusPositions.FIRST
             : FocusPositions.INITIAL);
-    }, [toggleMenu]);
+    }, [openMenu]);
 
     const handleKeyDown = useCallback(e => {
         let handled = false;
@@ -88,37 +76,36 @@ export const Menu = React.memo(function Menu({
         return React.cloneElement(button, buttonProps);
     }, [button, isOpen, handleClick, handleKeyDown]);
 
+    const menuList = useMenuList(
+        {
+            ariaLabel: ariaLabel ||
+                (typeof button.props.children === 'string'
+                    ? button.props.children
+                    : 'Menu'),
+            className,
+            styles,
+            anchorRef: buttonRef,
+            align,
+            direction,
+            isOpen,
+            isMounted,
+            menuItemFocus
+        },
+        animation,
+        debugging,
+        children,
+        onClick,
+        handleClose);
+
     useEffect(() => {
         safeCall(onChange, { open: isOpen });
     }, [onChange, isOpen]);
 
     return (
-        <div className={bem(menuContainerClass)()}
-            role="presentation" ref={containerRef} {...otherHandlers}>
+        <React.Fragment>
             {renderButton}
-
-            <SettingsContext.Provider value={settings}>
-                <EventHandlersContext.Provider value={eventHandlers}>
-                    <MenuList
-                        ariaLabel={
-                            ariaLabel ||
-                            (typeof button.props.children === 'string'
-                                ? button.props.children
-                                : 'Menu')}
-                        className={className}
-                        styles={styles}
-                        anchorRef={buttonRef}
-                        containerRef={containerRef}
-                        align={align}
-                        direction={direction}
-                        isOpen={isOpen}
-                        isMounted={isMounted}
-                        menuItemFocus={menuItemFocus}>
-                        {children}
-                    </MenuList>
-                </EventHandlersContext.Provider>
-            </SettingsContext.Provider>
-        </div>
+            {menuList}
+        </React.Fragment>
     );
 });
 
