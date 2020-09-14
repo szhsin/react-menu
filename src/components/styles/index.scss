@@ -151,4 +151,8 @@
     &:active {
         background-color: var.$btn-background-color-active;
     }
+    &:disabled {
+        color: var.$color-disabled;
+        background-color: var.$background-color-hover;
+    }
 }

@@ -13,6 +13,7 @@ export const MenuButton = defineName(React.memo(React.forwardRef(function MenuBu
     className,
     styles,
     isOpen,
+    disabled,
     children,
     onClick,
     onKeyDown }, ref) {
@@ -23,6 +24,7 @@ export const MenuButton = defineName(React.memo(React.forwardRef(function MenuBu
             aria-haspopup="true"
             aria-expanded={isOpen}
             ref={ref}
+            disabled={disabled}
             onClick={onClick}
             onKeyDown={onKeyDown} >
             {children}
@@ -33,6 +35,7 @@ export const MenuButton = defineName(React.memo(React.forwardRef(function MenuBu
 MenuButton.propTypes = {
     ...stylePropTypes,
     isOpen: PropTypes.bool,
+    disabled: PropTypes.bool,
     onClick: PropTypes.func,
     onKeyDown: PropTypes.func
 };
