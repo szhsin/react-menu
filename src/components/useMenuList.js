@@ -13,6 +13,7 @@ import { MenuList } from './MenuList';
 
 export const useMenuList = (
     menuListProps,
+    id,
     animation,
     debugging,
     children,
@@ -53,7 +54,8 @@ export const useMenuList = (
     };
 
     return (
-        <div className={bem(menuContainerClass)()}
+        <div id={id}
+            className={bem(menuContainerClass)()}
             role="presentation"
             ref={containerRef}
             onKeyDown={handleKeyDown}

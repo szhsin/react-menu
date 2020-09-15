@@ -12,6 +12,7 @@ import { useMenuList } from './useMenuList'
 
 export const Menu = React.memo(function Menu({
     'aria-label': ariaLabel,
+    id,
     className,
     styles,
     animation,
@@ -91,6 +92,7 @@ export const Menu = React.memo(function Menu({
             isMounted,
             menuItemFocus
         },
+        id,
         animation,
         debugging,
         children,

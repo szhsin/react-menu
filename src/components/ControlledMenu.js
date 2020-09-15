@@ -9,6 +9,7 @@ import { useMenuList } from './useMenuList'
 
 export const ControlledMenu = React.memo(function ControlledMenu({
     'aria-label': ariaLabel,
+    id,
     className,
     styles,
     animation,
@@ -39,6 +40,7 @@ export const ControlledMenu = React.memo(function ControlledMenu({
             isMounted,
             menuItemFocus
         },
+        id,
         animation,
         debugging,
         children,
