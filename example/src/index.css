@@ -1,64 +1,12 @@
 body {
-  margin: 0;
-  padding: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  height: 2000px;
-  width: 2000px;
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans",
+        "Droid Sans", "Helvetica Neue", sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
-}
-
-button {
-  margin: 2rem;
-  color: green;
-}
-
-.container {
-  position: absolute;
-  left: 100px;
-  top: 200px;
-}
-
-.special-item {
-  color: green;
-  background-color: lightblue;
-  text-decoration: none;
-}
-
-.special-item-hover {
-  color: yellow;
-  background-color: lightcoral;
-}
-
-.special-item-active {
-  color: red;
-  background-color: yellow;
-}
-
-.my-menu {
-  border-radius: 0;
-  box-shadow: none;
-  border: 2px solid red;
-  padding: 0;
-}
-
-.my-button {
-  border-radius: 0;
-  border: 1px solid blue;
-}
-
-.rc-menu__submenu > .submenu-open::after {
-  content: "<";
-}
-
-.controlled-menu {
-  border: 1px solid;
-  padding: 1rem;
+    font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
 }

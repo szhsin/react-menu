@@ -23,6 +23,7 @@ export const MenuButton = defineName(React.memo(React.forwardRef(function MenuBu
             style={flatStyles(styles)}
             aria-haspopup="true"
             aria-expanded={isOpen}
+            aria-disabled={disabled}
             ref={ref}
             disabled={disabled}
             onClick={onClick}
