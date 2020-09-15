@@ -30,13 +30,16 @@ export const Menu = React.memo(function Menu({
         openMenu, closeMenu
     } = useMenuState(keepMounted);
 
+    const skipClick = useRef(false);
     const buttonRef = useRef(null);
+    
     const handleClose = useCallback(e => {
         closeMenu();
         if (e.keyCode) buttonRef.current.focus();
     }, [closeMenu]);
 
     const handleClick = useCallback(e => {
+        if (skipClick.current) return;
         // Focus (hover) the first menu item when onClick event is trigger by keyboard
         openMenu(e.detail === 0
             ? FocusPositions.FIRST
@@ -97,7 +100,8 @@ export const Menu = React.memo(function Menu({
         debugging,
         children,
         onClick,
-        handleClose);
+        handleClose,
+        skipClick);
 
     useEffect(() => {
         safeCall(onChange, { open: isOpen });

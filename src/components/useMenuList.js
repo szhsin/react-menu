@@ -18,7 +18,8 @@ export const useMenuList = (
     debugging,
     children,
     onClick,
-    onClose) => {
+    onClose,
+    skipClick) => {
 
     const containerRef = useRef(null);
 
@@ -48,8 +49,21 @@ export const useMenuList = (
     };
 
     const handleBlur = e => {
-        if (!e.currentTarget.contains(e.relatedTarget) && !debugging) {
+        if (menuListProps.isOpen
+            && !e.currentTarget.contains(e.relatedTarget)
+            && !debugging) {
             safeCall(onClose, { reason: CloseReason.BLUR });
+
+            // If a user clicks on the menu button when a menu is open, we need to close the menu.
+            // However, a blur event will be fired prior to the click event on menu button,
+            // which makes the menu first close and then open again.
+            // If this happen, e.relatedTarget is incorrectly set to null instead of the button in Safari and Firefox,
+            // and makes it difficult to determine whether onBlur is fired because of clicking on menu button.
+            // This is a workaround approach which sets a flag to skip a following click event.
+            if (skipClick) {
+                skipClick.current = true;
+                setTimeout(() => skipClick.current = false, 300);
+            }
         }
     };
 
