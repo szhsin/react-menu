@@ -10,3 +10,15 @@ body {
 code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
 }
+
+.header {
+    .navbar-nav {
+        li {
+            margin: 0 20px;
+        }
+    }
+}
+
+.hljs-section, .hljs-name {
+    color: #22863a;
+}

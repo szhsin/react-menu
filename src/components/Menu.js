@@ -32,7 +32,10 @@ export const Menu = React.memo(function Menu({
 
     const skipClick = useRef(false);
     const buttonRef = useRef(null);
-    
+
+    const button = safeCall(menuButton, { open: isOpen });
+    if (!button) return 'Error: menuButton prop is required.';
+
     const handleClose = useCallback(e => {
         closeMenu();
         if (e.keyCode) buttonRef.current.focus();
@@ -63,8 +66,6 @@ export const Menu = React.memo(function Menu({
 
         if (handled) e.preventDefault();
     }, [openMenu]);
-
-    const button = safeCall(menuButton, { open: isOpen });
 
     const renderButton = useMemo(() => {
         if (!button) return null;

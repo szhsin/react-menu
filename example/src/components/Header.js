@@ -4,7 +4,7 @@ import { NavLink } from 'react-router-dom';
 export const Header = React.memo(function Header() {
 
     return (
-        <nav className="navbar navbar-expand navbar-dark bg-dark">
+        <nav className="header navbar navbar-expand navbar-dark bg-dark">
             <ul className="navbar-nav">
                 <li>
                     <NavLink className="nav-link" exact to="/">Home</NavLink>

@@ -1,5 +1,6 @@
+import 'highlight.js/styles/github-gist.css';
 import '@szhsin/react-menu/dist/index.css';
-import './index.css';
+import './styles/index.scss';
 
 import React from 'react';
 import ReactDOM from 'react-dom';
