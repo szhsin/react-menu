@@ -2,7 +2,8 @@ import React from 'react';
 import {
     Menu,
     MenuItem,
-    MenuButton
+    MenuButton,
+    SubMenu
 } from '@szhsin/react-menu';
 import { codeExamples } from '../data/codeExamples';
 import { Example } from './Example';
@@ -14,11 +15,25 @@ export const Usage = React.memo(function Usage() {
         <main id="usage">
             <h1>Usage</h1>
             <Example
-                data={codeExamples[0]} >
+                initialFullSource={true}
+                data={codeExamples.basicMenu} >
                 <Menu menuButton={<MenuButton>Open menu</MenuButton>}>
-                    <MenuItem>Open File</MenuItem>
+                    <MenuItem>New File</MenuItem>
                     <MenuItem>Save</MenuItem>
                     <MenuItem>Close Window</MenuItem>
+                </Menu>
+            </Example>
+
+            <Example
+                data={codeExamples.subMenu} >
+                <Menu menuButton={<MenuButton>Open menu</MenuButton>}>
+                    <MenuItem>New File</MenuItem>
+                    <SubMenu label={'Open Recent'}>
+                        <MenuItem>index.html</MenuItem>
+                        <MenuItem>example.js</MenuItem>
+                        <MenuItem>about.css</MenuItem>
+                    </SubMenu>
+                    <MenuItem>Save</MenuItem>
                 </Menu>
             </Example>
 

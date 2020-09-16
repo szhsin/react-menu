@@ -5,7 +5,7 @@ export const Header = React.memo(function Header() {
 
     return (
         <header id="header" >
-            <nav className="navbar navbar-expand navbar-dark bg-dark">
+            <nav className="navbar fixed-top navbar-expand navbar-dark bg-dark">
                 <ul className="navbar-nav">
                     <li>
                         <NavLink className="nav-link" exact to="/">Home</NavLink>

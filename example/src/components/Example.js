@@ -3,12 +3,13 @@ import hljs from 'highlight.js';
 import $ from 'jquery';
 
 export const Example = React.memo(function Example({
+    initialFullSource,
     data,
     children
 }) {
     const ref = useRef(null);
     const { title, desc, source, fullSource } = data;
-    const [isFullSource, setIsFullSource] = useState(false);
+    const [isFullSource, setIsFullSource] = useState(initialFullSource);
 
     useEffect(() => {
         $(ref.current).find('pre code').each((index, block) => hljs.highlightBlock(block));

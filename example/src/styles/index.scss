@@ -14,6 +14,11 @@ code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
 }
 
+#root {
+    background-color: #f9f9f9;
+    padding-top: 4rem;
+}
+
 #header {
     .navbar-nav {
         font-weight: 700;
@@ -40,6 +45,7 @@ code {
 }
 
 .example {
+    margin-top: 3rem;
     .actions {
         display: flex;
         justify-content: flex-end;
@@ -59,9 +65,10 @@ code {
 
     .code-demo {
         @include mixins.flex-center;
+        background-color: white;
         padding: 1rem;
         border: 1px solid var.$border-color;
-        border-radius: 2px;
+        border-radius: 6px;
     }
 
     .code-source {
