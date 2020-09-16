@@ -1,4 +1,5 @@
 @use 'var';
+@use 'mixins';
 
 body {
     margin: 0;
@@ -13,7 +14,8 @@ code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
 }
 
-.hljs-section, .hljs-name {
+.hljs-section,
+.hljs-name {
     color: #22863a;
 }
 
@@ -35,22 +37,38 @@ code {
 }
 
 #content {
-    display: flex;
-    justify-content: center;
+    @include mixins.flex-center("c", true);
+
     main {
         max-width: 800px;
     }
 }
 
 .example {
-    .code-demo {
+    .actions {
         display: flex;
-        justify-content: center;
-        align-items: center;
+        justify-content: flex-end;
+        padding: 0.6rem 0;
+
+        .btn {
+            @include mixins.flex-center;
+            border-radius: 50%;
+            width: 2.2rem;
+            height: 2.2rem;
+            margin-left: 1rem;
+        }
+    }
+
+    .code-demo {
+        @include mixins.flex-center;
         padding: 1rem;
         border: 1px solid var.$border-color;
         border-radius: 2px;
     }
+
     .code-snippet {
+        border: 1px solid var.$border-color;
+        border-radius: 2px;
+        max-width: 90vw;
     }
 }
