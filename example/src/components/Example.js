@@ -1,20 +1,22 @@
 import React, { useState, useEffect, useRef } from 'react';
 import hljs from 'highlight.js';
+import $ from 'jquery';
 
 export const Example = React.memo(function Example({
     data,
     children
 }) {
-    const snippetRef = useRef(null);
-    const { title, desc, snippet, fullSnippet } = data;
-    const [showFullSnippet, setShowFullSnippet] = useState(false);
+    const ref = useRef(null);
+    const { title, desc, source, fullSource } = data;
+    const [isFullSource, setIsFullSource] = useState(false);
 
     useEffect(() => {
-        snippetRef.current.querySelectorAll('pre code').forEach(hljs.highlightBlock);
-    }, [showFullSnippet]);
+        $(ref.current).find('pre code').each((index, block) => hljs.highlightBlock(block));
+        $(ref.current).find('[data-toggle="tooltip"]').tooltip().tooltip('hide');
+    }, [isFullSource]);
 
     return (
-        <section className="example">
+        <section className="example" ref={ref}>
             <h2>{title}</h2>
             <p>{desc}</p>
             <div className="code-demo">
@@ -22,18 +24,22 @@ export const Example = React.memo(function Example({
             </div>
 
             <div className="actions">
-                <button className={`btn ${showFullSnippet ? 'btn-secondary' : 'btn-outline-secondary'}`}
-                    onClick={() => setShowFullSnippet(s => !s)}>
-                    <i className="material-icons" title="code">code</i>
+                <button className={`btn ${isFullSource ? 'btn-secondary' : 'btn-outline-secondary'}`}
+                    data-toggle="tooltip" data-placement="top"
+                    data-original-title={`${isFullSource ? 'Hide' : 'Show'} full source code`}
+                    onClick={() => setIsFullSource(s => !s)}>
+                    <i className="material-icons">code</i>
                 </button>
-                <button className="btn btn-outline-secondary">
+                <button className="btn btn-outline-secondary"
+                    data-toggle="tooltip" data-placement="top"
+                    data-original-title="Edit in CodeSandbox">
                     <i className="material-icons">create</i>
                 </button>
             </div>
 
-            <pre className="code-snippet" ref={snippetRef}>
+            <pre className="code-source" >
                 <code className="lang-jsx">
-                    {showFullSnippet ? fullSnippet : snippet}
+                    {isFullSource ? fullSource : source}
                 </code>
             </pre>
         </section>

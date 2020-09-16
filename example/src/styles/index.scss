@@ -14,11 +14,6 @@ code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
 }
 
-.hljs-section,
-.hljs-name {
-    color: #22863a;
-}
-
 #header {
     .navbar-nav {
         font-weight: 700;
@@ -53,9 +48,12 @@ code {
         .btn {
             @include mixins.flex-center;
             border-radius: 50%;
-            width: 2.2rem;
-            height: 2.2rem;
-            margin-left: 1rem;
+            width: 2rem;
+            height: 2rem;
+            margin-left: 1.5rem;
+            .material-icons {
+                font-size: 1.3rem;
+            }
         }
     }
 
@@ -66,9 +64,11 @@ code {
         border-radius: 2px;
     }
 
-    .code-snippet {
-        border: 1px solid var.$border-color;
-        border-radius: 2px;
+    .code-source {
+        border-radius: 6px;
         max-width: 90vw;
+        .hljs {
+            padding: 1rem 1.5rem;
+        }
     }
 }
