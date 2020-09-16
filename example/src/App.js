@@ -15,17 +15,19 @@ const App = () => {
         <Router>
             <Header />
 
-            <Switch>
-                <Route exact path="/">
-                    <Usage />
-                </Route>
-                <Route path="/components">
-                    <ComponentApi />
-                </Route>
-                <Route path="/style-guide">
-                    <StyleGuide />
-                </Route>
-            </Switch>
+            <div id="content">
+                <Switch>
+                    <Route exact path="/">
+                        <Usage />
+                    </Route>
+                    <Route path="/components">
+                        <ComponentApi />
+                    </Route>
+                    <Route path="/style-guide">
+                        <StyleGuide />
+                    </Route>
+                </Switch>
+            </div>
 
             <Footer />
         </Router>

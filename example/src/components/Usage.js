@@ -5,6 +5,7 @@ import {
     MenuItem,
     MenuButton
 } from '@szhsin/react-menu';
+import { Example } from './Example';
 
 
 export const Usage = React.memo(function Usage() {
@@ -16,35 +17,26 @@ export const Usage = React.memo(function Usage() {
     }, []);
 
     return (
-        <div id="usage">
+        <main id="usage">
             <h1>Usage</h1>
-            <section>
-                <h2>Basic menu</h2>
-                <p>The Basic menu</p>
-                <div className="example">
-                    <Menu menuButton={<MenuButton>Open menu</MenuButton>}>
-                        <MenuItem>Open File</MenuItem>
-                        <MenuItem>Save</MenuItem>
-                        <MenuItem>Close Window</MenuItem>
-                    </Menu>
-                </div>
+            <Example
+                codeSnippet={`import {
+                    Menu,
+                    MenuItem,
+                    MenuButton
+                } from '@szhsin/react-menu';
+                <Menu menuButton={<MenuButton>Open menu</MenuButton>}>
+                    <MenuItem>Open File</MenuItem>
+                    <MenuItem>Save</MenuItem>
+                    <MenuItem>Close Window</MenuItem>
+                </Menu>`} >
+                <Menu menuButton={<MenuButton>Open menu</MenuButton>}>
+                    <MenuItem>Open File</MenuItem>
+                    <MenuItem>Save</MenuItem>
+                    <MenuItem>Close Window</MenuItem>
+                </Menu>
+            </Example>
 
-                <pre>
-                    <code className="lang-jsx">
-                        {`import {
-    Menu,
-    MenuItem,
-    MenuButton
-} from '@szhsin/react-menu';
-<Menu menuButton={<MenuButton>Open menu</MenuButton>}>
-    <MenuItem>Open File</MenuItem>
-    <MenuItem>Save</MenuItem>
-    <MenuItem>Close Window</MenuItem>
-</Menu>`}
-                    </code>
-                </pre>
-            </section>
-
-        </div>
+        </main >
     );
 });

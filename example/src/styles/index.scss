@@ -1,3 +1,5 @@
+@use 'var';
+
 body {
     margin: 0;
     padding: 0;
@@ -11,14 +13,44 @@ code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
 }
 
-.header {
+.hljs-section, .hljs-name {
+    color: #22863a;
+}
+
+#header {
     .navbar-nav {
+        font-weight: 700;
         li {
-            margin: 0 20px;
+            margin: 0 1.25rem;
         }
     }
 }
 
-.hljs-section, .hljs-name {
-    color: #22863a;
+#footer {
+    font-size: 0.9em;
+    color: var.$secondary-color;
+    padding: 0.8rem 1.5rem;
+    border-top: 1px solid var.$border-color;
+    text-align: center;
+}
+
+#content {
+    display: flex;
+    justify-content: center;
+    main {
+        max-width: 800px;
+    }
+}
+
+.example {
+    .code-demo {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 1rem;
+        border: 1px solid var.$border-color;
+        border-radius: 2px;
+    }
+    .code-snippet {
+    }
 }
