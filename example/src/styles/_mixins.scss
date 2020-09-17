@@ -5,3 +5,9 @@
     justify-content: if($axis == "b" or $axis == "m", center, flex-start);
     align-items: if($axis == "b" or $axis == "c", center, flex-start);
 }
+
+@mixin reset-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}

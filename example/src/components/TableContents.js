@@ -1,27 +1,15 @@
 import React from 'react';
-import { HashLink as Link } from 'react-router-hash-link';
+import { TableContentsList } from './TableContentsList';
 
 export const TableContents = React.memo(function TableContents({
-    list
+    children
 }) {
 
-    const listElt = list.map((item) => {
-        let nested = null;
-        if (item.list) {
-            nested = <TableContents list={item.list} />;
-        }
-
-        return (
-            <li key={item.id}>
-                <Link to={`#${item.id}`}>{item.title}</Link>
-                {nested}
-            </li>
-        );
-    });
-
     return (
-        <ul className='table-contents'>
-            {listElt}
-        </ul>
+        <aside className="table-contents">
+            <nav aria-label="Table of contents">
+                <TableContentsList list={children} />
+            </nav>
+        </aside>
     );
 });

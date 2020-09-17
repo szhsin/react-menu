@@ -14,45 +14,24 @@ code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
 }
 
-#root {
-    background-color: #f9f9f9;
-    padding-top: 4rem;
-}
+.table-contents {
+    @include mixins.flex-center("m");
+    .contents-list {
+        @include mixins.reset-list;
+    }
+    padding-top: 1.5rem;
 
-#header {
-    .navbar-nav {
-        font-weight: 700;
-        li {
-            margin: 0 1.25rem;
+    nav > .contents-list {
+        font-size: 1.3rem;
+        font-weight: 600;
+        > li {
+            margin-bottom: 1rem;
         }
-    }
-}
 
-#footer {
-    font-size: 0.9em;
-    color: var.$secondary-color;
-    padding: 1rem 1.5rem 3rem;
-    border-top: 1px solid var.$border-color;
-    text-align: center;
-}
-
-#content {
-    @include mixins.flex-center("c", true);
-
-    > .table-contents {
-        position: fixed;
-        left: 0;
-        top: 5rem;
-    }
-
-    main {
-        max-width: 900px;
-    }
-}
-
-#usage {
-    .sample-text {
-        margin-left: 1.5rem;
+        .contents-list {
+            font-size: 1rem;
+            font-weight: 400;
+        }
     }
 }
 
@@ -108,5 +87,67 @@ code {
     }
     &:hover::after {
         opacity: 0.8;
+    }
+}
+
+#root {
+    padding-top: 4rem;
+    background-color: #f9f9fb;
+}
+
+#header {
+    .navbar-nav {
+        font-weight: 700;
+        li {
+            margin: 0 1.25rem;
+        }
+    }
+}
+
+#footer {
+    font-size: 0.9em;
+    color: var.$secondary-color;
+    margin-top: 3rem;
+    padding: 2rem 1.5rem;
+    border-top: 1px solid var.$border-color;
+    text-align: center;
+    background-color: #f5f6f7;
+}
+
+#content {
+    @include mixins.flex-center("m");
+
+    .table-contents {
+        position: sticky;
+        left: 0;
+        top: 5rem;
+        flex: 1 1 0;
+        @media (max-width: 1200px) {
+            flex-basis: auto;
+        }
+    }
+
+    main {
+        max-width: 900px;
+    }
+
+    .place-holder {
+        flex: 1 1 0;
+    }
+}
+
+@media (max-width: 900px) {
+    #content {
+        flex-direction: column;
+        align-items: center;
+        .table-contents {
+            position: static;
+        }
+    }
+}
+
+#usage {
+    .sample-text {
+        margin-left: 1.5rem;
     }
 }

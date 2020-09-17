@@ -122,7 +122,8 @@ export default function Example() {
                 </MenuRadioGroup>
             </Menu>
 
-            <div className="sample-text" style={{ color: textColor }}>
+            <div className="sample-text"
+                style={{ color: textColor }}>
                 Sample text
             </div>
         </>
@@ -348,7 +349,7 @@ export default function Example() {
                 color: textColor,
                 fontWeight: isBold ? 'bold' : 'initial',
                 fontStyle: isItalic ? 'italic' : 'initial',
-                textDecoration: isUnderline ? 'underline' : 'initial'                
+                textDecoration: isUnderline ? 'underline' : 'initial'
             }}>Sample text</div>
         </>
     );

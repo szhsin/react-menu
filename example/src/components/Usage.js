@@ -41,7 +41,9 @@ export const Usage = React.memo(function Usage() {
 
     return (
         <React.Fragment>
-            <TableContents list={tableContents} />
+            <TableContents>
+                {tableContents}
+            </TableContents>
 
             <main id="usage">
                 <h1>Usage</h1>
@@ -161,6 +163,8 @@ export const Usage = React.memo(function Usage() {
                 </Example>
 
             </main >
+
+            <div className="place-holder" role="presentation"/>
 
         </React.Fragment>
     );
