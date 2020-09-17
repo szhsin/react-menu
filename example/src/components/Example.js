@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { HashLink as Link } from 'react-router-hash-link';
 import hljs from 'highlight.js';
 import $ from 'jquery';
 
@@ -8,7 +9,7 @@ export const Example = React.memo(function Example({
     children
 }) {
     const ref = useRef(null);
-    const { title, desc, source, fullSource } = data;
+    const { id, title, desc, source, fullSource } = data;
     const [isFullSource, setIsFullSource] = useState(initialFullSource);
 
     useEffect(() => {
@@ -17,8 +18,11 @@ export const Example = React.memo(function Example({
     }, [isFullSource]);
 
     return (
-        <section className="example" ref={ref}>
-            <h2>{title}</h2>
+        <section className="example" ref={ref} aria-labelledby={id}>
+            <Link to={`#${id}`}>
+                <h2 id={id} className="hash-link" >{title}</h2>
+            </Link>
+
             <p>{desc}</p>
             <div className="code-demo">
                 {children}

@@ -1,5 +1,7 @@
 export const codeExamples = {
     basicMenu: {
+        id: 'basic-menu',
+
         title: 'Basic menu',
 
         desc: 'The Basic menu',
@@ -32,6 +34,8 @@ export default function Example() {
     },
 
     subMenu: {
+        id: 'submenu',
+
         title: 'Submenu',
 
         desc: 'The Basic menu',
@@ -74,6 +78,8 @@ export default function Example() {
 
 
     radioGroup: {
+        id: 'radio-group',
+
         title: 'Radio group',
 
         desc: 'The Basic menu',
@@ -125,6 +131,8 @@ export default function Example() {
     },
 
     checkBox: {
+        id: 'checkbox',
+
         title: 'Menu item checkbox',
 
         desc: 'The Basic menu',
@@ -192,6 +200,8 @@ export default function Example() {
     },
 
     headerAndDivider: {
+        id: 'header-divider',
+
         title: 'Menu header and divider',
 
         desc: 'The Basic menu',
@@ -241,6 +251,8 @@ export default function Example() {
     },
 
     combined: {
+        id: 'combined',
+
         title: 'All combined',
 
         desc: 'The Basic menu',

@@ -39,6 +39,12 @@ code {
 #content {
     @include mixins.flex-center("c", true);
 
+    > .table-contents {
+        position: fixed;
+        left: 0;
+        top: 5rem;
+    }
+
     main {
         max-width: 900px;
     }
@@ -51,7 +57,14 @@ code {
 }
 
 .example {
-    margin-top: 5rem;
+    h2 {
+        padding-top: 5rem;
+    }
+
+    a {
+        text-decoration: none;
+    }
+
     .actions {
         display: flex;
         justify-content: flex-end;
@@ -83,5 +96,17 @@ code {
         .hljs {
             padding: 1rem 1.5rem;
         }
+    }
+}
+
+.hash-link {
+    &::after {
+        content: "#";
+        margin-left: 0.6rem;
+        opacity: 0;
+        transition: opacity 0.15s ease;
+    }
+    &:hover::after {
+        opacity: 0.8;
     }
 }
