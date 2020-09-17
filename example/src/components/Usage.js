@@ -5,8 +5,8 @@ import {
     MenuButton,
     SubMenu,
     MenuRadioGroup,
-    // MenuHeader,
-    // MenuDivider
+    MenuHeader,
+    MenuDivider
 } from '@szhsin/react-menu';
 import { codeExamples } from '../data/codeExamples';
 import { Example } from './Example';
@@ -79,6 +79,21 @@ export const Usage = React.memo(function Usage() {
                     fontStyle: isItalic ? 'italic' : 'initial',
                     textDecoration: isUnderline ? 'underline' : 'initial'
                 }}>Sample text</div>
+            </Example>
+
+            <Example data={codeExamples.headerAndDivider} >
+                <Menu menuButton={<MenuButton>Open menu</MenuButton>}>
+                    <MenuItem>New File</MenuItem>
+                    <MenuItem>Save</MenuItem>
+                    <MenuItem>Close Window</MenuItem>
+                    <MenuDivider />
+                    <MenuHeader>Edit</MenuHeader>
+                    <MenuItem>Cut</MenuItem>
+                    <MenuItem>Copy</MenuItem>
+                    <MenuItem>Paste</MenuItem>
+                    <MenuDivider />
+                    <MenuItem>Print</MenuItem>
+                </Menu>
             </Example>
 
         </main >

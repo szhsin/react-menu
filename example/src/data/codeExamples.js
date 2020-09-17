@@ -190,4 +190,53 @@ export default function Example() {
 }`
 
     },
+
+    headerAndDivider: {
+        title: 'Menu header and divider',
+
+        desc: 'The Basic menu',
+
+        source:
+            `<Menu menuButton={<MenuButton>Open menu</MenuButton>}>
+    <MenuItem>New File</MenuItem>
+    <MenuItem>Save</MenuItem>
+    <MenuItem>Close Window</MenuItem>
+    <MenuDivider />
+    <MenuHeader>Edit</MenuHeader>
+    <MenuItem>Cut</MenuItem>
+    <MenuItem>Copy</MenuItem>
+    <MenuItem>Paste</MenuItem>
+    <MenuDivider />
+    <MenuItem>Print</MenuItem>
+</Menu>`,
+
+        fullSource:
+            `import React from 'react';
+import {
+    Menu,
+    MenuItem,
+    MenuButton,
+    MenuHeader,
+    MenuDivider
+} from '@szhsin/react-menu';
+import '@szhsin/react-menu/dist/index.css';
+
+export default function Example() {
+
+    return (
+        <Menu menuButton={<MenuButton>Open menu</MenuButton>}>
+            <MenuItem>New File</MenuItem>
+            <MenuItem>Save</MenuItem>
+            <MenuItem>Close Window</MenuItem>
+            <MenuDivider />
+            <MenuHeader>Edit</MenuHeader>
+            <MenuItem>Cut</MenuItem>
+            <MenuItem>Copy</MenuItem>
+            <MenuItem>Paste</MenuItem>
+            <MenuDivider />
+            <MenuItem>Print</MenuItem>
+        </Menu>
+    );
+}`
+    },
 };
