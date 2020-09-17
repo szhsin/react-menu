@@ -14,7 +14,7 @@ import { Example } from './Example';
 
 export const Usage = React.memo(function Usage() {
 
-    const [fontColor, setFontColor] = useState('red');
+    const [textColor, setTextColor] = useState('red');
     const [isBold, setBold] = useState(true);
     const [isItalic, setItalic] = useState(false);
     const [isUnderline, setUnderline] = useState(false);
@@ -43,23 +43,23 @@ export const Usage = React.memo(function Usage() {
             </Example>
 
             <Example data={codeExamples.radioGroup} >
-                <Menu menuButton={<MenuButton>Font color</MenuButton>}>
+                <Menu menuButton={<MenuButton>Text color</MenuButton>}>
                     <MenuRadioGroup
-                        value={fontColor}
-                        onChange={e => setFontColor(e.value)}>
+                        value={textColor}
+                        onChange={e => setTextColor(e.value)}>
                         <MenuItem value={'red'}>Red</MenuItem>
                         <MenuItem value={'green'}>Green</MenuItem>
                         <MenuItem value={'blue'}>Blue</MenuItem>
                     </MenuRadioGroup>
                 </Menu>
 
-                <div className="sample-text" style={{ color: fontColor }}>
+                <div className="sample-text" style={{ color: textColor }}>
                     Sample text
                 </div>
             </Example>
 
             <Example data={codeExamples.checkBox} >
-                <Menu menuButton={<MenuButton>Font style</MenuButton>}>
+                <Menu menuButton={<MenuButton>Text style</MenuButton>}>
                     <MenuItem type="checkbox" checked={isBold}
                         onClick={e => setBold(e.checked)}>
                         Bold
@@ -94,6 +94,47 @@ export const Usage = React.memo(function Usage() {
                     <MenuDivider />
                     <MenuItem>Print</MenuItem>
                 </Menu>
+            </Example>
+
+            <Example data={codeExamples.combined} >
+                <Menu menuButton={<MenuButton>Open menu</MenuButton>}>
+                    <MenuItem>New File</MenuItem>
+                    <MenuItem>Save</MenuItem>
+                    <MenuDivider />
+                    <MenuHeader>Text settings</MenuHeader>
+
+                    <SubMenu label="Text color">
+                        <MenuRadioGroup
+                            value={textColor}
+                            onChange={e => setTextColor(e.value)}>
+                            <MenuItem value={'red'}>Red</MenuItem>
+                            <MenuItem value={'green'}>Green</MenuItem>
+                            <MenuItem value={'blue'}>Blue</MenuItem>
+                        </MenuRadioGroup>
+                    </SubMenu>
+
+                    <SubMenu label="Text style">
+                        <MenuItem type="checkbox" checked={isBold}
+                            onClick={e => setBold(e.checked)}>
+                            Bold
+                        </MenuItem>
+                        <MenuItem type="checkbox" checked={isItalic}
+                            onClick={e => setItalic(e.checked)}>
+                            Italic
+                        </MenuItem>
+                        <MenuItem type="checkbox" checked={isUnderline}
+                            onClick={e => setUnderline(e.checked)}>
+                            Underline
+                        </MenuItem>
+                    </SubMenu>
+                </Menu>
+
+                <div className="sample-text" style={{
+                    color: textColor,
+                    fontWeight: isBold ? 'bold' : 'initial',
+                    fontStyle: isItalic ? 'italic' : 'initial',
+                    textDecoration: isUnderline ? 'underline' : 'initial'
+                }}>Sample text</div>
             </Example>
 
         </main >
