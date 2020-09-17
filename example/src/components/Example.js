@@ -13,7 +13,7 @@ export const Example = React.memo(function Example({
 
     useEffect(() => {
         $(ref.current).find('pre code').each((index, block) => hljs.highlightBlock(block));
-        $(ref.current).find('[data-toggle="tooltip"]').tooltip().tooltip('hide');
+        $(ref.current).find('[data-toggle="tooltip"]').tooltip('hide').tooltip();
     }, [isFullSource]);
 
     return (

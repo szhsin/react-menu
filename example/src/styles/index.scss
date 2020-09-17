@@ -31,7 +31,7 @@ code {
 #footer {
     font-size: 0.9em;
     color: var.$secondary-color;
-    padding: 0.8rem 1.5rem;
+    padding: 1rem 1.5rem 3rem;
     border-top: 1px solid var.$border-color;
     text-align: center;
 }
@@ -40,7 +40,13 @@ code {
     @include mixins.flex-center("c", true);
 
     main {
-        max-width: 800px;
+        max-width: 900px;
+    }
+}
+
+#usage {
+    .sample-text {
+        margin-left: 1.5rem;
     }
 }
 
