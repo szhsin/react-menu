@@ -61,6 +61,7 @@ export const Usage = React.memo(function Usage() {
                 <LinkAndDisabledExample />
                 <IconAndImageExample />
                 <HoverAndActiveExample />
+                <OpenStateExample />
             </main >
 
             <div className="place-holder" role="presentation" />
@@ -282,6 +283,21 @@ function HoverAndActiveExample() {
                         </i>
                     }
                 </MenuItem>
+            </Menu>
+        </Example>
+    );
+}
+
+function OpenStateExample() {
+
+    return (
+        <Example data={codeExamples.menuButton.list.openState} >
+            <Menu menuButton={({ open }) =>
+                <MenuButton styles={{ minWidth: '5rem' }}>
+                    {open ? 'Close' : 'Open'}
+                </MenuButton>}>
+                <MenuItem>New File</MenuItem>
+                <MenuItem>Save</MenuItem>
             </Menu>
         </Example>
     );

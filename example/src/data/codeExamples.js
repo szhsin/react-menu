@@ -514,7 +514,48 @@ export default function Example() {
     );
 }`
             },
-            
+
+        }
+    },
+
+    menuButton: {
+        title: 'Menu button',
+        id: 'open-state',
+
+        list: {
+            openState: {
+                id: 'open-state',
+
+                title: 'Menu open state',
+
+                desc: 'The Basic menu',
+
+                source:
+                    `<Menu menuButton={({ open }) =>
+    <MenuButton>{open ? 'Close' : 'Open'}</MenuButton>}>
+    <MenuItem>New File</MenuItem>
+    <MenuItem>Save</MenuItem>
+</Menu>`,
+
+                fullSource:
+                    `import React from 'react';
+import {
+    Menu,
+    MenuItem,
+    MenuButton
+} from '@szhsin/react-menu';
+import '@szhsin/react-menu/dist/index.css';
+
+export default function Example() {
+    return (
+        <Menu menuButton={({ open }) =>
+            <MenuButton>{open ? 'Close' : 'Open'}</MenuButton>}>
+            <MenuItem>New File</MenuItem>
+            <MenuItem>Save</MenuItem>
+        </Menu>
+    );
+}`
+            },
         }
     }
 
