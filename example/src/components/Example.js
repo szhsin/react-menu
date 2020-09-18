@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { bem } from '../utils'
 import { HashLink as Link } from 'react-router-hash-link';
 import hljs from 'highlight.js';
 import $ from 'jquery';
@@ -6,6 +7,7 @@ import $ from 'jquery';
 export const Example = React.memo(function Example({
     initialFullSource,
     data,
+    spaceAround,
     children
 }) {
     const ref = useRef(null);
@@ -18,17 +20,17 @@ export const Example = React.memo(function Example({
     }, [isFullSource]);
 
     return (
-        <section className="example" ref={ref} aria-labelledby={id}>
+        <section className={bem('example')} ref={ref} aria-labelledby={id}>
             <Link className="hash-link" smooth to={`#${id}`}  >
                 <h2 id={id} className="heading">{title}</h2>
             </Link>
 
             <p>{desc}</p>
-            <div className="code-demo">
+            <div className={bem('example', 'demo', { spaceAround })}>
                 {children}
             </div>
 
-            <div className="actions">
+            <div className={bem('example', 'actions')}>
                 <button className={`btn ${isFullSource ? 'btn-secondary' : 'btn-outline-secondary'}`}
                     data-toggle="tooltip" data-placement="top"
                     data-original-title={`${isFullSource ? 'Hide' : 'Show'} full source code`}
@@ -42,7 +44,7 @@ export const Example = React.memo(function Example({
                 </button>
             </div>
 
-            <pre className="code-source" >
+            <pre className={bem('example', 'source')} >
                 <code className="lang-jsx">
                     {isFullSource ? fullSource : source}
                 </code>

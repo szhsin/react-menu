@@ -319,7 +319,7 @@ function CustomisedButtonExample() {
 
 function MenuDirectionExample() {
 
-    const menus = ['left', 'right', 'top', 'bottom'].map(direction => (
+    const menus = ['top', 'left', 'right', 'bottom'].map(direction => (
         <Menu menuButton={<MenuButton>{direction}</MenuButton>}
             key={direction} direction={direction}>
             <MenuItem>New File</MenuItem>
@@ -328,7 +328,7 @@ function MenuDirectionExample() {
     ));
 
     return (
-        <Example data={codeExamples.menuPlacement.list.direction} >
+        <Example data={codeExamples.menuPlacement.list.direction} spaceAround>
             {menus}
         </Example>
     );

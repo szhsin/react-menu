@@ -605,7 +605,7 @@ export default function Example() {
                 desc: 'The Basic menu',
 
                 source:
-                    `['left', 'right', 'top', 'bottom'].map(direction =>
+                    `['top', 'left', 'right', 'bottom'].map(direction =>
 <Menu menuButton={<MenuButton>{direction}</MenuButton>}
     key={direction} direction={direction}>
     <MenuItem>New File</MenuItem>
@@ -623,7 +623,7 @@ import '@szhsin/react-menu/dist/index.css';
 
 export default function Example() {
     return (
-        ['left', 'right', 'top', 'bottom'].map(direction =>
+        ['top', 'left', 'right', 'bottom'].map(direction =>
             <Menu menuButton={<MenuButton>{direction}</MenuButton>}
                 key={direction} direction={direction}>
                 <MenuItem>New File</MenuItem>

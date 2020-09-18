@@ -58,7 +58,7 @@ a {
         padding-top: 5rem;
     }
 
-    .actions {
+    &__actions {
         display: flex;
         justify-content: flex-end;
         padding: 0.6rem 0;
@@ -75,15 +75,19 @@ a {
         }
     }
 
-    .code-demo {
+    &__demo {
         @include mixins.flex-center;
         background-color: white;
         padding: 1rem;
         border: 1px solid var.$border-color;
         border-radius: 6px;
+
+        &--spaceAround {
+            justify-content: space-around;
+        }
     }
 
-    .code-source {
+    &__source {
         border-radius: 6px;
         max-width: 90vw;
         .hljs {
