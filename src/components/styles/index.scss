@@ -45,6 +45,8 @@
     &__item {
         @include mixins.remove-focus;
         position: relative;
+        display: flex;
+        align-items: center;
         font-weight: var.$font-weight;
         padding: 0.375rem 1.5rem;
         background-color: var.$background-color;

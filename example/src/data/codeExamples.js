@@ -134,7 +134,7 @@ export default function Example() {
     checkBox: {
         id: 'checkbox',
 
-        title: 'Menu item checkbox',
+        title: 'Checkbox',
 
         desc: 'The Basic menu',
 
@@ -203,7 +203,7 @@ export default function Example() {
     headerAndDivider: {
         id: 'header-divider',
 
-        title: 'Menu header and divider',
+        title: 'Header and divider',
 
         desc: 'The Basic menu',
 
@@ -364,7 +364,7 @@ export default function Example() {
             linkAndDisabled: {
                 id: 'link-disabled',
 
-                title: 'Link and disabled',
+                title: 'Link and disabled state',
 
                 desc: 'The Basic menu',
 
@@ -401,7 +401,63 @@ export default function Example() {
         </Menu>
     );
 }`
-            }
+            },
+
+            iconAndImage: {
+                id: 'icon-image',
+
+                title: 'Icon and image',
+
+                desc: 'The Basic menu',
+
+                source:
+                    `<Menu menuButton={<MenuButton>Open menu</MenuButton>}>
+    <MenuItem>
+        <i className="material-icons">content_cut</i>Cut
+    </MenuItem>
+    <MenuItem>
+        <i className="material-icons">content_copy</i>Copy
+    </MenuItem>
+    <MenuItem>
+        <i className="material-icons">content_paste</i>Paste
+    </MenuItem>
+    <MenuDivider />
+    <MenuItem href="https://github.com/">
+        <img src="octocat.png" alt="" role="presentation" />GitHub
+    </MenuItem>
+</Menu>`,
+
+                fullSource:
+                    `import React from 'react';
+import {
+    Menu,
+    MenuItem,
+    MenuButton,
+    MenuDivider
+} from '@szhsin/react-menu';
+import '@szhsin/react-menu/dist/index.css';
+
+export default function Example() {
+    return (
+        <Menu menuButton={<MenuButton>Open menu</MenuButton>}>
+            <MenuItem>
+                <i className="material-icons">content_cut</i>Cut
+            </MenuItem>
+            <MenuItem>
+                <i className="material-icons">content_copy</i>Copy
+            </MenuItem>
+            <MenuItem>
+                <i className="material-icons">content_paste</i>Paste
+            </MenuItem>
+            <MenuDivider />
+            <MenuItem href="https://github.com/">
+                <img src="octocat.png" alt="" role="presentation" />GitHub
+            </MenuItem>
+        </Menu>
+    );
+}`
+            },
+
         }
     }
 

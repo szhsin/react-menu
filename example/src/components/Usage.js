@@ -58,7 +58,8 @@ export const Usage = React.memo(function Usage() {
                 <CheckBoxExample />
                 <HeaderAndDividerExample />
                 <CombinedExample />
-                <MenuItemLinkExample />
+                <LinkAndDisabledExample />
+                <IconAndImageExample />
             </main >
 
             <div className="place-holder" role="presentation" />
@@ -220,7 +221,7 @@ function CombinedExample() {
     );
 }
 
-function MenuItemLinkExample() {
+function LinkAndDisabledExample() {
 
     return (
         <Example data={codeExamples.menuItem.list.linkAndDisabled} >
@@ -236,3 +237,27 @@ function MenuItemLinkExample() {
         </Example>
     );
 }
+
+function IconAndImageExample() {
+
+    return (
+        <Example data={codeExamples.menuItem.list.iconAndImage} >
+            <Menu menuButton={<MenuButton>Open menu</MenuButton>}>
+                <MenuItem>
+                    <i className="material-icons">content_cut</i>Cut
+                </MenuItem>
+                <MenuItem>
+                    <i className="material-icons">content_copy</i>Copy
+                </MenuItem>
+                <MenuItem>
+                    <i className="material-icons">content_paste</i>Paste
+                </MenuItem>
+                <MenuDivider />
+                <MenuItem href="https://github.com/">
+                    <img src="octocat.png" alt="" role="presentation" />GitHub
+                </MenuItem>
+            </Menu>
+        </Example>
+    );
+}
+
