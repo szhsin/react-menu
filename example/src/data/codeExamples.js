@@ -458,6 +458,63 @@ export default function Example() {
 }`
             },
 
+            hoverAndActive: {
+                id: 'hover-active',
+
+                title: 'Hover and active state',
+
+                desc: 'The Basic menu',
+
+                source:
+                    `<MenuItem>
+    {({ hover, active }) =>
+        active ? 'Active' : hover ? 'Press me' : 'Hover me'
+    }
+    </MenuItem>
+    <MenuDivider />
+    <MenuItem styles={{ justifyContent: 'center' }}>
+    {({ hover, active }) =>
+        <i className="material-icons md-48">
+            {active ? 'sentiment_very_satisfied'
+                : hover ? 'sentiment_satisfied_alt'
+                    : 'sentiment_very_dissatisfied'}
+        </i>
+    }
+</MenuItem>`,
+
+                fullSource:
+                    `import React from 'react';
+import {
+    Menu,
+    MenuItem,
+    MenuButton,
+    MenuDivider
+} from '@szhsin/react-menu';
+import '@szhsin/react-menu/dist/index.css';
+
+export default function Example() {
+    return (
+        <Menu menuButton={<MenuButton>Open menu</MenuButton>}>
+            <MenuItem>
+                {({ hover, active }) =>
+                    active ? 'Active' : hover ? 'Press me' : 'Hover me'
+                }
+            </MenuItem>
+            <MenuDivider />
+            <MenuItem styles={{ justifyContent: 'center' }}>
+                {({ hover, active }) =>
+                    <i className="material-icons md-48">
+                        {active ? 'sentiment_very_satisfied'
+                            : hover ? 'sentiment_satisfied_alt'
+                                : 'sentiment_very_dissatisfied'}
+                    </i>
+                }
+            </MenuItem>
+        </Menu>
+    );
+}`
+            },
+            
         }
     }
 

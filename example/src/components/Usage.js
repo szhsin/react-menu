@@ -60,6 +60,7 @@ export const Usage = React.memo(function Usage() {
                 <CombinedExample />
                 <LinkAndDisabledExample />
                 <IconAndImageExample />
+                <HoverAndActiveExample />
             </main >
 
             <div className="place-holder" role="presentation" />
@@ -261,3 +262,27 @@ function IconAndImageExample() {
     );
 }
 
+function HoverAndActiveExample() {
+
+    return (
+        <Example data={codeExamples.menuItem.list.hoverAndActive} >
+            <Menu menuButton={<MenuButton>Open menu</MenuButton>}>
+                <MenuItem>
+                    {({ hover, active }) =>
+                        active ? 'Active' : hover ? 'Press me' : 'Hover me'
+                    }
+                </MenuItem>
+                <MenuDivider />
+                <MenuItem styles={{ justifyContent: 'center' }}>
+                    {({ hover, active }) =>
+                        <i className="material-icons md-48">
+                            {active ? 'sentiment_very_satisfied'
+                                : hover ? 'sentiment_satisfied_alt'
+                                    : 'sentiment_very_dissatisfied'}
+                        </i>
+                    }
+                </MenuItem>
+            </Menu>
+        </Example>
+    );
+}
