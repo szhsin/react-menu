@@ -556,6 +556,39 @@ export default function Example() {
     );
 }`
             },
+
+            customised: {
+                id: 'customised-btn',
+
+                title: 'Customised button',
+
+                desc: 'The Basic menu',
+
+                source:
+                    `<Menu menuButton={
+    <button className="btn btn-primary">Open menu</button>}>
+    <MenuItem>New File</MenuItem>
+    <MenuItem>Save</MenuItem>
+</Menu>`,
+
+                fullSource:
+                    `import React from 'react';
+import {
+    Menu,
+    MenuItem
+} from '@szhsin/react-menu';
+import '@szhsin/react-menu/dist/index.css';
+
+export default function Example() {
+    return (
+        <Menu menuButton={
+            <button className="btn btn-primary">Open menu</button>}>
+            <MenuItem>New File</MenuItem>
+            <MenuItem>Save</MenuItem>
+        </Menu>
+    );
+}`
+            },
         }
     }
 

@@ -62,6 +62,7 @@ export const Usage = React.memo(function Usage() {
                 <IconAndImageExample />
                 <HoverAndActiveExample />
                 <OpenStateExample />
+                <CustomisedButtonExample />
             </main >
 
             <div className="place-holder" role="presentation" />
@@ -296,6 +297,18 @@ function OpenStateExample() {
                 <MenuButton styles={{ minWidth: '5rem' }}>
                     {open ? 'Close' : 'Open'}
                 </MenuButton>}>
+                <MenuItem>New File</MenuItem>
+                <MenuItem>Save</MenuItem>
+            </Menu>
+        </Example>
+    );
+}
+
+function CustomisedButtonExample() {
+
+    return (
+        <Example data={codeExamples.menuButton.list.customised} >
+            <Menu menuButton={<button className="btn btn-primary">Open menu</button>}>
                 <MenuItem>New File</MenuItem>
                 <MenuItem>Save</MenuItem>
             </Menu>
