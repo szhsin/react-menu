@@ -632,6 +632,42 @@ export default function Example() {
     );
 }`
             },
+
+            alignment: {
+                id: 'menu-alignment',
+
+                title: 'Alignment',
+
+                desc: 'The Basic menu',
+
+                source:
+                    `['start', 'center', 'end'].map(align =>
+<Menu menuButton={<MenuButton>{align}</MenuButton>}
+    key={align} align={align}>
+    <MenuItem>New File</MenuItem>
+    <MenuItem>Save</MenuItem>
+</Menu>)`,
+
+                fullSource:
+                    `import React from 'react';
+import {
+    Menu,
+    MenuItem,
+    MenuButton
+} from '@szhsin/react-menu';
+import '@szhsin/react-menu/dist/index.css';
+
+export default function Example() {
+    return (
+        ['start', 'center', 'end'].map(align =>
+            <Menu menuButton={<MenuButton>{align}</MenuButton>}
+                key={align} align={align}>
+                <MenuItem>New File</MenuItem>
+                <MenuItem>Save</MenuItem>
+            </Menu>)
+    );
+}`
+            },
         }
     }
 

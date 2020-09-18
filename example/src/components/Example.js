@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { bem } from '../utils'
+import { bem } from '../utils';
 import { HashLink as Link } from 'react-router-hash-link';
 import hljs from 'highlight.js';
 import $ from 'jquery';

@@ -64,6 +64,7 @@ export const Usage = React.memo(function Usage() {
                 <OpenStateExample />
                 <CustomisedButtonExample />
                 <MenuDirectionExample />
+                <MenuAlignmentExample />
             </main >
 
             <div className="place-holder" role="presentation" />
@@ -329,6 +330,23 @@ function MenuDirectionExample() {
 
     return (
         <Example data={codeExamples.menuPlacement.list.direction} spaceAround>
+            {menus}
+        </Example>
+    );
+}
+
+function MenuAlignmentExample() {
+
+    const menus = ['start', 'center', 'end'].map(align => (
+        <Menu menuButton={<MenuButton>{align}</MenuButton>}
+            key={align} align={align}>
+            <MenuItem>New File</MenuItem>
+            <MenuItem>Save</MenuItem>
+        </Menu>
+    ));
+
+    return (
+        <Example data={codeExamples.menuPlacement.list.alignment} spaceAround>
             {menus}
         </Example>
     );
