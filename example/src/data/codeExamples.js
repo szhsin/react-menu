@@ -590,7 +590,52 @@ export default function Example() {
 }`
             },
         }
+    },
+
+    menuPlacement: {
+        title: 'Menu placement',
+        id: 'menu-direction',
+
+        list: {
+            direction: {
+                id: 'menu-direction',
+
+                title: 'Direction',
+
+                desc: 'The Basic menu',
+
+                source:
+                    `['left', 'right', 'top', 'bottom'].map(direction =>
+<Menu menuButton={<MenuButton>{direction}</MenuButton>}
+    key={direction} direction={direction}>
+    <MenuItem>New File</MenuItem>
+    <MenuItem>Save</MenuItem>
+</Menu>)`,
+
+                fullSource:
+                    `import React from 'react';
+import {
+    Menu,
+    MenuItem,
+    MenuButton
+} from '@szhsin/react-menu';
+import '@szhsin/react-menu/dist/index.css';
+
+export default function Example() {
+    return (
+        ['left', 'right', 'top', 'bottom'].map(direction =>
+            <Menu menuButton={<MenuButton>{direction}</MenuButton>}
+                key={direction} direction={direction}>
+                <MenuItem>New File</MenuItem>
+                <MenuItem>Save</MenuItem>
+            </Menu>)
+    );
+}`
+            },
+        }
     }
+
+
 
 
 };

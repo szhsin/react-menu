@@ -63,6 +63,7 @@ export const Usage = React.memo(function Usage() {
                 <HoverAndActiveExample />
                 <OpenStateExample />
                 <CustomisedButtonExample />
+                <MenuDirectionExample />
             </main >
 
             <div className="place-holder" role="presentation" />
@@ -312,6 +313,23 @@ function CustomisedButtonExample() {
                 <MenuItem>New File</MenuItem>
                 <MenuItem>Save</MenuItem>
             </Menu>
+        </Example>
+    );
+}
+
+function MenuDirectionExample() {
+
+    const menus = ['left', 'right', 'top', 'bottom'].map(direction => (
+        <Menu menuButton={<MenuButton>{direction}</MenuButton>}
+            key={direction} direction={direction}>
+            <MenuItem>New File</MenuItem>
+            <MenuItem>Save</MenuItem>
+        </Menu>
+    ));
+
+    return (
+        <Example data={codeExamples.menuPlacement.list.direction} >
+            {menus}
         </Example>
     );
 }
