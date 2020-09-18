@@ -1,14 +1,17 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { HashLink as Link } from 'react-router-hash-link';
 
+
 export const TableContentsList = React.memo(function TableContentsList({
-    list
+    list,
+    level
 }) {
 
     const listElt = list.map((item) => {
         let nested = null;
         if (item.list) {
-            nested = <TableContentsList list={item.list} />;
+            nested = <TableContentsList list={item.list} level={level + 1} />;
         }
 
         return (
@@ -20,9 +23,17 @@ export const TableContentsList = React.memo(function TableContentsList({
     });
 
     return (
-        <ul className='contents-list'>
+        <ul className={`contents-list-lv${level}`}>
             {listElt}
         </ul>
     );
 });
 
+TableContentsList.propTypes = {
+    list: PropTypes.array.isRequired,
+    level: PropTypes.number
+};
+
+TableContentsList.defaultProps = {
+    level: 1
+};

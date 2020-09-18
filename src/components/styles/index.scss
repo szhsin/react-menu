@@ -68,6 +68,10 @@
         &--active {
             color: var.$color-active;
             background-color: var.$background-color-active;
+
+            &:hover {
+                color: var.$color-active;
+            }
         }
 
         &--disabled {
@@ -80,7 +84,8 @@
                 content: "\25cb";
                 position: absolute;
                 left: 0.8rem;
-                font-size: 0.9rem;
+                top: 0.55rem;
+                font-size: 0.8rem;
             }
         }
 
@@ -133,7 +138,6 @@
 }
 
 .rc-menu-button {
-    // -webkit-appearance: button;
     font-size: var.$font-size;
     font-weight: var.$font-weight;
     color: var.$color;

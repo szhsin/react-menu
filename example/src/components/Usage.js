@@ -15,6 +15,22 @@ import { codeExamples } from '../data/codeExamples';
 
 export const Usage = React.memo(function Usage() {
 
+    const getExampleList = (examples) => {
+        return Object.keys(examples).map(key => {
+            const example = examples[key];
+            let list = null;
+            if (example.list) {
+                list = getExampleList(example.list);
+            }
+
+            return {
+                id: example.id,
+                title: example.title,
+                list
+            };
+        });
+    }
+
     const tableContents = [
         {
             id: 'installation',
@@ -24,13 +40,7 @@ export const Usage = React.memo(function Usage() {
         {
             id: 'usage',
             title: 'Usage',
-            list: Object.keys(codeExamples).map(key => {
-                const example = codeExamples[key];
-                return {
-                    id: example.id,
-                    title: example.title
-                };
-            })
+            list: getExampleList(codeExamples)
         }
     ];
 
@@ -213,14 +223,15 @@ function CombinedExample() {
 function MenuItemLinkExample() {
 
     return (
-        <Example data={codeExamples.combined} >
+        <Example data={codeExamples.menuItem.list.linkAndDisabled} >
             <Menu menuButton={<MenuButton>Open menu</MenuButton>}>
                 <MenuItem href="https://www.google.com/">Google</MenuItem>
                 <MenuItem href="https://github.com/szhsin/react-menu/"
                     target="_blank">
-                    GitHub
+                    GitHub (new window)
                 </MenuItem>
                 <MenuItem>Normal item</MenuItem>
+                <MenuItem disabled>Disabled item</MenuItem>
             </Menu>
         </Example>
     );

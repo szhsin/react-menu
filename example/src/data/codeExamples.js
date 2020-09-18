@@ -355,4 +355,55 @@ export default function Example() {
     );
 }`
     },
+
+    menuItem: {
+        title: 'Menu item',
+        id: 'link-disabled',
+
+        list: {
+            linkAndDisabled: {
+                id: 'link-disabled',
+
+                title: 'Link and disabled',
+
+                desc: 'The Basic menu',
+
+                source:
+                    `<Menu menuButton={<MenuButton>Open menu</MenuButton>}>
+    <MenuItem href="https://www.google.com/">Google</MenuItem>
+    <MenuItem href="https://github.com/szhsin/react-menu/"
+        target="_blank">
+        GitHub (new window)
+    </MenuItem>
+    <MenuItem>Normal item</MenuItem>
+    <MenuItem disabled>Disabled item</MenuItem>
+</Menu>`,
+
+                fullSource:
+                    `import React from 'react';
+import {
+    Menu,
+    MenuItem,
+    MenuButton
+} from '@szhsin/react-menu';
+import '@szhsin/react-menu/dist/index.css';
+
+export default function Example() {
+    return (
+        <Menu menuButton={<MenuButton>Open menu</MenuButton>}>
+            <MenuItem href="https://www.google.com/">Google</MenuItem>
+            <MenuItem href="https://github.com/szhsin/react-menu/"
+                target="_blank">
+                GitHub (new window)
+            </MenuItem>
+            <MenuItem>Normal item</MenuItem>
+            <MenuItem disabled>Disabled item</MenuItem>
+        </Menu>
+    );
+}`
+            }
+        }
+    }
+
+
 };

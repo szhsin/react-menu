@@ -19,8 +19,8 @@ export const Example = React.memo(function Example({
 
     return (
         <section className="example" ref={ref} aria-labelledby={id}>
-            <Link smooth to={`#${id}`}>
-                <h2 id={id} className="hash-link" >{title}</h2>
+            <Link className="hash-link" smooth to={`#${id}`}  >
+                <h2 id={id} className="heading">{title}</h2>
             </Link>
 
             <p>{desc}</p>

@@ -1,3 +1,4 @@
+@use 'sass:color';
 @use 'var';
 @use 'mixins';
 
@@ -14,34 +15,43 @@ code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
 }
 
+a {
+    color: var.$link-color;
+    &:hover {
+        color: var.$link-hover-color;
+    }
+}
+
 .table-contents {
     @include mixins.flex-center("m");
-    .contents-list {
+    [class^="contents-list"] {
         @include mixins.reset-list;
     }
-    padding-top: 1.5rem;
 
-    nav > .contents-list {
+    .contents-list-lv1 {
         font-size: 1.3rem;
         font-weight: 600;
         > li {
             margin-bottom: 1rem;
         }
+    }
 
-        .contents-list {
-            font-size: 1rem;
-            font-weight: 400;
+    .contents-list-lv2 {
+        font-size: 1rem;
+        font-weight: 400;
+    }
+
+    .contents-list-lv3 {
+        margin-left: 1rem;
+        a {
+            color: color.scale(var.$link-color, $lightness: 20%);
         }
     }
 }
 
 .example {
-    h2 {
+    .heading {
         padding-top: 5rem;
-    }
-
-    a {
-        text-decoration: none;
     }
 
     .actions {
@@ -79,14 +89,20 @@ code {
 }
 
 .hash-link {
-    &::after {
-        content: "#";
-        margin-left: 0.6rem;
-        opacity: 0;
-        transition: opacity 0.15s ease;
+    &:hover {
+        text-decoration: none;
     }
-    &:hover::after {
-        opacity: 0.8;
+
+    .heading {
+        &::after {
+            content: "#";
+            margin-left: 0.6rem;
+            opacity: 0;
+            transition: opacity 0.15s ease;
+        }
+        &:hover::after {
+            opacity: 0.9;
+        }
     }
 }
 
@@ -142,6 +158,7 @@ code {
         align-items: center;
         .table-contents {
             position: static;
+            padding-top: 2rem;
         }
     }
 }
