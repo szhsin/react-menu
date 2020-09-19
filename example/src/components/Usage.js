@@ -71,6 +71,7 @@ export const Usage = React.memo(function Usage() {
                 <ControlledMenuExample />
                 <ContextMenuExample />
                 <UseMenuStateExample />
+                <CustomisedStylingExample />
             </main >
 
             <div className="place-holder" role="presentation" />
@@ -477,6 +478,35 @@ function UseMenuStateExample() {
                 <MenuItem>Save</MenuItem>
                 <MenuItem>Close Window</MenuItem>
             </ControlledMenu>
+        </Example>
+    );
+}
+
+function CustomisedStylingExample() {
+
+    return (
+        <Example data={codeExamples.customStyle} >
+            <Menu menuButton={<MenuButton>Open menu</MenuButton>}
+                styles={{
+                    border: '2px dashed green',
+                    boxShadow: 'none'
+                }}>
+                <MenuItem>New File</MenuItem>
+                <MenuItem>Save</MenuItem>
+                <MenuItem styles={{
+                    color: 'blue',
+                    backgroundColor: '#ee1',
+                    hover: {
+                        color: '#ee1',
+                        backgroundColor: '#bf4080'
+                    },
+                    active: {
+                        backgroundColor: '#333'
+                    }
+                }}>
+                    I'm special
+                </MenuItem>
+            </Menu>
         </Example>
     );
 }

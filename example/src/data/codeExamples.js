@@ -969,6 +969,75 @@ export default function Example() {
 }`
             },
         }
-    }
+    },
+
+    customStyle: {
+        id: 'custom-style',
+
+        title: 'Customised style',
+
+        desc: '',
+
+        source:
+            `<Menu menuButton={<MenuButton>Open menu</MenuButton>}
+    styles={{
+        border: '2px dashed green',
+        boxShadow: 'none'
+    }}>
+
+    <MenuItem>New File</MenuItem>
+    <MenuItem>Save</MenuItem>
+    <MenuItem styles={{
+        color: 'blue',
+        backgroundColor: '#ee1',
+        hover: {
+            color: '#ee1',
+            backgroundColor: '#bf4080'
+        },
+        active: {
+            backgroundColor: '#333'
+        }
+    }}>
+        I'm special
+    </MenuItem>
+</Menu>`,
+
+        fullSource:
+            `import React from 'react';
+import {
+    Menu,
+    MenuItem,
+    MenuButton
+} from '@szhsin/react-menu';
+import '@szhsin/react-menu/dist/index.css';
+
+export default function Example() {
+
+    return (
+        <Menu menuButton={<MenuButton>Open menu</MenuButton>}
+            styles={{
+                border: '2px dashed green',
+                boxShadow: 'none'
+            }}>
+
+            <MenuItem>New File</MenuItem>
+            <MenuItem>Save</MenuItem>
+            <MenuItem styles={{
+                color: 'blue',
+                backgroundColor: '#ee1',
+                hover: {
+                    color: '#ee1',
+                    backgroundColor: '#bf4080'
+                },
+                active: {
+                    backgroundColor: '#333'
+                }
+            }}>
+                I'm special
+            </MenuItem>
+        </Menu>
+    );
+}`
+    },
 
 };
