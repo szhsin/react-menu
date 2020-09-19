@@ -148,6 +148,8 @@
     border: 1px solid var.$border-color;
     border-radius: 0.25rem;
     background-color: var.$background-color;
+    transition: background-color 0.12s ease-in-out;
+    user-select: none;
     &:hover {
         background-color: var.$background-color-hover;
     }

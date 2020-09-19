@@ -14,3 +14,13 @@
         font-size: 48px;
     }
 }
+
+[aria-labelledby="menu-direction"],
+[aria-labelledby="menu-alignment"] {
+    .example__demo {
+        justify-content: space-around;
+    }
+    .rc-menu-button {
+        flex: 0 1 6rem;
+    }
+}

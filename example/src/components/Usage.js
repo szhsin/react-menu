@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import {
     Menu,
     MenuItem,
@@ -6,7 +6,8 @@ import {
     SubMenu,
     MenuRadioGroup,
     MenuHeader,
-    MenuDivider
+    MenuDivider,
+    ControlledMenu
 } from '@szhsin/react-menu';
 import { TableContents } from './TableContents';
 import { Example } from './Example';
@@ -65,10 +66,10 @@ export const Usage = React.memo(function Usage() {
                 <CustomisedButtonExample />
                 <MenuDirectionExample />
                 <MenuAlignmentExample />
+                <ControlledMenuExample />
             </main >
 
             <div className="place-holder" role="presentation" />
-
         </React.Fragment>
     );
 });
@@ -301,6 +302,7 @@ function OpenStateExample() {
                 </MenuButton>}>
                 <MenuItem>New File</MenuItem>
                 <MenuItem>Save</MenuItem>
+                <MenuItem>Close Window</MenuItem>
             </Menu>
         </Example>
     );
@@ -313,6 +315,7 @@ function CustomisedButtonExample() {
             <Menu menuButton={<button className="btn btn-primary">Open menu</button>}>
                 <MenuItem>New File</MenuItem>
                 <MenuItem>Save</MenuItem>
+                <MenuItem>Close Window</MenuItem>
             </Menu>
         </Example>
     );
@@ -325,11 +328,12 @@ function MenuDirectionExample() {
             key={direction} direction={direction}>
             <MenuItem>New File</MenuItem>
             <MenuItem>Save</MenuItem>
+            <MenuItem>Close Window</MenuItem>
         </Menu>
     ));
 
     return (
-        <Example data={codeExamples.menuPlacement.list.direction} spaceAround>
+        <Example data={codeExamples.menuPlacement.list.direction} >
             {menus}
         </Example>
     );
@@ -342,12 +346,35 @@ function MenuAlignmentExample() {
             key={align} align={align}>
             <MenuItem>New File</MenuItem>
             <MenuItem>Save</MenuItem>
+            <MenuItem>Close Window</MenuItem>
         </Menu>
     ));
 
     return (
-        <Example data={codeExamples.menuPlacement.list.alignment} spaceAround>
+        <Example data={codeExamples.menuPlacement.list.alignment} >
             {menus}
+        </Example>
+    );
+}
+
+function ControlledMenuExample() {
+
+    const [isOpen, setOpen] = useState(false);
+    const ref = useRef(null);
+
+    return (
+        <Example data={codeExamples.controlled.list.controlledMenu}>
+            <button ref={ref} className="btn btn-dark"
+                onClick={() => setOpen(true)}>
+                Open menu
+            </button>
+
+            <ControlledMenu anchorRef={ref} isOpen={isOpen}
+                onClose={() => setOpen(false)}>
+                <MenuItem>New File</MenuItem>
+                <MenuItem>Save</MenuItem>
+                <MenuItem>Close Window</MenuItem>
+            </ControlledMenu>
         </Example>
     );
 }

@@ -47,6 +47,7 @@ a {
 
     .contents-list-lv3 {
         margin-left: 1rem;
+        font-size: 0.95rem;
         a {
             color: color.scale(var.$link-color, $lightness: 20%);
         }
@@ -152,7 +153,7 @@ a {
     }
 
     main {
-        max-width: 900px;
+        flex: 0 1 800px;
     }
 
     .place-holder {

@@ -4,7 +4,7 @@ export const codeExamples = {
 
         title: 'Basic menu',
 
-        desc: 'The Basic menu',
+        desc: '',
 
         source:
             `<Menu menuButton={<MenuButton>Open menu</MenuButton>}>
@@ -357,8 +357,9 @@ export default function Example() {
     },
 
     menuItem: {
-        title: 'Menu item',
         id: 'link-disabled',
+
+        title: 'Menu item',
 
         list: {
             linkAndDisabled: {
@@ -466,21 +467,23 @@ export default function Example() {
                 desc: 'The Basic menu',
 
                 source:
-                    `<MenuItem>
-    {({ hover, active }) =>
-        active ? 'Active' : hover ? 'Press me' : 'Hover me'
-    }
+                    `<Menu menuButton={<MenuButton>Open menu</MenuButton>}>
+    <MenuItem>
+        {({ hover, active }) =>
+            active ? 'Active' : hover ? 'Press me' : 'Hover me'
+        }
     </MenuItem>
     <MenuDivider />
     <MenuItem styles={{ justifyContent: 'center' }}>
-    {({ hover, active }) =>
-        <i className="material-icons md-48">
-            {active ? 'sentiment_very_satisfied'
-                : hover ? 'sentiment_satisfied_alt'
-                    : 'sentiment_very_dissatisfied'}
-        </i>
-    }
-</MenuItem>`,
+        {({ hover, active }) =>
+            <i className="material-icons md-48">
+                {active ? 'sentiment_very_satisfied'
+                    : hover ? 'sentiment_satisfied_alt'
+                        : 'sentiment_very_dissatisfied'}
+            </i>
+        }
+    </MenuItem>
+</Menu>`,
 
                 fullSource:
                     `import React from 'react';
@@ -519,8 +522,9 @@ export default function Example() {
     },
 
     menuButton: {
-        title: 'Menu button',
         id: 'open-state',
+
+        title: 'Menu button',
 
         list: {
             openState: {
@@ -535,6 +539,7 @@ export default function Example() {
     <MenuButton>{open ? 'Close' : 'Open'}</MenuButton>}>
     <MenuItem>New File</MenuItem>
     <MenuItem>Save</MenuItem>
+    <MenuItem>Close Window</MenuItem>
 </Menu>`,
 
                 fullSource:
@@ -552,6 +557,7 @@ export default function Example() {
             <MenuButton>{open ? 'Close' : 'Open'}</MenuButton>}>
             <MenuItem>New File</MenuItem>
             <MenuItem>Save</MenuItem>
+            <MenuItem>Close Window</MenuItem>
         </Menu>
     );
 }`
@@ -569,6 +575,7 @@ export default function Example() {
     <button className="btn btn-primary">Open menu</button>}>
     <MenuItem>New File</MenuItem>
     <MenuItem>Save</MenuItem>
+    <MenuItem>Close Window</MenuItem>
 </Menu>`,
 
                 fullSource:
@@ -585,6 +592,7 @@ export default function Example() {
             <button className="btn btn-primary">Open menu</button>}>
             <MenuItem>New File</MenuItem>
             <MenuItem>Save</MenuItem>
+            <MenuItem>Close Window</MenuItem>
         </Menu>
     );
 }`
@@ -593,8 +601,9 @@ export default function Example() {
     },
 
     menuPlacement: {
-        title: 'Menu placement',
         id: 'menu-direction',
+
+        title: 'Menu placement',
 
         list: {
             direction: {
@@ -610,6 +619,7 @@ export default function Example() {
     key={direction} direction={direction}>
     <MenuItem>New File</MenuItem>
     <MenuItem>Save</MenuItem>
+    <MenuItem>Close Window</MenuItem>
 </Menu>)`,
 
                 fullSource:
@@ -628,6 +638,7 @@ export default function Example() {
                 key={direction} direction={direction}>
                 <MenuItem>New File</MenuItem>
                 <MenuItem>Save</MenuItem>
+                <MenuItem>Close Window</MenuItem>
             </Menu>)
     );
 }`
@@ -646,6 +657,7 @@ export default function Example() {
     key={align} align={align}>
     <MenuItem>New File</MenuItem>
     <MenuItem>Save</MenuItem>
+    <MenuItem>Close Window</MenuItem>
 </Menu>)`,
 
                 fullSource:
@@ -664,14 +676,101 @@ export default function Example() {
                 key={align} align={align}>
                 <MenuItem>New File</MenuItem>
                 <MenuItem>Save</MenuItem>
+                <MenuItem>Close Window</MenuItem>
             </Menu>)
     );
 }`
             },
         }
+    },
+
+    controlled: {
+        id: 'controlled-menu',
+
+        title: 'Controlled menu',
+
+        list: {
+            controlledMenu: {
+                id: 'controlled-menu',
+
+                title: 'Manage open state',
+
+                desc: 'The Basic menu',
+
+                source:
+                    `const [isOpen, setOpen] = useState(false);
+const ref = useRef(null);
+
+<button ref={ref} className="btn btn-dark"
+    onClick={() => setOpen(true)}>
+    Open menu
+</button>
+
+<ControlledMenu anchorRef={ref} isOpen={isOpen}
+    onClose={() => setOpen(false)}>
+    <MenuItem>New File</MenuItem>
+    <MenuItem>Save</MenuItem>
+    <MenuItem>Close Window</MenuItem>
+</ControlledMenu>`,
+
+                fullSource:
+                    `import React, { useState, useRef } from 'react';
+import {
+    ControlledMenu,
+    MenuItem
+} from '@szhsin/react-menu';
+import '@szhsin/react-menu/dist/index.css';
+
+export default function Example() {
+    const [isOpen, setOpen] = useState(false);
+    const ref = useRef(null);
+
+    return (
+        <>
+            <button ref={ref} className="btn btn-dark"
+                onClick={() => setOpen(true)}>
+                Open menu
+            </button>
+
+            <ControlledMenu anchorRef={ref} isOpen={isOpen}
+                onClose={() => setOpen(false)}>
+                <MenuItem>New File</MenuItem>
+                <MenuItem>Save</MenuItem>
+                <MenuItem>Close Window</MenuItem>
+            </ControlledMenu>
+        </>
+    );
+}`
+            },
+
+            contextMenu: {
+                id: 'context-menu',
+
+                title: 'Context menu',
+
+                desc: 'The Basic menu',
+
+                source:
+                    ``,
+
+                fullSource:
+                    ``
+            },
+
+            useMenuState: {
+                id: 'use-menu-state',
+
+                title: 'useMenuState',
+
+                desc: 'The Basic menu',
+
+                source:
+                    ``,
+
+                fullSource:
+                    ``
+            },
+        }
     }
-
-
-
 
 };
