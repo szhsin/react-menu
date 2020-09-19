@@ -1,0 +1,34 @@
+@use 'sass:color';
+@use 'var';
+@use 'mixins';
+
+.table-contents {
+    @include mixins.flex-center("m");
+    [class^="contents-list"] {
+        @include mixins.reset-list;
+        li {
+            margin-top: 0.25rem;
+        }
+    }
+
+    .contents-list-lv1 {
+        font-size: 1.3rem;
+        font-weight: 600;
+        > li {
+            margin-bottom: 1rem;
+        }
+    }
+
+    .contents-list-lv2 {
+        font-size: 1rem;
+        font-weight: 400;
+    }
+
+    .contents-list-lv3 {
+        margin-left: 1rem;
+        font-size: 0.95rem;
+        a {
+            color: color.scale(var.$link-color, $lightness: 20%);
+        }
+    }
+}

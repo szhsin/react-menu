@@ -1,7 +1,8 @@
-@use 'sass:color';
 @use 'var';
 @use 'mixins';
 @use 'menu';
+@use 'example';
+@use 'table-contents';
 
 body {
     margin: 0;
@@ -20,80 +21,6 @@ a {
     color: var.$link-color;
     &:hover {
         color: var.$link-hover-color;
-    }
-}
-
-.table-contents {
-    @include mixins.flex-center("m");
-    [class^="contents-list"] {
-        @include mixins.reset-list;
-        li {
-            margin-top: 0.25rem;
-        }
-    }
-
-    .contents-list-lv1 {
-        font-size: 1.3rem;
-        font-weight: 600;
-        > li {
-            margin-bottom: 1rem;
-        }
-    }
-
-    .contents-list-lv2 {
-        font-size: 1rem;
-        font-weight: 400;
-    }
-
-    .contents-list-lv3 {
-        margin-left: 1rem;
-        font-size: 0.95rem;
-        a {
-            color: color.scale(var.$link-color, $lightness: 20%);
-        }
-    }
-}
-
-.example {
-    .heading {
-        padding-top: 5rem;
-    }
-
-    &__actions {
-        display: flex;
-        justify-content: flex-end;
-        padding: 0.6rem 0;
-
-        .btn {
-            @include mixins.flex-center;
-            border-radius: 50%;
-            width: 2rem;
-            height: 2rem;
-            margin-left: 1.5rem;
-            .material-icons {
-                font-size: 1.3rem;
-            }
-        }
-    }
-
-    &__demo {
-        @include mixins.flex-center;
-        background-color: white;
-        padding: 1rem;
-        border: 1px solid var.$border-color;
-        border-radius: 6px;
-
-        &--spaceAround {
-            justify-content: space-around;
-        }
-    }
-
-    &__source {
-        border-radius: 6px;
-        max-width: 90vw;
-        .hljs {
-            padding: 1rem 1.5rem;
-        }
     }
 }
 
