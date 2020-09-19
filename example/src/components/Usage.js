@@ -67,6 +67,7 @@ export const Usage = React.memo(function Usage() {
                 <MenuDirectionExample />
                 <MenuAlignmentExample />
                 <ControlledMenuExample />
+                <ContextMenuExample />
             </main >
 
             <div className="place-holder" role="presentation" />
@@ -376,5 +377,30 @@ function ControlledMenuExample() {
                 <MenuItem>Close Window</MenuItem>
             </ControlledMenu>
         </Example>
+    );
+}
+
+function ContextMenuExample() {
+
+    const [isOpen, setOpen] = useState(false);
+    const [anchorPoint, setAnchorPoint] = useState({ x: 0, y: 0 });
+
+    return (
+        <Example data={codeExamples.controlled.list.contextMenu}
+            onContextMenu={e => {
+                e.preventDefault();
+                setAnchorPoint({ x: e.clientX, y: e.clientY });
+                setOpen(true);
+            }}>
+
+            Right click to open context menu
+
+            <ControlledMenu anchorPoint={anchorPoint} isOpen={isOpen}
+                onClose={() => setOpen(false)}>
+                <MenuItem>New File</MenuItem>
+                <MenuItem>Save</MenuItem>
+                <MenuItem>Close Window</MenuItem>
+            </ControlledMenu>
+        </Example >
     );
 }

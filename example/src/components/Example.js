@@ -7,7 +7,8 @@ import $ from 'jquery';
 export const Example = React.memo(function Example({
     initialFullSource,
     data,
-    children
+    children,
+    ...restProps
 }) {
     const ref = useRef(null);
     const { id, title, desc, source, fullSource } = data;
@@ -25,7 +26,7 @@ export const Example = React.memo(function Example({
             </Link>
 
             <p>{desc}</p>
-            <div className={bem('example', 'demo')}>
+            <div {...restProps} className={bem('example', 'demo')}>
                 {children}
             </div>
 

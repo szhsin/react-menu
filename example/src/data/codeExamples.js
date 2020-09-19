@@ -751,10 +751,53 @@ export default function Example() {
                 desc: 'The Basic menu',
 
                 source:
-                    ``,
+                    `const [isOpen, setOpen] = useState(false);
+const [anchorPoint, setAnchorPoint] = useState({ x: 0, y: 0 });
+
+<div onContextMenu={e => {
+    e.preventDefault();
+    setAnchorPoint({ x: e.clientX, y: e.clientY });
+    setOpen(true);
+}}>
+    Right click to open context menu
+
+    <ControlledMenu anchorPoint={anchorPoint} isOpen={isOpen}
+        onClose={() => setOpen(false)}>
+        <MenuItem>New File</MenuItem>
+        <MenuItem>Save</MenuItem>
+        <MenuItem>Close Window</MenuItem>
+    </ControlledMenu>
+</div >`,
 
                 fullSource:
-                    ``
+                    `import React, { useState } from 'react';
+import {
+    ControlledMenu,
+    MenuItem
+} from '@szhsin/react-menu';
+import '@szhsin/react-menu/dist/index.css';
+
+export default function Example() {
+    const [isOpen, setOpen] = useState(false);
+    const [anchorPoint, setAnchorPoint] = useState({ x: 0, y: 0 });
+
+    return (
+        <div onContextMenu={e => {
+            e.preventDefault();
+            setAnchorPoint({ x: e.clientX, y: e.clientY });
+            setOpen(true);
+        }}>
+            Right click to open context menu
+
+            <ControlledMenu anchorPoint={anchorPoint} isOpen={isOpen}
+                onClose={() => setOpen(false)}>
+                <MenuItem>New File</MenuItem>
+                <MenuItem>Save</MenuItem>
+                <MenuItem>Close Window</MenuItem>
+            </ControlledMenu>
+        </div >
+    );
+}`
             },
 
             useMenuState: {

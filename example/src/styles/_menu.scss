@@ -24,3 +24,10 @@
         flex: 0 1 6rem;
     }
 }
+
+[aria-labelledby="context-menu"] {
+    .example__demo {
+        min-height: 8rem;
+        user-select: none;
+    }
+}
