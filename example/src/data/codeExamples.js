@@ -1,20 +1,26 @@
 export const codeExamples = {
-    basicMenu: {
+    menu: {
         id: 'basic-menu',
 
-        title: 'Basic menu',
+        title: 'Menu',
 
-        desc: '',
+        list: {
+            basicMenu: {
+                id: 'basic-menu',
 
-        source:
-            `<Menu menuButton={<MenuButton>Open menu</MenuButton>}>
-        <MenuItem>New File</MenuItem>
-        <MenuItem>Save</MenuItem>
-        <MenuItem>Close Window</MenuItem>
+                title: 'Basic menu',
+
+                desc: '',
+
+                source:
+                    `<Menu menuButton={<MenuButton>Open menu</MenuButton>}>
+    <MenuItem>New File</MenuItem>
+    <MenuItem>Save</MenuItem>
+    <MenuItem>Close Window</MenuItem>
 </Menu>`,
 
-        fullSource:
-            `import React from 'react';
+                fullSource:
+                    `import React from 'react';
 import {
     Menu,
     MenuItem,
@@ -31,17 +37,17 @@ export default function Example() {
         </Menu>
     );
 }`
-    },
+            },
 
-    subMenu: {
-        id: 'submenu',
+            subMenu: {
+                id: 'submenu',
 
-        title: 'Submenu',
+                title: 'Submenu',
 
-        desc: 'The Basic menu',
+                desc: 'The Basic menu',
 
-        source:
-            `<Menu menuButton={<MenuButton>Open menu</MenuButton>}>
+                source:
+                    `<Menu menuButton={<MenuButton>Open menu</MenuButton>}>
     <MenuItem>New File</MenuItem>
     <SubMenu label={'Open Recent'}>
         <MenuItem>index.html</MenuItem>
@@ -51,8 +57,8 @@ export default function Example() {
     <MenuItem>Save</MenuItem>
 </Menu>`,
 
-        fullSource:
-            `import React from 'react';
+                fullSource:
+                    `import React from 'react';
 import {
     Menu,
     MenuItem,
@@ -74,19 +80,124 @@ export default function Example() {
         </Menu>
     );
 }`
-    },
+            },
+
+            eventHandling: {
+                id: 'event-handling',
+
+                title: 'Event handling',
+
+                desc: 'The Basic menu',
+
+                source:
+                    `const [text, setText] = useState('');
+        
+const handleMenuClick = e => {
+    setText(t => t + \`[Menu] \${e.value} clicked\\n\\n\`);
+};
+
+const handleFileClick = e => {
+    setText(t => t + \`[MenuItem] \${e.value} clicked\\n\`);
+};
+
+const handleSaveClick = e => {
+    setText(t => t + \`[MenuItem] \${e.value} clicked\\n\\n\`);
+    return false;
+};
+
+<div className="buttons">
+    <Menu menuButton={<MenuButton>Open menu</MenuButton>}
+        onClick={handleMenuClick}>
+
+        <MenuItem value={'File'} onClick={handleFileClick}>
+            New File
+        </MenuItem>
+
+        <MenuItem value={'Save'} onClick={handleSaveClick}>
+            Save
+        </MenuItem>
+
+        <MenuItem value={'Close'}>Close Window</MenuItem>
+    </Menu>
+
+    <button className="btn btn btn-dark"
+        onClick={() => setText('')}>
+        Clear
+    </button>
+</div>
+
+<textarea readOnly value={text} />`,
+
+                fullSource:
+                    `import React, { useRef, useState, useLayoutEffect } from 'react';
+import {
+    Menu,
+    MenuItem,
+    MenuButton
+} from '@szhsin/react-menu';
+import '@szhsin/react-menu/dist/index.css';
+
+export default function Example() {
+    const ref = useRef(null);
+    const [text, setText] = useState('');
+
+    const handleMenuClick = e => {
+        setText(t => t + \`[Menu] \${e.value} clicked\\n\\n\`);
+    };
+
+    const handleFileClick = e => {
+        setText(t => t + \`[MenuItem] \${e.value} clicked\\n\`);
+    };
+
+    const handleSaveClick = e => {
+        setText(t => t + \`[MenuItem] \${e.value} clicked\\n\\n\`);
+        return false;
+    };
+
+    useLayoutEffect(() => {
+        ref.current.scrollTop = ref.current.scrollHeight;
+    }, [text]);
+
+    return (
+        <>
+            <div className="buttons">
+                <Menu menuButton={<MenuButton>Open menu</MenuButton>}
+                    onClick={handleMenuClick}>
+
+                    <MenuItem value={'File'} onClick={handleFileClick}>
+                        New File
+                    </MenuItem>
+
+                    <MenuItem value={'Save'} onClick={handleSaveClick}>
+                        Save
+                    </MenuItem>
+
+                    <MenuItem value={'Close'}>Close Window</MenuItem>
+                </Menu>
+
+                <button className="btn btn btn-dark"
+                    onClick={() => setText('')}>
+                    Clear
+                </button>
+            </div>
+
+            <textarea readOnly ref={ref} value={text} />
+        </>
+    );
+}`
+            },
 
 
-    radioGroup: {
-        id: 'radio-group',
+            radioGroup: {
+                id: 'radio-group',
 
-        title: 'Radio group',
+                title: 'Radio group',
 
-        desc: 'The Basic menu',
+                desc: 'The Basic menu',
 
-        source:
-            `const [textColor, setTextColor] = useState('red');
-
+                source:
+                    `const [textColor, setTextColor] = useState('red');
+        
 <Menu menuButton={<MenuButton>Text color</MenuButton>}>
     <MenuRadioGroup
         value={textColor}
@@ -97,8 +208,8 @@ export default function Example() {
     </MenuRadioGroup>
 </Menu>`,
 
-        fullSource:
-            `import React, { useState } from 'react';
+                fullSource:
+                    `import React, { useState } from 'react';
 import {
     Menu,
     MenuItem,
@@ -129,17 +240,17 @@ export default function Example() {
         </>
     );
 }`
-    },
+            },
 
-    checkBox: {
-        id: 'checkbox',
+            checkBox: {
+                id: 'checkbox',
 
-        title: 'Checkbox',
+                title: 'Checkbox',
 
-        desc: 'The Basic menu',
+                desc: 'The Basic menu',
 
-        source:
-            `const [isBold, setBold] = useState(true);
+                source:
+                    `const [isBold, setBold] = useState(true);
 const [isItalic, setItalic] = useState(false);
 const [isUnderline, setUnderline] = useState(false);
 
@@ -158,8 +269,8 @@ const [isUnderline, setUnderline] = useState(false);
     </MenuItem>
 </Menu>`,
 
-        fullSource:
-            `import React, { useState } from 'react';
+                fullSource:
+                    `import React, { useState } from 'react';
 import {
     Menu,
     MenuItem,
@@ -198,17 +309,17 @@ export default function Example() {
     );
 }`
 
-    },
+            },
 
-    headerAndDivider: {
-        id: 'header-divider',
+            headerAndDivider: {
+                id: 'header-divider',
 
-        title: 'Header and divider',
+                title: 'Header and divider',
 
-        desc: 'The Basic menu',
+                desc: 'The Basic menu',
 
-        source:
-            `<Menu menuButton={<MenuButton>Open menu</MenuButton>}>
+                source:
+                    `<Menu menuButton={<MenuButton>Open menu</MenuButton>}>
     <MenuItem>New File</MenuItem>
     <MenuItem>Save</MenuItem>
     <MenuItem>Close Window</MenuItem>
@@ -221,8 +332,8 @@ export default function Example() {
     <MenuItem>Print</MenuItem>
 </Menu>`,
 
-        fullSource:
-            `import React from 'react';
+                fullSource:
+                    `import React from 'react';
 import {
     Menu,
     MenuItem,
@@ -249,17 +360,17 @@ export default function Example() {
         </Menu>
     );
 }`
-    },
+            },
 
-    combined: {
-        id: 'combined',
+            combined: {
+                id: 'combined',
 
-        title: 'All combined',
+                title: 'Combined example',
 
-        desc: 'The Basic menu',
+                desc: 'The Basic menu',
 
-        source:
-            `<Menu menuButton={<MenuButton>Open menu</MenuButton>}>
+                source:
+                    `<Menu menuButton={<MenuButton>Open menu</MenuButton>}>
     <MenuItem>New File</MenuItem>
     <MenuItem>Save</MenuItem>
     <MenuDivider />
@@ -291,8 +402,8 @@ export default function Example() {
     </SubMenu>
 </Menu>`,
 
-        fullSource:
-            `import React, { useState } from 'react';
+                fullSource:
+                    `import React, { useState } from 'react';
 import {
     Menu,
     MenuItem,
@@ -354,6 +465,8 @@ export default function Example() {
         </>
     );
 }`
+            },
+        }
     },
 
     menuItem: {
@@ -365,7 +478,7 @@ export default function Example() {
             linkAndDisabled: {
                 id: 'link-disabled',
 
-                title: 'Link and disabled state',
+                title: 'Link and disabled',
 
                 desc: 'The Basic menu',
 
@@ -462,7 +575,7 @@ export default function Example() {
             hoverAndActive: {
                 id: 'hover-active',
 
-                title: 'Hover and active state',
+                title: 'Hover and active',
 
                 desc: 'The Basic menu',
 
@@ -693,7 +806,7 @@ export default function Example() {
             controlledMenu: {
                 id: 'controlled-menu',
 
-                title: 'Manage open state',
+                title: 'Managing state',
 
                 desc: 'The Basic menu',
 
@@ -818,7 +931,7 @@ const ref = useRef(null);
 </button>
 
 <ControlledMenu {...menuProps} anchorRef={ref}
-onClose={() => closeMenu()}>
+    onClose={() => closeMenu()}>
     <MenuItem>New File</MenuItem>
     <MenuItem>Save</MenuItem>
     <MenuItem>Close Window</MenuItem>

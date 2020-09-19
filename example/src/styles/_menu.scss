@@ -15,6 +15,26 @@
     }
 }
 
+[aria-labelledby="event-handling"] {
+    .example__demo {
+        min-height: 15rem;
+        align-items: stretch;
+        justify-content: space-around;
+
+        .buttons {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+        }
+
+        textarea {
+            font-size: 0.9rem;
+            flex: 0 1 20rem;
+            margin-left: 1rem;
+        }
+    }
+}
+
 [aria-labelledby="menu-direction"],
 [aria-labelledby="menu-alignment"] {
     .example__demo {

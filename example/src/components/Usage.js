@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useLayoutEffect } from 'react';
 import {
     Menu,
     MenuItem,
@@ -56,6 +56,7 @@ export const Usage = React.memo(function Usage() {
                 <h1>Usage</h1>
                 <BasicMenuExample />
                 <SubmenuExample />
+                <EventHandlingExample />
                 <RadioGroupExample />
                 <CheckBoxExample />
                 <HeaderAndDividerExample />
@@ -80,7 +81,7 @@ export const Usage = React.memo(function Usage() {
 function BasicMenuExample() {
 
     return (
-        <Example initialFullSource={true} data={codeExamples.basicMenu} >
+        <Example initialFullSource={true} data={codeExamples.menu.list.basicMenu} >
             <Menu menuButton={<MenuButton>Open menu</MenuButton>}>
                 <MenuItem>New File</MenuItem>
                 <MenuItem>Save</MenuItem>
@@ -93,7 +94,7 @@ function BasicMenuExample() {
 function SubmenuExample() {
 
     return (
-        <Example data={codeExamples.subMenu} >
+        <Example data={codeExamples.menu.list.subMenu} >
             <Menu menuButton={<MenuButton>Open menu</MenuButton>}>
                 <MenuItem>New File</MenuItem>
                 <SubMenu label={'Open Recent'}>
@@ -107,11 +108,61 @@ function SubmenuExample() {
     );
 }
 
+
+function EventHandlingExample() {
+    const ref = useRef(null);
+    const [text, setText] = useState('');
+
+    const handleMenuClick = e => {
+        setText(t => t + `[Menu] ${e.value} clicked\n\n`);
+    };
+
+    const handleFileClick = e => {
+        setText(t => t + `[MenuItem] ${e.value} clicked\n`);
+    };
+
+    const handleSaveClick = e => {
+        setText(t => t + `[MenuItem] ${e.value} clicked\n\n`);
+        return false;
+    };
+
+    useLayoutEffect(() => {
+        ref.current.scrollTop = ref.current.scrollHeight;
+    }, [text]);
+
+    return (
+        <Example data={codeExamples.menu.list.eventHandling} >
+            <div className="buttons">
+                <Menu menuButton={<MenuButton>Open menu</MenuButton>}
+                    onClick={handleMenuClick}>
+
+                    <MenuItem value={'File'} onClick={handleFileClick}>
+                        New File
+                    </MenuItem>
+
+                    <MenuItem value={'Save'} onClick={handleSaveClick}>
+                        Save
+                    </MenuItem>
+
+                    <MenuItem value={'Close'}>Close Window</MenuItem>
+                </Menu>
+
+                <button className="btn btn btn-dark"
+                    onClick={() => setText('')}>
+                    Clear
+                </button>
+            </div>
+
+            <textarea readOnly ref={ref} value={text} />
+        </Example>
+    );
+}
+
 function RadioGroupExample() {
     const [textColor, setTextColor] = useState('red');
 
     return (
-        <Example data={codeExamples.radioGroup} >
+        <Example data={codeExamples.menu.list.radioGroup} >
             <Menu menuButton={<MenuButton>Text color</MenuButton>}>
                 <MenuRadioGroup
                     value={textColor}
@@ -135,7 +186,7 @@ function CheckBoxExample() {
     const [isUnderline, setUnderline] = useState(false);
 
     return (
-        <Example data={codeExamples.checkBox} >
+        <Example data={codeExamples.menu.list.checkBox} >
             <Menu menuButton={<MenuButton>Text style</MenuButton>}>
                 <MenuItem type="checkbox" checked={isBold}
                     onClick={e => setBold(e.checked)}>
@@ -163,7 +214,7 @@ function CheckBoxExample() {
 function HeaderAndDividerExample() {
 
     return (
-        <Example data={codeExamples.headerAndDivider} >
+        <Example data={codeExamples.menu.list.headerAndDivider} >
             <Menu menuButton={<MenuButton>Open menu</MenuButton>}>
                 <MenuItem>New File</MenuItem>
                 <MenuItem>Save</MenuItem>
@@ -187,7 +238,7 @@ function CombinedExample() {
     const [isUnderline, setUnderline] = useState(false);
 
     return (
-        <Example data={codeExamples.combined} >
+        <Example data={codeExamples.menu.list.combined} >
             <Menu menuButton={<MenuButton>Open menu</MenuButton>}>
                 <MenuItem>New File</MenuItem>
                 <MenuItem>Save</MenuItem>
