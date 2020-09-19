@@ -7,7 +7,8 @@ import {
     MenuRadioGroup,
     MenuHeader,
     MenuDivider,
-    ControlledMenu
+    ControlledMenu,
+    useMenuState
 } from '@szhsin/react-menu';
 import { TableContents } from './TableContents';
 import { Example } from './Example';
@@ -68,6 +69,7 @@ export const Usage = React.memo(function Usage() {
                 <MenuAlignmentExample />
                 <ControlledMenuExample />
                 <ContextMenuExample />
+                <UseMenuStateExample />
             </main >
 
             <div className="place-holder" role="presentation" />
@@ -397,10 +399,33 @@ function ContextMenuExample() {
 
             <ControlledMenu anchorPoint={anchorPoint} isOpen={isOpen}
                 onClose={() => setOpen(false)}>
+                <MenuItem>Cut</MenuItem>
+                <MenuItem>Copy</MenuItem>
+                <MenuItem>Paste</MenuItem>
+            </ControlledMenu>
+        </Example >
+    );
+}
+
+function UseMenuStateExample() {
+
+    const { openMenu, closeMenu, toggleMenu,
+        ...menuProps } = useMenuState();
+    const ref = useRef(null);
+
+    return (
+        <Example data={codeExamples.controlled.list.useMenuState}>
+            <button ref={ref} className="btn btn-dark"
+                onClick={() => openMenu()}>
+                Open menu
+            </button>
+
+            <ControlledMenu {...menuProps} anchorRef={ref}
+                onClose={() => closeMenu()}>
                 <MenuItem>New File</MenuItem>
                 <MenuItem>Save</MenuItem>
                 <MenuItem>Close Window</MenuItem>
             </ControlledMenu>
-        </Example >
+        </Example>
     );
 }

@@ -763,9 +763,9 @@ const [anchorPoint, setAnchorPoint] = useState({ x: 0, y: 0 });
 
     <ControlledMenu anchorPoint={anchorPoint} isOpen={isOpen}
         onClose={() => setOpen(false)}>
-        <MenuItem>New File</MenuItem>
-        <MenuItem>Save</MenuItem>
-        <MenuItem>Close Window</MenuItem>
+        <MenuItem>Cut</MenuItem>
+        <MenuItem>Copy</MenuItem>
+        <MenuItem>Paste</MenuItem>
     </ControlledMenu>
 </div >`,
 
@@ -791,9 +791,9 @@ export default function Example() {
 
             <ControlledMenu anchorPoint={anchorPoint} isOpen={isOpen}
                 onClose={() => setOpen(false)}>
-                <MenuItem>New File</MenuItem>
-                <MenuItem>Save</MenuItem>
-                <MenuItem>Close Window</MenuItem>
+                <MenuItem>Cut</MenuItem>
+                <MenuItem>Copy</MenuItem>
+                <MenuItem>Paste</MenuItem>
             </ControlledMenu>
         </div >
     );
@@ -808,10 +808,52 @@ export default function Example() {
                 desc: 'The Basic menu',
 
                 source:
-                    ``,
+                    `const { openMenu, closeMenu, toggleMenu,
+    ...menuProps } = useMenuState();
+const ref = useRef(null);
+
+<button ref={ref} className="btn btn-dark"
+    onClick={() => openMenu()}>
+    Open menu
+</button>
+
+<ControlledMenu {...menuProps} anchorRef={ref}
+onClose={() => closeMenu()}>
+    <MenuItem>New File</MenuItem>
+    <MenuItem>Save</MenuItem>
+    <MenuItem>Close Window</MenuItem>
+</ControlledMenu>`,
 
                 fullSource:
-                    ``
+                    `import React, { useRef } from 'react';
+import {
+    ControlledMenu,
+    MenuItem,
+    useMenuState
+} from '@szhsin/react-menu';
+import '@szhsin/react-menu/dist/index.css';
+
+export default function Example() {
+    const { openMenu, closeMenu, toggleMenu,
+        ...menuProps } = useMenuState();
+    const ref = useRef(null);
+
+    return (
+        <>
+            <button ref={ref} className="btn btn-dark"
+                onClick={() => openMenu()}>
+                Open menu
+            </button>
+
+            <ControlledMenu {...menuProps} anchorRef={ref}
+                onClose={() => closeMenu()}>
+                <MenuItem>New File</MenuItem>
+                <MenuItem>Save</MenuItem>
+                <MenuItem>Close Window</MenuItem>
+            </ControlledMenu>
+        </>
+    );
+}`
             },
         }
     }
