@@ -15,3 +15,4 @@ export const bem = (block, element, modifiers = {}) => {
 }
 
 export const DomSizeContext = React.createContext({});
+export const ToastContext = React.createContext(() => { });

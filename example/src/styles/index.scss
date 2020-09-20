@@ -45,6 +45,20 @@ a {
 #root {
     padding-top: 4rem;
     background-color: #f9f9fb;
+
+    .app-toast {
+        position: fixed;
+        z-index: 200;
+        left: 50%;
+        bottom: 50px;
+        transform: translateX(-50%);
+        padding: 0.6rem 1.5rem;
+        border-radius: 0.25rem;
+        box-shadow: rgba(0, 0, 0, 0.133) 0px 3.2px 7.2px 0px, rgba(0, 0, 0, 0.11) 0px 0.6px 1.8px 0px;
+        background-color: #f5f6fa;
+        pointer-events: none;
+        user-select: none;
+    }
 }
 
 #header {

@@ -369,39 +369,6 @@ export default function Example() {
 
                 desc: 'The Basic menu',
 
-                source:
-                    `<Menu menuButton={<MenuButton>Open menu</MenuButton>}>
-    <MenuItem>New File</MenuItem>
-    <MenuItem>Save</MenuItem>
-    <MenuDivider />
-    <MenuHeader>Text settings</MenuHeader>
-
-    <SubMenu label="Text color">
-    <MenuRadioGroup
-        value={textColor}
-        onChange={e => setTextColor(e.value)}>
-        <MenuItem value={'red'}>Red</MenuItem>
-        <MenuItem value={'green'}>Green</MenuItem>
-        <MenuItem value={'blue'}>Blue</MenuItem>
-    </MenuRadioGroup>
-    </SubMenu>
-
-    <SubMenu label="Text style">
-        <MenuItem type="checkbox" checked={isBold}
-            onClick={e => setBold(e.checked)}>
-            Bold
-        </MenuItem>
-        <MenuItem type="checkbox" checked={isItalic}
-            onClick={e => setItalic(e.checked)}>
-            Italic
-        </MenuItem>
-        <MenuItem type="checkbox" checked={isUnderline}
-            onClick={e => setUnderline(e.checked)}>
-            Underline
-        </MenuItem>
-    </SubMenu>
-</Menu>`,
-
                 fullSource:
                     `import React, { useState } from 'react';
 import {

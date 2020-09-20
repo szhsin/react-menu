@@ -4,7 +4,7 @@ import {
     Switch,
     Route
 } from 'react-router-dom';
-import { DomSizeContext } from './utils';
+import { DomSizeContext, ToastContext } from './utils';
 import { Header } from './components/Header';
 import { Usage } from './components/Usage';
 import { ComponentApi } from './components/ComponentApi';
@@ -14,7 +14,6 @@ import { Footer } from './components/Footer';
 
 const App = () => {
     const [domSize, setDomSize] = useState({});
-
     useEffect(() => {
         const handleResize = () => {
             const tocPosition = getComputedStyle(document.querySelector('.table-contents'))
@@ -39,27 +38,37 @@ const App = () => {
         }
     }, []);
 
+    const [toast, setToast] = useState(null);
+    useEffect(() => {
+        if (!toast) return;
+        const id = setTimeout(() => setToast(null), 2500);
+        return () => clearTimeout(id);
+    }, [toast]);
+
     return (
         <DomSizeContext.Provider value={domSize}>
-            <Router>
-                <Header />
+            <ToastContext.Provider value={setToast}>
+                <Router>
+                    <Header />
 
-                <div id="content">
-                    <Switch>
-                        <Route exact path="/">
-                            <Usage />
-                        </Route>
-                        <Route path="/components">
-                            <ComponentApi />
-                        </Route>
-                        <Route path="/style-guide">
-                            <StyleGuide />
-                        </Route>
-                    </Switch>
-                </div>
+                    <div id="content">
+                        <Switch>
+                            <Route exact path="/">
+                                <Usage />
+                            </Route>
+                            <Route path="/components">
+                                <ComponentApi />
+                            </Route>
+                            <Route path="/style-guide">
+                                <StyleGuide />
+                            </Route>
+                        </Switch>
+                    </div>
 
-                <Footer />
-            </Router>
+                    <Footer />
+                    {toast && <div className="app-toast">{toast}</div>}
+                </Router>
+            </ToastContext.Provider>
         </DomSizeContext.Provider>
     );
 }
