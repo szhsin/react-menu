@@ -1,3 +1,5 @@
+import React from 'react';
+
 export const bem = (block, element, modifiers = {}) => {
     let blockElement = element ? `${block}__${element}` : block;
     let className = blockElement;
@@ -11,3 +13,5 @@ export const bem = (block, element, modifiers = {}) => {
 
     return className;
 }
+
+export const DomSizeContext = React.createContext({});

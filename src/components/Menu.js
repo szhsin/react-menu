@@ -7,7 +7,7 @@ import {
     FocusPositions,
     useMenuState
 } from '../utils';
-import { useMenuList } from './useMenuList'
+import { useMenuList } from './useMenuList';
 
 
 export const Menu = React.memo(function Menu({

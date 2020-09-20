@@ -4,7 +4,7 @@ import {
     menuPropTypesBase,
     FocusPositions
 } from '../utils';
-import { useMenuList } from './useMenuList'
+import { useMenuList } from './useMenuList';
 
 
 export const ControlledMenu = React.memo(function ControlledMenu({

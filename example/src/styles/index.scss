@@ -48,7 +48,7 @@ a {
 }
 
 #header {
-    .navbar-nav {
+    .navbar {
         z-index: 10;
         font-weight: 700;
         li {
@@ -60,7 +60,6 @@ a {
 #footer {
     font-size: 0.9em;
     color: var.$secondary-color;
-    margin-top: 3rem;
     padding: 2rem 1.5rem;
     border-top: 1px solid var.$border-color;
     text-align: center;
@@ -73,7 +72,6 @@ a {
     .table-contents {
         position: sticky;
         left: 0;
-        top: 5rem;
         flex: 1 1 0;
         @media (max-width: 1200px) {
             flex-basis: auto;
@@ -82,6 +80,7 @@ a {
 
     main {
         flex: 0 1 800px;
+        padding-bottom: 3rem;
     }
 
     .place-holder {
@@ -95,7 +94,6 @@ a {
         align-items: center;
         .table-contents {
             position: static;
-            padding-top: 2rem;
         }
     }
 }
