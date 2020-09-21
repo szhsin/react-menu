@@ -58,7 +58,7 @@ ControlledMenu.propTypes = {
     isOpen: PropTypes.bool,
     isMounted: PropTypes.bool,
     menuItemFocus: PropTypes.exact({
-        position: PropTypes.number
+        position: PropTypes.string
     }),
     onClose: PropTypes.func
 };

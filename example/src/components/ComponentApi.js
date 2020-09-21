@@ -27,14 +27,24 @@ export const ComponentApi = React.memo(function ComponentApi() {
                 </thead>
                 <tbody>
                     {
-                        rows.map(({ name, type, defaultVal, desc }) => (
-                            <tr key={name}>
-                                <td>{name}</td>
-                                <td>{type}</td>
-                                <td>{defaultVal}</td>
-                                <td>{desc}</td>
-                            </tr>
-                        ))
+                        rows
+                            .sort(({ name: n1 }, { name: n2 }) => {
+                                if (n1 < n2) {
+                                    return -1;
+                                }
+                                if (n1 > n2) {
+                                    return 1;
+                                }
+                                return 0;
+                            })
+                            .map(({ name, type, defaultVal, desc }) => (
+                                <tr key={name}>
+                                    <td>{name}</td>
+                                    <td>{type}</td>
+                                    <td>{defaultVal}</td>
+                                    <td>{desc}</td>
+                                </tr>
+                            ))
                     }
                 </tbody>
             </table>

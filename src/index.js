@@ -1,5 +1,5 @@
 import './components/styles/index.scss';
-export { FocusPositions, useMenuState } from './utils';
+export { useMenuState } from './utils';
 export { MenuButton } from './components/MenuButton';
 export { Menu } from './components/Menu';
 export { ControlledMenu } from './components/ControlledMenu';
