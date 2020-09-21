@@ -1,4 +1,5 @@
 import React from 'react';
+import { HashLink as Link } from 'react-router-hash-link';
 import { components as componentData } from '../data/components';
 import { TableContents } from './TableContents';
 
@@ -15,7 +16,10 @@ export const ComponentApi = React.memo(function ComponentApi() {
 
     const components = componentData.map(({ id, title, rows }) => (
         <React.Fragment key={id}>
-            <h1>{title}</h1>
+            <Link className="hash-link" smooth to={`#${id}`}>
+                <h1 id={id} className="heading">{title}</h1>
+            </Link>
+
             <table className="table table-striped table-bordered">
                 <thead className="thead-dark">
                     <tr>

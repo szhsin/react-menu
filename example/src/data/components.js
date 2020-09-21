@@ -1,6 +1,23 @@
 import React from 'react';
 
-const menuItemModifiers =
+const menuModifiers = (
+    <ul>
+        <li><code>open</code> indicates if the menu is open.</li>
+        <li><code>animation</code> indicates if animation is enabled.</li>
+        <li><code>dir</code> direction in which the menu expands.</li>
+    </ul>
+);
+
+const submenuModifiers = (
+    <ul>
+        <li><code>open</code> indicates if the submenu is open.</li>
+        <li><code>hover</code> indicates if the submenu item is being hovered and has focus.</li>
+        <li><code>active</code> indicates if the submenu item is active(pressed).</li>
+        <li><code>disabled</code> indicates if the submenu item is disabled.</li>
+    </ul>
+);
+
+const menuItemModifiers = (
     <ul>
         <li><code>hover</code> indicates if the menu item is being hovered and has focus.</li>
         <li><code>active</code> indicates if the menu item is active(pressed).</li>
@@ -8,9 +25,10 @@ const menuItemModifiers =
         <li><code>disabled</code> indicates if the menu item is disabled.</li>
         <li><code>anchor</code> indicates if the menu item has a URL link.</li>
         <li><code>type</code> string value that is 'radio' in radio item and 'checkbox' in checkbox item.</li>
-    </ul>;
+    </ul>
+);
 
-const onClickEventObject =
+const onClickEventObject = (
     <>
         <p>Event object properties:</p>
         <ul>
@@ -21,49 +39,73 @@ const onClickEventObject =
             <li><code>checked</code> indicates if the menu item is checked, only
                  for <code>MenuItem type="checkbox"</code>.</li>
         </ul>
-    </>;
+    </>
+);
 
-const styleProps = modifiers => [
+const keepMountedProp = {
+    name: 'keepMounted',
+    type: 'boolean',
+    defaultVal: 'true',
+    desc: <p>If <code>true</code>, menu keeps mounted in the DOM and is hidden by CSS
+    when it's closed. Otherwise, menu is unmounted from DOM when closed.</p>
+};
+
+const menuChildrenProp = {
+    name: 'children',
+    type: 'node',
+    desc: <p>Can be <code>MenuDivider, MenuHeader, MenuItem,
+    MenuRadioGroup, SubMenu</code> or any of their combinations.</p>
+};
+
+const onChangeProp = {
+    name: 'onChange',
+    type: 'function',
+    desc:
+        <>
+            <p>Event fired when menu open state has changed.</p>
+            <p>Event object properties:</p>
+            <ul>
+                <li><code>open</code> indicates if the menu is open.</li>
+            </ul>
+        </>
+};
+
+const styleProps = (target, modifiers, className, styles) => [
     {
-        name: 'className',
+        name: className || 'className',
         type: 'string | function',
         desc:
             <>
-                <p>A string that will be appended to the <code>class</code> of menu DOM element directly.</p>
+                <p>A string that will be appended to the <code>class</code> of <strong>{target}</strong> DOM element directly.</p>
                 <p>When a function is provided, it will be called by passing an object with the
-                following modifiers and should return a string.</p>
+                following properties and should return a string.</p>
                 {modifiers}
             </>
     },
     {
-        name: 'styles',
+        name: styles || 'styles',
         type: 'object | function',
         desc:
             <>
-                <p>A style object that will be applied to the inline style of menu element.</p>
-                <p>Styles targeting modifiers should be supplied as nested objects.
+                <p>A style object that will be applied to the inline style of <strong>{target}</strong> DOM element.</p>
+                <p>Styles targeting modifier properties should be supplied as nested objects.
                     For more details, please see the style guide.</p>
                 <p>When a function is provided, it will be called by passing an object with the
-                    following modifiers and should return a style object.</p>
+                    following properties and should return a style object.</p>
                 {modifiers}
             </>
     }
 ];
 
 const menuPropsBase = [
-    ...styleProps(
-        <ul>
-            <li><code>open</code> indicates if the menu is open.</li>
-            <li><code>animation</code> indicates if animation is enabled.</li>
-            <li><code>dir</code> direction in which the menu expands.</li>
-        </ul>
-    ),
+    ...styleProps('menu', menuModifiers),
+    menuChildrenProp,
     {
         name: 'id',
         type: 'string | number',
         desc:
             <>
-                <p>Set ID attribute on the root DOM element containing the menu.</p>
+                <p>Sets ID attribute on the root DOM element containing the menu.</p>
                 <p>It can be helpful when you need to style a specific menu differently
                 and use ID in your CSS selectors.</p>
                 <p>It also helps increase selector specificity when overwriting the default style.</p>
@@ -114,12 +156,6 @@ const menuPropsBase = [
             </>
     },
     {
-        name: 'children',
-        type: 'node',
-        desc: <p>Can be <code>MenuDivider, MenuHeader, MenuItem,
-        MenuRadioGroup, SubMenu</code> or any of their combination.</p>
-    },
-    {
         name: 'onClick',
         type: 'function',
         desc:
@@ -136,22 +172,17 @@ export const components = [
         title: 'Menu',
         rows: [
             ...menuPropsBase,
+            keepMountedProp,
+            onChangeProp,
             {
                 name: 'aria-label',
                 type: 'string',
                 desc:
                     <>
-                        <p>Set <code>aria-label</code> attribute on the menu DOM element.</p>
+                        <p>Sets <code>aria-label</code> attribute on the menu DOM element.</p>
                         <p>If not provided, one will be generated from the string content of
                             menu button or the default 'Menu'.</p>
                     </>
-            },
-            {
-                name: 'keepMounted',
-                type: 'boolean',
-                defaultVal: 'true',
-                desc: <p>If <code>true</code>, menu keeps mounted in the DOM and is hidden by CSS
-                when it's closed. Otherwise, menu is unmounted from DOM when closed.</p>
             },
             {
                 name: 'menuButton',
@@ -160,7 +191,7 @@ export const components = [
                     <>
                         <p>Can be a <code>MenuButton</code>, a <code>button</code> element, or a React component.</p>
                         <p>It also accepts a function that returns one of the above.
-                            The function will be called by passing an object with the following modifiers.</p>
+                            The function will be called by passing an object with the following properties:</p>
                         <ul>
                             <li><code>open</code> indicates if the menu is open.</li>
                         </ul>
@@ -175,19 +206,7 @@ export const components = [
                         When using a <code>button</code> element or your own React component, it's your responsibility
                         to set these <code>aria</code> attributes if you need correct accessibility support.</p>
                     </>
-            },
-            {
-                name: 'onChange',
-                type: 'function',
-                desc:
-                    <>
-                        <p>Event fired when menu open state has changed.</p>
-                        <p>Event object properties:</p>
-                        <ul>
-                            <li><code>open</code> indicates if the menu is open.</li>
-                        </ul>
-                    </>
-            },
+            }
         ]
     },
 
@@ -201,7 +220,7 @@ export const components = [
                 type: 'string',
                 desc:
                     <>
-                        <p>Set <code>aria-label</code> attribute on the menu DOM element.</p>
+                        <p>Sets <code>aria-label</code> attribute on the menu DOM element.</p>
                         <p>If not provided, it will be set as 'Menu'.</p>
                     </>
             },
@@ -279,7 +298,7 @@ export const components = [
         id: 'menu-item',
         title: 'MenuItem',
         rows: [
-            ...styleProps(menuItemModifiers),
+            ...styleProps('menu item', menuItemModifiers),
             {
                 name: 'value',
                 type: 'any',
@@ -304,15 +323,20 @@ export const components = [
             {
                 name: 'checked',
                 type: 'boolean',
-                desc: "Indicates if a checkbox menu item is checked. Please note radio menu item doesn't use this prop."
+                desc: <p>Set <code>true</code> if a checkbox menu item is checked. Please note radio menu item doesn't use this prop.</p>
+            },
+            {
+                name: 'disabled',
+                type: 'boolean',
+                desc: <p>Set <code>true</code> to disabled the menu item.</p>
             },
             {
                 name: 'children',
-                type: 'node',
+                type: 'node | function',
                 desc:
                     <>
                         <p>Contents of the menu item, or a function that returns it.
-                            The function will be called by passing an object with the following modifiers.</p>
+                            The function will be called by passing an object with the following properties:</p>
                         {menuItemModifiers}
                     </>
             },
@@ -327,6 +351,43 @@ export const components = [
                         {onClickEventObject}
                     </>
             }
+        ]
+    },
+
+    {
+        id: 'submenu',
+        title: 'SubMenu',
+        rows: [
+            ...styleProps('submenu item', submenuModifiers),
+            ...styleProps('submenu', menuModifiers, 'menuClassName', 'menuStyles'),
+            keepMountedProp,
+            menuChildrenProp,
+            onChangeProp,
+            {
+                name: 'aria-label',
+                type: 'string',
+                desc:
+                    <>
+                        <p>Sets <code>aria-label</code> attribute on the submenu DOM element.</p>
+                        <p>If not provided, one will be generated from the string content
+                            of <code>label</code> prop or the default 'Submenu'.</p>
+                    </>
+            },
+            {
+                name: 'disabled',
+                type: 'boolean',
+                desc: <p>Set <code>true</code> to disabled the submenu item.</p>
+            },
+            {
+                name: 'label',
+                type: 'node | function',
+                desc:
+                    <>
+                        <p>Contents of the submenu item, or a function that returns it.
+                            The function will be called by passing an object with the following properties:</p>
+                        {submenuModifiers}
+                    </>
+            },
         ]
     }
 ];
