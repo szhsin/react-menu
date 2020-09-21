@@ -1,17 +1,29 @@
 import React from 'react';
 
-const menuPropsBase = [
-    {
-        name: 'id',
-        type: 'string | number',
-        desc:
-            <>
-                <p>Set ID attribute on the root DOM element containing the menu.</p>
-                <p>It can be helpful when you need to style a specific menu differently
-                and use ID in your CSS selectors.</p>
-                <p>It also helps increase selector specificity when overwriting the default style.</p>
-            </>
-    },
+const menuItemModifiers =
+    <ul>
+        <li><code>hover</code> indicates if the menu item is being hovered and has focus.</li>
+        <li><code>active</code> indicates if the menu item is active(pressed).</li>
+        <li><code>checked</code> indicates if the menu item is checked in both radio and checkbox item.</li>
+        <li><code>disabled</code> indicates if the menu item is disabled.</li>
+        <li><code>anchor</code> indicates if the menu item has a URL link.</li>
+        <li><code>type</code> string value that is 'radio' in radio item and 'checkbox' in checkbox item.</li>
+    </ul>;
+
+const onClickEventObject =
+    <>
+        <p>Event object properties:</p>
+        <ul>
+            <li><code>value</code> the value prop passed to the <code>MenuItem</code> being
+                clicked. It's useful for helping identify which menu item is clicked.</li>
+            <li><code>keyCode</code> indicates the key code if click is triggered by keyboard.
+                Can be <code>Return(13)</code> or <code>Space(32)</code>.</li>
+            <li><code>checked</code> indicates if the menu item is checked, only
+                 for <code>MenuItem type="checkbox"</code>.</li>
+        </ul>
+    </>;
+
+const styleProps = modifiers => [
     {
         name: 'className',
         type: 'string | function',
@@ -20,11 +32,7 @@ const menuPropsBase = [
                 <p>A string that will be appended to the <code>class</code> of menu DOM element directly.</p>
                 <p>When a function is provided, it will be called by passing an object with the
                 following modifiers and should return a string.</p>
-                <ul>
-                    <li><code>open</code> indicates if the menu is open.</li>
-                    <li><code>animation</code> indicates if animation is enabled.</li>
-                    <li><code>dir</code> the direction in which menu expands.</li>
-                </ul>
+                {modifiers}
             </>
     },
     {
@@ -37,13 +45,31 @@ const menuPropsBase = [
                     For more details, please see the style guide.</p>
                 <p>When a function is provided, it will be called by passing an object with the
                     following modifiers and should return a style object.</p>
-                <ul>
-                    <li><code>open</code> indicates if the menu is open.</li>
-                    <li><code>animation</code> indicates if animation is enabled.</li>
-                    <li><code>dir</code> direction in which the menu expands.</li>
-                </ul>
+                {modifiers}
+            </>
+    }
+];
+
+const menuPropsBase = [
+    ...styleProps(
+        <ul>
+            <li><code>open</code> indicates if the menu is open.</li>
+            <li><code>animation</code> indicates if animation is enabled.</li>
+            <li><code>dir</code> direction in which the menu expands.</li>
+        </ul>
+    ),
+    {
+        name: 'id',
+        type: 'string | number',
+        desc:
+            <>
+                <p>Set ID attribute on the root DOM element containing the menu.</p>
+                <p>It can be helpful when you need to style a specific menu differently
+                and use ID in your CSS selectors.</p>
+                <p>It also helps increase selector specificity when overwriting the default style.</p>
             </>
     },
+
     {
         name: 'animation',
         type: 'boolean',
@@ -99,18 +125,10 @@ const menuPropsBase = [
         desc:
             <>
                 <p>Event fired when descendent menu items are clicked.</p>
-                <p>Event object properties:</p>
-                <ul>
-                    <li><code>value</code> the value prop passed to the <code>MenuItem</code> being
-                    clicked. It's useful for helping identify which menu item is clicked.</li>
-                    <li><code>keyCode</code> indicates the key code if click is triggered by keyboard.
-                    Can be <code>Return(13)</code> or <code>Space(32)</code>.</li>
-                    <li><code>checked</code> indicates if the menu item is checked, only
-                     for <code>MenuItem type="checkbox"</code>.</li>
-                </ul>
+                {onClickEventObject}
             </>
     }
-]
+];
 
 export const components = [
     {
@@ -253,7 +271,62 @@ export const components = [
                             Can be <code>Return(13), Space(32)</code> or <code>Esc(27)</code>.</li>
                         </ul>
                     </>
+            }
+        ]
+    },
+
+    {
+        id: 'menu-item',
+        title: 'MenuItem',
+        rows: [
+            ...styleProps(menuItemModifiers),
+            {
+                name: 'value',
+                type: 'any',
+                desc:
+                    <>
+                        <p>Any value provided to this prop will be included in the event object
+                            of the <code>onClick</code> event.</p>
+                        <p>It's useful for helping identify which menu item is clicked
+                            when you listen the event on <code>Menu</code> component.</p>
+                    </>
             },
+            {
+                name: 'href',
+                type: 'string',
+                desc: 'The URL that the menu item points to. If provided, a HTML <a> element will be used.'
+            },
+            {
+                name: 'type',
+                type: 'string',
+                desc: "Set this prop to 'checkbox' to make it a checkbox menu item. Other values are ignored. Please note radio menu item doesn't use this prop."
+            },
+            {
+                name: 'checked',
+                type: 'boolean',
+                desc: "Indicates if a checkbox menu item is checked. Please note radio menu item doesn't use this prop."
+            },
+            {
+                name: 'children',
+                type: 'node',
+                desc:
+                    <>
+                        <p>Contents of the menu item, or a function that returns it.
+                            The function will be called by passing an object with the following modifiers.</p>
+                        {menuItemModifiers}
+                    </>
+            },
+            {
+                name: 'onClick',
+                type: 'function',
+                desc:
+                    <>
+                        <p>Event fired when the menu item is clicked. The event will then bubble up to the root
+                            menu component. To stop bubbling, return <code>false</code> from the event handler.
+                        </p>
+                        {onClickEventObject}
+                    </>
+            }
         ]
     }
 ];
