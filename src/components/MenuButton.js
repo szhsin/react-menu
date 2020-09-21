@@ -18,9 +18,11 @@ export const MenuButton = defineName(React.memo(React.forwardRef(function MenuBu
     onClick,
     onKeyDown }, ref) {
 
+    const modifiers = Object.freeze({ open: isOpen });
+
     return (
-        <button className={bem(menuButtonClass)(className)}
-            style={flatStyles(styles)}
+        <button className={bem(menuButtonClass, null, modifiers)(className)}
+            style={flatStyles(styles, modifiers)}
             aria-haspopup="true"
             aria-expanded={isOpen}
             aria-disabled={disabled}

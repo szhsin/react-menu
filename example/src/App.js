@@ -66,7 +66,7 @@ const App = () => {
                     </div>
 
                     <Footer />
-                    {toast && <div className="app-toast">{toast}</div>}
+                    {toast && <div className="app-toast" role="alert">{toast}</div>}
                 </Router>
             </ToastContext.Provider>
         </DomSizeContext.Provider>

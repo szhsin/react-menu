@@ -187,7 +187,6 @@ export default function Example() {
 }`
             },
 
-
             radioGroup: {
                 id: 'radio-group',
 
@@ -1005,6 +1004,5 @@ export default function Example() {
         </Menu>
     );
 }`
-    },
-
+    }
 };

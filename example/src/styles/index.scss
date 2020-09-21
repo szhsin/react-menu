@@ -117,3 +117,16 @@ a {
         margin-left: 1.5rem;
     }
 }
+
+#components-api {
+    tbody {
+        li code:first-child {
+            font-size: 1rem;
+            background-color: rgba(255, 229, 100, 0.28);
+        }
+
+        p:last-child {
+            margin-bottom: 0;
+        }
+    }
+}

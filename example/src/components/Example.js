@@ -15,6 +15,7 @@ export const Example = React.memo(function Example({
     const setToast = useContext(ToastContext);
     const [isFullSource, setIsFullSource] = useState(initialFullSource);
     const sourceCode = isFullSource ? fullSource : source;
+    const sourceBtnTitle = `${isFullSource ? 'Hide' : 'Show'} full source code`;
 
     const handleCopy = () => {
         navigator.clipboard.writeText(sourceCode)
@@ -42,12 +43,14 @@ export const Example = React.memo(function Example({
                 {sourceCode && <button className="btn btn-outline-secondary"
                     data-toggle="tooltip" data-placement="top"
                     data-original-title="Copy code"
+                    aria-label="Copy code"
                     onClick={handleCopy}>
                     <i className="material-icons">content_copy</i>
                 </button>}
                 <button className={`btn ${isFullSource ? 'btn-secondary' : 'btn-outline-secondary'}`}
                     data-toggle="tooltip" data-placement="top"
-                    data-original-title={`${isFullSource ? 'Hide' : 'Show'} full source code`}
+                    data-original-title={sourceBtnTitle}
+                    aria-label={sourceBtnTitle}
                     onClick={() => setIsFullSource(s => !s)}>
                     <i className="material-icons">code</i>
                 </button>
