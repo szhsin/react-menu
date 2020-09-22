@@ -73,26 +73,36 @@ const onChangeProp = {
 const styleProps = (target, modifiers, className, styles) => [
     {
         name: className || 'className',
-        type: 'string | function',
+        type: `string${modifiers ? ' | function' : ''}`,
         desc:
             <>
                 <p>A string that will be appended to the <code>class</code> of <strong>{target}</strong> DOM element directly.</p>
-                <p>When a function is provided, it will be called by passing an object with the
-                following properties and should return a string.</p>
-                {modifiers}
+                {
+                    modifiers &&
+                    <>
+                        <p>When a function is provided, it will be called by passing an object with the
+                        following properties and should return a string.</p>
+                        {modifiers}
+                    </>
+                }
             </>
     },
     {
         name: styles || 'styles',
-        type: 'object | function',
+        type: `object${modifiers ? ' | function' : ''}`,
         desc:
             <>
                 <p>A style object that will be applied to the inline style of <strong>{target}</strong> DOM element.</p>
-                <p>Styles targeting modifier properties should be supplied as nested objects.
+                {
+                    modifiers &&
+                    <>
+                        <p>Styles targeting modifier properties should be supplied as nested objects.
                     For more details, please see the style guide.</p>
-                <p>When a function is provided, it will be called by passing an object with the
+                        <p>When a function is provided, it will be called by passing an object with the
                     following properties and should return a style object.</p>
-                {modifiers}
+                        {modifiers}
+                    </>
+                }
             </>
     }
 ];
@@ -266,7 +276,7 @@ export const components = [
                 desc:
                     <>
                         <p>Sets which menu item receives focus(hover) when menu opens.</p>
-                        <p>Usually you will set this prop when the menu is opened by keyboard events.
+                        <p>You will usually set this prop when the menu is opened by keyboard events.
                             Recommend using this prop with <code>useMenuState</code>.</p>
                         <p>It has the shape of <code>{'{ position: string }'}</code>. The <code>position</code> can be one of the following:</p>
                         <ul>
@@ -388,6 +398,45 @@ export const components = [
                         {submenuModifiers}
                     </>
             },
+        ]
+    },
+
+    {
+        id: 'menu-button',
+        title: 'MenuButton',
+        rows: [
+            ...styleProps('menu button', <ul><li><code>open</code> indicates if the menu is open.</li></ul>),
+            {
+                name: 'disabled',
+                type: 'boolean',
+                desc: <p>Set <code>true</code> to disabled the menu button.</p>
+            },
+            {
+                name: 'children',
+                type: 'node',
+                desc: 'Contents of the menu button.'
+            },
+        ]
+    },
+
+    {
+        id: 'menu-header',
+        title: 'MenuHeader',
+        rows: [
+            ...styleProps('menu header'),
+            {
+                name: 'children',
+                type: 'node',
+                desc: 'Contents of the menu header. Can be anyting that is usually for presentational purpose and not supposed to receive focus.'
+            },
+        ]
+    },
+
+    {
+        id: 'menu-divider',
+        title: 'MenuDivider',
+        rows: [
+            ...styleProps('menu divider')
         ]
     }
 ];
