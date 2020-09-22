@@ -17,13 +17,6 @@ code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
 }
 
-a {
-    color: var.$link-color;
-    &:hover {
-        color: var.$link-hover-color;
-    }
-}
-
 .hash-link {
     &:hover {
         text-decoration: none;
@@ -121,12 +114,17 @@ a {
 #components-api {
     tbody {
         li code:first-child {
-            font-size: 1rem;
-            background-color: rgba(255, 229, 100, 0.28);
+            font-size: 0.925rem;
+            background-color: var.$highlight-color;
+            margin-right: 0.5rem;
         }
 
         p:last-child {
             margin-bottom: 0;
+        }
+
+        em {
+            background-color: var.$highlight-color;
         }
     }
 }

@@ -5,6 +5,17 @@
 .table-contents {
     @include mixins.flex-center("m");
 
+    code {
+        font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
+    }
+    
+    a {
+        color: var.$link-color;
+        &:hover {
+            color: var.$link-hover-color;
+        }
+    }
+
     nav {
         overflow-y: auto;
     }

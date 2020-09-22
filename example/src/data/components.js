@@ -1,30 +1,36 @@
 import React from 'react';
+import { HashLink as Link } from 'react-router-hash-link';
+
+const RETURN_KEY = '13(Return)';
+const SPACE_KEY = '32(Space)';
+const ESC_KEY = '27(Esc)';
 
 const menuModifiers = (
     <ul>
-        <li><code>open</code> indicates if the menu is open.</li>
-        <li><code>animation</code> indicates if animation is enabled.</li>
-        <li><code>dir</code> direction in which the menu expands.</li>
+        <li><code>open: bool</code> indicates if the menu is open.</li>
+        <li><code>animation: bool</code> indicates if animation is enabled.</li>
+        <li><code>dir: string</code> direction in which the menu expands. Can be 'left', 'right', 'top', or 'bottom'.</li>
     </ul>
 );
 
 const submenuModifiers = (
     <ul>
-        <li><code>open</code> indicates if the submenu is open.</li>
-        <li><code>hover</code> indicates if the submenu item is being hovered and has focus.</li>
-        <li><code>active</code> indicates if the submenu item is active(pressed).</li>
-        <li><code>disabled</code> indicates if the submenu item is disabled.</li>
+        <li><code>open: bool</code> indicates if the submenu is open.</li>
+        <li><code>hover: bool</code> indicates if the submenu item is being hovered and has focus.</li>
+        <li><code>active: bool</code> indicates if the submenu item is active (pressed).</li>
+        <li><code>disabled: bool</code> indicates if the submenu item is disabled.</li>
     </ul>
 );
 
 const menuItemModifiers = (
     <ul>
-        <li><code>hover</code> indicates if the menu item is being hovered and has focus.</li>
-        <li><code>active</code> indicates if the menu item is active(pressed).</li>
-        <li><code>checked</code> indicates if the menu item is checked in both radio and checkbox item.</li>
-        <li><code>disabled</code> indicates if the menu item is disabled.</li>
-        <li><code>anchor</code> indicates if the menu item has a URL link.</li>
-        <li><code>type</code> string value that is 'radio' in radio item and 'checkbox' in checkbox item.</li>
+        <li><code>hover: bool</code> indicates if the menu item is being hovered and has focus.</li>
+        <li><code>active: bool</code> indicates if the menu item is active (pressed).</li>
+        <li><code>checked: bool</code> indicates if the menu item is checked in both radio and checkbox item.</li>
+        <li><code>disabled: bool</code> indicates if the menu item is disabled.</li>
+        <li><code>anchor: bool</code> indicates if the menu item has a URL link.</li>
+        <li><code>type: string</code> 'radio' in radio item, 'checkbox' in checkbox item,
+        or <code>undefined</code> in other items.</li>
     </ul>
 );
 
@@ -32,11 +38,11 @@ const onClickEventObject = (
     <>
         <p>Event object properties:</p>
         <ul>
-            <li><code>value</code> the value prop passed to the <code>MenuItem</code> being
+            <li><code>value: any</code> the value prop passed to the <code>MenuItem</code> being
                 clicked. It's useful for helping identify which menu item is clicked.</li>
-            <li><code>keyCode</code> indicates the key code if click is triggered by keyboard.
-                Can be <code>Return(13)</code> or <code>Space(32)</code>.</li>
-            <li><code>checked</code> indicates if the menu item is checked, only
+            <li><code>keyCode: number</code> indicates the key code if click is triggered by keyboard.
+                Can be <code>{RETURN_KEY}</code> or <code>{SPACE_KEY}</code>.</li>
+            <li><code>checked: bool</code> indicates if the menu item is checked, only
                  for <code>MenuItem type="checkbox"</code>.</li>
         </ul>
     </>
@@ -65,7 +71,7 @@ const onChangeProp = {
             <p>Event fired when menu open state has changed.</p>
             <p>Event object properties:</p>
             <ul>
-                <li><code>open</code> indicates if the menu is open.</li>
+                <li><code>open: bool</code> indicates if the menu is open.</li>
             </ul>
         </>
 };
@@ -76,7 +82,7 @@ const styleProps = (target, modifiers, className, styles) => [
         type: `string${modifiers ? ' | function' : ''}`,
         desc:
             <>
-                <p>A string that will be appended to the <code>class</code> of <strong>{target}</strong> DOM element directly.</p>
+                <p>A string that will be appended to the <code>class</code> of <strong>{target}</strong> DOM element.</p>
                 {
                     modifiers &&
                     <>
@@ -176,267 +182,334 @@ const menuPropsBase = [
     }
 ];
 
+const menu = {
+    id: 'menu',
+    title: 'Menu',
+    rows: [
+        ...menuPropsBase,
+        keepMountedProp,
+        onChangeProp,
+        {
+            name: 'aria-label',
+            type: 'string',
+            desc:
+                <>
+                    <p>Sets <code>aria-label</code> attribute on the menu DOM element.</p>
+                    <p>If not provided, one will be generated from the string content of
+                        menu button, or the default 'Menu'.</p>
+                </>
+        },
+        {
+            name: 'menuButton',
+            type: 'element | function',
+            desc:
+                <>
+                    <p>Can be a <code>MenuButton</code>, a <code>button</code> element, or a React component.</p>
+                    <p>It also accepts a function that returns one of the above.
+                        The function will be called by passing an object with the following properties:</p>
+                    <ul>
+                        <li><code>open: bool</code> indicates if the menu is open.</li>
+                    </ul>
+                    <p>If a React component is provided, it needs to implement the following requirements:</p>
+                    <ul>
+                        <li><span>Accepts a </span><code>ref</code> prop that is forwarded to the element against which
+                        menu will be positioned. The element should be able to receive focus.</li>
+                        <li><span>Accepts </span><code>onClick</code> and <code>onKeyDown</code> event props.</li>
+                    </ul>
+                    <p>Please note <code>MenuButton</code> has one additional benefit that it has
+                    managed <code>aria-haspopup</code> and <code>aria-expanded</code> attributes.
+                    When using a <code>button</code> element or your own React component, it's your responsibility
+                    to set these <code>aria</code> attributes if you need correct accessibility support.</p>
+                </>
+        }
+    ]
+};
+
+const menuItem = {
+    id: 'menu-item',
+    title: 'MenuItem',
+    rows: [
+        ...styleProps('menu item', menuItemModifiers),
+        {
+            name: 'value',
+            type: 'any',
+            desc:
+                <>
+                    <p>Any value provided to this prop will be included in the event object
+                        of the <code>onClick</code> event.</p>
+                    <p>It's useful for helping identify which menu item is clicked
+                        when you listen the event on <code>Menu</code> component.</p>
+                </>
+        },
+        {
+            name: 'href',
+            type: 'string',
+            desc: 'The URL that the menu item points to. If provided, a HTML <a> element will be used.'
+        },
+        {
+            name: 'type',
+            type: 'string',
+            desc: "Set this prop to 'checkbox' to make it a checkbox menu item. Other values are ignored. Please note radio menu item doesn't use this prop."
+        },
+        {
+            name: 'checked',
+            type: 'boolean',
+            desc: <p>Set <code>true</code> if a checkbox menu item is checked. Please note radio menu item doesn't use this prop.</p>
+        },
+        {
+            name: 'disabled',
+            type: 'boolean',
+            desc: <p>Set <code>true</code> to disabled the menu item.</p>
+        },
+        {
+            name: 'children',
+            type: 'node | function',
+            desc:
+                <>
+                    <p>Contents of the menu item, or a function that returns it.
+                        The function will be called by passing an object with the following properties:</p>
+                    {menuItemModifiers}
+                </>
+        },
+        {
+            name: 'onClick',
+            type: 'function',
+            desc:
+                <>
+                    <p>Event fired when the menu item is clicked. The event will then bubble up to the root
+                        menu component. To stop bubbling, return <code>false</code> from the event handler.</p>
+                    {onClickEventObject}
+                    <p>Please note there is no <code>onClick</code> event on menu items under
+                    a <Link to={'#radio-group'}>MenuRadioGroup</Link>. Use <code>onChange</code> event on the group instead.</p>
+                </>
+        }
+    ]
+};
+
+const submenu = {
+    id: 'submenu',
+    title: 'SubMenu',
+    rows: [
+        ...styleProps('submenu item', submenuModifiers),
+        ...styleProps('submenu', menuModifiers, 'menuClassName', 'menuStyles'),
+        keepMountedProp,
+        menuChildrenProp,
+        onChangeProp,
+        {
+            name: 'aria-label',
+            type: 'string',
+            desc:
+                <>
+                    <p>Sets <code>aria-label</code> attribute on the submenu DOM element.</p>
+                    <p>If not provided, one will be generated from the string content
+                        of <code>label</code> prop, or the default 'Submenu'.</p>
+                </>
+        },
+        {
+            name: 'disabled',
+            type: 'boolean',
+            desc: <p>Set <code>true</code> to disabled the submenu item.</p>
+        },
+        {
+            name: 'label',
+            type: 'node | function',
+            desc:
+                <>
+                    <p>Contents of the submenu item, or a function that returns it.
+                        The function will be called by passing an object with the following properties:</p>
+                    {submenuModifiers}
+                </>
+        },
+    ]
+};
+
+const menuButton = {
+    id: 'menu-button',
+    title: 'MenuButton',
+    rows: [
+        ...styleProps('menu button', <ul><li><code>open: bool</code> indicates if the menu is open.</li></ul>),
+        {
+            name: 'disabled',
+            type: 'boolean',
+            desc: <p>Set <code>true</code> to disabled the menu button.</p>
+        },
+        {
+            name: 'children',
+            type: 'node',
+            desc: 'Contents of the menu button.'
+        },
+    ]
+};
+
+const menuHeader = {
+    id: 'menu-header',
+    title: 'MenuHeader',
+    rows: [
+        ...styleProps('menu header'),
+        {
+            name: 'children',
+            type: 'node',
+            desc: 'Contents of the menu header. Can be anyting that is usually for presentational purpose and not supposed to receive focus.'
+        },
+    ]
+};
+
+const menuDivider = {
+    id: 'menu-divider',
+    title: 'MenuDivider',
+    rows: [
+        ...styleProps('menu divider')
+    ]
+};
+
+const menuRadioGroup = {
+    id: 'radio-group',
+    title: 'MenuRadioGroup',
+    rows: [
+        ...styleProps('radio group'),
+        {
+            name: 'aria-label',
+            type: 'string',
+            desc:
+                <>
+                    <p>Sets <code>aria-label</code> attribute on the radio group DOM element.</p>
+                    <p>If not provided, it will be set as the value of <code>name</code> prop, or the default 'Radio group'.</p>
+                </>
+        },
+        {
+            name: 'name',
+            type: 'string',
+            desc:
+                <>
+                    <p>Sets the radio group name (optional).</p>
+                    <p>The name will be passed to the <code>onChange</code> event. It's useful for
+                    identifying radio groups if you attach the same event handler to multiple groups.</p>
+                </>
+        },
+        {
+            name: 'value',
+            type: 'any',
+            desc:
+                <>
+                    <p>Sets value of the radio group.</p>
+                    <p>The children menu item which has the same value (strict equality ===)
+                        as the radio group is marked as checked.</p>
+                </>
+        },
+        {
+            name: 'children',
+            type: 'node',
+            desc: <p>The only permitted children is <code>MenuItem</code>.</p>
+        },
+        {
+            name: 'onChange',
+            type: 'function',
+            desc:
+                <>
+                    <p>Event fired when a children menu item is clicked (selected).</p>
+                    <p>Event object properties:</p>
+                    <ul>
+                        <li><code>name: string</code> the name prop passed to the <code>MenuRadioGroup</code> on which this event occured.</li>
+                        <li><code>value: any</code> the value prop passed to the <code>MenuItem</code> being clicked.</li>
+                        <li><code>keyCode: number</code> indicates the key code if click is triggered by keyboard.
+                        Can be <code>{RETURN_KEY}</code> or <code>{SPACE_KEY}</code>.</li>
+                    </ul>
+                </>
+        }
+    ]
+};
+
+const controlledMenu = {
+    id: 'controlled-menu',
+    title: 'ControlledMenu',
+    rows: [
+        ...menuPropsBase,
+        {
+            name: 'aria-label',
+            type: 'string',
+            desc:
+                <>
+                    <p>Sets <code>aria-label</code> attribute on the menu DOM element.</p>
+                    <p>If not provided, it will be set as 'Menu'.</p>
+                </>
+        },
+        {
+            name: 'anchorPoint',
+            type: 'object',
+            desc:
+                <>
+                    <p><em>Use this prop only for context menu.</em></p>
+                    <p>An object describes viewport coordinates against which context menu will be positioned.</p>
+                    <p>It has the shape of <code>{'{ x: number, y: number }'}</code>.</p>
+                </>
+        },
+        {
+            name: 'anchorRef',
+            type: 'object',
+            desc:
+                <>
+                    <p>A ref object attached to a DOM element against which menu will be positioned.</p>
+                    <p>Supports ref created by <code>React.createRef</code> or <code>useRef</code> hook.
+                     Doesn't support callback ref.</p>
+                </>
+        },
+        {
+            name: 'isOpen',
+            type: 'boolean',
+            desc: 'Controls whether the menu is open or not.'
+        },
+        {
+            name: 'isMounted',
+            type: 'boolean',
+            defaultVal: 'true',
+            desc:
+                <>
+                    <p>Controls whether the menu is mounted or not.</p>
+                    <p>Can be used to unmount menu when it's closed.
+                        Recommend using this prop with <code>useMenuState</code>.</p>
+                </>
+        },
+        {
+            name: 'menuItemFocus',
+            type: 'object',
+            desc:
+                <>
+                    <p>Sets which menu item receives focus(hover) when menu opens.</p>
+                    <p>You will usually set this prop when the menu is opened by keyboard events.
+                        Recommend using this prop with <code>useMenuState</code>.</p>
+                    <p>It has the shape of <code>{'{ position: string }'}</code>. The <code>position</code> can be one of the following values:</p>
+                    <ul>
+                        <li><code>'initial'</code> don't set focus.</li>
+                        <li><code>'first'</code> focus the first item in the menu.</li>
+                        <li><code>'last'</code> focus the last item in the menu.</li>
+                    </ul>
+                </>
+        },
+        {
+            name: 'onClose',
+            type: 'function',
+            desc:
+                <>
+                    <p>Event fired when menu is about to close.</p>
+                    <p>Event object properties:</p>
+                    <ul>
+                        <li><code>reason: string</code> The reason that causes the close event.
+                        Can be 'click', 'cancel', or 'blur'.</li>
+                        <li><code>keyCode: number</code> indicates the key code if event is triggered by keyboard.
+                        Can be <code>{RETURN_KEY}, {SPACE_KEY}</code> or <code>{ESC_KEY}</code>.</li>
+                    </ul>
+                </>
+        }
+    ]
+};
+
 export const components = [
-    {
-        id: 'menu',
-        title: 'Menu',
-        rows: [
-            ...menuPropsBase,
-            keepMountedProp,
-            onChangeProp,
-            {
-                name: 'aria-label',
-                type: 'string',
-                desc:
-                    <>
-                        <p>Sets <code>aria-label</code> attribute on the menu DOM element.</p>
-                        <p>If not provided, one will be generated from the string content of
-                            menu button or the default 'Menu'.</p>
-                    </>
-            },
-            {
-                name: 'menuButton',
-                type: 'element | function',
-                desc:
-                    <>
-                        <p>Can be a <code>MenuButton</code>, a <code>button</code> element, or a React component.</p>
-                        <p>It also accepts a function that returns one of the above.
-                            The function will be called by passing an object with the following properties:</p>
-                        <ul>
-                            <li><code>open</code> indicates if the menu is open.</li>
-                        </ul>
-                        <p>If a React component is provided, it needs to implement the following requirements:</p>
-                        <ul>
-                            <li><span>Accepts a </span><code>ref</code> prop that is forwarded to the element against which
-                            menu will be positioned. The element should be able to receive focus.</li>
-                            <li><span>Accepts </span><code>onClick</code> and <code>onKeyDown</code> event props.</li>
-                        </ul>
-                        <p>Please note <code>MenuButton</code> has one additional benefit that it has
-                        managed <code>aria-haspopup</code> and <code>aria-expanded</code> attributes.
-                        When using a <code>button</code> element or your own React component, it's your responsibility
-                        to set these <code>aria</code> attributes if you need correct accessibility support.</p>
-                    </>
-            }
-        ]
-    },
-
-    {
-        id: 'controlled-menu',
-        title: 'ControlledMenu',
-        rows: [
-            ...menuPropsBase,
-            {
-                name: 'aria-label',
-                type: 'string',
-                desc:
-                    <>
-                        <p>Sets <code>aria-label</code> attribute on the menu DOM element.</p>
-                        <p>If not provided, it will be set as 'Menu'.</p>
-                    </>
-            },
-            {
-                name: 'anchorPoint',
-                type: 'object',
-                desc:
-                    <>
-                        <p><em>Use this prop only for context menu.</em></p>
-                        <p>An object describes viewport coordinates against which context menu will be positioned.</p>
-                        <p>It has the shape of <code>{'{ x: number, y: number }'}</code>.</p>
-                    </>
-            },
-            {
-                name: 'anchorRef',
-                type: 'object',
-                desc:
-                    <>
-                        <p>A ref object attached to a DOM element against which menu will be positioned.</p>
-                        <p>Supports ref created by <code>React.createRef</code> or <code>useRef</code> hook.
-                         Doesn't support callback ref.</p>
-                    </>
-            },
-            {
-                name: 'isOpen',
-                type: 'boolean',
-                desc: 'Controls whether the menu is open or not.'
-            },
-            {
-                name: 'isMounted',
-                type: 'boolean',
-                defaultVal: 'true',
-                desc:
-                    <>
-                        <p>Controls whether the menu is mounted or not.</p>
-                        <p>Can be used to unmount menu when it's closed.
-                            Recommend using this prop with <code>useMenuState</code>.</p>
-                    </>
-            },
-            {
-                name: 'menuItemFocus',
-                type: 'object',
-                desc:
-                    <>
-                        <p>Sets which menu item receives focus(hover) when menu opens.</p>
-                        <p>You will usually set this prop when the menu is opened by keyboard events.
-                            Recommend using this prop with <code>useMenuState</code>.</p>
-                        <p>It has the shape of <code>{'{ position: string }'}</code>. The <code>position</code> can be one of the following:</p>
-                        <ul>
-                            <li><code>initial</code> don't set focus.</li>
-                            <li><code>first</code> focus the first item in the menu.</li>
-                            <li><code>last</code> focus the last item in the menu.</li>
-                        </ul>
-                    </>
-            },
-            {
-                name: 'onClose',
-                type: 'function',
-                desc:
-                    <>
-                        <p>Event fired when menu is about to close.</p>
-                        <p>Event object properties:</p>
-                        <ul>
-                            <li><code>reason</code> The reason that causes the close event.
-                            Can be 'click', 'cancel', or 'blur'.</li>
-                            <li><code>keyCode</code> indicates the key code if event is triggered by keyboard.
-                            Can be <code>Return(13), Space(32)</code> or <code>Esc(27)</code>.</li>
-                        </ul>
-                    </>
-            }
-        ]
-    },
-
-    {
-        id: 'menu-item',
-        title: 'MenuItem',
-        rows: [
-            ...styleProps('menu item', menuItemModifiers),
-            {
-                name: 'value',
-                type: 'any',
-                desc:
-                    <>
-                        <p>Any value provided to this prop will be included in the event object
-                            of the <code>onClick</code> event.</p>
-                        <p>It's useful for helping identify which menu item is clicked
-                            when you listen the event on <code>Menu</code> component.</p>
-                    </>
-            },
-            {
-                name: 'href',
-                type: 'string',
-                desc: 'The URL that the menu item points to. If provided, a HTML <a> element will be used.'
-            },
-            {
-                name: 'type',
-                type: 'string',
-                desc: "Set this prop to 'checkbox' to make it a checkbox menu item. Other values are ignored. Please note radio menu item doesn't use this prop."
-            },
-            {
-                name: 'checked',
-                type: 'boolean',
-                desc: <p>Set <code>true</code> if a checkbox menu item is checked. Please note radio menu item doesn't use this prop.</p>
-            },
-            {
-                name: 'disabled',
-                type: 'boolean',
-                desc: <p>Set <code>true</code> to disabled the menu item.</p>
-            },
-            {
-                name: 'children',
-                type: 'node | function',
-                desc:
-                    <>
-                        <p>Contents of the menu item, or a function that returns it.
-                            The function will be called by passing an object with the following properties:</p>
-                        {menuItemModifiers}
-                    </>
-            },
-            {
-                name: 'onClick',
-                type: 'function',
-                desc:
-                    <>
-                        <p>Event fired when the menu item is clicked. The event will then bubble up to the root
-                            menu component. To stop bubbling, return <code>false</code> from the event handler.
-                        </p>
-                        {onClickEventObject}
-                    </>
-            }
-        ]
-    },
-
-    {
-        id: 'submenu',
-        title: 'SubMenu',
-        rows: [
-            ...styleProps('submenu item', submenuModifiers),
-            ...styleProps('submenu', menuModifiers, 'menuClassName', 'menuStyles'),
-            keepMountedProp,
-            menuChildrenProp,
-            onChangeProp,
-            {
-                name: 'aria-label',
-                type: 'string',
-                desc:
-                    <>
-                        <p>Sets <code>aria-label</code> attribute on the submenu DOM element.</p>
-                        <p>If not provided, one will be generated from the string content
-                            of <code>label</code> prop or the default 'Submenu'.</p>
-                    </>
-            },
-            {
-                name: 'disabled',
-                type: 'boolean',
-                desc: <p>Set <code>true</code> to disabled the submenu item.</p>
-            },
-            {
-                name: 'label',
-                type: 'node | function',
-                desc:
-                    <>
-                        <p>Contents of the submenu item, or a function that returns it.
-                            The function will be called by passing an object with the following properties:</p>
-                        {submenuModifiers}
-                    </>
-            },
-        ]
-    },
-
-    {
-        id: 'menu-button',
-        title: 'MenuButton',
-        rows: [
-            ...styleProps('menu button', <ul><li><code>open</code> indicates if the menu is open.</li></ul>),
-            {
-                name: 'disabled',
-                type: 'boolean',
-                desc: <p>Set <code>true</code> to disabled the menu button.</p>
-            },
-            {
-                name: 'children',
-                type: 'node',
-                desc: 'Contents of the menu button.'
-            },
-        ]
-    },
-
-    {
-        id: 'menu-header',
-        title: 'MenuHeader',
-        rows: [
-            ...styleProps('menu header'),
-            {
-                name: 'children',
-                type: 'node',
-                desc: 'Contents of the menu header. Can be anyting that is usually for presentational purpose and not supposed to receive focus.'
-            },
-        ]
-    },
-
-    {
-        id: 'menu-divider',
-        title: 'MenuDivider',
-        rows: [
-            ...styleProps('menu divider')
-        ]
-    }
+    menu,
+    menuItem,
+    menuButton,
+    submenu,
+    menuRadioGroup,
+    menuHeader,
+    menuDivider,
+    controlledMenu
 ];
