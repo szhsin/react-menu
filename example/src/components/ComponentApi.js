@@ -1,6 +1,9 @@
 import React from 'react';
 import { HashLink as Link } from 'react-router-hash-link';
-import { components as componentData } from '../data/components';
+import {
+    components as componentData,
+    hooks as hookData
+} from '../data/components';
 import { TableContents } from './TableContents';
 
 
@@ -11,6 +14,11 @@ export const ComponentApi = React.memo(function ComponentApi() {
             id: 'components',
             title: 'Components',
             list: componentData
+        },
+        {
+            id: 'hooks',
+            title: 'Hooks',
+            list: hookData
         }
     ];
 
@@ -55,6 +63,15 @@ export const ComponentApi = React.memo(function ComponentApi() {
         </React.Fragment>
     ));
 
+    const hooks = hookData.map(({ id, title, desc }) => (
+        <React.Fragment key={id}>
+            <Link className="hash-link" smooth to={`#${id}`}>
+                <h1 id={id} className="heading">{title}</h1>
+            </Link>
+            {desc}
+        </React.Fragment>
+    ));
+
     return (
         <React.Fragment>
             <TableContents>
@@ -63,6 +80,7 @@ export const ComponentApi = React.memo(function ComponentApi() {
 
             <main id="components-api">
                 {components}
+                {hooks}
             </main >
 
             <div className="place-holder" role="presentation" />

@@ -5,6 +5,11 @@ const RETURN_KEY = '13(Return)';
 const SPACE_KEY = '32(Space)';
 const ESC_KEY = '27(Esc)';
 
+const menuLink = <Link to={'#menu'}>Menu</Link>;
+const controlledMenuLink = <Link to={'#controlled-menu'}>ControlledMenu</Link>;
+const radioGroupLink = <Link to={'#radio-group'}>MenuRadioGroup</Link>;
+const useMenuStateLink = <Link to={'#use-menu-state'}>useMenuState</Link>;
+
 const menuModifiers = (
     <ul>
         <li><code>open: bool</code> indicates if the menu is open.</li>
@@ -280,7 +285,7 @@ const menuItem = {
                         menu component. To stop bubbling, return <code>false</code> from the event handler.</p>
                     {onClickEventObject}
                     <p>Please note there is no <code>onClick</code> event on menu items under
-                    a <Link to={'#radio-group'}>MenuRadioGroup</Link>. Use <code>onChange</code> event on the group instead.</p>
+                    a {radioGroupLink}. Use <code>onChange</code> event on the group instead.</p>
                 </>
         }
     ]
@@ -349,7 +354,7 @@ const menuHeader = {
         {
             name: 'children',
             type: 'node',
-            desc: 'Contents of the menu header. Can be anyting that is usually for presentational purpose and not supposed to receive focus.'
+            desc: 'Contents of the menu header. Can be anything that is usually for presentational purpose and not supposed to receive focus.'
         },
     ]
 };
@@ -409,7 +414,7 @@ const menuRadioGroup = {
                     <p>Event fired when a children menu item is clicked (selected).</p>
                     <p>Event object properties:</p>
                     <ul>
-                        <li><code>name: string</code> the name prop passed to the <code>MenuRadioGroup</code> on which this event occured.</li>
+                        <li><code>name: string</code> the name prop passed to the <code>MenuRadioGroup</code> on which this event occurred.</li>
                         <li><code>value: any</code> the value prop passed to the <code>MenuItem</code> being clicked.</li>
                         <li><code>keyCode: number</code> indicates the key code if click is triggered by keyboard.
                         Can be <code>{RETURN_KEY}</code> or <code>{SPACE_KEY}</code>.</li>
@@ -438,7 +443,7 @@ const controlledMenu = {
             type: 'object',
             desc:
                 <>
-                    <p><em>Use this prop only for context menu.</em></p>
+                    <p><em>Use this prop only for context menu.</em> See an <Link to={'/#context-menu'}>example</Link></p>
                     <p>An object describes viewport coordinates against which context menu will be positioned.</p>
                     <p>It has the shape of <code>{'{ x: number, y: number }'}</code>.</p>
                 </>
@@ -448,8 +453,8 @@ const controlledMenu = {
             type: 'object',
             desc:
                 <>
-                    <p>A ref object attached to a DOM element against which menu will be positioned.</p>
-                    <p>Supports ref created by <code>React.createRef</code> or <code>useRef</code> hook.
+                    <p>A ref object attached to a DOM element against which menu will be positioned. <em>Not needed for context menu.</em></p>
+                    <p>Supports ref created by <code>React.createRef</code> or <code>useRef</code> Hook.
                      Doesn't support callback ref.</p>
                 </>
         },
@@ -466,7 +471,7 @@ const controlledMenu = {
                 <>
                     <p>Controls whether the menu is mounted or not.</p>
                     <p>Can be used to unmount menu when it's closed.
-                        Recommend using this prop with <code>useMenuState</code>.</p>
+                        Recommend using this prop with {useMenuStateLink}.</p>
                 </>
         },
         {
@@ -476,7 +481,7 @@ const controlledMenu = {
                 <>
                     <p>Sets which menu item receives focus(hover) when menu opens.</p>
                     <p>You will usually set this prop when the menu is opened by keyboard events.
-                        Recommend using this prop with <code>useMenuState</code>.</p>
+                        Recommend using this prop with {useMenuStateLink}.</p>
                     <p>It has the shape of <code>{'{ position: string }'}</code>. The <code>position</code> can be one of the following values:</p>
                     <ul>
                         <li><code>'initial'</code> don't set focus.</li>
@@ -503,6 +508,31 @@ const controlledMenu = {
     ]
 };
 
+const menuStateHook = {
+    id: 'use-menu-state',
+    title: 'useMenuState',
+    desc:
+        <>
+            <p><code>useMenuState</code> is a custom Hook that helps manage the states of {controlledMenuLink}.</p>
+            <p>The Hook returns several states which are used by <code>ControlledMenu</code> and can be spread to its props. See an <Link to={'/#use-menu-state'}>example</Link></p>
+            <p>It accepts a boolean parameter <code>keepMounted</code>. If <code>true</code>, menu keeps
+            mounted in the DOM and is hidden by CSS when it's closed. Otherwise, menu is unmounted from DOM when closed. The default value is <code>true</code>.</p>
+            <p>It returns an object with the following properties:</p>
+            <ul>
+                <li><code>isMounted: bool</code></li>
+                <li><code>isOpen: bool</code></li>
+                <li><code>menuItemFocus: bool</code> see {controlledMenuLink} for more details of these properties.</li>
+                <li><code>openMenu: function</code> accepts 'initial', 'first', or 'last'.
+                <br />E.g. <code>openMenu('first')</code> will open menu and set focus to the first menu item.</li>
+                <li><code>closeMenu: function</code></li>
+                <li><code>toggleMenu: function</code> accepts the same parameter as <code>openMenu</code>.</li>
+            </ul>
+            <p>Using this Hook can take advantage of lazily creating menu and its descendent items, which means menu is
+            not created and mounted into DOM until a user opens it for the first time.
+            The {menuLink} component uses this hook internally to manage its states.</p>
+        </>
+};
+
 export const components = [
     menu,
     menuItem,
@@ -512,4 +542,8 @@ export const components = [
     menuHeader,
     menuDivider,
     controlledMenu
+];
+
+export const hooks = [
+    menuStateHook,
 ];

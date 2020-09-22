@@ -112,19 +112,17 @@ code {
 }
 
 #components-api {
-    tbody {
-        li code:first-child {
-            font-size: 0.925rem;
-            background-color: var.$highlight-color;
-            margin-right: 0.5rem;
-        }
+    li code:first-child {
+        font-size: 0.925rem;
+        background-color: var.$highlight-color;
+        margin-right: 0.5rem;
+    }
 
-        p:last-child {
-            margin-bottom: 0;
-        }
+    p:last-child {
+        margin-bottom: 0;
+    }
 
-        em {
-            background-color: var.$highlight-color;
-        }
+    em {
+        background-color: var.$highlight-color;
     }
 }

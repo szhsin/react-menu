@@ -70,7 +70,7 @@ export const Usage = React.memo(function Usage() {
                 <MenuAlignmentExample />
                 <ControlledMenuExample />
                 <ContextMenuExample />
-                <UseMenuStateExample />
+                <MenuStateHookExample />
                 <CustomisedStylingExample />
             </main >
 
@@ -459,7 +459,7 @@ function ContextMenuExample() {
     );
 }
 
-function UseMenuStateExample() {
+function MenuStateHookExample() {
 
     const { openMenu, closeMenu, toggleMenu,
         ...menuProps } = useMenuState();
