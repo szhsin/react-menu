@@ -8,7 +8,7 @@ const ESC_KEY = '27(Esc)';
 const menuLink = <Link to={'#menu'}>Menu</Link>;
 const controlledMenuLink = <Link to={'#controlled-menu'}>ControlledMenu</Link>;
 const radioGroupLink = <Link to={'#radio-group'}>MenuRadioGroup</Link>;
-const useMenuStateLink = <Link to={'#use-menu-state'}>useMenuState</Link>;
+const menuStateHookLink = <Link to={'#use-menu-state'}>useMenuState</Link>;
 
 const menuModifiers = (
     <ul>
@@ -194,6 +194,12 @@ const menuPropsBase = [
 const menu = {
     id: 'menu',
     title: 'Menu',
+    desc:
+        <>
+            <p>Sets <code>aria-label</code> attribute on the menu DOM element.</p>
+            <p>If not provided, one will be generated from the string content of
+        menu button, or the default 'Menu'.</p>
+        </>,
     rows: [
         ...menuPropsBase,
         keepMountedProp,
@@ -475,7 +481,7 @@ const controlledMenu = {
                 <>
                     <p>Controls whether the menu is mounted or not.</p>
                     <p>Can be used to unmount menu when it's closed.
-                        Recommend using this prop with {useMenuStateLink}.</p>
+                        Recommend using this prop with {menuStateHookLink}.</p>
                 </>
         },
         {
@@ -485,7 +491,7 @@ const controlledMenu = {
                 <>
                     <p>Sets which menu item receives focus (hover) when menu opens.</p>
                     <p>You will usually set this prop when the menu is opened by keyboard events.
-                        Recommend using this prop with {useMenuStateLink}.</p>
+                        Recommend using this prop with {menuStateHookLink}.</p>
                     <p>It has the shape of <code>{'{ position: string }'}</code>. The <code>position</code> can be one of the following values:</p>
                     <ul>
                         <li><code>'initial'</code> don't set focus.</li>

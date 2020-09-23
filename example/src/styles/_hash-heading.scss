@@ -1,12 +1,21 @@
 .hash-heading {
-    display: inline-block;
-    padding: 4.5rem 0.5rem 0 0;
-}
+    display: flex;
+    align-items: flex-end;
 
-.hash-link {
-    opacity: 0;
-    transition: opacity 0.15s ease;
-    &:hover {
-        text-decoration: none;
+    &__heading {
+        padding: 4.5rem 0.5rem 0 0;
+    }
+
+    &__link {
+        opacity: 0;
+        transition: opacity 0.15s ease;
+        line-height: 1.2;
+        margin-bottom: 0.5rem;
+        &:hover {
+            text-decoration: none;
+        }
+        &--hover {
+            opacity: 1;
+        }
     }
 }

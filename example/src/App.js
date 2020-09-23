@@ -10,8 +10,10 @@ const App = () => {
     const [domSize, setDomSize] = useState({});
     useEffect(() => {
         const handleResize = () => {
-            const tocPosition = getComputedStyle(document.querySelector('.table-contents'))
-                .getPropertyValue('position');
+            const toc = document.querySelector('.table-contents');
+            if (!toc) return;
+            
+            const tocPosition = getComputedStyle(toc).getPropertyValue('position');
             const size = { tocPosition, navbarHeight: 0 };
 
             if (tocPosition === 'sticky') {

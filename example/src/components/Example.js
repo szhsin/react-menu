@@ -4,6 +4,7 @@ import { bem, ToastContext } from '../utils';
 import hljs from 'highlight.js';
 import $ from 'jquery';
 
+const blockName = 'example';
 
 export const Example = React.memo(function Example({
     initialFullSource,
@@ -30,15 +31,15 @@ export const Example = React.memo(function Example({
     }, [isFullSource]);
 
     return (
-        <section className={bem('example')} ref={ref} aria-labelledby={id}>
+        <section className={bem(blockName)} ref={ref} aria-labelledby={id}>
             <HashHeading id={id} title={title} heading="h2" />
 
             <p>{desc}</p>
-            <div {...restProps} className={bem('example', 'demo')}>
+            <div {...restProps} className={bem(blockName, 'demo')}>
                 {children}
             </div>
 
-            <div className={bem('example', 'actions')}>
+            <div className={bem(blockName, 'actions')}>
                 {sourceCode && <button className="btn btn-outline-secondary"
                     data-toggle="tooltip" data-placement="top"
                     data-original-title="Copy code"
@@ -55,7 +56,7 @@ export const Example = React.memo(function Example({
                 </button>
             </div>
 
-            {sourceCode && <pre className={bem('example', 'source')} >
+            {sourceCode && <pre className={bem(blockName, 'source')} >
                 <code className="lang-jsx">
                     {sourceCode}
                 </code>

@@ -7,6 +7,7 @@ import {
 import { Usage } from './Usage';
 import { ComponentApi } from './ComponentApi';
 import { StyleGuide } from './StyleGuide';
+import { NotFound } from './NotFound';
 
 
 export const PageContent = React.memo(function PageContent() {
@@ -27,6 +28,9 @@ export const PageContent = React.memo(function PageContent() {
                 </Route>
                 <Route path="/style-guide">
                     <StyleGuide />
+                </Route>
+                <Route>
+                    <NotFound />
                 </Route>
             </Switch>
         </div>

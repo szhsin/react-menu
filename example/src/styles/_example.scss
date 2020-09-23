@@ -2,10 +2,6 @@
 @use 'mixins';
 
 .example {
-    .heading {
-        padding-top: 5rem;
-    }
-
     &__actions {
         display: flex;
         justify-content: flex-end;
