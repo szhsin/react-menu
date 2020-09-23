@@ -6,8 +6,10 @@ const SPACE_KEY = '32(Space)';
 const ESC_KEY = '27(Esc)';
 
 const menuLink = <Link to={'#menu'}>Menu</Link>;
+const menuButtonLink = <Link to={'#menu-button'}>MenuButton</Link>;
 const controlledMenuLink = <Link to={'#controlled-menu'}>ControlledMenu</Link>;
 const radioGroupLink = <Link to={'#radio-group'}>MenuRadioGroup</Link>;
+const menuHeaderLink = <Link to={'#menu-header'}>MenuHeader</Link>;
 const menuStateHookLink = <Link to={'#use-menu-state'}>useMenuState</Link>;
 
 const menuModifiers = (
@@ -196,9 +198,11 @@ const menu = {
     title: 'Menu',
     desc:
         <>
-            <p>Sets <code>aria-label</code> attribute on the menu DOM element.</p>
-            <p>If not provided, one will be generated from the string content of
-        menu button, or the default 'Menu'.</p>
+            <p><code>Menu</code> is a top-level component that contains menu items and other lower level submenus.</p>
+            <p>Working with a {menuButtonLink} or a compatible button component, <code>Menu</code> manages states
+            which controls the display of its contents and maintains focus among its descendants.</p>
+            <p>It should be able to serve the majority of use cases. If you need more controls on how and
+                when a menu is open or closed, you might use a {controlledMenuLink}.</p>
         </>,
     rows: [
         ...menuPropsBase,
@@ -219,7 +223,7 @@ const menu = {
             type: 'element | function',
             desc:
                 <>
-                    <p>Can be a <code>MenuButton</code>, a <code>button</code> element, or a React component.</p>
+                    <p>Can be a {menuButtonLink}, a <code>button</code> element, or a React component.</p>
                     <p>It also accepts a function that returns one of the above.
                         The function will be called by passing an object with the following properties:</p>
                     <ul>
@@ -231,7 +235,7 @@ const menu = {
                         menu will be positioned. The element should be able to receive focus.</li>
                         <li><span>Accepts </span><code>onClick</code> and <code>onKeyDown</code> event props.</li>
                     </ul>
-                    <p>Please note <code>MenuButton</code> has one additional benefit that it has
+                    <p>Please note {menuButtonLink} has one additional benefit that it has
                     managed <code>aria-haspopup</code> and <code>aria-expanded</code> attributes.
                     When using a <code>button</code> element or your own React component, it's your responsibility
                     to set these <code>aria</code> attributes if you need correct accessibility support.</p>
@@ -243,6 +247,12 @@ const menu = {
 const menuItem = {
     id: 'menu-item',
     title: 'MenuItem',
+    desc:
+        <>
+            <p><code>MenuItem</code> represents an item under a menu which can be activated.</p>
+            <p>It can a normal menu item, a checkbox item (<code>type="checkbox"</code>),
+            or a radio item (direct child of {radioGroupLink}).</p>
+        </>,
     rows: [
         ...styleProps('menu item', menuItemModifiers),
         {
@@ -304,6 +314,13 @@ const menuItem = {
 const submenu = {
     id: 'submenu',
     title: 'SubMenu',
+    desc:
+        <>
+            <p><code>SubMenu</code> is a menu container under other menu or submenu components.</p>
+            <p>It consists of a menu item and a sub-level menu contains submenu items.
+             Use <code>label</code> prop to set its own contents,
+             and place the submenu items it contains in the <code>children</code> prop.</p>
+        </>,
     rows: [
         ...styleProps('submenu item', submenuModifiers),
         ...styleProps('submenu', menuModifiers, 'menuClassName', 'menuStyles'),
@@ -341,6 +358,7 @@ const submenu = {
 const menuButton = {
     id: 'menu-button',
     title: 'MenuButton',
+    desc: <p><code>MenuButton</code> works with a {menuLink} and controls its open and close.</p>,
     rows: [
         ...styleProps('menu button', <ul><li><code>open: bool</code> indicates if the menu is open.</li></ul>),
         {
@@ -359,6 +377,7 @@ const menuButton = {
 const menuHeader = {
     id: 'menu-header',
     title: 'MenuHeader',
+    desc: <p><code>MenuHeader</code> can be used to provide a presentational information for a group of related menu items.</p>,
     rows: [
         ...styleProps('menu header'),
         {
@@ -372,6 +391,9 @@ const menuHeader = {
 const menuDivider = {
     id: 'menu-divider',
     title: 'MenuDivider',
+    desc: <p><code>MenuDivider</code> can be used to make a group of related menu items visually separated from other items.
+    It has <code>aria</code> roles that can be recognised by assistive technologies. If you need to put
+    something presentational in a menu, use a {menuHeaderLink} instead.</p>,
     rows: [
         ...styleProps('menu divider')
     ]
@@ -380,6 +402,12 @@ const menuDivider = {
 const menuRadioGroup = {
     id: 'radio-group',
     title: 'MenuRadioGroup',
+    desc:
+        <>
+            <p><code>MenuRadioGroup</code> is a container of menu items which are similar to radio buttons.</p>
+            <p>All menu items under a <code>MenuRadioGroup</code> are in the same radio group and
+            have <code>type="radio"</code>. It's <strong>unnecessary</strong> to manually set the property. </p>
+        </>,
     rows: [
         ...styleProps('radio group'),
         {
@@ -437,6 +465,15 @@ const menuRadioGroup = {
 const controlledMenu = {
     id: 'controlled-menu',
     title: 'ControlledMenu',
+    desc:
+        <>
+            <p><code>ControlledMenu</code> is a top-level component that contains menu items and other lower level submenus.</p>
+            <p>It's different from a {menuLink} that <code>ControlledMenu</code> allows you to control how and when
+            a menu is open or closed, rather than controlled by a menu button.</p>
+            <p>For example, you might need to open a menu when something on the page is hovered by a mouse, or
+            you need to position the menu against something other than the menu button. <code>ControlledMenu</code> can
+            be also use to implement a <Link to={'/#context-menu'}>context menu</Link>.</p>
+        </>,
     rows: [
         ...menuPropsBase,
         {
