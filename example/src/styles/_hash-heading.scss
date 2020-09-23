@@ -1,0 +1,12 @@
+.hash-heading {
+    display: inline-block;
+    padding: 4.5rem 0.5rem 0 0;
+}
+
+.hash-link {
+    opacity: 0;
+    transition: opacity 0.15s ease;
+    &:hover {
+        text-decoration: none;
+    }
+}

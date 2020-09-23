@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useContext } from 'react';
-import { HashLink as Link } from 'react-router-hash-link';
+import { HashHeading } from './HashHeading';
 import { bem, ToastContext } from '../utils';
 import hljs from 'highlight.js';
 import $ from 'jquery';
@@ -31,9 +31,7 @@ export const Example = React.memo(function Example({
 
     return (
         <section className={bem('example')} ref={ref} aria-labelledby={id}>
-            <Link className="hash-link" smooth to={`#${id}`}>
-                <h2 id={id} className="heading">{title}</h2>
-            </Link>
+            <HashHeading id={id} title={title} heading="h2" />
 
             <p>{desc}</p>
             <div {...restProps} className={bem('example', 'demo')}>

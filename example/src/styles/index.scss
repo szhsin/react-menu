@@ -3,6 +3,7 @@
 @use 'menu';
 @use 'example';
 @use 'table-contents';
+@use 'hash-heading';
 
 body {
     margin: 0;
@@ -15,24 +16,6 @@ body {
 
 code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
-}
-
-.hash-link {
-    &:hover {
-        text-decoration: none;
-    }
-
-    .heading {
-        &::after {
-            content: "#";
-            margin-left: 0.6rem;
-            opacity: 0;
-            transition: opacity 0.15s ease;
-        }
-        &:hover::after {
-            opacity: 0.9;
-        }
-    }
 }
 
 #root {

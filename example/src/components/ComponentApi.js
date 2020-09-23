@@ -1,5 +1,5 @@
 import React from 'react';
-import { HashLink as Link } from 'react-router-hash-link';
+import { HashHeading } from './HashHeading';
 import {
     components as componentData,
     hooks as hookData
@@ -24,9 +24,7 @@ export const ComponentApi = React.memo(function ComponentApi() {
 
     const components = componentData.map(({ id, title, rows }) => (
         <React.Fragment key={id}>
-            <Link className="hash-link" smooth to={`#${id}`}>
-                <h1 id={id} className="heading">{title}</h1>
-            </Link>
+            <HashHeading id={id} title={title} />
 
             <table className="table table-striped table-bordered">
                 <thead className="thead-dark">
@@ -65,9 +63,7 @@ export const ComponentApi = React.memo(function ComponentApi() {
 
     const hooks = hookData.map(({ id, title, desc }) => (
         <React.Fragment key={id}>
-            <Link className="hash-link" smooth to={`#${id}`}>
-                <h1 id={id} className="heading">{title}</h1>
-            </Link>
+            <HashHeading id={id} title={title} />
             {desc}
         </React.Fragment>
     ));
