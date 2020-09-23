@@ -5,7 +5,7 @@ import {
     useLocation
 } from 'react-router-dom';
 import { Usage } from './Usage';
-import { ComponentApi } from './ComponentApi';
+import { Docs } from './Docs';
 import { StyleGuide } from './StyleGuide';
 import { NotFound } from './NotFound';
 
@@ -23,8 +23,8 @@ export const PageContent = React.memo(function PageContent() {
                 <Route exact path="/">
                     <Usage />
                 </Route>
-                <Route path="/components">
-                    <ComponentApi />
+                <Route path="/documentation">
+                    <Docs />
                 </Route>
                 <Route path="/style-guide">
                     <StyleGuide />

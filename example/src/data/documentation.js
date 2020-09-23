@@ -580,17 +580,32 @@ const menuStateHook = {
         </>
 };
 
-export const components = [
-    menu,
-    menuItem,
-    menuButton,
-    submenu,
-    menuRadioGroup,
-    menuHeader,
-    menuDivider,
-    controlledMenu
-];
+export const components = {
+    id: 'components',
+    title: 'Components',
+    list: [
+        menu,
+        menuItem,
+        menuButton,
+        submenu,
+        menuRadioGroup,
+        menuHeader,
+        menuDivider,
+        controlledMenu
+    ]
+};
 
-export const hooks = [
-    menuStateHook,
-];
+export const hooks = {
+    id: 'hooks',
+    title: 'Hooks',
+    list: [
+        menuStateHook,
+    ]
+};
+
+export const accessibility = {
+    id: 'accessibility',
+    title: 'Accessibility',
+    list: [
+    ]
+};

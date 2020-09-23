@@ -12,7 +12,7 @@ export const Header = React.memo(function Header() {
                         <NavLink className="nav-link" exact to="/">Home</NavLink>
                     </li>
                     <li>
-                        <NavLink className="nav-link" to="/components">Component API</NavLink>
+                        <NavLink className="nav-link" to="/documentation">Documentation</NavLink>
                     </li>
                     <li>
                         <NavLink className="nav-link" to="/style-guide">Style Guide</NavLink>
