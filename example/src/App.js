@@ -1,14 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import {
-    BrowserRouter as Router,
-    Switch,
-    Route
-} from 'react-router-dom';
+import { BrowserRouter as Router } from 'react-router-dom';
 import { DomSizeContext, ToastContext } from './utils';
 import { Header } from './components/Header';
-import { Usage } from './components/Usage';
-import { ComponentApi } from './components/ComponentApi';
-import { StyleGuide } from './components/StyleGuide';
+import { PageContent } from './components/PageContent';
 import { Footer } from './components/Footer';
 
 
@@ -50,21 +44,7 @@ const App = () => {
             <ToastContext.Provider value={setToast}>
                 <Router>
                     <Header />
-
-                    <div id="content">
-                        <Switch>
-                            <Route exact path="/">
-                                <Usage />
-                            </Route>
-                            <Route path="/components">
-                                <ComponentApi />
-                            </Route>
-                            <Route path="/style-guide">
-                                <StyleGuide />
-                            </Route>
-                        </Switch>
-                    </div>
-
+                    <PageContent />
                     <Footer />
                     {toast && <div className="app-toast" role="alert">{toast}</div>}
                 </Router>

@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useLayoutEffect } from 'react';
 import { HashLink as Link } from 'react-router-hash-link';
 
 
@@ -21,7 +21,7 @@ export const HashHeading = React.memo(function HashHeading({
         setHover(false);
     }
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         setFontSize(getComputedStyle(ref.current).getPropertyValue('font-size'));
     }, []);
 
@@ -38,7 +38,7 @@ export const HashHeading = React.memo(function HashHeading({
                 },
                 title)}
 
-            <Link className="hash-link"                
+            <Link className="hash-link"
                 to={`#${id}`}
                 smooth={smooth}
                 style={{ fontSize, opacity: hover ? 1 : 0 }}

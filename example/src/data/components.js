@@ -31,7 +31,7 @@ const menuItemModifiers = (
     <ul>
         <li><code>hover: bool</code> indicates if the menu item is being hovered and has focus.</li>
         <li><code>active: bool</code> indicates if the menu item is active (pressed).</li>
-        <li><code>checked: bool</code> indicates if the menu item is checked in both radio and checkbox item.</li>
+        <li><code>checked: bool</code> indicates if the menu item is checked if it's a radio or checkbox item.</li>
         <li><code>disabled: bool</code> indicates if the menu item is disabled.</li>
         <li><code>anchor: bool</code> indicates if the menu item has a URL link.</li>
         <li><code>type: string</code> 'radio' in radio item, 'checkbox' in checkbox item,
@@ -57,8 +57,12 @@ const keepMountedProp = {
     name: 'keepMounted',
     type: 'boolean',
     defaultVal: 'true',
-    desc: <p>If <code>true</code>, menu keeps mounted in the DOM and is hidden by CSS
-    when it's closed. Otherwise, menu is unmounted from DOM when closed.</p>
+    desc: <>
+        <p>If <code>true</code>, menu keeps mounted in the DOM and is hidden by CSS
+        when it's closed. Otherwise, menu is unmounted from DOM when closed.</p>
+        <p>Please note menu won't be created and mounted into DOM until it's opened for the first time,
+            even if <code>keepMounted</code> is <code>true</code>.</p>
+    </>
 };
 
 const menuChildrenProp = {
@@ -443,7 +447,7 @@ const controlledMenu = {
             type: 'object',
             desc:
                 <>
-                    <p><em>Use this prop only for context menu.</em> See an <Link to={'/#context-menu'}>example</Link></p>
+                    <p><em>Use this prop only for context menu.</em> See an <Link to={'/#context-menu'}>example</Link>.</p>
                     <p>An object describes viewport coordinates against which context menu will be positioned.</p>
                     <p>It has the shape of <code>{'{ x: number, y: number }'}</code>.</p>
                 </>
@@ -479,7 +483,7 @@ const controlledMenu = {
             type: 'object',
             desc:
                 <>
-                    <p>Sets which menu item receives focus(hover) when menu opens.</p>
+                    <p>Sets which menu item receives focus (hover) when menu opens.</p>
                     <p>You will usually set this prop when the menu is opened by keyboard events.
                         Recommend using this prop with {useMenuStateLink}.</p>
                     <p>It has the shape of <code>{'{ position: string }'}</code>. The <code>position</code> can be one of the following values:</p>
@@ -514,7 +518,7 @@ const menuStateHook = {
     desc:
         <>
             <p><code>useMenuState</code> is a custom Hook that helps manage the states of {controlledMenuLink}.</p>
-            <p>The Hook returns several states which are used by <code>ControlledMenu</code> and can be spread to its props. See an <Link to={'/#use-menu-state'}>example</Link></p>
+            <p>The Hook returns several states which are used by <code>ControlledMenu</code> and can be spread to its props. See an <Link to={'/#use-menu-state'}>example</Link>.</p>
             <p>It accepts a boolean parameter <code>keepMounted</code>. If <code>true</code>, menu keeps
             mounted in the DOM and is hidden by CSS when it's closed. Otherwise, menu is unmounted from DOM when closed. The default value is <code>true</code>.</p>
             <p>It returns an object with the following properties:</p>
@@ -528,7 +532,7 @@ const menuStateHook = {
                 <li><code>toggleMenu: function</code> accepts the same parameter as <code>openMenu</code>.</li>
             </ul>
             <p>Using this Hook can take advantage of lazily creating menu and its descendent items, which means menu is
-            not created and mounted into DOM until a user opens it for the first time.
+            not created and mounted into DOM until it's opened for the first time.
             The {menuLink} component uses this hook internally to manage its states.</p>
         </>
 };
