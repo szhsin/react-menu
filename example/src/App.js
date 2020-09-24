@@ -10,6 +10,7 @@ const App = () => {
     const [domSize, setDomSize] = useState({});
     useEffect(() => {
         const handleResize = () => {
+            // Table of Contents
             const toc = document.querySelector('.table-contents');
             if (!toc) return;
             

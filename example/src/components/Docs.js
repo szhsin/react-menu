@@ -1,10 +1,10 @@
 import React from 'react';
-import { HashHeading } from './HashHeading';
 import {
     components as componentsDoc,
     hooks as hookDoc,
     accessibility as accessibilityDoc
 } from '../data/documentation';
+import { HashHeading } from './HashHeading';
 import { TableContents } from './TableContents';
 import { ApiDoc } from './ApiDoc';
 
