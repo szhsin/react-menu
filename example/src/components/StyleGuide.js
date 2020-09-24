@@ -1,6 +1,8 @@
 import React from 'react';
 import {
-    stylesheet as stylesheetDoc
+    stylesheet as stylesheetDoc,
+    className as classNameDoc,
+    styles as stylesDoc
 } from '../data/styleGuide';
 import { HashHeading } from './HashHeading';
 import { TableContents } from './TableContents';
@@ -10,7 +12,9 @@ import { StyleDoc } from './StyleDoc';
 export const StyleGuide = React.memo(function StyleGuide() {
 
     const docs = [
-        stylesheetDoc
+        stylesheetDoc,
+        classNameDoc,
+        stylesDoc
     ]; 
 
     return (
@@ -24,7 +28,7 @@ export const StyleGuide = React.memo(function StyleGuide() {
                     <React.Fragment key={id}>
                         <HashHeading id={id} title={title} />
                         {desc}
-                        {list.map(item => <StyleDoc key={item.id} {...item} />)}
+                        {list && list.map(item => <StyleDoc key={item.id} {...item} />)}
                     </React.Fragment>
                 ))}
             </main >

@@ -131,3 +131,10 @@ code {
         @include mixins.reset-list;
     }
 }
+
+.lib-name {
+    font-weight: 600;
+    background-color: #e1e2e3;
+    padding: 0 0.2rem;
+    border-radius: 2px;
+}

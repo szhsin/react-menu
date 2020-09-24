@@ -1,4 +1,6 @@
 import React from 'react';
+import { LibName } from '../components/LibName';
+import { HashLink as Link } from 'react-router-hash-link';
 
 
 const bem = block => element => modifier => {
@@ -15,11 +17,14 @@ export const stylesheet = {
     id: 'stylesheets',
     title: 'Stylesheets',
     desc:
-        <p><b>rc-menu</b> uses regular stylesheets to style components. It follows
+        <>
+            <p><LibName /> uses regular stylesheets to style components. It follows
          the <a href="http://getbem.com/naming/" target="_blank" rel="noopener noreferrer">BEM methodology</a> to name CSS selectors.
          You are able to overwrite the default styles by placing your stylesheets after its own. All default styles use CSS selectors
          with the lowest possible specificity, and you could always precede your selectors
-         with <code>.rc-menu-container</code> in case a specific style cannot be overwritten.</p>,
+         with <code>.rc-menu-container</code> in case a specific style cannot be overwritten.</p>
+            <p>Using stylesheets is the most efficient and recommended approach to style <LibName />.</p>
+        </>,
     list: [
         {
             id: 'menu',
@@ -121,3 +126,32 @@ export const stylesheet = {
         }
     ]
 };
+
+export const className = {
+    id: 'class-name',
+    title: 'className prop',
+    desc:
+        <>
+            <p>This approach can be used to style a specific menu in the page differently.</p>
+            <p>Every component accepts a <code>className</code> prop which allows you to suppy a custom CSS class.</p>
+            <p>Optionally, you may pass a function to the prop and receive addtional states about the component.</p>
+            <p>For more details, please refer to the <code>className</code> prop under
+            each <Link to={'/documentation#menu'}>component</Link>.</p>
+        </>
+}
+
+export const styles = {
+    id: 'styles',
+    title: 'styles prop',
+    desc:
+        <>
+            <p>This is another approach that can be used to style a specific menu in the page differently.</p>
+            <p>Every component accepts a <code>styles</code> prop as an object which allows you to add inline styles.
+            Normal styles are put in the object directly just like React's <code>style</code> prop, and styles which
+            are only applied to specific component states are written in nested objects under coresponding keys.
+            E.g. <code>{"{ color: 'green', hover: { color: 'red' } }"}</code>.</p>
+            <p>Optionally, you may pass a function to the prop and receive states about the component.</p>
+            <p>For more details, please refer to the <code>styles</code> prop under
+            each <Link to={'/documentation#menu'}>component</Link>.</p>
+        </>
+}
