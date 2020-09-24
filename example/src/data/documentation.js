@@ -237,7 +237,7 @@ const menu = {
                     </ul>
                     <p>Please note {menuButtonLink} has one additional benefit that it has
                     managed <code>aria-haspopup</code> and <code>aria-expanded</code> attributes.
-                    When using a <code>button</code> element or your own React component, it's your responsibility
+                    When using a <code>button</code> element or your own React component, it's your job
                     to set these <code>aria</code> attributes if you need correct accessibility support.</p>
                 </>
         }
@@ -473,6 +473,9 @@ const controlledMenu = {
             <p>For example, you might need to open a menu when something on the page is hovered by a mouse, or
             you need to position the menu against something other than the menu button. <code>ControlledMenu</code> can
             be also use to implement a <Link to={'/#context-menu'}>context menu</Link>.</p>
+            <p>When using <code>ControlledMenu</code>, it's your job to set focus to the desirable item after menu opens
+            and move focus back to your menu button after it closes, which can be done by setting <code>menuItemFocus</code>, and in 
+            the <code>onClose</code> event, respectively. However, depending on your requirements, both of them might be optional.</p>
         </>,
     rows: [
         ...menuPropsBase,
@@ -492,7 +495,7 @@ const controlledMenu = {
                 <>
                     <p><em>Use this prop only for context menu.</em> See an <Link to={'/#context-menu'}>example</Link>.</p>
                     <p>An object describes viewport coordinates against which context menu will be positioned.</p>
-                    <p>It has the shape of <code>{'{ x: number, y: number }'}</code>.</p>
+                    <p>It's an object with the shape of <code>{'{ x: number, y: number }'}</code>.</p>
                 </>
         },
         {
@@ -529,7 +532,7 @@ const controlledMenu = {
                     <p>Sets which menu item receives focus (hover) when menu opens.</p>
                     <p>You will usually set this prop when the menu is opened by keyboard events.
                         Recommend using this prop with {menuStateHookLink}.</p>
-                    <p>It has the shape of <code>{'{ position: string }'}</code>. The <code>position</code> can be one of the following values:</p>
+                    <p>It's an object with the shape of <code>{'{ position: string }'}</code>. The <code>position</code> can be one of the following values:</p>
                     <ul>
                         <li><code>'initial'</code> don't set focus.</li>
                         <li><code>'first'</code> focus the first item in the menu.</li>
@@ -580,6 +583,31 @@ const menuStateHook = {
         </>
 };
 
+const keyboard = {
+    id: 'keyboard',
+    title: 'Keyboard',
+    desc:
+        <>
+            <p><b>react-menu</b> supports the following keyboard interactions:</p>
+            <h3>Menu</h3>
+            <ul className="keyboard">
+                <li><span>Return</span> activates a menu item and closes the menu.</li>
+                <li><span>Space</span> activates a menu item and closes the menu; for radio and checkbox item, activates the menu item without closing the menu.</li>
+                <li><span>Down Arrow</span> moves focus to the next item, wrapping from the last to the first.</li>
+                <li><span>Up Arrow</span> moves focus to the previous item, wrapping from the first to the last.</li>
+                <li><span>Right Arrow</span> When focus is in a submenu item, opens the submenu.</li>
+                <li><span>Left Arrow</span> Closes a submenu if it is open.</li>
+                <li><span>Esc</span> Closes a menu and move focus to its associated menu button.</li>
+            </ul>
+            <h3>MenuButton</h3>
+            <ul className="keyboard">
+                <li><span>Return | Space</span> opens the associated menu.</li>
+                <li><span>Down Arrow</span> opens the associated menu and moves focus to the first menu item.</li>
+                <li><span>Up Arrow</span> opens the associated menu and moves focus to the last menu item.</li>
+            </ul>
+        </>
+}
+
 export const components = {
     id: 'components',
     title: 'Components',
@@ -606,6 +634,11 @@ export const hooks = {
 export const accessibility = {
     id: 'accessibility',
     title: 'Accessibility',
+    desc:
+        <p><b>react-menu</b> supports <code>aria</code> roles, states, and properties which aims to fully comply with
+            the <a href="https://www.w3.org/TR/wai-aria-practices/#menu" target="_blank" rel="noopener noreferrer">WAI-ARIA Authoring Practices 1.1</a>.
+            For more details, please refer to the website.</p>,
     list: [
+        keyboard
     ]
 };
