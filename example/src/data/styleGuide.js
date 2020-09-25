@@ -133,8 +133,8 @@ export const className = {
     desc:
         <>
             <p>This approach can be used to style a specific menu in the page differently.</p>
-            <p>Every component accepts a <code>className</code> prop which allows you to suppy a custom CSS class.</p>
-            <p>Optionally, you may pass a function to the prop and receive addtional states about the component.</p>
+            <p>Every component accepts a <code>className</code> prop which allows you to supply a custom CSS class.</p>
+            <p>Optionally, you may pass a function to the prop and receive additional states about the component.</p>
             <p>For more details, please refer to the <code>className</code> prop under
             each <Link to={'/documentation#menu'}>component</Link>.</p>
         </>
@@ -147,8 +147,8 @@ export const styles = {
         <>
             <p>This is another approach that can be used to style a specific menu in the page differently.</p>
             <p>Every component accepts a <code>styles</code> prop as an object which allows you to add inline styles.
-            Normal styles are put in the object directly just like React's <code>style</code> prop, and styles which
-            are only applied to specific component states are written in nested objects under coresponding keys.
+            Regular styles are put in the object directly just like React's <code>style</code> prop, and styles which
+            are only applied to specific component states are written in nested objects under corresponding keys.
             E.g. <code>{"{ color: 'green', hover: { color: 'red' } }"}</code>.</p>
             <p>Optionally, you may pass a function to the prop and receive states about the component.</p>
             <p>For more details, please refer to the <code>styles</code> prop under

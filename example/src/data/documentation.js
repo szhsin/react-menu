@@ -1,5 +1,7 @@
 import React from 'react';
+import { LibName } from '../components/LibName';
 import { HashLink as Link } from 'react-router-hash-link';
+
 
 const RETURN_KEY = '13(Return)';
 const SPACE_KEY = '32(Space)';
@@ -162,7 +164,7 @@ const menuPropsBase = [
         desc:
             <>
                 <p>Can be 'start', 'center', or 'end'.</p>
-                <p>It sets alignment of menu against menu button.
+                <p>It sets alignment of menu with menu button.
                     It has effect <strong>only</strong> when <code>direction</code> is
                     set to 'top' or 'bottom'.</p>
                 <p>The alignment of menu is subject to the available viewport space and
@@ -172,6 +174,7 @@ const menuPropsBase = [
     {
         name: 'direction',
         type: 'string',
+        defaultVal: "'bottom'",
         desc:
             <>
                 <p>Can be 'left', 'right', 'top', or 'bottom'.</p>
@@ -231,7 +234,7 @@ const menu = {
                     </ul>
                     <p>If a React component is provided, it needs to implement the following requirements:</p>
                     <ul>
-                        <li><span>Accepts a </span><code>ref</code> prop that is forwarded to the element against which
+                        <li><span>Accepts a </span><code>ref</code> prop that is forwarded to the element to which
                         menu will be positioned. The element should be able to receive focus.</li>
                         <li><span>Accepts </span><code>onClick</code> and <code>onKeyDown</code> event props.</li>
                     </ul>
@@ -250,7 +253,7 @@ const menuItem = {
     desc:
         <>
             <p><code>MenuItem</code> represents an item under a menu which can be activated.</p>
-            <p>It can a normal menu item, a checkbox item (<code>type="checkbox"</code>),
+            <p>It can a regular menu item, a checkbox item (<code>type="checkbox"</code>),
             or a radio item (direct child of {radioGroupLink}).</p>
         </>,
     rows: [
@@ -471,10 +474,10 @@ const controlledMenu = {
             <p>It's different from a {menuLink} that <code>ControlledMenu</code> allows you to control how and when
             a menu is open or closed, rather than controlled by a menu button.</p>
             <p>For example, you might need to open a menu when something on the page is hovered by a mouse, or
-            you need to position the menu against something other than the menu button. <code>ControlledMenu</code> can
+            you need to position the menu to something other than the menu button. <code>ControlledMenu</code> can
             be also use to implement a <Link to={'/#context-menu'}>context menu</Link>.</p>
             <p>When using <code>ControlledMenu</code>, it's your job to set focus to the desirable item after menu opens
-            and move focus back to your menu button after it closes, which can be done by setting <code>menuItemFocus</code>, and in 
+            and move focus back to your menu button after it closes, which can be done by setting <code>menuItemFocus</code>, and in
             the <code>onClose</code> event, respectively. However, depending on your requirements, both of them might be optional.</p>
         </>,
     rows: [
@@ -494,7 +497,7 @@ const controlledMenu = {
             desc:
                 <>
                     <p><em>Use this prop only for context menu.</em> See an <Link to={'/#context-menu'}>example</Link>.</p>
-                    <p>An object describes viewport coordinates against which context menu will be positioned.</p>
+                    <p>An object describes viewport coordinates to which context menu will be positioned.</p>
                     <p>It's an object with the shape of <code>{'{ x: number, y: number }'}</code>.</p>
                 </>
         },
@@ -503,7 +506,7 @@ const controlledMenu = {
             type: 'object',
             desc:
                 <>
-                    <p>A ref object attached to a DOM element against which menu will be positioned. <em>Not needed for context menu.</em></p>
+                    <p>A ref object attached to a DOM element to which menu will be positioned. <em>Not needed for context menu.</em></p>
                     <p>Supports ref created by <code>React.createRef</code> or <code>useRef</code> Hook.
                      Doesn't support callback ref.</p>
                 </>
@@ -588,7 +591,7 @@ const keyboard = {
     title: 'Keyboard',
     desc:
         <>
-            <p><b>react-menu</b> supports the following keyboard interactions:</p>
+            <p><LibName /> supports the following keyboard interactions:</p>
             <h3>Menu</h3>
             <ul className="keyboard">
                 <li><span>Return</span> activates a menu item and closes the menu.</li>
@@ -635,7 +638,7 @@ export const accessibility = {
     id: 'accessibility',
     title: 'Accessibility',
     desc:
-        <p><b>react-menu</b> supports <code>aria</code> roles, states, and properties which aims to fully comply with
+        <p><LibName /> supports <code>aria</code> roles, states, and properties which aims to fully comply with
             the <a href="https://www.w3.org/TR/wai-aria-practices/#menu" target="_blank" rel="noopener noreferrer">WAI-ARIA Authoring Practices 1.1</a>.
             For more details, please refer to the website.</p>,
     list: [

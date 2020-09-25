@@ -34,7 +34,7 @@ export const Example = React.memo(function Example({
         <section className={bem(blockName)} ref={ref} aria-labelledby={id}>
             <HashHeading id={id} title={title} heading="h2" />
 
-            <p>{desc}</p>
+            {desc}
             <div {...restProps} className={bem(blockName, 'demo')}>
                 {children}
             </div>

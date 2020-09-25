@@ -1,3 +1,13 @@
+import React from 'react';
+import { LibName } from '../components/LibName';
+import { HashLink as Link } from 'react-router-hash-link';
+
+const menuLink = <Link to={'/documentation#menu'}>Menu</Link>;
+const menuItemLink = <Link to={'/documentation#menu-item'}>MenuItem</Link>;
+const menuButtonLink = <Link to={'/documentation#menu-button'}>MenuButton</Link>;
+const menuStateHookLink = <Link to={'/documentation#use-menu-state'}>useMenuState</Link>;
+const styleGuideLink = <Link to={'/style-guide'}>style guide</Link>;
+
 export const codeExamples = {
     menu: {
         id: 'basic-menu',
@@ -10,7 +20,9 @@ export const codeExamples = {
 
                 title: 'Basic menu',
 
-                desc: '',
+                desc:
+                    <p>The most basic menu consists of several <code>MenuItem</code>s wrapped
+                    in a <code>Menu</code>, and is controlled by a <code>MenuButton</code>.</p>,
 
                 source:
                     `<Menu menuButton={<MenuButton>Open menu</MenuButton>}>
@@ -44,7 +56,9 @@ export default function Example() {
 
                 title: 'Submenu',
 
-                desc: 'The Basic menu',
+                desc:
+                    <p><code>SubMenu</code> can be placed in a <code>Menu</code> and has its
+                    own <code>MenuItem</code>s as children. You might also create nested submenus under a submenu.</p>,
 
                 source:
                     `<Menu menuButton={<MenuButton>Open menu</MenuButton>}>
@@ -87,7 +101,13 @@ export default function Example() {
 
                 title: 'Event handling',
 
-                desc: 'The Basic menu',
+                desc:
+                    <>
+                        <p>When a menu item is activated, the <code>onClick</code> event first fires on
+                        the menu item and then bubbles up to the root <code>Menu</code> component. To stop
+                        bubbling, return <code>false</code> from the menu item event handler.</p>
+                        <p>For details of the event object, please refer to {menuItemLink}.</p>
+                    </>,
 
                 source:
                     `const [text, setText] = useState('');
@@ -192,7 +212,9 @@ export default function Example() {
 
                 title: 'Radio group',
 
-                desc: 'The Basic menu',
+                desc:
+                    <p>You could make menu items behave like radio buttons by wrapping them under a <code>MenuRadioGroup</code>.
+                    The children menu item which has the same value (strict equality ===) as the radio group is marked as checked.</p>,
 
                 source:
                     `const [textColor, setTextColor] = useState('red');
@@ -246,7 +268,8 @@ export default function Example() {
 
                 title: 'Checkbox',
 
-                desc: 'The Basic menu',
+                desc:
+                    <p>You could make menu items behave like checkboxs by setting <code>type="checkbox"</code>.</p>,
 
                 source:
                     `const [isBold, setBold] = useState(true);
@@ -315,7 +338,9 @@ export default function Example() {
 
                 title: 'Header and divider',
 
-                desc: 'The Basic menu',
+                desc:
+                    <p>You could use <code>MenuHeader</code> and <code>MenuDivider</code> to group related menu items.
+                    In addition, <code>MenuHeader</code> can wrap anything for presentational purposes.</p>,
 
                 source:
                     `<Menu menuButton={<MenuButton>Open menu</MenuButton>}>
@@ -366,7 +391,7 @@ export default function Example() {
 
                 title: 'Combined example',
 
-                desc: 'The Basic menu',
+                desc: <p>An example combines the usage of several components.</p>,
 
                 fullSource:
                     `import React, { useState } from 'react';
@@ -446,7 +471,10 @@ export default function Example() {
 
                 title: 'Link and disabled',
 
-                desc: 'The Basic menu',
+                desc:
+                    <p><code>MenuItem</code> can be made a hyperlink by giving it a <code>href</code> prop. Even if
+                    it's a link, the <code>onClick</code> event still fires as normal. You might also disable
+                    a menu item using the <code>disabled</code> prop.</p>,
 
                 source:
                     `<Menu menuButton={<MenuButton>Open menu</MenuButton>}>
@@ -455,7 +483,7 @@ export default function Example() {
         target="_blank">
         GitHub (new window)
     </MenuItem>
-    <MenuItem>Normal item</MenuItem>
+    <MenuItem>Regular item</MenuItem>
     <MenuItem disabled>Disabled item</MenuItem>
 </Menu>`,
 
@@ -476,7 +504,7 @@ export default function Example() {
                 target="_blank">
                 GitHub (new window)
             </MenuItem>
-            <MenuItem>Normal item</MenuItem>
+            <MenuItem>Regular item</MenuItem>
             <MenuItem disabled>Disabled item</MenuItem>
         </Menu>
     );
@@ -488,7 +516,10 @@ export default function Example() {
 
                 title: 'Icon and image',
 
-                desc: 'The Basic menu',
+                desc:
+                    <p><LibName /> doesn't include any imagery. However, you are free to use you own or
+                third-party icons and images, as you could wrap anything in a <code>MenuItem</code>. This
+                example use Google's Material icons.</p>,
 
                 source:
                     `<Menu menuButton={<MenuButton>Open menu</MenuButton>}>
@@ -543,7 +574,13 @@ export default function Example() {
 
                 title: 'Hover and active',
 
-                desc: 'The Basic menu',
+                desc:
+                    <>
+                        <p><code>MenuItem</code> manages a number of internal states such as 'hover' and 'active'.
+                        If you need to display different contents under different states, you are able to
+                        use <code>children</code> as a render prop and pass it a callback function.</p>
+                        <p>For more menu item states, please refer to {menuItemLink}.</p>
+                    </>,
 
                 source:
                     `<Menu menuButton={<MenuButton>Open menu</MenuButton>}>
@@ -611,7 +648,9 @@ export default function Example() {
 
                 title: 'Menu open state',
 
-                desc: 'The Basic menu',
+                desc:
+                    <p>If you need to change the contents of a menu button when the menu opens,
+                    you could use the <code>menuButton</code> as a render prop and pass it a callback function.</p>,
 
                 source:
                     `<Menu menuButton={({ open }) =>
@@ -647,7 +686,16 @@ export default function Example() {
 
                 title: 'Customised button',
 
-                desc: 'The Basic menu',
+                desc:
+                    <>
+                        <p>You are free to use a native button element with <code>Menu</code>, or use your
+                        own React button component which implements a forwarding ref and
+                        accepts <code>onClick</code> and <code>onKeyDown</code> event props.</p>
+                        <p><code>Menu</code> also works well with third-party React libraries,
+                        such as the Material-UI.</p>
+                        <p>The benefit of {menuButtonLink} is its has additional <code>aria</code> attributes, and you will
+                        always be able to style it by following the {styleGuideLink}.</p>
+                    </>,
 
                 source:
                     `<Menu menuButton={
@@ -690,7 +738,12 @@ export default function Example() {
 
                 title: 'Direction',
 
-                desc: 'The Basic menu',
+                desc:
+                    <>
+                        <p>You could control the direction in which a menu expands using the <code>direction</code> prop.</p>
+                        <p>Please note the actual direction might be different depending on the available
+                            viewport space, please see {menuLink} for more details.</p>
+                    </>,
 
                 source:
                     `['top', 'left', 'right', 'bottom'].map(direction =>
@@ -728,7 +781,9 @@ export default function Example() {
 
                 title: 'Alignment',
 
-                desc: 'The Basic menu',
+                desc:
+                    <p>You could control how a menu aligns with its menu button using the <code>align</code> prop.
+                    It has effect <strong>only</strong> when <code>direction</code> is set to 'top' or 'bottom'.</p>,
 
                 source:
                     `['start', 'center', 'end'].map(align =>
@@ -774,7 +829,14 @@ export default function Example() {
 
                 title: 'Managing state',
 
-                desc: 'The Basic menu',
+                desc:
+                    <>
+                        <p>In some use cases you may need to control how and when a menu is open or closed, and it can
+                            be implemented using a <code>ControlledMenu</code>.</p>
+                        <p>The minimum props you need to provide are a boolean <code>isOpen</code> state, and
+                        a <code>ref</code> of an element to which menu will be positioned. You also need to
+                        update <code>isOpen</code> in response to the <code>onClose</code> event.</p>
+                    </>,
 
                 source:
                     `const [isOpen, setOpen] = useState(false);
@@ -827,7 +889,13 @@ export default function Example() {
 
                 title: 'Context menu',
 
-                desc: 'The Basic menu',
+                desc:
+                    <>
+                        <p>Context menu is implemented using a <code>ControlledMenu</code>.</p>
+                        <p>The minimum props you need to provide are a boolean <code>isOpen</code> state, and
+                        an <code>anchorPoint</code> of viewport coordinates to which menu will be positioned. You also need to
+                        update <code>isOpen</code> in response to the <code>onClose</code> event.</p>
+                    </>,
 
                 source:
                     `const [isOpen, setOpen] = useState(false);
@@ -884,7 +952,14 @@ export default function Example() {
 
                 title: 'useMenuState',
 
-                desc: 'The Basic menu',
+                desc:
+                    <>
+                        <p>To fully make use of functionalities provided by <code>ControlledMenu</code>, you
+                        need to give it three props: <code>isMounted, isOpen, menuItemFocus</code>. To ease this
+                        task, you could use the <code>useMenuState</code> Hook which returns these three states and
+                        methods that manage them.</p>
+                        <p>Please see {menuStateHookLink} for more details.</p>
+                    </>,
 
                 source:
                     `const { openMenu, closeMenu, toggleMenu,

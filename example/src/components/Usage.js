@@ -292,7 +292,7 @@ function LinkAndDisabledExample() {
                     target="_blank">
                     GitHub (new window)
                 </MenuItem>
-                <MenuItem>Normal item</MenuItem>
+                <MenuItem>Regular item</MenuItem>
                 <MenuItem disabled>Disabled item</MenuItem>
             </Menu>
         </Example>
@@ -351,10 +351,12 @@ function OpenStateExample() {
 
     return (
         <Example data={codeExamples.menuButton.list.openState} >
-            <Menu menuButton={({ open }) =>
-                <MenuButton styles={{ minWidth: '5rem' }}>
-                    {open ? 'Close' : 'Open'}
-                </MenuButton>}>
+            <Menu menuButton={
+                ({ open }) =>
+                    <MenuButton styles={{ minWidth: '5rem' }}>
+                        {open ? 'Close' : 'Open'}
+                    </MenuButton>
+            }>
                 <MenuItem>New File</MenuItem>
                 <MenuItem>Save</MenuItem>
                 <MenuItem>Close Window</MenuItem>
