@@ -1,34 +1,24 @@
 import React from 'react';
-import {
-    components as componentsDoc,
-    hooks as hookDoc,
-    accessibility as accessibilityDoc
-} from '../data/documentation';
+import data from '../data/documentation';
 import { HashHeading } from './HashHeading';
 import { TableContents } from './TableContents';
-import { ApiDoc } from './ApiDoc';
+import { DocSection } from './DocSection';
 
 
 export const Docs = React.memo(function Docs() {
 
-    const docs = [
-        componentsDoc,
-        hookDoc,
-        accessibilityDoc
-    ];
-
     return (
         <React.Fragment>
             <TableContents>
-                {docs}
+                {data}
             </TableContents>
 
             <main id="documentation">
-                {docs.map(({ id, title, desc, list }) => (
+                {data.map(({ id, title, desc, list }) => (
                     <React.Fragment key={id}>
                         <HashHeading id={id} title={title} />
                         {desc}
-                        {list.map(item => <ApiDoc key={item.id} {...item} />)}
+                        {list.map(item => <DocSection key={item.id} {...item} />)}
                     </React.Fragment>
                 ))}
             </main >

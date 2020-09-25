@@ -13,7 +13,7 @@ const bem = block => element => modifier => {
 const menuClass = bem('.rc-menu');
 const menuItemClass = menuClass('item');
 
-export const stylesheet = {
+const stylesheet = {
     id: 'stylesheets',
     title: 'Stylesheets',
     desc:
@@ -127,7 +127,7 @@ export const stylesheet = {
     ]
 };
 
-export const className = {
+const classNameProp = {
     id: 'class-name',
     title: 'className prop',
     desc:
@@ -140,7 +140,7 @@ export const className = {
         </>
 }
 
-export const styles = {
+const stylesProp = {
     id: 'styles',
     title: 'styles prop',
     desc:
@@ -155,3 +155,5 @@ export const styles = {
             each <Link to={'/documentation#menu'}>component</Link>.</p>
         </>
 }
+
+export default [stylesheet, classNameProp, stylesProp];

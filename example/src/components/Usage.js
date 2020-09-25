@@ -12,44 +12,15 @@ import {
 } from '@szhsin/react-menu';
 import { TableContents } from './TableContents';
 import { Example } from './Example';
-import { codeExamples } from '../data/codeExamples';
+import data, * as codeExamples from '../data/codeExamples';
 
 
 export const Usage = React.memo(function Usage() {
 
-    const getExampleList = (examples) => {
-        return Object.keys(examples).map(key => {
-            const example = examples[key];
-            let list = null;
-            if (example.list) {
-                list = getExampleList(example.list);
-            }
-
-            return {
-                id: example.id,
-                title: example.title,
-                list
-            };
-        });
-    }
-
-    const tableContents = [
-        {
-            id: 'installation',
-            title: 'Installation'
-        },
-
-        {
-            id: 'usage',
-            title: 'Usage',
-            list: getExampleList(codeExamples)
-        }
-    ];
-
     return (
         <React.Fragment>
             <TableContents>
-                {tableContents}
+                {data}
             </TableContents>
 
             <main id="usage">
@@ -82,7 +53,7 @@ export const Usage = React.memo(function Usage() {
 function BasicMenuExample() {
 
     return (
-        <Example initialFullSource={true} data={codeExamples.menu.list.basicMenu} >
+        <Example initialFullSource={true} data={codeExamples.basicMenu} >
             <Menu menuButton={<MenuButton>Open menu</MenuButton>}>
                 <MenuItem>New File</MenuItem>
                 <MenuItem>Save</MenuItem>
@@ -95,13 +66,17 @@ function BasicMenuExample() {
 function SubmenuExample() {
 
     return (
-        <Example data={codeExamples.menu.list.subMenu} >
+        <Example data={codeExamples.subMenu} >
             <Menu menuButton={<MenuButton>Open menu</MenuButton>}>
                 <MenuItem>New File</MenuItem>
-                <SubMenu label={'Open Recent'}>
+                <SubMenu label="Open">
                     <MenuItem>index.html</MenuItem>
                     <MenuItem>example.js</MenuItem>
-                    <MenuItem>about.css</MenuItem>
+                    <SubMenu label="Styles">
+                        <MenuItem>about.css</MenuItem>
+                        <MenuItem>home.css</MenuItem>
+                        <MenuItem>index.css</MenuItem>
+                    </SubMenu>
                 </SubMenu>
                 <MenuItem>Save</MenuItem>
             </Menu>
@@ -132,20 +107,20 @@ function EventHandlingExample() {
     }, [text]);
 
     return (
-        <Example data={codeExamples.menu.list.eventHandling} >
+        <Example data={codeExamples.eventHandling} >
             <div className="buttons">
                 <Menu menuButton={<MenuButton>Open menu</MenuButton>}
                     onClick={handleMenuClick}>
 
-                    <MenuItem value={'File'} onClick={handleFileClick}>
+                    <MenuItem value="File" onClick={handleFileClick}>
                         New File
                     </MenuItem>
 
-                    <MenuItem value={'Save'} onClick={handleSaveClick}>
+                    <MenuItem value="Save" onClick={handleSaveClick}>
                         Save
                     </MenuItem>
 
-                    <MenuItem value={'Close'}>Close Window</MenuItem>
+                    <MenuItem value="Close">Close Window</MenuItem>
                 </Menu>
 
                 <button className="btn btn btn-dark"
@@ -163,14 +138,13 @@ function RadioGroupExample() {
     const [textColor, setTextColor] = useState('red');
 
     return (
-        <Example data={codeExamples.menu.list.radioGroup} >
+        <Example data={codeExamples.radioGroup} >
             <Menu menuButton={<MenuButton>Text color</MenuButton>}>
-                <MenuRadioGroup
-                    value={textColor}
+                <MenuRadioGroup value={textColor}
                     onChange={e => setTextColor(e.value)}>
-                    <MenuItem value={'red'}>Red</MenuItem>
-                    <MenuItem value={'green'}>Green</MenuItem>
-                    <MenuItem value={'blue'}>Blue</MenuItem>
+                    <MenuItem value="red">Red</MenuItem>
+                    <MenuItem value="green">Green</MenuItem>
+                    <MenuItem value="blue">Blue</MenuItem>
                 </MenuRadioGroup>
             </Menu>
 
@@ -187,7 +161,7 @@ function CheckBoxExample() {
     const [isUnderline, setUnderline] = useState(false);
 
     return (
-        <Example data={codeExamples.menu.list.checkBox} >
+        <Example data={codeExamples.checkBox} >
             <Menu menuButton={<MenuButton>Text style</MenuButton>}>
                 <MenuItem type="checkbox" checked={isBold}
                     onClick={e => setBold(e.checked)}>
@@ -215,7 +189,7 @@ function CheckBoxExample() {
 function HeaderAndDividerExample() {
 
     return (
-        <Example data={codeExamples.menu.list.headerAndDivider} >
+        <Example data={codeExamples.headerAndDivider} >
             <Menu menuButton={<MenuButton>Open menu</MenuButton>}>
                 <MenuItem>New File</MenuItem>
                 <MenuItem>Save</MenuItem>
@@ -239,7 +213,7 @@ function CombinedExample() {
     const [isUnderline, setUnderline] = useState(false);
 
     return (
-        <Example data={codeExamples.menu.list.combined} >
+        <Example data={codeExamples.combined} >
             <Menu menuButton={<MenuButton>Open menu</MenuButton>}>
                 <MenuItem>New File</MenuItem>
                 <MenuItem>Save</MenuItem>
@@ -285,7 +259,7 @@ function CombinedExample() {
 function LinkAndDisabledExample() {
 
     return (
-        <Example data={codeExamples.menuItem.list.linkAndDisabled} >
+        <Example data={codeExamples.linkAndDisabled} >
             <Menu menuButton={<MenuButton>Open menu</MenuButton>}>
                 <MenuItem href="https://www.google.com/">Google</MenuItem>
                 <MenuItem href="https://github.com/szhsin/react-menu/"
@@ -302,7 +276,7 @@ function LinkAndDisabledExample() {
 function IconAndImageExample() {
 
     return (
-        <Example data={codeExamples.menuItem.list.iconAndImage} >
+        <Example data={codeExamples.iconAndImage} >
             <Menu menuButton={<MenuButton>Open menu</MenuButton>}>
                 <MenuItem>
                     <i className="material-icons">content_cut</i>Cut
@@ -325,7 +299,7 @@ function IconAndImageExample() {
 function HoverAndActiveExample() {
 
     return (
-        <Example data={codeExamples.menuItem.list.hoverAndActive} >
+        <Example data={codeExamples.hoverAndActive} >
             <Menu menuButton={<MenuButton>Open menu</MenuButton>}>
                 <MenuItem>
                     {({ hover, active }) =>
@@ -350,7 +324,7 @@ function HoverAndActiveExample() {
 function OpenStateExample() {
 
     return (
-        <Example data={codeExamples.menuButton.list.openState} >
+        <Example data={codeExamples.openStateButton} >
             <Menu menuButton={
                 ({ open }) =>
                     <MenuButton styles={{ minWidth: '5rem' }}>
@@ -368,7 +342,7 @@ function OpenStateExample() {
 function CustomisedButtonExample() {
 
     return (
-        <Example data={codeExamples.menuButton.list.customised} >
+        <Example data={codeExamples.customisedButton} >
             <Menu menuButton={<button className="btn btn-primary">Open menu</button>}>
                 <MenuItem>New File</MenuItem>
                 <MenuItem>Save</MenuItem>
@@ -390,7 +364,7 @@ function MenuDirectionExample() {
     ));
 
     return (
-        <Example data={codeExamples.menuPlacement.list.direction} >
+        <Example data={codeExamples.direction} >
             {menus}
         </Example>
     );
@@ -408,7 +382,7 @@ function MenuAlignmentExample() {
     ));
 
     return (
-        <Example data={codeExamples.menuPlacement.list.alignment} >
+        <Example data={codeExamples.alignment} >
             {menus}
         </Example>
     );
@@ -420,7 +394,7 @@ function ControlledMenuExample() {
     const ref = useRef(null);
 
     return (
-        <Example data={codeExamples.controlled.list.controlledMenu}>
+        <Example data={codeExamples.controlledMenu}>
             <button ref={ref} className="btn btn-dark"
                 onClick={() => setOpen(true)}>
                 Open menu
@@ -442,7 +416,7 @@ function ContextMenuExample() {
     const [anchorPoint, setAnchorPoint] = useState({ x: 0, y: 0 });
 
     return (
-        <Example data={codeExamples.controlled.list.contextMenu}
+        <Example data={codeExamples.contextMenu}
             onContextMenu={e => {
                 e.preventDefault();
                 setAnchorPoint({ x: e.clientX, y: e.clientY });
@@ -468,7 +442,7 @@ function MenuStateHookExample() {
     const ref = useRef(null);
 
     return (
-        <Example data={codeExamples.controlled.list.useMenuState}>
+        <Example data={codeExamples.menuStateHook}>
             <button ref={ref} className="btn btn-dark"
                 onClick={() => openMenu()}>
                 Open menu
@@ -487,7 +461,7 @@ function MenuStateHookExample() {
 function CustomisedStylingExample() {
 
     return (
-        <Example data={codeExamples.customStyle} >
+        <Example data={codeExamples.stylesProp} >
             <Menu menuButton={<MenuButton>Open menu</MenuButton>}
                 styles={{
                     border: '2px dashed green',

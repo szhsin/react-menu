@@ -1,34 +1,24 @@
 import React from 'react';
-import {
-    stylesheet as stylesheetDoc,
-    className as classNameDoc,
-    styles as stylesDoc
-} from '../data/styleGuide';
+import data from '../data/styleGuide';
 import { HashHeading } from './HashHeading';
 import { TableContents } from './TableContents';
-import { StyleDoc } from './StyleDoc';
+import { StyleSection } from './StyleSection';
 
 
 export const StyleGuide = React.memo(function StyleGuide() {
 
-    const docs = [
-        stylesheetDoc,
-        classNameDoc,
-        stylesDoc
-    ]; 
-
     return (
         <React.Fragment>
             <TableContents>
-                {docs}
+                {data}
             </TableContents>
 
             <main id="style-guide">
-                {docs.map(({ id, title, desc, list }) => (
+                {data.map(({ id, title, desc, list }) => (
                     <React.Fragment key={id}>
                         <HashHeading id={id} title={title} />
                         {desc}
-                        {list && list.map(item => <StyleDoc key={item.id} {...item} />)}
+                        {list && list.map(item => <StyleSection key={item.id} {...item} />)}
                     </React.Fragment>
                 ))}
             </main >

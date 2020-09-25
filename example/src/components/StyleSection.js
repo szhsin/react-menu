@@ -1,7 +1,7 @@
 import React from 'react';
 import { HashHeading } from './HashHeading';
 
-export const StyleDoc = React.memo(function StyleDoc({
+export const StyleSection = React.memo(function StyleSection({
     id,
     title,
     desc,

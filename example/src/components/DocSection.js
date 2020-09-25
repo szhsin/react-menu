@@ -1,7 +1,7 @@
 import React from 'react';
 import { HashHeading } from './HashHeading';
 
-export const ApiDoc = React.memo(function ApiDoc({
+export const DocSection = React.memo(function DocSection({
     id,
     title,
     desc,

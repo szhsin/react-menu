@@ -611,7 +611,7 @@ const keyboard = {
         </>
 }
 
-export const components = {
+const components = {
     id: 'components',
     title: 'Components',
     list: [
@@ -626,7 +626,7 @@ export const components = {
     ]
 };
 
-export const hooks = {
+const hooks = {
     id: 'hooks',
     title: 'Hooks',
     list: [
@@ -634,7 +634,7 @@ export const hooks = {
     ]
 };
 
-export const accessibility = {
+const accessibility = {
     id: 'accessibility',
     title: 'Accessibility',
     desc:
@@ -645,3 +645,5 @@ export const accessibility = {
         keyboard
     ]
 };
+
+export default [components, hooks, accessibility];
