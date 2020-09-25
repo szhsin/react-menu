@@ -12,6 +12,7 @@ import {
 } from '@szhsin/react-menu';
 import { TableContents } from './TableContents';
 import { Example } from './Example';
+import { HashHeading } from './HashHeading';
 import data, * as codeExamples from '../data/codeExamples';
 
 
@@ -24,7 +25,10 @@ export const Usage = React.memo(function Usage() {
             </TableContents>
 
             <main id="usage">
-                <h1>Usage</h1>
+                <HashHeading id={codeExamples.usage.id}
+                    title={codeExamples.usage.title} heading="h1" />
+
+                <ExamleGrouping data={codeExamples.menu} />
                 <BasicMenuExample />
                 <SubmenuExample />
                 <EventHandlingExample />
@@ -32,23 +36,43 @@ export const Usage = React.memo(function Usage() {
                 <CheckBoxExample />
                 <HeaderAndDividerExample />
                 <CombinedExample />
+
+                <ExamleGrouping data={codeExamples.menuItem} />
                 <LinkAndDisabledExample />
                 <IconAndImageExample />
                 <HoverAndActiveExample />
+
+                <ExamleGrouping data={codeExamples.menuButton} />
                 <OpenStateExample />
                 <CustomisedButtonExample />
+
+                <ExamleGrouping data={codeExamples.menuPlacement} />
                 <MenuDirectionExample />
                 <MenuAlignmentExample />
-                <ControlledMenuExample />
+
+                <ExamleGrouping data={codeExamples.controlledMenu} />
+                <ManagingStateExample />
                 <ContextMenuExample />
                 <MenuStateHookExample />
-                <CustomisedStylingExample />
+
+                <ExamleGrouping data={codeExamples.customisedStyle} />
+                <StylesPropExample />
+                <ClassNamePropExample />
             </main >
 
             <div className="place-holder" role="presentation" />
         </React.Fragment>
     );
 });
+
+function ExamleGrouping({ data: { id, title, desc } }) {
+    return (
+        <>
+            <HashHeading id={id} title={title} heading="h2" />
+            {desc}
+        </>
+    );
+}
 
 function BasicMenuExample() {
 
@@ -388,13 +412,13 @@ function MenuAlignmentExample() {
     );
 }
 
-function ControlledMenuExample() {
+function ManagingStateExample() {
 
     const [isOpen, setOpen] = useState(false);
     const ref = useRef(null);
 
     return (
-        <Example data={codeExamples.controlledMenu}>
+        <Example data={codeExamples.managingState}>
             <button ref={ref} className="btn btn-dark"
                 onClick={() => setOpen(true)}>
                 Open menu
@@ -458,11 +482,12 @@ function MenuStateHookExample() {
     );
 }
 
-function CustomisedStylingExample() {
+function StylesPropExample() {
 
     return (
         <Example data={codeExamples.stylesProp} >
             <Menu menuButton={<MenuButton>Open menu</MenuButton>}
+                direction="top" align="center"
                 styles={{
                     border: '2px dashed green',
                     boxShadow: 'none'
@@ -486,3 +511,25 @@ function CustomisedStylingExample() {
         </Example>
     );
 }
+
+function ClassNamePropExample() {
+
+    return (
+        <Example data={codeExamples.classNameProp} >
+            <Menu menuButton={<MenuButton>Open menu</MenuButton>}
+                className="my-menu" direction="top" align="center">
+                <MenuItem>New File</MenuItem>
+                <MenuItem>Save</MenuItem>
+                <MenuItem className={
+                    ({ hover, active }) =>
+                        active ? 'my-menuitem-active'
+                            : hover ? 'my-menuitem-hover'
+                                : 'my-menuitem'
+                }>
+                    I'm special
+                </MenuItem>
+            </Menu>
+        </Example>
+    );
+}
+

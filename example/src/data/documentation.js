@@ -100,7 +100,7 @@ const styleProps = (target, modifiers, className, styles) => [
                     modifiers &&
                     <>
                         <p>When a function is provided, it will be called by passing an object with the
-                        following properties and should return a string.</p>
+                        following properties and should return a CSS class name.</p>
                         {modifiers}
                     </>
                 }
@@ -115,11 +115,11 @@ const styleProps = (target, modifiers, className, styles) => [
                 {
                     modifiers &&
                     <>
-                        <p>Styles targeting modifier properties should be supplied as nested objects.
-                    For more details, please see the style guide.</p>
-                        <p>When a function is provided, it will be called by passing an object with the
-                    following properties and should return a style object.</p>
+                        <p>Styles targeting specific component state should be supplied as nested objects
+                            under each key.</p>
                         {modifiers}
+                        <p>When a function is provided, it will be called by passing an object with the
+                            above properties and should return a <em>flattened</em> style object.</p>
                     </>
                 }
             </>

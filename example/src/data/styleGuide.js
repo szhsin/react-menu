@@ -140,6 +140,21 @@ const classNameProp = {
         </>
 }
 
+const stylesSample = `{
+    color: 'green',
+    hover: {
+        color: 'red'
+    },
+    type: {
+        radio: {
+            color: 'blue'
+        },
+        checkbox: {
+            color: 'black'
+        }
+    }
+}`;
+
 const stylesProp = {
     id: 'styles',
     title: 'styles prop',
@@ -148,8 +163,10 @@ const stylesProp = {
             <p>This is another approach that can be used to style a specific menu in the page differently.</p>
             <p>Every component accepts a <code>styles</code> prop as an object which allows you to add inline styles.
             Regular styles are put in the object directly just like React's <code>style</code> prop, and styles which
-            are only applied to specific component states are written in nested objects under corresponding keys.
-            E.g. <code>{"{ color: 'green', hover: { color: 'red' } }"}</code>.</p>
+            are only applied to specific component states are written in nested objects under corresponding keys.</p>
+            <p>E.g. <code>{stylesSample}</code>. </p>
+            <p><LibName /> will flatten the styles object by applying the properties from top to bottom, 
+            with latter properties overriding former ones of the same name.</p>
             <p>Optionally, you may pass a function to the prop and receive states about the component.</p>
             <p>For more details, please refer to the <code>styles</code> prop under
             each <Link to={'/documentation#menu'}>component</Link>.</p>

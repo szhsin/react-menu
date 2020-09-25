@@ -8,11 +8,10 @@ const blockName = 'example';
 
 export const Example = React.memo(function Example({
     initialFullSource,
-    data,
+    data: { id, title, desc, source, fullSource },
     children,
     ...restProps
 }) {
-    const { id, title, desc, source, fullSource } = data;
     const ref = useRef(null);
     const setToast = useContext(ToastContext);
     const [isFullSource, setIsFullSource] = useState(initialFullSource);
@@ -32,7 +31,7 @@ export const Example = React.memo(function Example({
 
     return (
         <section className={bem(blockName)} ref={ref} aria-labelledby={id}>
-            <HashHeading id={id} title={title} heading="h2" />
+            <HashHeading id={id} title={title} heading="h3" />
 
             {desc}
             <div {...restProps} className={bem(blockName, 'demo')}>

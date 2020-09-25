@@ -103,6 +103,26 @@ code {
     p code {
         font-size: initial;
     }
+
+    .my-menu {
+        border: 2px solid #dc3545;
+        border-radius: 0;
+        box-shadow: none;
+    }
+
+    .my-menuitem {
+        color: blue;
+        background-color: #ee1;
+    }
+
+    .my-menuitem-hover {
+        color: #ee1;
+        background-color: #bf4080;
+    }
+
+    .my-menuitem-active {
+        background-color: #333;
+    }
 }
 
 #documentation {

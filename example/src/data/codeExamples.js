@@ -505,7 +505,7 @@ export const iconAndImage = {
     title: 'Icon and image',
 
     desc:
-        <p><LibName /> doesn't include any imagery. However, you are free to use you own or
+        <p><LibName /> doesn't include any imagery. However, you are free to use your own or
     third-party icons and images, as you could wrap anything in a <code>MenuItem</code>. This
     example use Google's Material icons.</p>,
 
@@ -787,8 +787,8 @@ export default function Example() {
 }`
 };
 
-export const controlledMenu = {
-    id: 'controlled-menu',
+export const managingState = {
+    id: 'managing-state',
 
     title: 'Managing state',
 
@@ -978,10 +978,19 @@ export const stylesProp = {
 
     title: 'styles prop',
 
-    desc: '',
+    desc:
+        <>
+            <p>You could apply your style by giving an object to the <code>styles</code> prop. Regular styles
+            are put in the object directly just like React's style prop, and styles which are only applied to
+            specific component states are written in nested objects under corresponding keys. <LibName /> will
+            flatten the styles object by applying the properties from top to bottom, with latter properties
+            overriding former ones of the same name.</p>
+            <p>For more details about the state keys, please refer to the <code>styles</code> prop under
+            each <Link to={'/documentation#menu-item'}>component</Link>.</p>
+        </>,
 
     source:
-`<Menu menuButton={<MenuButton>Open menu</MenuButton>}
+        `<Menu menuButton={<MenuButton>Open menu</MenuButton>}
     styles={{
         border: '2px dashed green',
         boxShadow: 'none'
@@ -1042,74 +1051,191 @@ export default function Example() {
 }`
 };
 
-const usage =
+export const classNameProp = {
+    id: 'classname-prop',
+
+    title: 'className prop',
+
+    desc:
+        <>
+            <p>You could give components custom CSS class using the <code>className</code> prop.
+            Optionally, you may pass a function to the prop and returns different CSS class names
+            under different component states.</p>
+            <p>For more details about available states, please refer to the <code>className</code> prop under
+            each <Link to={'/documentation#menu-item'}>component</Link>.</p>
+        </>,
+
+    source:
+        `<Menu menuButton={<MenuButton>Open menu</MenuButton>}
+    className="my-menu">
+    <MenuItem>New File</MenuItem>
+    <MenuItem>Save</MenuItem>
+    <MenuItem className={
+        ({ hover, active }) =>
+            active ? 'my-menuitem-active'
+                : hover ? 'my-menuitem-hover'
+                    : 'my-menuitem'
+    }>
+        I'm special
+    </MenuItem>
+</Menu>
+
+// CSS classes
+.my-menu {
+    border: 2px solid #dc3545;
+    border-radius: 0;
+    box-shadow: none;
+}
+
+.my-menuitem {
+    color: blue;
+    background-color: #ee1;
+}
+
+.my-menuitem-hover {
+    color: #ee1;
+    background-color: #bf4080;
+}
+
+.my-menuitem-active {
+    background-color: #333;
+}`,
+
+    fullSource:
+        `import React from 'react';
+import {
+    Menu,
+    MenuItem,
+    MenuButton
+} from '@szhsin/react-menu';
+import '@szhsin/react-menu/dist/index.css';
+
+export default function Example() {
+
+    return (
+        <Menu menuButton={<MenuButton>Open menu</MenuButton>}
+            className="my-menu">
+            <MenuItem>New File</MenuItem>
+            <MenuItem>Save</MenuItem>
+            <MenuItem className={
+                ({ hover, active }) =>
+                    active ? 'my-menuitem-active'
+                        : hover ? 'my-menuitem-hover'
+                            : 'my-menuitem'
+            }>
+                I'm special
+            </MenuItem>
+        </Menu>
+    );
+}
+
+// CSS classes
+.my-menu {
+    border: 2px solid #dc3545;
+    border-radius: 0;
+    box-shadow: none;
+}
+
+.my-menuitem {
+    color: blue;
+    background-color: #ee1;
+}
+
+.my-menuitem-hover {
+    color: #ee1;
+    background-color: #bf4080;
+}
+
+.my-menuitem-active {
+    background-color: #333;
+}`
+};
+
+export const menu = {
+    id: 'menu',
+    title: 'Menu',
+    list: [
+        basicMenu,
+        subMenu,
+        eventHandling,
+        radioGroup,
+        checkBox,
+        headerAndDivider,
+        combined
+    ]
+};
+
+export const menuItem = {
+    id: 'menu-item',
+    title: 'Menu item',
+    list: [
+        linkAndDisabled,
+        iconAndImage,
+        hoverAndActive
+    ]
+};
+
+export const menuButton = {
+    id: 'menu-button',
+    title: 'Menu button',
+    list: [
+        openStateButton,
+        customisedButton,
+    ]
+};
+
+export const menuPlacement = {
+    id: 'menu-placement',
+    title: 'Menu placement',
+    list: [
+        direction,
+        alignment
+    ]
+};
+
+export const controlledMenu = {
+    id: 'controlled-menu',
+    title: 'Controlled menu',
+    list: [
+        managingState,
+        contextMenu,
+        menuStateHook
+    ]
+};
+
+export const customisedStyle = {
+    id: 'customised-style',
+    title: 'Customised style',
+    desc:
+        <>
+            <p><LibName /> provides multiple ways to modify its default style. Using your own stylesheets
+                to overwrite the default ones is the most efficient and recommended approach. Please see
+                the {styleGuideLink} for more details.</p>
+            <p>Sometimes you may need to style a specific menu or menu item differently. One of the solutions
+                is to give that menu a <code>id</code> prop and precede your CSS selectors with the id.
+                In addition, you could use <code>styles</code> or <code>className</code> props.</p>
+        </>,
+    list: [
+        stylesProp,
+        classNameProp
+    ]
+};
+
+export const usage =
 {
     id: 'usage',
     title: 'Usage',
     list: [
-        {
-            id: 'basic-menu',
-            title: 'Menu',
-            list: [
-                basicMenu,
-                subMenu,
-                eventHandling,
-                radioGroup,
-                checkBox,
-                headerAndDivider,
-                combined
-            ]
-        },
-
-        {
-            id: 'link-disabled',
-            title: 'Menu item',
-            list: [
-                linkAndDisabled,
-                iconAndImage,
-                hoverAndActive
-            ]
-        },
-
-        {
-            id: 'open-state',
-            title: 'Menu button',
-            list: [
-                openStateButton,
-                customisedButton,
-            ]
-        },
-
-        {
-            id: 'menu-direction',
-            title: 'Menu placement',
-            list: [
-                direction,
-                alignment
-            ]
-        },
-
-        {
-            id: 'controlled-menu',
-            title: 'Controlled menu',
-            list: [
-                controlledMenu,
-                contextMenu,
-                menuStateHook
-            ]
-        },
-
-        {
-            id: 'styles-prop',
-            title: 'Customised style',
-            list: [
-                stylesProp
-            ]
-        }
+        menu,
+        menuItem,
+        menuButton,
+        menuPlacement,
+        controlledMenu,
+        customisedStyle
     ]
 };
 
-const installation = {
+export const installation = {
     id: 'installation',
     title: 'Installation'
 };
