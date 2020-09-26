@@ -23,15 +23,11 @@ code {
     font-weight: 600;
     background-color: var.$highlight-color;
     padding: 0 0.2rem;
-    border-radius: 2px;
+    border-radius: var.$border-radius-small;
 }
 
 #root {
     padding-top: 4rem;
-
-    em {
-        background-color: var.$highlight-color;
-    }
 
     .app-toast {
         position: fixed;
@@ -40,7 +36,7 @@ code {
         bottom: 50px;
         transform: translateX(-50%);
         padding: 0.6rem 1.5rem;
-        border-radius: 0.25rem;
+        border-radius: var.$border-radius-medium;
         box-shadow: 0px 3px 7px rgba(0, 0, 0, 0.133), 0px 0.6px 2px rgba(0, 0, 0, 0.1);
         background-color: #f5f6fa;
         pointer-events: none;
@@ -89,6 +85,34 @@ code {
 #content {
     @include mixins.flex-center("m");
 
+    em {
+        background-color: var.$highlight-color;
+    }
+
+    h1 {
+        margin-top: 4rem;
+        font-size: 2rem;
+        font-weight: bold;
+    }
+
+    h2 {
+        margin-top: 2rem;
+        font-size: 1.75rem;
+        font-weight: bold;
+    }
+
+    h3 {
+        margin-top: 1rem;
+        font-size: 1.75rem;
+        font-weight: 400;
+    }
+
+    h1,
+    h2,
+    h3 {
+        color: #383a3e;
+    }
+
     .table-contents {
         position: sticky;
         left: 0;
@@ -101,6 +125,9 @@ code {
     main {
         flex: 0 1 900px;
         padding: 0 1rem 3rem 1rem;
+        > .hash-heading:first-child {
+            margin-top: -7rem;
+        }
     }
 
     .place-holder {
@@ -119,14 +146,31 @@ code {
 }
 
 #usage {
+    p code {
+        font-size: inherit;
+    }
+
+    .title {
+        font-size: 2.5rem;
+        margin-top: 2rem;
+    }
+
+    .features {
+        font-size: 1.2rem;
+    }
+
+    .npm-install {
+        position: relative;
+        padding: 0.75rem 1rem;
+        background-color: #e5e6e7;
+        border-radius: var.$border-radius-large;
+    }
+
     .sample-text {
         margin-left: 1.5rem;
     }
 
-    p code {
-        font-size: initial;
-    }
-
+    // className prop example styles
     .my-menu {
         border: 2px solid #dc3545;
         border-radius: 0;
@@ -167,7 +211,7 @@ code {
             display: inline-block;
             font-size: 0.875rem;
             border: 1px solid #212529;
-            border-radius: 0.125rem;
+            border-radius: var.$border-radius-small;
             background-color: white;
             box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
             padding: 0 0.5rem;
@@ -177,6 +221,10 @@ code {
 }
 
 #style-guide {
+    h2 {
+        font-weight: 500;
+    }
+
     table ul {
         @include mixins.reset-list;
     }

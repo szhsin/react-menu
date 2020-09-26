@@ -165,7 +165,8 @@ const stylesProp = {
             <p>Every component accepts a <code>styles</code> prop as an object which allows you to add inline styles.
             Regular styles are put in the object directly just like React's <code>style</code> prop, and styles which
             are only applied to specific component states are written in nested objects under corresponding keys.</p>
-            <p>E.g. <code>{stylesSample}</code>. </p>
+            <p>For example:</p>
+            <pre><code>{stylesSample}</code></pre>
             <p><LibName /> will flatten the styles object by applying the properties from top to bottom,
             with latter properties overriding former ones of the same name.</p>
             <p>Optionally, you may pass a function to the prop and receive states about the component.</p>

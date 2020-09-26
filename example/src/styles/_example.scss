@@ -2,6 +2,7 @@
 @use 'mixins';
 
 .example {
+    margin-bottom: 4rem;
     &__actions {
         display: flex;
         justify-content: flex-end;
@@ -24,7 +25,7 @@
         background-color: white;
         padding: 1rem;
         border: 1px solid var.$border-color;
-        border-radius: 6px;
+        border-radius: var.$border-radius-large;
 
         &--spaceAround {
             justify-content: space-around;
@@ -32,7 +33,7 @@
     }
 
     &__source {
-        border-radius: 6px;
+        border-radius: var.$border-radius-large;
         max-width: 90vw;
         .hljs {
             padding: 1rem 1.5rem;

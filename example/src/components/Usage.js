@@ -25,10 +25,12 @@ export const Usage = React.memo(function Usage() {
             </TableContents>
 
             <main id="usage">
-                <HashHeading id={codeExamples.usage.id}
-                    title={codeExamples.usage.title} heading="h1" />
+                <h1 className="title">React-Menu</h1>
+                <GroupingSection heading="h1" data={codeExamples.features} />
+                <GroupingSection heading="h1" data={codeExamples.installation} />
+                <GroupingSection heading="h1" data={codeExamples.usageExamples} />
 
-                <ExamleGrouping data={codeExamples.menu} />
+                <GroupingSection data={codeExamples.menu} />
                 <BasicMenuExample />
                 <SubmenuExample />
                 <EventHandlingExample />
@@ -37,25 +39,25 @@ export const Usage = React.memo(function Usage() {
                 <HeaderAndDividerExample />
                 <CombinedExample />
 
-                <ExamleGrouping data={codeExamples.menuItem} />
+                <GroupingSection data={codeExamples.menuItem} />
                 <LinkAndDisabledExample />
                 <IconAndImageExample />
                 <HoverAndActiveExample />
 
-                <ExamleGrouping data={codeExamples.menuButton} />
+                <GroupingSection data={codeExamples.menuButton} />
                 <OpenStateExample />
                 <CustomisedButtonExample />
 
-                <ExamleGrouping data={codeExamples.menuPlacement} />
+                <GroupingSection data={codeExamples.menuPlacement} />
                 <MenuDirectionExample />
                 <MenuAlignmentExample />
 
-                <ExamleGrouping data={codeExamples.controlledMenu} />
+                <GroupingSection data={codeExamples.controlledMenu} />
                 <ManagingStateExample />
                 <ContextMenuExample />
                 <MenuStateHookExample />
 
-                <ExamleGrouping data={codeExamples.customisedStyle} />
+                <GroupingSection data={codeExamples.customisedStyle} />
                 <StylesPropExample />
                 <ClassNamePropExample />
             </main >
@@ -65,10 +67,10 @@ export const Usage = React.memo(function Usage() {
     );
 });
 
-function ExamleGrouping({ data: { id, title, desc } }) {
+function GroupingSection({ heading, data: { id, title, desc } }) {
     return (
         <>
-            <HashHeading id={id} title={title} heading="h2" />
+            <HashHeading id={id} title={title} heading={heading || 'h2'} />
             {desc}
         </>
     );

@@ -1,5 +1,6 @@
 import React from 'react';
 import { LibName } from '../components/LibName';
+import { ARIAPracticesLink } from '../components/ARIAPracticesLink';
 import { HashLink as Link } from 'react-router-hash-link';
 
 const menuLink = <Link to={'/documentation#menu'}>Menu</Link>;
@@ -1154,6 +1155,8 @@ export default function Example() {
 export const menu = {
     id: 'menu',
     title: 'Menu',
+    desc:
+        <p>The group includes common usage examples of <code>Menu, SubMenu</code>, and <code>MenuItem</code>.</p>,
     list: [
         basicMenu,
         subMenu,
@@ -1168,6 +1171,8 @@ export const menu = {
 export const menuItem = {
     id: 'menu-item',
     title: 'Menu item',
+    desc:
+        <p>Advanced usage examples with <code>MenuItem</code>.</p>,
     list: [
         linkAndDisabled,
         iconAndImage,
@@ -1178,6 +1183,8 @@ export const menuItem = {
 export const menuButton = {
     id: 'menu-button',
     title: 'Menu button',
+    desc:
+        <p>Change the look and content of your menu button.</p>,
     list: [
         openStateButton,
         customisedButton,
@@ -1187,6 +1194,8 @@ export const menuButton = {
 export const menuPlacement = {
     id: 'menu-placement',
     title: 'Menu placement',
+    desc:
+        <p>Control the position of menu related to menu button.</p>,
     list: [
         direction,
         alignment
@@ -1196,6 +1205,8 @@ export const menuPlacement = {
 export const controlledMenu = {
     id: 'controlled-menu',
     title: 'Controlled menu',
+    desc:
+        <p>Get more control on the states of menu.</p>,
     list: [
         managingState,
         contextMenu,
@@ -1221,10 +1232,13 @@ export const customisedStyle = {
     ]
 };
 
-export const usage =
+export const usageExamples =
 {
-    id: 'usage',
+    id: 'usage-examples',
     title: 'Usage',
+    desc:
+        <p>Each of the following sections includes a live example. They are grouped into related categories.
+        You could toggle between the brief and full versions of the source code.</p>,
     list: [
         menu,
         menuItem,
@@ -1235,9 +1249,29 @@ export const usage =
     ]
 };
 
-export const installation = {
-    id: 'installation',
-    title: 'Installation'
+export const features = {
+    id: 'features',
+    title: 'Features',
+    desc:
+        <ul className="features">
+            <li>React menu components for easy and fast web development.</li>
+            <li>Unlimited levels of submenu.</li>
+            <li>Radio and checkbox menu items.</li>
+            <li>Supports context menu.</li>
+            <li>Customisable styling.</li>
+            <li>Comprehensive keyboard interaction.</li>
+            <li>Built to comply with <ARIAPracticesLink />.</li>
+        </ul>
 };
 
-export default [installation, usage];
+export const installation = {
+    id: 'installation',
+    title: 'Installation',
+    desc:
+        <>
+            <p>Install <LibName /> from npm:</p>
+            <p className="npm-install">npm install @szhsin/react-menu</p>
+        </>
+};
+
+export default [features, installation, usageExamples];

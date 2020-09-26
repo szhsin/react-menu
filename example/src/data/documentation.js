@@ -1,6 +1,7 @@
 import React from 'react';
 import { LibName } from '../components/LibName';
 import { HashLink as Link } from 'react-router-hash-link';
+import { ARIAPracticesLink } from '../components/ARIAPracticesLink';
 
 
 const RETURN_KEY = '13(Return)';
@@ -639,8 +640,7 @@ const accessibility = {
     title: 'Accessibility',
     desc:
         <p><LibName /> supports <code>aria</code> roles, states, and properties which aims to fully comply with
-            the <a href="https://www.w3.org/TR/wai-aria-practices/#menu" target="_blank" rel="noopener noreferrer">WAI-ARIA Authoring Practices 1.1</a>.
-            For more details, please refer to the website.</p>,
+            the <ARIAPracticesLink />. For more details, please refer to the website.</p>,
     list: [
         keyboard
     ]
