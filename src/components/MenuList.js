@@ -251,12 +251,12 @@ export const MenuList = defineName(React.memo(function MenuList({
         } = positionHelpers();
 
         const anchorRect = anchorRef.current.getBoundingClientRect();
-        const placeLeftX = anchorRect.left - containerRect.left - menuRect.width - 1;
-        const placeRightX = anchorRect.right - containerRect.left + 1;
+        const placeLeftX = anchorRect.left - containerRect.left - menuRect.width;
+        const placeRightX = anchorRect.right - containerRect.left;
         const placeLeftorRightY = anchorRect.top - containerRect.top;
 
-        const placeTopY = anchorRect.top - containerRect.top - menuRect.height - 1;
-        const placeBottomY = anchorRect.bottom - containerRect.top + 1;
+        const placeTopY = anchorRect.top - containerRect.top - menuRect.height;
+        const placeBottomY = anchorRect.bottom - containerRect.top;
         let placeToporBottomX;
         if (align === 'end') {
             placeToporBottomX = anchorRect.right - containerRect.left - menuRect.width;

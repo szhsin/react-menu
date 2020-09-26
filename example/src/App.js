@@ -1,30 +1,27 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
-import { DomSizeContext, ToastContext } from './utils';
+import { DomInfoContext, ToastContext } from './utils';
 import { Header } from './components/Header';
 import { PageContent } from './components/PageContent';
 import { Footer } from './components/Footer';
 
 
 const App = () => {
-    const [domSize, setDomSize] = useState({});
+    const [domInfo, setDomInfo] = useState({});
     useEffect(() => {
         const handleResize = () => {
-            // Table of Contents
-            const toc = document.querySelector('.table-contents');
-            if (!toc) return;
-            
-            const tocPosition = getComputedStyle(toc).getPropertyValue('position');
-            const size = { tocPosition, navbarHeight: 0 };
+            const info = {
+                // Viewport size
+                vWidth: document.documentElement.clientWidth,
+                vHeight: document.documentElement.clientHeight,
 
-            if (tocPosition === 'sticky') {
-                const navbarHeight = document.querySelector('#header .navbar').offsetHeight;
+                navbarHeight: document.querySelector('#header .navbar').offsetHeight,
+                // Table of Contents position
+                tocPosition: getComputedStyle(document.querySelector('.table-contents'))
+                    .getPropertyValue('position')
+            };
 
-                size.navbarHeight = navbarHeight;
-                size.tocHeight = document.documentElement.clientHeight - navbarHeight;
-            }
-
-            setDomSize(size);
+            setDomInfo(info);
         }
 
         handleResize();
@@ -43,7 +40,7 @@ const App = () => {
     }, [toast]);
 
     return (
-        <DomSizeContext.Provider value={domSize}>
+        <DomInfoContext.Provider value={domInfo}>
             <ToastContext.Provider value={setToast}>
                 <Router>
                     <Header />
@@ -52,7 +49,7 @@ const App = () => {
                     {toast && <div className="app-toast" role="alert">{toast}</div>}
                 </Router>
             </ToastContext.Provider>
-        </DomSizeContext.Provider>
+        </DomInfoContext.Provider>
     );
 }
 

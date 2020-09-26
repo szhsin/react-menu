@@ -12,6 +12,7 @@ body {
         "Droid Sans", "Helvetica Neue", sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    background-color: #f9f9fb;
 }
 
 code {
@@ -20,14 +21,17 @@ code {
 
 .lib-name {
     font-weight: 600;
-    background-color: #e1e2e3;
+    background-color: var.$highlight-color;
     padding: 0 0.2rem;
     border-radius: 2px;
 }
 
 #root {
     padding-top: 4rem;
-    background-color: #f9f9fb;
+
+    em {
+        background-color: var.$highlight-color;
+    }
 
     .app-toast {
         position: fixed;
@@ -50,6 +54,25 @@ code {
         font-weight: 700;
         li {
             margin: 0 1.25rem;
+        }
+    }
+
+    .github {
+        margin-left: auto;
+        margin-right: 1.25rem;
+
+        img {
+            height: 2rem;
+            object-fit: contain;
+        }
+    }
+
+    @media (max-width: 550px) {
+        .navbar li {
+            margin: 0 0.25rem;
+        }
+        .github {
+            margin-right: 0.25rem;
         }
     }
 }
@@ -134,10 +157,6 @@ code {
 
     p:last-child {
         margin-bottom: 0;
-    }
-
-    em {
-        background-color: var.$highlight-color;
     }
 
     .keyboard {

@@ -23,7 +23,7 @@ const stylesheet = {
          You are able to overwrite the default styles by placing your stylesheets after its own. All default styles use CSS selectors
          with the lowest possible specificity, and you could always precede your selectors
          with <code>.rc-menu-container</code> in case a specific style cannot be overwritten.</p>
-            <p>Using stylesheets is the most efficient and recommended approach to style <LibName />.</p>
+            <p><em>Using stylesheets is the most efficient and recommended approach to style</em> <LibName />.</p>
         </>,
     list: [
         {
@@ -136,7 +136,8 @@ const classNameProp = {
             <p>Every component accepts a <code>className</code> prop which allows you to supply a custom CSS class.</p>
             <p>Optionally, you may pass a function to the prop and receive additional states about the component.</p>
             <p>For more details, please refer to the <code>className</code> prop under
-            each <Link to={'/documentation#menu'}>component</Link>.</p>
+                each <Link to={'/documentation#menu'}>component</Link>, or see
+                an <Link to={'/#classname-prop'}>example</Link> for its usage.</p>
         </>
 }
 
@@ -165,11 +166,12 @@ const stylesProp = {
             Regular styles are put in the object directly just like React's <code>style</code> prop, and styles which
             are only applied to specific component states are written in nested objects under corresponding keys.</p>
             <p>E.g. <code>{stylesSample}</code>. </p>
-            <p><LibName /> will flatten the styles object by applying the properties from top to bottom, 
+            <p><LibName /> will flatten the styles object by applying the properties from top to bottom,
             with latter properties overriding former ones of the same name.</p>
             <p>Optionally, you may pass a function to the prop and receive states about the component.</p>
             <p>For more details, please refer to the <code>styles</code> prop under
-            each <Link to={'/documentation#menu'}>component</Link>.</p>
+                each <Link to={'/documentation#menu'}>component</Link>, or see
+                an <Link to={'/#styles-prop'}>example</Link> for its usage.</p>
         </>
 }
 

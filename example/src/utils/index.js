@@ -14,5 +14,5 @@ export const bem = (block, element, modifiers = {}) => {
     return className;
 }
 
-export const DomSizeContext = React.createContext({});
+export const DomInfoContext = React.createContext({});
 export const ToastContext = React.createContext(() => { });
