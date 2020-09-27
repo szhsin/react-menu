@@ -2,29 +2,51 @@
 
 > React menu components
 
-[![NPM](https://img.shields.io/npm/v/@szhsin/react-menu.svg)](https://www.npmjs.com/package/@szhsin/react-menu) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
+[![NPM](https://img.shields.io/npm/v/@szhsin/react-menu.svg)](https://www.npmjs.com/package/@szhsin/react-menu) 
 
-## Install
+## Features
+
+- React menu components for easy and fast web development.
+- Unlimited levels of submenu.
+- Radio and checkbox menu items.
+- Supports context menu.
+- Customisable styling.
+- Comprehensive keyboard interaction.
+- Built to comply with [WAI-ARIA Authoring Practices](https://www.w3.org/TR/wai-aria-practices/#menu).
+
+## Installation
 
 ```bash
-npm install --save @szhsin/react-menu
+npm install @szhsin/react-menu
 ```
 
 ## Usage
 
 ```jsx
-import React, { Component } from 'react'
+import React from 'react';
+import {
+    Menu,
+    MenuItem,
+    MenuButton,
+    SubMenu
+} from '@szhsin/react-menu';
+import '@szhsin/react-menu/dist/index.css';
 
-import MyComponent from '@szhsin/react-menu'
-import '@szhsin/react-menu/dist/index.css'
-
-class Example extends Component {
-  render() {
-    return <MyComponent />
-  }
+export default function Example() {
+    return (
+        <Menu menuButton={<MenuButton>Open menu</MenuButton>}>
+            <MenuItem>New File</MenuItem>
+            <SubMenu label="Open">
+                <MenuItem>index.html</MenuItem>
+                <MenuItem>example.js</MenuItem>
+                <MenuItem>about.css</MenuItem>
+            </SubMenu>
+            <MenuItem>Save</MenuItem>
+        </Menu>
+    );
 }
 ```
 
 ## License
 
-MIT © [szhsin](https://github.com/szhsin)
+MIT Licensed. Copyright (c) 2020 Zheng Song.

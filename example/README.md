@@ -1,5 +1,3 @@
-This example was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+@szhsin/react-menu examples and documentation project
 
-It is linked to the @szhsin/react-menu package in the parent directory for development purposes.
-
-You can run `npm install` and then `npm start` to test your package.
+It was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
