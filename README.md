@@ -1,6 +1,8 @@
-# @szhsin/react-menu
+# React-Menu
 
 > React menu components
+
+**[Live examples and documentation](https://szhsin.github.io/react-menu/)**
 
 [![NPM](https://img.shields.io/npm/v/@szhsin/react-menu.svg)](https://www.npmjs.com/package/@szhsin/react-menu) 
 
