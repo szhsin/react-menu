@@ -34,7 +34,7 @@ export const Menu = React.memo(function Menu({
     const buttonRef = useRef(null);
 
     const button = safeCall(menuButton, { open: isOpen });
-    if (!button) return 'Error: menuButton prop is required.';
+    if (!button) throw new Error('Menu requires a menuButton prop.');
 
     const handleClose = useCallback(e => {
         closeMenu();
