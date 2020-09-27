@@ -168,7 +168,7 @@ const stylesProp = {
             <p>For example:</p>
             <pre><code>{stylesSample}</code></pre>
             <p><LibName /> will flatten the styles object by applying the properties from top to bottom,
-            with latter properties overriding former ones of the same name.</p>
+            with later properties overriding earlier ones of the same name.</p>
             <p>Optionally, you may pass a function to the prop and receive states about the component.</p>
             <p>For more details, please refer to the <code>styles</code> prop under
                 each <Link to={'/documentation#menu'}>component</Link>, or see

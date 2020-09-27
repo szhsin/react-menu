@@ -141,6 +141,7 @@ code {
         align-items: center;
         .table-contents {
             position: static;
+            margin-bottom: 4rem;
         }
     }
 }
@@ -159,10 +160,11 @@ code {
         font-size: 1.2rem;
     }
 
-    .npm-install {
+    .install-command {
         position: relative;
         padding: 0.75rem 1rem;
-        background-color: #e5e6e7;
+        background-color: white;
+        border: 1px solid var.$border-color;
         border-radius: var.$border-radius-large;
     }
 

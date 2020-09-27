@@ -267,7 +267,7 @@ export const checkBox = {
     title: 'Checkbox',
 
     desc:
-        <p>You could make menu items behave like checkboxs by setting <code>type="checkbox"</code>.</p>,
+        <p>You could make menu items behave like checkboxes by setting <code>type="checkbox"</code>.</p>,
 
     source:
         `const [isBold, setBold] = useState(true);
@@ -982,10 +982,10 @@ export const stylesProp = {
     desc:
         <>
             <p>You could apply your style by giving an object to the <code>styles</code> prop. Regular styles
-            are put in the object directly just like React's style prop, and styles which are only applied to
+            are put in the object directly just like React's <code>style</code> prop, and styles which are only applied to
             specific component states are written in nested objects under corresponding keys. <LibName /> will
-            flatten the styles object by applying the properties from top to bottom, with latter properties
-            overriding former ones of the same name.</p>
+            flatten the styles object by applying the properties from top to bottom, with later properties
+            overriding earlier ones of the same name.</p>
             <p>For more details about the state keys, please refer to the <code>styles</code> prop under
             each <Link to={'/documentation#menu-item'}>component</Link>.</p>
         </>,
@@ -1206,7 +1206,7 @@ export const controlledMenu = {
     id: 'controlled-menu',
     title: 'Controlled menu',
     desc:
-        <p>Get more control on the states of menu.</p>,
+        <p>Get more control on the states with <code>ControlledMenu</code>.</p>,
     list: [
         managingState,
         contextMenu,
@@ -1270,7 +1270,7 @@ export const installation = {
     desc:
         <>
             <p>Install <LibName /> from npm:</p>
-            <p className="npm-install">npm install @szhsin/react-menu</p>
+            <p className="install-command">npm install @szhsin/react-menu</p>
         </>
 };
 

@@ -19,16 +19,17 @@
     [class^="contents-list"] {
         @include mixins.reset-list;
         li {
-            margin-top: 0.25rem;
+            margin: 0.75rem 0;
+            line-height: 1.1;
         }
     }
 
     .contents-list-lv1 {
         font-size: 1.3rem;
         font-weight: 600;
-        padding: 2rem 0.5rem;
+        padding: 1.5rem 0.5rem;
         > li {
-            margin-bottom: 1rem;
+            margin-bottom: 1.5rem;
         }
     }
 
