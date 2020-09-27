@@ -18,6 +18,8 @@ const menuStateHookLink = <Link to={'#use-menu-state'}>useMenuState</Link>;
 const menuModifiers = (
     <ul>
         <li><code>open: bool</code> indicates if the menu is open.</li>
+        <li><code>closing: bool</code> indicates if the menu is closing.
+            (Only <code>true</code> when animation is enabled and closing animation is playing)</li>
         <li><code>animation: bool</code> indicates if animation is enabled.</li>
         <li><code>dir: string</code> direction in which the menu expands. Can be 'left', 'right', 'top', or 'bottom'.</li>
     </ul>
@@ -64,7 +66,9 @@ const keepMountedProp = {
     defaultVal: 'true',
     desc: <>
         <p>If <code>true</code>, menu keeps mounted in the DOM and is hidden by CSS
-        when it's closed. Otherwise, menu is unmounted from DOM when closed.</p>
+            when it's closed. Otherwise, menu is unmounted from DOM when closed.</p>
+        <p>Setting this prop to <code>false</code> will result in unintended consequence of losing
+            menu close animation.</p>
         <p>Please note menu won't be created and mounted into DOM until it's opened for the first time,
             even if <code>keepMounted</code> is <code>true</code>.</p>
     </>

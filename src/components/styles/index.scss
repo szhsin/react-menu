@@ -24,18 +24,11 @@
     width: max-content;
     cursor: default;
     user-select: none;
-    visibility: hidden;
+    display: none;
 
-    &--open {
-        visibility: visible;
-    }
-
-    &--animation {
-        transition: visibility 0s animations.$duration;
-    }
-
-    &--open#{&}--animation {
-        transition: visibility 0s;
+    &--open,
+    &--closing {
+        display: block;
     }
 
     @each $dir in map.keys(animations.$directions) {

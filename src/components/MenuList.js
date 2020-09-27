@@ -38,9 +38,11 @@ export const MenuList = defineName(React.memo(function MenuList({
     menuItemFocus,
     children,
     onKeyDown,
+    onAnimationEnd,
     ...restProps }) {
 
     const [position, setPosition] = useState({ x: 0, y: 0 });
+    const [isClosing, setClosing] = useState(false);
     const [expandedDirection, setExpandedDirection] = useState(direction);
     const { animation } = useContext(SettingsContext);
     const menuRef = useRef(null);
@@ -174,6 +176,14 @@ export const MenuList = defineName(React.memo(function MenuList({
 
         // Invoke client code defined event handle when it's used as ControlledMenu
         safeCall(onKeyDown, e);
+    }
+
+    const handleAnimationEnd = e => {
+        // Check before changing state to avoid triggering unnecessary re-render
+        if (isClosing) setClosing(false);
+
+        // Invoke client code defined event handle when it's used as ControlledMenu
+        safeCall(onAnimationEnd, e);
     }
 
     const positionHelpers = useCallback(() => {
@@ -455,6 +465,10 @@ export const MenuList = defineName(React.memo(function MenuList({
         setExpandedDirection(computedDirection);
     }, [isOpen, anchorPoint, positionHelpers]);
 
+    useLayoutEffect(() => {
+        if (animation && isMounted) setClosing(!isOpen);
+    }, [animation, isMounted, isOpen]);
+
     useEffect(() => {
         if (!isOpen) hoverIndexDispatch({ type: HoverIndexActionTypes.RESET });
 
@@ -483,6 +497,7 @@ export const MenuList = defineName(React.memo(function MenuList({
 
     const modifiers = {
         open: isOpen,
+        closing: isClosing,
         animation,
         dir: animation && expandedDirection
     };
@@ -500,6 +515,7 @@ export const MenuList = defineName(React.memo(function MenuList({
                     aria-label={ariaLabel}
                     ref={menuRef}
                     onKeyDown={handleKeyDown}
+                    onAnimationEnd={handleAnimationEnd}
                     style={{
                         ...flatStyles(styles, userModifiers),
                         left: `${position.x}px`,

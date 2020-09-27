@@ -9,12 +9,12 @@ $directions: (
 );
 
 @mixin slide($dir) {
-    &--dir-#{$dir} {
-        animation: slide-in-#{$dir} $duration ease-in;
-    }
-
     &--open#{&}--dir-#{$dir} {
         animation: slide-out-#{$dir} $duration ease-out;
+    }
+
+    &--closing#{&}--dir-#{$dir} {
+        animation: slide-in-#{$dir} $duration ease-in;
     }
 }
 
