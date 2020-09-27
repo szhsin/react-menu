@@ -42,7 +42,7 @@ const App = () => {
     return (
         <DomInfoContext.Provider value={domInfo}>
             <ToastContext.Provider value={setToast}>
-                <Router>
+                <Router basename="/react-menu">
                     <Header />
                     <PageContent />
                     <Footer />
