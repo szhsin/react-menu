@@ -47,6 +47,7 @@ export const MenuList = defineName(React.memo(function MenuList({
     const { animation } = useContext(SettingsContext);
     const menuRef = useRef(null);
     const menuItemsCount = useRef(0);
+    const prevOpen = useRef(isOpen);
     const [hoverIndex, hoverIndexDispatch] = useReducer(hoverIndexReducer, initialHoverIndex);
 
     function hoverIndexReducer(state, { type, index }) {
@@ -466,7 +467,15 @@ export const MenuList = defineName(React.memo(function MenuList({
     }, [isOpen, anchorPoint, positionHelpers]);
 
     useLayoutEffect(() => {
-        if (animation && isMounted) setClosing(!isOpen);
+        if (animation && isMounted) {
+            if (isOpen) {
+                setClosing(false)
+            } else if (isOpen !== prevOpen.current) { // Skip the first effect run in which isOpen is false
+                setClosing(true);
+            }
+        }
+
+        prevOpen.current = isOpen;
     }, [animation, isMounted, isOpen]);
 
     useEffect(() => {
