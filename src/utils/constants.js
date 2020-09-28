@@ -66,5 +66,12 @@ export const menuPropTypesBase = {
     debugging: PropTypes.bool,
     align: PropTypes.oneOf(['start', 'center', 'end']),
     direction: PropTypes.oneOf(['left', 'right', 'top', 'bottom']),
+    children: PropTypes.node.isRequired,
     onClick: PropTypes.func
+};
+
+export const menuDefaultPropsBase = {
+    animation: true,
+    align: 'start',
+    direction: 'bottom'
 };

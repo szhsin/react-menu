@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import {
     safeCall,
     menuPropTypesBase,
+    menuDefaultPropsBase,
     KeyCodes,
     FocusPositions,
     useMenuState
@@ -127,6 +128,6 @@ Menu.propTypes = {
 };
 
 Menu.defaultProps = {
-    animation: true,
+    ...menuDefaultPropsBase,
     keepMounted: true
 };

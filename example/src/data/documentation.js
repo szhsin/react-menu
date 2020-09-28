@@ -142,7 +142,7 @@ const menuPropsBase = [
                 <p>Sets ID attribute on the root DOM element containing the menu.</p>
                 <p>It can be helpful when you need to style a specific menu differently
                 and use ID in your CSS selectors.</p>
-                <p>It also helps increase selector specificity when overwriting the default style.</p>
+                <p>It also helps increase selector specificity when overriding the default style.</p>
             </>
     },
 
@@ -166,6 +166,7 @@ const menuPropsBase = [
     {
         name: 'align',
         type: 'string',
+        defaultVal: "'start'",
         desc:
             <>
                 <p>Can be 'start', 'center', or 'end'.</p>
@@ -184,7 +185,7 @@ const menuPropsBase = [
             <>
                 <p>Can be 'left', 'right', 'top', or 'bottom'.</p>
                 <p>It sets direction in which menu expands against menu button.</p>
-                <p>The actual direction in which menu expands is subject to the available viewport space.
+                <p>Please note the actual direction in which menu expands is subject to the available viewport space.
                 If available space is not enough in the direction provided in this prop,
                 menu will attempt to expands in the opposite direction.
                 Menu position can also be adjusted in order to have it contained within viewport.</p>
@@ -369,6 +370,12 @@ const menuButton = {
     desc: <p><code>MenuButton</code> works with a {menuLink} and controls its open and close.</p>,
     rows: [
         ...styleProps('menu button', <ul><li><code>open: bool</code> indicates if the menu is open.</li></ul>),
+        {
+            name: 'id',
+            type: 'string | number',
+            desc:
+                <p>Sets ID attribute on the menu button DOM element.</p>
+        },
         {
             name: 'disabled',
             type: 'boolean',
@@ -603,7 +610,7 @@ const keyboard = {
                 <li><span>Space</span> activates a menu item and closes the menu; for radio and checkbox item, activates the menu item without closing the menu.</li>
                 <li><span>Down Arrow</span> moves focus to the next item, wrapping from the last to the first.</li>
                 <li><span>Up Arrow</span> moves focus to the previous item, wrapping from the first to the last.</li>
-                <li><span>Right Arrow</span> When focus is in a submenu item, opens the submenu.</li>
+                <li><span>Right Arrow</span> When focus is in a submenu item, opens the submenu, and moves focus to the first menu item.</li>
                 <li><span>Left Arrow</span> Closes a submenu if it is open.</li>
                 <li><span>Esc</span> Closes a menu and move focus to its associated menu button.</li>
             </ul>

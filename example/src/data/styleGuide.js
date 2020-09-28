@@ -20,9 +20,9 @@ const stylesheet = {
         <>
             <p><LibName /> uses regular stylesheets to style components. It follows
          the <a href="http://getbem.com/naming/" target="_blank" rel="noopener noreferrer">BEM methodology</a> to name CSS selectors.
-         You are able to overwrite the default styles by placing your stylesheets after its own. All default styles use CSS selectors
+         You are able to override the default styles by placing your stylesheets after its own. All default styles use CSS selectors
          with the lowest possible specificity, and you could always precede your selectors
-         with <code>.rc-menu-container</code> in case a specific style cannot be overwritten.</p>
+         with <code>.rc-menu-container</code> in case a specific style cannot be overridden.</p>
             <p><em>Using stylesheets is the most efficient and recommended approach to style</em> <LibName />.</p>
         </>,
     list: [
@@ -121,6 +121,10 @@ const stylesheet = {
                 {
                     name: menuClass('radio-group')(),
                     desc: 'MenuRadioGroup element.'
+                },
+                {
+                    name: '.rc-menu-button',
+                    desc: 'MenuButton element.'
                 }
             ]
         }

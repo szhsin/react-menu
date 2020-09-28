@@ -195,7 +195,8 @@ SubMenu.propTypes = {
     label: PropTypes.oneOfType([
         PropTypes.node,
         PropTypes.func
-    ]),
+    ]).isRequired,
+    children: PropTypes.node.isRequired,
     onChange: PropTypes.func
 };
 

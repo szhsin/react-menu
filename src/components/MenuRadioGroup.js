@@ -42,5 +42,6 @@ MenuRadioGroup.propTypes = {
     'aria-label': PropTypes.string,
     name: PropTypes.string,
     value: PropTypes.any,
+    children: PropTypes.node.isRequired,
     onChange: PropTypes.func
 };

@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {
     menuPropTypesBase,
+    menuDefaultPropsBase,
     FocusPositions
 } from '../utils';
 import { useMenuList } from './useMenuList';
@@ -64,7 +65,7 @@ ControlledMenu.propTypes = {
 };
 
 ControlledMenu.defaultProps = {
-    animation: true,
+    ...menuDefaultPropsBase,
     isMounted: true,
     menuItemFocus: { position: FocusPositions.INITIAL }
 };

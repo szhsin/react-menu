@@ -10,6 +10,7 @@ import {
 
 
 export const MenuButton = defineName(React.memo(React.forwardRef(function MenuButton({
+    id,
     className,
     styles,
     isOpen,
@@ -21,7 +22,7 @@ export const MenuButton = defineName(React.memo(React.forwardRef(function MenuBu
     const modifiers = Object.freeze({ open: isOpen });
 
     return (
-        <button className={bem(menuButtonClass, null, modifiers)(className)}
+        <button id={id} className={bem(menuButtonClass, null, modifiers)(className)}
             style={flatStyles(styles, modifiers)}
             aria-haspopup="true"
             aria-expanded={isOpen}
@@ -37,8 +38,13 @@ export const MenuButton = defineName(React.memo(React.forwardRef(function MenuBu
 
 MenuButton.propTypes = {
     ...stylePropTypes,
+    id: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.number
+    ]),
     isOpen: PropTypes.bool,
     disabled: PropTypes.bool,
+    children: PropTypes.node.isRequired,
     onClick: PropTypes.func,
     onKeyDown: PropTypes.func
 };
