@@ -23,7 +23,7 @@ export const PageContent = React.memo(function PageContent() {
                 <Route exact path="/">
                     <Usage />
                 </Route>
-                <Route path="/documentation">
+                <Route path="/docs">
                     <Docs />
                 </Route>
                 <Route path="/style-guide">

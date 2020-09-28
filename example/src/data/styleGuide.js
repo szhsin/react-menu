@@ -136,7 +136,7 @@ const classNameProp = {
             <p>Every component accepts a <code>className</code> prop which allows you to supply a custom CSS class.</p>
             <p>Optionally, you may pass a function to the prop and receive additional states about the component.</p>
             <p>For more details, please refer to the <code>className</code> prop under
-                each <Link to={'/documentation#menu'}>component</Link>, or see
+                each <Link to={'/docs#menu'}>component</Link>, or see
                 an <Link to={'/#classname-prop'}>example</Link> for its usage.</p>
         </>
 }
@@ -171,7 +171,7 @@ const stylesProp = {
             with later properties overriding earlier ones of the same name.</p>
             <p>Optionally, you may pass a function to the prop and receive states about the component.</p>
             <p>For more details, please refer to the <code>styles</code> prop under
-                each <Link to={'/documentation#menu'}>component</Link>, or see
+                each <Link to={'/docs#menu'}>component</Link>, or see
                 an <Link to={'/#styles-prop'}>example</Link> for its usage.</p>
         </>
 }

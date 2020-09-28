@@ -15,7 +15,7 @@ export const Header = React.memo(function Header() {
                         <NavLink className="nav-link" exact to="/">Home</NavLink>
                     </li>
                     <li>
-                        <NavLink className="nav-link" to="/documentation">
+                        <NavLink className="nav-link" to="/docs">
                             {isFullSize ? 'Documentation' : 'Docs'}
                         </NavLink>
                     </li>

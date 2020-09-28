@@ -3,10 +3,10 @@ import { LibName } from '../components/LibName';
 import { ARIAPracticesLink } from '../components/ARIAPracticesLink';
 import { HashLink as Link } from 'react-router-hash-link';
 
-const menuLink = <Link to={'/documentation#menu'}>Menu</Link>;
-const menuItemLink = <Link to={'/documentation#menu-item'}>MenuItem</Link>;
-const menuButtonLink = <Link to={'/documentation#menu-button'}>MenuButton</Link>;
-const menuStateHookLink = <Link to={'/documentation#use-menu-state'}>useMenuState</Link>;
+const menuLink = <Link to={'/docs#menu'}>Menu</Link>;
+const menuItemLink = <Link to={'/docs#menu-item'}>MenuItem</Link>;
+const menuButtonLink = <Link to={'/docs#menu-button'}>MenuButton</Link>;
+const menuStateHookLink = <Link to={'/docs#use-menu-state'}>useMenuState</Link>;
 const styleGuideLink = <Link to={'/style-guide'}>style guide</Link>;
 
 export const basicMenu = {
@@ -987,7 +987,7 @@ export const stylesProp = {
             flatten the styles object by applying the properties from top to bottom, with later properties
             overriding earlier ones of the same name.</p>
             <p>For more details about the state keys, please refer to the <code>styles</code> prop under
-            each <Link to={'/documentation#menu-item'}>component</Link>.</p>
+            each <Link to={'/docs#menu-item'}>component</Link>.</p>
         </>,
 
     source:
@@ -1063,7 +1063,7 @@ export const classNameProp = {
             Optionally, you may pass a function to the prop and returns different CSS class names
             under different component states.</p>
             <p>For more details about available states, please refer to the <code>className</code> prop under
-            each <Link to={'/documentation#menu-item'}>component</Link>.</p>
+            each <Link to={'/docs#menu-item'}>component</Link>.</p>
         </>,
 
     source:
