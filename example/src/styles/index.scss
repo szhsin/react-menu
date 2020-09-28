@@ -1,6 +1,7 @@
 @use 'var';
 @use 'mixins';
 @use 'menu';
+@use 'hljs';
 @use 'example';
 @use 'table-contents';
 @use 'hash-heading';
@@ -110,7 +111,7 @@ code {
     h1,
     h2,
     h3 {
-        color: #383a3e;
+        color: var.$dark-color;
     }
 
     .table-contents {

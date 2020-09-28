@@ -6,9 +6,9 @@
     @include mixins.flex-center("m");
 
     a {
-        color: var.$link-color;
+        color: var.$dark-color;
         &:hover {
-            color: var.$link-hover-color;
+            color: color.scale(var.$dark-color, $lightness: 10%);
         }
     }
 
@@ -42,7 +42,7 @@
         margin-left: 1rem;
         font-size: 0.95rem;
         a {
-            color: color.scale(var.$link-color, $lightness: 20%);
+            color: color.scale(var.$dark-color, $lightness: 16%);
         }
     }
 }

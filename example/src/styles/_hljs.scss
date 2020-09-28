@@ -1,0 +1,23 @@
+@use 'var';
+
+.hljs {
+    background-color: var.$dark-color;
+    &-name {
+        color: #4ce2c3;
+    }
+    &-attr {
+        color: #9cdcfe;
+    }
+    &-string {
+        color: #eeab8f;
+    }
+    &-keyword {
+        color: #eb96e4;
+    }
+    &-literal {
+        color: #4fc1ff;
+    }
+    &-number {
+        color: #c6eeb1;
+    }
+}

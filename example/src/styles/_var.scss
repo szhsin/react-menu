@@ -1,10 +1,7 @@
-@use 'sass:color';
-
 $border-color: #ccc;
 $border-radius-small: 0.125rem;
 $border-radius-medium: 0.25rem;
 $border-radius-large: 0.375rem;
 $secondary-color: #808080;
-$link-color: #343a40;
-$link-hover-color: color.scale($link-color, $lightness: -10%);
+$dark-color: #343a40;
 $highlight-color: rgba(255, 229, 100, 0.3);
