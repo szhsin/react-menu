@@ -213,7 +213,7 @@ export const radioGroup = {
     title: 'Radio group',
 
     desc:
-        <p>You could make menu items behave like radio buttons by wrapping them under a <code>MenuRadioGroup</code>.
+        <p>You could make menu items behave like radio buttons by wrapping them in a <code>MenuRadioGroup</code>.
         The children menu item which has the same value (strict equality ===) as the radio group is marked as checked.</p>,
 
     source:
@@ -462,7 +462,7 @@ export const linkAndDisabled = {
 
     desc:
         <p><code>MenuItem</code> can be made a hyperlink by giving it a <code>href</code> prop. Even if
-        it's a link, the <code>onClick</code> event still fires as normal. You might also disable
+        it's a link, the <code>onClick</code> event still fires as normal. You could also disable
         a menu item using the <code>disabled</code> prop.</p>,
 
     source:
@@ -508,7 +508,7 @@ export const iconAndImage = {
     desc:
         <p><LibName /> doesn't include any imagery. However, you are free to use your own or
     third-party icons and images, as you could wrap anything in a <code>MenuItem</code>. This
-    example use Google's Material icons.</p>,
+    example uses Google's Material icons.</p>,
 
     source:
         `<Menu menuButton={<MenuButton>Open menu</MenuButton>}>
@@ -676,7 +676,7 @@ export const customisedButton = {
             See <a href="https://codesandbox.io/s/react-menu-material-ui-example-wvzpc"
                     target="_blank" rel="noopener noreferrer">
                     an example on CodeSandbox</a>.</p>
-            <p>The benefit of {menuButtonLink} is its has additional <code>aria</code> attributes, and you will
+            <p>The benefit of {menuButtonLink} is it has additional <code>aria</code> attributes, and you will
             always be able to style it by following the {styleGuideLink}.</p>
         </>,
 
@@ -1062,8 +1062,8 @@ export const classNameProp = {
 
     desc:
         <>
-            <p>You could give components custom CSS class using the <code>className</code> prop.
-            Optionally, you may pass a function to the prop and returns different CSS class names
+            <p>You could give components your CSS classes using the <code>className</code> prop.
+            Optionally, you may pass a function to the prop and return different CSS class names
             under different component states.</p>
             <p>For more details about available states, please refer to the <code>className</code> prop under
             each <Link to={'/docs#menu-item'}>component</Link>.</p>
@@ -1187,7 +1187,7 @@ export const menuButton = {
     id: 'menu-button',
     title: 'Menu button',
     desc:
-        <p>Change the look and content of your menu button.</p>,
+        <p>Change the look and contents of your menu button.</p>,
     list: [
         openStateButton,
         customisedButton,
@@ -1209,7 +1209,7 @@ export const controlledMenu = {
     id: 'controlled-menu',
     title: 'Controlled menu',
     desc:
-        <p>Get more control on the states with <code>ControlledMenu</code>.</p>,
+        <p>Get more control of the states with <code>ControlledMenu</code>.</p>,
     list: [
         managingState,
         contextMenu,
@@ -1259,10 +1259,10 @@ export const features = {
         <ul className="features">
             <li>React menu components for easy and fast web development.</li>
             <li>Unlimited levels of submenu.</li>
-            <li>Radio and checkbox menu items.</li>
+            <li>Supports radio and checkbox menu items.</li>
             <li>Supports context menu.</li>
             <li>Customisable styling.</li>
-            <li>Comprehensive keyboard interaction.</li>
+            <li>Comprehensive keyboard interactions.</li>
             <li>Built to comply with <ARIAPracticesLink />.</li>
         </ul>
 };

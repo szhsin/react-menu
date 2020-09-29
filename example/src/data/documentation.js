@@ -86,7 +86,7 @@ const onChangeProp = {
     type: 'function',
     desc:
         <>
-            <p>Event fired when menu open state has changed.</p>
+            <p>Event fired when menu states have changed.</p>
             <p>Event object properties:</p>
             <ul>
                 <li><code>open: bool</code> indicates if the menu is open.</li>
@@ -121,7 +121,7 @@ const styleProps = (target, modifiers, className, styles) => [
                     modifiers &&
                     <>
                         <p>Styles targeting specific component state should be supplied as nested objects
-                            under each key.</p>
+                            under each state key.</p>
                         {modifiers}
                         <p>When a function is provided, it will be called by passing an object with the
                             above properties and should return a <em>flattened</em> style object.</p>
@@ -259,7 +259,7 @@ const menuItem = {
     desc:
         <>
             <p><code>MenuItem</code> represents an item under a menu which can be activated.</p>
-            <p>It can a regular menu item, a checkbox item (<code>type="checkbox"</code>),
+            <p>It can be a regular menu item, a checkbox item (<code>type="checkbox"</code>),
             or a radio item (direct child of {radioGroupLink}).</p>
         </>,
     rows: [
@@ -278,7 +278,7 @@ const menuItem = {
         {
             name: 'href',
             type: 'string',
-            desc: 'The URL that the menu item points to. If provided, a HTML <a> element will be used.'
+            desc: 'The URL that the menu item points to. If provided, an HTML <a> element will be used.'
         },
         {
             name: 'type',
@@ -326,7 +326,7 @@ const submenu = {
     desc:
         <>
             <p><code>SubMenu</code> is a menu container under other menu or submenu components.</p>
-            <p>It consists of a menu item and a sub-level menu contains submenu items.
+            <p>It consists of a menu item and a sub-level menu containing submenu items.
              Use <code>label</code> prop to set its own contents,
              and place the submenu items it contains in the <code>children</code> prop.</p>
         </>,
@@ -349,7 +349,7 @@ const submenu = {
         {
             name: 'disabled',
             type: 'boolean',
-            desc: <p>Set <code>true</code> to disabled the submenu item.</p>
+            desc: <p>Set <code>true</code> to disabled the submenu item (and the submenu).</p>
         },
         {
             name: 'label',
@@ -392,7 +392,7 @@ const menuButton = {
 const menuHeader = {
     id: 'menu-header',
     title: 'MenuHeader',
-    desc: <p><code>MenuHeader</code> can be used to provide a presentational information for a group of related menu items.</p>,
+    desc: <p><code>MenuHeader</code> can be used to provide presentational information for a group of related menu items.</p>,
     rows: [
         ...styleProps('menu header'),
         {
@@ -610,14 +610,13 @@ const keyboard = {
                 <li><span>Space</span> activates a menu item and closes the menu; for radio and checkbox item, activates the menu item without closing the menu.</li>
                 <li><span>Down Arrow</span> moves focus to the next item, wrapping from the last to the first.</li>
                 <li><span>Up Arrow</span> moves focus to the previous item, wrapping from the first to the last.</li>
-                <li><span>Right Arrow</span> When focus is in a submenu item, opens the submenu, and moves focus to the first menu item.</li>
+                <li><span>Return | Space | Right Arrow</span> When focus is in a submenu item, opens the submenu, and moves focus to the first menu item.</li>
                 <li><span>Left Arrow</span> Closes a submenu if it is open.</li>
                 <li><span>Esc</span> Closes a menu and move focus to its associated menu button.</li>
             </ul>
             <h3>MenuButton</h3>
             <ul className="keyboard">
-                <li><span>Return | Space</span> opens the associated menu.</li>
-                <li><span>Down Arrow</span> opens the associated menu and moves focus to the first menu item.</li>
+                <li><span>Return | Space | Down Arrow</span> opens the associated menu and moves focus to the first menu item.</li>
                 <li><span>Up Arrow</span> opens the associated menu and moves focus to the last menu item.</li>
             </ul>
         </>

@@ -10,10 +10,10 @@
 
 - React menu components for easy and fast web development.
 - Unlimited levels of submenu.
-- Radio and checkbox menu items.
+- Supports radio and checkbox menu items.
 - Supports context menu.
 - Customisable styling.
-- Comprehensive keyboard interaction.
+- Comprehensive keyboard interactions.
 - Built to comply with [WAI-ARIA Authoring Practices](https://www.w3.org/TR/wai-aria-practices/#menu).
 
 ## Installation

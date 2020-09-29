@@ -153,7 +153,7 @@ const classNameProp = {
     title: 'className prop',
     desc:
         <>
-            <p>This approach can be used to style a specific menu in the page differently.</p>
+            <p>This prop can be used to style a specific menu in the page differently.</p>
             <p>Every component accepts a <code>className</code> prop which allows you to supply a custom CSS class.</p>
             <p>Optionally, you may pass a function to the prop and receive additional states about the component.</p>
             <p>For more details, please refer to the <code>className</code> prop under
@@ -182,7 +182,7 @@ const stylesProp = {
     title: 'styles prop',
     desc:
         <>
-            <p>This is another approach that can be used to style a specific menu in the page differently.</p>
+            <p>This is another prop that can be used to style a specific menu in the page differently.</p>
             <p>Every component accepts a <code>styles</code> prop as an object which allows you to add inline styles.
             Regular styles are put in the object directly just like React's <code>style</code> prop, and styles which
             are only applied to specific component states are written in nested objects under corresponding keys.</p>
