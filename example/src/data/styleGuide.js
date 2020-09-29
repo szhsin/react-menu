@@ -127,6 +127,23 @@ const stylesheet = {
                     desc: 'MenuButton element.'
                 }
             ]
+        },
+
+        {
+            id: 'z-index',
+            title: 'z-index',
+            desc:
+                <>
+                    <p><LibName /> has a default <code>z-index</code> of 100 for positioned menu.
+                    If this value is not appropriate for your app, you could adjust it by overriding
+                    the <code>{menuClass()()}</code> selector.</p>
+                    <p>E.g., set <code>z-index</code> to 1000:</p>
+                    <pre><code>
+                        {`${menuClass()()} {
+    z-index: 1000;
+}`}
+                    </code></pre>
+                </>
         }
     ]
 };
