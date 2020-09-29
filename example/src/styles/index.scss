@@ -118,7 +118,7 @@ code {
         position: sticky;
         left: 0;
         flex: 1 1 0;
-        @media (max-width: 1300px) {
+        @media (max-width: 1350px) {
             flex-basis: auto;
         }
     }
@@ -126,8 +126,20 @@ code {
     main {
         flex: 0 1 900px;
         padding: 0 1rem 3rem 1rem;
+        margin: 0 1rem;
         > .hash-heading:first-child {
             margin-top: -7rem;
+        }
+        @media (max-width: 1200px) {
+            margin: 0;
+        }
+        @media (max-width: 600px) {
+            .table {
+                display: block;
+                overflow-x: auto;
+                border: 0;
+                margin-bottom: 4.5rem;
+            }
         }
     }
 
@@ -138,8 +150,7 @@ code {
 
 @media (max-width: 900px) {
     #content {
-        flex-direction: column;
-        align-items: center;
+        display: block;
         .table-contents {
             position: static;
             margin-bottom: 4rem;

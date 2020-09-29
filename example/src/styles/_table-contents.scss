@@ -3,8 +3,6 @@
 @use 'mixins';
 
 .table-contents {
-    @include mixins.flex-center("m");
-
     a {
         color: var.$dark-color;
         &:hover {
@@ -13,6 +11,7 @@
     }
 
     nav {
+        @include mixins.flex-center("c", true);
         overflow-y: auto;
     }
 

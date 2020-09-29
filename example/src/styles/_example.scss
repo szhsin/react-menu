@@ -26,15 +26,10 @@
         padding: 1rem;
         border: 1px solid var.$border-color;
         border-radius: var.$border-radius-large;
-
-        &--spaceAround {
-            justify-content: space-around;
-        }
     }
 
     &__source {
         border-radius: var.$border-radius-large;
-        max-width: 90vw;
         .hljs {
             padding: 1rem 1.5rem;
         }
