@@ -61,6 +61,9 @@ code {
         img {
             height: 2rem;
             object-fit: contain;
+            &:hover {
+                opacity: 0.7;
+            }
         }
     }
 

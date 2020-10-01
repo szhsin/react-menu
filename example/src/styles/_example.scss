@@ -38,7 +38,7 @@
 
 [aria-labelledby="event-handling"] {
     .example__demo {
-        min-height: 15rem;
+        height: 15rem;
         align-items: stretch;
         justify-content: space-around;
 
@@ -48,10 +48,14 @@
             justify-content: space-around;
         }
 
-        textarea {
+        .output {
+            @include mixins.reset-list;
             font-size: 0.9rem;
             flex: 0 1 20rem;
             margin-left: 1rem;
+            border: 1px solid var.$border-color;
+            border-radius: var.$border-radius-medium;
+            overflow-y: auto;
         }
     }
 }

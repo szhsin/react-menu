@@ -672,7 +672,7 @@ export const customisedButton = {
             own React button component which implements a forwarding ref and
             accepts <code>onClick</code> and <code>onKeyDown</code> event props.</p>
             <p><code>Menu</code> also works well with third-party React libraries,
-            such as the Material-UI.
+            such as the <b>Material-UI</b>.
             See <a href="https://codesandbox.io/s/react-menu-material-ui-example-wvzpc"
                     target="_blank" rel="noopener noreferrer">
                     an example on CodeSandbox</a>.</p>

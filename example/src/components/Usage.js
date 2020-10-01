@@ -113,24 +113,31 @@ function SubmenuExample() {
 
 function EventHandlingExample() {
     const ref = useRef(null);
-    const [text, setText] = useState('');
+    const lineNum = useRef(1);
+    const [output, setOutput] = useState([]);
+
+    const addLine = line => {
+        return setOutput(o => [...o, <li key={lineNum.current++}>{line}</li>]);
+    }
 
     const handleMenuClick = e => {
-        setText(t => t + `[Menu] ${e.value} clicked\n\n`);
+        addLine(`[Menu] ${e.value} clicked`);
+        addLine('------');
     };
 
     const handleFileClick = e => {
-        setText(t => t + `[MenuItem] ${e.value} clicked\n`);
+        addLine(`[MenuItem] ${e.value} clicked`);
     };
 
     const handleSaveClick = e => {
-        setText(t => t + `[MenuItem] ${e.value} clicked\n\n`);
+        addLine(`[MenuItem] ${e.value} clicked`);
+        addLine('------');
         return false;
     };
 
     useLayoutEffect(() => {
         ref.current.scrollTop = ref.current.scrollHeight;
-    }, [text]);
+    }, [output]);
 
     return (
         <Example data={codeExamples.eventHandling} >
@@ -150,12 +157,14 @@ function EventHandlingExample() {
                 </Menu>
 
                 <button className="btn btn btn-dark"
-                    onClick={() => setText('')}>
+                    onClick={() => setOutput([])}>
                     Clear
                 </button>
             </div>
 
-            <textarea readOnly ref={ref} value={text} />
+            <ul className="output" ref={ref}>
+                {output}
+            </ul>
         </Example>
     );
 }
