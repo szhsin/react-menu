@@ -92,7 +92,7 @@ export const MenuList = defineName(React.memo(function MenuList({
 
         let index = 0;
         const permittedChildren = ['MenuDivider', 'MenuHeader', 'MenuItem',
-            'MenuRadioGroup', 'SubMenu'];
+            'FocusableItem', 'MenuRadioGroup', 'SubMenu'];
         const validateChildren = (parent, child, permitted) => {
             if (!permitted.includes(child.type && child.type.__name__)) {
                 console.warn(`${child.type || child} is ignored.\n`,
@@ -166,7 +166,10 @@ export const MenuList = defineName(React.memo(function MenuList({
             // prevent browser from scrolling the page when SPACE or RETURN is pressed
             case KeyCodes.SPACE:
             case KeyCodes.RETURN:
-                if (e.currentTarget.contains(e.target)) e.preventDefault();
+                // Don't preventDefault on children of FocusableItem 
+                if (e.target && e.target.className.includes(menuClass)) {
+                    e.preventDefault();
+                }
                 break;
         }
 
@@ -481,12 +484,15 @@ export const MenuList = defineName(React.memo(function MenuList({
     useEffect(() => {
         if (!isOpen) hoverIndexDispatch({ type: HoverIndexActionTypes.RESET });
 
+        // Use a timeout here because if set focus immediately, page might scroll unexpectedly.
         const id = setTimeout(() => {
             // We are seeing the old isOpen value when closure was created
             // However it should not be a issue since the timeout is cleared whenever isOpen changes
             // Don't set focus when menu is closed, otherwise focus will be lost
             // and onBlur event will be fired with relatedTarget setting as null.
-            if (!isOpen) return;
+            // If focus has already been set to a children element, don't set focus on the menu;
+            // this happens in some edge cases because of the timeout delay.
+            if (!isOpen || menuRef.current.contains(document.activeElement)) return;
             menuRef.current.focus();
             if (menuItemFocus.position === FocusPositions.FIRST) {
                 hoverIndexDispatch({ type: HoverIndexActionTypes.FIRST });

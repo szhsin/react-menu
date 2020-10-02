@@ -9,7 +9,7 @@ import {
 } from '../utils';
 
 
-export const MenuDivider = defineName(function MenuDivider({
+export const MenuDivider = defineName(React.memo(function MenuDivider({
     className,
     styles }) {
 
@@ -18,7 +18,7 @@ export const MenuDivider = defineName(function MenuDivider({
             style={flatStyles(styles)}
             role="separator" />
     );
-}, 'MenuDivider');
+}), 'MenuDivider');
 
 MenuDivider.propTypes = {
     ...stylePropTypes

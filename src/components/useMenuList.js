@@ -37,6 +37,10 @@ export const useMenuList = (
             }
 
             if (!isStopPropagation) safeCall(onClick, event);
+        },
+
+        handleClose(keyCode) {
+            safeCall(onClose, { keyCode, reason: CloseReason.CLICK });
         }
     }), [onClick, onClose]);
 

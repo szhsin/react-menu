@@ -71,6 +71,11 @@
             }
         }
 
+        &--focusable {
+            cursor: default;
+            background-color: var.$background-color;
+        }
+
         &--disabled {
             color: var.$color-disabled;
             cursor: default;

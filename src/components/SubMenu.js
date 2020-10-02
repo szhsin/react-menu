@@ -14,8 +14,9 @@ import {
     KeyCodes,
     HoverIndexActionTypes,
     FocusPositions,
-    useMenuState,
-    useActiveState
+    useActiveState,
+    useMenuChange,
+    useMenuState
 } from '../utils';
 import { MenuList } from './MenuList';
 
@@ -42,6 +43,8 @@ export const SubMenu = defineName(React.memo(function SubMenu({
     const timeoutId = useRef();
     const isHovering = hoverIndex === index;
     const isDisabled = disabled ? true : undefined;
+
+    useMenuChange(onChange, isOpen);
 
     const handleMouseEnter = e => {
         if (isDisabled) return;
@@ -128,10 +131,6 @@ export const SubMenu = defineName(React.memo(function SubMenu({
             closeMenu();
         }
     }, [isHovering, isParentOpen, closeMenu]);
-
-    useEffect(() => {
-        safeCall(onChange, { open: isOpen });
-    }, [onChange, isOpen]);
 
     const modifiers = Object.freeze({
         open: isOpen,

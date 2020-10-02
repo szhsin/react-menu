@@ -9,7 +9,7 @@ import {
 } from '../utils';
 
 
-export const MenuHeader = defineName(function MenuHeader({
+export const MenuHeader = defineName(React.memo(function MenuHeader({
     className,
     styles,
     children }) {
@@ -21,7 +21,7 @@ export const MenuHeader = defineName(function MenuHeader({
             {children}
         </li>
     );
-}, 'MenuHeader');
+}), 'MenuHeader');
 
 MenuHeader.propTypes = {
     ...stylePropTypes

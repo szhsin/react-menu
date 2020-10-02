@@ -1,4 +1,4 @@
-import React, { useRef, useCallback, useMemo, useEffect } from 'react';
+import React, { useRef, useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import {
     safeCall,
@@ -6,6 +6,7 @@ import {
     menuDefaultPropsBase,
     KeyCodes,
     FocusPositions,
+    useMenuChange,
     useMenuState
 } from '../utils';
 import { useMenuList } from './useMenuList';
@@ -30,6 +31,7 @@ export const Menu = React.memo(function Menu({
         isMounted, isOpen, menuItemFocus,
         openMenu, closeMenu
     } = useMenuState(keepMounted);
+    useMenuChange(onChange, isOpen);
 
     const skipClick = useRef(false);
     const buttonRef = useRef(null);
@@ -104,10 +106,6 @@ export const Menu = React.memo(function Menu({
         onClick,
         handleClose,
         skipClick);
-
-    useEffect(() => {
-        safeCall(onChange, { open: isOpen });
-    }, [onChange, isOpen]);
 
     return (
         <React.Fragment>
