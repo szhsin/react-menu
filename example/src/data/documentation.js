@@ -124,7 +124,7 @@ const styleProps = (target, modifiers, className, styles) => [
                             under each state key.</p>
                         {modifiers}
                         <p>When a function is provided, it will be called by passing an object with the
-                            above properties and should return a <em>flattened</em> style object.</p>
+                            above properties and should return a <strong>flattened</strong> style object.</p>
                     </>
                 }
             </>
@@ -518,7 +518,8 @@ const controlledMenu = {
             type: 'object',
             desc:
                 <>
-                    <p>A ref object attached to a DOM element to which menu will be positioned. <em>Not needed for context menu.</em></p>
+                    <p><em>Not needed for context menu.</em></p>
+                    <p>A ref object attached to a DOM element to which menu will be positioned.</p>
                     <p>Supports ref created by <code>React.createRef</code> or <code>useRef</code> Hook.
                      Doesn't support callback ref.</p>
                 </>
@@ -610,9 +611,11 @@ const keyboard = {
                 <li><span>Space</span> activates a menu item and closes the menu; for radio and checkbox item, activates the menu item without closing the menu.</li>
                 <li><span>Down Arrow</span> moves focus to the next item, wrapping from the last to the first.</li>
                 <li><span>Up Arrow</span> moves focus to the previous item, wrapping from the first to the last.</li>
-                <li><span>Return | Space | Right Arrow</span> When focus is in a submenu item, opens the submenu, and moves focus to the first menu item.</li>
-                <li><span>Left Arrow</span> Closes a submenu if it is open.</li>
+                <li><span>Home</span> moves focus to the first item.</li>
+                <li><span>End</span> moves focus to the last item.</li>
                 <li><span>Esc</span> Closes a menu and move focus to its associated menu button.</li>
+                <li><span>Left Arrow</span> Closes a submenu if it is open.</li>
+                <li><span>Return | Space | Right Arrow</span> When focus is in a submenu item, opens the submenu, and moves focus to the first menu item.</li>
             </ul>
             <h3>MenuButton</h3>
             <ul className="keyboard">
@@ -649,7 +652,7 @@ const accessibility = {
     id: 'accessibility',
     title: 'Accessibility',
     desc:
-        <p><LibName /> supports <code>aria</code> roles, states, and properties which aims to fully comply with
+        <p><LibName /> supports WAI-ARIA roles, states, and properties which adhere to
             the <ARIAPracticesLink />. For more details, please refer to the website.</p>,
     list: [
         keyboard

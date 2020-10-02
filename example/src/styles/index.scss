@@ -13,7 +13,7 @@ body {
         "Droid Sans", "Helvetica Neue", sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    background-color: #f9f9fb;
+    background-color: #fafafc;
 }
 
 code {
@@ -22,9 +22,6 @@ code {
 
 .lib-name {
     font-weight: 600;
-    background-color: var.$highlight-color;
-    padding: 0 0.2rem;
-    border-radius: var.$border-radius-small;
 }
 
 #root {
@@ -90,7 +87,7 @@ code {
     @include mixins.flex-center("m");
 
     em {
-        background-color: var.$highlight-color;
+        @include mixins.highlight;
     }
 
     h1 {
@@ -211,8 +208,8 @@ code {
 
 #documentation {
     li code:first-child {
+        @include mixins.highlight;
         font-size: 0.925rem;
-        background-color: var.$highlight-color;
         margin-right: 0.5rem;
     }
 

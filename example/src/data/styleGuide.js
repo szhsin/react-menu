@@ -23,7 +23,7 @@ const stylesheet = {
          You are able to override the default styles by placing your stylesheets after its own. All default styles use CSS selectors
          with the lowest possible specificity, and you could always precede your selectors
          with <code>.rc-menu-container</code> in case a specific style cannot be overridden.</p>
-            <p><em>Using stylesheets is the most efficient and recommended approach to style</em> <LibName />.</p>
+            <p>Using stylesheets is the most efficient and recommended approach to style <LibName />.</p>
         </>,
     list: [
         {

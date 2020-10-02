@@ -14,7 +14,7 @@
 - Supports context menu.
 - Customisable styling.
 - Comprehensive keyboard interactions.
-- Built to comply with [WAI-ARIA Authoring Practices](https://www.w3.org/TR/wai-aria-practices/#menu).
+- Adheres to [WAI-ARIA Authoring Practices](https://www.w3.org/TR/wai-aria-practices/#menu).
 
 ## Installation
 

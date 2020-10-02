@@ -1263,7 +1263,7 @@ export const features = {
             <li>Supports context menu.</li>
             <li>Customisable styling.</li>
             <li>Comprehensive keyboard interactions.</li>
-            <li>Built to comply with <ARIAPracticesLink />.</li>
+            <li>Adheres to <ARIAPracticesLink />.</li>
         </ul>
 };
 
