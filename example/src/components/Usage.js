@@ -3,6 +3,7 @@ import {
     Menu,
     MenuItem,
     MenuButton,
+    FocusableItem,
     SubMenu,
     MenuRadioGroup,
     MenuHeader,
@@ -43,6 +44,7 @@ export const Usage = React.memo(function Usage() {
                 <LinkAndDisabledExample />
                 <IconAndImageExample />
                 <HoverAndActiveExample />
+                <FocusableItemExample />
 
                 <GroupingSection data={codeExamples.menuButton} />
                 <OpenStateExample />
@@ -351,6 +353,31 @@ function HoverAndActiveExample() {
                         </i>
                     }
                 </MenuItem>
+            </Menu>
+        </Example>
+    );
+}
+
+function FocusableItemExample() {
+    const [filter, setFilter] = useState('');
+
+    return (
+        <Example data={codeExamples.focusableItem} >
+            <Menu menuButton={<MenuButton>Open menu</MenuButton>}
+                align="center" onChange={e => e.open && setFilter('')}>
+                <FocusableItem>
+                    {({ ref }) => (
+                        <input ref={ref} className="form-control" type="text"
+                            placeholder="Type to filter" value={filter}
+                            onChange={e => setFilter(e.target.value)} />
+                    )}
+                </FocusableItem>
+                {
+                    ['Apple', 'Banana', 'Blueberry', 'Cherry', 'Strawberry']
+                        .filter(fruit => fruit.toUpperCase()
+                            .includes(filter.trim().toUpperCase()))
+                        .map(fruit => <MenuItem key={fruit}>{fruit}</MenuItem>)
+                }
             </Menu>
         </Example>
     );

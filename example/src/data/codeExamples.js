@@ -558,6 +558,74 @@ export default function Example() {
 }`
 };
 
+export const focusableItem = {
+    id: 'focusable-item',
+    title: 'Focusable item',
+    desc:
+        <>
+            <p><code>FocusableItem</code> is a special menu item. It's used to wrap elements
+                which are able to receive focus, such as input or button.</p>
+            <p>It receives a render prop as children and passes down a <code>ref</code> and
+                several other states. This example demonstrates how to use an input element to filter
+                menu items.</p>
+        </>,
+
+    source:
+        `const [filter, setFilter] = useState('');
+
+<Menu menuButton={<MenuButton>Open menu</MenuButton>}
+    onChange={e => e.open && setFilter('')}>
+    <FocusableItem>
+        {({ ref }) => (
+            <input ref={ref} className="form-control" type="text"
+                placeholder="Type to filter" value={filter}
+                onChange={e => setFilter(e.target.value)} />
+        )}
+    </FocusableItem>
+    {
+        ['Apple', 'Banana', 'Blueberry', 'Cherry', 'Strawberry']
+            .filter(fruit => fruit.toUpperCase()
+                .includes(filter.trim().toUpperCase()))
+            .map(fruit => <MenuItem key={fruit}>{fruit}</MenuItem>)
+    }
+</Menu>`,
+
+    fullSource:
+        `import React, { useState } from 'react';
+import {
+    Menu,
+    MenuItem,
+    FocusableItem,
+    MenuButton
+} from '@szhsin/react-menu';
+import '@szhsin/react-menu/dist/index.css';
+
+
+export default function Example() {
+    const [filter, setFilter] = useState('');
+
+    return (
+        <Menu menuButton={<MenuButton>Open menu</MenuButton>}
+            onChange={e => e.open && setFilter('')}>
+            <FocusableItem>
+                {({ ref }) => (
+                    <input ref={ref} className="form-control" type="text"
+                        placeholder="Type to filter" value={filter}
+                        onChange={e => setFilter(e.target.value)} />
+                )}
+            </FocusableItem>
+            {
+                ['Apple', 'Banana', 'Blueberry', 'Cherry', 'Strawberry']
+                    .filter(fruit => fruit.toUpperCase()
+                        .includes(filter.trim().toUpperCase()))
+                    .map(fruit => <MenuItem key={fruit}>{fruit}</MenuItem>)
+            }
+        </Menu>
+    );
+}`
+};
+
+
 export const hoverAndActive = {
     id: 'hover-active',
 
@@ -1179,7 +1247,8 @@ export const menuItem = {
     list: [
         linkAndDisabled,
         iconAndImage,
-        hoverAndActive
+        hoverAndActive,
+        focusableItem
     ]
 };
 

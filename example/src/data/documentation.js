@@ -477,6 +477,54 @@ const menuRadioGroup = {
     ]
 };
 
+const focusableItem = {
+    id: 'focusable-item',
+    title: 'FocusableItem',
+    desc: <p><code>FocusableItem</code> can be used to wrap focusable element (input, button) in a
+    menu item. It manages focus automatically among other menu items during mouse and keyboard
+    interactions.</p>,
+    rows: [
+        ...styleProps('focusable item', (
+            <ul>
+                <li><code>focusable: bool</code> always <code>true</code> for a focusable item.</li>
+                <li><code>hover: bool</code> indicates if the focusable item is being hovered.</li>
+                <li><code>disabled: bool</code> indicates if the focusable item is disabled.</li>
+            </ul>
+        )),
+        {
+            name: 'disabled',
+            type: 'boolean',
+            desc:
+                <>
+                    <p>Set <code>true</code> to disabled the item.</p>
+                    <p>Please note this prop only removes the current item from mouse and keyboard
+                    interaction sequences. You still need to disable any focusable element
+                    which you have supplied in its children. This prop is passed to the
+                        children render function.</p>
+                </>
+        },
+        {
+            name: 'children',
+            type: 'function',
+            desc:
+                <>
+                    <p>A function which returns what to be rendered. It will be called by passing an
+                        object with the following properties:</p>
+                    <ul>
+                        <li><code>hover: bool</code> indicates if the focusable item is being hovered.</li>
+                        <li><code>disabled: bool</code> indicates if the focusable item is disabled.</li>
+                        <li><code>ref: object</code> A ref to be attached to the element which should receive
+                        focus when this focusable item is hovered. <br />If you render a React component,
+                        it needs to expose a <code>focus</code> method or supports ref forwarding.</li>
+                        <li><code>closeMenu: func</code> A function that requests to close the root menu.
+                        You could optionally pass a <code>keyCode</code> parameter to indicate which key
+                        initiates the close request.</li>
+                    </ul>
+                </>
+        },
+    ]
+};
+
 const controlledMenu = {
     id: 'controlled-menu',
     title: 'ControlledMenu',
@@ -632,6 +680,7 @@ const components = {
         menu,
         menuItem,
         menuButton,
+        focusableItem,
         submenu,
         menuRadioGroup,
         menuHeader,
