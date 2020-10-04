@@ -60,6 +60,12 @@
     }
 }
 
+[aria-labelledby="focusable-item"] {
+    .example__demo input {
+        max-width: 10rem;
+    }
+}
+
 [aria-labelledby="menu-direction"],
 [aria-labelledby="menu-alignment"] {
     .example__demo {

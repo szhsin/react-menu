@@ -1243,7 +1243,7 @@ export const menuItem = {
     id: 'menu-item',
     title: 'Menu item',
     desc:
-        <p>Advanced usage examples with <code>MenuItem</code>.</p>,
+        <p>Advanced usage examples with menu items.</p>,
     list: [
         linkAndDisabled,
         iconAndImage,

@@ -15,4 +15,5 @@ export const bem = (block, element, modifiers = {}) => {
 }
 
 export const DomInfoContext = React.createContext({});
+export const TocContext = React.createContext({}); // Table of contents
 export const ToastContext = React.createContext(() => { });

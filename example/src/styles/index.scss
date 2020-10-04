@@ -51,6 +51,22 @@ code {
         }
     }
 
+    .menu-btn {
+        display: none;
+        border: 0;
+        background: none;
+        color: white;
+        line-height: 1;
+        margin-right: 1rem;
+        padding: 0.25rem 0.5rem;
+        &:hover {
+            opacity: 0.75;
+        }
+        &:active {
+            opacity: 0.6;
+        }
+    }
+
     .github {
         margin-left: auto;
         margin-right: 1.25rem;
@@ -59,12 +75,12 @@ code {
             height: 2rem;
             object-fit: contain;
             &:hover {
-                opacity: 0.7;
+                opacity: 0.75;
             }
         }
     }
 
-    @media (max-width: 550px) {
+    @media (max-width: 650px) {
         .navbar li {
             margin: 0 0.25rem;
         }
@@ -119,7 +135,7 @@ code {
         left: 0;
         flex: 1 1 0;
         @media (max-width: 1350px) {
-            flex-basis: auto;
+            flex: 1 0 auto;
         }
     }
 
@@ -130,7 +146,11 @@ code {
         > .hash-heading:first-child {
             margin-top: -7rem;
         }
-        @media (max-width: 1200px) {
+        .table p:last-child {
+            margin-bottom: 0;
+        }
+
+        @media (max-width: 1150px) {
             margin: 0;
         }
         @media (max-width: 600px) {
@@ -148,12 +168,62 @@ code {
     }
 }
 
-@media (max-width: 900px) {
+$toc-animation: 0.22s ease-out;
+
+@keyframes slide-out {
+    from {
+        transform: translateX(-100%);
+    }
+    to {
+        transform: none;
+    }
+}
+
+@keyframes fade-in {
+    from {
+        background-color: transparent;
+    }
+    to {
+        background-color: var.$mask-color;
+    }
+}
+
+// Hide table of contents
+@media (max-width: 850px) {
+    #header .menu-btn {
+        display: inline-block;
+    }
+
     #content {
         display: block;
         .table-contents {
-            position: static;
-            margin-bottom: 4rem;
+            position: fixed;
+            display: none;
+            z-index: 200;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            background-color: var.$mask-color;
+
+            &--open {
+                display: flex;
+                animation: fade-in $toc-animation;
+                nav {
+                    animation: slide-out $toc-animation;
+                }
+            }
+
+            nav {
+                display: block;
+                background-color: white;
+                box-shadow: 4px 0 20px 4px var.$mask-color;
+                min-width: 15rem;
+            }
+
+            .contents-list-lv1 {
+                padding: 1.5rem 2rem;
+            }
         }
     }
 }
@@ -211,10 +281,6 @@ code {
         @include mixins.highlight;
         font-size: 0.925rem;
         margin-right: 0.5rem;
-    }
-
-    p:last-child {
-        margin-bottom: 0;
     }
 
     .keyboard {

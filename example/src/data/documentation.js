@@ -500,7 +500,7 @@ const focusableItem = {
                     <p>Please note this prop only removes the current item from mouse and keyboard
                     interaction sequences. You still need to disable any focusable element
                     which you have supplied in its children. This prop is passed to the
-                        children render function.</p>
+                    children render function.</p>
                 </>
         },
         {

@@ -1,9 +1,10 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useContext } from 'react';
 import {
     Switch,
     Route,
     useLocation
 } from 'react-router-dom';
+import { TocContext } from '../utils';
 import { Usage } from './Usage';
 import { Docs } from './Docs';
 import { StyleGuide } from './StyleGuide';
@@ -13,9 +14,12 @@ import { NotFound } from './NotFound';
 export const PageContent = React.memo(function PageContent() {
 
     const location = useLocation();
+    const { setTocOpen } = useContext(TocContext);
     useEffect(() => {
         if (!location.hash) window.scrollTo(0, 0);
-    }, [location]);
+
+        setTocOpen(false);
+    }, [location, setTocOpen]);
 
     return (
         <div id="content">

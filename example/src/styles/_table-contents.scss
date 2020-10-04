@@ -3,6 +3,7 @@
 @use 'mixins';
 
 .table-contents {
+    white-space: nowrap;
     a {
         color: var.$dark-color;
         &:hover {
@@ -12,7 +13,11 @@
 
     nav {
         @include mixins.flex-center("c", true);
+        overflow-x: hidden;
         overflow-y: auto;
+        &:focus {
+            outline: none;
+        }
     }
 
     [class^="contents-list"] {
@@ -26,7 +31,7 @@
     .contents-list-lv1 {
         font-size: 1.3rem;
         font-weight: 600;
-        padding: 1.5rem 0.5rem;
+        padding: 1.5rem 1rem;
         > li {
             margin-bottom: 1.5rem;
         }

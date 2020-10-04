@@ -94,6 +94,10 @@ const stylesheet = {
                             <li>{menuItemClass('type-checkbox')}</li>
                         </ul>,
                     desc: 'Menu item is a radio or checkbox item.'
+                },
+                {
+                    name: menuItemClass('focusable'),
+                    desc: <p>Always present on a <code>FocusableItem</code>.</p>
                 }
             ]
         },
