@@ -4,7 +4,7 @@ import {
     bem,
     menuContainerClass,
     CloseReason,
-    KeyCodes,
+    Keys,
     EventHandlersContext,
     SettingsContext
 } from '../utils';
@@ -32,22 +32,22 @@ export const useMenuList = (
         handleClick(event, isStopPropagation, isCheckorRadio) {
             // According to WAI-ARIA Authoring Practices 1.1
             // Keep menu open when check or radio is invoked by SPACE key
-            if (!isCheckorRadio || event.keyCode !== KeyCodes.SPACE) {
-                safeCall(onClose, { keyCode: event.keyCode, reason: CloseReason.CLICK });
+            if (!isCheckorRadio || event.key !== Keys.SPACE) {
+                safeCall(onClose, { key: event.key, reason: CloseReason.CLICK });
             }
 
             if (!isStopPropagation) safeCall(onClick, event);
         },
 
-        handleClose(keyCode) {
-            safeCall(onClose, { keyCode, reason: CloseReason.CLICK });
+        handleClose(key) {
+            safeCall(onClose, { key, reason: CloseReason.CLICK });
         }
     }), [onClick, onClose]);
 
-    const handleKeyDown = ({ keyCode }) => {
-        switch (keyCode) {
-            case KeyCodes.ESC:
-                safeCall(onClose, { keyCode, reason: CloseReason.CANCEL });
+    const handleKeyDown = ({ key }) => {
+        switch (key) {
+            case Keys.ESC:
+                safeCall(onClose, { key, reason: CloseReason.CANCEL });
                 break;
         }
     };

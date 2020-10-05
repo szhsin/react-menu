@@ -10,7 +10,7 @@ import {
     menuItemClass,
     EventHandlersContext,
     RadioGroupContext,
-    KeyCodes,
+    Keys,
     useActiveState,
     useItemState
 } from '../utils';
@@ -43,11 +43,11 @@ export const MenuItem = defineName(React.memo(function MenuItem({
     const isCheckBox = type === 'checkbox';
     const isAnchor = href && !isDisabled && !isRadio && !isCheckBox;
 
-    const handleClick = (keyCode) => {
+    const handleClick = (key) => {
         if (isDisabled) return;
 
         let isStopPropagation = false;
-        const event = { value, keyCode };
+        const event = { value, key };
         if (isCheckBox) {
             event.checked = !checked;
         }
@@ -71,13 +71,13 @@ export const MenuItem = defineName(React.memo(function MenuItem({
         if (!isActive) return;
 
         onKeyUp(e);
-        switch (e.keyCode) {
-            case KeyCodes.SPACE:
-            case KeyCodes.RETURN:
+        switch (e.key) {
+            case Keys.SPACE:
+            case Keys.ENTER:
                 if (isAnchor) {
                     ref.current.click();
                 } else {
-                    handleClick(e.keyCode);
+                    handleClick(e.key);
                 }
                 break;
         }

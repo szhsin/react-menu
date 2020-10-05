@@ -11,7 +11,7 @@ import {
     menuItemClass,
     MenuListContext,
     SettingsContext,
-    KeyCodes,
+    Keys,
     HoverIndexActionTypes,
     FocusPositions,
     useActiveState,
@@ -35,7 +35,7 @@ export const SubMenu = defineName(React.memo(function SubMenu({
     onChange }) {
 
     const { isMounted, isOpen, menuItemFocus, openMenu, closeMenu } = useMenuState(keepMounted);
-    const { isActive, onKeyUp, onBlur, ...activeStateHandlers } = useActiveState(KeyCodes.RIGHT);
+    const { isActive, onKeyUp, onBlur, ...activeStateHandlers } = useActiveState(Keys.RIGHT);
     const { isParentOpen, hoverIndex, hoverIndexDispatch } = useContext(MenuListContext);
     const { debugging } = useContext(SettingsContext);
     const containerRef = useRef(null);
@@ -67,9 +67,9 @@ export const SubMenu = defineName(React.memo(function SubMenu({
     const handleKeyDown = e => {
         let handled = false;
 
-        switch (e.keyCode) {
+        switch (e.key) {
             // LEFT key is bubbled up from submenu items
-            case KeyCodes.LEFT:
+            case Keys.LEFT:
                 if (isOpen) {
                     closeMenu();
                     itemRef.current.focus();
@@ -78,7 +78,7 @@ export const SubMenu = defineName(React.memo(function SubMenu({
                 break;
 
             // prevent browser from scrolling page to the right
-            case KeyCodes.RIGHT:
+            case Keys.RIGHT:
                 if (!isOpen) handled = true;
                 break;
         }
@@ -94,10 +94,10 @@ export const SubMenu = defineName(React.memo(function SubMenu({
         if (!isActive) return;
 
         onKeyUp(e);
-        switch (e.keyCode) {
-            case KeyCodes.SPACE:
-            case KeyCodes.RETURN:
-            case KeyCodes.RIGHT:
+        switch (e.key) {
+            case Keys.SPACE:
+            case Keys.ENTER:
+            case Keys.RIGHT:
                 openMenu(FocusPositions.FIRST);
                 break;
         }

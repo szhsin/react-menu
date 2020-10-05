@@ -4,7 +4,7 @@ import {
     safeCall,
     menuPropTypesBase,
     menuDefaultPropsBase,
-    KeyCodes,
+    Keys,
     FocusPositions,
     useMenuChange,
     useMenuState
@@ -41,7 +41,7 @@ export const Menu = React.memo(function Menu({
 
     const handleClose = useCallback(e => {
         closeMenu();
-        if (e.keyCode) buttonRef.current.focus();
+        if (e.key) buttonRef.current.focus();
     }, [closeMenu]);
 
     const handleClick = useCallback(e => {
@@ -55,13 +55,13 @@ export const Menu = React.memo(function Menu({
     const handleKeyDown = useCallback(e => {
         let handled = false;
 
-        switch (e.keyCode) {
-            case KeyCodes.UP:
+        switch (e.key) {
+            case Keys.UP:
                 openMenu(FocusPositions.LAST);
                 handled = true;
                 break;
 
-            case KeyCodes.DOWN:
+            case Keys.DOWN:
                 openMenu(FocusPositions.FIRST);
                 handled = true;
                 break;

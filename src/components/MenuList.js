@@ -17,7 +17,7 @@ import {
     SettingsContext,
     MenuListContext,
     initialHoverIndex,
-    KeyCodes,
+    Keys,
     FocusPositions,
     HoverIndexActionTypes
 } from '../utils';
@@ -142,30 +142,29 @@ export const MenuList = defineName(React.memo(function MenuList({
     const handleKeyDown = e => {
         let handled = false;
 
-        switch (e.keyCode) {
-            case KeyCodes.HOME:
+        switch (e.key) {
+            case Keys.HOME:
                 hoverIndexDispatch({ type: HoverIndexActionTypes.FIRST });
                 handled = true;
                 break;
 
-            case KeyCodes.END:
+            case Keys.END:
                 hoverIndexDispatch({ type: HoverIndexActionTypes.LAST });
                 handled = true;
                 break;
 
-            case KeyCodes.UP:
+            case Keys.UP:
                 hoverIndexDispatch({ type: HoverIndexActionTypes.DECREASE });
                 handled = true;
                 break;
 
-            case KeyCodes.DOWN:
+            case Keys.DOWN:
                 hoverIndexDispatch({ type: HoverIndexActionTypes.INCREASE });
                 handled = true;
                 break;
 
-            // prevent browser from scrolling the page when SPACE or RETURN is pressed
-            case KeyCodes.SPACE:
-            case KeyCodes.RETURN:
+            // prevent browser from scrolling the page when SPACE is pressed
+            case Keys.SPACE:
                 // Don't preventDefault on children of FocusableItem 
                 if (e.target && e.target.className.includes(menuClass)) {
                     e.preventDefault();

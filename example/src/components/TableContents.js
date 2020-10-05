@@ -20,10 +20,15 @@ export const TableContents = React.memo(function TableContents({
         if (isTocOpen) ref.current.focus();
     }, [isTocOpen]);
 
+    const handleClose = e => {
+        if (e.currentTarget === e.target) setTocOpen(false);
+    }
+
     return (
         <aside className={bem('table-contents', null, { open: isTocOpen })}
             style={{ top }}
-            onClick={e => e.currentTarget === e.target && setTocOpen(false)}
+            onTouchStart={handleClose}
+            onClick={handleClose}
             onKeyDown={e => e.key === 'Escape' && setTocOpen(false)}>
             <nav aria-label="Table of contents"
                 tabIndex="-1" ref={ref}

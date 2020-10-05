@@ -16,16 +16,16 @@ export const EventHandlersContext = React.createContext({});
 export const RadioGroupContext = React.createContext({});
 export const SettingsContext = React.createContext({});
 
-export const KeyCodes = Object.freeze({
-    'RETURN': 13,
-    'ESC': 27,
-    'SPACE': 32,
-    'END': 35,
-    'HOME': 36,
-    'LEFT': 37,
-    'UP': 38,
-    'RIGHT': 39,
-    'DOWN': 40
+export const Keys = Object.freeze({
+    'ENTER': 'Enter',
+    'ESC': 'Escape',
+    'SPACE': ' ',
+    'HOME': 'Home',
+    'END': 'End',
+    'LEFT': 'ArrowLeft',
+    'RIGHT': 'ArrowRight',
+    'UP': 'ArrowUp',
+    'DOWN': 'ArrowDown'
 });
 
 export const HoverIndexActionTypes = Object.freeze({
