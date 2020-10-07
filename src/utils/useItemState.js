@@ -36,11 +36,8 @@ export const useItemState = (disabled, index) => {
             if (!isDisabled) hoverIndexDispatch({ type: HoverIndexActionTypes.SET, index });
         }, [isDisabled, hoverIndexDispatch, index]),
 
-        unsetHover: useCallback(e => {
-            // It handles situation such as clicking on a sibling disabled menu item
-            if (!e.currentTarget.contains(e.relatedTarget)) {
-                hoverIndexDispatch({ type: HoverIndexActionTypes.UNSET, index });
-            }
-        }, [hoverIndexDispatch, index])
+        unsetHover: useCallback(() => {
+            if (!isDisabled) hoverIndexDispatch({ type: HoverIndexActionTypes.UNSET, index });
+        }, [isDisabled, hoverIndexDispatch, index])
     };
 }

@@ -85,6 +85,8 @@ export const MenuItem = defineName(React.memo(function MenuItem({
 
     const handleBlur = e => {
         onBlur(e);
+
+        // It handles situation such as clicking on a sibling disabled menu item
         unsetHover(e);
     }
 
@@ -106,6 +108,7 @@ export const MenuItem = defineName(React.memo(function MenuItem({
         tabIndex: isHovering ? 0 : -1,
         ref,
         onMouseEnter: setHover,
+        onMouseLeave: unsetHover,
         onKeyUp: handleKeyUp,
         onBlur: handleBlur,
         onClick: () => handleClick(),

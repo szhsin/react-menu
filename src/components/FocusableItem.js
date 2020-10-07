@@ -45,6 +45,14 @@ export const FocusableItem = defineName(React.memo(function FocusableItem({
         closeMenu: handleClose
     });
 
+    const handleBlur = e => {
+        // Focus has moved out of the entire FocusableItem
+        // It handles situation such as clicking on a sibling disabled menu item
+        if (!e.currentTarget.contains(e.relatedTarget)) {
+            unsetHover(e);
+        }
+    }
+
     return (
         <li className={bem(menuClass, menuItemClass, modifiers)(className)}
             style={flatStyles(styles, modifiers)}
@@ -52,8 +60,9 @@ export const FocusableItem = defineName(React.memo(function FocusableItem({
             role="menuitem"
             tabIndex="-1"
             onMouseEnter={setHover}
+            onMouseLeave={unsetHover}
             onFocus={setHover}
-            onBlur={unsetHover}>
+            onBlur={handleBlur}>
             {renderChildren}
         </li>
     );

@@ -56,7 +56,11 @@ export const SubMenu = defineName(React.memo(function SubMenu({
     }
 
     const handleMouseLeave = e => {
+        if (isDisabled) return;
         clearTimeout(timeoutId.current);
+        if (!isOpen) {
+            hoverIndexDispatch({ type: HoverIndexActionTypes.UNSET, index });
+        }
     }
 
     const handleClick = e => {

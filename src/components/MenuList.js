@@ -480,28 +480,38 @@ export const MenuList = defineName(React.memo(function MenuList({
         prevOpen.current = isOpen;
     }, [animation, isMounted, isOpen]);
 
+    const focusPosition = useRef(null);
+    useEffect(() => {
+        focusPosition.current = menuItemFocus.position;
+    }, [menuItemFocus]);
+
+    const isResetIndex = hoverIndex === initialHoverIndex;
     useEffect(() => {
         if (!isOpen) hoverIndexDispatch({ type: HoverIndexActionTypes.RESET });
 
         // Use a timeout here because if set focus immediately, page might scroll unexpectedly.
         const id = setTimeout(() => {
-            // We are seeing the old isOpen value when closure was created
-            // However it should not be a issue since the timeout is cleared whenever isOpen changes
+            // We are seeing the old isOpen and isResetIndex value when closure was created
+            // However it should not be a issue since the timeout is cleared whenever states change
             // Don't set focus when menu is closed, otherwise focus will be lost
             // and onBlur event will be fired with relatedTarget setting as null.
             // If focus has already been set to a children element, don't set focus on the menu;
             // this happens in some edge cases because of the timeout delay.
-            if (!isOpen || menuRef.current.contains(document.activeElement)) return;
-            menuRef.current.focus();
-            if (menuItemFocus.position === FocusPositions.FIRST) {
-                hoverIndexDispatch({ type: HoverIndexActionTypes.FIRST });
-            } else if (menuItemFocus.position === FocusPositions.LAST) {
-                hoverIndexDispatch({ type: HoverIndexActionTypes.LAST });
+
+            if (isOpen && isResetIndex) {
+                menuRef.current.focus();
+
+                if (focusPosition.current === FocusPositions.FIRST) {
+                    hoverIndexDispatch({ type: HoverIndexActionTypes.FIRST });
+                } else if (focusPosition.current === FocusPositions.LAST) {
+                    hoverIndexDispatch({ type: HoverIndexActionTypes.LAST });
+                }
             }
+            focusPosition.current = null;
         }, 100);
 
         return () => clearTimeout(id);
-    }, [isOpen, menuItemFocus]);
+    }, [isOpen, isResetIndex, menuItemFocus]);
 
     const context = useMemo(() => ({
         isParentOpen: isOpen,
