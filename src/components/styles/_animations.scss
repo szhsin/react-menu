@@ -1,5 +1,6 @@
 @use 'sass:list';
 
+$menu: "rc-menu-";
 $duration: 0.15s;
 $directions: (
     "left": "X" 1,
@@ -10,11 +11,11 @@ $directions: (
 
 @mixin slide($dir) {
     &--open#{&}--dir-#{$dir} {
-        animation: slide-out-#{$dir} $duration ease-out;
+        animation: #{$menu}slide-out-#{$dir} $duration ease-out;
     }
 
     &--closing#{&}--dir-#{$dir} {
-        animation: slide-in-#{$dir} $duration ease-in;
+        animation: #{$menu}slide-in-#{$dir} $duration ease-in;
     }
 }
 
@@ -32,7 +33,7 @@ $directions: (
     $axis: list.nth($value, 1);
     $sign: list.nth($value, 2);
 
-    @keyframes slide-out-#{$dir} {
+    @keyframes #{$menu}slide-out-#{$dir} {
         from {
             @include slide-start($axis, $sign);
         }
@@ -41,7 +42,7 @@ $directions: (
         }
     }
 
-    @keyframes slide-in-#{$dir} {
+    @keyframes #{$menu}slide-in-#{$dir} {
         from {
             @include slide-end;
         }
