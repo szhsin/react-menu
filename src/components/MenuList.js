@@ -201,6 +201,24 @@ export const MenuList = defineName(React.memo(function MenuList({
         const getTopOverflow = y => containerRect.top + y;
         const getBottomOverflow = y => containerRect.top + y + menuRect.height - viewportHeight;
 
+        // Don't let menu overflow to the left because it may go off screen
+        // and cannot be scroll into view.
+        const safeMoveLeft = (x, rightOverflow) => {
+            let adjustedX = x - rightOverflow;
+            const leftOverflow = getLeftOverflow(adjustedX);
+            if (leftOverflow < 0) adjustedX -= leftOverflow;
+            return adjustedX;
+        }
+
+        // Don't let menu overflow to the top because it may go off screen
+        // and cannot be scroll into view.
+        const safeMoveUp = (y, bottomOverflow) => {
+            let adjustedY = y - bottomOverflow;
+            const topOverflow = getTopOverflow(adjustedY);
+            if (topOverflow < 0) adjustedY -= topOverflow;
+            return adjustedY;
+        }
+
         const confineHorizontally = x => {
             // If menu overflows to the right side, adjust x to have the menu contained within the viewport
             // and there is no need to check the left side;
@@ -208,7 +226,7 @@ export const MenuList = defineName(React.memo(function MenuList({
             // and adjust x to have the menu contained within the viewport.
             const rightOverflow = getRightOverflow(x);
             if (rightOverflow > 0) {
-                x -= rightOverflow;
+                x = safeMoveLeft(x, rightOverflow);
             } else {
                 const leftOverflow = getLeftOverflow(x);
                 if (leftOverflow < 0) {
@@ -223,7 +241,7 @@ export const MenuList = defineName(React.memo(function MenuList({
             // Similar logic to confineHorizontally above
             const bottomOverflow = getBottomOverflow(y);
             if (bottomOverflow > 0) {
-                y -= bottomOverflow;
+                y = safeMoveUp(y, bottomOverflow);
             } else {
                 const topOverflow = getTopOverflow(y);
                 if (topOverflow < 0) {
@@ -243,6 +261,8 @@ export const MenuList = defineName(React.memo(function MenuList({
             getRightOverflow,
             getTopOverflow,
             getBottomOverflow,
+            safeMoveLeft,
+            safeMoveUp,
             confineHorizontally,
             confineVertically
         };
@@ -259,6 +279,8 @@ export const MenuList = defineName(React.memo(function MenuList({
             getRightOverflow,
             getTopOverflow,
             getBottomOverflow,
+            safeMoveLeft,
+            safeMoveUp,
             confineHorizontally,
             confineVertically
         } = positionHelpers();
@@ -300,8 +322,7 @@ export const MenuList = defineName(React.memo(function MenuList({
                     const rightOverflow = getRightOverflow(adjustedX);
                     if (rightOverflow > 0) {
                         if (-leftOverflow > rightOverflow) {
-                            adjustedX -= rightOverflow;
-                            x = adjustedX;
+                            x = safeMoveLeft(adjustedX, rightOverflow);
                             computedDirection = 'right';
                         } else {
                             x -= leftOverflow;
@@ -333,7 +354,7 @@ export const MenuList = defineName(React.memo(function MenuList({
                             x = adjustedX;
                             computedDirection = 'left';
                         } else {
-                            x -= rightOverflow;
+                            x = safeMoveLeft(x, rightOverflow);
                         }
                     } else {
                         x = adjustedX;
@@ -362,8 +383,7 @@ export const MenuList = defineName(React.memo(function MenuList({
                     const bottomOverflow = getBottomOverflow(adjustedY);
                     if (bottomOverflow > 0) {
                         if (-topOverflow > bottomOverflow) {
-                            adjustedY -= bottomOverflow;
-                            y = adjustedY;
+                            y = safeMoveUp(adjustedY, bottomOverflow);
                             computedDirection = 'bottom';
                         } else {
                             y -= topOverflow;
@@ -397,7 +417,7 @@ export const MenuList = defineName(React.memo(function MenuList({
                             y = adjustedY;
                             computedDirection = 'top';
                         } else {
-                            y -= bottomOverflow;
+                            y = safeMoveUp(y, bottomOverflow);
                         }
                     } else {
                         y = adjustedY;
@@ -424,7 +444,9 @@ export const MenuList = defineName(React.memo(function MenuList({
             getLeftOverflow,
             getRightOverflow,
             getTopOverflow,
-            getBottomOverflow
+            getBottomOverflow,
+            safeMoveLeft,
+            safeMoveUp
         } = positionHelpers();
 
         let x, y;
@@ -443,7 +465,7 @@ export const MenuList = defineName(React.memo(function MenuList({
             const adjustedX = x - menuRect.width;
             const leftOverflow = getLeftOverflow(adjustedX);
             if (leftOverflow < 0) {
-                x -= rightOverflow;
+                x = safeMoveLeft(x, rightOverflow);
             } else {
                 x = adjustedX;
             }
@@ -458,7 +480,7 @@ export const MenuList = defineName(React.memo(function MenuList({
             const adjustedY = y - menuRect.height;
             const topOverflow = getTopOverflow(adjustedY);
             if (topOverflow < 0) {
-                y -= bottomOverflow;
+                y = safeMoveUp(y, bottomOverflow);
             } else {
                 y = adjustedY;
             }
