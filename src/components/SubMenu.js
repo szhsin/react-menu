@@ -6,6 +6,8 @@ import {
     bem,
     flatStyles,
     stylePropTypes,
+    offsetPropTypes,
+    offsetDefaultProps,
     menuClass,
     subMenuClass,
     menuItemClass,
@@ -31,6 +33,8 @@ export const SubMenu = defineName(React.memo(function SubMenu({
     keepMounted,
     label,
     index,
+    offsetX,
+    offsetY,
     children,
     onChange }) {
 
@@ -175,7 +179,9 @@ export const SubMenu = defineName(React.memo(function SubMenu({
                 isOpen={isOpen}
                 isMounted={isMounted}
                 isDisabled={isDisabled}
-                menuItemFocus={menuItemFocus}>
+                menuItemFocus={menuItemFocus}
+                offsetX={offsetX}
+                offsetY={offsetY}>
                 {children}
             </MenuList>
         </li>
@@ -184,6 +190,7 @@ export const SubMenu = defineName(React.memo(function SubMenu({
 
 SubMenu.propTypes = {
     ...stylePropTypes,
+    ...offsetPropTypes,
     'aria-label': PropTypes.string,
     menuClassName: PropTypes.oneOfType([
         PropTypes.string,
@@ -204,5 +211,6 @@ SubMenu.propTypes = {
 };
 
 SubMenu.defaultProps = {
+    ...offsetDefaultProps,
     keepMounted: true
 };

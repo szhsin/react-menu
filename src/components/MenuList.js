@@ -36,6 +36,8 @@ export const MenuList = defineName(React.memo(function MenuList({
     isMounted,
     isDisabled,
     menuItemFocus,
+    offsetX,
+    offsetY,
     children,
     onKeyDown,
     onAnimationEnd,
@@ -286,12 +288,12 @@ export const MenuList = defineName(React.memo(function MenuList({
         } = positionHelpers();
 
         const anchorRect = anchorRef.current.getBoundingClientRect();
-        const placeLeftX = anchorRect.left - containerRect.left - menuRect.width;
-        const placeRightX = anchorRect.right - containerRect.left;
-        const placeLeftorRightY = anchorRect.top - containerRect.top;
+        const placeLeftX = anchorRect.left - containerRect.left - menuRect.width - offsetX;
+        const placeRightX = anchorRect.right - containerRect.left + offsetX;
+        const placeLeftorRightY = anchorRect.top - containerRect.top + offsetY;
 
-        const placeTopY = anchorRect.top - containerRect.top - menuRect.height;
-        const placeBottomY = anchorRect.bottom - containerRect.top;
+        const placeTopY = anchorRect.top - containerRect.top - menuRect.height - offsetY;
+        const placeBottomY = anchorRect.bottom - containerRect.top + offsetY;
         let placeToporBottomX;
         if (align === 'end') {
             placeToporBottomX = anchorRect.right - containerRect.left - menuRect.width;
@@ -301,6 +303,7 @@ export const MenuList = defineName(React.memo(function MenuList({
         } else {
             placeToporBottomX = anchorRect.left - containerRect.left;
         }
+        placeToporBottomX += offsetX;
 
         let newPosition, x, y;
         let computedDirection = direction;

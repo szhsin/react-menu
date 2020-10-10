@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import {
     menuPropTypesBase,
     menuDefaultPropsBase,
+    offsetPropTypes,
+    offsetDefaultProps,
     FocusPositions
 } from '../utils';
 import { useMenuList } from './useMenuList';
@@ -22,6 +24,8 @@ export const ControlledMenu = React.memo(function ControlledMenu({
     isOpen,
     isMounted,
     menuItemFocus,
+    offsetX,
+    offsetY,
     children,
     onClick,
     onClose,
@@ -39,7 +43,9 @@ export const ControlledMenu = React.memo(function ControlledMenu({
             direction,
             isOpen,
             isMounted,
-            menuItemFocus
+            menuItemFocus,
+            offsetX,
+            offsetY
         },
         id,
         animation,
@@ -51,6 +57,7 @@ export const ControlledMenu = React.memo(function ControlledMenu({
 
 ControlledMenu.propTypes = {
     ...menuPropTypesBase,
+    ...offsetPropTypes,
     anchorPoint: PropTypes.exact({
         x: PropTypes.number,
         y: PropTypes.number
@@ -66,6 +73,7 @@ ControlledMenu.propTypes = {
 
 ControlledMenu.defaultProps = {
     ...menuDefaultPropsBase,
+    ...offsetDefaultProps,
     isMounted: true,
     menuItemFocus: { position: FocusPositions.INITIAL }
 };
