@@ -14,6 +14,7 @@ import {
     bem,
     flatStyles,
     menuClass,
+    menuArrowClass,
     SettingsContext,
     MenuListContext,
     initialHoverIndex,
@@ -30,6 +31,7 @@ export const MenuList = defineName(React.memo(function MenuList({
     anchorPoint,
     anchorRef,
     containerRef,
+    arrow,
     align,
     direction,
     isOpen,
@@ -44,10 +46,12 @@ export const MenuList = defineName(React.memo(function MenuList({
     ...restProps }) {
 
     const [position, setPosition] = useState({ x: 0, y: 0 });
+    const [arrowPosition, setArrowPosition] = useState({});
     const [isClosing, setClosing] = useState(false);
     const [expandedDirection, setExpandedDirection] = useState(direction);
     const { animation } = useContext(SettingsContext);
     const menuRef = useRef(null);
+    const arrowRef = useRef(null);
     const menuItemsCount = useRef(0);
     const prevOpen = useRef(isOpen);
     const [hoverIndex, hoverIndexDispatch] = useReducer(hoverIndexReducer, initialHoverIndex);
@@ -270,6 +274,198 @@ export const MenuList = defineName(React.memo(function MenuList({
         };
     }, [containerRef]);
 
+    const placeArrowX = useCallback((menuX, {
+        anchorRect,
+        containerRect,
+        menuRect
+    }) => {
+        if (!arrow) return;
+        let x = anchorRect.left - containerRect.left - menuX + anchorRect.width / 2;
+        const offset = arrowRef.current.offsetWidth * 1.25;
+        x = Math.max(offset, x);
+        x = Math.min(x, menuRect.width - offset);
+        setArrowPosition({ x });
+    }, [arrow]);
+
+    const placeArrowY = useCallback((menuY, {
+        anchorRect,
+        containerRect,
+        menuRect
+    }) => {
+        if (!arrow) return;
+        let y = anchorRect.top - containerRect.top - menuY + anchorRect.height / 2;
+        const offset = arrowRef.current.offsetWidth * 1.25;
+        y = Math.max(offset, y);
+        y = Math.min(y, menuRect.height - offset);
+        setArrowPosition({ y });
+    }, [arrow]);
+
+    const placeLeft = useCallback((rects, {
+        placeLeftorRightY,
+        placeLeftX,
+        placeRightX
+    }, {
+        getLeftOverflow,
+        getRightOverflow,
+        safeMoveLeft,
+        confineVertically
+    }) => {
+        let computedDirection = 'left';
+        let x = placeLeftX;
+        let y = placeLeftorRightY;
+        y = confineVertically(y);
+
+        const leftOverflow = getLeftOverflow(x);
+        if (leftOverflow < 0) {
+            // if menu overflows to the left side, 
+            // try to reposition it to the right of the anchor.
+            let adjustedX = placeRightX;
+
+            // if menu overflows to the right side after repositioning,
+            // choose a side which has less overflow,
+            // and adjust x to have the menu contained within the viewport.
+            const rightOverflow = getRightOverflow(adjustedX);
+            if (rightOverflow > 0) {
+                if (-leftOverflow > rightOverflow) {
+                    x = safeMoveLeft(adjustedX, rightOverflow);
+                    computedDirection = 'right';
+                } else {
+                    x -= leftOverflow;
+                }
+            } else {
+                x = adjustedX;
+                computedDirection = 'right';
+            }
+        }
+
+        setPosition({ x, y });
+        setExpandedDirection(computedDirection);
+        placeArrowY(y, rects);
+    }, [placeArrowY]);
+
+    const placeRight = useCallback((rects, {
+        placeLeftorRightY,
+        placeLeftX,
+        placeRightX
+    }, {
+        getLeftOverflow,
+        getRightOverflow,
+        safeMoveLeft,
+        confineVertically
+    }) => {
+        let computedDirection = 'right';
+        let x = placeRightX;
+        let y = placeLeftorRightY;
+        y = confineVertically(y);
+
+        // Opposite logic to the 'left' direction above
+        const rightOverflow = getRightOverflow(x);
+        if (rightOverflow > 0) {
+            let adjustedX = placeLeftX;
+
+            const leftOverflow = getLeftOverflow(adjustedX);
+            if (leftOverflow < 0) {
+                if (-leftOverflow < rightOverflow) {
+                    adjustedX -= leftOverflow;
+                    x = adjustedX;
+                    computedDirection = 'left';
+                } else {
+                    x = safeMoveLeft(x, rightOverflow);
+                }
+            } else {
+                x = adjustedX;
+                computedDirection = 'left';
+            }
+        }
+
+        setPosition({ x, y });
+        setExpandedDirection(computedDirection);
+        placeArrowY(y, rects);
+    }, [placeArrowY]);
+
+    const placeTop = useCallback((rects, {
+        placeToporBottomX,
+        placeTopY,
+        placeBottomY
+    }, {
+        getTopOverflow,
+        getBottomOverflow,
+        safeMoveUp,
+        confineHorizontally
+    }) => {
+        let computedDirection = 'top';
+        let x = placeToporBottomX;
+        let y = placeTopY;
+        x = confineHorizontally(x);
+
+        const topOverflow = getTopOverflow(y);
+        if (topOverflow < 0) {
+            // if menu overflows to the top, 
+            // try to reposition it to the bottom of the anchor.
+            let adjustedY = placeBottomY;
+
+            // if menu overflows to the bottom after repositioning,
+            // choose a side which has less overflow,
+            // and adjust y to have the menu contained within the viewport.
+            const bottomOverflow = getBottomOverflow(adjustedY);
+            if (bottomOverflow > 0) {
+                if (-topOverflow > bottomOverflow) {
+                    y = safeMoveUp(adjustedY, bottomOverflow);
+                    computedDirection = 'bottom';
+                } else {
+                    y -= topOverflow;
+                }
+            } else {
+                y = adjustedY;
+                computedDirection = 'bottom';
+            }
+        }
+
+        setPosition({ x, y });
+        setExpandedDirection(computedDirection);
+        placeArrowX(x, rects);
+    }, [placeArrowX]);
+
+    const placeBottom = useCallback((rects, {
+        placeToporBottomX,
+        placeTopY,
+        placeBottomY
+    }, {
+        getTopOverflow,
+        getBottomOverflow,
+        safeMoveUp,
+        confineHorizontally
+    }) => {
+        let computedDirection = 'bottom';
+        let x = placeToporBottomX;
+        let y = placeBottomY;
+        x = confineHorizontally(x);
+
+        // Opposite logic to the 'top' direction above
+        const bottomOverflow = getBottomOverflow(y);
+        if (bottomOverflow > 0) {
+            let adjustedY = placeTopY;
+
+            const topOverflow = getTopOverflow(adjustedY);
+            if (topOverflow < 0) {
+                if (-topOverflow < bottomOverflow) {
+                    adjustedY -= topOverflow;
+                    y = adjustedY;
+                    computedDirection = 'top';
+                } else {
+                    y = safeMoveUp(y, bottomOverflow);
+                }
+            } else {
+                y = adjustedY;
+                computedDirection = 'top';
+            }
+        }
+
+        setPosition({ x, y });
+        setExpandedDirection(computedDirection);
+        placeArrowX(x, rects);
+    }, [placeArrowX]);
+
     // handle menu positioning
     useLayoutEffect(() => {
         if (!isOpen || anchorPoint || !anchorRef) return;
@@ -277,23 +473,27 @@ export const MenuList = defineName(React.memo(function MenuList({
         const {
             menuRect,
             containerRect,
-            getLeftOverflow,
-            getRightOverflow,
-            getTopOverflow,
-            getBottomOverflow,
-            safeMoveLeft,
-            safeMoveUp,
-            confineHorizontally,
-            confineVertically
+            ...helpers
         } = positionHelpers();
 
-        const anchorRect = anchorRef.current.getBoundingClientRect();
-        const placeLeftX = anchorRect.left - containerRect.left - menuRect.width - offsetX;
-        const placeRightX = anchorRect.right - containerRect.left + offsetX;
-        const placeLeftorRightY = anchorRect.top - containerRect.top + offsetY;
+        let horizontalOffset = offsetX;
+        let verticalOffset = offsetY;
+        if (arrow) {
+            const offset = arrowRef.current.offsetWidth;
+            if (direction === 'left' || direction === 'right') {
+                horizontalOffset += offset;
+            } else {
+                verticalOffset += offset;
+            }
+        }
 
-        const placeTopY = anchorRect.top - containerRect.top - menuRect.height - offsetY;
-        const placeBottomY = anchorRect.bottom - containerRect.top + offsetY;
+        const anchorRect = anchorRef.current.getBoundingClientRect();
+        const placeLeftX = anchorRect.left - containerRect.left - menuRect.width - horizontalOffset;
+        const placeRightX = anchorRect.right - containerRect.left + horizontalOffset;
+        const placeLeftorRightY = anchorRect.top - containerRect.top + verticalOffset;
+
+        const placeTopY = anchorRect.top - containerRect.top - menuRect.height - verticalOffset;
+        const placeBottomY = anchorRect.bottom - containerRect.top + verticalOffset;
         let placeToporBottomX;
         if (align === 'end') {
             placeToporBottomX = anchorRect.right - containerRect.left - menuRect.width;
@@ -303,139 +503,41 @@ export const MenuList = defineName(React.memo(function MenuList({
         } else {
             placeToporBottomX = anchorRect.left - containerRect.left;
         }
-        placeToporBottomX += offsetX;
+        placeToporBottomX += horizontalOffset;
 
-        let newPosition, x, y;
-        let computedDirection = direction;
+        const rects = { anchorRect, containerRect, menuRect };
+        const placements = {
+            placeLeftX,
+            placeRightX,
+            placeLeftorRightY,
+            placeTopY,
+            placeBottomY,
+            placeToporBottomX
+        };
+
         switch (direction) {
-            case 'left': {
-                x = placeLeftX;
-                y = placeLeftorRightY;
-                y = confineVertically(y);
-
-                const leftOverflow = getLeftOverflow(x);
-                if (leftOverflow < 0) {
-                    // if menu overflows to the left side, 
-                    // try to reposition it to the right of the anchor.
-                    let adjustedX = placeRightX;
-
-                    // if menu overflows to the right side after repositioning,
-                    // choose a side which has less overflow,
-                    // and adjust x to have the menu contained within the viewport.
-                    const rightOverflow = getRightOverflow(adjustedX);
-                    if (rightOverflow > 0) {
-                        if (-leftOverflow > rightOverflow) {
-                            x = safeMoveLeft(adjustedX, rightOverflow);
-                            computedDirection = 'right';
-                        } else {
-                            x -= leftOverflow;
-                        }
-                    } else {
-                        x = adjustedX;
-                        computedDirection = 'right';
-                    }
-                }
-
-                newPosition = { x, y };
-            }
+            case 'left':
+                placeLeft(rects, placements, helpers);
                 break;
 
-            case 'right': {
-                x = placeRightX;
-                y = placeLeftorRightY;
-                y = confineVertically(y);
-
-                // Opposite logic to the 'left' direction above
-                const rightOverflow = getRightOverflow(x);
-                if (rightOverflow > 0) {
-                    let adjustedX = placeLeftX;
-
-                    const leftOverflow = getLeftOverflow(adjustedX);
-                    if (leftOverflow < 0) {
-                        if (-leftOverflow < rightOverflow) {
-                            adjustedX -= leftOverflow;
-                            x = adjustedX;
-                            computedDirection = 'left';
-                        } else {
-                            x = safeMoveLeft(x, rightOverflow);
-                        }
-                    } else {
-                        x = adjustedX;
-                        computedDirection = 'left';
-                    }
-                }
-
-                newPosition = { x, y };
-            }
+            case 'right':
+                placeRight(rects, placements, helpers);
                 break;
 
-            case 'top': {
-                x = placeToporBottomX;
-                y = placeTopY;
-                x = confineHorizontally(x);
-
-                const topOverflow = getTopOverflow(y);
-                if (topOverflow < 0) {
-                    // if menu overflows to the top, 
-                    // try to reposition it to the bottom of the anchor.
-                    let adjustedY = placeBottomY;
-
-                    // if menu overflows to the bottom after repositioning,
-                    // choose a side which has less overflow,
-                    // and adjust y to have the menu contained within the viewport.
-                    const bottomOverflow = getBottomOverflow(adjustedY);
-                    if (bottomOverflow > 0) {
-                        if (-topOverflow > bottomOverflow) {
-                            y = safeMoveUp(adjustedY, bottomOverflow);
-                            computedDirection = 'bottom';
-                        } else {
-                            y -= topOverflow;
-                        }
-                    } else {
-                        y = adjustedY;
-                        computedDirection = 'bottom';
-                    }
-                }
-
-                newPosition = { x, y };
-            }
+            case 'top':
+                placeTop(rects, placements, helpers);
                 break;
 
             case 'bottom':
-            default: {
-                computedDirection = 'bottom';
-                x = placeToporBottomX;
-                y = placeBottomY;
-                x = confineHorizontally(x);
-
-                // Opposite logic to the 'top' direction above
-                const bottomOverflow = getBottomOverflow(y);
-                if (bottomOverflow > 0) {
-                    let adjustedY = placeTopY;
-
-                    const topOverflow = getTopOverflow(adjustedY);
-                    if (topOverflow < 0) {
-                        if (-topOverflow < bottomOverflow) {
-                            adjustedY -= topOverflow;
-                            y = adjustedY;
-                            computedDirection = 'top';
-                        } else {
-                            y = safeMoveUp(y, bottomOverflow);
-                        }
-                    } else {
-                        y = adjustedY;
-                        computedDirection = 'top';
-                    }
-                }
-
-                newPosition = { x, y };
-            }
+            default:
+                placeBottom(rects, placements, helpers);
                 break;
         }
-
-        setPosition(newPosition);
-        setExpandedDirection(computedDirection);
-    }, [isOpen, anchorPoint, anchorRef, positionHelpers, align, direction]);
+    }, [
+        isOpen, anchorPoint, anchorRef,
+        arrow, align, direction, offsetX, offsetY,
+        positionHelpers, placeLeft, placeRight, placeTop, placeBottom
+    ]);
 
     // handle context menu positioning
     useLayoutEffect(() => {
@@ -570,6 +672,19 @@ export const MenuList = defineName(React.memo(function MenuList({
                         left: `${position.x}px`,
                         top: `${position.y}px`
                     }}>
+
+                    {arrow &&
+                        <div className={bem(menuClass, menuArrowClass, {
+                            dir: expandedDirection
+                        })()}
+                            style={{
+                                left: arrowPosition.x && `${arrowPosition.x}px`,
+                                top: arrowPosition.y && `${arrowPosition.y}px`,
+                            }}
+                            ref={arrowRef}
+                            role="presentation" />
+                    }
+
                     <MenuListContext.Provider value={context}>
                         {menuItems}
                     </MenuListContext.Provider>

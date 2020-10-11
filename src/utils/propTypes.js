@@ -20,6 +20,7 @@ export const menuPropTypesBase = {
     ]),
     animation: PropTypes.bool,
     debugging: PropTypes.bool,
+    arrow: PropTypes.bool,
     align: PropTypes.oneOf(['start', 'center', 'end']),
     direction: PropTypes.oneOf(['left', 'right', 'top', 'bottom']),
     children: PropTypes.node.isRequired,

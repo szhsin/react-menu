@@ -35,6 +35,37 @@
         @include animations.slide($dir);
     }
 
+    &__arrow {
+        box-sizing: border-box;
+        width: var.$arrow-size;
+        height: var.$arrow-size;
+        background-color: var.$background-color;
+        border: 1px solid transparent;
+        border-left-color: var.$arrow-border-color;
+        border-top-color: var.$arrow-border-color;
+        position: absolute;
+
+        &--dir-left {
+            right: var.$arrow-pos;
+            transform: translateY(-50%) rotate(135deg);
+        }
+
+        &--dir-right {
+            left: var.$arrow-pos;
+            transform: translateY(-50%) rotate(-45deg);
+        }
+
+        &--dir-top {
+            bottom: var.$arrow-pos;
+            transform: translateX(-50%) rotate(-135deg);
+        }
+
+        &--dir-bottom {
+            top: var.$arrow-pos;
+            transform: translateX(-50%) rotate(45deg);
+        }
+    }
+
     &__item {
         @include mixins.remove-focus;
         position: relative;

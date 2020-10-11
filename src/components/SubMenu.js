@@ -29,6 +29,7 @@ export const SubMenu = defineName(React.memo(function SubMenu({
     menuClassName,
     styles,
     menuStyles,
+    arrow,
     disabled,
     keepMounted,
     label,
@@ -175,6 +176,7 @@ export const SubMenu = defineName(React.memo(function SubMenu({
                 styles={menuStyles}
                 anchorRef={itemRef}
                 containerRef={containerRef}
+                arrow={arrow}
                 direction={'right'}
                 isOpen={isOpen}
                 isMounted={isMounted}
@@ -200,6 +202,7 @@ SubMenu.propTypes = {
         PropTypes.object,
         PropTypes.func
     ]),
+    arrow: PropTypes.bool,
     disabled: PropTypes.bool,
     keepMounted: PropTypes.bool,
     label: PropTypes.oneOfType([
