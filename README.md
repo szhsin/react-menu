@@ -1,6 +1,6 @@
 # React-Menu
 
-> React menu components
+> A customisable, lightweight, and optimised React menu library with accessibility.
 
 **[Live examples and documentation](https://szhsin.github.io/react-menu/)**
 
@@ -48,6 +48,8 @@ export default function Example() {
     );
 }
 ```
+
+[More examples and documentation](https://szhsin.github.io/react-menu/)
 
 ## License
 

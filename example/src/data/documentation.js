@@ -74,13 +74,6 @@ const keepMountedProp = {
     </>
 };
 
-const menuChildrenProp = {
-    name: 'children',
-    type: 'node',
-    desc: <p>Can be <code>MenuDivider, MenuHeader, MenuItem, FocusableItem,
-    MenuRadioGroup, SubMenu</code> or any of their combinations.</p>
-};
-
 const onChangeProp = {
     name: 'onChange',
     type: 'function',
@@ -131,9 +124,35 @@ const styleProps = (target, modifiers, className, styles) => [
     }
 ];
 
+const commonMenuProps = [
+    {
+        name: 'arrow',
+        type: 'boolean',
+        desc: <p>Set <code>true</code> to display an arrow pointing to its anchor element.</p>
+    },
+    {
+        name: 'offsetX',
+        type: 'number',
+        defaultVal: 0,
+        desc: <p>Set the horizontal distance (in pixels) between menu and its anchor element. The value can be negative.</p>
+    },
+    {
+        name: 'offsetY',
+        type: 'number',
+        defaultVal: 0,
+        desc: <p>Set the vertical distance (in pixels) between menu and its anchor element. The value can be negative.</p>
+    },
+    {
+        name: 'children',
+        type: 'node',
+        desc: <p>Can be <code>MenuDivider, MenuHeader, MenuItem, FocusableItem,
+        MenuRadioGroup, SubMenu</code> or any of their combinations.</p>
+    }
+];
+
 const menuPropsBase = [
     ...styleProps('menu', menuModifiers),
-    menuChildrenProp,
+    ...commonMenuProps,
     {
         name: 'id',
         type: 'string | number',
@@ -333,8 +352,8 @@ const submenu = {
     rows: [
         ...styleProps('submenu item', submenuModifiers),
         ...styleProps('submenu', menuModifiers, 'menuClassName', 'menuStyles'),
+        ...commonMenuProps,
         keepMountedProp,
-        menuChildrenProp,
         onChangeProp,
         {
             name: 'aria-label',
