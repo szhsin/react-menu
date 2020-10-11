@@ -69,10 +69,27 @@
 [aria-labelledby="menu-direction"],
 [aria-labelledby="menu-alignment"] {
     .example__demo {
-        justify-content: space-around;
-    }
-    .rc-menu-button {
-        flex: 0 1 6rem;
+        flex-direction: column;
+
+        .menus {
+            display: flex;
+            justify-content: space-around;
+            align-self: stretch;
+        }
+
+        .form {
+            margin: 0 -1rem 1rem -1rem;
+            label {
+                margin: 0 1rem;
+            }
+            input[type="radio"] {
+                margin-right: 0.5rem;
+            }
+        }
+
+        .rc-menu-button {
+            flex: 0 1 6rem;
+        }
     }
 }
 

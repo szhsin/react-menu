@@ -294,7 +294,7 @@ export const MenuList = defineName(React.memo(function MenuList({
     }) => {
         if (!arrow) return;
         let y = anchorRect.top - containerRect.top - menuY + anchorRect.height / 2;
-        const offset = arrowRef.current.offsetWidth * 1.25;
+        const offset = arrowRef.current.offsetHeight * 1.25;
         y = Math.max(offset, y);
         y = Math.min(y, menuRect.height - offset);
         setArrowPosition({ y });
@@ -479,11 +479,10 @@ export const MenuList = defineName(React.memo(function MenuList({
         let horizontalOffset = offsetX;
         let verticalOffset = offsetY;
         if (arrow) {
-            const offset = arrowRef.current.offsetWidth;
             if (direction === 'left' || direction === 'right') {
-                horizontalOffset += offset;
+                horizontalOffset += arrowRef.current.offsetWidth;
             } else {
-                verticalOffset += offset;
+                verticalOffset += arrowRef.current.offsetHeight;
             }
         }
 

@@ -415,10 +415,18 @@ function CustomisedButtonExample() {
 }
 
 function MenuDirectionExample() {
+    const [option, setOption] = useState('default');
 
-    const menus = ['top', 'left', 'right', 'bottom'].map(direction => (
+    const menus = ['right', 'top', 'bottom', 'left'].map(direction => (
         <Menu menuButton={<MenuButton>{direction}</MenuButton>}
-            key={direction} direction={direction}>
+            key={direction} direction={direction}
+            arrow={option === 'arrow'}
+            offsetX={option === 'offset' &&
+                (direction === 'left' || direction === 'right')
+                ? 12 : 0}
+            offsetY={option === 'offset' &&
+                (direction === 'top' || direction === 'bottom')
+                ? 12 : 0}>
             <MenuItem>New File</MenuItem>
             <MenuItem>Save</MenuItem>
             <MenuItem>Close Window</MenuItem>
@@ -427,16 +435,23 @@ function MenuDirectionExample() {
 
     return (
         <Example data={codeExamples.direction} >
-            {menus}
+            <PlacementOptions name="directionGroup" option={option}
+                onOptionChange={setOption} />
+            <div className="menus">
+                {menus}
+            </div>
         </Example>
     );
 }
 
 function MenuAlignmentExample() {
+    const [option, setOption] = useState('default');
 
     const menus = ['start', 'center', 'end'].map(align => (
         <Menu menuButton={<MenuButton>{align}</MenuButton>}
-            key={align} align={align}>
+            key={align} align={align}
+            arrow={option === 'arrow'}
+            offsetY={option === 'offset' ? 12 : 0}>
             <MenuItem>New File</MenuItem>
             <MenuItem>Save</MenuItem>
             <MenuItem>Close Window</MenuItem>
@@ -445,7 +460,11 @@ function MenuAlignmentExample() {
 
     return (
         <Example data={codeExamples.alignment} >
-            {menus}
+            <PlacementOptions name="alignmentGroup" option={option}
+                onOptionChange={setOption} />
+            <div className="menus">
+                {menus}
+            </div>
         </Example>
     );
 }
@@ -571,3 +590,21 @@ function ClassNamePropExample() {
     );
 }
 
+function PlacementOptions({ name, option, onOptionChange }) {
+
+    return (
+        <form className="form">
+            {['default', 'arrow', 'offset'].map((item) =>
+                <label key={item}>
+                    <input type="radio"
+                        name={name}
+                        value={item}
+                        checked={option === item}
+                        onChange={({ target }) =>
+                            (target.checked && onOptionChange(target.value))
+                        } />
+                    {item}
+                </label>)}
+        </form>
+    );
+}
