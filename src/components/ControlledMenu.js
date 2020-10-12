@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import {
     menuPropTypesBase,
     menuDefaultPropsBase,
-    offsetPropTypes,
     offsetDefaultProps,
     FocusPositions
 } from '../utils';
@@ -15,6 +14,8 @@ export const ControlledMenu = React.memo(function ControlledMenu({
     id,
     className,
     styles,
+    arrowClassName,
+    arrowStyles,
     animation,
     debugging,
     anchorPoint,
@@ -38,6 +39,8 @@ export const ControlledMenu = React.memo(function ControlledMenu({
             ariaLabel: ariaLabel || 'Menu',
             className,
             styles,
+            arrowClassName,
+            arrowStyles,
             anchorPoint,
             anchorRef,
             arrow,
@@ -59,7 +62,6 @@ export const ControlledMenu = React.memo(function ControlledMenu({
 
 ControlledMenu.propTypes = {
     ...menuPropTypesBase,
-    ...offsetPropTypes,
     anchorPoint: PropTypes.exact({
         x: PropTypes.number,
         y: PropTypes.number

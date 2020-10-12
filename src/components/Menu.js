@@ -4,7 +4,6 @@ import {
     safeCall,
     menuPropTypesBase,
     menuDefaultPropsBase,
-    offsetPropTypes,
     offsetDefaultProps,
     Keys,
     FocusPositions,
@@ -19,6 +18,8 @@ export const Menu = React.memo(function Menu({
     id,
     className,
     styles,
+    arrowClassName,
+    arrowStyles,
     animation,
     debugging,
     keepMounted,
@@ -97,6 +98,8 @@ export const Menu = React.memo(function Menu({
                     : 'Menu'),
             className,
             styles,
+            arrowClassName,
+            arrowStyles,
             anchorRef: buttonRef,
             arrow,
             align,
@@ -125,7 +128,6 @@ export const Menu = React.memo(function Menu({
 
 Menu.propTypes = {
     ...menuPropTypesBase,
-    ...offsetPropTypes,
     keepMounted: PropTypes.bool,
     menuButton: PropTypes.oneOfType([
         PropTypes.element,

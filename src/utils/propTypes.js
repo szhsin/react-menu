@@ -1,29 +1,36 @@
 import PropTypes from 'prop-types';
 
-export const stylePropTypes = {
-    className: PropTypes.oneOfType([
+export const stylePropTypes = (name) => ({
+    [name ? `${name}ClassName` : 'className']: PropTypes.oneOfType([
         PropTypes.string,
         PropTypes.func
     ]),
-    styles: PropTypes.oneOfType([
+    [name ? `${name}Styles` : 'styles']: PropTypes.oneOfType([
         PropTypes.object,
         PropTypes.func
     ]),
-};
+});
+
+export const sharedMenuPropTypes = {
+    ...stylePropTypes(),
+    ...stylePropTypes('arrow'),
+    'aria-label': PropTypes.string,
+    arrow: PropTypes.bool,
+    offsetX: PropTypes.number,
+    offsetY: PropTypes.number,
+    children: PropTypes.node.isRequired
+}
 
 export const menuPropTypesBase = {
-    ...stylePropTypes,
-    'aria-label': PropTypes.string,
+    ...sharedMenuPropTypes,
     id: PropTypes.oneOfType([
         PropTypes.string,
         PropTypes.number
     ]),
     animation: PropTypes.bool,
     debugging: PropTypes.bool,
-    arrow: PropTypes.bool,
     align: PropTypes.oneOf(['start', 'center', 'end']),
     direction: PropTypes.oneOf(['left', 'right', 'top', 'bottom']),
-    children: PropTypes.node.isRequired,
     onClick: PropTypes.func
 };
 
@@ -32,11 +39,6 @@ export const menuDefaultPropsBase = {
     align: 'start',
     direction: 'bottom'
 };
-
-export const offsetPropTypes = {
-    offsetX: PropTypes.number,
-    offsetY: PropTypes.number
-}
 
 export const offsetDefaultProps = {
     offsetX: 0,

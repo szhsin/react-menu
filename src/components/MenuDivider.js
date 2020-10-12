@@ -21,5 +21,5 @@ export const MenuDivider = defineName(React.memo(function MenuDivider({
 }), 'MenuDivider');
 
 MenuDivider.propTypes = {
-    ...stylePropTypes
+    ...stylePropTypes()
 };

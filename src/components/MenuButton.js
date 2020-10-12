@@ -37,7 +37,7 @@ export const MenuButton = defineName(React.memo(React.forwardRef(function MenuBu
 })), 'MenuButton');
 
 MenuButton.propTypes = {
-    ...stylePropTypes,
+    ...stylePropTypes(),
     id: PropTypes.oneOfType([
         PropTypes.string,
         PropTypes.number

@@ -24,5 +24,5 @@ export const MenuHeader = defineName(React.memo(function MenuHeader({
 }), 'MenuHeader');
 
 MenuHeader.propTypes = {
-    ...stylePropTypes
+    ...stylePropTypes()
 };

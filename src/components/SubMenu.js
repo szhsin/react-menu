@@ -6,7 +6,7 @@ import {
     bem,
     flatStyles,
     stylePropTypes,
-    offsetPropTypes,
+    sharedMenuPropTypes,
     offsetDefaultProps,
     menuClass,
     subMenuClass,
@@ -26,9 +26,11 @@ import { MenuList } from './MenuList';
 export const SubMenu = defineName(React.memo(function SubMenu({
     'aria-label': ariaLabel,
     className,
-    menuClassName,
     styles,
-    menuStyles,
+    arrowClassName,
+    arrowStyles,
+    itemClassName,
+    itemStyles,
     arrow,
     disabled,
     keepMounted,
@@ -154,8 +156,8 @@ export const SubMenu = defineName(React.memo(function SubMenu({
             onKeyDown={handleKeyDown}
             onBlur={handleBlur}>
 
-            <div className={bem(menuClass, menuItemClass, modifiers)(className)}
-                style={flatStyles(styles, modifiers)}
+            <div className={bem(menuClass, menuItemClass, modifiers)(itemClassName)}
+                style={flatStyles(itemStyles, modifiers)}
                 role="menuitem"
                 aria-haspopup="true"
                 aria-expanded={isOpen}
@@ -172,8 +174,10 @@ export const SubMenu = defineName(React.memo(function SubMenu({
 
             <MenuList
                 ariaLabel={ariaLabel || (typeof label === 'string' ? label : 'Submenu')}
-                className={menuClassName}
-                styles={menuStyles}
+                className={className}
+                styles={styles}
+                arrowClassName={arrowClassName}
+                arrowStyles={arrowStyles}
                 anchorRef={itemRef}
                 containerRef={containerRef}
                 arrow={arrow}
@@ -191,25 +195,14 @@ export const SubMenu = defineName(React.memo(function SubMenu({
 }), 'SubMenu');
 
 SubMenu.propTypes = {
-    ...stylePropTypes,
-    ...offsetPropTypes,
-    'aria-label': PropTypes.string,
-    menuClassName: PropTypes.oneOfType([
-        PropTypes.string,
-        PropTypes.func
-    ]),
-    menuStyles: PropTypes.oneOfType([
-        PropTypes.object,
-        PropTypes.func
-    ]),
-    arrow: PropTypes.bool,
+    ...sharedMenuPropTypes,
+    ...stylePropTypes('item'),
     disabled: PropTypes.bool,
     keepMounted: PropTypes.bool,
     label: PropTypes.oneOfType([
         PropTypes.node,
         PropTypes.func
     ]).isRequired,
-    children: PropTypes.node.isRequired,
     onChange: PropTypes.func
 };
 

@@ -28,6 +28,8 @@ export const MenuList = defineName(React.memo(function MenuList({
     ariaLabel,
     className,
     styles,
+    arrowClassName,
+    arrowStyles,
     anchorPoint,
     anchorRef,
     containerRef,
@@ -653,6 +655,7 @@ export const MenuList = defineName(React.memo(function MenuList({
     };
 
     const userModifiers = Object.freeze({ ...modifiers, dir: expandedDirection });
+    const arrowModifiers = Object.freeze({ dir: expandedDirection });
 
     return (
         <React.Fragment>
@@ -673,10 +676,10 @@ export const MenuList = defineName(React.memo(function MenuList({
                     }}>
 
                     {arrow &&
-                        <div className={bem(menuClass, menuArrowClass, {
-                            dir: expandedDirection
-                        })()}
+                        <div className={bem(menuClass, menuArrowClass,
+                            arrowModifiers)(arrowClassName)}
                             style={{
+                                ...flatStyles(arrowStyles, arrowModifiers),
                                 left: arrowPosition.x && `${arrowPosition.x}px`,
                                 top: arrowPosition.y && `${arrowPosition.y}px`,
                             }}

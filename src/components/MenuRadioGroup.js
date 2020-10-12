@@ -38,7 +38,7 @@ export const MenuRadioGroup = defineName(React.memo(function MenuRadioGroup({
 }), 'MenuRadioGroup');
 
 MenuRadioGroup.propTypes = {
-    ...stylePropTypes,
+    ...stylePropTypes(),
     'aria-label': PropTypes.string,
     name: PropTypes.string,
     value: PropTypes.any,

@@ -135,7 +135,7 @@ export const MenuItem = defineName(React.memo(function MenuItem({
 }), 'MenuItem');
 
 MenuItem.propTypes = {
-    ...stylePropTypes,
+    ...stylePropTypes(),
     value: PropTypes.any,
     href: PropTypes.string,
     type: PropTypes.oneOf(['checkbox', 'radio']),

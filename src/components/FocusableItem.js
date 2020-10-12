@@ -69,7 +69,7 @@ export const FocusableItem = defineName(React.memo(function FocusableItem({
 }), 'FocusableItem');
 
 FocusableItem.propTypes = {
-    ...stylePropTypes,
+    ...stylePropTypes(),
     disabled: PropTypes.bool,
     children: PropTypes.func.isRequired
 };
