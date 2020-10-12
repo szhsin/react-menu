@@ -11,7 +11,9 @@ const bem = block => element => modifier => {
 }
 
 const menuClass = bem('.rc-menu');
+const menuArrowClass = menuClass('arrow');
 const menuItemClass = menuClass('item');
+const directions = ['left', 'right', 'top', 'bottom'];
 
 const stylesheet = {
     id: 'stylesheets',
@@ -49,12 +51,26 @@ const stylesheet = {
                 {
                     name:
                         <ul>
-                            <li>{menuClass()('dir-left')}</li>
-                            <li>{menuClass()('dir-right')}</li>
-                            <li>{menuClass()('dir-top')}</li>
-                            <li>{menuClass()('dir-bottom')}</li>
+                            {
+                                directions.map((dir, i) =>
+                                    <li key={i}>{menuClass()(`dir-${dir}`)}</li>)
+                            }
                         </ul>,
                     desc: 'Direction in which the menu expands.'
+                },
+                {
+                    name: menuArrowClass(),
+                    desc: 'Menu arrow element.'
+                },
+                {
+                    name:
+                        <ul>
+                            {
+                                directions.map((dir, i) =>
+                                    <li key={i}>{menuArrowClass(`dir-${dir}`)}</li>)
+                            }
+                        </ul>,
+                    desc: 'Direction in which the menu expands (arrow points to the opposite direction).'
                 }
             ]
         },
@@ -157,7 +173,9 @@ const classNameProp = {
     title: 'className prop',
     desc:
         <>
-            <p>This prop can be used to style a specific menu in the page differently.</p>
+            <p>This prop can be used to style a specific menu in the page differently. Also, projects
+                using <b>CSS Module</b> can use this prop to add locally scoped class names.
+            </p>
             <p>Every component accepts a <code>className</code> prop which allows you to supply a custom CSS class.</p>
             <p>Optionally, you may pass a function to the prop and receive additional states about the component.</p>
             <p>For more details, please refer to the <code>className</code> prop under

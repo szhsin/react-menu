@@ -15,17 +15,20 @@ const radioGroupLink = <Link to={'#radio-group'}>MenuRadioGroup</Link>;
 const menuHeaderLink = <Link to={'#menu-header'}>MenuHeader</Link>;
 const menuStateHookLink = <Link to={'#use-menu-state'}>useMenuState</Link>;
 
+const dirModifier = <li><code>dir: string</code> direction in which the menu expands.
+                        Can be 'left', 'right', 'top', or 'bottom'.</li>;
+
 const menuModifiers = (
     <ul>
         <li><code>open: bool</code> indicates if the menu is open.</li>
         <li><code>closing: bool</code> indicates if the menu is closing.
             (Only <code>true</code> when animation is enabled and closing animation is playing)</li>
         <li><code>animation: bool</code> indicates if animation is enabled.</li>
-        <li><code>dir: string</code> direction in which the menu expands. Can be 'left', 'right', 'top', or 'bottom'.</li>
+        {dirModifier}
     </ul>
 );
 
-const submenuModifiers = (
+const submenuItemModifiers = (
     <ul>
         <li><code>open: bool</code> indicates if the submenu is open.</li>
         <li><code>hover: bool</code> indicates if the submenu item is being hovered and has focus.</li>
@@ -124,7 +127,8 @@ const styleProps = (target, modifiers, className, styles) => [
     }
 ];
 
-const commonMenuProps = [
+const sharedMenuProps = [
+    ...styleProps('menu arrow', <ul>{dirModifier}</ul>, 'arrowClassName', 'arrowStyles'),
     {
         name: 'arrow',
         type: 'boolean',
@@ -152,7 +156,7 @@ const commonMenuProps = [
 
 const menuPropsBase = [
     ...styleProps('menu', menuModifiers),
-    ...commonMenuProps,
+    ...sharedMenuProps,
     {
         name: 'id',
         type: 'string | number',
@@ -164,7 +168,6 @@ const menuPropsBase = [
                 <p>It also helps increase selector specificity when overriding the default style.</p>
             </>
     },
-
     {
         name: 'animation',
         type: 'boolean',
@@ -350,9 +353,9 @@ const submenu = {
              and place the submenu items it contains in the <code>children</code> prop.</p>
         </>,
     rows: [
-        ...styleProps('submenu item', submenuModifiers),
-        ...styleProps('submenu', menuModifiers, 'menuClassName', 'menuStyles'),
-        ...commonMenuProps,
+        ...styleProps('submenu', menuModifiers),
+        ...styleProps('submenu item', submenuItemModifiers, 'itemClassName', 'itemStyles'),
+        ...sharedMenuProps,
         keepMountedProp,
         onChangeProp,
         {
@@ -377,7 +380,7 @@ const submenu = {
                 <>
                     <p>Contents of the submenu item, or a function that returns it.
                         The function will be called by passing an object with the following properties:</p>
-                    {submenuModifiers}
+                    {submenuItemModifiers}
                 </>
         },
     ]
