@@ -409,20 +409,24 @@ export const MenuList = defineName(React.memo(function MenuList({
         const anchorRect = anchorRef.current.getBoundingClientRect();
         const placeLeftX = anchorRect.left - containerRect.left - menuRect.width - horizontalOffset;
         const placeRightX = anchorRect.right - containerRect.left + horizontalOffset;
-        const placeLeftorRightY = anchorRect.top - containerRect.top + verticalOffset;
-
         const placeTopY = anchorRect.top - containerRect.top - menuRect.height - verticalOffset;
         const placeBottomY = anchorRect.bottom - containerRect.top + verticalOffset;
-        let placeToporBottomX;
+
+        let placeToporBottomX, placeLeftorRightY;
         if (align === 'end') {
             placeToporBottomX = anchorRect.right - containerRect.left - menuRect.width;
+            placeLeftorRightY = anchorRect.bottom - containerRect.top - menuRect.height;
         } else if (align === 'center') {
             placeToporBottomX = anchorRect.left - containerRect.left
                 - (menuRect.width - anchorRect.width) / 2;
+            placeLeftorRightY = anchorRect.top - containerRect.top
+                - (menuRect.height - anchorRect.height) / 2;
         } else {
             placeToporBottomX = anchorRect.left - containerRect.left;
+            placeLeftorRightY = anchorRect.top - containerRect.top;
         }
         placeToporBottomX += horizontalOffset;
+        placeLeftorRightY += verticalOffset;
 
         const rects = { anchorRect, containerRect, menuRect };
         const placements = {
