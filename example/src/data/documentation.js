@@ -192,9 +192,7 @@ const menuPropsBase = [
         desc:
             <>
                 <p>Can be 'start', 'center', or 'end'.</p>
-                <p>It sets alignment of menu with menu button.
-                    It has effect <strong>only</strong> when <code>direction</code> is
-                    set to 'top' or 'bottom'.</p>
+                <p>It sets alignment of menu with menu button.</p>
                 <p>The alignment of menu is subject to the available viewport space and
                 menu position can be adjusted in order to have it contained within viewport.</p>
             </>

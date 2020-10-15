@@ -861,8 +861,7 @@ export const alignment = {
     title: 'Alignment',
 
     desc:
-        <p>You could control how a menu aligns with its menu button using the <code>align</code> prop.
-        It has effect <strong>only</strong> when <code>direction</code> is set to 'top' or 'bottom'.</p>,
+        <p>You could control how a menu aligns with its menu button using the <code>align</code> prop.</p>,
 
     source:
         `['start', 'center', 'end'].map(align =>
