@@ -18,6 +18,7 @@ import {
     SettingsContext,
     MenuListContext,
     initialHoverIndex,
+    CloseReason,
     Keys,
     FocusPositions,
     HoverIndexActionTypes
@@ -45,6 +46,7 @@ export const MenuList = defineName(React.memo(function MenuList({
     children,
     onKeyDown,
     onAnimationEnd,
+    onClose,
     ...restProps }) {
 
     const [position, setPosition] = useState({ x: 0, y: 0 });
@@ -517,6 +519,14 @@ export const MenuList = defineName(React.memo(function MenuList({
     useLayoutEffect(() => {
         if (isOpen) handlePosition();
     }, [isOpen, handlePosition]);
+
+    useEffect(() => {
+        if (!isOpen || !onClose) return;
+
+        const handleResize = () => onClose({ reason: CloseReason.RESIZE });
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, [isOpen, onClose]);
 
     useLayoutEffect(() => {
         if (animation && isMounted) {

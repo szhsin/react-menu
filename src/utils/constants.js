@@ -41,5 +41,6 @@ export const HoverIndexActionTypes = Object.freeze({
 export const CloseReason = Object.freeze({
     'CLICK': 'click',
     'CANCEL': 'cancel',
-    'BLUR': 'blur'
+    'BLUR': 'blur',
+    'RESIZE': 'resize'
 });
