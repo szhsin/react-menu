@@ -1,6 +1,6 @@
 {
   "name": "@szhsin/react-menu",
-  "version": "0.10.7",
+  "version": "0.10.8",
   "description": "React menu components",
   "author": "Zheng Song",
   "license": "MIT",
@@ -13,7 +13,7 @@
   },
   "scripts": {
     "build": "microbundle-crl --no-compress --format modern,cjs --css-modules false --sourcemap false",
-    "start": "microbundle-crl watch --no-compress --format modern,cjs --css-modules false",
+    "start": "microbundle-crl watch --no-compress --format modern,cjs --css-modules false --sourcemap false",
     "prepare": "run-s build",
     "test": "run-s test:unit test:lint test:build",
     "test:build": "run-s build",

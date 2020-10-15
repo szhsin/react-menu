@@ -633,7 +633,7 @@ const controlledMenu = {
                     <p>Event object properties:</p>
                     <ul>
                         <li><code>reason: string</code> The reason that causes the close event.
-                        Can be 'click', 'cancel', or 'blur'.</li>
+                        Can be 'click', 'cancel', 'blur', or 'resize'.</li>
                         <li><code>key: string</code> indicates the key if event is triggered by keyboard.
                         Can be {ENTER_KEY}, {SPACE_KEY} or {ESC_KEY}.</li>
                     </ul>
