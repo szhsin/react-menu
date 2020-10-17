@@ -31,13 +31,17 @@ export const menuPropTypesBase = {
     debugging: PropTypes.bool,
     align: PropTypes.oneOf(['start', 'center', 'end']),
     direction: PropTypes.oneOf(['left', 'right', 'top', 'bottom']),
+    position: PropTypes.oneOf(['auto', 'anchor', 'initial']),
+    overflow: PropTypes.oneOf(['auto', 'visible', 'hidden']),
     onClick: PropTypes.func
 };
 
 export const menuDefaultPropsBase = {
     animation: true,
     align: 'start',
-    direction: 'bottom'
+    direction: 'bottom',
+    position: 'auto',
+    overflow: 'visible'
 };
 
 export const offsetDefaultProps = {
