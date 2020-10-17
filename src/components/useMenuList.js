@@ -16,6 +16,7 @@ export const useMenuList = (
     id,
     animation,
     debugging,
+    viewScroll,
     children,
     onClick,
     onClose,
@@ -25,8 +26,9 @@ export const useMenuList = (
 
     const settings = useMemo(() => ({
         animation,
-        debugging
-    }), [animation, debugging]);
+        debugging,
+        viewScroll
+    }), [animation, debugging, viewScroll]);
 
     const eventHandlers = useMemo(() => ({
         handleClick(event, isStopPropagation, isCheckorRadio) {

@@ -18,6 +18,7 @@ export const ControlledMenu = React.memo(function ControlledMenu({
     arrowStyles,
     animation,
     debugging,
+    viewScroll,
     anchorPoint,
     anchorRef,
     arrow,
@@ -59,6 +60,7 @@ export const ControlledMenu = React.memo(function ControlledMenu({
         id,
         animation,
         debugging,
+        viewScroll,
         children,
         onClick,
         onClose);

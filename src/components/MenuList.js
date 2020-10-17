@@ -56,7 +56,7 @@ export const MenuList = defineName(React.memo(function MenuList({
     const [maxHeight, setMaxHeight] = useState(-1);
     const [isClosing, setClosing] = useState(false);
     const [expandedDirection, setExpandedDirection] = useState(direction);
-    const { animation } = useContext(SettingsContext);
+    const { animation, viewScroll } = useContext(SettingsContext);
     const menuRef = useRef(null);
     const arrowRef = useRef(null);
     const menuItemsCount = useRef(0);
@@ -592,12 +592,28 @@ export const MenuList = defineName(React.memo(function MenuList({
     ]);
 
     useLayoutEffect(() => {
-        if (!isOpen) return;
-
-        handlePosition();
-        window.addEventListener('scroll', handlePosition);
-        return () => window.removeEventListener('scroll', handlePosition);
+        if (isOpen) handlePosition();
     }, [isOpen, handlePosition]);
+
+    useLayoutEffect(() => {
+        if (!isOpen || viewScroll === 'initial') return;
+
+        // For best user experience, 
+        // force to close menu in the following setting combination
+        let scroll = viewScroll;
+        if (scroll === 'auto' && overflow !== 'visible') scroll = 'close';
+
+        const handleScroll = () => {
+            if (scroll === 'auto') {
+                handlePosition();
+            } else {
+                onClose && onClose({ reason: CloseReason.SCROLL });
+            }
+        }
+
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, [isOpen, overflow, onClose, viewScroll, handlePosition]);
 
     useEffect(() => {
         if (!isOpen || !onClose) return;

@@ -29,6 +29,7 @@ export const menuPropTypesBase = {
     ]),
     animation: PropTypes.bool,
     debugging: PropTypes.bool,
+    viewScroll: PropTypes.oneOf(['auto', 'close', 'initial']),
     align: PropTypes.oneOf(['start', 'center', 'end']),
     direction: PropTypes.oneOf(['left', 'right', 'top', 'bottom']),
     position: PropTypes.oneOf(['auto', 'anchor', 'initial']),
@@ -38,6 +39,7 @@ export const menuPropTypesBase = {
 
 export const menuDefaultPropsBase = {
     animation: true,
+    viewScroll: 'initial',
     align: 'start',
     direction: 'bottom',
     position: 'auto',
