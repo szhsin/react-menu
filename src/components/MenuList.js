@@ -615,13 +615,6 @@ export const MenuList = defineName(React.memo(function MenuList({
         return () => window.removeEventListener('scroll', handleScroll);
     }, [isOpen, overflow, onClose, viewScroll, handlePosition]);
 
-    useEffect(() => {
-        if (!isOpen) return;
-
-        window.addEventListener('resize', handlePosition);
-        return () => window.removeEventListener('resize', handlePosition);
-    }, [isOpen, handlePosition]);
-
     useLayoutEffect(() => {
         if (animation && isMounted) {
             if (isOpen) {
