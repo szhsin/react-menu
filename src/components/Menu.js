@@ -4,7 +4,6 @@ import {
     safeCall,
     menuPropTypesBase,
     menuDefaultPropsBase,
-    offsetDefaultProps,
     Keys,
     FocusPositions,
     useMenuChange,
@@ -144,6 +143,5 @@ Menu.propTypes = {
 
 Menu.defaultProps = {
     ...menuDefaultPropsBase,
-    ...offsetDefaultProps,
     keepMounted: true
 };

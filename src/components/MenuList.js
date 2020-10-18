@@ -595,7 +595,7 @@ export const MenuList = defineName(React.memo(function MenuList({
         if (isOpen) handlePosition();
     }, [isOpen, handlePosition]);
 
-    useLayoutEffect(() => {
+    useEffect(() => {
         if (!isOpen || viewScroll === 'initial') return;
 
         // For best user experience, 
@@ -607,7 +607,7 @@ export const MenuList = defineName(React.memo(function MenuList({
             if (scroll === 'auto') {
                 handlePosition();
             } else {
-                onClose && onClose({ reason: CloseReason.SCROLL });
+                safeCall(onClose, { reason: CloseReason.SCROLL });
             }
         }
 
@@ -618,7 +618,7 @@ export const MenuList = defineName(React.memo(function MenuList({
     useEffect(() => {
         if (!isOpen || !onClose) return;
 
-        const handleResize = () => onClose({ reason: CloseReason.RESIZE });
+        const handleResize = () => safeCall(onClose, { reason: CloseReason.RESIZE });
         window.addEventListener('resize', handleResize);
         return () => window.removeEventListener('resize', handleResize);
     }, [isOpen, onClose]);

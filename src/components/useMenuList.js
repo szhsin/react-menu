@@ -1,4 +1,4 @@
-import React, { useRef, useMemo, useCallback } from 'react';
+import React, { useRef, useMemo } from 'react';
 import {
     safeCall,
     bem,
@@ -73,10 +73,6 @@ export const useMenuList = (
         }
     };
 
-    const handleMenuClose = useCallback(e => {
-        safeCall(onClose, e);
-    }, [onClose])
-
     return (
         <div id={id}
             className={bem(menuContainerClass)()}
@@ -89,7 +85,7 @@ export const useMenuList = (
                 <EventHandlersContext.Provider value={eventHandlers}>
                     <MenuList {...menuListProps}
                         containerRef={containerRef}
-                        onClose={handleMenuClose}>
+                        onClose={onClose}>
                         {children}
                     </MenuList>
                 </EventHandlersContext.Provider>

@@ -1,4 +1,4 @@
-import React, { useRef, useContext, useEffect } from 'react';
+import React, { useRef, useContext, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import {
     defineName,
@@ -7,7 +7,7 @@ import {
     flatStyles,
     stylePropTypes,
     sharedMenuPropTypes,
-    offsetDefaultProps,
+    sharedMenuDefaultProp,
     menuClass,
     subMenuClass,
     menuItemClass,
@@ -32,12 +32,16 @@ export const SubMenu = defineName(React.memo(function SubMenu({
     itemClassName,
     itemStyles,
     arrow,
+    align,
+    direction,
+    position,
+    overflow,
+    offsetX,
+    offsetY,
     disabled,
     keepMounted,
     label,
     index,
-    offsetX,
-    offsetY,
     children,
     onChange }) {
 
@@ -53,7 +57,12 @@ export const SubMenu = defineName(React.memo(function SubMenu({
 
     useMenuChange(onChange, isOpen);
 
-    const handleMouseEnter = e => {
+    const handleClose = useCallback(() => {
+        // let onBlur close the menu
+        itemRef.current.focus();
+    }, []);
+
+    const handleMouseEnter = () => {
         if (isDisabled) return;
         hoverIndexDispatch({ type: HoverIndexActionTypes.SET, index });
         timeoutId.current = setTimeout(() => {
@@ -62,7 +71,7 @@ export const SubMenu = defineName(React.memo(function SubMenu({
         }, 300);
     }
 
-    const handleMouseLeave = e => {
+    const handleMouseLeave = () => {
         if (isDisabled) return;
         clearTimeout(timeoutId.current);
         if (!isOpen) {
@@ -70,7 +79,7 @@ export const SubMenu = defineName(React.memo(function SubMenu({
         }
     }
 
-    const handleClick = e => {
+    const handleClick = () => {
         if (isDisabled) return;
         openMenu();
     }
@@ -82,8 +91,7 @@ export const SubMenu = defineName(React.memo(function SubMenu({
             // LEFT key is bubbled up from submenu items
             case Keys.LEFT:
                 if (isOpen) {
-                    closeMenu();
-                    itemRef.current.focus();
+                    handleClose();
                     handled = true;
                 }
                 break;
@@ -181,13 +189,17 @@ export const SubMenu = defineName(React.memo(function SubMenu({
                 anchorRef={itemRef}
                 containerRef={containerRef}
                 arrow={arrow}
-                direction={'right'}
+                align={align}
+                direction={direction}
+                position={position}
+                overflow={overflow}
+                offsetX={offsetX}
+                offsetY={offsetY}
                 isOpen={isOpen}
                 isMounted={isMounted}
                 isDisabled={isDisabled}
                 menuItemFocus={menuItemFocus}
-                offsetX={offsetX}
-                offsetY={offsetY}>
+                onClose={handleClose}>
                 {children}
             </MenuList>
         </li>
@@ -207,6 +219,7 @@ SubMenu.propTypes = {
 };
 
 SubMenu.defaultProps = {
-    ...offsetDefaultProps,
+    ...sharedMenuDefaultProp,
+    direction: 'right',
     keepMounted: true
 };

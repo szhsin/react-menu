@@ -18,6 +18,10 @@ export const sharedMenuPropTypes = {
     arrow: PropTypes.bool,
     offsetX: PropTypes.number,
     offsetY: PropTypes.number,
+    align: PropTypes.oneOf(['start', 'center', 'end']),
+    direction: PropTypes.oneOf(['left', 'right', 'top', 'bottom']),
+    position: PropTypes.oneOf(['auto', 'anchor', 'initial']),
+    overflow: PropTypes.oneOf(['auto', 'visible', 'hidden']),
     children: PropTypes.node.isRequired
 }
 
@@ -30,23 +34,20 @@ export const menuPropTypesBase = {
     animation: PropTypes.bool,
     debugging: PropTypes.bool,
     viewScroll: PropTypes.oneOf(['auto', 'close', 'initial']),
-    align: PropTypes.oneOf(['start', 'center', 'end']),
-    direction: PropTypes.oneOf(['left', 'right', 'top', 'bottom']),
-    position: PropTypes.oneOf(['auto', 'anchor', 'initial']),
-    overflow: PropTypes.oneOf(['auto', 'visible', 'hidden']),
     onClick: PropTypes.func
 };
 
-export const menuDefaultPropsBase = {
-    animation: true,
-    viewScroll: 'initial',
+export const sharedMenuDefaultProp = {
+    offsetX: 0,
+    offsetY: 0,
     align: 'start',
     direction: 'bottom',
     position: 'auto',
     overflow: 'visible'
 };
 
-export const offsetDefaultProps = {
-    offsetX: 0,
-    offsetY: 0
-}
+export const menuDefaultPropsBase = {
+    ...sharedMenuDefaultProp,
+    animation: true,
+    viewScroll: 'initial'
+};

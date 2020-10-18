@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import {
     menuPropTypesBase,
     menuDefaultPropsBase,
-    offsetDefaultProps,
     FocusPositions
 } from '../utils';
 import { useMenuList } from './useMenuList';
@@ -83,7 +82,6 @@ ControlledMenu.propTypes = {
 
 ControlledMenu.defaultProps = {
     ...menuDefaultPropsBase,
-    ...offsetDefaultProps,
     isMounted: true,
     menuItemFocus: { position: FocusPositions.INITIAL }
 };
