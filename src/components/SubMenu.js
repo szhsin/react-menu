@@ -46,13 +46,16 @@ export const SubMenu = defineName(React.memo(function SubMenu({
     onChange }) {
 
     const { isMounted, isOpen, menuItemFocus, openMenu, closeMenu } = useMenuState(keepMounted);
-    const { isActive, onKeyUp, onBlur, ...activeStateHandlers } = useActiveState(Keys.RIGHT);
     const { isParentOpen, hoverIndex, hoverIndexDispatch } = useContext(MenuListContext);
     const { debugging } = useContext(SettingsContext);
+    const isHovering = hoverIndex === index;
+    const {
+        isActive, onKeyUp, onBlur,
+        ...activeStateHandlers
+    } = useActiveState(isHovering, Keys.RIGHT);
     const containerRef = useRef(null);
     const itemRef = useRef(null);
     const timeoutId = useRef();
-    const isHovering = hoverIndex === index;
     const isDisabled = disabled ? true : undefined;
 
     useMenuChange(onChange, isOpen);

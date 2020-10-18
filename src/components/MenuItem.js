@@ -38,7 +38,10 @@ export const MenuItem = defineName(React.memo(function MenuItem({
     } = useItemState(disabled, index);
     const eventHandlers = useContext(EventHandlersContext);
     const radioGroup = useContext(RadioGroupContext);
-    const { isActive, onKeyUp, onBlur, ...activeStateHandlers } = useActiveState();
+    const {
+        isActive, onKeyUp, onBlur,
+        ...activeStateHandlers
+    } = useActiveState(isHovering);
     const isRadio = type === 'radio';
     const isCheckBox = type === 'checkbox';
     const isAnchor = href && !isDisabled && !isRadio && !isCheckBox;

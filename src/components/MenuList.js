@@ -616,12 +616,11 @@ export const MenuList = defineName(React.memo(function MenuList({
     }, [isOpen, overflow, onClose, viewScroll, handlePosition]);
 
     useEffect(() => {
-        if (!isOpen || !onClose) return;
+        if (!isOpen) return;
 
-        const handleResize = () => safeCall(onClose, { reason: CloseReason.RESIZE });
-        window.addEventListener('resize', handleResize);
-        return () => window.removeEventListener('resize', handleResize);
-    }, [isOpen, onClose]);
+        window.addEventListener('resize', handlePosition);
+        return () => window.removeEventListener('resize', handlePosition);
+    }, [isOpen, handlePosition]);
 
     useLayoutEffect(() => {
         if (animation && isMounted) {
@@ -635,12 +634,6 @@ export const MenuList = defineName(React.memo(function MenuList({
         prevOpen.current = isOpen;
     }, [animation, isMounted, isOpen]);
 
-    const focusPosition = useRef(null);
-    useEffect(() => {
-        focusPosition.current = menuItemFocus.position;
-    }, [menuItemFocus]);
-
-    const isResetIndex = hoverIndex === initialHoverIndex;
     useEffect(() => {
         if (!isOpen) {
             hoverIndexDispatch({ type: HoverIndexActionTypes.RESET });
@@ -649,27 +642,23 @@ export const MenuList = defineName(React.memo(function MenuList({
 
         // Use a timeout here because if set focus immediately, page might scroll unexpectedly.
         const id = setTimeout(() => {
-            // We are seeing the old isOpen and isResetIndex value when closure was created
+            // We are seeing the old isOpen value when closure was created
             // However it should not be a issue since the timeout is cleared whenever states change
             // Don't set focus when menu is closed, otherwise focus will be lost
             // and onBlur event will be fired with relatedTarget setting as null.
             // If focus has already been set to a children element, don't set focus on the menu;
             // this happens in some edge cases because of the timeout delay.
-
-            if (isOpen && isResetIndex) {
-                menuRef.current.focus();
-
-                if (focusPosition.current === FocusPositions.FIRST) {
-                    hoverIndexDispatch({ type: HoverIndexActionTypes.FIRST });
-                } else if (focusPosition.current === FocusPositions.LAST) {
-                    hoverIndexDispatch({ type: HoverIndexActionTypes.LAST });
-                }
+            if (!isOpen || menuRef.current.contains(document.activeElement)) return;
+            menuRef.current.focus();
+            if (menuItemFocus.position === FocusPositions.FIRST) {
+                hoverIndexDispatch({ type: HoverIndexActionTypes.FIRST });
+            } else if (menuItemFocus.position === FocusPositions.LAST) {
+                hoverIndexDispatch({ type: HoverIndexActionTypes.LAST });
             }
-            focusPosition.current = null;
         }, 150);
 
         return () => clearTimeout(id);
-    }, [animation, isOpen, isResetIndex, menuItemFocus]);
+    }, [animation, isOpen, menuItemFocus]);
 
     const context = useMemo(() => ({
         isParentOpen: isOpen,

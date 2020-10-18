@@ -3,7 +3,7 @@ import { Keys } from './constants';
 
 // This function receive customKey as a single value rather than an array;
 // It's intentional for keeping the argument's identity stable across each render.
-export const useActiveState = (customKey) => {
+export const useActiveState = (isHovering, customKey) => {
     const [active, setActive] = useState(false);
     const activeKeys = useMemo(() =>
         [Keys.SPACE, Keys.ENTER,
@@ -27,10 +27,10 @@ export const useActiveState = (customKey) => {
         }, []),
 
         onKeyDown: useCallback(e => {
-            if (activeKeys.includes(e.key)) {
+            if (isHovering && activeKeys.includes(e.key)) {
                 setActive(true);
             }
-        }, [activeKeys]),
+        }, [isHovering, activeKeys]),
 
         onKeyUp: useCallback(e => {
             if (activeKeys.includes(e.key)) {
