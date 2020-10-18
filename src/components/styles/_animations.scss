@@ -9,13 +9,13 @@ $directions: (
     "bottom": "Y" -1,
 );
 
-@mixin slide($dir) {
+@mixin animation($name, $dir) {
     &--open#{&}--dir-#{$dir} {
-        animation: #{$menu}slide-out-#{$dir} $duration ease-out;
+        animation: #{$menu}show-#{$name}-#{$dir} $duration ease-out;
     }
 
     &--closing#{&}--dir-#{$dir} {
-        animation: #{$menu}slide-in-#{$dir} $duration ease-in;
+        animation: #{$menu}hide-#{$name}-#{$dir} $duration ease-in;
     }
 }
 
@@ -33,7 +33,7 @@ $directions: (
     $axis: list.nth($value, 1);
     $sign: list.nth($value, 2);
 
-    @keyframes #{$menu}slide-out-#{$dir} {
+    @keyframes #{$menu}show-slide-#{$dir} {
         from {
             @include slide-start($axis, $sign);
         }
@@ -42,7 +42,7 @@ $directions: (
         }
     }
 
-    @keyframes #{$menu}slide-in-#{$dir} {
+    @keyframes #{$menu}hide-slide-#{$dir} {
         from {
             @include slide-end;
         }

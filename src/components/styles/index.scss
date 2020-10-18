@@ -32,7 +32,7 @@
     }
 
     @each $dir in map.keys(animations.$directions) {
-        @include animations.slide($dir);
+        @include animations.animation("slide", $dir);
     }
 
     &__arrow {
