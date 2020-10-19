@@ -1,6 +1,6 @@
 # React-Menu
 
-> A customisable, lightweight, and optimised React menu library with accessibility.
+> A customisable, responsive, and optimised React menu library with accessibility.
 
 **[Live examples and documentation](https://szhsin.github.io/react-menu/)**
 
@@ -12,6 +12,7 @@
 - Unlimited levels of submenu.
 - Supports radio and checkbox menu items.
 - Supports context menu.
+- Flexible menu positioning.
 - Customisable styling.
 - Comprehensive keyboard interactions.
 - Adheres to [WAI-ARIA Authoring Practices](https://www.w3.org/TR/wai-aria-practices/#menu).

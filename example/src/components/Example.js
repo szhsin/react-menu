@@ -46,13 +46,14 @@ export const Example = React.memo(function Example({
                     onClick={handleCopy}>
                     <i className="material-icons">content_copy</i>
                 </button>}
-                <button className={`btn ${isFullSource ? 'btn-secondary' : 'btn-outline-secondary'}`}
-                    data-toggle="tooltip" data-placement="top"
-                    data-original-title={sourceBtnTitle}
-                    aria-label={sourceBtnTitle}
-                    onClick={() => setIsFullSource(s => !s)}>
-                    <i className="material-icons">code</i>
-                </button>
+                {fullSource &&
+                    <button className={`btn ${isFullSource ? 'btn-secondary' : 'btn-outline-secondary'}`}
+                        data-toggle="tooltip" data-placement="top"
+                        data-original-title={sourceBtnTitle}
+                        aria-label={sourceBtnTitle}
+                        onClick={() => setIsFullSource(s => !s)}>
+                        <i className="material-icons">code</i>
+                    </button>}
             </div>
 
             {sourceCode && <pre className={bem(blockName, 'source')} >

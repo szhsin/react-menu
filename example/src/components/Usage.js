@@ -46,13 +46,12 @@ export const Usage = React.memo(function Usage() {
                 <HoverAndActiveExample />
                 <FocusableItemExample />
 
+                <GroupingSection data={codeExamples.menuOptions} />
+                <MenuPlacementExample />
+
                 <GroupingSection data={codeExamples.menuButton} />
                 <OpenStateExample />
                 <CustomisedButtonExample />
-
-                <GroupingSection data={codeExamples.menuPlacement} />
-                <MenuDirectionExample />
-                <MenuAlignmentExample />
 
                 <GroupingSection data={codeExamples.controlledMenu} />
                 <ManagingStateExample />
@@ -414,54 +413,68 @@ function CustomisedButtonExample() {
     );
 }
 
-function MenuDirectionExample() {
-    const [option, setOption] = useState('default');
+const alginOptions = [
+    ['start'],
+    ['center'],
+    ['end']
+];
+const displayOptions = [
+    ['default'],
+    ['arrow', 'display an arrow'],
+    ['offset', 'display a gap']
+];
+const positionOptions = [
+    ['auto', 'keep in viewport'],
+    ['anchor', 'stick to the edges of anchor'],
+    ['initial', 'fixed to initial position']
+];
+const viewScrollOptions = [
+    ['initial', 'keep menu in place'],
+    ['auto', 'reposition menu'],
+    ['close', 'close menu']
+];
+
+function MenuPlacementExample() {
+    const [display, setDisplay] = useState('arrow');
+    const [align, setAlign] = useState('center');
+    const [position, setPosition] = useState('anchor');
+    const [viewScroll, setViewScroll] = useState('auto');
 
     const menus = ['right', 'top', 'bottom', 'left'].map(direction => (
         <Menu menuButton={<MenuButton>{direction}</MenuButton>}
             key={direction} direction={direction}
-            arrow={option === 'arrow'}
-            offsetX={option === 'offset' &&
+            align={align} position={position} viewScroll={viewScroll}
+            arrow={display === 'arrow'}
+            offsetX={display === 'offset' &&
                 (direction === 'left' || direction === 'right')
                 ? 12 : 0}
-            offsetY={option === 'offset' &&
+            offsetY={display === 'offset' &&
                 (direction === 'top' || direction === 'bottom')
                 ? 12 : 0}>
-            <MenuItem>New File</MenuItem>
-            <MenuItem>Save</MenuItem>
-            <MenuItem>Close Window</MenuItem>
+
+            {['Apple', 'Banana', 'Blueberry', 'Cherry', 'Strawberry']
+                .map(fruit => <MenuItem key={fruit}>{fruit}</MenuItem>)}
         </Menu>
     ));
 
     return (
-        <Example data={codeExamples.direction} >
-            <PlacementOptions name="directionGroup" option={option}
-                onOptionChange={setOption} />
-            <div className="menus">
-                {menus}
-            </div>
-        </Example>
-    );
-}
-
-function MenuAlignmentExample() {
-    const [option, setOption] = useState('default');
-
-    const menus = ['start', 'center', 'end'].map(align => (
-        <Menu menuButton={<MenuButton>{align}</MenuButton>}
-            key={align} align={align}
-            arrow={option === 'arrow'}
-            offsetY={option === 'offset' ? 12 : 0}>
-            <MenuItem>New File</MenuItem>
-            <MenuItem>Save</MenuItem>
-            <MenuItem>Close Window</MenuItem>
-        </Menu>
-    ));
-
-    return (
-        <Example data={codeExamples.alignment} >
-            <PlacementOptions name="alignmentGroup" option={option}
-                onOptionChange={setOption} />
+        <Example data={codeExamples.placement} >
+            <form className="form">
+                <MenuOptions name="alignGroup"
+                    title="Align with anchor" data={alginOptions}
+                    option={align} onOptionChange={setAlign} />
+                <MenuOptions name="displayGroup"
+                    title="Menu to anchor" data={displayOptions}
+                    option={display} onOptionChange={setDisplay} />
+                <MenuOptions name="viewScrollGroup"
+                    title="When window scrolls" data={viewScrollOptions}
+                    option={viewScroll} onOptionChange={setViewScroll} />
+                <MenuOptions name="positionGroup"
+                    title="Menu position" data={positionOptions}
+                    option={position} onOptionChange={setPosition} />
+            </form>
+            <p className="alert alert-warning"><i className="material-icons">info</i> Try to select
+            different option combinations and scroll page up and down to see the behaviour.</p>
             <div className="menus">
                 {menus}
             </div>
@@ -590,21 +603,22 @@ function ClassNamePropExample() {
     );
 }
 
-function PlacementOptions({ name, option, onOptionChange }) {
+function MenuOptions({ title, name, data, option, onOptionChange }) {
 
     return (
-        <form className="form">
-            {['default', 'arrow', 'offset'].map((item) =>
-                <label key={item}>
+        <fieldset className="options">
+            <legend>{title}</legend>
+            {data.map(([value, desc]) =>
+                <label key={value}>
                     <input type="radio"
                         name={name}
-                        value={item}
-                        checked={option === item}
+                        value={value}
+                        checked={option === value}
                         onChange={({ target }) =>
                             (target.checked && onOptionChange(target.value))
                         } />
-                    {item}
+                    {value}{desc && ` (${desc})`}
                 </label>)}
-        </form>
+        </fieldset>
     );
 }

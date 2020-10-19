@@ -3,7 +3,6 @@ import { LibName } from '../components/LibName';
 import { ARIAPracticesLink } from '../components/ARIAPracticesLink';
 import { HashLink as Link } from 'react-router-hash-link';
 
-const menuLink = <Link to={'/docs#menu'}>Menu</Link>;
 const menuItemLink = <Link to={'/docs#menu-item'}>MenuItem</Link>;
 const menuButtonLink = <Link to={'/docs#menu-button'}>MenuButton</Link>;
 const menuStateHookLink = <Link to={'/docs#use-menu-state'}>useMenuState</Link>;
@@ -776,151 +775,44 @@ export default function Example() {
 }`
 };
 
-export const direction = {
-    id: 'menu-direction',
+export const placement = {
+    id: 'menu-placement',
 
-    title: 'Direction',
+    title: 'Placement options',
 
     desc:
         <>
-            <p>You could control the direction in which a menu expands using the <code>direction</code> prop.</p>
-            <p>Optionally, menu can be set to display an arrow pointing to its anchor element or add an offset using
-                the <code>arrow, offsetX</code>, and <code>offsetY</code> props.</p>
-            <p>Please note the actual direction might be different depending on the available
-                viewport space, please see {menuLink} for more details.</p>
+            <p>Thanks to <LibName />'s flexible positioning algorithm, you could control the
+            position of menu and how it behaves in response to window scroll event with
+            the <code>align, direction, position</code>, and <code>viewScroll</code> props.</p>
+            <p>Optionally, menu can be set to display an arrow pointing to its anchor element or
+                add an offset using the <code>arrow, offsetX</code>, and <code>offsetY</code> props.</p>
         </>,
 
     source:
-        `['right', 'top', 'bottom', 'left'].map(direction =>
+        `const [display, setDisplay] = useState('arrow');
+const [align, setAlign] = useState('center');
+const [position, setPosition] = useState('anchor');
+const [viewScroll, setViewScroll] = useState('auto');
+
+const menus = ['right', 'top', 'bottom', 'left'].map(direction => (
     <Menu menuButton={<MenuButton>{direction}</MenuButton>}
-        key={direction} direction={direction}>
-        <MenuItem>New File</MenuItem>
-        <MenuItem>Save</MenuItem>
-        <MenuItem>Close Window</MenuItem>
-    </Menu>)`,
+        key={direction} direction={direction}
+        align={align} position={position} viewScroll={viewScroll}
+        arrow={display === 'arrow'}
+        offsetX={display === 'offset' &&
+            (direction === 'left' || direction === 'right')
+            ? 12 : 0}
+        offsetY={display === 'offset' &&
+            (direction === 'top' || direction === 'bottom')
+            ? 12 : 0}>
 
-    fullSource:
-        `import React, { useState } from 'react';
-import {
-    Menu,
-    MenuItem,
-    MenuButton
-} from '@szhsin/react-menu';
-import '@szhsin/react-menu/dist/index.css';
-
-export default function Example() {
-    const [option, setOption] = useState('default');
-
-    const menus = ['right', 'top', 'bottom', 'left'].map(direction => (
-        <Menu menuButton={<MenuButton>{direction}</MenuButton>}
-            key={direction} direction={direction}
-            arrow={option === 'arrow'}
-            offsetX={option === 'offset' &&
-                (direction === 'left' || direction === 'right')
-                ? 12 : 0}
-            offsetY={option === 'offset' &&
-                (direction === 'top' || direction === 'bottom')
-                ? 12 : 0}>
-            <MenuItem>New File</MenuItem>
-            <MenuItem>Save</MenuItem>
-            <MenuItem>Close Window</MenuItem>
-        </Menu>
-    ));
-
-    return (
-        <>
-            <PlacementOptions name="directionGroup" option={option}
-                onOptionChange={setOption} />
-            <div className="menus">
-                {menus}
-            </div>
-        </>
-    );
-}
-
-function PlacementOptions({ name, option, onOptionChange }) {
-    return (
-        <form className="form">
-            {['default', 'arrow', 'offset'].map((item) =>
-                <label key={item}>
-                    <input type="radio" name={name} value={item}
-                        checked={option === item}
-                        onChange={({ target }) =>
-                            (target.checked && onOptionChange(target.value))
-                        } />
-                    {item}
-                </label>)}
-        </form>
-    );
-}`
+        {['Apple', 'Banana', 'Blueberry', 'Cherry', 'Strawberry']
+            .map(fruit => <MenuItem key={fruit}>{fruit}</MenuItem>)}
+    </Menu>
+));`
 };
 
-export const alignment = {
-    id: 'menu-alignment',
-
-    title: 'Alignment',
-
-    desc:
-        <p>You could control how a menu aligns with its menu button using the <code>align</code> prop.</p>,
-
-    source:
-        `['start', 'center', 'end'].map(align =>
-    <Menu menuButton={<MenuButton>{align}</MenuButton>}
-        key={align} align={align}>
-        <MenuItem>New File</MenuItem>
-        <MenuItem>Save</MenuItem>
-        <MenuItem>Close Window</MenuItem>
-    </Menu>)`,
-
-    fullSource:
-        `import React, { useState } from 'react';
-import {
-    Menu,
-    MenuItem,
-    MenuButton
-} from '@szhsin/react-menu';
-import '@szhsin/react-menu/dist/index.css';
-
-export default function Example() {
-    const [option, setOption] = useState('default');
-    const menus = ['start', 'center', 'end'].map(align => (
-        <Menu menuButton={<MenuButton>{align}</MenuButton>}
-            key={align} align={align}
-            arrow={option === 'arrow'}
-            offsetY={option === 'offset' ? 12 : 0}>
-            <MenuItem>New File</MenuItem>
-            <MenuItem>Save</MenuItem>
-            <MenuItem>Close Window</MenuItem>
-        </Menu>
-    ));
-
-    return (
-        <>
-            <PlacementOptions name="alignmentGroup" option={option}
-                onOptionChange={setOption} />
-            <div className="menus">
-                {menus}
-            </div>
-        </>
-    );
-}
-
-function PlacementOptions({ name, option, onOptionChange }) {
-    return (
-        <form className="form">
-            {['default', 'arrow', 'offset'].map((item) =>
-                <label key={item}>
-                    <input type="radio" name={name} value={item}
-                        checked={option === item}
-                        onChange={({ target }) =>
-                            (target.checked && onOptionChange(target.value))
-                        } />
-                    {item}
-                </label>)}
-        </form>
-    );
-}`
-};
 
 export const managingState = {
     id: 'managing-state',
@@ -1326,14 +1218,13 @@ export const menuButton = {
     ]
 };
 
-export const menuPlacement = {
-    id: 'menu-placement',
-    title: 'Menu placement',
+export const menuOptions = {
+    id: 'menu-options',
+    title: 'Menu options',
     desc:
-        <p>Control the position of menu related to menu button.</p>,
+        <p>Control the display and position of menu related to menu button.</p>,
     list: [
-        direction,
-        alignment
+        placement,
     ]
 };
 
@@ -1377,8 +1268,8 @@ export const usageExamples =
     list: [
         menu,
         menuItem,
+        menuOptions,
         menuButton,
-        menuPlacement,
         controlledMenu,
         customisedStyle
     ]
@@ -1393,6 +1284,7 @@ export const features = {
             <li>Unlimited levels of submenu.</li>
             <li>Supports radio and checkbox menu items.</li>
             <li>Supports context menu.</li>
+            <li>Flexible menu positioning.</li>
             <li>Customisable styling.</li>
             <li>Comprehensive keyboard interactions.</li>
             <li>Adheres to <ARIAPracticesLink />.</li>
