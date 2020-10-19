@@ -36,6 +36,48 @@
     }
 }
 
+.option-form {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;
+    margin-right: -1.5rem;
+    .options {
+        flex: 1 1 10rem;
+        border: 1px solid var.$border-color;
+        border-radius: var.$border-radius-medium;
+        margin: 0 1.5rem 1.5rem 0;
+        position: relative;
+        padding-top: 2rem;
+
+        legend {
+            color: white;
+            background-color: var.$dark-color;
+            border-top-left-radius: var.$border-radius-medium;
+            border-top-right-radius: var.$border-radius-medium;
+            width: calc(100% + 2px);
+            max-width: inherit;
+            position: absolute;
+            left: -1px;
+            top: 0;
+            padding: 0.25rem 1rem;
+            font-size: 1rem;
+            white-space: nowrap;
+        }
+
+        label {
+            margin: 0.75rem 1rem;
+            display: block;
+            &.checked {
+                color: var(--primary);
+            }
+        }
+
+        input[type="radio"] {
+            margin-right: 0.5rem;
+        }
+    }
+}
+
 [aria-labelledby="event-handling"] {
     .example__demo {
         height: 15rem;
@@ -87,47 +129,30 @@
             }
         }
 
-        .form {
-            display: flex;
-            flex-wrap: wrap;
-            align-items: stretch;
-            margin-right: -1.5rem;
+        .rc-menu-button {
+            flex: 0 1 6rem;
+        }
+    }
+}
+
+[aria-labelledby="menu-overflow"] {
+    .example__demo {
+        .option-form {
+            margin: 0 1rem -1rem 0;
+            justify-content: center;
             .options {
-                flex: 1 1 10rem;
-                border: 1px solid var.$border-color;
-                border-radius: var.$border-radius-medium;
-                margin: 0 1.5rem 1.5rem 0;
-                position: relative;
-                padding-top: 2rem;
+                flex: 1 1 auto;
+                margin: 0 1rem 1rem 0;
+                max-width: 22rem;
+            }
 
-                legend {
-                    color: white;
-                    background-color: var.$dark-color;
-                    border-top-left-radius: var.$border-radius-medium;
-                    border-top-right-radius: var.$border-radius-medium;
-                    width: calc(100% + 2px);
-                    max-width: inherit;
-                    position: absolute;
-                    left: -1px;
-                    top: 0;
-                    padding: 0.25rem 1rem;
-                    font-size: 1rem;
-                    white-space: nowrap;
-                }
-
-                label {
-                    margin: 0.75rem 1rem;
-                    display: block;
-                }
-
-                input[type="radio"] {
-                    margin-right: 0.5rem;
-                }
+            @media (max-width: 600px) {
+                margin-right: 0;
             }
         }
 
         .rc-menu-button {
-            flex: 0 1 6rem;
+            white-space: nowrap;
         }
     }
 }

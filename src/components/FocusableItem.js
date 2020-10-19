@@ -60,7 +60,6 @@ export const FocusableItem = defineName(React.memo(function FocusableItem({
             role="menuitem"
             tabIndex="-1"
             onMouseEnter={setHover}
-            onMouseLeave={unsetHover}
             onFocus={setHover}
             onBlur={handleBlur}>
             {renderChildren}

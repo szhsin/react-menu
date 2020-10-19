@@ -48,6 +48,7 @@ export const Usage = React.memo(function Usage() {
 
                 <GroupingSection data={codeExamples.menuOptions} />
                 <MenuPlacementExample />
+                <MenuOverflowExample />
 
                 <GroupingSection data={codeExamples.menuButton} />
                 <OpenStateExample />
@@ -459,7 +460,7 @@ function MenuPlacementExample() {
 
     return (
         <Example data={codeExamples.placement} >
-            <form className="form">
+            <form className="option-form">
                 <MenuOptions name="alignGroup"
                     title="Align with anchor" data={alginOptions}
                     option={align} onOptionChange={setAlign} />
@@ -478,6 +479,37 @@ function MenuPlacementExample() {
             <div className="menus">
                 {menus}
             </div>
+        </Example>
+    );
+}
+
+const overflowOptions = [
+    ['visible'],
+    ['auto'],
+    ['hidden']
+];
+
+function MenuOverflowExample() {
+    const [overflow, setOverflow] = useState('auto');
+    const [position, setPosition] = useState('anchor');
+
+    return (
+        <Example data={codeExamples.overflow} >
+            <form className="option-form">
+                <MenuOptions name="overflowGroup"
+                    title="Overflow" data={overflowOptions}
+                    option={overflow} onOptionChange={setOverflow} />
+                <MenuOptions name="positionGroup"
+                    title="Menu position" data={positionOptions}
+                    option={position} onOptionChange={setPosition} />
+            </form>
+
+            <Menu menuButton={<MenuButton>Open menu</MenuButton>}
+                overflow={overflow} position={position} align="center">
+
+                {new Array(25).fill(0).map(
+                    (_, i) => <MenuItem key={i}>Item {i + 1}</MenuItem>)}
+            </Menu>
         </Example>
     );
 }
@@ -609,7 +641,8 @@ function MenuOptions({ title, name, data, option, onOptionChange }) {
         <fieldset className="options">
             <legend>{title}</legend>
             {data.map(([value, desc]) =>
-                <label key={value}>
+                <label key={value}
+                    className={option === value ? 'checked' : undefined}>
                     <input type="radio"
                         name={name}
                         value={value}

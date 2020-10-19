@@ -778,7 +778,7 @@ export default function Example() {
 export const placement = {
     id: 'menu-placement',
 
-    title: 'Placement options',
+    title: 'Placement',
 
     desc:
         <>
@@ -811,6 +811,30 @@ const menus = ['right', 'top', 'bottom', 'left'].map(direction => (
             .map(fruit => <MenuItem key={fruit}>{fruit}</MenuItem>)}
     </Menu>
 ));`
+};
+
+export const overflow = {
+    id: 'menu-overflow',
+
+    title: 'Overflow',
+
+    desc:
+        <>
+            <p>When there are too many menu items to be displayed in the viewport, you could use
+            the <code>overflow</code> prop to make the menu list scrollable. The value of this prop
+            is similar to the CSS overflow property.</p>
+        </>,
+
+    source:
+        `const [overflow, setOverflow] = useState('auto');
+const [position, setPosition] = useState('anchor');
+
+<Menu menuButton={<MenuButton>Open menu</MenuButton>}
+    overflow={overflow} position={position} align="center">
+
+    {new Array(25).fill(0).map(
+        (_, i) => <MenuItem key={i}>Item {i + 1}</MenuItem>)}
+</Menu>`
 };
 
 
@@ -1225,6 +1249,7 @@ export const menuOptions = {
         <p>Control the display and position of menu related to menu button.</p>,
     list: [
         placement,
+        overflow
     ]
 };
 
