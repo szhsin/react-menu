@@ -147,6 +147,56 @@ const sharedMenuProps = [
         desc: <p>Set the vertical distance (in pixels) between menu and its anchor element. The value can be negative.</p>
     },
     {
+        name: 'align',
+        type: 'string',
+        defaultVal: "'start'",
+        desc:
+            <>
+                <p>Can be 'start', 'center', or 'end'.</p>
+                <p>It sets alignment of menu with anchor element.</p>
+            </>
+    },
+    {
+        name: 'direction',
+        type: 'string',
+        defaultVal: "'bottom' or 'right' for SubMenu",
+        desc:
+            <>
+                <p>Can be 'left', 'right', 'top', or 'bottom'.</p>
+                <p>It sets direction in which menu expands against anchor element.</p>
+            </>
+    },
+    {
+        name: 'position',
+        type: 'string',
+        defaultVal: "'auto'",
+        desc:
+            <>
+                <p>It sets the position of menu related to its anchor element.</p>
+                <ul>
+                    <li><code>'auto'</code> menu position is adjusted to have it contained within
+                    the viewport, even if it will be detached from the anchor element. This option
+                    allows to display menu in the viewport as much as possible.</li>
+                    <li><code>'anchor'</code> menu position is adjusted to have it contained within
+                    the viewport, but it will be kept attached to the edges of anchor element.</li>
+                    <li><code>'initial'</code> menu always stays at its initial position.</li>
+                </ul>
+            </>
+    },
+    {
+        name: 'overflow',
+        type: 'string',
+        defaultVal: "'visible'",
+        desc:
+            <>
+                <p>Can be 'visible', 'auto', or 'hidden'.</p>
+                <p>It makes the menu list scrollable or hidden when there is not enough viewport
+                    space to display all menu items. The value is similar to the CSS overflow property.</p>
+                <p>Limitation: an <code>overflow</code> value other than 'visible' can only be set on the last
+                    level of menu cascading. (i.e. no more deeper level of submenu is allowed).</p>
+            </>
+    },
+    {
         name: 'children',
         type: 'node',
         desc: <p>Can be <code>MenuDivider, MenuHeader, MenuItem, FocusableItem,
@@ -186,29 +236,22 @@ const menuPropsBase = [
             </>
     },
     {
-        name: 'align',
+        name: 'viewScroll',
         type: 'string',
-        defaultVal: "'start'",
+        defaultVal: "'initial'",
         desc:
             <>
-                <p>Can be 'start', 'center', or 'end'.</p>
-                <p>It sets alignment of menu with menu button.</p>
-                <p>The alignment of menu is subject to the available viewport space and
-                menu position can be adjusted in order to have it contained within viewport.</p>
-            </>
-    },
-    {
-        name: 'direction',
-        type: 'string',
-        defaultVal: "'bottom'",
-        desc:
-            <>
-                <p>Can be 'left', 'right', 'top', or 'bottom'.</p>
-                <p>It sets direction in which menu expands against menu button.</p>
-                <p>Please note the actual direction in which menu expands is subject to the available viewport space.
-                If available space is not enough in the direction provided in this prop,
-                menu will attempt to expands in the opposite direction.
-                Menu position can also be adjusted in order to have it contained within viewport.</p>
+                <p>It sets the behaviour of menu and any of its descendent submenus
+                     when window is scrolling.</p>
+                <ul>
+                    <li><code>'initial'</code> The window scroll event is ignored and has no
+                    effect on menu.</li>
+                    <li><code>'auto'</code> Menu will reposition itself based on the value
+                    of <code>position</code> prop when window is scrolling. <p>Note: for the best
+                    user experience, if the <code>overflow</code> prop is set to a value other than
+                    'visible', <code>viewScroll</code> will behave as 'close'.</p></li>
+                    <li><code>'close'</code> menu will be closed when window is scrolled.</li>
+                </ul>
             </>
     },
     {

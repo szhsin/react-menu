@@ -22,6 +22,7 @@
 ```bash
 npm install @szhsin/react-menu
 ```
+React-Menu requires React 16.8+ which supports Hooks. No other peer dependency is required.
 
 ## Usage
 

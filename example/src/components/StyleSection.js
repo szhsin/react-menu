@@ -23,8 +23,8 @@ export const StyleSection = React.memo(function StyleSection({
                         </thead>
                         <tbody>
                             {
-                                rows.map(({ name, desc }) => (
-                                    <tr key={name}>
+                                rows.map(({ name, desc }, i) => (
+                                    <tr key={i}>
                                         <td>{name}</td>
                                         <td>{desc}</td>
                                     </tr>

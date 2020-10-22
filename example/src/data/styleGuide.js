@@ -13,6 +13,7 @@ const bem = block => element => modifier => {
 const menuClass = bem('.rc-menu');
 const menuArrowClass = menuClass('arrow');
 const menuItemClass = menuClass('item');
+const menuButtonClass = bem('.rc-menu-button');
 const directions = ['left', 'right', 'top', 'bottom'];
 
 const stylesheet = {
@@ -143,8 +144,12 @@ const stylesheet = {
                     desc: 'MenuRadioGroup element.'
                 },
                 {
-                    name: '.rc-menu-button',
+                    name: menuButtonClass()(),
                     desc: 'MenuButton element.'
+                },
+                {
+                    name: menuButtonClass()('open'),
+                    desc: 'Menu controlled by the button is open.'
                 }
             ]
         },

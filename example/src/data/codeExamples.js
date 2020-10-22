@@ -1321,8 +1321,8 @@ export const installation = {
     title: 'Installation',
     desc:
         <>
-            <p>Install <LibName /> from npm:</p>
             <p className="install-command">npm install @szhsin/react-menu</p>
+            <p><LibName /> requires React 16.8+ which supports Hooks. No other peer dependency is required.</p>
         </>
 };
 
