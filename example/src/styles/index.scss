@@ -251,6 +251,17 @@ $toc-animation: 0.22s ease-out;
         background-color: white;
         border: 1px solid var.$border-color;
         border-radius: var.$border-radius-large;
+        margin: 1rem 0;
+        p {
+            margin-bottom: 0;
+        }
+        .comment {
+            color: var.$secondary-color;
+            margin-top: 1.5rem;
+            &:first-of-type {
+                margin-top: 0;
+            }
+        }
     }
 
     .sample-text {
