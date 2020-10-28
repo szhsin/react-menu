@@ -771,4 +771,5 @@ const accessibility = {
     ]
 };
 
-export default [components, hooks, accessibility];
+const documentation = [components, hooks, accessibility];
+export default documentation;

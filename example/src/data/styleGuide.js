@@ -224,4 +224,6 @@ const stylesProp = {
         </>
 }
 
-export default [stylesheet, classNameProp, stylesProp];
+const styleGuide = [stylesheet, classNameProp, stylesProp];
+export default styleGuide;
+

@@ -22,7 +22,7 @@ export const useActiveState = (isHovering, customKey) => {
             e.currentTarget.releasePointerCapture(e.pointerId);
         }, []),
 
-        onLostPointerCapture: useCallback(e => {
+        onLostPointerCapture: useCallback(() => {
             setActive(false);
         }, []),
 
@@ -38,7 +38,7 @@ export const useActiveState = (isHovering, customKey) => {
             }
         }, [activeKeys]),
 
-        onBlur: useCallback(e => {
+        onBlur: useCallback(() => {
             setActive(false);
         }, [])
     }

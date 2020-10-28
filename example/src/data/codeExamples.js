@@ -1331,4 +1331,5 @@ export const installation = {
         </>
 };
 
-export default [features, installation, usageExamples];
+const codeExamples = [features, installation, usageExamples];
+export default codeExamples;
