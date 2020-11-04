@@ -1327,7 +1327,7 @@ export const installation = {
                 <p className="comment"># with Yarn</p>
                 <p>yarn add @szhsin/react-menu</p>
             </div>
-            <p><LibName /> requires React 16.8+ which supports Hooks. No other peer dependency is required.</p>
+            <p>No peer dependency is required except React 16.8+.</p>
         </>
 };
 

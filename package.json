@@ -1,10 +1,11 @@
 {
   "name": "@szhsin/react-menu",
-  "version": "0.11.1",
+  "version": "0.11.2",
   "description": "React menu components",
   "author": "Zheng Song",
   "license": "MIT",
   "repository": "szhsin/react-menu",
+  "homepage": "https://szhsin.github.io/react-menu/",
   "main": "dist/index.js",
   "module": "dist/index.modern.js",
   "source": "src/index.js",
@@ -19,7 +20,7 @@
     "test:build": "run-s build",
     "test:lint": "eslint .",
     "test:unit": "cross-env CI=1 react-scripts test --env=jsdom",
-    "test:watch": "react-scripts test --env=jsdom",
+    "test:watch": "react-scripts test",
     "predeploy": "cd example && npm run build",
     "deploy": "gh-pages -d example/build"
   },
@@ -31,6 +32,9 @@
   "devDependencies": {
     "@babel/preset-env": "^7.12.1",
     "@babel/preset-react": "^7.12.1",
+    "@testing-library/jest-dom": "^5.11.5",
+    "@testing-library/react": "^11.1.0",
+    "@testing-library/user-event": "^12.1.10",
     "babel-eslint": "^10.0.3",
     "babel-jest": "^26.6.1",
     "cross-env": "^7.0.2",
@@ -49,8 +53,19 @@
     "react-test-renderer": "^16.14.0",
     "sass": "^1.26.10"
   },
+  "dependencies": {},
   "files": [
     "dist"
   ],
-  "dependencies": {}
+  "keywords": [
+    "react",
+    "menu",
+    "contextmenu",
+    "dropdown",
+    "submenu",
+    "checkbox",
+    "radio-button",
+    "accessibility",
+    "wai-aria"
+  ]
 }

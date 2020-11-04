@@ -26,7 +26,7 @@ npm install @szhsin/react-menu
 # with Yarn
 yarn add @szhsin/react-menu
 ```
-React-Menu requires React 16.8+ which supports Hooks. No other peer dependency is required.
+No peer dependency is required except React 16.8+.
 
 ## Usage
 
