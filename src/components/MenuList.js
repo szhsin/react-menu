@@ -648,7 +648,7 @@ export const MenuList = defineName(React.memo(function MenuList({
             } else if (menuItemFocus.position === FocusPositions.LAST) {
                 hoverIndexDispatch({ type: HoverIndexActionTypes.LAST });
             }
-        }, 150);
+        }, 100);
 
         return () => clearTimeout(id);
     }, [animation, isOpen, menuItemFocus]);

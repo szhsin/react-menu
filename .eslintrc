@@ -26,6 +26,7 @@
   "rules": {
     "react/prop-types": 0,
     "react/display-name": 0,
+    "react/no-children-prop": 0,
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn"
   }

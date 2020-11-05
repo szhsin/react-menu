@@ -17,10 +17,8 @@
     "start": "microbundle-crl watch --no-compress --format modern,cjs --css-modules false --sourcemap false",
     "prepare": "run-s build",
     "test": "jest",
-    "test:build": "run-s build",
+    "test:watch": "jest --watch",
     "test:lint": "eslint .",
-    "test:unit": "cross-env CI=1 react-scripts test --env=jsdom",
-    "test:watch": "react-scripts test",
     "predeploy": "cd example && npm run build",
     "deploy": "gh-pages -d example/build"
   },
@@ -67,5 +65,11 @@
     "radio-button",
     "accessibility",
     "wai-aria"
-  ]
+  ],
+  "jest": {
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "/__tests__/utils/"
+    ]
+  }
 }
