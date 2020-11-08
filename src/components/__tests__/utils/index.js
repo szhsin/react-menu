@@ -24,6 +24,9 @@ export const expectMenuItemToBeHover = (menuItem, truthy) =>
 export const expectMenuItemToBeActive = (menuItem, truthy) =>
     expectToBe(menuItem, truthy).toHaveClass('rc-menu__item--active');
 
+export const expectMenuItemToBeChecked = (menuItem, truthy) =>
+    expectToBe(menuItem, truthy).toHaveClass('rc-menu__item--checked');
+
 export const clickMenuButton = keyboard => {
     const menuButton = queryByRole('button');
     if (keyboard) menuButton.focus();
