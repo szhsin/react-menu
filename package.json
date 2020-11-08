@@ -17,7 +17,8 @@
     "start": "microbundle-crl watch --no-compress --format modern,cjs --css-modules false --sourcemap false",
     "prepare": "run-s build",
     "test": "jest",
-    "test:watch": "jest --watch",
+    "test:watch": "jest --watch --verbose",
+    "test:coverage": "jest --coverage=true",
     "test:lint": "eslint .",
     "predeploy": "cd example && npm run build",
     "deploy": "gh-pages -d example/build"

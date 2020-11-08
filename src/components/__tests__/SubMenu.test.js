@@ -1,0 +1,128 @@
+import React from 'react';
+import { Menu } from '../Menu';
+import { MenuItem } from '../MenuItem';
+import { MenuButton } from '../MenuButton';
+import { SubMenu } from '../SubMenu';
+import { render, fireEvent, waitFor } from '@testing-library/react';
+import '@testing-library/jest-dom/extend-expect';
+import 'regenerator-runtime/runtime.js';
+import * as utils from './utils';
+
+const renderMenu = (props, itemProps, submenuProps) => render(
+    <Menu menuButton={<MenuButton>Menu</MenuButton>} animation={false} {...props}>
+        <MenuItem>One</MenuItem>
+        <SubMenu label="Submenu" {...submenuProps}>
+            <MenuItem>First</MenuItem>
+            <MenuItem children="Middle" {...itemProps} />
+            <MenuItem>Last</MenuItem>
+        </SubMenu>
+        <MenuItem>Two</MenuItem>
+    </Menu>
+);
+
+test('Open and close submenu, and activate submenu item with mouse and keyboard', async () => {
+    const menuItemText = 'Save';
+    const onClick = jest.fn();
+    const onChange = jest.fn();
+    const onItemClick = jest.fn();
+    const { container } = renderMenu({ onClick }, {
+        children: menuItemText,
+        value: menuItemText,
+        onClick: onItemClick
+    }, { onChange });
+
+    utils.clickMenuButton();
+    const menuOptions = { name: 'Menu', container };
+    const submenuOptions = { name: 'Submenu', container };
+    const submenuItem = utils.queryMenuItem('Submenu');
+
+    // Open submenu with click event
+    utils.expectMenuToBeInTheDocument(false, submenuOptions);
+    fireEvent.click(submenuItem);
+    utils.expectMenuToBeOpen(true, submenuOptions);
+    expect(onChange).toHaveBeenLastCalledWith({ open: true });
+    await waitFor(() => expect(utils.queryMenu(submenuOptions)).toHaveFocus());
+
+    // Hovering an item in the parent menu list will close submenu
+    fireEvent.mouseEnter(utils.queryMenuItem('One'));
+    utils.expectMenuToBeOpen(false, submenuOptions);
+    expect(onChange).toHaveBeenLastCalledWith({ open: false });
+    expect(utils.queryMenuItem('One')).toHaveFocus();
+
+    // Open submenu with mouse enter event
+    fireEvent.mouseEnter(submenuItem);
+    await waitFor(() => utils.expectMenuToBeOpen(true, submenuOptions));
+    await waitFor(() => expect(utils.queryMenu(submenuOptions)).toHaveFocus());
+    fireEvent.mouseEnter(utils.queryMenuItem('One'));
+
+    // Mouse enter and leave submenu item in short succession will not open submenu
+    fireEvent.mouseEnter(submenuItem);
+    fireEvent.mouseLeave(submenuItem);
+    await waitFor(() => new Promise(resolve => setTimeout(resolve, 500)));
+    utils.expectMenuToBeOpen(false, submenuOptions);
+
+    // Open submenu with right arrow key
+    fireEvent.mouseEnter(submenuItem);
+    expect(submenuItem).toHaveFocus();
+    fireEvent.keyDown(submenuItem, { key: 'ArrowRight' });
+    fireEvent.keyUp(submenuItem, { key: 'ArrowRight' });
+    utils.expectMenuToBeOpen(true, submenuOptions);
+    await waitFor(() => expect(utils.queryMenuItem('First')).toHaveFocus());
+
+    // Close submenu with left arrow key
+    fireEvent.keyDown(utils.queryMenu(submenuOptions), { key: 'ArrowLeft' });
+    utils.expectMenuToBeOpen(false, submenuOptions);
+
+    // Open submenu with enter key
+    expect(submenuItem).toHaveFocus();
+    fireEvent.keyDown(submenuItem, { key: 'Enter' });
+    fireEvent.keyUp(submenuItem, { key: 'Enter' });
+    utils.expectMenuToBeOpen(true, submenuOptions);
+    await waitFor(() => expect(utils.queryMenuItem('First')).toHaveFocus());
+
+    // Close menu with ESC key
+    fireEvent.keyDown(utils.queryMenuItem('First'), { key: 'Escape' });
+    utils.expectMenuToBeOpen(false, submenuOptions);
+    utils.expectMenuToBeOpen(false, menuOptions);
+
+    // Open submenu and click a menu item, expecting onClick to fire on the menu item and root menu
+    utils.clickMenuButton();
+    fireEvent.click(submenuItem);
+    fireEvent.click(utils.queryMenuItem(menuItemText));
+    expect(onItemClick).toHaveBeenLastCalledWith({ value: menuItemText });
+    expect(onClick).toHaveBeenLastCalledWith({ value: menuItemText });
+    utils.expectMenuToBeOpen(false, menuOptions);
+
+    // Activate submenu item with space key
+    utils.clickMenuButton();
+    fireEvent.click(submenuItem);
+    await waitFor(() => expect(utils.queryMenu(submenuOptions)).toHaveFocus());
+    fireEvent.keyDown(utils.queryMenu(submenuOptions), { key: 'ArrowDown' });
+    fireEvent.keyDown(utils.queryMenu(submenuOptions), { key: 'ArrowDown' });
+    fireEvent.keyDown(utils.queryMenuItem(menuItemText), { key: ' ' });
+    fireEvent.keyUp(utils.queryMenuItem(menuItemText), { key: ' ' });
+    expect(onItemClick).toHaveBeenLastCalledWith({ value: menuItemText, key: ' ' });
+    expect(onClick).toHaveBeenLastCalledWith({ value: menuItemText, key: ' ' });
+    utils.expectMenuToBeOpen(false, menuOptions);
+});
+
+test('Submenu is disabled', async () => {
+    const { container } = renderMenu(null, null, { disabled: true });
+    utils.clickMenuButton();
+    const submenuItem = utils.queryMenuItem('Submenu');
+
+    expect(submenuItem).toHaveClass('rc-menu__item--disabled');
+    fireEvent.click(submenuItem);
+    utils.expectMenuToBeInTheDocument(false, { name: 'Submenu', container });
+
+    // Disabled item is skipped in keyboard navigation
+    fireEvent.keyDown(utils.queryMenu(), { key: 'ArrowDown' });
+    utils.expectMenuItemToBeHover(utils.queryMenuItem('One'), true);
+    fireEvent.keyDown(utils.queryMenu(), { key: 'ArrowDown' });
+    utils.expectMenuItemToBeHover(utils.queryMenuItem('Two'), true);
+    utils.expectMenuItemToBeHover(submenuItem, false);
+
+    // Menu item loses hover state when losing focus
+    utils.queryMenu().focus();
+    utils.expectMenuItemToBeHover(utils.queryMenuItem('Two'), false);
+});

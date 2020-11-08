@@ -10,7 +10,7 @@ import * as utils from './utils';
 const { queryByRole, queryAllByRole } = screen;
 
 const renderMenu = (props, itemProps) => render(
-    <Menu menuButton={<MenuButton>Open</MenuButton>} animation={false} {...props}>
+    <Menu menuButton={<MenuButton>Menu</MenuButton>} animation={false} {...props}>
         <MenuItem>First</MenuItem>
         <MenuItem children="Middle" {...itemProps} />
         <MenuItem>Last</MenuItem>
@@ -29,7 +29,7 @@ test('Menu is unmounted before opening and closes after losing focus', async () 
     utils.clickMenuButton();
     utils.expectButtonToBeExpanded(true);
     utils.expectMenuToBeOpen(true);
-    await waitFor(() => expect(queryByRole('menu')).toHaveFocus());
+    await waitFor(() => expect(utils.queryMenu()).toHaveFocus());
     const menuItems = queryAllByRole('menuitem');
     expect(menuItems).toHaveLength(3);
     menuItems.forEach(item => utils.expectMenuItemToBeHover(item, false));
@@ -46,7 +46,7 @@ test('Menu is removed from DOM after closing when keepMounted is false', async (
 
     utils.clickMenuButton();
     utils.expectMenuToBeInTheDocument(true);
-    await waitFor(() => expect(queryByRole('menu')).toHaveFocus());
+    await waitFor(() => expect(utils.queryMenu()).toHaveFocus());
 
     queryByRole('button').focus();
     utils.expectMenuToBeInTheDocument(false);
@@ -68,8 +68,8 @@ test('Clicking a menu item fires onClick event and closes the menu', () => {
     expect(onChange).toHaveBeenLastCalledWith({ open: true });
 
     fireEvent.click(utils.queryMenuItem(menuItemText));
-    expect(onItemClick).toHaveBeenCalledWith({ value: menuItemText });
-    expect(onClick).toHaveBeenCalledWith({ value: menuItemText });
+    expect(onItemClick).toHaveBeenLastCalledWith({ value: menuItemText });
+    expect(onClick).toHaveBeenLastCalledWith({ value: menuItemText });
     expect(onChange).toHaveBeenLastCalledWith({ open: false });
     expect(onChange).toHaveBeenCalledTimes(2);
 
@@ -137,7 +137,7 @@ test('Open and close menu with keyboard', async () => {
 test('Navigate with arrow keys', async () => {
     renderMenu();
     utils.clickMenuButton();
-    const menu = queryByRole('menu');
+    const menu = utils.queryMenu();
     await waitFor(() => expect(menu).toHaveFocus());
 
     fireEvent.keyDown(menu, { key: 'ArrowUp' });
@@ -151,4 +151,3 @@ test('Navigate with arrow keys', async () => {
     fireEvent.keyDown(menu, { key: 'ArrowDown' });
     utils.expectMenuItemToBeHover(utils.queryMenuItem('First'), true);
 });
-

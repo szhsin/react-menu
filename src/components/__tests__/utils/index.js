@@ -5,11 +5,15 @@ const { queryByRole } = screen;
 
 const expectToBe = (value, truthy) => truthy ? expect(value) : expect(value).not;
 
-export const expectMenuToBeInTheDocument = truthy =>
-    expectToBe(queryByRole('menu'), truthy).toBeInTheDocument();
+export const queryMenu = ({ name, container } = {}) => name
+    ? container.querySelector(`ul[aria-label="${name}"]`)
+    : queryByRole('menu');
 
-export const expectMenuToBeOpen = truthy =>
-    expectToBe(queryByRole('menu'), truthy).toHaveClass('rc-menu--open');
+export const expectMenuToBeInTheDocument = (truthy, options) =>
+    expectToBe(queryMenu(options), truthy).toBeInTheDocument();
+
+export const expectMenuToBeOpen = (truthy, options) =>
+    expectToBe(queryMenu(options), truthy).toHaveClass('rc-menu--open');
 
 export const expectButtonToBeExpanded = truthy =>
     expect(queryByRole('button')).toHaveAttribute('aria-expanded', String(truthy));
