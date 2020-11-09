@@ -106,7 +106,7 @@ test('Open and close submenu, and activate submenu item with mouse and keyboard'
     utils.expectMenuToBeOpen(false, menuOptions);
 });
 
-test('Submenu is disabled', async () => {
+test('Submenu is disabled', () => {
     const { container } = renderMenu(null, null, { disabled: true });
     utils.clickMenuButton();
     const submenuItem = utils.queryMenuItem('Submenu');
