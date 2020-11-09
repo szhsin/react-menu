@@ -70,7 +70,7 @@ export const SubMenu = defineName(React.memo(function SubMenu({
         hoverIndexDispatch({ type: HoverIndexActionTypes.SET, index });
         timeoutId.current = setTimeout(() => {
             timeoutId.current = null;
-            openMenu();
+            if (isParentOpen) openMenu();
         }, 300);
     }
 

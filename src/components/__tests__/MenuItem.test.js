@@ -14,7 +14,7 @@ test('Test radio items', () => {
     const onChange = jest.fn();
     const getMenu = value => (
         <Menu menuButton={<MenuButton>Color</MenuButton>}>
-            <MenuRadioGroup value={value} onChange={onChange}>
+            <MenuRadioGroup value={value} name="color" onChange={onChange}>
                 <MenuItem value="red">Red</MenuItem>
                 <MenuItem value="green">Green</MenuItem>
                 <MenuItem value="blue">Blue</MenuItem>
@@ -30,7 +30,7 @@ test('Test radio items', () => {
     utils.expectMenuItemToBeChecked(queryByRole('menuitemradio', { name: 'Green' }), true);
 
     fireEvent.click(queryByRole('menuitemradio', { name: 'Blue' }));
-    expect(onChange).toHaveBeenLastCalledWith({ value: 'blue' });
+    expect(onChange).toHaveBeenLastCalledWith({ name: 'color', value: 'blue' });
     rerender(getMenu('blue'));
     utils.expectMenuItemToBeChecked(queryByRole('menuitemradio', { name: 'Blue' }), true);
     utils.expectMenuItemToBeChecked(queryByRole('menuitemradio', { name: 'Green' }), false);

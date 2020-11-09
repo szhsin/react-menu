@@ -151,3 +151,24 @@ test('Navigate with arrow keys', async () => {
     fireEvent.keyDown(menu, { key: 'ArrowDown' });
     utils.expectMenuItemToBeHover(utils.queryMenuItem('First'), true);
 });
+
+test.each([
+    ['left', 'start', 'auto'],
+    ['right', 'center', 'anchor'],
+    ['top', 'end', 'initial'],
+    ['bottom', 'center', 'anchor']
+])('Menu direction: %s, align: %s, position: %s', (direction, align, position) => {
+    const { container } = renderMenu({
+        direction,
+        align,
+        position,
+        animation: true,
+        arrow: true,
+        offsetX: 10,
+        offsetY: -10,
+        overflow: 'auto'
+    });
+    utils.clickMenuButton();
+    expect(utils.queryMenu()).toHaveClass(`rc-menu--dir-${direction}`);
+    expect(container.querySelector(`.rc-menu__arrow--dir-${direction}`)).toBeInTheDocument();
+});
