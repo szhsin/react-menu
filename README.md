@@ -1,6 +1,6 @@
 # React-Menu
 
-> A customisable, responsive, and optimised React menu library with accessibility.
+> An accessible, responsive, and customisable React menu library.
 
 **[Live examples and documentation](https://szhsin.github.io/react-menu/)**
 

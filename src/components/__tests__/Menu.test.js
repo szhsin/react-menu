@@ -116,7 +116,7 @@ test('Hover and press a menu item', () => {
 
 test('Open and close menu with keyboard', async () => {
     renderMenu();
-    utils.clickMenuButton(true);
+    utils.clickMenuButton({ keyboard: true });
     const menuButton = queryByRole('button');
 
     const firstItem = utils.queryMenuItem('First');

@@ -27,8 +27,8 @@ export const expectMenuItemToBeActive = (menuItem, truthy) =>
 export const expectMenuItemToBeChecked = (menuItem, truthy) =>
     expectToBe(menuItem, truthy).toHaveClass('rc-menu__item--checked');
 
-export const clickMenuButton = keyboard => {
-    const menuButton = queryByRole('button');
+export const clickMenuButton = ({ name, keyboard } = {}) => {
+    const menuButton = queryByRole('button', { name });
     if (keyboard) menuButton.focus();
     fireEvent.click(menuButton, { detail: keyboard ? 0 : 1 });
 }

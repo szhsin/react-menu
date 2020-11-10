@@ -1,6 +1,9 @@
 import React from 'react';
 import { Menu } from '../Menu';
 import { MenuItem } from '../MenuItem';
+import { FocusableItem } from '../FocusableItem';
+import { MenuHeader } from '../MenuHeader';
+import { MenuDivider } from '../MenuDivider';
 import { MenuButton } from '../MenuButton';
 import { MenuRadioGroup } from '../MenuRadioGroup';
 import { screen, render, fireEvent } from '@testing-library/react';
@@ -61,5 +64,43 @@ test('Test check box items', () => {
     expect(onClick).toHaveBeenLastCalledWith({ checked: false });
     rerender(getMenu(false));
     utils.expectMenuItemToBeChecked(queryByRole('menuitemcheckbox', { name: 'Bold' }), false);
+    utils.expectMenuToBeOpen(false);
+});
+
+test('Test FocusableItem', () => {
+    render(
+        <Menu menuButton={<MenuButton>Menu</MenuButton>}>
+            <FocusableItem>
+                {({ ref, hover, closeMenu }) => (
+                    <button ref={ref}
+                        className={hover ? 'hover' : undefined}
+                        onClick={() => closeMenu()}>
+                        Close
+                    </button>
+                )}
+            </FocusableItem>
+            <MenuDivider />
+            <MenuHeader>Header</MenuHeader>
+            <MenuItem>Last</MenuItem>
+        </Menu>
+    );
+
+    utils.clickMenuButton({ name: 'Menu' });
+    utils.expectMenuToBeOpen(true);
+
+    const button = queryByRole('button', { name: 'Close' });
+    fireEvent.mouseEnter(button);
+    expect(button).toHaveFocus();
+    expect(button).toHaveClass('hover');
+
+    fireEvent.keyDown(button, { key: 'ArrowDown' });
+    expect(button).not.toHaveFocus();
+    expect(button).not.toHaveClass('hover');
+
+    fireEvent.keyDown(utils.queryMenuItem('Last'), { key: 'ArrowUp' });
+    expect(button).toHaveFocus();
+    expect(button).toHaveClass('hover');
+
+    fireEvent.click(button);
     utils.expectMenuToBeOpen(false);
 });

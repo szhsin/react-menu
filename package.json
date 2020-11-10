@@ -1,7 +1,7 @@
 {
   "name": "@szhsin/react-menu",
-  "version": "1.0.0",
-  "description": "React menu components",
+  "version": "1.0.1",
+  "description": "An accessible, responsive, and customisable React menu library",
   "author": "Zheng Song",
   "license": "MIT",
   "repository": "szhsin/react-menu",
@@ -59,11 +59,11 @@
   "keywords": [
     "react",
     "menu",
+    "submenu",
     "contextmenu",
     "dropdown",
-    "submenu",
     "checkbox",
-    "radio-button",
+    "radio button",
     "accessibility",
     "wai-aria"
   ],
