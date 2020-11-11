@@ -300,7 +300,7 @@ function LinkAndDisabledExample() {
             <Menu menuButton={<MenuButton>Open menu</MenuButton>}>
                 <MenuItem href="https://www.google.com/">Google</MenuItem>
                 <MenuItem href="https://github.com/szhsin/react-menu/"
-                    target="_blank">
+                    target="_blank" rel="noopener noreferrer">
                     GitHub (new window)
                 </MenuItem>
                 <MenuItem>Regular item</MenuItem>
@@ -552,7 +552,7 @@ function ContextMenuExample() {
             Right click to open context menu
 
             <ControlledMenu anchorPoint={anchorPoint} isOpen={isOpen}
-                onClose={() => setOpen(false)}>
+                onClose={() => setOpen(false)} animation={false}>
                 <MenuItem>Cut</MenuItem>
                 <MenuItem>Copy</MenuItem>
                 <MenuItem>Paste</MenuItem>

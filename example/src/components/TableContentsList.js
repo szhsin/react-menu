@@ -16,7 +16,7 @@ export const TableContentsList = React.memo(function TableContentsList({
 
         return (
             <li key={item.id}>
-                <Link smooth to={`#${item.id}`}>{item.title}</Link>
+                <Link to={`#${item.id}`}>{item.title}</Link>
                 {nested}
             </li>
         );

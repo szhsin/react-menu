@@ -1,7 +1,7 @@
 {
   "name": "@szhsin/react-menu",
   "version": "1.0.1",
-  "description": "An accessible, responsive, and customisable React menu library",
+  "description": "An accessible, responsive, and customisable React menu library.",
   "author": "Zheng Song",
   "license": "MIT",
   "repository": "szhsin/react-menu",
@@ -20,6 +20,7 @@
     "test:watch": "jest --watch --verbose",
     "test:coverage": "jest --coverage=true",
     "test:lint": "eslint .",
+    "example": "npm start --prefix example",
     "predeploy": "cd example && npm run build",
     "deploy": "gh-pages -d example/build"
   },
