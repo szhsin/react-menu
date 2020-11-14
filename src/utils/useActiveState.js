@@ -3,34 +3,31 @@ import { Keys } from './constants';
 
 // This function receive customKey as a single value rather than an array;
 // It's intentional for keeping the argument's identity stable across each render.
-export const useActiveState = (isHovering, customKey) => {
+export const useActiveState = (isHovering, isDisabled, customKey) => {
     const [active, setActive] = useState(false);
     const activeKeys = useMemo(() =>
         [Keys.SPACE, Keys.ENTER,
         ...(customKey ? [customKey] : [])],
         [customKey]);
 
+    const cancelActive = useCallback(() => setActive(false), []);
+
     return {
         isActive: active,
 
-        onPointerDown: useCallback(e => {
-            e.currentTarget.setPointerCapture(e.pointerId);
-            setActive(true);
-        }, []),
+        onPointerDown: useCallback(() => {
+            if (!isDisabled) setActive(true);
+        }, [isDisabled]),
 
-        onPointerUp: useCallback(e => {
-            e.currentTarget.releasePointerCapture(e.pointerId);
-        }, []),
+        onPointerUp: cancelActive,
 
-        onLostPointerCapture: useCallback(() => {
-            setActive(false);
-        }, []),
+        onPointerLeave: cancelActive,
 
         onKeyDown: useCallback(e => {
-            if (isHovering && activeKeys.includes(e.key)) {
+            if (isHovering && !isDisabled && activeKeys.includes(e.key)) {
                 setActive(true);
             }
-        }, [isHovering, activeKeys]),
+        }, [isHovering, isDisabled, activeKeys]),
 
         onKeyUp: useCallback(e => {
             if (activeKeys.includes(e.key)) {
@@ -38,8 +35,10 @@ export const useActiveState = (isHovering, customKey) => {
             }
         }, [activeKeys]),
 
-        onBlur: useCallback(() => {
-            setActive(false);
+        onBlur: useCallback(e => {
+            if (!e.currentTarget.contains(e.relatedTarget)) {
+                setActive(false);
+            }
         }, [])
     }
 }

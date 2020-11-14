@@ -642,7 +642,7 @@ export const hoverAndActive = {
         `<Menu menuButton={<MenuButton>Open menu</MenuButton>}>
     <MenuItem>
         {({ hover, active }) =>
-            active ? 'Active' : hover ? 'Press me' : 'Hover me'}
+            active ? 'Pressed' : hover ? 'Press me' : 'Hover me'}
     </MenuItem>
     <MenuDivider />
     <MenuItem styles={{ justifyContent: 'center' }}>
@@ -671,7 +671,7 @@ export default function Example() {
         <Menu menuButton={<MenuButton>Open menu</MenuButton>}>
             <MenuItem>
                 {({ hover, active }) =>
-                    active ? 'Active' : hover ? 'Press me' : 'Hover me'}
+                    active ? 'Pressed' : hover ? 'Press me' : 'Hover me'}
             </MenuItem>
             <MenuDivider />
             <MenuItem styles={{ justifyContent: 'center' }}>

@@ -49,14 +49,14 @@ export const SubMenu = defineName(React.memo(function SubMenu({
     const { isParentOpen, hoverIndex, hoverIndexDispatch } = useContext(MenuListContext);
     const { debugging } = useContext(SettingsContext);
     const isHovering = hoverIndex === index;
+    const isDisabled = disabled ? true : undefined;
     const {
-        isActive, onKeyUp, onBlur,
+        isActive, onKeyUp,
         ...activeStateHandlers
-    } = useActiveState(isHovering, Keys.RIGHT);
+    } = useActiveState(isHovering, isDisabled, Keys.RIGHT);
     const containerRef = useRef(null);
     const itemRef = useRef(null);
     const timeoutId = useRef();
-    const isDisabled = disabled ? true : undefined;
 
     useMenuChange(onChange, isOpen);
 
@@ -75,16 +75,10 @@ export const SubMenu = defineName(React.memo(function SubMenu({
     }
 
     const handleMouseLeave = () => {
-        if (isDisabled) return;
         clearTimeout(timeoutId.current);
         if (!isOpen) {
             hoverIndexDispatch({ type: HoverIndexActionTypes.UNSET, index });
         }
-    }
-
-    const handleClick = () => {
-        if (isDisabled) return;
-        openMenu();
     }
 
     const handleKeyDown = e => {
@@ -126,8 +120,6 @@ export const SubMenu = defineName(React.memo(function SubMenu({
     }
 
     const handleBlur = e => {
-        onBlur(e);
-
         // In debugging mode, neither close menu nor reset hoverIndex.
         if (debugging) return;
 
@@ -136,9 +128,9 @@ export const SubMenu = defineName(React.memo(function SubMenu({
         if (!e.currentTarget.contains(e.relatedTarget)) {
             closeMenu();
             hoverIndexDispatch({ type: HoverIndexActionTypes.UNSET, index });
-        } else if (itemRef.current === e.relatedTarget) {
+        } else if (itemRef.current.contains(e.relatedTarget)) {
             // This handles clicking on submenu item when it's open
-            // First close the submenu and then let subsequent onClick event to re-open it
+            // First close the submenu and then let subsequent onClick event re-open it
             // for maintaining the correct focus
             closeMenu();
         }
@@ -157,7 +149,7 @@ export const SubMenu = defineName(React.memo(function SubMenu({
     const modifiers = Object.freeze({
         open: isOpen,
         hover: isHovering,
-        active: isActive && !isDisabled,
+        active: isActive,
         disabled: isDisabled
     });
 
@@ -177,7 +169,7 @@ export const SubMenu = defineName(React.memo(function SubMenu({
                 ref={itemRef}
                 onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}
-                onClick={handleClick}
+                onClick={() => !isDisabled && openMenu()}
                 onKeyUp={handleKeyUp}
                 {...activeStateHandlers}>
                 {safeCall(label, modifiers)}

@@ -340,7 +340,7 @@ function HoverAndActiveExample() {
             <Menu menuButton={<MenuButton>Open menu</MenuButton>}>
                 <MenuItem>
                     {({ hover, active }) =>
-                        active ? 'Active' : hover ? 'Press me' : 'Hover me'
+                        active ? 'Pressed' : hover ? 'Press me' : 'Hover me'
                     }
                 </MenuItem>
                 <MenuDivider />

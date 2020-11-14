@@ -37,7 +37,7 @@ export const useItemState = (disabled, index) => {
         }, [isDisabled, hoverIndexDispatch, index]),
 
         unsetHover: useCallback(() => {
-            if (!isDisabled) hoverIndexDispatch({ type: HoverIndexActionTypes.UNSET, index });
-        }, [isDisabled, hoverIndexDispatch, index])
+            hoverIndexDispatch({ type: HoverIndexActionTypes.UNSET, index });
+        }, [hoverIndexDispatch, index])
     };
 }

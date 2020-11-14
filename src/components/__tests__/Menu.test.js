@@ -85,7 +85,7 @@ test('Hover and press a menu item', () => {
     // hover and press a menu item
     const menuItem = utils.queryMenuItem('Middle');
     fireEvent.mouseEnter(menuItem);
-    fireEvent.pointerDown(menuItem, { target: { setPointerCapture: jest.fn() } });
+    fireEvent.pointerDown(menuItem);
     utils.expectMenuItemToBeHover(menuItem, true);
     utils.expectMenuItemToBeActive(menuItem, true);
     expect(menuItem).toHaveAttribute('tabindex', '0');
@@ -93,7 +93,7 @@ test('Hover and press a menu item', () => {
 
     // unhover and release pressing a menu item
     fireEvent.mouseLeave(menuItem);
-    fireEvent.lostPointerCapture(menuItem);
+    fireEvent.pointerUp(menuItem);
     utils.expectMenuItemToBeHover(menuItem, false);
     utils.expectMenuItemToBeActive(menuItem, false);
     expect(menuItem).toHaveAttribute('tabindex', '-1');

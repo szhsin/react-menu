@@ -41,7 +41,7 @@ export const MenuItem = defineName(React.memo(function MenuItem({
     const {
         isActive, onKeyUp, onBlur,
         ...activeStateHandlers
-    } = useActiveState(isHovering);
+    } = useActiveState(isHovering, isDisabled);
     const isRadio = type === 'radio';
     const isCheckBox = type === 'checkbox';
     const isAnchor = href && !isDisabled && !isRadio && !isCheckBox;
@@ -90,14 +90,16 @@ export const MenuItem = defineName(React.memo(function MenuItem({
         onBlur(e);
 
         // It handles situation such as clicking on a sibling disabled menu item
-        unsetHover(e);
+        if (!e.currentTarget.contains(e.relatedTarget)) {
+            unsetHover(e);
+        }
     }
 
     const modifiers = Object.freeze({
         type,
         disabled: isDisabled,
         hover: isHovering,
-        active: isActive && !isDisabled,
+        active: isActive,
         checked: isRadio ? radioGroup.value === value : (isCheckBox ? !!checked : undefined),
         anchor: isAnchor
     });
