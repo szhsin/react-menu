@@ -1,19 +1,8 @@
-import React from 'react';
-import { Menu } from '../Menu';
-import { MenuItem } from '../MenuItem';
-import { MenuButton } from '../MenuButton';
-import { screen, render, fireEvent } from '@testing-library/react';
+import { screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 import * as utils from './utils';
 
 const { queryByRole } = screen;
-
-const renderMenu = (props, itemProps) => render(
-    <Menu menuButton={<MenuButton>Menu</MenuButton>} {...props}>
-        <MenuItem {...itemProps}>First</MenuItem>
-        <MenuItem>Last</MenuItem>
-    </Menu>
-);
 
 test('className and styles props', () => {
     const className = 'my-class1 my-class2';
@@ -36,11 +25,11 @@ test('className and styles props', () => {
         }
     };
 
-    renderMenu({ className }, { styles, type: 'checkbox' });
+    utils.renderMenu({ className }, { styles, type: 'checkbox' });
     utils.clickMenuButton();
     expect(utils.queryMenu()).toHaveClass(className);
 
-    const menuItem = queryByRole('menuitemcheckbox', { name: 'First' })
+    const menuItem = queryByRole('menuitemcheckbox', { name: 'Middle' })
     expect(menuItem).toHaveStyle({ ...baseStyle, color: 'red' });
 
     fireEvent.mouseEnter(menuItem);
@@ -53,14 +42,14 @@ test('className and styles props', () => {
 test('className and styles props as functions', () => {
     const className = jest.fn();
     const styles = jest.fn();
-    renderMenu({ className }, { styles });
+    utils.renderMenu({ className }, { styles });
     utils.clickMenuButton();
     expect(className).toHaveBeenLastCalledWith(expect.objectContaining({
         open: true,
         dir: 'bottom'
     }));
 
-    const menuItem = queryByRole('menuitem', { name: 'First' })
+    const menuItem = queryByRole('menuitem', { name: 'Middle' })
     fireEvent.mouseEnter(menuItem);
     expect(styles).toHaveBeenLastCalledWith(expect.objectContaining({
         hover: true

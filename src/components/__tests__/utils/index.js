@@ -1,4 +1,8 @@
-import { screen, fireEvent } from '@testing-library/react';
+import React from 'react';
+import { Menu } from '../../Menu';
+import { MenuItem } from '../../MenuItem';
+import { MenuButton } from '../../MenuButton';
+import { screen, render, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 
 const { queryByRole } = screen;
@@ -34,3 +38,11 @@ export const clickMenuButton = ({ name, keyboard } = {}) => {
 }
 
 export const queryMenuItem = name => queryByRole('menuitem', { name });
+
+export const renderMenu = (props, itemProps) => render(
+    <Menu menuButton={<MenuButton>Menu</MenuButton>} animation={false} {...props}>
+        <MenuItem>First</MenuItem>
+        <MenuItem children="Middle" {...itemProps} />
+        <MenuItem>Last</MenuItem>
+    </Menu>
+);

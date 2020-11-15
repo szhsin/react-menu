@@ -63,11 +63,15 @@ test('Open and close submenu, and activate submenu item with mouse and keyboard'
 
     // Open submenu with right arrow key
     fireEvent.mouseEnter(submenuItem);
+    utils.expectMenuItemToBeHover(submenuItem, true);
     expect(submenuItem).toHaveFocus();
     fireEvent.keyDown(submenuItem, { key: 'ArrowRight' });
+    utils.expectMenuItemToBeActive(submenuItem, true);
     fireEvent.keyUp(submenuItem, { key: 'ArrowRight' });
+    utils.expectMenuItemToBeActive(submenuItem, false);
     utils.expectMenuToBeOpen(true, submenuOptions);
-    await waitFor(() => expect(utils.queryMenuItem('First')).toHaveFocus());
+    await waitFor(() => utils.expectMenuItemToBeHover(utils.queryMenuItem('First'), true));
+    utils.expectMenuItemToBeHover(submenuItem, true);
 
     // Close submenu with left arrow key
     fireEvent.keyDown(utils.queryMenu(submenuOptions), { key: 'ArrowLeft' });
@@ -84,6 +88,25 @@ test('Open and close submenu, and activate submenu item with mouse and keyboard'
     fireEvent.keyDown(utils.queryMenuItem('First'), { key: 'Escape' });
     utils.expectMenuToBeOpen(false, submenuOptions);
     utils.expectMenuToBeOpen(false, menuOptions);
+
+    // Open submenu
+    utils.clickMenuButton();
+    fireEvent.mouseEnter(submenuItem);
+    await waitFor(() => expect(utils.queryMenu(submenuOptions)).toHaveFocus());
+    utils.expectMenuItemToBeHover(submenuItem, true);
+    utils.expectMenuToBeOpen(true, submenuOptions);
+    // When submenu item receives focus, submenu is closed
+    submenuItem.focus();
+    utils.expectMenuItemToBeHover(submenuItem, true);
+    utils.expectMenuToBeOpen(false, submenuOptions);
+
+    fireEvent.click(submenuItem);
+    await waitFor(() => expect(utils.queryMenu(submenuOptions)).toHaveFocus());
+    // When something outside submenu item receives focus, 
+    // submenu is closed and submenu item loses hover state
+    utils.queryMenu(menuOptions).focus();
+    utils.expectMenuItemToBeHover(submenuItem, false);
+    utils.expectMenuToBeOpen(false, submenuOptions);
 
     // Open submenu and click a menu item, expecting onClick to fire on the menu item and root menu
     utils.clickMenuButton();
@@ -121,8 +144,4 @@ test('Submenu is disabled', () => {
     fireEvent.keyDown(utils.queryMenu(), { key: 'ArrowDown' });
     utils.expectMenuItemToBeHover(utils.queryMenuItem('Two'), true);
     utils.expectMenuItemToBeHover(submenuItem, false);
-
-    // Menu item loses hover state when losing focus
-    utils.queryMenu().focus();
-    utils.expectMenuItemToBeHover(utils.queryMenuItem('Two'), false);
 });

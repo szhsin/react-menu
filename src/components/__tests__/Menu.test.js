@@ -1,24 +1,12 @@
-import React from 'react';
-import { Menu } from '../Menu';
-import { MenuItem } from '../MenuItem';
-import { MenuButton } from '../MenuButton';
-import { screen, render, fireEvent, waitFor } from '@testing-library/react';
+import { screen, fireEvent, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 import 'regenerator-runtime/runtime.js';
 import * as utils from './utils';
 
 const { queryByRole, queryAllByRole } = screen;
 
-const renderMenu = (props, itemProps) => render(
-    <Menu menuButton={<MenuButton>Menu</MenuButton>} animation={false} {...props}>
-        <MenuItem>First</MenuItem>
-        <MenuItem children="Middle" {...itemProps} />
-        <MenuItem>Last</MenuItem>
-    </Menu>
-);
-
 test('Menu is unmounted before opening and closes after losing focus', async () => {
-    renderMenu();
+    utils.renderMenu();
 
     // menu is unmounted
     utils.expectButtonToBeExpanded(false);
@@ -41,7 +29,7 @@ test('Menu is unmounted before opening and closes after losing focus', async () 
 });
 
 test('Menu is removed from DOM after closing when keepMounted is false', async () => {
-    renderMenu({ keepMounted: false });
+    utils.renderMenu({ keepMounted: false });
     utils.expectMenuToBeInTheDocument(false);
 
     utils.clickMenuButton();
@@ -57,7 +45,7 @@ test('Clicking a menu item fires onClick event and closes the menu', () => {
     const onClick = jest.fn();
     const onChange = jest.fn();
     const onItemClick = jest.fn();
-    renderMenu({ onClick, onChange }, {
+    utils.renderMenu({ onClick, onChange }, {
         children: menuItemText,
         value: menuItemText,
         onClick: onItemClick
@@ -78,44 +66,8 @@ test('Clicking a menu item fires onClick event and closes the menu', () => {
     utils.expectMenuToBeOpen(false);
 });
 
-test('Hover and press a menu item', () => {
-    renderMenu();
-    utils.clickMenuButton();
-
-    // hover and press a menu item
-    const menuItem = utils.queryMenuItem('Middle');
-    fireEvent.mouseEnter(menuItem);
-    fireEvent.pointerDown(menuItem);
-    utils.expectMenuItemToBeHover(menuItem, true);
-    utils.expectMenuItemToBeActive(menuItem, true);
-    expect(menuItem).toHaveAttribute('tabindex', '0');
-    expect(menuItem).toHaveFocus();
-
-    // unhover and release pressing a menu item
-    fireEvent.mouseLeave(menuItem);
-    fireEvent.pointerUp(menuItem);
-    utils.expectMenuItemToBeHover(menuItem, false);
-    utils.expectMenuItemToBeActive(menuItem, false);
-    expect(menuItem).toHaveAttribute('tabindex', '-1');
-    expect(menuItem).toHaveFocus(); // still keep focus
-
-    // hover menu items one after the other
-    const oneItem = utils.queryMenuItem('First');
-    const anothorItem = utils.queryMenuItem('Last');
-
-    fireEvent.mouseEnter(oneItem);
-    expect(oneItem).toHaveFocus();
-    utils.expectMenuItemToBeHover(oneItem, true);
-    utils.expectMenuItemToBeHover(anothorItem, false);
-
-    fireEvent.mouseEnter(anothorItem);
-    expect(anothorItem).toHaveFocus();
-    utils.expectMenuItemToBeHover(oneItem, false);
-    utils.expectMenuItemToBeHover(anothorItem, true);
-});
-
 test('Open and close menu with keyboard', async () => {
-    renderMenu();
+    utils.renderMenu();
     utils.clickMenuButton({ keyboard: true });
     const menuButton = queryByRole('button');
 
@@ -135,7 +87,7 @@ test('Open and close menu with keyboard', async () => {
 });
 
 test('Navigate with arrow keys', async () => {
-    renderMenu();
+    utils.renderMenu();
     utils.clickMenuButton();
     const menu = utils.queryMenu();
     await waitFor(() => expect(menu).toHaveFocus());
@@ -158,7 +110,7 @@ test.each([
     ['top', 'end', 'initial'],
     ['bottom', 'center', 'anchor']
 ])('Menu direction: %s, align: %s, position: %s', (direction, align, position) => {
-    const { container } = renderMenu({
+    const { container } = utils.renderMenu({
         direction,
         align,
         position,
