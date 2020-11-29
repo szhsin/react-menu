@@ -2,7 +2,6 @@ import React, {
     useState,
     useReducer,
     useEffect,
-    useLayoutEffect,
     useRef,
     useMemo,
     useCallback,
@@ -21,7 +20,8 @@ import {
     CloseReason,
     Keys,
     FocusPositions,
-    HoverIndexActionTypes
+    HoverIndexActionTypes,
+    useLayoutEffect
 } from '../utils';
 
 
