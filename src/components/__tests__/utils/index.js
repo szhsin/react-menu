@@ -40,7 +40,7 @@ export const clickMenuButton = ({ name, keyboard } = {}) => {
 export const queryMenuItem = name => queryByRole('menuitem', { name });
 
 export const renderMenu = (props, itemProps) => render(
-    <Menu menuButton={<MenuButton>Menu</MenuButton>} animation={false} {...props}>
+    <Menu menuButton={<MenuButton>Open</MenuButton>} animation={false} {...props}>
         <MenuItem>First</MenuItem>
         <MenuItem children="Middle" {...itemProps} />
         <MenuItem>Last</MenuItem>
