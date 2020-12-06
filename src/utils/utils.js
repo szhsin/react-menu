@@ -4,6 +4,27 @@ export const defineName = (component, name) =>
 
 export const safeCall = (fn, ...args) => typeof fn === 'function' ? fn(...args) : fn;
 
+export const attachHandlerProps = (handlers, props) => {
+    const result = {};
+
+    for (const handlerName of Object.keys(handlers)) {
+        const handler = handlers[handlerName];
+        const propHandler = props[handlerName];
+        let attachedHandler;
+        if (typeof propHandler === 'function') {
+            attachedHandler = e => {
+                propHandler(e);
+                handler(e);
+            }
+        } else {
+            attachedHandler = handler;
+        }
+        result[handlerName] = attachedHandler;
+    }
+
+    return result;
+}
+
 // Generate className following BEM methodology: http://getbem.com/naming/
 // Modifier value can be one of the following types: boolean, string, undefined
 export const bem = (block, element, modifiers = {}) => (userClassName, userModifiers) => {

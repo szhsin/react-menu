@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import {
+    attachHandlerProps,
     defineName,
     safeCall,
     bem,
@@ -104,20 +105,25 @@ export const MenuItem = defineName(React.memo(function MenuItem({
         anchor: isAnchor
     });
 
-    const menuItemProps = {
-        className: bem(menuClass, menuItemClass, modifiers)(className),
-        style: flatStyles(styles, modifiers),
-        role: isRadio ? 'menuitemradio' : (isCheckBox ? 'menuitemcheckbox' : 'menuitem'),
-        'aria-checked': modifiers.checked,
-        'aria-disabled': isDisabled,
-        tabIndex: isHovering ? 0 : -1,
-        ref,
+    const handlers = attachHandlerProps({
+        ...activeStateHandlers,
         onMouseEnter: setHover,
         onMouseLeave: unsetHover,
         onKeyUp: handleKeyUp,
         onBlur: handleBlur,
-        onClick: () => handleClick(),
-        ...activeStateHandlers
+        onClick: () => handleClick()
+    }, restProps);
+
+    const menuItemProps = {
+        role: isRadio ? 'menuitemradio' : (isCheckBox ? 'menuitemcheckbox' : 'menuitem'),
+        'aria-checked': modifiers.checked,
+        'aria-disabled': isDisabled,
+        tabIndex: isHovering ? 0 : -1,
+        ...restProps,
+        ...handlers,
+        ref,
+        className: bem(menuClass, menuItemClass, modifiers)(className),
+        style: flatStyles(styles, modifiers),
     };
 
     const renderChildren = safeCall(children, modifiers);
@@ -125,7 +131,7 @@ export const MenuItem = defineName(React.memo(function MenuItem({
     if (isAnchor) {
         return (
             <li role="presentation">
-                <a {...restProps} href={href} {...menuItemProps} >
+                <a {...menuItemProps} href={href}>
                     {renderChildren}
                 </a>
             </li>
