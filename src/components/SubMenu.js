@@ -25,25 +25,14 @@ import { MenuList } from './MenuList';
 
 export const SubMenu = defineName(React.memo(function SubMenu({
     'aria-label': ariaLabel,
-    className,
-    styles,
-    arrowClassName,
-    arrowStyles,
     itemClassName,
     itemStyles,
-    arrow,
-    align,
-    direction,
-    position,
-    overflow,
-    offsetX,
-    offsetY,
     disabled,
     keepMounted,
     label,
     index,
-    children,
-    onChange }) {
+    onChange,
+    ...restProps }) {
 
     const { isMounted, isOpen, menuItemFocus, openMenu, closeMenu } = useMenuState(keepMounted);
     const { isParentOpen, hoverIndex, hoverIndexDispatch } = useContext(MenuListContext);
@@ -176,27 +165,15 @@ export const SubMenu = defineName(React.memo(function SubMenu({
             </div>
 
             <MenuList
+                {...restProps}
                 ariaLabel={ariaLabel || (typeof label === 'string' ? label : 'Submenu')}
-                className={className}
-                styles={styles}
-                arrowClassName={arrowClassName}
-                arrowStyles={arrowStyles}
                 anchorRef={itemRef}
                 containerRef={containerRef}
-                arrow={arrow}
-                align={align}
-                direction={direction}
-                position={position}
-                overflow={overflow}
-                offsetX={offsetX}
-                offsetY={offsetY}
                 isOpen={isOpen}
                 isMounted={isMounted}
                 isDisabled={isDisabled}
                 menuItemFocus={menuItemFocus}
-                onClose={handleClose}>
-                {children}
-            </MenuList>
+                onClose={handleClose} />
         </li>
     );
 }), 'SubMenu');
