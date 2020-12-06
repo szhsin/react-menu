@@ -10,27 +10,25 @@ import {
 
 
 export const MenuButton = defineName(React.memo(React.forwardRef(function MenuButton({
-    id,
     className,
     styles,
     isOpen,
     disabled,
     children,
-    onClick,
-    onKeyDown }, ref) {
+    ...restProps }, ref) {
 
     const modifiers = Object.freeze({ open: isOpen });
 
     return (
-        <button id={id} className={bem(menuButtonClass, null, modifiers)(className)}
-            style={flatStyles(styles, modifiers)}
+        <button
             aria-haspopup="true"
             aria-expanded={isOpen}
             aria-disabled={disabled}
-            ref={ref}
             disabled={disabled}
-            onClick={onClick}
-            onKeyDown={onKeyDown} >
+            {...restProps}
+            ref={ref}
+            className={bem(menuButtonClass, null, modifiers)(className)}
+            style={flatStyles(styles, modifiers)}>
             {children}
         </button>
     );
@@ -38,10 +36,6 @@ export const MenuButton = defineName(React.memo(React.forwardRef(function MenuBu
 
 MenuButton.propTypes = {
     ...stylePropTypes(),
-    id: PropTypes.oneOfType([
-        PropTypes.string,
-        PropTypes.number
-    ]),
     isOpen: PropTypes.bool,
     disabled: PropTypes.bool,
     children: PropTypes.node.isRequired,

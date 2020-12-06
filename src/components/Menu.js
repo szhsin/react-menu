@@ -1,6 +1,7 @@
 import React, { useRef, useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import {
+    attachHandlerProps,
     safeCall,
     menuPropTypesBase,
     menuDefaultPropsBase,
@@ -68,12 +69,12 @@ export const Menu = React.memo(function Menu({
     }, [openMenu]);
 
     const renderButton = useMemo(() => {
-        if (!button) return null;
-
         const buttonProps = {
             ref: buttonRef,
-            onClick: handleClick,
-            onKeyDown: handleKeyDown
+            ...attachHandlerProps({
+                onClick: handleClick,
+                onKeyDown: handleKeyDown
+            }, button.props)
         };
         if (button.type.__name__ === 'MenuButton') {
             buttonProps.isOpen = isOpen;

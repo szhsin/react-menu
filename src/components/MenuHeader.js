@@ -12,12 +12,14 @@ import {
 export const MenuHeader = defineName(React.memo(function MenuHeader({
     className,
     styles,
-    children }) {
+    children,
+    ...restProps }) {
 
     return (
-        <li className={bem(menuClass, menuHeaderClass)(className)}
-            style={flatStyles(styles)}
-            role="presentation">
+        <li role="presentation"
+            {...restProps}
+            className={bem(menuClass, menuHeaderClass)(className)}
+            style={flatStyles(styles)}>
             {children}
         </li>
     );

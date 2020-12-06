@@ -434,12 +434,6 @@ const menuButton = {
     rows: [
         ...styleProps('menu button', <ul><li><code>open: bool</code> indicates if the menu is open.</li></ul>),
         {
-            name: 'id',
-            type: 'string | number',
-            desc:
-                <p>Sets ID attribute on the menu button DOM element.</p>
-        },
-        {
             name: 'disabled',
             type: 'boolean',
             desc: <p>Set <code>true</code> to disabled the menu button.</p>

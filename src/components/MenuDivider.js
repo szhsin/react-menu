@@ -11,12 +11,14 @@ import {
 
 export const MenuDivider = defineName(React.memo(function MenuDivider({
     className,
-    styles }) {
+    styles,
+    ...restProps }) {
 
     return (
-        <li className={bem(menuClass, menuDividerClass)(className)}
-            style={flatStyles(styles)}
-            role="separator" />
+        <li role="separator"
+            {...restProps}
+            className={bem(menuClass, menuDividerClass)(className)}
+            style={flatStyles(styles)} />
     );
 }), 'MenuDivider');
 
