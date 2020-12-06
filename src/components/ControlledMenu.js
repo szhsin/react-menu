@@ -11,56 +11,22 @@ import { useMenuList } from './useMenuList';
 export const ControlledMenu = React.memo(function ControlledMenu({
     'aria-label': ariaLabel,
     id,
-    className,
-    styles,
-    arrowClassName,
-    arrowStyles,
     animation,
     debugging,
     viewScroll,
-    anchorPoint,
-    anchorRef,
-    arrow,
-    align,
-    direction,
-    position,
-    overflow,
-    isOpen,
-    isMounted,
-    menuItemFocus,
-    offsetX,
-    offsetY,
-    children,
     onClick,
     onClose,
     ...restProps }) {
 
     return useMenuList(
         {
-            ...restProps, // restProps for passing through client code defined event handlers
-            ariaLabel: ariaLabel || 'Menu',
-            className,
-            styles,
-            arrowClassName,
-            arrowStyles,
-            anchorPoint,
-            anchorRef,
-            arrow,
-            align,
-            direction,
-            position,
-            overflow,
-            isOpen,
-            isMounted,
-            menuItemFocus,
-            offsetX,
-            offsetY
+            ...restProps,
+            ariaLabel: ariaLabel || 'Menu'
         },
         id,
         animation,
         debugging,
         viewScroll,
-        children,
         onClick,
         onClose);
 });

@@ -8,6 +8,7 @@ import React, {
     useContext
 } from 'react';
 import {
+    attachHandlerProps,
     defineName,
     safeCall,
     bem,
@@ -46,8 +47,6 @@ export const MenuList = defineName(React.memo(function MenuList({
     offsetX,
     offsetY,
     children,
-    onKeyDown,
-    onAnimationEnd,
     onClose,
     ...restProps }) {
 
@@ -189,20 +188,14 @@ export const MenuList = defineName(React.memo(function MenuList({
             e.preventDefault();
             e.stopPropagation();
         }
-
-        // Invoke client code defined event handle when it's used as ControlledMenu
-        safeCall(onKeyDown, e);
     }
 
-    const handleAnimationEnd = e => {
+    const handleAnimationEnd = () => {
         // Check before changing state to avoid triggering unnecessary re-render
         if (isClosing) {
             setClosing(false);
             setMaxHeight(-1); // reset maxHeight after closing
         }
-
-        // Invoke client code defined event handle when it's used as ControlledMenu
-        safeCall(onAnimationEnd, e);
     }
 
     const positionHelpers = useCallback(() => {
@@ -676,18 +669,22 @@ export const MenuList = defineName(React.memo(function MenuList({
         overflowStyles = { maxHeight, overflow };
     }
 
+    const handlers = attachHandlerProps({
+        onKeyDown: handleKeyDown,
+        onAnimationEnd: handleAnimationEnd
+    }, restProps);
+
     return (
         <React.Fragment>
             {isMounted &&
-                <ul {...restProps} // Only for passing through client code defined event handlers from ControlledMenu
-                    className={bem(menuClass, null, modifiers)(className, userModifiers)}
-                    role="menu"
+                <ul role="menu"
                     tabIndex="-1"
                     aria-disabled={isDisabled}
                     aria-label={ariaLabel}
+                    {...restProps}
+                    {...handlers}
                     ref={menuRef}
-                    onKeyDown={handleKeyDown}
-                    onAnimationEnd={handleAnimationEnd}
+                    className={bem(menuClass, null, modifiers)(className, userModifiers)}
                     style={{
                         ...flatStyles(styles, userModifiers),
                         ...overflowStyles,
