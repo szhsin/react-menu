@@ -18,17 +18,19 @@ export const MenuRadioGroup = defineName(React.memo(function MenuRadioGroup({
     name,
     value,
     children,
-    onChange }) {
+    onChange,
+    ...restProps }) {
 
     const contextValue = useMemo(() => ({ name, value, onChange }),
         [name, value, onChange]);
 
     return (
         <li role="presentation">
-            <ul className={bem(menuClass, radioGroupClass)(className)}
-                style={flatStyles(styles)}
-                role="group"
-                aria-label={ariaLabel || name || 'Radio group'}>
+            <ul role="group"
+                aria-label={ariaLabel || name || 'Radio group'}
+                {...restProps}
+                className={bem(menuClass, radioGroupClass)(className)}
+                style={flatStyles(styles)}>
                 <RadioGroupContext.Provider value={contextValue}>
                     {children}
                 </RadioGroupContext.Provider>

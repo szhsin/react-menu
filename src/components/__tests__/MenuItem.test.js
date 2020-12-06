@@ -150,7 +150,7 @@ test('keyDown on one item and keyUp on another will not trigger click event', ()
 
     fireEvent.keyDown(anothorItem, { key: 'Enter' });
     fireEvent.keyUp(anothorItem, { key: 'Enter' });
-    expect(onClick).toHaveBeenLastCalledWith({ key: "Enter", value: 'Middle' })
+    expect(onClick).toHaveBeenLastCalledWith({ key: 'Enter', value: 'Middle' })
 });
 
 test('Disabled menu item', () => {
@@ -174,6 +174,26 @@ test('Disabled menu item', () => {
     // Menu item loses hover state when losing focus
     utils.queryMenu().focus();
     utils.expectMenuItemToBeHover(menuItem, false);
+});
+
+test('Additional props are forwarded to MenuItem', () => {
+    const onMouseEnter = jest.fn();
+    const onKeyDown = jest.fn();
+    utils.renderMenu(null, {
+        ['aria-label']: 'test',
+        randomattr: 'random',
+        onMouseEnter,
+        onKeyDown
+    });
+    utils.clickMenuButton();
+
+    const menuItem = screen.queryByText('Middle');
+    expect(menuItem).toHaveAttribute('aria-label', 'test');
+    expect(menuItem).toHaveAttribute('randomattr', 'random');
+    fireEvent.mouseEnter(menuItem);
+    expect(onMouseEnter).toHaveBeenCalledTimes(1);
+    fireEvent.keyDown(menuItem, { key: 'Enter' });
+    expect(onKeyDown).toHaveBeenCalledTimes(1);
 });
 
 test('Test FocusableItem', () => {

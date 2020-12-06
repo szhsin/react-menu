@@ -1,6 +1,7 @@
 import React, { useRef, useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import {
+    attachHandlerProps,
     safeCall,
     menuPropTypesBase,
     menuDefaultPropsBase,
@@ -15,25 +16,14 @@ import { useMenuList } from './useMenuList';
 export const Menu = React.memo(function Menu({
     'aria-label': ariaLabel,
     id,
-    className,
-    styles,
-    arrowClassName,
-    arrowStyles,
     animation,
     debugging,
     viewScroll,
     keepMounted,
-    arrow,
-    align,
-    direction,
-    position,
-    overflow,
     menuButton,
-    offsetX,
-    offsetY,
-    children,
     onClick,
-    onChange }) {
+    onChange,
+    ...restProps }) {
 
     const {
         isMounted, isOpen, menuItemFocus,
@@ -79,12 +69,12 @@ export const Menu = React.memo(function Menu({
     }, [openMenu]);
 
     const renderButton = useMemo(() => {
-        if (!button) return null;
-
         const buttonProps = {
             ref: buttonRef,
-            onClick: handleClick,
-            onKeyDown: handleKeyDown
+            ...attachHandlerProps({
+                onClick: handleClick,
+                onKeyDown: handleKeyDown
+            }, button.props)
         };
         if (button.type.__name__ === 'MenuButton') {
             buttonProps.isOpen = isOpen;
@@ -94,31 +84,20 @@ export const Menu = React.memo(function Menu({
 
     const menuList = useMenuList(
         {
+            ...restProps,
             ariaLabel: ariaLabel ||
                 (typeof button.props.children === 'string'
                     ? button.props.children
                     : 'Menu'),
-            className,
-            styles,
-            arrowClassName,
-            arrowStyles,
             anchorRef: buttonRef,
-            arrow,
-            align,
-            direction,
-            position,
-            overflow,
             isOpen,
             isMounted,
             menuItemFocus,
-            offsetX,
-            offsetY
         },
         id,
         animation,
         debugging,
         viewScroll,
-        children,
         onClick,
         handleClose,
         skipClick);

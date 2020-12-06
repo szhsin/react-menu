@@ -17,7 +17,6 @@ export const useMenuList = (
     animation,
     debugging,
     viewScroll,
-    children,
     onClick,
     onClose,
     skipClick) => {
@@ -85,9 +84,7 @@ export const useMenuList = (
                 <EventHandlersContext.Provider value={eventHandlers}>
                     <MenuList {...menuListProps}
                         containerRef={containerRef}
-                        onClose={onClose}>
-                        {children}
-                    </MenuList>
+                        onClose={onClose} />
                 </EventHandlersContext.Provider>
             </SettingsContext.Provider>
         </div>

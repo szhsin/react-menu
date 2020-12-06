@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import {
+    attachHandlerProps,
     defineName,
     safeCall,
     bem,
@@ -18,7 +19,8 @@ export const FocusableItem = defineName(React.memo(function FocusableItem({
     styles,
     disabled,
     index,
-    children }) {
+    children,
+    ...restProps }) {
 
     const {
         ref,
@@ -53,15 +55,20 @@ export const FocusableItem = defineName(React.memo(function FocusableItem({
         }
     }
 
+    const handlers = attachHandlerProps({
+        onMouseEnter: setHover,
+        onFocus: setHover,
+        onBlur: handleBlur
+    }, restProps);
+
     return (
-        <li className={bem(menuClass, menuItemClass, modifiers)(className)}
-            style={flatStyles(styles, modifiers)}
-            aria-disabled={isDisabled}
+        <li aria-disabled={isDisabled}
             role="menuitem"
             tabIndex="-1"
-            onMouseEnter={setHover}
-            onFocus={setHover}
-            onBlur={handleBlur}>
+            {...restProps}
+            {...handlers}
+            className={bem(menuClass, menuItemClass, modifiers)(className)}
+            style={flatStyles(styles, modifiers)}>
             {renderChildren}
         </li>
     );

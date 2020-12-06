@@ -17,6 +17,7 @@ test('Menu is unmounted before opening and closes after losing focus', async () 
     utils.clickMenuButton();
     utils.expectButtonToBeExpanded(true);
     utils.expectMenuToBeOpen(true);
+    expect(utils.queryMenu()).toHaveAttribute('aria-label', 'Open');
     await waitFor(() => expect(utils.queryMenu()).toHaveFocus());
     const menuItems = queryAllByRole('menuitem');
     expect(menuItems).toHaveLength(3);
@@ -102,6 +103,28 @@ test('Navigate with arrow keys', async () => {
     utils.expectMenuItemToBeHover(utils.queryMenuItem('Last'), true);
     fireEvent.keyDown(menu, { key: 'ArrowDown' });
     utils.expectMenuItemToBeHover(utils.queryMenuItem('First'), true);
+});
+
+test('Additional props are forwarded to Menu', () => {
+    const onMouseEnter = jest.fn();
+    const onKeyDown = jest.fn();
+    utils.renderMenu({
+        ['aria-label']: 'test',
+        ['aria-haspopup']: true,
+        randomattr: 'random',
+        onMouseEnter,
+        onKeyDown
+    });
+    utils.clickMenuButton();
+
+    const menu = utils.queryMenu()
+    expect(menu).toHaveAttribute('aria-label', 'test');
+    expect(menu).toHaveAttribute('aria-haspopup', 'true');
+    expect(menu).toHaveAttribute('randomattr', 'random');
+    fireEvent.mouseEnter(menu);
+    expect(onMouseEnter).toHaveBeenCalledTimes(1);
+    fireEvent.keyDown(menu, { key: 'ArrowDown' });
+    expect(onKeyDown).toHaveBeenCalledTimes(1);
 });
 
 test.each([
