@@ -21,6 +21,7 @@ export const Menu = React.memo(function Menu({
     viewScroll,
     keepMounted,
     menuButton,
+    portal,
     onClick,
     onChange,
     ...restProps }) {
@@ -98,6 +99,7 @@ export const Menu = React.memo(function Menu({
         animation,
         debugging,
         viewScroll,
+        portal,
         onClick,
         handleClose,
         skipClick);

@@ -14,6 +14,7 @@ export const ControlledMenu = React.memo(function ControlledMenu({
     animation,
     debugging,
     viewScroll,
+    portal,
     onClick,
     onClose,
     ...restProps }) {
@@ -27,6 +28,7 @@ export const ControlledMenu = React.memo(function ControlledMenu({
         animation,
         debugging,
         viewScroll,
+        portal,
         onClick,
         onClose);
 });

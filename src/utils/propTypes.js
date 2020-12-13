@@ -8,9 +8,10 @@ export const stylePropTypes = (name) => ({
     [name ? `${name}Styles` : 'styles']: PropTypes.oneOfType([
         PropTypes.object,
         PropTypes.func
-    ]),
+    ])
 });
 
+// Menu, SubMenu and ControlledMenu
 export const sharedMenuPropTypes = {
     ...stylePropTypes(),
     ...stylePropTypes('arrow'),
@@ -25,6 +26,7 @@ export const sharedMenuPropTypes = {
     children: PropTypes.node.isRequired
 }
 
+// Menu and ControlledMenu
 export const menuPropTypesBase = {
     ...sharedMenuPropTypes,
     id: PropTypes.oneOfType([
@@ -34,6 +36,7 @@ export const menuPropTypesBase = {
     animation: PropTypes.bool,
     debugging: PropTypes.bool,
     viewScroll: PropTypes.oneOf(['auto', 'close', 'initial']),
+    portal: PropTypes.bool,
     onClick: PropTypes.func
 };
 
