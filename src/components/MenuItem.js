@@ -114,6 +114,12 @@ export const MenuItem = defineName(React.memo(function MenuItem({
         onClick: () => handleClick()
     }, restProps);
 
+    // Order of props overriding (same in all components):
+    // 1. Preset props adhering to WAI-ARIA Authoring Practices.
+    // 2. restProps(client code overriding)
+    // 3. handlers (with client code handlers hooked)
+    // 4. ref, className, and styles (style prop is overriden, client code should 
+    //    use the styles prop instead)
     const menuItemProps = {
         role: isRadio ? 'menuitemradio' : (isCheckBox ? 'menuitemcheckbox' : 'menuitem'),
         'aria-checked': modifiers.checked,
