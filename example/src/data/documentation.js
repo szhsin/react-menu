@@ -255,6 +255,22 @@ const menuPropsBase = [
             </>
     },
     {
+        name: 'portal',
+        type: 'boolean',
+        desc:
+            <>
+                <p>If <code>true</code>, menu is rendered as a direct child of <code>document.body</code>.</p>
+                <p>Portal allows menu to visually “break out” of its container. Typical use cases may include:</p>
+                <ul>
+                    <li>An ancestor container is positioned and CSS overflow is set to a value other than visible.</li>
+                    <li>You have a DOM structure that creates a complex hierarchy of stacking contexts, and menu
+                    is overlapped regardless of z-index value.
+                    </li>
+                </ul>
+                <p>Note: portal breaks tab sequence and may impact the accessibility of your website.</p>
+            </>
+    },
+    {
         name: 'onClick',
         type: 'function',
         desc:
