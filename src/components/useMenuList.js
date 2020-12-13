@@ -1,4 +1,5 @@
 import React, { useRef, useMemo } from 'react';
+import ReactDOM from 'react-dom';
 import {
     safeCall,
     bem,
@@ -17,6 +18,7 @@ export const useMenuList = (
     animation,
     debugging,
     viewScroll,
+    portal,
     onClick,
     onClose,
     skipClick) => {
@@ -72,7 +74,7 @@ export const useMenuList = (
         }
     };
 
-    return (
+    const menuList = (
         <div id={id}
             className={bem(menuContainerClass)()}
             role="presentation"
@@ -89,4 +91,10 @@ export const useMenuList = (
             </SettingsContext.Provider>
         </div>
     );
+
+    if (portal) {
+        return ReactDOM.createPortal(menuList, document.body);
+    } else {
+        return menuList;
+    }
 }
