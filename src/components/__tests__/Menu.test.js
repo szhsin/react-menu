@@ -5,41 +5,45 @@ import * as utils from './utils';
 
 const { queryByRole, queryAllByRole } = screen;
 
-test('Menu is unmounted before opening and closes after losing focus', async () => {
-    utils.renderMenu();
+test.each([false, true])(
+    'Menu is unmounted before opening and closes after losing focus (portal = %s)',
+    async (portal) => {
+        utils.renderMenu({ portal });
 
-    // menu is unmounted
-    utils.expectButtonToBeExpanded(false);
-    utils.expectMenuToBeInTheDocument(false);
-    expect(queryByRole('menuitem')).not.toBeInTheDocument();
+        // menu is unmounted
+        utils.expectButtonToBeExpanded(false);
+        utils.expectMenuToBeInTheDocument(false);
+        expect(queryByRole('menuitem')).not.toBeInTheDocument();
 
-    // Click the menu button, menu is expected to mount and open, and get focus
-    utils.clickMenuButton();
-    utils.expectButtonToBeExpanded(true);
-    utils.expectMenuToBeOpen(true);
-    expect(utils.queryMenu()).toHaveAttribute('aria-label', 'Open');
-    await waitFor(() => expect(utils.queryMenu()).toHaveFocus());
-    const menuItems = queryAllByRole('menuitem');
-    expect(menuItems).toHaveLength(3);
-    menuItems.forEach(item => utils.expectMenuItemToBeHover(item, false));
+        // Click the menu button, menu is expected to mount and open, and get focus
+        utils.clickMenuButton();
+        utils.expectButtonToBeExpanded(true);
+        utils.expectMenuToBeOpen(true);
+        expect(utils.queryMenu()).toHaveAttribute('aria-label', 'Open');
+        await waitFor(() => expect(utils.queryMenu()).toHaveFocus());
+        const menuItems = queryAllByRole('menuitem');
+        expect(menuItems).toHaveLength(3);
+        menuItems.forEach(item => utils.expectMenuItemToBeHover(item, false));
 
-    // focus something outside menu, expecting menu to close but keep mounted
-    queryByRole('button').focus();
-    utils.expectButtonToBeExpanded(false);
-    utils.expectMenuToBeOpen(false);
-});
+        // focus something outside menu, expecting menu to close but keep mounted
+        queryByRole('button').focus();
+        utils.expectButtonToBeExpanded(false);
+        utils.expectMenuToBeOpen(false);
+    });
 
-test('Menu is removed from DOM after closing when keepMounted is false', async () => {
-    utils.renderMenu({ keepMounted: false });
-    utils.expectMenuToBeInTheDocument(false);
+test.each([false, true])(
+    'Menu is removed from DOM after closing when keepMounted is false (portal = %s)',
+    async (portal) => {
+        utils.renderMenu({ portal, keepMounted: false });
+        utils.expectMenuToBeInTheDocument(false);
 
-    utils.clickMenuButton();
-    utils.expectMenuToBeInTheDocument(true);
-    await waitFor(() => expect(utils.queryMenu()).toHaveFocus());
+        utils.clickMenuButton();
+        utils.expectMenuToBeInTheDocument(true);
+        await waitFor(() => expect(utils.queryMenu()).toHaveFocus());
 
-    queryByRole('button').focus();
-    utils.expectMenuToBeInTheDocument(false);
-});
+        queryByRole('button').focus();
+        utils.expectMenuToBeInTheDocument(false);
+    });
 
 test('Clicking a menu item fires onClick event and closes the menu', () => {
     const menuItemText = 'Save';
@@ -67,25 +71,27 @@ test('Clicking a menu item fires onClick event and closes the menu', () => {
     utils.expectMenuToBeOpen(false);
 });
 
-test('Open and close menu with keyboard', async () => {
-    utils.renderMenu();
-    utils.clickMenuButton({ keyboard: true });
-    const menuButton = queryByRole('button');
+test.each([false, true])(
+    'Open and close menu with keyboard (portal = %s)',
+    async (portal) => {
+        utils.renderMenu({ portal });
+        utils.clickMenuButton({ keyboard: true });
+        const menuButton = queryByRole('button');
 
-    const firstItem = utils.queryMenuItem('First');
-    await waitFor(() => utils.expectMenuItemToBeHover(firstItem, true));
-    fireEvent.keyDown(firstItem, { key: 'Escape' });
-    utils.expectMenuToBeOpen(false);
-    expect(menuButton).toHaveFocus();
+        const firstItem = utils.queryMenuItem('First');
+        await waitFor(() => utils.expectMenuItemToBeHover(firstItem, true));
+        fireEvent.keyDown(firstItem, { key: 'Escape' });
+        utils.expectMenuToBeOpen(false);
+        expect(menuButton).toHaveFocus();
 
-    fireEvent.keyDown(menuButton, { key: 'ArrowUp' });
-    const lastItem = utils.queryMenuItem('Last');
-    await waitFor(() => utils.expectMenuItemToBeHover(lastItem, true));
-    fireEvent.keyDown(lastItem, { key: 'Escape' });
+        fireEvent.keyDown(menuButton, { key: 'ArrowUp' });
+        const lastItem = utils.queryMenuItem('Last');
+        await waitFor(() => utils.expectMenuItemToBeHover(lastItem, true));
+        fireEvent.keyDown(lastItem, { key: 'Escape' });
 
-    fireEvent.keyDown(menuButton, { key: 'ArrowDown' });
-    await waitFor(() => utils.expectMenuItemToBeHover(firstItem, true));
-});
+        fireEvent.keyDown(menuButton, { key: 'ArrowDown' });
+        await waitFor(() => utils.expectMenuItemToBeHover(firstItem, true));
+    });
 
 test('Navigate with arrow keys', async () => {
     utils.renderMenu();
@@ -125,6 +131,16 @@ test('Additional props are forwarded to Menu', () => {
     expect(onMouseEnter).toHaveBeenCalledTimes(1);
     fireEvent.keyDown(menu, { key: 'ArrowDown' });
     expect(onKeyDown).toHaveBeenCalledTimes(1);
+});
+
+test('Portal will render Menu into document.body', () => {
+    const { container } = utils.renderMenu({ portal: true });
+    utils.clickMenuButton();
+
+    expect(container.querySelector('.rc-menu-container')).toBe(null);
+    expect(container.querySelector('.rc-menu')).toBe(null);
+    expect(document.querySelector('.rc-menu-container')).toBeInTheDocument();
+    utils.expectMenuToBeInTheDocument(true);
 });
 
 test.each([
