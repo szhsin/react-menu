@@ -57,7 +57,7 @@ export const useMenuList = (
 
     const handleBlur = e => {
         if (menuListProps.isOpen
-            && !e.currentTarget.contains(e.relatedTarget)
+            && !e.currentTarget.contains(e.relatedTarget || document.activeElement)
             && !debugging) {
             safeCall(onClose, { reason: CloseReason.BLUR });
 
