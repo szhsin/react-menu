@@ -112,12 +112,13 @@ export const SubMenu = defineName(React.memo(function SubMenu({
         // In debugging mode, neither close menu nor reset hoverIndex.
         if (debugging) return;
 
+        const relatedTarget = e.relatedTarget || document.activeElement;
         // Check if something which is not in the subtree get focus.
         // It handles situation such as clicking on a sibling disabled menu item
-        if (!e.currentTarget.contains(e.relatedTarget)) {
+        if (!e.currentTarget.contains(relatedTarget)) {
             closeMenu();
             hoverIndexDispatch({ type: HoverIndexActionTypes.UNSET, index });
-        } else if (itemRef.current.contains(e.relatedTarget)) {
+        } else if (itemRef.current.contains(relatedTarget)) {
             // This handles clicking on submenu item when it's open
             // First close the submenu and then let subsequent onClick event re-open it
             // for maintaining the correct focus
