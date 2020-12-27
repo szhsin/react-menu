@@ -325,7 +325,7 @@ function IconAndImageExample() {
                     <i className="material-icons">content_paste</i>Paste
                 </MenuItem>
                 <MenuDivider />
-                <MenuItem href="https://github.com/">
+                <MenuItem href="https://github.com/szhsin/react-menu/">
                     <img src="octocat.png" alt="" role="presentation" />GitHub
                 </MenuItem>
             </Menu>

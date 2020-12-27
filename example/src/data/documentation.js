@@ -720,6 +720,30 @@ const menuStateHook = {
         </>
 };
 
+const applyHOC = {
+    id: 'utils-apply-hoc',
+    title: 'applyHOC',
+    desc:
+        <>
+            <p>A helper function which copies statics if you create HOC on <LibName /> components. It accepts an HOC
+            and returns a new HOC with the same signature.
+            See <a href="https://codesandbox.io/s/react-menu-hoc-0bipn" target="_blank" rel="noopener noreferrer">an Codesandbox example</a> for its usage.</p>
+            <p>Note: some third-party HOC utilities (such as the <code>connect</code> of react-redux) have already 
+            copied statics so you don't need to call this helper.</p>
+        </>
+};
+
+const applyStatics = {
+    id: 'utils-apply-statics',
+    title: 'applyStatics',
+    desc:
+        <>
+            <p>It's similar to <code>applyHOC</code>, but accepts a source
+            component with statics to be copied and returns an HOC which accepts a wrapped component.</p>
+            <p>It creates a composable HOC that can be placed at the leftmost of a compose utility.</p>
+        </>
+};
+
 const keyboard = {
     id: 'keyboard',
     title: 'Keyboard',
@@ -770,6 +794,15 @@ const hooks = {
     ]
 };
 
+const utilities = {
+    id: 'utils',
+    title: 'Utilities',
+    list: [
+        applyHOC,
+        applyStatics
+    ]
+};
+
 const accessibility = {
     id: 'accessibility',
     title: 'Accessibility',
@@ -781,5 +814,5 @@ const accessibility = {
     ]
 };
 
-const documentation = [components, hooks, accessibility];
+const documentation = [components, hooks, utilities, accessibility];
 export default documentation;
