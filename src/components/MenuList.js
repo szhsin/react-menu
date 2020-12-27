@@ -10,6 +10,7 @@ import React, {
 import {
     attachHandlerProps,
     defineName,
+    getName,
     safeCall,
     bem,
     flatStyles,
@@ -106,9 +107,10 @@ export const MenuList = defineName(React.memo(function MenuList({
         const permittedChildren = ['MenuDivider', 'MenuHeader', 'MenuItem',
             'FocusableItem', 'MenuRadioGroup', 'SubMenu'];
         const validateChildren = (parent, child, permitted) => {
-            if (!permitted.includes(child.type && child.type.__name__)) {
+            if (!permitted.includes(getName(child.type))) {
                 console.warn(`${child.type || child} is ignored.\n`,
-                    `The permitted children inside a ${parent} are ${permitted.join(', ')}.`);
+                    `The permitted children inside a ${parent} are ${permitted.join(', ')}.`,
+                    'If you create HOC of these components, you can use the applyHOC or applyStatics helper, see more at: https://szhsin.github.io/react-menu/docs#utils-apply-hoc');
                 return false;
             }
 
@@ -118,10 +120,10 @@ export const MenuList = defineName(React.memo(function MenuList({
         const items = React.Children.map(children, (child) => {
             if (!validateChildren('Menu or SubMenu', child, permittedChildren)) return null;
 
-            if (child.type.__name__ === 'MenuDivider'
-                || child.type.__name__ === 'MenuHeader') {
+            const componentName = getName(child.type);
+            if (componentName === 'MenuDivider' || componentName === 'MenuHeader') {
                 return child;
-            } else if (child.type.__name__ === 'MenuRadioGroup') {
+            } else if (componentName === 'MenuRadioGroup') {
                 const permittedChildren = ['MenuItem'];
                 const props = { type: 'radio' };
 

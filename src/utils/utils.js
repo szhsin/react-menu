@@ -1,6 +1,13 @@
+export const defineName = (component, name) => name
+    ? Object.defineProperty(component, '_reactMenu', { value: name, writable: false })
+    : component;
 
-export const defineName = (component, name) =>
-    Object.defineProperty(component, '__name__', { value: name, writable: false });
+export const getName = component => component && component['_reactMenu'];
+
+export const applyHOC = HOC => (...args) => defineName(HOC(...args), getName(args[0]));
+
+export const applyStatics = sourceComponent => wrappedComponent =>
+    defineName(wrappedComponent, getName(sourceComponent));
 
 export const safeCall = (fn, ...args) => typeof fn === 'function' ? fn(...args) : fn;
 

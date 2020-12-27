@@ -1,6 +1,7 @@
 import React, { useRef, useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import {
+    getName,
     attachHandlerProps,
     safeCall,
     menuPropTypesBase,
@@ -77,7 +78,7 @@ export const Menu = React.memo(function Menu({
                 onKeyDown: handleKeyDown
             }, button.props)
         };
-        if (button.type.__name__ === 'MenuButton') {
+        if (getName(button.type) === 'MenuButton') {
             buttonProps.isOpen = isOpen;
         }
         return React.cloneElement(button, buttonProps);
