@@ -1,4 +1,5 @@
 import React from 'react';
+import { applyHOC, applyStatics } from '../../../utils';
 import { Menu } from '../../Menu';
 import { MenuItem } from '../../MenuItem';
 import { MenuButton } from '../../MenuButton';
@@ -39,10 +40,21 @@ export const clickMenuButton = ({ name, keyboard } = {}) => {
 
 export const queryMenuItem = name => queryByRole('menuitem', { name });
 
+const enhance = (WrappedComponent, value) => {
+    const Enhance = props => (
+        <WrappedComponent children={value} value={value} {...props} />
+    );
+    Enhance.displayName = `Enhance${value}`;
+    return Enhance;
+}
+
+export const FirstItem = applyStatics(MenuItem)(enhance(MenuItem, 'First'));
+export const LastItem = applyHOC(enhance)(MenuItem, 'Last');
+
 export const renderMenu = (props, itemProps) => render(
     <Menu menuButton={<MenuButton>Open</MenuButton>} animation={false} {...props}>
-        <MenuItem>First</MenuItem>
+        <FirstItem />
         <MenuItem children="Middle" {...itemProps} />
-        <MenuItem>Last</MenuItem>
+        <LastItem />
     </Menu>
 );
