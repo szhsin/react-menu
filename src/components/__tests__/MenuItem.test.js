@@ -11,6 +11,7 @@ import '@testing-library/jest-dom/extend-expect';
 import * as utils from './utils';
 
 const { queryByRole, queryAllByRole } = screen;
+const LastItem = utils.LastItem;
 
 test('Test radio items', () => {
     const onChange = jest.fn();
@@ -20,6 +21,7 @@ test('Test radio items', () => {
                 <MenuItem value="red">Red</MenuItem>
                 <MenuItem value="green">Green</MenuItem>
                 <MenuItem value="blue">Blue</MenuItem>
+                <LastItem />
             </MenuRadioGroup>
         </Menu>
     );
@@ -27,7 +29,7 @@ test('Test radio items', () => {
     const { rerender } = render(getMenu('green'));
     utils.clickMenuButton();
     const menuItems = queryAllByRole('menuitemradio');
-    expect(menuItems).toHaveLength(3);
+    expect(menuItems).toHaveLength(4);
     menuItems.forEach(item => expect(item).toHaveClass('rc-menu__item--type-radio'));
     utils.expectMenuItemToBeChecked(queryByRole('menuitemradio', { name: 'Green' }), true);
 
