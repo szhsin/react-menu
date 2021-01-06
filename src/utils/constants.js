@@ -42,6 +42,5 @@ export const CloseReason = Object.freeze({
     'CLICK': 'click',
     'CANCEL': 'cancel',
     'BLUR': 'blur',
-    'RESIZE': 'resize',
     'SCROLL':'scroll'
 });
