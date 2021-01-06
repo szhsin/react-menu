@@ -13,11 +13,11 @@ test('className and styles props', () => {
     const styles = {
         ...baseStyle,
         type: {
-            checkbox: {
+            $checkbox: {
                 color: 'red'
             }
         },
-        hover: {
+        $hover: {
             color: 'green'
         },
         active: {

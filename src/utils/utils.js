@@ -57,9 +57,6 @@ export const bem = (block, element, modifiers = {}) => (userClassName, userModif
     return className;
 }
 
-
-const isObject = obj => obj && typeof obj === 'object';
-
 /* 
 Flatten up to two levels of nesting styles.
 Modifier value can be one of the following types: boolean, string, undefined
@@ -83,6 +80,9 @@ Example style:
 }
 */
 
+const isObject = obj => obj && typeof obj === 'object';
+const sanitiseKey = key => key.charAt(0) === '$' ? key.slice(1) : key;
+
 export const flatStyles = (styles, modifiers) => {
     if (typeof styles === 'function') return styles(modifiers);
     if (!isObject(styles)) return undefined;
@@ -92,12 +92,12 @@ export const flatStyles = (styles, modifiers) => {
     for (const prop of Object.keys(styles)) {
         const value = styles[prop];
         if (isObject(value)) {
-            const modifierValue = modifiers[prop];
+            const modifierValue = modifiers[sanitiseKey(prop)];
             if (typeof modifierValue === 'string') {
                 for (const nestedProp of Object.keys(value)) {
                     const nestedValue = value[nestedProp];
                     if (isObject(nestedValue)) {
-                        if (nestedProp === modifierValue) {
+                        if (sanitiseKey(nestedProp) === modifierValue) {
                             Object.assign(style, nestedValue);
                         }
                     } else {
