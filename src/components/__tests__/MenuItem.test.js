@@ -21,6 +21,7 @@ test('Test radio items', () => {
                 <MenuItem value="red">Red</MenuItem>
                 <MenuItem value="green">Green</MenuItem>
                 <MenuItem value="blue">Blue</MenuItem>
+                {'falsy'.length === 0 && <MenuItem value="black">Black</MenuItem>}
                 <LastItem />
             </MenuRadioGroup>
         </Menu>
@@ -51,6 +52,7 @@ test('Test check box items', () => {
             <MenuItem type="checkbox" checked={false}>
                 Italic
             </MenuItem>
+            {'falsy'.length === 0 && <MenuItem type="checkbox">falsy</MenuItem>}
         </Menu>
     );
 

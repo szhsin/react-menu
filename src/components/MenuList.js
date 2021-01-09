@@ -107,6 +107,7 @@ export const MenuList = defineName(React.memo(function MenuList({
         const permittedChildren = ['MenuDivider', 'MenuHeader', 'MenuItem',
             'FocusableItem', 'MenuRadioGroup', 'SubMenu'];
         const validateChildren = (parent, child, permitted) => {
+            if (!child) return false;
             if (!permitted.includes(getName(child.type))) {
                 console.warn(`${child.type || child} is ignored.\n`,
                     `The permitted children inside a ${parent} are ${permitted.join(', ')}.`,
