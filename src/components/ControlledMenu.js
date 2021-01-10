@@ -50,6 +50,7 @@ ControlledMenu.propTypes = {
 
 ControlledMenu.defaultProps = {
     ...menuDefaultPropsBase,
+    isOpen: false,
     isMounted: true,
     menuItemFocus: { position: FocusPositions.INITIAL }
 };

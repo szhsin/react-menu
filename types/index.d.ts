@@ -35,7 +35,7 @@ interface BaseProps<M = undefined, S = M> extends Omit<React.HTMLAttributes<HTML
 export interface ClickEvent {
     value?: any;
     key?: string;
-    checked?: boolean;
+    checked: boolean;
 }
 
 export interface MenuChangeEvent {

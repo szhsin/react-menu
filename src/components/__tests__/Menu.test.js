@@ -61,8 +61,8 @@ test('Clicking a menu item fires onClick event and closes the menu', () => {
     expect(onChange).toHaveBeenLastCalledWith({ open: true });
 
     fireEvent.click(utils.queryMenuItem(menuItemText));
-    expect(onItemClick).toHaveBeenLastCalledWith({ value: menuItemText });
-    expect(onClick).toHaveBeenLastCalledWith({ value: menuItemText });
+    expect(onItemClick).toHaveBeenLastCalledWith({ value: menuItemText, checked: false });
+    expect(onClick).toHaveBeenLastCalledWith({ value: menuItemText, checked: false });
     expect(onChange).toHaveBeenLastCalledWith({ open: false });
     expect(onChange).toHaveBeenCalledTimes(2);
 

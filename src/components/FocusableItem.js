@@ -22,13 +22,13 @@ export const FocusableItem = defineName(React.memo(function FocusableItem({
     children,
     ...restProps }) {
 
+    const isDisabled = Boolean(disabled);
     const {
         ref,
         isHovering,
-        isDisabled,
         setHover,
         unsetHover
-    } = useItemState(disabled, index);
+    } = useItemState(isDisabled, index);
     const { handleClose } = useContext(EventHandlersContext);
 
     const baseParams = {
@@ -62,7 +62,7 @@ export const FocusableItem = defineName(React.memo(function FocusableItem({
     }, restProps);
 
     return (
-        <li aria-disabled={isDisabled}
+        <li aria-disabled={isDisabled || undefined}
             role="menuitem"
             tabIndex="-1"
             {...restProps}

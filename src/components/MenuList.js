@@ -682,7 +682,7 @@ export const MenuList = defineName(React.memo(function MenuList({
             {isMounted &&
                 <ul role="menu"
                     tabIndex="-1"
-                    aria-disabled={isDisabled}
+                    aria-disabled={isDisabled || undefined}
                     aria-label={ariaLabel}
                     {...restProps}
                     {...handlers}

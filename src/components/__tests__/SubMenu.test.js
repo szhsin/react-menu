@@ -38,6 +38,7 @@ test('Open and close submenu, and activate submenu item with mouse and keyboard'
 
     // Open submenu with click event
     utils.expectMenuToBeInTheDocument(false, submenuOptions);
+    utils.expectToBeDisabled(submenuItem, false);
     fireEvent.click(submenuItem);
     utils.expectMenuToBeOpen(true, submenuOptions);
     expect(onChange).toHaveBeenLastCalledWith({ open: true });
@@ -112,8 +113,8 @@ test('Open and close submenu, and activate submenu item with mouse and keyboard'
     utils.clickMenuButton();
     fireEvent.click(submenuItem);
     fireEvent.click(utils.queryMenuItem(menuItemText));
-    expect(onItemClick).toHaveBeenLastCalledWith({ value: menuItemText });
-    expect(onClick).toHaveBeenLastCalledWith({ value: menuItemText });
+    expect(onItemClick).toHaveBeenLastCalledWith({ value: menuItemText, checked: false });
+    expect(onClick).toHaveBeenLastCalledWith({ value: menuItemText, checked: false });
     utils.expectMenuToBeOpen(false, menuOptions);
 
     // Activate submenu item with space key
@@ -124,8 +125,8 @@ test('Open and close submenu, and activate submenu item with mouse and keyboard'
     fireEvent.keyDown(utils.queryMenu(submenuOptions), { key: 'ArrowDown' });
     fireEvent.keyDown(utils.queryMenuItem(menuItemText), { key: ' ' });
     fireEvent.keyUp(utils.queryMenuItem(menuItemText), { key: ' ' });
-    expect(onItemClick).toHaveBeenLastCalledWith({ value: menuItemText, key: ' ' });
-    expect(onClick).toHaveBeenLastCalledWith({ value: menuItemText, key: ' ' });
+    expect(onItemClick).toHaveBeenLastCalledWith({ value: menuItemText, key: ' ', checked: false });
+    expect(onClick).toHaveBeenLastCalledWith({ value: menuItemText, key: ' ', checked: false });
     utils.expectMenuToBeOpen(false, menuOptions);
 });
 
@@ -135,6 +136,7 @@ test('Submenu is disabled', () => {
     const submenuItem = utils.queryMenuItem('Submenu');
 
     expect(submenuItem).toHaveClass('rc-menu__item--disabled');
+    utils.expectToBeDisabled(submenuItem, true);
     fireEvent.click(submenuItem);
     utils.expectMenuToBeInTheDocument(false, { name: 'Submenu', container });
 
