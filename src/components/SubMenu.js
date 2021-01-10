@@ -38,7 +38,7 @@ export const SubMenu = defineName(React.memo(function SubMenu({
     const { isParentOpen, hoverIndex, hoverIndexDispatch } = useContext(MenuListContext);
     const { debugging } = useContext(SettingsContext);
     const isHovering = hoverIndex === index;
-    const isDisabled = disabled ? true : undefined;
+    const isDisabled = Boolean(disabled);
     const {
         isActive, onKeyUp,
         ...activeStateHandlers
@@ -154,7 +154,7 @@ export const SubMenu = defineName(React.memo(function SubMenu({
                 role="menuitem"
                 aria-haspopup="true"
                 aria-expanded={isOpen}
-                aria-disabled={isDisabled}
+                aria-disabled={isDisabled || undefined}
                 tabIndex={isHovering && !isOpen ? 0 : -1}
                 ref={itemRef}
                 onMouseEnter={handleMouseEnter}

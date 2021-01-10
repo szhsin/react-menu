@@ -23,14 +23,28 @@ export const expectMenuToBeOpen = (truthy, options) =>
 export const expectButtonToBeExpanded = truthy =>
     expect(queryByRole('button')).toHaveAttribute('aria-expanded', String(truthy));
 
+export const expectToBeDisabled = (element, truthy) => {
+    if (truthy) {
+        expect(element).toHaveAttribute('aria-disabled', 'true');
+    } else {
+        expect(element).not.toHaveAttribute('aria-disabled');
+    }
+}
+
 export const expectMenuItemToBeHover = (menuItem, truthy) =>
     expectToBe(menuItem, truthy).toHaveClass('rc-menu__item--hover');
 
 export const expectMenuItemToBeActive = (menuItem, truthy) =>
     expectToBe(menuItem, truthy).toHaveClass('rc-menu__item--active');
 
-export const expectMenuItemToBeChecked = (menuItem, truthy) =>
+export const expectMenuItemToBeChecked = (menuItem, truthy) => {
     expectToBe(menuItem, truthy).toHaveClass('rc-menu__item--checked');
+    if (truthy !== undefined) {
+        expect(menuItem).toHaveAttribute('aria-checked', String(truthy));
+    } else {
+        expect(menuItem).not.toHaveAttribute('aria-checked');
+    }
+}
 
 export const clickMenuButton = ({ name, keyboard } = {}) => {
     const menuButton = queryByRole('button', { name });

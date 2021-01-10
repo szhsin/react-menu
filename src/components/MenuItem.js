@@ -30,13 +30,13 @@ export const MenuItem = defineName(React.memo(function MenuItem({
     onClick,
     ...restProps }) {
 
+    const isDisabled = Boolean(disabled);
     const {
         ref,
         isHovering,
-        isDisabled,
         setHover,
         unsetHover
-    } = useItemState(disabled, index);
+    } = useItemState(isDisabled, index);
     const eventHandlers = useContext(EventHandlersContext);
     const radioGroup = useContext(RadioGroupContext);
     const {
@@ -45,22 +45,23 @@ export const MenuItem = defineName(React.memo(function MenuItem({
     } = useActiveState(isHovering, isDisabled);
     const isRadio = type === 'radio';
     const isCheckBox = type === 'checkbox';
-    const isAnchor = href && !isDisabled && !isRadio && !isCheckBox;
+    const isAnchor = Boolean(href) && !isDisabled && !isRadio && !isCheckBox;
+    const isChecked = isRadio
+        ? radioGroup.value === value
+        : (isCheckBox ? Boolean(checked) : false);
 
     const handleClick = (key) => {
         if (isDisabled) return;
 
         let isStopPropagation = false;
         const event = { value, key };
-        if (isCheckBox) {
-            event.checked = !checked;
-        }
 
         if (isRadio) {
             event.name = radioGroup.name;
             isStopPropagation = true;
             safeCall(radioGroup.onChange, event);
         } else {
+            event.checked = isCheckBox ? !isChecked : false;
             isStopPropagation = safeCall(onClick, event) === false;
         }
 
@@ -101,7 +102,7 @@ export const MenuItem = defineName(React.memo(function MenuItem({
         disabled: isDisabled,
         hover: isHovering,
         active: isActive,
-        checked: isRadio ? radioGroup.value === value : (isCheckBox ? !!checked : undefined),
+        checked: isChecked,
         anchor: isAnchor
     });
 
@@ -122,8 +123,8 @@ export const MenuItem = defineName(React.memo(function MenuItem({
     //    use the styles prop instead)
     const menuItemProps = {
         role: isRadio ? 'menuitemradio' : (isCheckBox ? 'menuitemcheckbox' : 'menuitem'),
-        'aria-checked': modifiers.checked,
-        'aria-disabled': isDisabled,
+        'aria-checked': (isRadio || isCheckBox) ? isChecked : undefined,
+        'aria-disabled': isDisabled || undefined,
         tabIndex: isHovering ? 0 : -1,
         ...restProps,
         ...handlers,

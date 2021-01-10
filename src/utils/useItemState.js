@@ -11,11 +11,10 @@ import {
 
 
 // This hook includes some common stateful logic in MenuItem and FocusableItem
-export const useItemState = (disabled, index) => {
+export const useItemState = (isDisabled, index) => {
     const ref = useRef(null);
     const { isParentOpen, hoverIndex, hoverIndexDispatch } = useContext(MenuListContext);
     const isHovering = hoverIndex === index;
-    const isDisabled = disabled ? true : undefined;
 
     useEffect(() => {
         // Don't set focus when parent menu is closed, otherwise focus will be lost
@@ -29,8 +28,6 @@ export const useItemState = (disabled, index) => {
         ref,
 
         isHovering,
-
-        isDisabled,
 
         setHover: useCallback(() => {
             if (!isDisabled) hoverIndexDispatch({ type: HoverIndexActionTypes.SET, index });

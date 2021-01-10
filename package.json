@@ -22,7 +22,7 @@
     "test:coverage": "jest --coverage=true",
     "lint": "eslint .",
     "dtslint": "dtslint --localTs node_modules/typescript/lib types",
-    "types": "npm run dtslint && cp types/index.d.ts dist/",
+    "types": "npm run dtslint && cp -f types/index.d.ts dist/",
     "tsc": "cd types && npx tsc",
     "example": "npm start --prefix example",
     "predeploy": "cd example && npm run build",

@@ -154,7 +154,7 @@ test('keyDown on one item and keyUp on another will not trigger click event', ()
 
     fireEvent.keyDown(anothorItem, { key: 'Enter' });
     fireEvent.keyUp(anothorItem, { key: 'Enter' });
-    expect(onClick).toHaveBeenLastCalledWith({ key: 'Enter', value: 'Middle' })
+    expect(onClick).toHaveBeenLastCalledWith({ key: 'Enter', value: 'Middle', checked: false })
 });
 
 test('Disabled menu item', () => {
@@ -163,6 +163,7 @@ test('Disabled menu item', () => {
     utils.clickMenuButton();
 
     const disabledItem = utils.queryMenuItem('Middle');
+    utils.expectToBeDisabled(disabledItem, true);
     fireEvent.mouseEnter(disabledItem);
     fireEvent.pointerDown(disabledItem);
     utils.expectMenuItemToBeHover(disabledItem, false);
@@ -172,6 +173,8 @@ test('Disabled menu item', () => {
     utils.expectMenuToBeOpen(true);
 
     const menuItem = utils.queryMenuItem('First');
+    utils.expectToBeDisabled(menuItem, false);
+    utils.expectMenuItemToBeChecked(menuItem);
     fireEvent.mouseEnter(menuItem);
     utils.expectMenuItemToBeHover(menuItem, true);
 
