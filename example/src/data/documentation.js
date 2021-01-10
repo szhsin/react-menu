@@ -18,6 +18,10 @@ const menuStateHookLink = <Link to={'#use-menu-state'}>useMenuState</Link>;
 const dirModifier = <li><code>dir: string</code> direction in which the menu expands.
                         Can be 'left', 'right', 'top', or 'bottom'.</li>;
 
+const keepOpenEventProp = <li><code>keepOpen: bool</code> assign to this property in consuming code to control
+                    whether to keep menu open after menu item is clicked. Leaving it undefined will behave
+                    in accordance with WAI-ARIA Authoring Practices.</li>;
+
 const menuModifiers = (
     <ul>
         <li><code>open: bool</code> indicates if the menu is open.</li>
@@ -59,6 +63,7 @@ const onClickEventObject = (
                 Can be {ENTER_KEY} or {SPACE_KEY}.</li>
             <li><code>checked: bool</code> indicates if the menu item is checked, only
                  for <code>MenuItem type="checkbox"</code>.</li>
+            {keepOpenEventProp}
         </ul>
     </>
 );
@@ -544,6 +549,7 @@ const menuRadioGroup = {
                         <li><code>value: any</code> the value prop passed to the <code>MenuItem</code> being clicked.</li>
                         <li><code>key: string</code> indicates the key if click is triggered by keyboard.
                         Can be {ENTER_KEY} or {SPACE_KEY}.</li>
+                        {keepOpenEventProp}
                     </ul>
                 </>
         }
@@ -685,8 +691,10 @@ const controlledMenu = {
                     <p>Event fired when menu is about to close.</p>
                     <p>Event object properties:</p>
                     <ul>
-                        <li><code>reason: string</code> The reason that causes the close event.
+                        <li><code>reason: string</code> the reason that causes the close event.
                         Can be 'click', 'cancel', 'blur', or 'scroll'.</li>
+                        <li><code>value: any</code> the value prop passed to the <code>MenuItem</code> being
+                        clicked.</li>
                         <li><code>key: string</code> indicates the key if event is triggered by keyboard.
                         Can be {ENTER_KEY}, {SPACE_KEY} or {ESC_KEY}.</li>
                     </ul>
@@ -728,7 +736,7 @@ const applyHOC = {
             <p>A helper function which copies statics if you create HOC on <LibName /> components. It accepts an HOC
             and returns a new HOC with the same signature.
             See <a href="https://codesandbox.io/s/react-menu-hoc-0bipn" target="_blank" rel="noopener noreferrer">an Codesandbox example</a> for its usage.</p>
-            <p>Note: some third-party HOC utilities (such as the <code>connect</code> of react-redux) have already 
+            <p>Note: some third-party HOC utilities (such as the <code>connect</code> of react-redux) have already
             copied statics so you don't need to call this helper.</p>
         </>
 };

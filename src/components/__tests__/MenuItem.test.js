@@ -42,6 +42,23 @@ test('Test radio items', () => {
     utils.expectMenuToBeOpen(false);
 });
 
+test('Use keepOpen of onChange to customise when menu is closed', () => {
+    render(
+        <Menu menuButton={<MenuButton>Color</MenuButton>}>
+            <MenuRadioGroup value="green"
+                onChange={e => e.keepOpen = true}>
+                <MenuItem value="red">Red</MenuItem>
+                <MenuItem value="green">Green</MenuItem>
+            </MenuRadioGroup>
+        </Menu>
+    );
+    utils.clickMenuButton();
+
+    utils.expectMenuToBeOpen(true);
+    fireEvent.click(queryByRole('menuitemradio', { name: 'Red' }));
+    utils.expectMenuToBeOpen(true);
+});
+
 test('Test check box items', () => {
     const onClick = jest.fn();
     const getMenu = isBold => (

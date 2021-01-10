@@ -143,6 +143,24 @@ test('Portal will render Menu into document.body', () => {
     utils.expectMenuToBeInTheDocument(true);
 });
 
+test('Use keepOpen of onClick to customise when menu is closed', () => {
+    utils.renderMenu({
+        onClick: e => e.keepOpen = true
+    }, {
+        onClick: e => e.keepOpen = false
+    });
+    utils.clickMenuButton();
+
+    utils.expectMenuToBeOpen(true);
+    fireEvent.click(utils.queryMenuItem('Middle'));
+    utils.expectMenuToBeOpen(false);
+
+    utils.clickMenuButton();
+    utils.expectMenuToBeOpen(true);
+    fireEvent.click(utils.queryMenuItem('First'));
+    utils.expectMenuToBeOpen(true);
+});
+
 test.each([
     ['left', 'start', 'auto'],
     ['right', 'center', 'anchor'],
