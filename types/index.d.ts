@@ -32,25 +32,27 @@ interface BaseProps<M = undefined, S = M> extends Omit<React.HTMLAttributes<HTML
     styles?: StylesProp<M, S>;
 }
 
-export interface ClickEvent {
+interface Event {
     value?: any;
     key?: string;
+}
+
+export interface ClickEvent extends Event {
     checked: boolean;
+    keepOpen?: boolean;
+}
+
+export interface MenuCloseEvent extends Event {
+    reason: CloseReason;
+}
+
+export interface RadioChangeEvent extends Event {
+    name?: string;
+    keepOpen?: boolean;
 }
 
 export interface MenuChangeEvent {
     open: boolean;
-}
-
-export interface MenuCloseEvent {
-    key?: string;
-    reason: CloseReason;
-}
-
-export interface RadioChangeEvent {
-    value?: any;
-    key?: string;
-    name?: string;
 }
 
 interface EventHandler<E, R = void> {

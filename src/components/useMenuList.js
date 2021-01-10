@@ -33,13 +33,23 @@ export const useMenuList = (
 
     const eventHandlers = useMemo(() => ({
         handleClick(event, isStopPropagation, isCheckorRadio) {
-            // According to WAI-ARIA Authoring Practices 1.1
-            // Keep menu open when check or radio is invoked by SPACE key
-            if (!isCheckorRadio || event.key !== Keys.SPACE) {
-                safeCall(onClose, { key: event.key, reason: CloseReason.CLICK });
+            if (!isStopPropagation) safeCall(onClick, event);
+
+            let keepOpen = event.keepOpen;
+            if (keepOpen === undefined) {
+                // if event.keepOpen is undefined, the following default behaviour is used
+                // According to WAI-ARIA Authoring Practices 1.1
+                // Keep menu open when check or radio is invoked by SPACE key
+                keepOpen = isCheckorRadio && event.key === Keys.SPACE;
             }
 
-            if (!isStopPropagation) safeCall(onClick, event);
+            if (!keepOpen) {
+                safeCall(onClose, {
+                    value: event.value,
+                    key: event.key,
+                    reason: CloseReason.CLICK
+                });
+            }
         },
 
         handleClose(key) {
