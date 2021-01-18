@@ -142,6 +142,7 @@ export interface ControlledMenuProps extends BaseMenuProps {
         y: number;
     };
     anchorRef?: React.RefObject<Element>;
+    captureFocus?: boolean;
     isOpen?: boolean;
     isMounted?: boolean;
     menuItemFocus?: {
