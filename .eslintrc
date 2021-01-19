@@ -26,6 +26,12 @@
     "react-hooks"
   ],
   "rules": {
+    "no-unused-vars": [
+      2,
+      {
+        "argsIgnorePattern": "^_$"
+      }
+    ],
     "react/prop-types": 0,
     "react/display-name": 0,
     "react/no-children-prop": 0,

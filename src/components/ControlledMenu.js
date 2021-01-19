@@ -40,6 +40,7 @@ ControlledMenu.propTypes = {
         y: PropTypes.number
     }),
     anchorRef: PropTypes.object,
+    captureFocus: PropTypes.bool,
     isOpen: PropTypes.bool,
     isMounted: PropTypes.bool,
     menuItemFocus: PropTypes.exact({
@@ -50,6 +51,7 @@ ControlledMenu.propTypes = {
 
 ControlledMenu.defaultProps = {
     ...menuDefaultPropsBase,
+    captureFocus: true,
     isOpen: false,
     isMounted: true,
     menuItemFocus: { position: FocusPositions.INITIAL }

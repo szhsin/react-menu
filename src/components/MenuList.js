@@ -41,6 +41,7 @@ export const MenuList = defineName(React.memo(function MenuList({
     direction,
     position,
     overflow,
+    captureFocus = true,
     isOpen,
     isMounted,
     isDisabled,
@@ -638,7 +639,7 @@ export const MenuList = defineName(React.memo(function MenuList({
             // If focus has already been set to a children element, don't set focus on the menu;
             // this happens in some edge cases because of the timeout delay.
             if (!isOpen || menuRef.current.contains(document.activeElement)) return;
-            menuRef.current.focus();
+            if (captureFocus) menuRef.current.focus();
             if (menuItemFocus.position === FocusPositions.FIRST) {
                 hoverIndexDispatch({ type: HoverIndexActionTypes.FIRST });
             } else if (menuItemFocus.position === FocusPositions.LAST) {
@@ -647,7 +648,7 @@ export const MenuList = defineName(React.memo(function MenuList({
         }, 100);
 
         return () => clearTimeout(id);
-    }, [animation, isOpen, menuItemFocus]);
+    }, [animation, captureFocus, isOpen, menuItemFocus]);
 
     const context = useMemo(() => ({
         isParentOpen: isOpen,

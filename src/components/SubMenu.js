@@ -27,6 +27,7 @@ export const SubMenu = defineName(React.memo(function SubMenu({
     'aria-label': ariaLabel,
     itemClassName,
     itemStyles,
+    captureFocus: _,
     disabled,
     keepMounted,
     label,

@@ -18,6 +18,7 @@ export const Menu = React.memo(function Menu({
     'aria-label': ariaLabel,
     id,
     animation,
+    captureFocus: _,
     debugging,
     viewScroll,
     keepMounted,
