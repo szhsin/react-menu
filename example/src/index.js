@@ -1,5 +1,5 @@
 import 'highlight.js/styles/agate.css';
-import 'bootstrap/dist/css/bootstrap.min.css';
+// import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap';
 import '@szhsin/react-menu/dist/index.css';
 import './styles/index.scss';

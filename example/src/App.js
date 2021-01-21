@@ -1,12 +1,19 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
-import { DomInfoContext, TocContext, ToastContext } from './utils';
+import { bem, DomInfoContext, SettingContext, TocContext, ToastContext } from './utils';
 import { Header } from './components/Header';
 import { PageContent } from './components/PageContent';
 import { Footer } from './components/Footer';
 
 
 const App = () => {
+    const [theme, setTheme] = useState('dark');
+    const setting = useMemo(() => ({ theme }), [theme]);
+    const toggleTheme = useCallback(e => setTheme(e.target.checked ? 'dark' : null), []);
+    useEffect(() => {
+        document.body.className = bem('rc-menu-app', null, { theme });
+    }, [theme]);
+
     const [isTocOpen, setTocOpen] = useState(false);
     const tocContext = useMemo(
         () => ({ isTocOpen, setTocOpen }),
@@ -48,16 +55,19 @@ const App = () => {
 
     return (
         <DomInfoContext.Provider value={domInfo}>
-            <TocContext.Provider value={tocContext}>
-                <ToastContext.Provider value={setToast}>
-                    <Router basename="/react-menu">
-                        <Header />
-                        <PageContent />
-                        <Footer />
-                        {toast && <div className="app-toast" role="alert">{toast}</div>}
-                    </Router>
-                </ToastContext.Provider>
-            </TocContext.Provider>
+            <SettingContext.Provider value={setting}>
+                <TocContext.Provider value={tocContext}>
+                    <ToastContext.Provider value={setToast}>
+                        <Router basename="/react-menu">
+                            <Header onToggleTheme={toggleTheme} />
+                            <PageContent />
+                            <Footer />
+                            {toast && <div className={bem('rc-menu-app', 'toast')}
+                                role="alert">{toast}</div>}
+                        </Router>
+                    </ToastContext.Provider>
+                </TocContext.Provider>
+            </SettingContext.Provider>
         </DomInfoContext.Provider>
     );
 }

@@ -1,0 +1,145 @@
+@use 'var';
+@use 'mixins';
+@use 'sass:color';
+
+#header .navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    z-index: 10;
+    font-weight: 700;
+    padding: 0 1rem;
+    white-space: nowrap;
+    background-color: var.$navbar-light;
+    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.25);
+
+    &--theme-dark {
+        background-color: var.$navbar-dark;
+        box-shadow: 0 2px 8px 2px rgba(0, 0, 0, 0.25);
+
+        .navbar__toggle {
+            color: var.$navbar-light;
+            &:focus {
+                outline-color: var.$navbar-light;
+            }
+        }
+
+        .navbar__link {
+            a {
+                color: var.$navbar-light;
+            }
+
+            a:hover:not(.active) {
+                color: color.scale(var.$navbar-light, $lightness: -15%);
+                border-bottom-color: #999;
+            }
+
+            .active {
+                border-bottom-color: var.$navbar-light;
+            }
+        }
+
+        .navbar__theme-switch {
+            color: var.$navbar-light;
+        }
+    }
+
+    &__toggle {
+        display: none;
+        border: 0;
+        background: none;
+        line-height: 1;
+        margin-right: 1rem;
+        padding: 0.25rem 0.5rem;
+        color: var.$navbar-dark;
+
+        &:hover {
+            opacity: 0.75;
+        }
+        &:focus {
+            outline: 1px dashed;
+            outline-color: var.$navbar-dark;
+        }
+    }
+
+    &__link-list {
+        @include mixins.reset-list;
+        display: flex;
+    }
+
+    &__link {
+        margin: 0 1.75rem;
+        a {
+            display: block;
+            padding: 1rem 0;
+            border-bottom: 3px solid transparent;
+            transition: all 0.15s ease-in-out;
+            color: var.$navbar-dark;
+        }
+
+        a:hover {
+            text-decoration: none;
+            &:not(.active) {
+                color: color.scale(var.$navbar-dark, $lightness: 15%);
+                border-bottom-color: #888;
+            }
+        }
+
+        .active {
+            border-bottom-color: var.$navbar-dark;
+        }
+    }
+
+    &__theme-switch {
+        -moz-appearance: none;
+        -webkit-appearance: none;
+        appearance: none;
+        font-family: "Material Icons";
+        font-size: 2rem;
+        cursor: pointer;
+        margin-left: auto;
+        margin-right: 2.5rem;
+        color: var.$navbar-dark;
+        &::before {
+            content: "nights_stay";
+        }
+        &:checked::before {
+            content: "light_mode";
+        }
+        &:hover {
+            opacity: 0.75;
+        }
+        &:focus {
+            outline: none;
+        }
+    }
+
+    &__github {
+        display: flex;
+        margin-right: 1.25rem;
+
+        img {
+            height: 2rem;
+            object-fit: contain;
+            &:hover {
+                opacity: 0.75;
+            }
+        }
+    }
+
+    @media (max-width: 650px) {
+        &__link {
+            margin: 0 0.75rem;
+        }
+        &__theme-switch {
+            font-size: 1.75rem;
+            margin-right: 1.25rem;
+        }
+        &__github {
+            margin-right: 0.25rem;
+        }
+    }
+}

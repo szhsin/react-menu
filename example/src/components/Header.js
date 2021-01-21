@@ -1,41 +1,53 @@
 import React, { useContext } from 'react';
 import { NavLink } from 'react-router-dom';
-import { DomInfoContext, TocContext } from '../utils';
+import { bem, DomInfoContext, SettingContext, TocContext } from '../utils';
 
-export const Header = React.memo(function Header() {
+const blockName = 'navbar';
+
+export const Header = React.memo(function Header({ onToggleTheme }) {
 
     const isFullSize = useContext(DomInfoContext).vWidth > 500;
+    const { theme } = useContext(SettingContext);
+    const isDarkTheme = theme === 'dark';
     const { setTocOpen } = useContext(TocContext);
 
     return (
-        <header id="header" >
-            <nav className="navbar fixed-top navbar-expand navbar-dark bg-dark"
+        <header id="header">
+            <nav className={bem(blockName, null, { theme })}
                 aria-label="Site">
-                <button className="menu-btn" aria-label="Open table of contents"
+                <button className={bem(blockName, 'toggle')} aria-label="Open table of contents"
                     onClick={() => setTocOpen(true)}>
                     <i className="material-icons">menu</i>
                 </button>
 
-                <ul className="navbar-nav">
-                    <li>
-                        <NavLink className="nav-link" exact to="/">Home</NavLink>
-                    </li>
-                    <li>
-                        <NavLink className="nav-link" to="/docs">
-                            {isFullSize ? 'Documentation' : 'Docs'}
-                        </NavLink>
-                    </li>
-                    <li>
-                        <NavLink className="nav-link" to="/style-guide">
-                            {isFullSize ? 'Style Guide' : 'Styling'}
-                        </NavLink>
-                    </li>
+                <ul className={bem(blockName, 'link-list')}>
+                    <NavBarLink exact to="/">Home</NavBarLink>
+
+                    <NavBarLink to="/docs">
+                        {isFullSize ? 'Documentation' : 'Docs'}
+                    </NavBarLink>
+
+                    <NavBarLink to="/style-guide">
+                        {isFullSize ? 'Style Guide' : 'Styling'}
+                    </NavBarLink>
                 </ul>
 
-                <a className="github" title="GitHub" href="https://github.com/szhsin/react-menu">
-                    <img src="GitHub-Mark-Light-64px.png" alt="GitHub" />
+                <input className={bem(blockName, 'theme-switch')} type="checkbox"
+                    onChange={onToggleTheme} checked={isDarkTheme} />
+
+                <a className={bem(blockName, 'github')} title="GitHub"
+                    href="https://github.com/szhsin/react-menu">
+                    <img src={`GitHub-Mark-${isDarkTheme ? 'Light-' : ''}64px.png`} alt="GitHub" />
                 </a>
             </nav>
         </header>
     );
 });
+
+function NavBarLink(props) {
+    return (
+        <li className={bem(blockName, 'link')}>
+            <NavLink {...props} />
+        </li>
+    );
+}
