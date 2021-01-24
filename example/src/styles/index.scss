@@ -33,7 +33,7 @@ button {
     line-height: 1.5;
     transition: background-color 0.1s ease-in-out;
     color: #212121;
-    background-color: #fafafc;
+    background-color: #fafbfc;
     a {
         text-decoration: none;
         transition: color 0.15s ease-in-out;
@@ -41,17 +41,6 @@ button {
         &:hover {
             text-decoration: underline;
             color: #2767cf;
-        }
-    }
-
-    &--theme-dark {
-        color: #cad1d8;
-        background-color: #18191a;
-        a {
-            color: #69a6f8;
-            &:hover {
-                color: #3688f6;
-            }
         }
     }
 
@@ -67,6 +56,17 @@ button {
         background-color: #f5f6fa;
         pointer-events: none;
         user-select: none;
+    }
+
+    &--theme-dark {
+        color: #cad1d8;
+        background-color: #18191a;
+        a {
+            color: #69a6f8;
+            &:hover {
+                color: #3688f6;
+            }
+        }
     }
 }
 
@@ -186,6 +186,17 @@ $toc-animation: 0.22s ease-out;
             bottom: 0;
             background-color: var.$mask-color;
 
+            nav {
+                display: block;
+                background-color: var.$navbar-light;
+                box-shadow: 4px 0 20px 4px var.$mask-color;
+                min-width: 15rem;
+            }
+
+            .contents-list-lv1 {
+                padding: 1.5rem 2rem;
+            }
+
             &--open {
                 display: flex;
                 animation: fade-in $toc-animation;
@@ -194,15 +205,8 @@ $toc-animation: 0.22s ease-out;
                 }
             }
 
-            nav {
-                display: block;
-                background-color: white;
-                box-shadow: 4px 0 20px 4px var.$mask-color;
-                min-width: 15rem;
-            }
-
-            .contents-list-lv1 {
-                padding: 1.5rem 2rem;
+            &--theme-dark nav {
+                background-color: var.$navbar-dark;
             }
         }
     }

@@ -16,37 +16,6 @@
     background-color: var.$navbar-light;
     box-shadow: 0 1px 6px rgba(0, 0, 0, 0.25);
 
-    &--theme-dark {
-        background-color: var.$navbar-dark;
-        box-shadow: 0 2px 8px 2px rgba(0, 0, 0, 0.25);
-
-        .navbar__toggle {
-            color: var.$navbar-light;
-            &:focus {
-                outline-color: var.$navbar-light;
-            }
-        }
-
-        .navbar__link {
-            a {
-                color: var.$navbar-light;
-            }
-
-            a:hover:not(.active) {
-                color: color.scale(var.$navbar-light, $lightness: -15%);
-                border-bottom-color: #999;
-            }
-
-            .active {
-                border-bottom-color: var.$navbar-light;
-            }
-        }
-
-        .navbar__theme-switch {
-            color: var.$navbar-light;
-        }
-    }
-
     &__toggle {
         display: none;
         border: 0;
@@ -140,6 +109,37 @@
         }
         &__github {
             margin-right: 0.25rem;
+        }
+    }
+
+    &--theme-dark {
+        background-color: var.$navbar-dark;
+        box-shadow: 0 2px 8px 2px rgba(0, 0, 0, 0.25);
+
+        .navbar__toggle {
+            color: var.$navbar-light;
+            &:focus {
+                outline-color: var.$navbar-light;
+            }
+        }
+
+        .navbar__link {
+            a {
+                color: var.$navbar-light;
+            }
+
+            a:hover:not(.active) {
+                color: color.scale(var.$navbar-light, $lightness: -15%);
+                border-bottom-color: #999;
+            }
+
+            .active {
+                border-bottom-color: var.$navbar-light;
+            }
+        }
+
+        .navbar__theme-switch {
+            color: var.$navbar-light;
         }
     }
 }

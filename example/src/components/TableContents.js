@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useRef } from 'react';
-import { bem, DomInfoContext, TocContext } from '../utils';
+import { bem, DomInfoContext, SettingContext, TocContext } from '../utils';
 import { TableContentsList } from './TableContentsList';
 
 export const TableContents = React.memo(function TableContents({
@@ -8,6 +8,7 @@ export const TableContents = React.memo(function TableContents({
 
     const ref = useRef(null);
     const domInfo = useContext(DomInfoContext);
+    const { theme } = useContext(SettingContext);
     const { isTocOpen, setTocOpen } = useContext(TocContext);
 
     let top, maxHeight = undefined;
@@ -25,7 +26,7 @@ export const TableContents = React.memo(function TableContents({
     }
 
     return (
-        <aside className={bem('table-contents', null, { open: isTocOpen })}
+        <aside className={bem('table-contents', null, { open: isTocOpen, theme })}
             style={{ top }}
             onTouchStart={handleClose}
             onClick={handleClose}

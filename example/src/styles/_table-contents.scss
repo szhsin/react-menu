@@ -2,12 +2,14 @@
 @use 'var';
 @use 'mixins';
 
-.table-contents {
+#content .table-contents {
     white-space: nowrap;
     a {
-        color: var.$dark-color;
         &:hover {
-            color: color.scale(var.$dark-color, $lightness: 10%);
+            text-decoration: none;
+        }
+        &:not(:hover) {
+            color: var.$navbar-dark;
         }
     }
 
@@ -29,11 +31,11 @@
     }
 
     .contents-list-lv1 {
-        font-size: 1.3rem;
+        font-size: 1.1rem;
         font-weight: 600;
         padding: 1.5rem 1rem;
         > li {
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.25rem;
         }
     }
 
@@ -43,10 +45,19 @@
     }
 
     .contents-list-lv3 {
-        margin-left: 1rem;
+        margin-left: 0.75rem;
         font-size: 0.95rem;
-        a {
-            color: color.scale(var.$dark-color, $lightness: 16%);
+        a:not(:hover) {
+            color: color.scale(var.$navbar-dark, $lightness: 10%);
+        }
+    }
+
+    &--theme-dark {
+        a:not(:hover) {
+            color: var.$navbar-light;
+        }
+        .contents-list-lv3 a:not(:hover) {
+            color: color.scale(var.$navbar-light, $lightness: -10%);
         }
     }
 }
