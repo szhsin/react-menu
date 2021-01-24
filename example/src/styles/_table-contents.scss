@@ -4,9 +4,19 @@
 
 #content .table-contents {
     white-space: nowrap;
-    a {
+    li a {
+        display: block;
+        padding: 0.5rem 2rem;
+        transition-property: color, background-color;
+        transition-timing-function: ease-in-out;
+        transition-duration: 0.15s;
+
+        @media (max-width: var.$bp-lg) {
+            padding: 0.5rem 1rem;
+        }
         &:hover {
             text-decoration: none;
+            background-color: color.scale(var.$navbar-light, $lightness: -8%);
         }
         &:not(:hover) {
             color: var.$navbar-dark;
@@ -14,9 +24,6 @@
     }
 
     nav {
-        @include mixins.flex-center("c", true);
-        overflow-x: hidden;
-        overflow-y: auto;
         &:focus {
             outline: none;
         }
@@ -29,17 +36,17 @@
     [class^="contents-list"] {
         @include mixins.reset-list;
         li {
-            margin: 0.75rem 0;
             line-height: 1.1;
         }
     }
 
     .contents-list-lv1 {
+        overflow-x: hidden;
+        overflow-y: auto;
         font-size: 1.1rem;
         font-weight: 600;
-        padding: 1.5rem 1rem;
         > li {
-            margin-bottom: 1.25rem;
+            margin: 0.5rem 0;
         }
     }
 
@@ -48,17 +55,25 @@
         font-weight: 400;
     }
 
-    .contents-list-lv3 {
-        margin-left: 0.75rem;
+    .contents-list-lv3 a {
+        padding-left: 2.75rem;
+        @media (max-width: var.$bp-lg) {
+            padding-left: 1.75rem;
+        }
         font-size: 0.95rem;
-        a:not(:hover) {
+        &:not(:hover) {
             color: color.scale(var.$navbar-dark, $lightness: 10%);
         }
     }
 
     &--theme-dark {
-        a:not(:hover) {
-            color: var.$navbar-light;
+        li a {
+            &:hover {
+                background-color: color.scale(var.$navbar-dark, $lightness: 8%);
+            }
+            &:not(:hover) {
+                color: var.$navbar-light;
+            }
         }
         .contents-list-lv3 a:not(:hover) {
             color: color.scale(var.$navbar-light, $lightness: -10%);

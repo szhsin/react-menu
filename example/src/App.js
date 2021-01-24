@@ -24,7 +24,7 @@ const App = () => {
             const info = {
                 // Viewport size
                 vWidth: document.documentElement.clientWidth,
-                vHeight: document.documentElement.clientHeight,
+                vHeight: window.innerHeight,
 
                 navbarHeight: document.querySelector('#header .navbar').offsetHeight,
                 // Table of Contents position

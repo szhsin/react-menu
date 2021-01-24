@@ -69,6 +69,10 @@ button {
                 color: #3688f6;
             }
         }
+
+        #content main {
+            border-color: var.$border-dark;
+        }
     }
 }
 
@@ -123,8 +127,8 @@ button {
 
     main {
         flex: 0 1 900px;
-        padding: 0 1rem 3rem 1rem;
-        margin: 0 1rem;
+        padding: 0 2rem 3rem 2rem;
+        border-left: 1px solid var.$border-light;
         > .hash-heading:first-child {
             margin-top: -7rem;
         }
@@ -132,8 +136,8 @@ button {
             margin-bottom: 0;
         }
 
-        @media (max-width: 1150px) {
-            margin: 0;
+        @media (max-width: var.$bp-lg) {
+            padding: 0 1rem 3rem 1rem;
         }
         @media (max-width: 600px) {
             .table {
@@ -171,7 +175,7 @@ $toc-animation: 0.22s ease-out;
 }
 
 // Hide table of contents
-@media (max-width: 850px) {
+@media (max-width: 950px) {
     #header .navbar {
         .app-logo,
         .theme-switch {
@@ -198,7 +202,6 @@ $toc-animation: 0.22s ease-out;
             background-color: var.$mask-color;
 
             nav {
-                display: block;
                 background-color: var.$navbar-light;
                 box-shadow: 4px 0 20px 4px var.$mask-color;
                 min-width: 15rem;
@@ -209,7 +212,15 @@ $toc-animation: 0.22s ease-out;
                 display: flex;
                 align-items: center;
                 padding: 1rem;
-                border-bottom: 1px solid #ddd;
+                border-bottom: 1px solid var.$border-light;
+            }
+
+            .app-logo {
+                text-decoration: none;
+                color: var.$navbar-dark;
+                &:hover {
+                    opacity: 0.75;
+                }
             }
 
             .theme-switch {
@@ -217,9 +228,9 @@ $toc-animation: 0.22s ease-out;
                 margin-left: auto;
             }
 
-            .contents-list-lv1 {
-                padding: 1.5rem 2rem;
-            }
+            // .contents-list-lv1 {
+            //     padding: 1.5rem 2rem;
+            // }
 
             &--open {
                 display: flex;
@@ -233,10 +244,17 @@ $toc-animation: 0.22s ease-out;
                 nav {
                     background-color: var.$navbar-dark;
                 }
+                .app-logo {
+                    color: var.$navbar-light;
+                }
                 .table-contents__header {
-                    border-bottom-color: #555;
+                    border-bottom-color: var.$border-dark;
                 }
             }
+        }
+
+        main {
+            border-left: none;
         }
     }
 }

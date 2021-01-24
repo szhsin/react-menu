@@ -5,7 +5,8 @@ import { HashLink as Link } from 'react-router-hash-link';
 
 export const TableContentsList = React.memo(function TableContentsList({
     list,
-    level
+    level,
+    maxHeight
 }) {
 
     const listElt = list.map((item) => {
@@ -23,7 +24,7 @@ export const TableContentsList = React.memo(function TableContentsList({
     });
 
     return (
-        <ul className={`contents-list-lv${level}`}>
+        <ul className={`contents-list-lv${level}`} style={{ maxHeight }}>
             {listElt}
         </ul>
     );
