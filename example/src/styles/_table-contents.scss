@@ -22,6 +22,10 @@
         }
     }
 
+    &__header {
+        display: none;
+    }
+
     [class^="contents-list"] {
         @include mixins.reset-list;
         li {

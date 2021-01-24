@@ -1,14 +1,15 @@
 import React, { useContext } from 'react';
 import { NavLink } from 'react-router-dom';
 import { bem, DomInfoContext, SettingContext, TocContext } from '../utils';
+import { Logo } from './Logo';
+import { ThemeSwitch } from './ThemeSwitch';
 
 const blockName = 'navbar';
 
-export const Header = React.memo(function Header({ onToggleTheme }) {
+export const Header = React.memo(function Header() {
 
     const isFullSize = useContext(DomInfoContext).vWidth > 500;
     const { theme } = useContext(SettingContext);
-    const isDarkTheme = theme === 'dark';
     const { setTocOpen } = useContext(TocContext);
 
     return (
@@ -19,6 +20,8 @@ export const Header = React.memo(function Header({ onToggleTheme }) {
                     onClick={() => setTocOpen(true)}>
                     <i className="material-icons">menu</i>
                 </button>
+
+                <Logo />
 
                 <ul className={bem(blockName, 'link-list')}>
                     <NavBarLink exact to="/">Home</NavBarLink>
@@ -32,12 +35,13 @@ export const Header = React.memo(function Header({ onToggleTheme }) {
                     </NavBarLink>
                 </ul>
 
-                <input className={bem(blockName, 'theme-switch')} type="checkbox"
-                    onChange={onToggleTheme} checked={isDarkTheme} />
+                <ThemeSwitch />
 
                 <a className={bem(blockName, 'github')} title="GitHub"
-                    href="https://github.com/szhsin/react-menu">
-                    <img src={`GitHub-Mark-${isDarkTheme ? 'Light-' : ''}64px.png`} alt="GitHub" />
+                    href="https://github.com/szhsin/react-menu"
+                    target="_blank" rel="noopener noreferrer">
+                    <img src={`GitHub-Mark-${theme === 'dark' ? 'Light-' : ''}64px.png`}
+                        alt="GitHub" />
                 </a>
             </nav>
         </header>

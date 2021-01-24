@@ -1,0 +1,26 @@
+@use 'var';
+
+.theme-switch {
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    appearance: none;
+    font-family: "Material Icons";
+    cursor: pointer;
+    color: var.$navbar-dark;
+    &::before {
+        content: "nights_stay";
+    }
+    &:checked::before {
+        content: "light_mode";
+    }
+    &:hover {
+        opacity: 0.75;
+    }
+    &:focus {
+        outline: none;
+    }
+
+    &--theme-dark {
+        color: var.$navbar-light;
+    }
+}

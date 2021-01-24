@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { bem, DomInfoContext, SettingContext, TocContext, ToastContext } from './utils';
 import { Header } from './components/Header';
@@ -8,16 +8,13 @@ import { Footer } from './components/Footer';
 
 const App = () => {
     const [theme, setTheme] = useState('dark');
-    const setting = useMemo(() => ({ theme }), [theme]);
-    const toggleTheme = useCallback(e => setTheme(e.target.checked ? 'dark' : null), []);
+    const setting = useMemo(() => ({ theme, setTheme }), [theme]);
     useEffect(() => {
         document.body.className = bem('rc-menu-app', null, { theme });
     }, [theme]);
 
     const [isTocOpen, setTocOpen] = useState(false);
-    const tocContext = useMemo(
-        () => ({ isTocOpen, setTocOpen }),
-        [isTocOpen]);
+    const tocContext = useMemo(() => ({ isTocOpen, setTocOpen }), [isTocOpen]);
 
     const [domInfo, setDomInfo] = useState({});
     useEffect(() => {
@@ -59,7 +56,7 @@ const App = () => {
                 <TocContext.Provider value={tocContext}>
                     <ToastContext.Provider value={setToast}>
                         <Router basename="/react-menu">
-                            <Header onToggleTheme={toggleTheme} />
+                            <Header />
                             <PageContent />
                             <Footer />
                             {toast && <div className={bem('rc-menu-app', 'toast')}

@@ -1,6 +1,10 @@
 import React, { useContext, useEffect, useRef } from 'react';
 import { bem, DomInfoContext, SettingContext, TocContext } from '../utils';
 import { TableContentsList } from './TableContentsList';
+import { Logo } from './Logo';
+import { ThemeSwitch } from './ThemeSwitch';
+
+const blockName = 'table-contents';
 
 export const TableContents = React.memo(function TableContents({
     children
@@ -26,7 +30,7 @@ export const TableContents = React.memo(function TableContents({
     }
 
     return (
-        <aside className={bem('table-contents', null, { open: isTocOpen, theme })}
+        <aside className={bem(blockName, null, { open: isTocOpen, theme })}
             style={{ top }}
             onTouchStart={handleClose}
             onClick={handleClose}
@@ -34,6 +38,10 @@ export const TableContents = React.memo(function TableContents({
             <nav aria-label="Table of contents"
                 tabIndex="-1" ref={ref}
                 style={{ maxHeight }}>
+                <div className={bem(blockName, 'header')}>
+                    <Logo />
+                    <ThemeSwitch />
+                </div>
                 <TableContentsList list={children} />
             </nav>
         </aside>

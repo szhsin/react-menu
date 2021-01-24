@@ -1,6 +1,8 @@
 @use 'var';
 @use 'mixins';
 @use 'menu';
+@use 'logo';
+@use 'theme-switch';
 @use 'navbar';
 @use 'hljs';
 @use 'example';
@@ -31,7 +33,7 @@ button {
 .rc-menu-app {
     padding-top: 4rem;
     line-height: 1.5;
-    transition: background-color 0.1s ease-in-out;
+    @include mixins.background-transition;
     color: #212121;
     background-color: #fafbfc;
     a {
@@ -170,8 +172,17 @@ $toc-animation: 0.22s ease-out;
 
 // Hide table of contents
 @media (max-width: 850px) {
-    #header .navbar__toggle {
-        display: inline-block;
+    #header .navbar {
+        .app-logo,
+        .theme-switch {
+            display: none;
+        }
+        &__toggle {
+            display: inline-block;
+        }
+        &__github {
+            margin-left: auto;
+        }
     }
 
     #content {
@@ -191,6 +202,19 @@ $toc-animation: 0.22s ease-out;
                 background-color: var.$navbar-light;
                 box-shadow: 4px 0 20px 4px var.$mask-color;
                 min-width: 15rem;
+                @include mixins.background-transition;
+            }
+
+            &__header {
+                display: flex;
+                align-items: center;
+                padding: 1rem;
+                border-bottom: 1px solid #ddd;
+            }
+
+            .theme-switch {
+                font-size: 1.5rem;
+                margin-left: auto;
             }
 
             .contents-list-lv1 {
@@ -205,8 +229,13 @@ $toc-animation: 0.22s ease-out;
                 }
             }
 
-            &--theme-dark nav {
-                background-color: var.$navbar-dark;
+            &--theme-dark {
+                nav {
+                    background-color: var.$navbar-dark;
+                }
+                .table-contents__header {
+                    border-bottom-color: #555;
+                }
             }
         }
     }
