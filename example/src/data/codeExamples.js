@@ -749,7 +749,7 @@ export const customisedButton = {
 
     source:
         `<Menu menuButton={
-    <button className="btn btn-primary">Open menu</button>}>
+    <button className="btn-primary">Open menu</button>}>
     <MenuItem>New File</MenuItem>
     <MenuItem>Save</MenuItem>
     <MenuItem>Close Window</MenuItem>
@@ -766,7 +766,7 @@ import '@szhsin/react-menu/dist/index.css';
 export default function Example() {
     return (
         <Menu menuButton={
-            <button className="btn btn-primary">Open menu</button>}>
+            <button className="btn-primary">Open menu</button>}>
             <MenuItem>New File</MenuItem>
             <MenuItem>Save</MenuItem>
             <MenuItem>Close Window</MenuItem>
@@ -827,12 +827,12 @@ export const overflow = {
 
     source:
         `const [overflow, setOverflow] = useState('auto');
-const [position, setPosition] = useState('anchor');
+const [position, setPosition] = useState('auto');
 
 <Menu menuButton={<MenuButton>Open menu</MenuButton>}
     overflow={overflow} position={position} align="center">
 
-    {new Array(25).fill(0).map(
+    {new Array(40).fill(0).map(
         (_, i) => <MenuItem key={i}>Item {i + 1}</MenuItem>)}
 </Menu>`
 };
@@ -856,8 +856,7 @@ export const managingState = {
         `const [isOpen, setOpen] = useState(false);
 const ref = useRef(null);
 
-<button ref={ref} className="btn btn-dark"
-    onClick={() => setOpen(true)}>
+<button ref={ref} onClick={() => setOpen(true)}>
     Open menu
 </button>
 
@@ -882,8 +881,7 @@ export default function Example() {
 
     return (
         <>
-            <button ref={ref} className="btn btn-dark"
-                onClick={() => setOpen(true)}>
+            <button ref={ref} onClick={() => setOpen(true)}>
                 Open menu
             </button>
 
@@ -980,8 +978,7 @@ export const menuStateHook = {
     ...menuProps } = useMenuState();
 const ref = useRef(null);
 
-<button ref={ref} className="btn btn-dark"
-    onClick={() => openMenu()}>
+<button ref={ref} onClick={() => openMenu()}>
     Open menu
 </button>
 
@@ -1008,8 +1005,7 @@ export default function Example() {
 
     return (
         <>
-            <button ref={ref} className="btn btn-dark"
-                onClick={() => openMenu()}>
+            <button ref={ref} onClick={() => openMenu()}>
                 Open menu
             </button>
 

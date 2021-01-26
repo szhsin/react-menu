@@ -1,9 +1,6 @@
 @use 'var';
 
 .theme-switch {
-    -moz-appearance: none;
-    -webkit-appearance: none;
-    appearance: none;
     font-family: "Material Icons";
     cursor: pointer;
     color: var.$navbar-dark;

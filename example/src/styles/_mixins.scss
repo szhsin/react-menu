@@ -20,13 +20,21 @@
     border-radius: var.$border-radius-small;
 }
 
+@mixin focus($width: 1px, $color: var.$focus-light) {
+    &:focus {
+        outline: none;
+        border-color: $color;
+        box-shadow: 0 0 0 $width $color;
+    }
+}
+
 @mixin transition($property: background-color, $duration: 0.15s, $timing-function: ease-in-out) {
     transition-property: $property;
     transition-duration: $duration;
     transition-timing-function: $timing-function;
 }
 
-@mixin border($border, $width: 1px, $transition: true) {
+@mixin border($border: "border", $width: 1px, $transition: true) {
     #{$border}: $width solid var.$border-light;
     @if $transition {
         @include transition(border-color);

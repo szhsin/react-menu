@@ -9,7 +9,7 @@ const blockName = 'navbar';
 export const Header = React.memo(function Header() {
 
     const isFullSize = useContext(DomInfoContext).vWidth > 500;
-    const { theme } = useContext(SettingContext);
+    const { theme, isDark } = useContext(SettingContext);
     const { setTocOpen } = useContext(TocContext);
 
     return (
@@ -40,7 +40,7 @@ export const Header = React.memo(function Header() {
                 <a className={bem(blockName, 'github')} title="GitHub"
                     href="https://github.com/szhsin/react-menu"
                     target="_blank" rel="noopener noreferrer">
-                    <img src={`GitHub-Mark-${theme === 'dark' ? 'Light-' : ''}64px.png`}
+                    <img src={`GitHub-Mark-${isDark ? 'Light-' : ''}64px.png`}
                         alt="GitHub" />
                 </a>
             </nav>

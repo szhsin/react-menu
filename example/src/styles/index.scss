@@ -20,17 +20,142 @@ body {
 
 code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
+    background-color: var.$code-light;
+    border-radius: var.$border-radius-medium;
+    padding: 0.2rem 0.4rem;
+    font-size: 0.875rem;
+    @include mixins.transition;
+    .rc-app--theme-dark & {
+        background-color: var.$code-dark;
+    }
 }
 
+p {
+    margin-top: 0;
+    margin-bottom: 1rem;
+}
+
+pre {
+    margin: 0;
+}
+
+a {
+    color: var.$primary-light;
+    text-decoration: none;
+    @include mixins.transition(color, 0.15s);
+    &:hover {
+        text-decoration: underline;
+        color: var.$primary-light-lv2;
+    }
+}
+
+input {
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+input[type="text"] {
+    font-size: 1rem;
+    padding: 0.375rem 0.75rem;
+    border-radius: var.$border-radius-medium;
+    @include mixins.focus(2px);
+    @include mixins.border($transition: false);
+    @include mixins.transition((border-color, box-shadow));
+    .rc-app--theme-dark & {
+        background-color: #e3e3e3;
+        @include mixins.focus(2px, $color: var.$focus-dark);
+    }
+}
+
+label {
+    cursor: pointer;
+    @include mixins.transition(color);
+    &:hover,
+    &.checked {
+        color: var.$primary-light;
+        .rc-app--theme-dark & {
+            color: var.$primary-dark;
+        }
+    }
+    input[type="radio"] {
+        color: inherit;
+        margin-right: 0.5rem;
+        font-family: "Material Icons";
+        cursor: pointer;
+
+        &::before {
+            font-size: 1.25rem;
+            top: 0.3rem;
+            position: relative;
+            content: "radio_button_unchecked";
+        }
+        &:checked::before {
+            content: "radio_button_checked";
+        }
+        &:focus {
+            outline: none;
+        }
+    }
+}
+
+.rc-menu-button,
 button {
     cursor: pointer;
+    font-size: 1rem;
+    font-weight: 500;
+    padding: 0.375rem 0.75rem;
+    line-height: 1.5;
+    background-color: #fafbfc;
+    border-radius: var.$border-radius-medium;
+    @include mixins.border($transition: false);
+    @include mixins.transition((background-color, border-color, color, box-shadow));
+    @include mixins.focus;
+
+    &:hover {
+        background-color: #f3f4f5;
+    }
+    &:active {
+        background-color: #edeff1;
+    }
+}
+
+.btn-primary {
+    color: white;
+    background-color: var.$primary-light;
+    border: none;
+    &:hover {
+        background-color: var.$primary-light-lv2;
+    }
+    @include mixins.focus(3px);
+}
+
+.alert-warning {
+    background-color: var.$highlight-color;
+    border-radius: var.$border-radius-medium;
+    padding: 0.5rem 1.25rem 0.75rem 1.25rem;
 }
 
 .lib-name {
     font-weight: 600;
 }
 
-.rc-menu-app {
+.rc-menu {
+    &::-webkit-scrollbar {
+        width: 7px;
+    }
+    @include mixins.scrollbar-light;
+    &__item--active {
+        color: #fff !important;
+    }
+    @media (max-width: 600px) {
+        &::-webkit-scrollbar {
+            width: 3px;
+        }
+    }
+}
+
+.rc-app {
     padding-top: 4rem;
     line-height: 1.5;
     @include mixins.transition((background-color, color));
@@ -41,15 +166,6 @@ button {
         width: 7px;
     }
     @include mixins.scrollbar-light;
-    a {
-        text-decoration: none;
-        @include mixins.transition(color, 0.15s);
-        color: #007bff;
-        &:hover {
-            text-decoration: underline;
-            color: #2767cf;
-        }
-    }
 
     &__toast {
         position: fixed;
@@ -66,14 +182,70 @@ button {
     }
 
     &--theme-dark {
-        color: #cad1d8;
+        color: var.$text-dark;
         background-color: #18191a;
         @include mixins.scrollbar-dark;
         a {
-            color: #69a6f8;
+            color: var.$primary-dark;
             &:hover {
-                color: #3688f6;
+                color: var.$primary-dark-lv2;
             }
+        }
+
+        .rc-menu-button,
+        button:not(.btn-primary) {
+            color: var.$text-dark;
+            background-color: var.$btn-dark;
+            border-color: var.$border-dark;
+            @include mixins.focus($color: var.$focus-dark);
+            &:hover {
+                background-color: #2b3036;
+            }
+        }
+
+        .btn-primary {
+            background-color: var.$primary-light-lv2;
+            &:hover {
+                background-color: var.$primary-light-lv3;
+            }
+        }
+
+        .rc-menu {
+            @include mixins.scrollbar-dark;
+            color: var.$text-dark;
+            border: 1px solid var.$border-dark;
+            background-color: var.$btn-dark;
+            box-shadow: 0 2px 9px 3px rgba(0, 0, 0, 0.25);
+            &__arrow {
+                background-color: var.$btn-dark;
+                border-left-color: var.$border-dark;
+                border-top-color: var.$border-dark;
+            }
+            &__item {
+                background-color: var.$btn-dark;
+                &--disabled {
+                    color: #666;
+                }
+                &--hover {
+                    background-color: #31363c;
+                }
+                &--active {
+                    background-color: #007bff;
+                }
+                &--focusable {
+                    background-color: var.$btn-dark;
+                }
+            }
+            &__header {
+                color: var.$secondary-dark;
+            }
+            &__divider {
+                background-color: var.$border-dark;
+            }
+        }
+
+        .example__action-btn--on {
+            background-color: var.$border-dark;
         }
 
         #content {
@@ -86,11 +258,17 @@ button {
             h3 {
                 color: var.$heading-dark;
             }
+
+            .example__demo,
+            .install-command {
+                background-color: var.$background-dark;
+                border-color: var.$border-dark;
+            }
         }
 
         #footer {
             color: var.$secondary-dark;
-            background-color: var.$navbar-dark;
+            background-color: var.$background-dark;
             border-color: var.$border-dark;
         }
     }
@@ -102,8 +280,8 @@ button {
     padding: 2rem 1.5rem;
     text-align: center;
     background-color: #f6f6f6;
-    @include mixins.transition((background-color, border-color));
     @include mixins.border(border-top, $transition: false);
+    @include mixins.transition((background-color, border-color));
 }
 
 #content {
@@ -282,10 +460,6 @@ $toc-animation: 0.22s ease-out;
 }
 
 #usage {
-    p code {
-        font-size: inherit;
-    }
-
     .features {
         font-size: 1.2rem;
         @media (max-width: 600px) {
@@ -297,8 +471,9 @@ $toc-animation: 0.22s ease-out;
         position: relative;
         padding: 0.75rem 1rem;
         background-color: white;
-        border: 1px solid var.$border-color;
-        border-radius: var.$border-radius-large;
+        border-radius: var.$border-radius-medium;
+        @include mixins.border($transition: false);
+        @include mixins.transition((background-color, border-color));
         margin: 1rem 0;
         p {
             margin-bottom: 0;

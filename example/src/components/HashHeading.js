@@ -43,5 +43,6 @@ export const HashHeading = React.memo(function HashHeading({
 });
 
 HashHeading.defaultProps = {
-    heading: 'h1'
+    heading: 'h1',
+    smooth: true
 };

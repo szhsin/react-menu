@@ -1,8 +1,11 @@
-import React, { useState, useEffect, useRef, useContext } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { HashHeading } from './HashHeading';
-import { bem, ToastContext } from '../utils';
+import { bem } from '../utils';
+import {
+    ControlledMenu,
+    MenuHeader
+} from '@szhsin/react-menu';
 import hljs from 'highlight.js';
-import $ from 'jquery';
 
 const blockName = 'example';
 
@@ -13,21 +16,26 @@ export const Example = React.memo(function Example({
     ...restProps
 }) {
     const ref = useRef(null);
-    const setToast = useContext(ToastContext);
     const [isFullSource, setIsFullSource] = useState(initialFullSource);
     const sourceCode = isFullSource ? fullSource : source;
     const sourceBtnTitle = `${isFullSource ? 'Hide' : 'Show'} full source code`;
+    const [isOpen, setOpen] = useState(false);
+    const refCopy = useRef(null);
+    const refSource = useRef(null);
+    const [anchorRef, setAnchorRef] = useState();
+    const [toolTip, setToolTip] = useState();
 
     const handleCopy = () => {
         navigator.clipboard.writeText(sourceCode)
-            .then(() => setToast('The code has been copied.'))
-            .catch(() => setToast('Something went wrong.'));
+            .then(() => setToolTip('Copied!'))
+            .catch(() => setToolTip('Something went wrong.'));
     }
 
     useEffect(() => {
-        $(ref.current).find('pre code').each((_, block) => hljs.highlightBlock(block));
-        $(ref.current).find('[data-toggle="tooltip"]').tooltip('hide').tooltip();
-    }, [isFullSource]);
+        setToolTip(sourceBtnTitle);
+        ref.current.querySelectorAll('pre code')
+            .forEach(block => hljs.highlightBlock(block));
+    }, [sourceBtnTitle]);
 
     return (
         <section className={bem(blockName)} ref={ref} aria-labelledby={id}>
@@ -39,28 +47,47 @@ export const Example = React.memo(function Example({
             </div>
 
             <div className={bem(blockName, 'actions')}>
-                {sourceCode && <button className="btn btn-outline-secondary"
-                    data-toggle="tooltip" data-placement="top"
-                    data-original-title="Copy code"
-                    aria-label="Copy code"
-                    onClick={handleCopy}>
-                    <i className="material-icons">content_copy</i>
-                </button>}
+                {sourceCode &&
+                    <button ref={refCopy}
+                        className={bem(blockName, 'action-btn')}
+                        aria-label="Copy code"
+                        onClick={handleCopy}
+                        onMouseEnter={() => {
+                            setAnchorRef(refCopy);
+                            setToolTip('Copy code')
+                            setOpen(true);
+                        }}
+                        onMouseLeave={() => setOpen(false)}>
+                        <i className="material-icons">content_copy</i>
+                    </button>}
                 {fullSource &&
-                    <button className={`btn ${isFullSource ? 'btn-secondary' : 'btn-outline-secondary'}`}
-                        data-toggle="tooltip" data-placement="top"
-                        data-original-title={sourceBtnTitle}
+                    <button ref={refSource}
+                        className={bem(blockName, 'action-btn', { on: isFullSource })}
                         aria-label={sourceBtnTitle}
-                        onClick={() => setIsFullSource(s => !s)}>
+                        onClick={() => setIsFullSource(s => !s)}
+                        onMouseEnter={() => {
+                            setAnchorRef(refSource);
+                            setToolTip(sourceBtnTitle)
+                            setOpen(true);
+                        }}
+                        onMouseLeave={() => setOpen(false)}>
                         <i className="material-icons">code</i>
                     </button>}
+
+                <ControlledMenu
+                    anchorRef={anchorRef} isOpen={isOpen} isMounted={isOpen}
+                    captureFocus={false} animation={false}
+                    arrow direction="top" align="center">
+                    <MenuHeader>{toolTip}</MenuHeader>
+                </ControlledMenu>
             </div>
 
-            {sourceCode && <pre className={bem(blockName, 'source')} >
-                <code className="lang-jsx">
-                    {sourceCode}
-                </code>
-            </pre>}
+            {sourceCode &&
+                <pre className={bem(blockName, 'source')} >
+                    <code className="lang-jsx">
+                        {sourceCode}
+                    </code>
+                </pre>}
         </section>
     );
 });

@@ -8,9 +8,13 @@ import { Footer } from './components/Footer';
 
 const App = () => {
     const [theme, setTheme] = useState('dark');
-    const setting = useMemo(() => ({ theme, setTheme }), [theme]);
+    const setting = useMemo(() => ({
+        isDark: theme === 'dark',
+        theme,
+        setTheme
+    }), [theme]);
     useEffect(() => {
-        document.body.className = bem('rc-menu-app', null, { theme });
+        document.body.className = bem('rc-app', null, { theme });
     }, [theme]);
 
     const [isTocOpen, setTocOpen] = useState(false);
@@ -59,7 +63,7 @@ const App = () => {
                             <Header />
                             <PageContent />
                             <Footer />
-                            {toast && <div className={bem('rc-menu-app', 'toast')}
+                            {toast && <div className={bem('rc-app', 'toast')}
                                 role="alert">{toast}</div>}
                         </Router>
                     </ToastContext.Provider>
