@@ -5,7 +5,7 @@
 #header {
     a {
         display: block;
-        transition: all 0.15s ease-in-out;
+        @include mixins.transition((color, border-bottom-color), 0.15s);
         color: var.$navbar-dark;
     }
 
@@ -28,8 +28,8 @@
         font-weight: 700;
         padding: 0 1rem;
         white-space: nowrap;
-        background-color: var.$navbar-light;
-        @include mixins.background-transition;
+        background-color: #fff;
+        @include mixins.transition;
         box-shadow: 0 1px 6px rgba(0, 0, 0, 0.25);
 
         &__toggle {

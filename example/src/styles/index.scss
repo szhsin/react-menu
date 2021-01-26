@@ -33,12 +33,17 @@ button {
 .rc-menu-app {
     padding-top: 4rem;
     line-height: 1.5;
-    @include mixins.background-transition;
+    @include mixins.transition;
     color: #212121;
     background-color: #fafbfc;
+
+    &::-webkit-scrollbar {
+        width: 7px;
+    }
+    @include mixins.scrollbar-light;
     a {
         text-decoration: none;
-        transition: color 0.15s ease-in-out;
+        @include mixins.transition(color, 0.15s);
         color: #007bff;
         &:hover {
             text-decoration: underline;
@@ -63,6 +68,7 @@ button {
     &--theme-dark {
         color: #cad1d8;
         background-color: #18191a;
+        @include mixins.scrollbar-dark;
         a {
             color: #69a6f8;
             &:hover {
@@ -128,7 +134,7 @@ button {
     main {
         flex: 0 1 900px;
         padding: 0 2rem 3rem 2rem;
-        border-left: 1px solid var.$border-light;
+        @include mixins.border(border-left);
         > .hash-heading:first-child {
             margin-top: -7rem;
         }
@@ -205,14 +211,14 @@ $toc-animation: 0.22s ease-out;
                 background-color: var.$navbar-light;
                 box-shadow: 4px 0 20px 4px var.$mask-color;
                 min-width: 15rem;
-                @include mixins.background-transition;
+                @include mixins.transition;
             }
 
             &__header {
                 display: flex;
                 align-items: center;
                 padding: 1rem;
-                border-bottom: 1px solid var.$border-light;
+                @include mixins.border(border-bottom);
             }
 
             .app-logo {
@@ -228,9 +234,9 @@ $toc-animation: 0.22s ease-out;
                 margin-left: auto;
             }
 
-            // .contents-list-lv1 {
-            //     padding: 1.5rem 2rem;
-            // }
+            .contents-list-lv1::-webkit-scrollbar {
+                width: 3px;
+            }
 
             &--open {
                 display: flex;
@@ -248,7 +254,7 @@ $toc-animation: 0.22s ease-out;
                     color: var.$navbar-light;
                 }
                 .table-contents__header {
-                    border-bottom-color: var.$border-dark;
+                    border-color: var.$border-dark;
                 }
             }
         }

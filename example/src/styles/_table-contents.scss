@@ -7,19 +7,16 @@
     li a {
         display: block;
         padding: 0.5rem 2rem;
-        transition-property: color, background-color;
-        transition-timing-function: ease-in-out;
-        transition-duration: 0.15s;
+        color: var.$navbar-dark;
+        @include mixins.transition((color, background-color), 0.15s);
+
+        &:hover {
+            text-decoration: none;
+            background-color: var.$border-light;
+        }
 
         @media (max-width: var.$bp-lg) {
             padding: 0.5rem 1rem;
-        }
-        &:hover {
-            text-decoration: none;
-            background-color: color.scale(var.$navbar-light, $lightness: -8%);
-        }
-        &:not(:hover) {
-            color: var.$navbar-dark;
         }
     }
 
@@ -45,6 +42,14 @@
         overflow-y: auto;
         font-size: 1.1rem;
         font-weight: 600;
+
+        &::-webkit-scrollbar {
+            width: 0;
+        }
+        &:hover::-webkit-scrollbar {
+            width: 6px;
+        }
+        @include mixins.scrollbar-light;
         > li {
             margin: 0.5rem 0;
         }
@@ -68,15 +73,17 @@
 
     &--theme-dark {
         li a {
+            color: var.$navbar-light;
             &:hover {
-                background-color: color.scale(var.$navbar-dark, $lightness: 8%);
-            }
-            &:not(:hover) {
-                color: var.$navbar-light;
+                background-color: var.$border-dark;
             }
         }
         .contents-list-lv3 a:not(:hover) {
             color: color.scale(var.$navbar-light, $lightness: -10%);
+        }
+
+        .contents-list-lv1 {
+            @include mixins.scrollbar-dark;
         }
     }
 }

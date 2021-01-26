@@ -1,3 +1,5 @@
+@use 'mixins';
+
 .hash-heading {
     display: flex;
     align-items: flex-end;
@@ -9,7 +11,7 @@
 
     &__link {
         opacity: 0;
-        transition: opacity 0.15s ease;
+        @include mixins.transition(opacity, 0.15s);
         line-height: 1.2;
         margin-bottom: 0.5rem;
         &:hover {
