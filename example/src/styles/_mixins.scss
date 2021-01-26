@@ -20,15 +20,17 @@
     border-radius: var.$border-radius-small;
 }
 
-@mixin transition($property: background-color, $duration: 0.12s, $timing-function: ease-in-out) {
+@mixin transition($property: background-color, $duration: 0.15s, $timing-function: ease-in-out) {
     transition-property: $property;
     transition-duration: $duration;
     transition-timing-function: $timing-function;
 }
 
-@mixin border($border, $width: 1px) {
+@mixin border($border, $width: 1px, $transition: true) {
     #{$border}: $width solid var.$border-light;
-    @include transition(border-color);
+    @if $transition {
+        @include transition(border-color);
+    }
 }
 
 @mixin scrollbar-light {

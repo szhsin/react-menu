@@ -26,7 +26,6 @@ export const Usage = React.memo(function Usage() {
             </TableContents>
 
             <main id="usage">
-                <h1 className="title">React-Menu</h1>
                 <GroupingSection heading="h1" data={codeExamples.features} />
                 <GroupingSection heading="h1" data={codeExamples.installation} />
                 <GroupingSection heading="h1" data={codeExamples.usageExamples} />

@@ -33,7 +33,7 @@ button {
 .rc-menu-app {
     padding-top: 4rem;
     line-height: 1.5;
-    @include mixins.transition;
+    @include mixins.transition((background-color, color));
     color: #212121;
     background-color: #fafbfc;
 
@@ -76,7 +76,21 @@ button {
             }
         }
 
-        #content main {
+        #content {
+            main {
+                border-color: var.$border-dark;
+            }
+
+            h1,
+            h2,
+            h3 {
+                color: var.$heading-dark;
+            }
+        }
+
+        #footer {
+            color: var.$secondary-dark;
+            background-color: var.$navbar-dark;
             border-color: var.$border-dark;
         }
     }
@@ -84,11 +98,12 @@ button {
 
 #footer {
     font-size: 0.9em;
-    color: var.$secondary-color;
+    color: var.$secondary-light;
     padding: 2rem 1.5rem;
-    border-top: 1px solid var.$border-color;
     text-align: center;
-    background-color: #f5f6f7;
+    background-color: #f6f6f6;
+    @include mixins.transition((background-color, border-color));
+    @include mixins.border(border-top, $transition: false);
 }
 
 #content {
@@ -98,8 +113,15 @@ button {
         @include mixins.highlight;
     }
 
+    h1,
+    h2,
+    h3 {
+        margin-bottom: 0;
+        color: var.$heading-light;
+    }
+
     h1 {
-        margin-top: 4rem;
+        margin-top: 3.5rem;
         font-size: 2rem;
         font-weight: bold;
     }
@@ -114,12 +136,6 @@ button {
         margin-top: 1rem;
         font-size: 1.75rem;
         font-weight: 400;
-    }
-
-    h1,
-    h2,
-    h3 {
-        color: var.$dark-color;
     }
 
     .table-contents {
@@ -270,11 +286,6 @@ $toc-animation: 0.22s ease-out;
         font-size: inherit;
     }
 
-    .title {
-        font-size: 2.5rem;
-        margin-top: 2rem;
-    }
-
     .features {
         font-size: 1.2rem;
         @media (max-width: 600px) {
@@ -293,7 +304,7 @@ $toc-animation: 0.22s ease-out;
             margin-bottom: 0;
         }
         .comment {
-            color: var.$secondary-color;
+            color: var.$secondary-light;
             margin-top: 1.5rem;
             &:first-of-type {
                 margin-top: 0;
