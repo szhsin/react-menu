@@ -21,11 +21,6 @@
     align-items: if($axis == "b" or $axis == "c", center, flex-start);
 }
 
-@mixin highlight {
-    background-color: var.$highlight-color;
-    border-radius: var.$border-radius-small;
-}
-
 @mixin focus($width: 1px, $color: var.$focus-light) {
     &:focus {
         border-color: $color;

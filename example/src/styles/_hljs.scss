@@ -5,6 +5,8 @@
     font-size: 90%;
     background-color: #f2f2f3;
     color: inherit;
+    border-radius: var.$border-radius-medium;
+    padding: 1rem 1.5rem;
     @include mixins.transition;
 
     &-title,

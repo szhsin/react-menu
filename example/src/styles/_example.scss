@@ -44,13 +44,6 @@
         @include mixins.border($transition: false);
         @include mixins.transition((background-color, border-color));
     }
-
-    &__source {
-        .hljs {
-            border-radius: var.$border-radius-medium;
-            padding: 1rem 1.5rem;
-        }
-    }
 }
 
 .option-form {

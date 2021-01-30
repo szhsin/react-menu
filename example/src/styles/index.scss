@@ -71,7 +71,9 @@
     @include mixins.flex-center("m");
 
     em {
-        @include mixins.highlight;
+        border-radius: var.$border-radius-medium;
+        background-color: var.$highlight-color;
+        padding: 0.25rem 0.75rem;
     }
 
     h1,
@@ -102,6 +104,10 @@
         font-weight: 400;
     }
 
+    .table {
+        margin-bottom: 3rem;
+    }
+
     .table-contents {
         position: sticky;
         left: 0;
@@ -121,20 +127,9 @@
         > .hash-heading:first-child {
             margin-top: -7rem;
         }
-        .table p:last-child {
-            margin-bottom: 0;
-        }
 
         @media (max-width: var.$bp-lg) {
             padding: 0 1rem 3rem 1rem;
-        }
-        @media (max-width: 600px) {
-            .table {
-                display: block;
-                overflow-x: auto;
-                border: 0;
-                margin-bottom: 4.5rem;
-            }
         }
     }
 
@@ -303,9 +298,10 @@ $toc-animation: 0.22s ease-out;
 }
 
 #documentation {
+    li {
+        margin-top: 0.5rem;
+    }
     li code:first-child {
-        @include mixins.highlight;
-        font-size: 0.925rem;
         margin-right: 0.5rem;
     }
 
@@ -313,15 +309,24 @@ $toc-animation: 0.22s ease-out;
         @include mixins.reset-list;
         margin-bottom: 2rem;
 
+        li {
+            margin-top: 0;
+        }
+
         li span:first-child {
             display: inline-block;
             font-size: 0.875rem;
             border: 1px solid #212529;
             border-radius: var.$border-radius-small;
             background-color: white;
-            box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+            box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5);
             padding: 0 0.5rem;
             margin: 0.25rem 0.5rem 0.25rem 0;
+            @include mixins.transition;
+            .rc-app--theme-dark & {
+                background-color: var.$btn-dark;
+                border-color: var.$border-dark;
+            }
         }
     }
 }
