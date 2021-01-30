@@ -1,9 +1,12 @@
 @use 'var';
+@use 'mixins';
 
 .theme-switch {
     font-family: "Material Icons";
     cursor: pointer;
     color: var.$navbar-dark;
+    @include mixins.remove-focus;
+
     &::before {
         content: "nights_stay";
     }
@@ -12,9 +15,6 @@
     }
     &:hover {
         opacity: 0.75;
-    }
-    &:focus {
-        outline: none;
     }
 
     &--theme-dark {

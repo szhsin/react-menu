@@ -49,7 +49,7 @@ export const Example = React.memo(function Example({
             <div className={bem(blockName, 'actions')}>
                 {sourceCode &&
                     <button ref={refCopy}
-                        className={bem(blockName, 'action-btn')}
+                        className={bem(blockName, 'action-btn') + ' btn'}
                         aria-label="Copy code"
                         onClick={handleCopy}
                         onMouseEnter={() => {
@@ -62,7 +62,7 @@ export const Example = React.memo(function Example({
                     </button>}
                 {fullSource &&
                     <button ref={refSource}
-                        className={bem(blockName, 'action-btn', { on: isFullSource })}
+                        className={bem(blockName, 'action-btn', { on: isFullSource }) + ' btn'}
                         aria-label={sourceBtnTitle}
                         onClick={() => setIsFullSource(s => !s)}
                         onMouseEnter={() => {

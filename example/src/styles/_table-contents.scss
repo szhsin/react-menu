@@ -21,9 +21,7 @@
     }
 
     nav {
-        &:focus {
-            outline: none;
-        }
+        @include mixins.remove-focus;
     }
 
     &__header {
@@ -43,13 +41,10 @@
         font-size: 1.1rem;
         font-weight: 600;
 
-        &::-webkit-scrollbar {
-            width: 0;
-        }
         &:hover::-webkit-scrollbar {
             width: 6px;
         }
-        @include mixins.scrollbar-light;
+        @include mixins.scrollbar(0);
         > li {
             margin: 0.5rem 0;
         }

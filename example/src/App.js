@@ -23,8 +23,6 @@ const App = () => {
     const [domInfo, setDomInfo] = useState({});
     useEffect(() => {
         const handleResize = () => {
-            setTocOpen(false);
-
             const info = {
                 // Viewport size
                 vWidth: document.documentElement.clientWidth,
@@ -36,6 +34,7 @@ const App = () => {
                     .getPropertyValue('position')
             };
 
+            if (info.vWidth > 950) setTocOpen(false);
             setDomInfo(info);
         }
 

@@ -784,9 +784,9 @@ export const placement = {
         <>
             <p>Thanks to <LibName />'s flexible positioning algorithm, you could control the
             position of menu and how it behaves in response to window scroll event with
-            the <code>align, direction, position</code>, and <code>viewScroll</code> props.</p>
+            the <code>align</code>, <code>direction</code>, <code>position</code>, and <code>viewScroll</code> props.</p>
             <p>Optionally, menu can be set to display an arrow pointing to its anchor element or
-                add an offset using the <code>arrow, offsetX</code>, and <code>offsetY</code> props.</p>
+                add an offset using the <code>arrow</code>, <code>offsetX</code>, and <code>offsetY</code> props.</p>
         </>,
 
     source:
@@ -967,7 +967,7 @@ export const menuStateHook = {
     desc:
         <>
             <p>To fully make use of functionalities provided by <code>ControlledMenu</code>, you
-            need to give it three props: <code>isMounted, isOpen, menuItemFocus</code>. To ease this
+            need to give it three props: <code>isMounted</code>, <code>isOpen</code>, <code>menuItemFocus</code>. To ease this
             task, you could use the <code>useMenuState</code> Hook which returns these three states and
             methods that manage them.</p>
             <p>Please see {menuStateHookLink} for more details.</p>
@@ -1202,7 +1202,7 @@ export const menu = {
     id: 'menu',
     title: 'Menu',
     desc:
-        <p>The group includes common usage examples of <code>Menu, SubMenu</code>, and <code>MenuItem</code>.</p>,
+        <p>The group includes common usage examples of <code>Menu</code>, <code>SubMenu</code>, and <code>MenuItem</code>.</p>,
     list: [
         basicMenu,
         subMenu,

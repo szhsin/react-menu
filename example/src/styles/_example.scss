@@ -30,6 +30,9 @@
         }
         &--on {
             background-color: var.$border-light;
+            .rc-app--theme-dark & {
+                background-color: var.$border-dark;
+            }
         }
     }
 

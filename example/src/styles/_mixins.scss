@@ -1,18 +1,24 @@
 @use 'var';
 @use 'sass:color';
 
+@mixin reset-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+@mixin remove-focus {
+    &:focus {
+        outline: none;
+    }
+}
+
 // $axis: 'b' -- both, 'm' -- main axis, 'c' -- cross axis
 @mixin flex-center($axis: "b", $column: false) {
     display: flex;
     flex-direction: if($column, column, row);
     justify-content: if($axis == "b" or $axis == "m", center, flex-start);
     align-items: if($axis == "b" or $axis == "c", center, flex-start);
-}
-
-@mixin reset-list {
-    margin: 0;
-    padding: 0;
-    list-style: none;
 }
 
 @mixin highlight {
@@ -22,7 +28,6 @@
 
 @mixin focus($width: 1px, $color: var.$focus-light) {
     &:focus {
-        outline: none;
         border-color: $color;
         box-shadow: 0 0 0 $width $color;
     }
@@ -41,7 +46,10 @@
     }
 }
 
-@mixin scrollbar-light {
+@mixin scrollbar($width: 7px) {
+    &::-webkit-scrollbar {
+        width: $width;
+    }
     &::-webkit-scrollbar-thumb {
         background-color: color.scale(var.$border-light, $lightness: -15%);
     }

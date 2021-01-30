@@ -163,7 +163,7 @@ function EventHandlingExample() {
                     <MenuItem value="Close">Close Window</MenuItem>
                 </Menu>
 
-                <button
+                <button className="btn"
                     onClick={() => setOutput([])}>
                     Clear
                 </button>
@@ -412,7 +412,7 @@ function CustomisedButtonExample() {
 
     return (
         <Example data={codeExamples.customisedButton} >
-            <Menu menuButton={<button className="btn-primary">Open menu</button>}>
+            <Menu menuButton={<button className="btn btn-primary">Open menu</button>}>
                 <MenuItem>New File</MenuItem>
                 <MenuItem>Save</MenuItem>
                 <MenuItem>Close Window</MenuItem>
@@ -528,7 +528,7 @@ function ManagingStateExample() {
 
     return (
         <Example data={codeExamples.managingState}>
-            <button ref={ref}
+            <button ref={ref} className="btn"
                 onClick={() => setOpen(true)}>
                 Open menu
             </button>
@@ -576,7 +576,7 @@ function MenuStateHookExample() {
 
     return (
         <Example data={codeExamples.menuStateHook}>
-            <button ref={ref}
+            <button ref={ref} className="btn"
                 onClick={() => openMenu()}>
                 Open menu
             </button>
