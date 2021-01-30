@@ -107,7 +107,7 @@ label {
     padding: 0.375rem 0.75rem;
     line-height: 1.5;
     color: inherit;
-    background-color: #fafbfc;
+    background-color: var.$btn-light;
     border-radius: var.$border-radius-medium;
     @include mixins.border($transition: false);
     @include mixins.transition((background-color, border-color, color, box-shadow));
@@ -115,10 +115,10 @@ label {
     @include mixins.focus;
 
     &:hover {
-        background-color: #f3f4f5;
+        background-color: var.$btn-light-lv2;
     }
     &:active {
-        background-color: #edeff1;
+        background-color: var.$btn-light-lv3;
     }
 
     .rc-app--theme-dark & {
@@ -126,7 +126,10 @@ label {
         border-color: var.$border-dark;
         @include mixins.focus($color: var.$focus-dark);
         &:hover {
-            background-color: #2b3036;
+            background-color: var.$btn-dark-lv2;
+        }
+        &:active {
+            background-color: var.$block-dark;
         }
     }
 }

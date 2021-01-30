@@ -1,3 +1,4 @@
+@use 'sass:color';
 @use 'var';
 @use 'mixins';
 @use 'basis';
@@ -38,13 +39,13 @@
 
     &--theme-dark {
         color: var.$text-dark;
-        background-color: #18191a;
+        background-color: var.$background-dark;
         @include mixins.scrollbar-dark;
 
         #content {
             .example__demo,
             .install-command {
-                background-color: var.$background-dark;
+                background-color: var.$block-dark;
                 border-color: var.$border-dark;
             }
         }
@@ -52,6 +53,7 @@
 }
 
 #footer {
+    @include mixins.flex-center("c", true);
     font-size: 0.9em;
     color: var.$secondary-light;
     padding: 2rem 1.5rem;
@@ -59,11 +61,76 @@
     background-color: #f6f6f6;
     @include mixins.border(border-top, $transition: false);
     @include mixins.transition((background-color, border-color));
+    p {
+        margin: 0;
+    }
+    .build {
+        color: #999;
+        margin-top: 0.25rem;
+    }
+
+    .github {
+        display: flex;
+        margin-bottom: 1.25rem;
+    }
+
+    .github-btn {
+        @include mixins.flex-center("c");
+        @include mixins.border;
+        @include mixins.transition((background-color, border-color));
+        color: inherit;
+        font-size: 0.75rem;
+        font-weight: 600;
+        padding: 0.25rem 0.75rem;
+        background-color: var.$btn-light-lv2;
+        border-radius: 3px;
+        &:hover {
+            text-decoration: none;
+            background-color: var.$btn-light-lv3;
+        }
+    }
+
+    .left {
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+        background-color: var.$btn-light;
+        &:hover {
+            border-color: color.scale(var.$border-light, $lightness: -20%);
+        }
+    }
+
+    .right {
+        border-left: none;
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+    }
+
+    .github-img {
+        width: 1rem;
+        height: 1rem;
+        margin-right: 0.5rem;
+    }
 
     .rc-app--theme-dark & {
         color: var.$secondary-dark;
-        background-color: var.$background-dark;
+        background-color: var.$block-dark;
         border-color: var.$border-dark;
+        .build {
+            color: #777;
+        }
+        .github-btn {
+            border-color: var.$border-dark;
+            background-color: var.$block-dark;
+            &:hover {
+                background-color: var.$btn-dark-lv2;
+            }
+        }
+        .left {
+            background-color: var.$background-dark;
+            &:hover {
+                border-color: color.scale(var.$border-dark, $lightness: 40%);
+            }
+        }
     }
 }
 
