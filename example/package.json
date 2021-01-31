@@ -15,7 +15,7 @@
     "react": "file:../node_modules/react",
     "react-dom": "file:../node_modules/react-dom",
     "react-router-dom": "^5.2.0",
-    "react-router-hash-link": "^2.1.0",
+    "react-router-hash-link": "^2.3.1",
     "react-scripts": "file:../node_modules/react-scripts"
   },
   "devDependencies": {
