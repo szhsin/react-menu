@@ -1,3 +1,6 @@
+@use 'var';
+@use 'mixins';
+
 .rc-menu__item {
     i {
         font-size: 1.25rem;
@@ -12,5 +15,52 @@
 
     .md-48 {
         font-size: 3rem;
+    }
+}
+
+.rc-menu {
+    @include mixins.scrollbar;
+    white-space: nowrap;
+    &__item--active {
+        color: #fff !important;
+    }
+    @media (max-width: 600px) {
+        &::-webkit-scrollbar {
+            width: 3px;
+        }
+    }
+}
+
+.rc-app--theme-dark .rc-menu {
+    @include mixins.scrollbar-dark;
+    color: var.$text-dark;
+    border: 1px solid var.$border-dark;
+    background-color: var.$btn-dark;
+    box-shadow: 0 2px 9px 3px rgba(0, 0, 0, 0.25);
+    &__arrow {
+        background-color: var.$btn-dark;
+        border-left-color: var.$border-dark;
+        border-top-color: var.$border-dark;
+    }
+    &__item {
+        background-color: var.$btn-dark;
+        &--disabled {
+            color: #666;
+        }
+        &--hover {
+            background-color: #31363c;
+        }
+        &--active {
+            background-color: #007bff;
+        }
+        &--focusable {
+            background-color: var.$btn-dark;
+        }
+    }
+    &__header {
+        color: var.$secondary-dark;
+    }
+    &__divider {
+        background-color: var.$border-dark;
     }
 }

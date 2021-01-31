@@ -1,9 +1,48 @@
 @use 'var';
+@use 'mixins';
 
 .hljs {
-    background-color: var.$dark-color;
+    font-size: 90%;
+    background-color: #f2f2f3;
+    color: inherit;
+    border-radius: var.$border-radius-medium;
+    padding: 1rem 1.5rem;
+    @include mixins.transition;
+
+    &-title,
     &-name {
-        color: #4ce2c3;
+        font-weight: 700;
+    }
+
+    &-title,
+    &-number {
+        color: #267f99;
+    }
+    &-name {
+        color: #438343;
+    }
+    &-attr {
+        color: #235dbe;
+    }
+    &-string {
+        color: #c6474e;
+    }
+    &-keyword {
+        color: #6848ba;
+    }
+    &-tag,
+    &-literal {
+        color: #061683;
+    }
+}
+
+.rc-app--theme-dark .hljs {
+    background-color: var.$block-dark;
+    &-title {
+        color: #fffeb4;
+    }
+    &-name {
+        color: #4ec9b0;
     }
     &-attr {
         color: #9cdcfe;
@@ -14,6 +53,7 @@
     &-keyword {
         color: #eb96e4;
     }
+    &-tag,
     &-literal {
         color: #4fc1ff;
     }

@@ -1,26 +1,49 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
-import { DomInfoContext, TocContext, ToastContext } from './utils';
+import { bem, DomInfoContext, SettingContext, TocContext, ToastContext } from './utils';
 import { Header } from './components/Header';
 import { PageContent } from './components/PageContent';
 import { Footer } from './components/Footer';
 
 
 const App = () => {
+    const [theme, setTheme] = useState(() => {
+        let theme
+        try {
+            theme = localStorage.getItem('theme');
+        } catch (err) {
+            console.log(err)
+        }
+
+        return theme === 'light' ? theme : 'dark';
+    });
+    const setAndSaveTheme = useCallback((theme) => {
+        setTheme(theme);
+        try {
+            localStorage.setItem('theme', theme);
+        } catch (err) {
+            console.log(err)
+        }
+    }, []);
+    const setting = useMemo(() => ({
+        isDark: theme === 'dark',
+        theme,
+        setTheme: setAndSaveTheme
+    }), [theme, setAndSaveTheme]);
+    useEffect(() => {
+        document.body.className = bem('rc-app', null, { theme });
+    }, [theme]);
+
     const [isTocOpen, setTocOpen] = useState(false);
-    const tocContext = useMemo(
-        () => ({ isTocOpen, setTocOpen }),
-        [isTocOpen]);
+    const tocContext = useMemo(() => ({ isTocOpen, setTocOpen }), [isTocOpen]);
 
     const [domInfo, setDomInfo] = useState({});
     useEffect(() => {
         const handleResize = () => {
-            setTocOpen(false);
-
             const info = {
                 // Viewport size
                 vWidth: document.documentElement.clientWidth,
-                vHeight: document.documentElement.clientHeight,
+                vHeight: window.innerHeight,
 
                 navbarHeight: document.querySelector('#header .navbar').offsetHeight,
                 // Table of Contents position
@@ -28,6 +51,7 @@ const App = () => {
                     .getPropertyValue('position')
             };
 
+            if (info.vWidth > 950) setTocOpen(false);
             setDomInfo(info);
         }
 
@@ -48,16 +72,19 @@ const App = () => {
 
     return (
         <DomInfoContext.Provider value={domInfo}>
-            <TocContext.Provider value={tocContext}>
-                <ToastContext.Provider value={setToast}>
-                    <Router basename="/react-menu">
-                        <Header />
-                        <PageContent />
-                        <Footer />
-                        {toast && <div className="app-toast" role="alert">{toast}</div>}
-                    </Router>
-                </ToastContext.Provider>
-            </TocContext.Provider>
+            <SettingContext.Provider value={setting}>
+                <TocContext.Provider value={tocContext}>
+                    <ToastContext.Provider value={setToast}>
+                        <Router basename="/react-menu">
+                            <Header />
+                            <PageContent />
+                            <Footer />
+                            {toast && <div className={bem('rc-app', 'toast')}
+                                role="alert">{toast}</div>}
+                        </Router>
+                    </ToastContext.Provider>
+                </TocContext.Provider>
+            </SettingContext.Provider>
         </DomInfoContext.Provider>
     );
 }

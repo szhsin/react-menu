@@ -8,14 +8,30 @@
         justify-content: flex-end;
         padding: 0.6rem 0;
 
-        .btn {
-            @include mixins.flex-center;
-            border-radius: 50%;
-            width: 2rem;
-            height: 2rem;
-            margin-left: 1.5rem;
-            .material-icons {
-                font-size: 1.2rem;
+        .rc-menu {
+            min-width: initial;
+            &__header {
+                color: inherit;
+                font-size: inherit;
+                text-transform: none;
+                padding: 0.125rem 1rem;
+            }
+        }
+    }
+
+    &__action-btn {
+        @include mixins.flex-center;
+        border-radius: 50%;
+        width: 2.25rem;
+        height: 2.25rem;
+        margin-left: 1.5rem;
+        .material-icons {
+            font-size: 1.2rem;
+        }
+        &--on {
+            background-color: var.$border-light;
+            .rc-app--theme-dark & {
+                background-color: var.$border-dark;
             }
         }
     }
@@ -24,15 +40,9 @@
         @include mixins.flex-center;
         background-color: white;
         padding: 1rem;
-        border: 1px solid var.$border-color;
-        border-radius: var.$border-radius-large;
-    }
-
-    &__source {
-        border-radius: var.$border-radius-large;
-        .hljs {
-            padding: 1rem 1.5rem;
-        }
+        border-radius: var.$border-radius-medium;
+        @include mixins.border($transition: false);
+        @include mixins.transition((background-color, border-color));
     }
 }
 
@@ -43,37 +53,39 @@
     margin-right: -1.5rem;
     .options {
         flex: 1 1 10rem;
-        border: 1px solid var.$border-color;
+        @include mixins.border;
         border-radius: var.$border-radius-medium;
         margin: 0 1.5rem 1.5rem 0;
         position: relative;
-        padding-top: 2rem;
+        padding: 2rem 0 0 0;
 
         legend {
-            color: white;
-            background-color: var.$dark-color;
+            box-sizing: border-box;
+            color: inherit;
+            background-color: var.$border-light;
             border-top-left-radius: var.$border-radius-medium;
             border-top-right-radius: var.$border-radius-medium;
             width: calc(100% + 2px);
             max-width: inherit;
             position: absolute;
             left: -1px;
-            top: 0;
+            top: -1px;
             padding: 0.25rem 1rem;
             font-size: 1rem;
             white-space: nowrap;
+            @include mixins.transition;
         }
 
         label {
             margin: 0.75rem 1rem;
             display: block;
-            &.checked {
-                color: var(--primary);
-            }
         }
 
-        input[type="radio"] {
-            margin-right: 0.5rem;
+        .rc-app--theme-dark & {
+            border-color: var.$border-dark;
+            legend {
+                background-color: var.$btn-dark;
+            }
         }
     }
 }
@@ -95,9 +107,13 @@
             font-size: 0.9rem;
             flex: 0 1 20rem;
             margin-left: 1rem;
-            border: 1px solid var.$border-color;
-            border-radius: var.$border-radius-medium;
             overflow-y: auto;
+            border-radius: var.$border-radius-medium;
+            @include mixins.border;
+
+            .rc-app--theme-dark & {
+                border-color: var.$border-dark;
+            }
         }
     }
 }
@@ -119,9 +135,8 @@
             align-self: stretch;
         }
 
-        .alert {
+        .alert-warning {
             margin-bottom: 1.5rem;
-            padding-top: 0.5rem;
             .material-icons {
                 position: relative;
                 font-size: 1.5rem;

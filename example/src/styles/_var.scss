@@ -1,8 +1,42 @@
-$border-color: #ccc;
 $border-radius-small: 0.125rem;
 $border-radius-medium: 0.25rem;
 $border-radius-large: 0.375rem;
-$secondary-color: #808080;
-$dark-color: #343a40;
+
+$focus-light: rgba(17, 113, 240, 0.5);
+$focus-dark: #707070;
+
+$code-light: #eee;
+$code-dark: #343a40;
+
+$btn-light: #fafbfc;
+$btn-light-lv2: #f3f4f5;
+$btn-light-lv3: #edeff1;
+$btn-dark: #22262c;
+$btn-dark-lv2: #2b3036;
+
+$primary-light: #007bff;
+$primary-light-lv2: #2767cf;
+$primary-light-lv3: #1d4d9b;
+$primary-dark: #69a6f8;
+$primary-dark-lv2: #3688f6;
+
+$heading-dark: #b0b0b0;
+$heading-light: #505050;
+
+$navbar-dark: #1f2021;
+$navbar-light: #f8f9fa;
+
+$border-dark: #333;
+$border-light: #ddd;
+
+$secondary-light: #808080;
+$secondary-dark: #aaa;
+
+$background-dark: #18191a;
+$block-dark: #1d1e1f;
+$text-dark: #cad1d8;
+
 $highlight-color: rgba(255, 229, 100, 0.3);
-$mask-color: rgba(0, 0, 0, 0.33);
+$mask-color: rgba(0, 0, 0, 0.5);
+
+$bp-lg: 1150px;

@@ -1,20 +1,21 @@
-.hash-heading {
+@use 'mixins';
+
+#content .hash-heading {
     display: flex;
     align-items: flex-end;
     margin-top: -4.5rem;
 
     &__heading {
         padding: 4.5rem 0.5rem 0 0;
+        position: relative;
+        z-index: -1;
     }
 
     &__link {
         opacity: 0;
-        transition: opacity 0.15s ease;
+        @include mixins.transition(opacity, 0.15s);
         line-height: 1.2;
-        margin-bottom: 0.5rem;
-        &:hover {
-            text-decoration: none;
-        }
+        margin-bottom: 0.25rem;
         &--hover {
             opacity: 1;
         }

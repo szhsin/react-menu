@@ -204,8 +204,7 @@ const sharedMenuProps = [
     {
         name: 'children',
         type: 'node',
-        desc: <p>Can be <code>MenuDivider, MenuHeader, MenuItem, FocusableItem,
-        MenuRadioGroup, SubMenu</code> or any of their combinations.</p>
+        desc: <p>Can be <code>MenuDivider</code>, <code>MenuHeader</code>, <code>MenuItem</code>, <code>FocusableItem</code>, <code>MenuRadioGroup</code>, <code>SubMenu</code> or any of their combinations.</p>
     }
 ];
 
@@ -228,7 +227,7 @@ const menuPropsBase = [
         type: 'boolean',
         defaultVal: 'true',
         desc: <p>Enable or disable animation and transition effects in the <code>Menu</code>,
-        <code> MenuItem</code>, and any descendent <code>SubMenu</code>.</p>
+        <code>MenuItem</code>, and any descendent <code>SubMenu</code>.</p>
     },
     {
         name: 'debugging',

@@ -1,4 +1,9 @@
-import React, { useRef, useState, useLayoutEffect } from 'react';
+import React, {
+    useRef,
+    useState,
+    useLayoutEffect,
+    useContext
+} from 'react';
 import {
     Menu,
     MenuItem,
@@ -11,6 +16,7 @@ import {
     ControlledMenu,
     useMenuState
 } from '@szhsin/react-menu';
+import { SettingContext } from '../utils';
 import { TableContents } from './TableContents';
 import { Example } from './Example';
 import { HashHeading } from './HashHeading';
@@ -26,7 +32,6 @@ export const Usage = React.memo(function Usage() {
             </TableContents>
 
             <main id="usage">
-                <h1 className="title">React-Menu</h1>
                 <GroupingSection heading="h1" data={codeExamples.features} />
                 <GroupingSection heading="h1" data={codeExamples.installation} />
                 <GroupingSection heading="h1" data={codeExamples.usageExamples} />
@@ -158,7 +163,7 @@ function EventHandlingExample() {
                     <MenuItem value="Close">Close Window</MenuItem>
                 </Menu>
 
-                <button className="btn btn btn-dark"
+                <button className="btn"
                     onClick={() => setOutput([])}>
                     Clear
                 </button>
@@ -173,6 +178,7 @@ function EventHandlingExample() {
 
 function RadioGroupExample() {
     const [textColor, setTextColor] = useState('red');
+    const { isDark } = useContext(SettingContext);
 
     return (
         <Example data={codeExamples.radioGroup} >
@@ -181,7 +187,7 @@ function RadioGroupExample() {
                     onChange={e => setTextColor(e.value)}>
                     <MenuItem value="red">Red</MenuItem>
                     <MenuItem value="green">Green</MenuItem>
-                    <MenuItem value="blue">Blue</MenuItem>
+                    <MenuItem value={isDark ? '#69a6f8' : 'blue'}>Blue</MenuItem>
                 </MenuRadioGroup>
             </Menu>
 
@@ -248,6 +254,7 @@ function CombinedExample() {
     const [isBold, setBold] = useState(true);
     const [isItalic, setItalic] = useState(false);
     const [isUnderline, setUnderline] = useState(false);
+    const { isDark } = useContext(SettingContext);
 
     return (
         <Example data={codeExamples.combined} >
@@ -263,7 +270,7 @@ function CombinedExample() {
                         onChange={e => setTextColor(e.value)}>
                         <MenuItem value={'red'}>Red</MenuItem>
                         <MenuItem value={'green'}>Green</MenuItem>
-                        <MenuItem value={'blue'}>Blue</MenuItem>
+                        <MenuItem value={isDark ? '#69a6f8' : 'blue'}>Blue</MenuItem>
                     </MenuRadioGroup>
                 </SubMenu>
 
@@ -474,7 +481,7 @@ function MenuPlacementExample() {
                     title="Menu position" data={positionOptions}
                     option={position} onOptionChange={setPosition} />
             </form>
-            <p className="alert alert-warning"><i className="material-icons">info</i> Try to select
+            <p className="alert-warning"><i className="material-icons">info</i> Try to select
             different option combinations and scroll page up and down to see the behaviour.</p>
             <div className="menus">
                 {menus}
@@ -491,7 +498,7 @@ const overflowOptions = [
 
 function MenuOverflowExample() {
     const [overflow, setOverflow] = useState('auto');
-    const [position, setPosition] = useState('anchor');
+    const [position, setPosition] = useState('auto');
 
     return (
         <Example data={codeExamples.overflow} >
@@ -507,7 +514,7 @@ function MenuOverflowExample() {
             <Menu menuButton={<MenuButton>Open menu</MenuButton>}
                 overflow={overflow} position={position} align="center">
 
-                {new Array(25).fill(0).map(
+                {new Array(40).fill(0).map(
                     (_, i) => <MenuItem key={i}>Item {i + 1}</MenuItem>)}
             </Menu>
         </Example>
@@ -521,7 +528,7 @@ function ManagingStateExample() {
 
     return (
         <Example data={codeExamples.managingState}>
-            <button ref={ref} className="btn btn-dark"
+            <button ref={ref} className="btn"
                 onClick={() => setOpen(true)}>
                 Open menu
             </button>
@@ -569,7 +576,7 @@ function MenuStateHookExample() {
 
     return (
         <Example data={codeExamples.menuStateHook}>
-            <button ref={ref} className="btn btn-dark"
+            <button ref={ref} className="btn"
                 onClick={() => openMenu()}>
                 Open menu
             </button>
@@ -589,7 +596,7 @@ function StylesPropExample() {
     return (
         <Example data={codeExamples.stylesProp} >
             <Menu menuButton={<MenuButton>Open menu</MenuButton>}
-                direction="top" align="center"
+                align="center"
                 styles={{
                     border: '2px dashed green',
                     boxShadow: 'none'
@@ -619,7 +626,7 @@ function ClassNamePropExample() {
     return (
         <Example data={codeExamples.classNameProp} >
             <Menu menuButton={<MenuButton>Open menu</MenuButton>}
-                className="my-menu" direction="top" align="center">
+                className="my-menu" align="center">
                 <MenuItem>New File</MenuItem>
                 <MenuItem>Save</MenuItem>
                 <MenuItem className={

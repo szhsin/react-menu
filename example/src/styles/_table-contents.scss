@@ -2,38 +2,51 @@
 @use 'var';
 @use 'mixins';
 
-.table-contents {
+#content .table-contents {
     white-space: nowrap;
-    a {
-        color: var.$dark-color;
+    li a {
+        display: block;
+        padding: 0.5rem 2rem;
+        color: var.$navbar-dark;
+        @include mixins.transition((color, background-color), 0.15s);
+
         &:hover {
-            color: color.scale(var.$dark-color, $lightness: 10%);
+            text-decoration: none;
+            background-color: var.$border-light;
+        }
+
+        @media (max-width: var.$bp-lg) {
+            padding: 0.5rem 1rem;
         }
     }
 
     nav {
-        @include mixins.flex-center("c", true);
-        overflow-x: hidden;
-        overflow-y: auto;
-        &:focus {
-            outline: none;
-        }
+        @include mixins.remove-focus;
+    }
+
+    &__header {
+        display: none;
     }
 
     [class^="contents-list"] {
         @include mixins.reset-list;
         li {
-            margin: 0.75rem 0;
             line-height: 1.1;
         }
     }
 
     .contents-list-lv1 {
-        font-size: 1.3rem;
+        overflow-x: hidden;
+        overflow-y: auto;
+        font-size: 1.1rem;
         font-weight: 600;
-        padding: 1.5rem 1rem;
+
+        &:hover::-webkit-scrollbar {
+            width: 6px;
+        }
+        @include mixins.scrollbar(0);
         > li {
-            margin-bottom: 1.5rem;
+            margin: 0.5rem 0;
         }
     }
 
@@ -42,11 +55,30 @@
         font-weight: 400;
     }
 
-    .contents-list-lv3 {
-        margin-left: 1rem;
+    .contents-list-lv3 a {
+        padding-left: 2.75rem;
+        @media (max-width: var.$bp-lg) {
+            padding-left: 1.75rem;
+        }
         font-size: 0.95rem;
-        a {
-            color: color.scale(var.$dark-color, $lightness: 16%);
+        &:not(:hover) {
+            color: color.scale(var.$navbar-dark, $lightness: 10%);
+        }
+    }
+
+    &--theme-dark {
+        li a {
+            color: var.$navbar-light;
+            &:hover {
+                background-color: var.$border-dark;
+            }
+        }
+        .contents-list-lv3 a:not(:hover) {
+            color: color.scale(var.$navbar-light, $lightness: -10%);
+        }
+
+        .contents-list-lv1 {
+            @include mixins.scrollbar-dark;
         }
     }
 }

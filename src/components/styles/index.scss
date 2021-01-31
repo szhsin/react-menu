@@ -12,6 +12,7 @@
 .rc-menu {
     @include mixins.reset-list;
     @include mixins.remove-focus;
+    box-sizing: border-box;
     font-size: var.$font-size;
     color: var.$color;
     background-color: var.$background-color;
@@ -82,10 +83,6 @@
                 duration: animations.$duration;
                 timing-function: ease-in-out;
             }
-        }
-
-        &--anchor {
-            display: block;
         }
 
         &--hover {
@@ -172,6 +169,7 @@
 }
 
 .rc-menu-button {
+    box-sizing: border-box;
     font-size: var.$font-size;
     font-weight: var.$font-weight;
     color: var.$color;
