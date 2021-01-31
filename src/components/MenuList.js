@@ -638,7 +638,7 @@ export const MenuList = defineName(React.memo(function MenuList({
             // and onBlur event will be fired with relatedTarget setting as null.
             // If focus has already been set to a children element, don't set focus on the menu;
             // this happens in some edge cases because of the timeout delay.
-            if (!isOpen || menuRef.current.contains(document.activeElement)) return;
+            if (!isOpen || !menuRef.current || menuRef.current.contains(document.activeElement)) return;
             if (captureFocus) menuRef.current.focus();
             if (menuItemFocus.position === FocusPositions.FIRST) {
                 hoverIndexDispatch({ type: HoverIndexActionTypes.FIRST });
