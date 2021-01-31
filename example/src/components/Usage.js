@@ -596,7 +596,7 @@ function StylesPropExample() {
     return (
         <Example data={codeExamples.stylesProp} >
             <Menu menuButton={<MenuButton>Open menu</MenuButton>}
-                direction="top" align="center"
+                align="center"
                 styles={{
                     border: '2px dashed green',
                     boxShadow: 'none'
@@ -626,7 +626,7 @@ function ClassNamePropExample() {
     return (
         <Example data={codeExamples.classNameProp} >
             <Menu menuButton={<MenuButton>Open menu</MenuButton>}
-                className="my-menu" direction="top" align="center">
+                className="my-menu" align="center">
                 <MenuItem>New File</MenuItem>
                 <MenuItem>Save</MenuItem>
                 <MenuItem className={

@@ -73,7 +73,6 @@ input[type="text"] {
 label {
     cursor: pointer;
     @include mixins.transition(color);
-    &:hover,
     &.checked {
         color: var.$primary-light;
         .rc-app--theme-dark & {
@@ -86,6 +85,7 @@ label {
         font-family: "Material Icons";
         cursor: pointer;
         @include mixins.remove-focus;
+        border: none;
 
         &::before {
             font-size: 1.25rem;

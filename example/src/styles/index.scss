@@ -75,6 +75,7 @@
     }
 
     .github-btn {
+        @include mixins.remove-focus;
         @include mixins.flex-center("c");
         @include mixins.border;
         @include mixins.transition((background-color, border-color));
@@ -138,6 +139,7 @@
     @include mixins.flex-center("m");
 
     em {
+        line-height: 1.75;
         border-radius: var.$border-radius-medium;
         background-color: var.$highlight-color;
         padding: 0.25rem 0.75rem;

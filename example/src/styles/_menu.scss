@@ -20,6 +20,7 @@
 
 .rc-menu {
     @include mixins.scrollbar;
+    white-space: nowrap;
     &__item--active {
         color: #fff !important;
     }

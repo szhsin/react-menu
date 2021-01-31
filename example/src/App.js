@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { bem, DomInfoContext, SettingContext, TocContext, ToastContext } from './utils';
 import { Header } from './components/Header';
@@ -7,12 +7,29 @@ import { Footer } from './components/Footer';
 
 
 const App = () => {
-    const [theme, setTheme] = useState('dark');
+    const [theme, setTheme] = useState(() => {
+        let theme
+        try {
+            theme = localStorage.getItem('theme');
+        } catch (err) {
+            console.log(err)
+        }
+
+        return theme === 'light' ? theme : 'dark';
+    });
+    const setAndSaveTheme = useCallback((theme) => {
+        setTheme(theme);
+        try {
+            localStorage.setItem('theme', theme);
+        } catch (err) {
+            console.log(err)
+        }
+    }, []);
     const setting = useMemo(() => ({
         isDark: theme === 'dark',
         theme,
-        setTheme
-    }), [theme]);
+        setTheme: setAndSaveTheme
+    }), [theme, setAndSaveTheme]);
     useEffect(() => {
         document.body.className = bem('rc-app', null, { theme });
     }, [theme]);

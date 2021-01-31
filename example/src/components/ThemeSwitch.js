@@ -8,7 +8,7 @@ export const ThemeSwitch = React.memo(function ThemeSwitch() {
     return (
         <input className={bem('theme-switch', null, { theme })}
             type="checkbox"
-            onChange={e => setTheme(e.target.checked ? 'dark' : null)}
+            onChange={e => setTheme(e.target.checked ? 'dark' : 'light')}
             checked={isDark} />
     );
 });

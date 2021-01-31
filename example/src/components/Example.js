@@ -76,7 +76,7 @@ export const Example = React.memo(function Example({
 
                 <ControlledMenu
                     anchorRef={anchorRef} isOpen={isOpen} isMounted={isOpen}
-                    captureFocus={false} animation={false}
+                    captureFocus={false} animation={false} role="tooltip"
                     arrow direction="top" align="center">
                     <MenuHeader>{toolTip}</MenuHeader>
                 </ControlledMenu>
