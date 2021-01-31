@@ -38,7 +38,7 @@
     "@babel/preset-react": "^7.12.10",
     "@testing-library/jest-dom": "^5.11.6",
     "@testing-library/react": "^11.2.2",
-    "@types/estree": "^0.0.45",
+    "@types/estree": "^0.0.46",
     "@types/react": "^17.0.0",
     "babel-eslint": "^10.1.0",
     "babel-jest": "^26.6.3",
