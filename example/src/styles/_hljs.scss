@@ -39,7 +39,7 @@
 .rc-app--theme-dark .hljs {
     background-color: var.$block-dark;
     &-title {
-        color: #fffeb4;
+        color: var.$primary-dark;
     }
     &-name {
         color: #4ec9b0;
