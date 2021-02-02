@@ -19,8 +19,9 @@ const dirModifier = <li><code>dir: string</code> direction in which the menu exp
                         Can be 'left', 'right', 'top', or 'bottom'.</li>;
 
 const keepOpenEventProp = <li><code>keepOpen: bool</code> assign to this property in consuming code to control
-                    whether to keep menu open after menu item is clicked. Leaving it undefined will behave
-                    in accordance with WAI-ARIA Authoring Practices.</li>;
+                    whether to keep menu open after menu item is activated. Leaving it <code>undefined</code> will behave
+                    in accordance with WAI-ARIA Authoring Practices.
+                    See <a href="https://codesandbox.io/s/react-menu-keepopen-dzscw" target="_blank" rel="noopener noreferrer">an Codesandbox example</a> for its usage.</li>;
 
 const menuModifiers = (
     <ul>
@@ -216,9 +217,9 @@ const menuPropsBase = [
         type: 'string | number',
         desc:
             <>
-                <p>Sets ID attribute on the root DOM element containing the menu.</p>
+                <p>Sets <code>id</code> attribute on the root DOM element containing the menu.</p>
                 <p>It can be helpful when you need to style a specific menu differently
-                and use ID in your CSS selectors.</p>
+                and use <code>id</code> in your CSS selectors.</p>
                 <p>It also helps increase selector specificity when overriding the default style.</p>
             </>
     },
@@ -266,9 +267,9 @@ const menuPropsBase = [
                 <p>If <code>true</code>, menu is rendered as a direct child of <code>document.body</code>.</p>
                 <p>Portal allows menu to visually “break out” of its container. Typical use cases may include:</p>
                 <ul>
-                    <li>An ancestor container is positioned and CSS overflow is set to a value other than visible.</li>
+                    <li>An ancestor container is positioned and CSS <code>overflow</code>is set to a value other than <code>visible</code>.</li>
                     <li>You have a DOM structure that creates a complex hierarchy of stacking contexts, and menu
-                    is overlapped regardless of z-index value.
+                    is overlapped regardless of <code>z-index</code>value.
                     </li>
                 </ul>
                 <p>Note: portal breaks tab sequence and may impact the accessibility of your website.</p>

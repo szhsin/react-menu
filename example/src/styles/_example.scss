@@ -110,8 +110,10 @@
             overflow-y: auto;
             border-radius: var.$border-radius-medium;
             @include mixins.border;
+            @include mixins.scrollbar;
 
             .rc-app--theme-dark & {
+                @include mixins.scrollbar-dark;
                 border-color: var.$border-dark;
             }
         }

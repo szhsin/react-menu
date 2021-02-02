@@ -61,4 +61,4 @@ export default function Example() {
 
 ## License
 
-MIT Licensed. Copyright (c) 2020 Zheng Song.
+MIT Licensed. Copyright (c) 2021 Zheng Song.

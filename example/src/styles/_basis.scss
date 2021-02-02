@@ -138,7 +138,8 @@ label {
     color: white;
     background-color: var.$primary-light;
     border: none;
-    &:hover {
+    &:hover,
+    &:active {
         background-color: var.$primary-light-lv2;
     }
     @include mixins.focus(3px);
@@ -146,7 +147,8 @@ label {
     .rc-app--theme-dark & {
         background-color: var.$primary-light-lv2;
         @include mixins.focus(3px);
-        &:hover {
+        &:hover,
+        &:active {
             background-color: var.$primary-light-lv3;
         }
     }
