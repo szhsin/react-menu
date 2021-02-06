@@ -35,7 +35,7 @@ test('Test radio items', () => {
     utils.expectMenuItemToBeChecked(queryByRole('menuitemradio', { name: 'Green' }), true);
 
     fireEvent.click(queryByRole('menuitemradio', { name: 'Blue' }));
-    expect(onChange).toHaveBeenLastCalledWith({ name: 'color', value: 'blue' });
+    expect(onChange).toHaveBeenLastCalledWith({ name: 'color', value: 'blue', checked: false });
     rerender(getMenu('blue'));
     utils.expectMenuItemToBeChecked(queryByRole('menuitemradio', { name: 'Blue' }), true);
     utils.expectMenuItemToBeChecked(queryByRole('menuitemradio', { name: 'Green' }), false);

@@ -37,11 +37,6 @@ interface Event {
     key?: string;
 }
 
-export interface ClickEvent extends Event {
-    checked: boolean;
-    keepOpen?: boolean;
-}
-
 export interface MenuCloseEvent extends Event {
     reason: CloseReason;
 }
@@ -49,6 +44,10 @@ export interface MenuCloseEvent extends Event {
 export interface RadioChangeEvent extends Event {
     name?: string;
     keepOpen?: boolean;
+}
+
+export interface ClickEvent extends RadioChangeEvent {
+    checked: boolean;
 }
 
 export interface MenuChangeEvent {
