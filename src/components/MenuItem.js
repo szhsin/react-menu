@@ -58,12 +58,11 @@ export const MenuItem = defineName(React.memo(function MenuItem({
 
         if (isRadio) {
             event.name = radioGroup.name;
-            isStopPropagation = true;
             safeCall(radioGroup.onChange, event);
-        } else {
-            event.checked = isCheckBox ? !isChecked : false;
-            isStopPropagation = safeCall(onClick, event) === false;
         }
+
+        event.checked = isCheckBox ? !isChecked : false;
+        isStopPropagation = safeCall(onClick, event) === false;
 
         eventHandlers.handleClick(
             event,

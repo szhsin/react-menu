@@ -63,7 +63,9 @@ const onClickEventObject = (
             <li><code>key: string</code> indicates the key if click is triggered by keyboard.
                 Can be {ENTER_KEY} or {SPACE_KEY}.</li>
             <li><code>checked: bool</code> indicates if the menu item is checked, only
-                 for <code>MenuItem type="checkbox"</code>.</li>
+                 for <code>MenuItem</code> <code>type="checkbox"</code>.</li>
+            <li><code>name: string</code> the <code>name</code> prop passed to the <code>MenuRadioGroup</code> when
+                the menu item is in a radio group.</li>
             {keepOpenEventProp}
         </ul>
     </>
@@ -397,8 +399,6 @@ const menuItem = {
                     <p>Event fired when the menu item is clicked. The event will then bubble up to the root
                         menu component. To stop bubbling, return <code>false</code> from the event handler.</p>
                     {onClickEventObject}
-                    <p>Please note there is no <code>onClick</code> event on menu items under
-                    a {radioGroupLink}. Use <code>onChange</code> event on the group instead.</p>
                 </>
         }
     ]
@@ -545,7 +545,7 @@ const menuRadioGroup = {
                     <p>Event fired when a children menu item is clicked (selected).</p>
                     <p>Event object properties:</p>
                     <ul>
-                        <li><code>name: string</code> the name prop passed to the <code>MenuRadioGroup</code> on which this event occurred.</li>
+                        <li><code>name: string</code> the <code>name</code> prop passed to the <code>MenuRadioGroup</code> on which this event occurred.</li>
                         <li><code>value: any</code> the value prop passed to the <code>MenuItem</code> being clicked.</li>
                         <li><code>key: string</code> indicates the key if click is triggered by keyboard.
                         Can be {ENTER_KEY} or {SPACE_KEY}.</li>
@@ -650,6 +650,12 @@ const controlledMenu = {
                     <p>Supports ref created by <code>React.createRef</code> or <code>useRef</code> Hook.
                      Doesn't support callback ref.</p>
                 </>
+        },
+        {
+            name: 'captureFocus',
+            type: 'boolean',
+            defaultVal: 'true',
+            desc: <p>If <code>true</code>, the menu list element will gain focus after menu is open.</p>
         },
         {
             name: 'isOpen',
