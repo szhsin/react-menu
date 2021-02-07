@@ -1,4 +1,3 @@
-import 'highlight.js/styles/agate.css';
 import '@szhsin/react-menu/dist/index.css';
 import './styles/index.scss';
 

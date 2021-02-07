@@ -1,4 +1,3 @@
-import './components/styles/index.scss';
 export { applyHOC, applyStatics, useMenuState } from './utils';
 export { MenuButton } from './components/MenuButton';
 export { Menu } from './components/Menu';

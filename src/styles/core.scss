@@ -1,0 +1,96 @@
+@use 'var';
+@use 'mixins';
+
+.rc-menu-container {
+    position: relative;
+    width: 0px;
+    height: 0px;
+}
+
+.rc-menu {
+    @include mixins.reset-list;
+    @include mixins.remove-focus;
+    display: none;
+    box-sizing: border-box;
+    width: max-content;
+    position: absolute;
+    z-index: 100;
+    border: 1px solid var.$border-color;
+    background-color: var.$background-color;
+
+    &--open,
+    &--closing {
+        display: block;
+    }
+
+    &__arrow {
+        box-sizing: border-box;
+        width: var.$arrow-size;
+        height: var.$arrow-size;
+        background-color: var.$background-color;
+        border: 1px solid transparent;
+        border-left-color: var.$border-color;
+        border-top-color: var.$border-color;
+        position: absolute;
+        z-index: -1;
+
+        &--dir-left {
+            right: var.$arrow-pos;
+            transform: translateY(-50%) rotate(135deg);
+        }
+
+        &--dir-right {
+            left: var.$arrow-pos;
+            transform: translateY(-50%) rotate(-45deg);
+        }
+
+        &--dir-top {
+            bottom: var.$arrow-pos;
+            transform: translateX(-50%) rotate(-135deg);
+        }
+
+        &--dir-bottom {
+            top: var.$arrow-pos;
+            transform: translateX(-50%) rotate(45deg);
+        }
+    }
+
+    &__item {
+        @include mixins.remove-focus;
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+
+        &--hover {
+            background-color: var.$background-color-hover;
+        }
+
+        &--focusable {
+            cursor: default;
+            background-color: inherit;
+        }
+
+        &--disabled {
+            cursor: default;
+            color: var.$color-disabled;
+        }
+    }
+
+    &__submenu {
+        position: relative;
+    }
+
+    &__radio-group {
+        @include mixins.reset-list;
+    }
+
+    &__divider {
+        height: 1px;
+        margin: 0.5rem 0;
+        background-color: var.$color-divider;
+    }
+}
+
+.rc-menu-button {
+    box-sizing: border-box;
+}

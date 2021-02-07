@@ -14,15 +14,18 @@
     "node": ">=10"
   },
   "scripts": {
-    "build": "npm run types && microbundle-crl --no-compress --format cjs --css-modules false --sourcemap false",
-    "start": "microbundle-crl watch --no-compress --format modern,cjs --css-modules false --sourcemap false",
-    "prepare": "run-s build",
+    "bundle": "microbundle-crl --no-compress --css-modules false --sourcemap false",
+    "watch": "microbundle-crl watch --no-compress --format modern,cjs --css-modules false --sourcemap false",
+    "clean": "rm -rf dist && mkdir -p dist",
+    "start": "run-p \"css -- --watch\" watch",
+    "build": "run-s clean lint types css \"bundle -- --format modern\" \"bundle -- --format cjs\"",
     "test": "jest",
     "test:watch": "jest --watch --verbose",
     "test:coverage": "jest --coverage=true",
     "lint": "eslint .",
     "dtslint": "dtslint --localTs node_modules/typescript/lib types",
-    "types": "npm run dtslint && mkdir -p dist && cp -f types/index.d.ts dist/",
+    "css": "sass src/styles:dist --no-source-map",
+    "types": "npm run dtslint && cp -f types/index.d.ts dist/",
     "tsc": "cd types && npx tsc",
     "example": "npm start --prefix example",
     "predeploy": "cd example && npm run build",
@@ -34,7 +37,7 @@
     "react-dom": ">=16.8.0"
   },
   "devDependencies": {
-    "@babel/preset-env": "^7.12.16",
+    "@babel/preset-env": "^7.13.5",
     "@babel/preset-react": "^7.12.13",
     "@testing-library/jest-dom": "^5.11.9",
     "@testing-library/react": "^11.2.5",
@@ -55,10 +58,10 @@
     "prop-types": "^15.7.2",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
-    "react-scripts": "^4.0.2",
+    "react-scripts": "^4.0.3",
     "react-test-renderer": "^17.0.1",
-    "sass": "^1.32.7",
-    "typescript": "^4.1.5"
+    "sass": "^1.32.8",
+    "typescript": "^4.2.2"
   },
   "files": [
     "dist"
