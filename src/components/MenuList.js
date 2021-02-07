@@ -207,7 +207,7 @@ export const MenuList = defineName(React.memo(function MenuList({
         const containerRect = containerRef.current.getBoundingClientRect();
 
         const viewportWidth = document.documentElement.clientWidth;
-        const viewportHeight = document.documentElement.clientHeight;
+        const viewportHeight = window.innerHeight;
 
         // For left and top, overflows are negative value.
         // For right and bottom, overflows are positive value.
@@ -645,7 +645,7 @@ export const MenuList = defineName(React.memo(function MenuList({
             } else if (menuItemFocus.position === FocusPositions.LAST) {
                 hoverIndexDispatch({ type: HoverIndexActionTypes.LAST });
             }
-        }, 100);
+        }, animation ? 150 : 100);
 
         return () => clearTimeout(id);
     }, [animation, captureFocus, isOpen, menuItemFocus]);
