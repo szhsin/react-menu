@@ -37,7 +37,7 @@
     "@babel/preset-env": "^7.12.11",
     "@babel/preset-react": "^7.12.10",
     "@testing-library/jest-dom": "^5.11.9",
-    "@testing-library/react": "^11.2.3",
+    "@testing-library/react": "^11.2.5",
     "@types/estree": "^0.0.46",
     "@types/react": "^17.0.1",
     "babel-eslint": "^10.1.0",
