@@ -35,7 +35,7 @@
   },
   "devDependencies": {
     "@babel/preset-env": "^7.12.13",
-    "@babel/preset-react": "^7.12.10",
+    "@babel/preset-react": "^7.12.13",
     "@testing-library/jest-dom": "^5.11.9",
     "@testing-library/react": "^11.2.3",
     "@types/estree": "^0.0.46",
