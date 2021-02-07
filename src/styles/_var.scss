@@ -1,31 +1,16 @@
 @use 'sass:color';
 
-$font-size: 1rem !default;
-
 $color: #212529 !default;
-
+$color-active: #fff !default;
 $color-disabled: #aaa !default;
-
 $color-divider: rgba(0, 0, 0, 0.12) !default;
-
 $color-header: #888 !default;
 
-$border-color: color.change($color, $alpha: 0.5) !default;
-
 $background-color: #fff !default;
-
 $background-color-hover: color.scale($background-color, $lightness: -8%) !default;
-
-$btn-background-color-active: color.scale($background-color-hover, $lightness: -10%) !default;
-
-$color-active: #fff !default;
-
 $background-color-active: #007bff !default;
 
-$font-weight: 400 !default;
-
-$arrow-size: 0.75rem !default;
-
+$arrow-size: 0.75rem;
 $arrow-pos: -($arrow-size / 2);
 
-$arrow-border-color: rgba(0, 0, 0, 0.1) !default;
+$border-color: rgba(0, 0, 0, 0.1) !default;

@@ -2,6 +2,8 @@
 @use 'mixins';
 
 .hljs {
+    display: block;
+    overflow-x: auto;
     font-size: 90%;
     background-color: #f2f2f3;
     color: inherit;
