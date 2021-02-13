@@ -29,18 +29,23 @@ export const Keys = Object.freeze({
 });
 
 export const HoverIndexActionTypes = Object.freeze({
-    'RESET': 0,
-    'SET': 1,
-    'UNSET': 2,
-    'INCREASE': 3,
-    'DECREASE': 4,
-    'FIRST': 5,
-    'LAST': 6
+    'RESET': 'HOVER_INDEX_RESET',
+    'SET': 'HOVER_INDEX_SET',
+    'UNSET': 'HOVER_INDEX_UNSET',
+    'INCREASE': 'HOVER_INDEX_INCREASE',
+    'DECREASE': 'HOVER_INDEX_DECREASE',
+    'FIRST': 'HOVER_INDEX_FIRST',
+    'LAST': 'HOVER_INDEX_LAST'
+});
+
+export const SubmenuActionTypes = Object.freeze({
+    'OPEN': 'SUBMENU_OPEN',
+    'CLOSE': 'SUBMENU_CLOSE'
 });
 
 export const CloseReason = Object.freeze({
     'CLICK': 'click',
     'CANCEL': 'cancel',
     'BLUR': 'blur',
-    'SCROLL':'scroll'
+    'SCROLL': 'scroll'
 });

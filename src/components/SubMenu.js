@@ -36,7 +36,7 @@ export const SubMenu = defineName(React.memo(function SubMenu({
     ...restProps }) {
 
     const { isMounted, isOpen, menuItemFocus, openMenu, closeMenu } = useMenuState(keepMounted);
-    const { isParentOpen, hoverIndex, hoverIndexDispatch } = useContext(MenuListContext);
+    const { isParentOpen, hoverIndex, dispatch } = useContext(MenuListContext);
     const { debugging } = useContext(SettingsContext);
     const isHovering = hoverIndex === index;
     const isDisabled = Boolean(disabled);
@@ -57,7 +57,7 @@ export const SubMenu = defineName(React.memo(function SubMenu({
 
     const handleMouseEnter = () => {
         if (isDisabled) return;
-        hoverIndexDispatch({ type: HoverIndexActionTypes.SET, index });
+        dispatch({ type: HoverIndexActionTypes.SET, index });
         timeoutId.current = setTimeout(() => {
             timeoutId.current = null;
             if (isParentOpen) openMenu();
@@ -67,7 +67,7 @@ export const SubMenu = defineName(React.memo(function SubMenu({
     const handleMouseLeave = () => {
         clearTimeout(timeoutId.current);
         if (!isOpen) {
-            hoverIndexDispatch({ type: HoverIndexActionTypes.UNSET, index });
+            dispatch({ type: HoverIndexActionTypes.UNSET, index });
         }
     }
 
@@ -118,7 +118,7 @@ export const SubMenu = defineName(React.memo(function SubMenu({
         // It handles situation such as clicking on a sibling disabled menu item
         if (!e.currentTarget.contains(relatedTarget)) {
             closeMenu();
-            hoverIndexDispatch({ type: HoverIndexActionTypes.UNSET, index });
+            dispatch({ type: HoverIndexActionTypes.UNSET, index });
         } else if (itemRef.current.contains(relatedTarget)) {
             // This handles clicking on submenu item when it's open
             // First close the submenu and then let subsequent onClick event re-open it

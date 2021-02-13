@@ -13,7 +13,7 @@ import {
 // This hook includes some common stateful logic in MenuItem and FocusableItem
 export const useItemState = (isDisabled, index) => {
     const ref = useRef(null);
-    const { isParentOpen, hoverIndex, hoverIndexDispatch } = useContext(MenuListContext);
+    const { isParentOpen, hoverIndex, dispatch } = useContext(MenuListContext);
     const isHovering = hoverIndex === index;
 
     useEffect(() => {
@@ -30,11 +30,11 @@ export const useItemState = (isDisabled, index) => {
         isHovering,
 
         setHover: useCallback(() => {
-            if (!isDisabled) hoverIndexDispatch({ type: HoverIndexActionTypes.SET, index });
-        }, [isDisabled, hoverIndexDispatch, index]),
+            if (!isDisabled) dispatch({ type: HoverIndexActionTypes.SET, index });
+        }, [isDisabled, dispatch, index]),
 
         unsetHover: useCallback(() => {
-            hoverIndexDispatch({ type: HoverIndexActionTypes.UNSET, index });
-        }, [hoverIndexDispatch, index])
+            dispatch({ type: HoverIndexActionTypes.UNSET, index });
+        }, [dispatch, index])
     };
 }
