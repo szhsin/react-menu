@@ -46,7 +46,7 @@ test('Open and close submenu, and activate submenu item with mouse and keyboard'
 
     // Hovering an item in the parent menu list will close submenu
     fireEvent.mouseEnter(utils.queryMenuItem('One'));
-    utils.expectMenuToBeOpen(false, submenuOptions);
+    await waitFor(() => utils.expectMenuToBeOpen(false, submenuOptions));
     expect(onChange).toHaveBeenLastCalledWith({ open: false });
     expect(utils.queryMenuItem('One')).toHaveFocus();
 

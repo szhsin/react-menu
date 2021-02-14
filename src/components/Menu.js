@@ -32,7 +32,6 @@ export const Menu = React.memo(function Menu({
         isMounted, isOpen, menuItemFocus,
         openMenu, closeMenu
     } = useMenuState(keepMounted);
-    useMenuChange(onChange, isOpen);
 
     const skipClick = useRef(false);
     const buttonRef = useRef(null);
@@ -105,6 +104,8 @@ export const Menu = React.memo(function Menu({
         onClick,
         handleClose,
         skipClick);
+
+    useMenuChange(onChange, isOpen);
 
     return (
         <React.Fragment>
