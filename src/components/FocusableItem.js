@@ -27,7 +27,9 @@ export const FocusableItem = defineName(React.memo(function FocusableItem({
         ref,
         isHovering,
         setHover,
-        unsetHover
+        onBlur,
+        onMouseEnter,
+        onMouseLeave
     } = useItemState(isDisabled, index);
     const { handleClose } = useContext(EventHandlersContext);
 
@@ -47,18 +49,11 @@ export const FocusableItem = defineName(React.memo(function FocusableItem({
         closeMenu: handleClose
     });
 
-    const handleBlur = e => {
-        // Focus has moved out of the entire FocusableItem
-        // It handles situation such as clicking on a sibling disabled menu item
-        if (!e.currentTarget.contains(e.relatedTarget)) {
-            unsetHover(e);
-        }
-    }
-
     const handlers = attachHandlerProps({
-        onMouseEnter: setHover,
+        onMouseEnter,
+        onMouseLeave: e => onMouseLeave(e, true),
         onFocus: setHover,
-        onBlur: handleBlur
+        onBlur
     }, restProps);
 
     return (

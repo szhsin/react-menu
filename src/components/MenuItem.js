@@ -34,13 +34,14 @@ export const MenuItem = defineName(React.memo(function MenuItem({
     const {
         ref,
         isHovering,
-        setHover,
-        unsetHover
+        onBlur,
+        onMouseEnter,
+        onMouseLeave
     } = useItemState(isDisabled, index);
     const eventHandlers = useContext(EventHandlersContext);
     const radioGroup = useContext(RadioGroupContext);
     const {
-        isActive, onKeyUp, onBlur,
+        isActive, onKeyUp, onBlur: activeStateBlur,
         ...activeStateHandlers
     } = useActiveState(isHovering, isDisabled);
     const isRadio = type === 'radio';
@@ -88,12 +89,8 @@ export const MenuItem = defineName(React.memo(function MenuItem({
     }
 
     const handleBlur = e => {
+        activeStateBlur(e);
         onBlur(e);
-
-        // It handles situation such as clicking on a sibling disabled menu item
-        if (!e.currentTarget.contains(e.relatedTarget)) {
-            unsetHover(e);
-        }
     }
 
     const modifiers = Object.freeze({
@@ -107,8 +104,8 @@ export const MenuItem = defineName(React.memo(function MenuItem({
 
     const handlers = attachHandlerProps({
         ...activeStateHandlers,
-        onMouseEnter: setHover,
-        onMouseLeave: unsetHover,
+        onMouseEnter,
+        onMouseLeave,
         onKeyUp: handleKeyUp,
         onBlur: handleBlur,
         onClick: () => handleClick()

@@ -174,6 +174,23 @@ test('keyDown on one item and keyUp on another will not trigger click event', ()
     expect(onClick).toHaveBeenLastCalledWith({ key: 'Enter', value: 'Middle', checked: false })
 });
 
+test('MenuItem keeps hover and active states after focusing something inside it', () => {
+    utils.renderMenu(undefined, { children: <button>Click</button> });
+    utils.clickMenuButton();
+
+    const menuItem = utils.queryMenuItem('Click');
+    fireEvent.mouseEnter(menuItem);
+    fireEvent.pointerDown(menuItem);
+    expect(menuItem).toHaveFocus();
+    utils.expectMenuItemToBeHover(menuItem, true);
+    utils.expectMenuItemToBeActive(menuItem, true);
+
+    queryByRole('button', { name: 'Click' }).focus();
+    expect(menuItem).not.toHaveFocus();
+    utils.expectMenuItemToBeHover(menuItem, true);
+    utils.expectMenuItemToBeActive(menuItem, true);
+});
+
 test('Disabled menu item', () => {
     const onClick = jest.fn();
     utils.renderMenu({ onClick }, { disabled: true });

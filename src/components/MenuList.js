@@ -23,6 +23,7 @@ import {
     Keys,
     FocusPositions,
     HoverIndexActionTypes,
+    SubmenuActionTypes,
     useLayoutEffect
 } from '../utils';
 
@@ -62,7 +63,17 @@ export const MenuList = defineName(React.memo(function MenuList({
     const arrowRef = useRef(null);
     const menuItemsCount = useRef(0);
     const prevOpen = useRef(isOpen);
-    const [hoverIndex, hoverIndexDispatch] = useReducer(hoverIndexReducer, initialHoverIndex);
+    const [{ hoverIndex, openSubmenuCount }, dispatch] = useReducer(reducer, {
+        hoverIndex: initialHoverIndex,
+        openSubmenuCount: 0
+    });
+
+    function reducer({ hoverIndex, openSubmenuCount }, action) {
+        return {
+            hoverIndex: hoverIndexReducer(hoverIndex, action),
+            openSubmenuCount: submenuCountReducer(openSubmenuCount, action)
+        }
+    }
 
     function hoverIndexReducer(state, { type, index }) {
         switch (type) {
@@ -97,7 +108,7 @@ export const MenuList = defineName(React.memo(function MenuList({
                     ? menuItemsCount.current - 1 : initialHoverIndex;
 
             default:
-                throw new Error('hoverIndexReducer: unknown action type');
+                return state;
         }
     }
 
@@ -160,22 +171,22 @@ export const MenuList = defineName(React.memo(function MenuList({
 
         switch (e.key) {
             case Keys.HOME:
-                hoverIndexDispatch({ type: HoverIndexActionTypes.FIRST });
+                dispatch({ type: HoverIndexActionTypes.FIRST });
                 handled = true;
                 break;
 
             case Keys.END:
-                hoverIndexDispatch({ type: HoverIndexActionTypes.LAST });
+                dispatch({ type: HoverIndexActionTypes.LAST });
                 handled = true;
                 break;
 
             case Keys.UP:
-                hoverIndexDispatch({ type: HoverIndexActionTypes.DECREASE });
+                dispatch({ type: HoverIndexActionTypes.DECREASE });
                 handled = true;
                 break;
 
             case Keys.DOWN:
-                hoverIndexDispatch({ type: HoverIndexActionTypes.INCREASE });
+                dispatch({ type: HoverIndexActionTypes.INCREASE });
                 handled = true;
                 break;
 
@@ -626,7 +637,7 @@ export const MenuList = defineName(React.memo(function MenuList({
 
     useEffect(() => {
         if (!isOpen) {
-            hoverIndexDispatch({ type: HoverIndexActionTypes.RESET });
+            dispatch({ type: HoverIndexActionTypes.RESET });
             if (!animation) setMaxHeight(-1);
         }
 
@@ -641,20 +652,22 @@ export const MenuList = defineName(React.memo(function MenuList({
             if (!isOpen || !menuRef.current || menuRef.current.contains(document.activeElement)) return;
             if (captureFocus) menuRef.current.focus();
             if (menuItemFocus.position === FocusPositions.FIRST) {
-                hoverIndexDispatch({ type: HoverIndexActionTypes.FIRST });
+                dispatch({ type: HoverIndexActionTypes.FIRST });
             } else if (menuItemFocus.position === FocusPositions.LAST) {
-                hoverIndexDispatch({ type: HoverIndexActionTypes.LAST });
+                dispatch({ type: HoverIndexActionTypes.LAST });
             }
         }, animation ? 150 : 100);
 
         return () => clearTimeout(id);
     }, [animation, captureFocus, isOpen, menuItemFocus]);
 
+    const isSubmenuOpen = openSubmenuCount > 0;
     const context = useMemo(() => ({
         isParentOpen: isOpen,
         hoverIndex,
-        hoverIndexDispatch
-    }), [isOpen, hoverIndex]);
+        isSubmenuOpen,
+        dispatch
+    }), [isOpen, hoverIndex, isSubmenuOpen]);
 
     const modifiers = {
         open: isOpen,
@@ -715,3 +728,14 @@ export const MenuList = defineName(React.memo(function MenuList({
         </React.Fragment>
     );
 }), 'MenuList');
+
+function submenuCountReducer(state, { type }) {
+    switch (type) {
+        case SubmenuActionTypes.OPEN:
+            return state + 1;
+        case SubmenuActionTypes.CLOSE:
+            return Math.max(state - 1, 0);
+        default:
+            return state;
+    }
+}

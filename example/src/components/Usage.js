@@ -200,7 +200,7 @@ function RadioGroupExample() {
 
 function CheckBoxExample() {
     const [isBold, setBold] = useState(true);
-    const [isItalic, setItalic] = useState(false);
+    const [isItalic, setItalic] = useState(true);
     const [isUnderline, setUnderline] = useState(false);
 
     return (
@@ -252,7 +252,7 @@ function HeaderAndDividerExample() {
 function CombinedExample() {
     const [textColor, setTextColor] = useState('red');
     const [isBold, setBold] = useState(true);
-    const [isItalic, setItalic] = useState(false);
+    const [isItalic, setItalic] = useState(true);
     const [isUnderline, setUnderline] = useState(false);
     const { isDark } = useContext(SettingContext);
 
@@ -374,9 +374,8 @@ function FocusableItemExample() {
                 align="center" onChange={e => e.open && setFilter('')}>
                 <FocusableItem>
                     {({ ref }) => (
-                        <input ref={ref} className="form-control" type="text"
-                            placeholder="Type to filter" value={filter}
-                            onChange={e => setFilter(e.target.value)} />
+                        <input ref={ref} type="text" placeholder="Type to filter"
+                            value={filter} onChange={e => setFilter(e.target.value)} />
                     )}
                 </FocusableItem>
                 {
