@@ -1,6 +1,7 @@
 import React from 'react';
 import { Menu } from '../Menu';
 import { MenuItem } from '../MenuItem';
+import { FocusableItem } from '../FocusableItem';
 import { MenuButton } from '../MenuButton';
 import { SubMenu } from '../SubMenu';
 import { render, fireEvent, waitFor } from '@testing-library/react';
@@ -128,6 +129,52 @@ test('Open and close submenu, and activate submenu item with mouse and keyboard'
     expect(onItemClick).toHaveBeenLastCalledWith({ value: menuItemText, key: ' ', checked: false });
     expect(onClick).toHaveBeenLastCalledWith({ value: menuItemText, key: ' ', checked: false });
     utils.expectMenuToBeOpen(false, menuOptions);
+});
+
+test('Delay closing submenu when hovering items in parent menu list', async () => {
+    const { container } = render(
+        <Menu menuButton={<MenuButton>Menu</MenuButton>} animation={false}>
+            <MenuItem disabled>Disabled</MenuItem>
+            <SubMenu label="Submenu1">
+                <MenuItem>1</MenuItem>
+                <MenuItem>2</MenuItem>
+            </SubMenu>
+            <SubMenu label="Submenu2">
+                <MenuItem>3</MenuItem>
+                <MenuItem>4</MenuItem>
+            </SubMenu>
+            <MenuItem>One</MenuItem>
+            <MenuItem>Two</MenuItem>
+            <FocusableItem>
+                {({ ref }) => <input ref={ref} type="text" />}
+            </FocusableItem>
+        </Menu>
+    );
+
+    const submenuOptions1 = { name: 'Submenu1', container };
+    const submenuOptions2 = { name: 'Submenu2', container };
+    utils.clickMenuButton();
+    fireEvent.click(utils.queryMenuItem('Submenu1'));
+    utils.expectMenuToBeOpen(true, submenuOptions1);
+
+    const quickEnterLeave = async (item) => {
+        fireEvent.mouseEnter(item);
+        await waitFor(() => new Promise(resolve => setTimeout(resolve, 100)));
+        fireEvent.mouseLeave(item);
+        utils.expectMenuToBeOpen(true, submenuOptions1);
+    }
+
+    await quickEnterLeave(utils.queryMenuItem('Submenu2'));
+    await quickEnterLeave(utils.queryMenuItem('Two'));
+    await quickEnterLeave(container.querySelector('.rc-menu__item--focusable'));
+
+    fireEvent.mouseEnter(utils.queryMenuItem('Disabled'));
+    await waitFor(() => new Promise(resolve => setTimeout(resolve, 500)));
+    utils.expectMenuToBeOpen(true, submenuOptions1);
+
+    fireEvent.mouseEnter(utils.queryMenuItem('Submenu2'));
+    await waitFor(() => utils.expectMenuToBeOpen(true, submenuOptions2));
+    utils.expectMenuToBeOpen(false, submenuOptions1);
 });
 
 test('Submenu is disabled', () => {
