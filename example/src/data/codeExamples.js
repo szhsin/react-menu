@@ -270,7 +270,7 @@ export const checkBox = {
 
     source:
         `const [isBold, setBold] = useState(true);
-const [isItalic, setItalic] = useState(false);
+const [isItalic, setItalic] = useState(true);
 const [isUnderline, setUnderline] = useState(false);
 
 <Menu menuButton={<MenuButton>Text style</MenuButton>}>
@@ -299,7 +299,7 @@ import '@szhsin/react-menu/dist/index.css';
 
 export default function Example() {
     const [isBold, setBold] = useState(true);
-    const [isItalic, setItalic] = useState(false);
+    const [isItalic, setItalic] = useState(true);
     const [isUnderline, setUnderline] = useState(false);
 
     return (
@@ -406,7 +406,7 @@ export default function Example() {
 
     const [textColor, setTextColor] = useState('red');
     const [isBold, setBold] = useState(true);
-    const [isItalic, setItalic] = useState(false);
+    const [isItalic, setItalic] = useState(true);
     const [isUnderline, setUnderline] = useState(false);
 
     return (
@@ -576,9 +576,8 @@ export const focusableItem = {
     onChange={e => e.open && setFilter('')}>
     <FocusableItem>
         {({ ref }) => (
-            <input ref={ref} className="form-control" type="text"
-                placeholder="Type to filter" value={filter}
-                onChange={e => setFilter(e.target.value)} />
+            <input ref={ref} type="text" placeholder="Type to filter"
+                value={filter} onChange={e => setFilter(e.target.value)} />
         )}
     </FocusableItem>
     {
@@ -608,9 +607,8 @@ export default function Example() {
             onChange={e => e.open && setFilter('')}>
             <FocusableItem>
                 {({ ref }) => (
-                    <input ref={ref} className="form-control" type="text"
-                        placeholder="Type to filter" value={filter}
-                        onChange={e => setFilter(e.target.value)} />
+                    <input ref={ref} type="text" placeholder="Type to filter"
+                        value={filter} onChange={e => setFilter(e.target.value)} />
                 )}
             </FocusableItem>
             {

@@ -14,7 +14,7 @@ export const bem = (block, element, modifiers = {}) => {
     return className;
 }
 
-export const version = '1.6.0';
+export const version = '1.6.1';
 export const build = '0';
 export const DomInfoContext = React.createContext({});
 export const SettingContext = React.createContext({ theme: 'dark' });
