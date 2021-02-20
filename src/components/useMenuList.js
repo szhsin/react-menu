@@ -16,6 +16,8 @@ export const useMenuList = (
     menuListProps,
     id,
     animation,
+    boundingBoxRef,
+    boundingBoxPadding,
     debugging,
     viewScroll,
     portal,
@@ -27,9 +29,11 @@ export const useMenuList = (
 
     const settings = useMemo(() => ({
         animation,
+        boundingBoxRef,
+        boundingBoxPadding,
         debugging,
         viewScroll
-    }), [animation, debugging, viewScroll]);
+    }), [animation, boundingBoxRef, boundingBoxPadding, debugging, viewScroll]);
 
     const eventHandlers = useMemo(() => ({
         handleClick(event, isStopPropagation, isCheckorRadio) {
