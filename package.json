@@ -1,6 +1,6 @@
 {
   "name": "@szhsin/react-menu",
-  "version": "1.6.1",
+  "version": "1.7.0",
   "description": "React component for building accessible menu, dropdown, submenu, context menu and more.",
   "author": "Zheng Song",
   "license": "MIT",
@@ -39,12 +39,12 @@
     "@testing-library/jest-dom": "^5.11.9",
     "@testing-library/react": "^11.2.5",
     "@types/estree": "^0.0.46",
-    "@types/react": "^17.0.1",
+    "@types/react": "^17.0.2",
     "babel-eslint": "^10.1.0",
     "babel-jest": "^26.6.3",
     "cross-env": "^7.0.3",
     "dtslint": "^4.0.7",
-    "eslint": "^7.19.0",
+    "eslint": "^7.20.0",
     "eslint-plugin-react": "^7.22.0",
     "eslint-plugin-react-hooks": "^4.2.0",
     "gh-pages": "^2.2.0",
@@ -74,11 +74,5 @@
     "radio button",
     "accessibility",
     "wai-aria"
-  ],
-  "jest": {
-    "testPathIgnorePatterns": [
-      "/node_modules/",
-      "/__tests__/utils/"
-    ]
-  }
+  ]
 }

@@ -1,8 +1,8 @@
 import React from 'react';
-import { applyHOC, applyStatics } from '../../../utils';
-import { Menu } from '../../Menu';
-import { MenuItem } from '../../MenuItem';
-import { MenuButton } from '../../MenuButton';
+import { applyHOC, applyStatics } from '../../utils';
+import { Menu } from '../../components/Menu';
+import { MenuItem } from '../../components/MenuItem';
+import { MenuButton } from '../../components/MenuButton';
 import { screen, render, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 
