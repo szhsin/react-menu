@@ -16,7 +16,6 @@ code {
     border-radius: var.$border-radius-medium;
     padding: 0.2rem 0.4rem;
     font-size: 0.875rem;
-    white-space: nowrap;
     @include mixins.transition;
     .rc-app--theme-dark & {
         background-color: var.$code-dark;
@@ -28,10 +27,6 @@ ul,
 pre {
     margin-top: 0;
     margin-bottom: 1rem;
-}
-
-pre code {
-    white-space: inherit;
 }
 
 a {
@@ -65,7 +60,9 @@ input[type="text"] {
     @include mixins.border($transition: false);
     @include mixins.transition((border-color, box-shadow));
     .rc-app--theme-dark & {
-        background-color: #e3e3e3;
+        color: inherit;
+        background-color: var.$background-dark;
+        border-color: var.$border-dark;
         @include mixins.focus(2px, $color: var.$focus-dark);
     }
 }
@@ -116,9 +113,11 @@ label {
 
     &:hover {
         background-color: var.$btn-light-lv2;
+        border-color: var.$border-hover-light;
     }
     &:active {
         background-color: var.$btn-light-lv3;
+        border-color: var.$focus-light;
     }
 
     .rc-app--theme-dark & {
@@ -127,9 +126,11 @@ label {
         @include mixins.focus($color: var.$focus-dark);
         &:hover {
             background-color: var.$btn-dark-lv2;
+            border-color: var.$border-hover-dark;
         }
         &:active {
             background-color: var.$block-dark;
+            border-color: var.$focus-dark;
         }
     }
 }

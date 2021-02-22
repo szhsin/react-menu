@@ -2,7 +2,8 @@ import React, {
     useRef,
     useState,
     useLayoutEffect,
-    useContext
+    useContext,
+    useEffect
 } from 'react';
 import {
     Menu,
@@ -16,7 +17,7 @@ import {
     ControlledMenu,
     useMenuState
 } from '@szhsin/react-menu';
-import { SettingContext } from '../utils';
+import { SettingContext, DomInfoContext } from '../utils';
 import { TableContents } from './TableContents';
 import { Example } from './Example';
 import { HashHeading } from './HashHeading';
@@ -54,6 +55,7 @@ export const Usage = React.memo(function Usage() {
                 <GroupingSection data={codeExamples.menuOptions} />
                 <MenuPlacementExample />
                 <MenuOverflowExample />
+                <BoundingBoxExample />
 
                 <GroupingSection data={codeExamples.menuButton} />
                 <OpenStateExample />
@@ -233,7 +235,8 @@ function HeaderAndDividerExample() {
 
     return (
         <Example data={codeExamples.headerAndDivider} >
-            <Menu menuButton={<MenuButton>Open menu</MenuButton>}>
+            <Menu menuButton={<MenuButton>Open menu</MenuButton>}
+                boundingBoxPadding={`${useContext(DomInfoContext).navbarHeight} 0 0 0`}>
                 <MenuItem>New File</MenuItem>
                 <MenuItem>Save</MenuItem>
                 <MenuItem>Close Window</MenuItem>
@@ -446,10 +449,12 @@ function MenuPlacementExample() {
     const [align, setAlign] = useState('center');
     const [position, setPosition] = useState('anchor');
     const [viewScroll, setViewScroll] = useState('auto');
+    const { navbarHeight } = useContext(DomInfoContext);
 
     const menus = ['right', 'top', 'bottom', 'left'].map(direction => (
         <Menu menuButton={<MenuButton>{direction}</MenuButton>}
             key={direction} direction={direction}
+            boundingBoxPadding={`${navbarHeight} 0 0 0`}
             align={align} position={position} viewScroll={viewScroll}
             arrow={display === 'arrow'}
             offsetX={display === 'offset' &&
@@ -518,6 +523,47 @@ function MenuOverflowExample() {
             </Menu>
         </Example>
     );
+}
+
+function BoundingBoxExample() {
+    const ref = useRef(null);
+    const leftAnchor = useRef(null);
+    const rightAnchor = useRef(null);
+    const [isOpen, setOpen] = useState(false);
+    useEffect(() => {
+        setOpen(true);
+    }, []);
+
+    const tooltipProps = {
+        isOpen,
+        captureFocus: false,
+        animation: false,
+        arrow: true,
+        role: 'tooltip',
+        align: 'center',
+        viewScroll: 'auto',
+        position: 'anchor',
+        boundingBoxRef: ref,
+        boundingBoxPadding: '1 8 1 1'
+    };
+
+    return (
+        <Example data={codeExamples.boundingBox} ref={ref}>
+            <div className="bounding-box">
+                <div className="anchor" ref={leftAnchor} />
+                <ControlledMenu {...tooltipProps}
+                    anchorRef={leftAnchor} direction="top">
+                    <MenuHeader>I can flip if you scroll this block</MenuHeader>
+                </ControlledMenu>
+
+                <div className="anchor" ref={rightAnchor} />
+                <ControlledMenu {...tooltipProps}
+                    anchorRef={rightAnchor} direction="right">
+                    <MenuHeader>I'm a tooltip built with React-Menu</MenuHeader>
+                </ControlledMenu>
+            </div>
+        </Example>
+    )
 }
 
 function ManagingStateExample() {

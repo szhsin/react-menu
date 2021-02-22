@@ -835,6 +835,52 @@ const [position, setPosition] = useState('auto');
 </Menu>`
 };
 
+export const boundingBox = {
+    id: 'bounding-box',
+
+    title: 'Bounding box',
+
+    desc: <p>Normally menu positions itself within the browser viewport. However, you can specify a
+    container in the page as the bounding box for a menu using the <code>boundingBoxRef</code> prop.
+    Menu will try to position itself within that container.</p>,
+
+    source:
+        `const ref = useRef(null);
+const leftAnchor = useRef(null);
+const rightAnchor = useRef(null);
+const [isOpen, setOpen] = useState(false);
+useEffect(() => {
+    setOpen(true);
+}, []);
+
+const tooltipProps = {
+    isOpen,
+    captureFocus: false,
+    animation: false,
+    arrow: true,
+    role: 'tooltip',
+    align: 'center',
+    viewScroll: 'auto',
+    position: 'anchor',
+    boundingBoxRef: ref,
+    boundingBoxPadding: '1 8 1 1'
+};
+
+<div ref={ref}>
+    <div ref={leftAnchor} />
+    <ControlledMenu {...tooltipProps}
+        anchorRef={leftAnchor} direction="top">
+        <MenuHeader>I can flip if you scroll this block</MenuHeader>
+    </ControlledMenu>
+
+    <div ref={rightAnchor} />
+    <ControlledMenu {...tooltipProps}
+        anchorRef={rightAnchor} direction="right">
+        <MenuHeader>I'm a tooltip built with React-Menu</MenuHeader>
+    </ControlledMenu>
+</div>`
+}
+
 
 export const managingState = {
     id: 'managing-state',
@@ -1243,7 +1289,8 @@ export const menuOptions = {
         <p>Control the display and position of menu related to menu button.</p>,
     list: [
         placement,
-        overflow
+        overflow,
+        boundingBox
     ]
 };
 
