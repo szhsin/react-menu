@@ -58,6 +58,17 @@ interface EventHandler<E, R = void> {
     (event: E): R;
 }
 
+interface RectElement {
+    getBoundingClientRect(): {
+        left: number;
+        right: number;
+        top: number;
+        bottom: number;
+        width: number;
+        height: number;
+    };
+}
+
 //
 // Menu common types
 // ----------------------------------------------------------------------
@@ -101,6 +112,8 @@ interface SharedMenuProps extends BaseProps<MenuModifiers, MenuStyleKeys> {
 // Menu and ControlledMenu
 interface BaseMenuProps extends Omit<SharedMenuProps, 'onClick'> {
     animation?: boolean;
+    boundingBoxRef?: React.RefObject<Element | RectElement>;
+    boundingBoxPadding?: string;
     debugging?: boolean;
     viewScroll?: MenuViewScroll;
     portal?: boolean;
@@ -140,7 +153,7 @@ export interface ControlledMenuProps extends BaseMenuProps {
         x: number;
         y: number;
     };
-    anchorRef?: React.RefObject<Element>;
+    anchorRef?: React.RefObject<Element | RectElement>;
     captureFocus?: boolean;
     isOpen?: boolean;
     isMounted?: boolean;

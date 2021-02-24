@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import { HashHeading } from './HashHeading';
-import { bem } from '../utils';
+import { bem, DomInfoContext } from '../utils';
 import {
     ControlledMenu,
     MenuHeader
@@ -9,13 +9,13 @@ import hljs from 'highlight.js';
 
 const blockName = 'example';
 
-export const Example = React.memo(function Example({
+export const Example = React.memo(React.forwardRef(function Example({
     initialFullSource,
     data: { id, title, desc, source, fullSource },
     children,
     ...restProps
-}) {
-    const ref = useRef(null);
+}, ref) {
+    const refSection = useRef(null);
     const [isFullSource, setIsFullSource] = useState(initialFullSource);
     const sourceCode = isFullSource ? fullSource : source;
     const sourceBtnTitle = `${isFullSource ? 'Hide' : 'Show'} full source code`;
@@ -24,6 +24,7 @@ export const Example = React.memo(function Example({
     const refSource = useRef(null);
     const [anchorRef, setAnchorRef] = useState();
     const [toolTip, setToolTip] = useState();
+    const { navbarHeight } = useContext(DomInfoContext);
 
     const handleCopy = () => {
         navigator.clipboard.writeText(sourceCode)
@@ -33,16 +34,16 @@ export const Example = React.memo(function Example({
 
     useEffect(() => {
         setToolTip(sourceBtnTitle);
-        ref.current.querySelectorAll('pre code')
+        refSection.current.querySelectorAll('pre code')
             .forEach(block => hljs.highlightBlock(block));
     }, [sourceBtnTitle]);
 
     return (
-        <section className={bem(blockName)} ref={ref} aria-labelledby={id}>
+        <section className={bem(blockName)} ref={refSection} aria-labelledby={id}>
             <HashHeading id={id} title={title} heading="h3" />
 
             {desc}
-            <div {...restProps} className={bem(blockName, 'demo')}>
+            <div {...restProps} ref={ref} className={bem(blockName, 'demo')}>
                 {children}
             </div>
 
@@ -77,7 +78,8 @@ export const Example = React.memo(function Example({
                 <ControlledMenu
                     anchorRef={anchorRef} isOpen={isOpen} isMounted={isOpen}
                     captureFocus={false} animation={false} role="tooltip"
-                    arrow direction="top" align="center">
+                    arrow direction="top" align="center"
+                    boundingBoxPadding={`${navbarHeight} 0 0 0`}>
                     <MenuHeader>{toolTip}</MenuHeader>
                 </ControlledMenu>
             </div>
@@ -90,4 +92,4 @@ export const Example = React.memo(function Example({
                 </pre>}
         </section>
     );
-});
+}));

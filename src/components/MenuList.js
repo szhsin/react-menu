@@ -14,6 +14,7 @@ import {
     safeCall,
     bem,
     flatStyles,
+    parsePadding,
     menuClass,
     menuArrowClass,
     SettingsContext,
@@ -58,7 +59,7 @@ export const MenuList = defineName(React.memo(function MenuList({
     const [maxHeight, setMaxHeight] = useState(-1);
     const [isClosing, setClosing] = useState(false);
     const [expandedDirection, setExpandedDirection] = useState(direction);
-    const { animation, viewScroll } = useContext(SettingsContext);
+    const { animation, boundingBoxRef, boundingBoxPadding, viewScroll } = useContext(SettingsContext);
     const menuRef = useRef(null);
     const arrowRef = useRef(null);
     const menuItemsCount = useRef(0);
@@ -213,19 +214,24 @@ export const MenuList = defineName(React.memo(function MenuList({
         }
     }
 
-    const positionHelpers = useCallback(() => {
+    const positionHelpers = useCallback(boundingBoxRef => {
         const menuRect = menuRef.current.getBoundingClientRect();
         const containerRect = containerRef.current.getBoundingClientRect();
-
-        const viewportWidth = document.documentElement.clientWidth;
-        const viewportHeight = window.innerHeight;
+        const boundingRect = boundingBoxRef ?
+            boundingBoxRef.current.getBoundingClientRect() : {
+                left: 0,
+                top: 0,
+                right: document.documentElement.clientWidth,
+                bottom: window.innerHeight
+            };
+        const padding = parsePadding(boundingBoxPadding);
 
         // For left and top, overflows are negative value.
         // For right and bottom, overflows are positive value.
-        const getLeftOverflow = x => containerRect.left + x;
-        const getRightOverflow = x => containerRect.left + x + menuRect.width - viewportWidth;
-        const getTopOverflow = y => containerRect.top + y;
-        const getBottomOverflow = y => containerRect.top + y + menuRect.height - viewportHeight;
+        const getLeftOverflow = x => x + containerRect.left - boundingRect.left - padding.left;
+        const getRightOverflow = x => x + containerRect.left + menuRect.width - boundingRect.right + padding.right;
+        const getTopOverflow = y => y + containerRect.top - boundingRect.top - padding.top;
+        const getBottomOverflow = y => y + containerRect.top + menuRect.height - boundingRect.bottom + padding.bottom;
 
         const confineHorizontally = x => {
             // If menu overflows to the left side, adjust x to have the menu contained within the viewport
@@ -270,8 +276,6 @@ export const MenuList = defineName(React.memo(function MenuList({
         return {
             menuRect,
             containerRect,
-            viewportWidth,
-            viewportHeight,
             getLeftOverflow,
             getRightOverflow,
             getTopOverflow,
@@ -279,7 +283,7 @@ export const MenuList = defineName(React.memo(function MenuList({
             confineHorizontally,
             confineVertically
         };
-    }, [containerRef]);
+    }, [containerRef, boundingBoxPadding]);
 
     const placeArrowX = useCallback((
         menuX,
@@ -554,7 +558,7 @@ export const MenuList = defineName(React.memo(function MenuList({
     }, []);
 
     const handlePosition = useCallback(() => {
-        const helpers = positionHelpers();
+        const helpers = positionHelpers(boundingBoxRef);
         let results = { computedDirection: 'bottom' };
         if (anchorPoint) {
             results = positionContextMenu(helpers, anchorPoint);
@@ -595,7 +599,7 @@ export const MenuList = defineName(React.memo(function MenuList({
         setMenuPosition({ x, y });
         setExpandedDirection(computedDirection);
     }, [
-        anchorPoint, anchorRef, overflow,
+        anchorPoint, anchorRef, boundingBoxRef, overflow,
         positionHelpers, positionMenu, positionContextMenu
     ]);
 
@@ -619,9 +623,11 @@ export const MenuList = defineName(React.memo(function MenuList({
             }
         }
 
-        window.addEventListener('scroll', handleScroll);
-        return () => window.removeEventListener('scroll', handleScroll);
-    }, [isOpen, overflow, onClose, viewScroll, handlePosition]);
+        const target = boundingBoxRef && boundingBoxRef.current.addEventListener ?
+            boundingBoxRef.current : window;
+        target.addEventListener('scroll', handleScroll);
+        return () => target.removeEventListener('scroll', handleScroll);
+    }, [boundingBoxRef, isOpen, overflow, onClose, viewScroll, handlePosition]);
 
     useLayoutEffect(() => {
         if (animation && isMounted) {

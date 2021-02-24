@@ -7,16 +7,6 @@
         display: flex;
         justify-content: flex-end;
         padding: 0.6rem 0;
-
-        .rc-menu {
-            min-width: initial;
-            &__header {
-                color: inherit;
-                font-size: inherit;
-                text-transform: none;
-                padding: 0.125rem 1rem;
-            }
-        }
     }
 
     &__action-btn {
@@ -43,6 +33,19 @@
         border-radius: var.$border-radius-medium;
         @include mixins.border($transition: false);
         @include mixins.transition((background-color, border-color));
+    }
+}
+
+.example__actions,
+[aria-labelledby="bounding-box"] {
+    .rc-menu {
+        min-width: initial;
+        &__header {
+            color: inherit;
+            font-size: inherit;
+            text-transform: none;
+            padding: 0.125rem 1rem;
+        }
     }
 }
 
@@ -170,6 +173,53 @@
 
         .rc-menu-button {
             white-space: nowrap;
+        }
+
+        .rc-menu {
+            z-index: 201;
+        }
+    }
+}
+
+[aria-labelledby="bounding-box"] {
+    .example__demo {
+        display: block;
+        height: 18rem;
+        overflow: auto;
+        @include mixins.scrollbar;
+        .rc-app--theme-dark & {
+            @include mixins.scrollbar-dark;
+        }
+
+        .rc-menu__header {
+            max-width: 6rem;
+            white-space: initial;
+            text-align: center;
+            padding: 0.125rem 0.5rem;
+        }
+    }
+
+    .bounding-box {
+        padding-bottom: 24rem;
+        display: flex;
+        justify-content: space-around;
+        @media (max-width: 600px) {
+            flex-direction: column;
+            align-items: center;
+        }
+    }
+
+    .anchor {
+        width: 4rem;
+        height: 3.5rem;
+        margin-top: 12.75rem;
+        border-radius: var.$border-radius-medium;
+        background-color: var.$btn-light;
+        @include mixins.border("border", 2px, false);
+        @include mixins.transition((border-color, background-color));
+        .rc-app--theme-dark & {
+            border-color: var.$border-dark;
+            background-color: var.$background-dark;
         }
     }
 }

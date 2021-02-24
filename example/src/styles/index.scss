@@ -1,4 +1,3 @@
-@use 'sass:color';
 @use 'var';
 @use 'mixins';
 @use 'basis';
@@ -96,7 +95,7 @@
         border-bottom-right-radius: 0;
         background-color: var.$btn-light;
         &:hover {
-            border-color: color.scale(var.$border-light, $lightness: -20%);
+            border-color: var.$border-hover-light;
         }
     }
 
@@ -129,7 +128,7 @@
         .left {
             background-color: var.$background-dark;
             &:hover {
-                border-color: color.scale(var.$border-dark, $lightness: 40%);
+                border-color: var.$border-hover-dark;
             }
         }
     }

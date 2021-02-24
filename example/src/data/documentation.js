@@ -23,6 +23,10 @@ const keepOpenEventProp = <li><code>keepOpen: bool</code> assign to this propert
                     in accordance with WAI-ARIA Authoring Practices.
                     See <a href="https://codesandbox.io/s/react-menu-keepopen-dzscw" target="_blank" rel="noopener noreferrer">an Codesandbox example</a> for its usage.</li>;
 
+const refObjectDesc = <p>Supports <code>ref</code> created by <code>React.createRef</code> or <code>useRef</code> Hook,
+    or an object of <code>{'{ current: { getBoundingClientRect(): DOMRect } }'}</code>.
+    Doesn't support callback ref.</p>;
+
 const menuModifiers = (
     <ul>
         <li><code>open: bool</code> indicates if the menu is open.</li>
@@ -135,6 +139,7 @@ const styleProps = (target, modifiers, className, styles) => [
     }
 ];
 
+// Menu, SubMenu and ControlledMenu
 const sharedMenuProps = [
     ...styleProps('menu arrow', <ul>{dirModifier}</ul>, 'arrowClassName', 'arrowStyles'),
     {
@@ -199,7 +204,7 @@ const sharedMenuProps = [
             <>
                 <p>Can be 'visible', 'auto', or 'hidden'.</p>
                 <p>It makes the menu list scrollable or hidden when there is not enough viewport
-                    space to display all menu items. The value is similar to the CSS overflow property.</p>
+                    space to display all menu items. The value is similar to the CSS <code>overflow</code> property.</p>
                 <p>Limitation: an <code>overflow</code> value other than 'visible' can only be set on the last
                     level of menu cascading. (i.e. no more deeper level of submenu is allowed).</p>
             </>
@@ -211,6 +216,7 @@ const sharedMenuProps = [
     }
 ];
 
+// Menu and ControlledMenu
 const menuPropsBase = [
     ...styleProps('menu', menuModifiers),
     ...sharedMenuProps,
@@ -231,6 +237,23 @@ const menuPropsBase = [
         defaultVal: 'true',
         desc: <p>Enable or disable animation and transition effects in the <code>Menu</code>,
         <code>MenuItem</code>, and any descendent <code>SubMenu</code>.</p>
+    },
+    {
+        name: 'boundingBoxRef',
+        type: 'object',
+        desc:
+            <>
+                <p>A ref object attached to a DOM element within which menu will be positioned. If not
+                provided, browser viewport will serve as the bounding box.</p>
+                {refObjectDesc}
+            </>
+    },
+    {
+        name: 'boundingBoxPadding',
+        type: 'string',
+        desc:
+            <p>Specify bounding box padding in pixels. Use a syntax similar to the
+            CSS <code>padding</code> property but sizing units are discarded.</p>
     },
     {
         name: 'debugging',
@@ -647,8 +670,7 @@ const controlledMenu = {
                 <>
                     <p><em>Not needed for context menu.</em></p>
                     <p>A ref object attached to a DOM element to which menu will be positioned.</p>
-                    <p>Supports ref created by <code>React.createRef</code> or <code>useRef</code> Hook.
-                     Doesn't support callback ref.</p>
+                    {refObjectDesc}
                 </>
         },
         {

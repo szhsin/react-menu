@@ -32,6 +32,20 @@ export const attachHandlerProps = (handlers, props) => {
     return result;
 }
 
+export const parsePadding = paddingStr => {
+    if (typeof paddingStr !== 'string') return { top: 0, right: 0, bottom: 0, left: 0 };
+
+    const padding = paddingStr.trim().split(/\s+/, 4).map(parseFloat);
+    const top = !isNaN(padding[0]) ? padding[0] : 0;
+    const right = !isNaN(padding[1]) ? padding[1] : top;
+    return {
+        top,
+        right,
+        bottom: !isNaN(padding[2]) ? padding[2] : top,
+        left: !isNaN(padding[3]) ? padding[3] : right,
+    };
+}
+
 // Generate className following BEM methodology: http://getbem.com/naming/
 // Modifier value can be one of the following types: boolean, string, undefined
 export const bem = (block, element, modifiers = {}) => (userClassName, userModifiers) => {
