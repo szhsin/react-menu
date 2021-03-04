@@ -1,6 +1,5 @@
 import React from 'react';
-import { ControlledMenu } from '../components/ControlledMenu';
-import { MenuItem } from '../components/MenuItem';
+import { ControlledMenu, MenuItem } from '../';
 import { screen, render, fireEvent, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 import 'regenerator-runtime/runtime.js';
