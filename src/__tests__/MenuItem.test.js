@@ -1,11 +1,13 @@
 import React from 'react';
-import { Menu } from '../components/Menu';
-import { MenuItem } from '../components/MenuItem';
-import { FocusableItem } from '../components/FocusableItem';
-import { MenuHeader } from '../components/MenuHeader';
-import { MenuDivider } from '../components/MenuDivider';
-import { MenuButton } from '../components/MenuButton';
-import { MenuRadioGroup } from '../components/MenuRadioGroup';
+import {
+    Menu,
+    MenuItem,
+    FocusableItem,
+    MenuHeader,
+    MenuDivider,
+    MenuButton,
+    MenuRadioGroup
+} from '../';
 import { screen, render, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 import * as utils from './utils';

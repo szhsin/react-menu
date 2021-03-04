@@ -1,9 +1,5 @@
 import React from 'react';
-import { Menu } from '../components/Menu';
-import { MenuItem } from '../components/MenuItem';
-import { FocusableItem } from '../components/FocusableItem';
-import { MenuButton } from '../components/MenuButton';
-import { SubMenu } from '../components/SubMenu';
+import { Menu, MenuItem, FocusableItem, MenuButton, SubMenu } from '../';
 import { render, fireEvent, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 import 'regenerator-runtime/runtime.js';
