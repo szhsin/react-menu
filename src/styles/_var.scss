@@ -1,16 +1,20 @@
-@use 'sass:color';
+$color: #212529;
+$color-dark: #cad1d8;
+$color-active: #fff;
+$color-disabled: #aaa;
+$color-disabled-dark: #666;
 
-$color: #212529 !default;
-$color-active: #fff !default;
-$color-disabled: #aaa !default;
-$color-divider: rgba(0, 0, 0, 0.12) !default;
-$color-header: #888 !default;
+$header-color: #888;
+$divider-color: rgba(0, 0, 0, 0.12);
+$divider-color-dark: #3a3a3a;
+$border-color: rgba(0, 0, 0, 0.1);
+$border-color-dark: #333;
 
-$background-color: #fff !default;
-$background-color-hover: color.scale($background-color, $lightness: -8%) !default;
-$background-color-active: #007bff !default;
+$background-color: #fff;
+$background-color-dark: #22262c;
+$background-color-hover: #ebebeb;
+$background-color-hover-dark: #31363c;
+$background-color-active: #007bff;
 
 $arrow-size: 0.75rem;
 $arrow-pos: -($arrow-size / 2);
-
-$border-color: rgba(0, 0, 0, 0.1) !default;
