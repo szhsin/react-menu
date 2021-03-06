@@ -17,15 +17,15 @@ export const ControlledMenu = React.memo(function ControlledMenu({
     debugging,
     viewScroll,
     portal,
+    theming,
     onClick,
     onClose,
     ...restProps }) {
 
-    return useMenuList(
-        {
-            ...restProps,
-            ariaLabel: ariaLabel || 'Menu'
-        },
+    return useMenuList({
+        ...restProps,
+        ariaLabel: ariaLabel || 'Menu'
+    }, {
         id,
         animation,
         boundingBoxRef,
@@ -33,8 +33,10 @@ export const ControlledMenu = React.memo(function ControlledMenu({
         debugging,
         viewScroll,
         portal,
+        theming,
         onClick,
-        onClose);
+        onClose
+    });
 });
 
 ControlledMenu.propTypes = {

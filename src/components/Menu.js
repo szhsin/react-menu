@@ -26,6 +26,7 @@ export const Menu = React.memo(function Menu({
     keepMounted,
     menuButton,
     portal,
+    theming,
     onClick,
     onChange,
     ...restProps }) {
@@ -86,18 +87,17 @@ export const Menu = React.memo(function Menu({
         return React.cloneElement(button, buttonProps);
     }, [button, isOpen, handleClick, handleKeyDown]);
 
-    const menuList = useMenuList(
-        {
-            ...restProps,
-            ariaLabel: ariaLabel ||
-                (typeof button.props.children === 'string'
-                    ? button.props.children
-                    : 'Menu'),
-            anchorRef: buttonRef,
-            isOpen,
-            isMounted,
-            menuItemFocus,
-        },
+    const menuList = useMenuList({
+        ...restProps,
+        ariaLabel: ariaLabel ||
+            (typeof button.props.children === 'string'
+                ? button.props.children
+                : 'Menu'),
+        anchorRef: buttonRef,
+        isOpen,
+        isMounted,
+        menuItemFocus,
+    }, {
         id,
         animation,
         boundingBoxRef,
@@ -105,9 +105,11 @@ export const Menu = React.memo(function Menu({
         debugging,
         viewScroll,
         portal,
+        theming,
         onClick,
-        handleClose,
-        skipClick);
+        onClose: handleClose,
+        skipClick
+    });
 
     useMenuChange(onChange, isOpen);
 
