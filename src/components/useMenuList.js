@@ -13,17 +13,19 @@ import { MenuList } from './MenuList';
 
 
 export const useMenuList = (
-    menuListProps,
-    id,
-    animation,
-    boundingBoxRef,
-    boundingBoxPadding,
-    debugging,
-    viewScroll,
-    portal,
-    onClick,
-    onClose,
-    skipClick) => {
+    menuListProps, {
+        id,
+        animation,
+        boundingBoxRef,
+        boundingBoxPadding,
+        debugging,
+        viewScroll,
+        portal,
+        theming,
+        onClick,
+        onClose,
+        skipClick
+    }) => {
 
     const containerRef = useRef(null);
 
@@ -90,7 +92,7 @@ export const useMenuList = (
 
     const menuList = (
         <div id={id}
-            className={bem(menuContainerClass)()}
+            className={bem(menuContainerClass, null, { theme: theming })()}
             role="presentation"
             ref={containerRef}
             onKeyDown={handleKeyDown}

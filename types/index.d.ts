@@ -117,6 +117,7 @@ interface BaseMenuProps extends Omit<SharedMenuProps, 'onClick'> {
     debugging?: boolean;
     viewScroll?: MenuViewScroll;
     portal?: boolean;
+    theming?: string;
     onClick?: EventHandler<ClickEvent>;
 }
 

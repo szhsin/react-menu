@@ -39,6 +39,7 @@ export const menuPropTypesBase = {
     boundingBoxPadding: PropTypes.string,
     viewScroll: PropTypes.oneOf(['auto', 'close', 'initial']),
     portal: PropTypes.bool,
+    theming: PropTypes.string,
     onClick: PropTypes.func
 };
 
