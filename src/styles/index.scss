@@ -31,11 +31,6 @@
         &--active {
             color: var.$color-active;
             background-color: var.$background-color-active;
-
-            // for <a> tag
-            &:hover {
-                color: var.$color-active;
-            }
         }
 
         &--type-radio {
@@ -76,7 +71,7 @@
     }
 
     &__header {
-        color: var.$color-header;
+        color: var.$header-color;
         font-size: 0.8em;
         padding: 0.2rem 1.5rem;
         text-transform: uppercase;

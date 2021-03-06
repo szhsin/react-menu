@@ -1,0 +1,33 @@
+@use 'var';
+
+.rc-menu-container--theme-dark .rc-menu {
+    color: var.$color-dark;
+    background-color: var.$background-color-dark;
+    border: 1px solid var.$border-color-dark;
+    box-shadow: 0 2px 9px 3px rgba(0, 0, 0, 0.25);
+
+    &__arrow {
+        background-color: var.$background-color-dark;
+        border-left-color: var.$border-color-dark;
+        border-top-color: var.$border-color-dark;
+    }
+
+    &__item {
+        &--hover {
+            background-color: var.$background-color-hover-dark;
+        }
+        &--active {
+            background-color: var.$background-color-active;
+        }
+        &--focusable {
+            background-color: inherit;
+        }
+        &--disabled {
+            color: var.$color-disabled-dark;
+        }
+    }
+
+    &__divider {
+        background-color: var.$divider-color-dark;
+    }
+}
