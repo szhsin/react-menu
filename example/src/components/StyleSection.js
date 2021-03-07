@@ -9,13 +9,13 @@ export const StyleSection = React.memo(function StyleSection({
 }) {
 
     return (
-        <section className="style-doc" aria-labelledby={id}>
+        <section aria-labelledby={id}>
             <HashHeading id={id} title={title} heading="h2" />
             {desc}
             {rows &&
                 <>
-                    <table className="table table-striped table-bordered">
-                        <thead className="thead-dark">
+                    <table className="table">
+                        <thead>
                             <tr>
                                 <th scope="col">CSS selectors</th>
                                 <th scope="col">Description</th>

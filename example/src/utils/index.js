@@ -1,5 +1,12 @@
 import React from 'react';
 
+export const version = '1.8.0';
+export const build = '0';
+export const DomInfoContext = React.createContext({});
+export const SettingContext = React.createContext({ theme: 'dark' });
+export const TocContext = React.createContext({}); // Table of contents
+export const ToastContext = React.createContext(() => { });
+
 export const bem = (block, element, modifiers = {}) => {
     let blockElement = element ? `${block}__${element}` : block;
     let className = blockElement;
@@ -14,9 +21,6 @@ export const bem = (block, element, modifiers = {}) => {
     return className;
 }
 
-export const version = '1.7.0';
-export const build = '0';
-export const DomInfoContext = React.createContext({});
-export const SettingContext = React.createContext({ theme: 'dark' });
-export const TocContext = React.createContext({}); // Table of contents
-export const ToastContext = React.createContext(() => { });
+export const withTheme = WrappedComponent => props => (
+    <WrappedComponent {...props} theming={React.useContext(SettingContext).theme} />
+);

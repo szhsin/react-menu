@@ -9,14 +9,14 @@ export const DocSection = React.memo(function DocSection({
 }) {
 
     return (
-        <section className="api-doc" aria-labelledby={id}>
+        <section aria-labelledby={id}>
             <HashHeading id={id} title={title} heading="h2" />
             {desc}
             {rows &&
                 <>
                     <h3>Props</h3>
-                    <table className="table table-striped table-bordered">
-                        <thead className="thead-dark">
+                    <table className="table">
+                        <thead>
                             <tr>
                                 <th scope="col">Name</th>
                                 <th scope="col">Type</th>
