@@ -301,6 +301,12 @@ const menuPropsBase = [
             </>
     },
     {
+        name: 'theming',
+        type: 'string',
+        desc: <p>It sets a CSS <code>class</code> on the container element of menu for theming purpose. E.g., 'dark' will
+            add <code>rc-menu-container--theme-dark</code>.</p>
+    },
+    {
         name: 'onClick',
         type: 'function',
         desc:

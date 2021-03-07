@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useContext } from 'react';
 import { HashHeading } from './HashHeading';
-import { bem, DomInfoContext } from '../utils';
+import { bem, DomInfoContext, SettingContext } from '../utils';
 import {
     ControlledMenu,
     MenuHeader
@@ -76,6 +76,7 @@ export const Example = React.memo(React.forwardRef(function Example({
                     </button>}
 
                 <ControlledMenu
+                    theming={useContext(SettingContext).theme}
                     anchorRef={anchorRef} isOpen={isOpen} isMounted={isOpen}
                     captureFocus={false} animation={false} role="tooltip"
                     arrow direction="top" align="center"

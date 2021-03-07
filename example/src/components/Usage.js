@@ -6,7 +6,8 @@ import React, {
     useEffect
 } from 'react';
 import {
-    Menu,
+    Menu as ReactMenu,
+    ControlledMenu as ReactControlledMenu,
     MenuItem,
     MenuButton,
     FocusableItem,
@@ -14,15 +15,16 @@ import {
     MenuRadioGroup,
     MenuHeader,
     MenuDivider,
-    ControlledMenu,
     useMenuState
 } from '@szhsin/react-menu';
-import { SettingContext, DomInfoContext } from '../utils';
+import { SettingContext, DomInfoContext, withTheme } from '../utils';
 import { TableContents } from './TableContents';
 import { Example } from './Example';
 import { HashHeading } from './HashHeading';
 import data, * as codeExamples from '../data/codeExamples';
 
+const Menu = withTheme(ReactMenu);
+const ControlledMenu = withTheme(ReactControlledMenu);
 
 export const Usage = React.memo(function Usage() {
 
