@@ -6,8 +6,9 @@ import {
 } from 'react-router-dom';
 import { TocContext } from '../utils';
 import { Usage } from './Usage';
-import { Docs } from './Docs';
-import { StyleGuide } from './StyleGuide';
+import { PageView } from './PageView';
+import styleGuide from '../data/styleGuide';
+import documentation from '../data/documentation';
 import { NotFound } from './NotFound';
 
 
@@ -28,10 +29,10 @@ export const PageContent = React.memo(function PageContent() {
                     <Usage />
                 </Route>
                 <Route path="/docs">
-                    <Docs />
+                    <PageView id="documentation" data={documentation} />
                 </Route>
                 <Route path="/style-guide">
-                    <StyleGuide />
+                    <PageView id="style-guide" data={styleGuide} />
                 </Route>
                 <Route>
                     <NotFound />
