@@ -25,7 +25,8 @@ import {
     FocusPositions,
     HoverIndexActionTypes,
     SubmenuActionTypes,
-    useLayoutEffect
+    useLayoutEffect,
+    getScrollParent
 } from '../utils';
 
 
@@ -214,16 +215,33 @@ export const MenuList = defineName(React.memo(function MenuList({
         }
     }
 
-    const positionHelpers = useCallback(boundingBoxRef => {
+    const scrollingRef = useRef(boundingBoxRef)
+
+    const positionHelpers = useCallback((boundingBoxRef) => {
         const menuRect = menuRef.current.getBoundingClientRect();
         const containerRect = containerRef.current.getBoundingClientRect();
-        const boundingRect = boundingBoxRef ?
-            boundingBoxRef.current.getBoundingClientRect() : {
-                left: 0,
-                top: 0,
-                right: document.documentElement.clientWidth,
-                bottom: window.innerHeight
-            };
+        let boundingRect = {}
+
+        if (boundingBoxRef) {
+            // user explicitly sets boundingBoxRef
+            scrollingRef.current = boundingBoxRef
+            boundingRect = boundingBoxRef.current.getBoundingClientRect() 
+        } else {
+            // try to discover the boundingBoxRef automatically
+            const scrollParent = getScrollParent(containerRef.current)
+            const isScrollWindow = scrollParent === document.body
+
+            scrollingRef.current = isScrollWindow ? window : scrollParent
+
+            boundingRect = (!scrollParent || isScrollWindow)
+                ? {
+                    left: 0,
+                    top: 0,
+                    right: document.documentElement.clientWidth,
+                    bottom: window.innerHeight
+                }
+                : scrollParent.getBoundingClientRect();
+        }
         const padding = parsePadding(boundingBoxPadding);
 
         // For left and top, overflows are negative value.
@@ -623,11 +641,11 @@ export const MenuList = defineName(React.memo(function MenuList({
             }
         }
 
-        const target = boundingBoxRef && boundingBoxRef.current.addEventListener ?
-            boundingBoxRef.current : window;
+        const target = scrollingRef && scrollingRef.current.addEventListener ?
+            scrollingRef.current : window;
         target.addEventListener('scroll', handleScroll);
         return () => target.removeEventListener('scroll', handleScroll);
-    }, [boundingBoxRef, isOpen, overflow, onClose, viewScroll, handlePosition]);
+    }, [scrollingRef, isOpen, overflow, onClose, viewScroll, handlePosition]);
 
     useLayoutEffect(() => {
         if (animation && isMounted) {
