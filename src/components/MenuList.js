@@ -217,7 +217,7 @@ export const MenuList = defineName(React.memo(function MenuList({
 
     const scrollingRef = useRef(boundingBoxRef)
 
-    const positionHelpers = useCallback((boundingBoxRef) => {
+    const positionHelpers = useCallback(boundingBoxRef => {
         const menuRect = menuRef.current.getBoundingClientRect();
         const containerRect = containerRef.current.getBoundingClientRect();
         let boundingRect = {}
