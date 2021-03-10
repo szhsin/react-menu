@@ -215,23 +215,23 @@ export const MenuList = defineName(React.memo(function MenuList({
         }
     }
 
-    const scrollingRef = useRef(boundingBoxRef)
+    const scrollingRef = useRef(null);
 
     const positionHelpers = useCallback(boundingBoxRef => {
         const menuRect = menuRef.current.getBoundingClientRect();
         const containerRect = containerRef.current.getBoundingClientRect();
-        let boundingRect = {}
+        let boundingRect = {};
 
         if (boundingBoxRef) {
             // user explicitly sets boundingBoxRef
-            scrollingRef.current = boundingBoxRef
-            boundingRect = boundingBoxRef.current.getBoundingClientRect() 
+            scrollingRef.current = boundingBoxRef.current;
+            boundingRect = boundingBoxRef.current.getBoundingClientRect();
         } else {
             // try to discover the boundingBoxRef automatically
-            const scrollParent = getScrollParent(containerRef.current)
-            const isScrollWindow = scrollParent === document.body
+            const scrollParent = getScrollParent(containerRef.current);
+            const isScrollWindow = scrollParent === document.body;
 
-            scrollingRef.current = isScrollWindow ? window : scrollParent
+            scrollingRef.current = isScrollWindow ? window : scrollParent;
 
             boundingRect = (!scrollParent || isScrollWindow)
                 ? {

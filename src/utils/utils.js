@@ -184,7 +184,7 @@ export const getParentNode = (element) => {
  */
 export const getScrollParent = (node) => {
     if (node == null) {
-        return null
+        return null;
     }
 
     if (['html', 'body', '#document'].indexOf((node.nodeName || '').toLowerCase()) > -1) {
