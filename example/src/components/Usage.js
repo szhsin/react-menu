@@ -545,7 +545,6 @@ function BoundingBoxExample() {
         align: 'center',
         viewScroll: 'auto',
         position: 'anchor',
-        boundingBoxRef: ref,
         boundingBoxPadding: '1 8 1 1'
     };
 
@@ -559,7 +558,8 @@ function BoundingBoxExample() {
                 </ControlledMenu>
 
                 <div className="anchor" ref={rightAnchor} />
-                <ControlledMenu {...tooltipProps}
+                {/* explicitly set bounding box with the boundingBoxRef prop */}
+                <ControlledMenu {...tooltipProps} boundingBoxRef={ref}
                     anchorRef={rightAnchor} direction="right">
                     <MenuHeader>I'm a tooltip built with React-Menu</MenuHeader>
                 </ControlledMenu>

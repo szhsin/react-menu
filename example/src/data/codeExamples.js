@@ -840,9 +840,10 @@ export const boundingBox = {
 
     title: 'Bounding box',
 
-    desc: <p>Normally menu positions itself within the browser viewport. However, you can specify a
-    container in the page as the bounding box for a menu using the <code>boundingBoxRef</code> prop.
-    Menu will try to position itself within that container.</p>,
+    desc: <p>Normally menu positions itself within its nearest ancestor which has
+        CSS <code>overflow</code> set to a value other than 'visible', or the browser viewport.
+        Also, you can specify a container in the page as the bounding box for a menu using
+        the <code>boundingBoxRef</code> prop. Menu will try to position itself within that container.</p>,
 
     source:
         `const ref = useRef(null);
@@ -862,7 +863,6 @@ const tooltipProps = {
     align: 'center',
     viewScroll: 'auto',
     position: 'anchor',
-    boundingBoxRef: ref,
     boundingBoxPadding: '1 8 1 1'
 };
 
@@ -874,7 +874,8 @@ const tooltipProps = {
     </ControlledMenu>
 
     <div ref={rightAnchor} />
-    <ControlledMenu {...tooltipProps}
+    {/* explicitly set bounding box with the boundingBoxRef prop */}
+    <ControlledMenu {...tooltipProps} boundingBoxRef={ref}
         anchorRef={rightAnchor} direction="right">
         <MenuHeader>I'm a tooltip built with React-Menu</MenuHeader>
     </ControlledMenu>
