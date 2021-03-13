@@ -129,71 +129,12 @@ export const flatStyles = (styles, modifiers) => {
     return style;
 }
 
-/**
- * Determines if element has overflow in its styles
- * copied from https://github.com/popperjs/popper-core/tree/c3c52a868ead8ecbe7885f248b152374db83c1c2/src/dom-utils
- * @param {HTMLElement} element 
- * @returns boolean
- */
-export const isScrollParent = (element) => {
-    const { overflow, overflowX, overflowY } = window.getComputedStyle(element);
-
-    return /auto|scroll|overlay|hidden/.test(overflow + overflowY + overflowX);
-}
-
-/**
- * Determines if element is in shadow root
- * copied from https://github.com/popperjs/popper-core/tree/c3c52a868ead8ecbe7885f248b152374db83c1c2/src/dom-utils
- * @param {HTMLElement} node 
- * @returns boolean
- */
-export const isShadowRoot = (node) => {
-    // IE 11 has no ShadowRoot
-    if (typeof ShadowRoot === 'undefined') {
-      return false;
+// Adapted from https://github.com/popperjs/popper-core/tree/v2.9.1/src/dom-utils
+export const getScrollAncestor = node => {
+    while (node && node !== document.body) {
+        const { overflow, overflowX, overflowY } = window.getComputedStyle(node);
+        if (/auto|scroll|overlay|hidden/.test(overflow + overflowY + overflowX)) return node;
+        node = node.parentNode;
     }
-    const OwnElement = window.ShadowRoot;
-
-    return node instanceof OwnElement || node instanceof ShadowRoot;
-}
-
-/**
- * Gets parent of given node
- * copied from https://github.com/popperjs/popper-core/tree/c3c52a868ead8ecbe7885f248b152374db83c1c2/src/dom-utils
- * @param {HTMLElement} element 
- * @returns HTMLElement
- */
-export const getParentNode = (element) => {
-    if ((element.nodeName || '').toLowerCase() === 'html') {
-        return element;
-    }
-
-    return (
-        element.assignedSlot || // step into the shadow DOM of the parent of a slotted node
-        element.parentNode || // DOM Element detected
-        (isShadowRoot(element) ? element.host : null) || // ShadowRoot detected
-        (element.ownerDocument || element.document || window.document).documentElement // fallback
-    );
-}
-
-/**
- * Gets nearest element with overflow or top-level window
- * copied from https://github.com/popperjs/popper-core/tree/c3c52a868ead8ecbe7885f248b152374db83c1c2/src/dom-utils
- * @param {HTMLElement | null} node 
- * @returns HTMLElement | null
- */
-export const getScrollParent = (node) => {
-    if (node == null) {
-        return null;
-    }
-
-    if (['html', 'body', '#document'].indexOf((node.nodeName || '').toLowerCase()) > -1) {
-        return node.ownerDocument.body;
-    }
-
-    if (isScrollParent(node)) {
-        return node;
-    }
-
-    return getScrollParent(getParentNode(node));
+    return window;
 }

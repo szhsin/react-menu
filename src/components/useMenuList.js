@@ -28,11 +28,14 @@ export const useMenuList = (
     }) => {
 
     const containerRef = useRef(null);
+    const scrollingRef = useRef(null);
 
     const settings = useMemo(() => ({
         animation,
         boundingBoxRef,
         boundingBoxPadding,
+        menuRootRef: containerRef,
+        scrollingRef,
         debugging,
         viewScroll
     }), [animation, boundingBoxRef, boundingBoxPadding, debugging, viewScroll]);

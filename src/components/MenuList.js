@@ -11,6 +11,7 @@ import {
     attachHandlerProps,
     defineName,
     getName,
+    getScrollAncestor,
     safeCall,
     bem,
     flatStyles,
@@ -26,7 +27,6 @@ import {
     HoverIndexActionTypes,
     SubmenuActionTypes,
     useLayoutEffect,
-    getScrollParent
 } from '../utils';
 
 
@@ -60,7 +60,14 @@ export const MenuList = defineName(React.memo(function MenuList({
     const [maxHeight, setMaxHeight] = useState(-1);
     const [isClosing, setClosing] = useState(false);
     const [expandedDirection, setExpandedDirection] = useState(direction);
-    const { animation, boundingBoxRef, boundingBoxPadding, viewScroll } = useContext(SettingsContext);
+    const {
+        animation,
+        boundingBoxRef,
+        boundingBoxPadding,
+        menuRootRef,
+        scrollingRef,
+        viewScroll
+    } = useContext(SettingsContext);
     const menuRef = useRef(null);
     const arrowRef = useRef(null);
     const menuItemsCount = useRef(0);
@@ -215,33 +222,21 @@ export const MenuList = defineName(React.memo(function MenuList({
         }
     }
 
-    const scrollingRef = useRef(null);
-
     const positionHelpers = useCallback(boundingBoxRef => {
         const menuRect = menuRef.current.getBoundingClientRect();
         const containerRect = containerRef.current.getBoundingClientRect();
-        let boundingRect = {};
-
-        if (boundingBoxRef) {
-            // user explicitly sets boundingBoxRef
-            scrollingRef.current = boundingBoxRef.current;
-            boundingRect = boundingBoxRef.current.getBoundingClientRect();
-        } else {
-            // try to discover the boundingBoxRef automatically
-            const scrollParent = getScrollParent(containerRef.current);
-            const isScrollWindow = scrollParent === document.body;
-
-            scrollingRef.current = isScrollWindow ? window : scrollParent;
-
-            boundingRect = (!scrollParent || isScrollWindow)
-                ? {
-                    left: 0,
-                    top: 0,
-                    right: document.documentElement.clientWidth,
-                    bottom: window.innerHeight
-                }
-                : scrollParent.getBoundingClientRect();
+        if (!scrollingRef.current) {
+            scrollingRef.current = boundingBoxRef
+                ? boundingBoxRef.current // user explicitly sets boundingBoxRef
+                : getScrollAncestor(menuRootRef.current); // try to discover bounding box automatically
         }
+
+        const boundingRect = scrollingRef.current === window ? {
+            left: 0,
+            top: 0,
+            right: document.documentElement.clientWidth,
+            bottom: window.innerHeight
+        } : scrollingRef.current.getBoundingClientRect();
         const padding = parsePadding(boundingBoxPadding);
 
         // For left and top, overflows are negative value.
@@ -301,7 +296,7 @@ export const MenuList = defineName(React.memo(function MenuList({
             confineHorizontally,
             confineVertically
         };
-    }, [containerRef, boundingBoxPadding]);
+    }, [containerRef, menuRootRef, scrollingRef, boundingBoxPadding]);
 
     const placeArrowX = useCallback((
         menuX,
@@ -641,7 +636,7 @@ export const MenuList = defineName(React.memo(function MenuList({
             }
         }
 
-        const target = scrollingRef && scrollingRef.current.addEventListener ?
+        const target = scrollingRef.current.addEventListener ?
             scrollingRef.current : window;
         target.addEventListener('scroll', handleScroll);
         return () => target.removeEventListener('scroll', handleScroll);
