@@ -270,7 +270,8 @@ const menuPropsBase = [
         desc:
             <>
                 <p>A ref object attached to a DOM element within which menu will be positioned. If not
-                provided, browser viewport will serve as the bounding box.</p>
+                provided, the nearest ancestor which has CSS <code>overflow</code> set to a value other
+                than 'visible' or the browser viewport will serve as the bounding box.</p>
                 {refObjectDesc}
             </>
     },
