@@ -173,16 +173,15 @@ export const SubMenu = defineName(React.memo(function SubMenu({
                 {safeCall(label, modifiers)}
             </div>
 
-            <MenuList
+            {isMounted && <MenuList
                 {...restProps}
                 ariaLabel={ariaLabel || (typeof label === 'string' ? label : 'Submenu')}
                 anchorRef={itemRef}
                 containerRef={containerRef}
                 isOpen={isOpen}
-                isMounted={isMounted}
                 isDisabled={isDisabled}
                 menuItemFocus={menuItemFocus}
-                onClose={handleClose} />
+                onClose={handleClose} />}
         </li>
     );
 }), 'SubMenu');

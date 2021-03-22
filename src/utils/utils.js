@@ -132,9 +132,11 @@ export const flatStyles = (styles, modifiers) => {
 // Adapted from https://github.com/popperjs/popper-core/tree/v2.9.1/src/dom-utils
 export const getScrollAncestor = node => {
     while (node && node !== document.body) {
-        const { overflow, overflowX, overflowY } = window.getComputedStyle(node);
+        const { overflow, overflowX, overflowY } = getComputedStyle(node);
         if (/auto|scroll|overlay|hidden/.test(overflow + overflowY + overflowX)) return node;
         node = node.parentNode;
     }
     return window;
 }
+
+export const floatEqual = (a, b) => Math.abs(a - b) < 0.001;

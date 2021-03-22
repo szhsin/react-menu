@@ -10,6 +10,7 @@ import React, {
 import {
     attachHandlerProps,
     defineName,
+    floatEqual,
     getName,
     getScrollAncestor,
     safeCall,
@@ -46,7 +47,6 @@ export const MenuList = defineName(React.memo(function MenuList({
     overflow,
     captureFocus = true,
     isOpen,
-    isMounted,
     isDisabled,
     menuItemFocus,
     offsetX,
@@ -72,6 +72,8 @@ export const MenuList = defineName(React.memo(function MenuList({
     const arrowRef = useRef(null);
     const menuItemsCount = useRef(0);
     const prevOpen = useRef(isOpen);
+    const lastMenuSize = useRef({ width: 0, height: 0 });
+    const lastHandlePosition = useRef(() => { });
     const [{ hoverIndex, openSubmenuCount }, dispatch] = useReducer(reducer, {
         hoverIndex: initialHoverIndex,
         openSubmenuCount: 0
@@ -122,8 +124,6 @@ export const MenuList = defineName(React.memo(function MenuList({
     }
 
     const menuItems = useMemo(() => {
-        if (!isMounted) return null;
-
         let index = 0;
         const permittedChildren = ['MenuDivider', 'MenuHeader', 'MenuItem',
             'FocusableItem', 'MenuRadioGroup', 'SubMenu'];
@@ -173,7 +173,7 @@ export const MenuList = defineName(React.memo(function MenuList({
         // to avoid updating state during render
         menuItemsCount.current = index;
         return items;
-    }, [isMounted, children]);
+    }, [children]);
 
     const handleKeyDown = e => {
         let handled = false;
@@ -222,7 +222,7 @@ export const MenuList = defineName(React.memo(function MenuList({
         }
     }
 
-    const positionHelpers = useCallback(boundingBoxRef => {
+    const positionHelpers = useCallback((boundingBoxRef, boundingBoxPadding) => {
         const menuRect = menuRef.current.getBoundingClientRect();
         const containerRect = containerRef.current.getBoundingClientRect();
         if (!scrollingRef.current) {
@@ -296,7 +296,7 @@ export const MenuList = defineName(React.memo(function MenuList({
             confineHorizontally,
             confineVertically
         };
-    }, [containerRef, menuRootRef, scrollingRef, boundingBoxPadding]);
+    }, [containerRef, menuRootRef, scrollingRef]);
 
     const placeArrowX = useCallback((
         menuX,
@@ -571,7 +571,14 @@ export const MenuList = defineName(React.memo(function MenuList({
     }, []);
 
     const handlePosition = useCallback(() => {
-        const helpers = positionHelpers(boundingBoxRef);
+        if (!menuRef.current) {
+            process.env.NODE_ENV !== 'production' &&
+                console.warn('Menu ref is null and might not be positioned properly. You could report an issue on GitHub.');
+            return;
+        }
+
+        const helpers = positionHelpers(boundingBoxRef, boundingBoxPadding);
+        const { menuRect } = helpers;
         let results = { computedDirection: 'bottom' };
         if (anchorPoint) {
             results = positionContextMenu(helpers, anchorPoint);
@@ -582,7 +589,6 @@ export const MenuList = defineName(React.memo(function MenuList({
 
         if (overflow !== 'visible') {
             const {
-                menuRect,
                 getTopOverflow,
                 getBottomOverflow
             } = helpers;
@@ -595,11 +601,11 @@ export const MenuList = defineName(React.memo(function MenuList({
                 // This might be the result of a previous maxHeight set on the menu.
                 // In this situation, we need to still apply a new maxHeight.
                 // Same reason for the top side
-                if (bottomOverflow > 0 || (bottomOverflow === 0 && height >= 0)) {
+                if (bottomOverflow > 0 || (floatEqual(bottomOverflow, 0) && height >= 0)) {
                     newHeight = menuRect.height - bottomOverflow;
                 } else {
                     const topOverflow = getTopOverflow(y);
-                    if (topOverflow < 0 || (topOverflow === 0 && height >= 0)) {
+                    if (topOverflow < 0 || (floatEqual(topOverflow, 0) && height >= 0)) {
                         newHeight = menuRect.height + topOverflow;
                         if (newHeight >= 0) y -= topOverflow;
                     }
@@ -611,14 +617,28 @@ export const MenuList = defineName(React.memo(function MenuList({
 
         setMenuPosition({ x, y });
         setExpandedDirection(computedDirection);
+        lastMenuSize.current = { width: menuRect.width, height: menuRect.height };
     }, [
-        anchorPoint, anchorRef, boundingBoxRef, overflow,
+        anchorPoint, anchorRef, boundingBoxRef, boundingBoxPadding, overflow,
         positionHelpers, positionMenu, positionContextMenu
     ]);
 
     useLayoutEffect(() => {
         if (isOpen) handlePosition();
+        lastHandlePosition.current = handlePosition;
     }, [isOpen, handlePosition]);
+
+    useLayoutEffect(() => {
+        if (animation) {
+            if (isOpen) {
+                setClosing(false)
+            } else if (isOpen !== prevOpen.current) { // Skip the first effect run in which isOpen is false
+                setClosing(true);
+            }
+        }
+
+        prevOpen.current = isOpen;
+    }, [animation, isOpen]);
 
     useEffect(() => {
         if (!isOpen || viewScroll === 'initial') return;
@@ -642,17 +662,32 @@ export const MenuList = defineName(React.memo(function MenuList({
         return () => target.removeEventListener('scroll', handleScroll);
     }, [scrollingRef, isOpen, overflow, onClose, viewScroll, handlePosition]);
 
-    useLayoutEffect(() => {
-        if (animation && isMounted) {
-            if (isOpen) {
-                setClosing(false)
-            } else if (isOpen !== prevOpen.current) { // Skip the first effect run in which isOpen is false
-                setClosing(true);
-            }
-        }
+    useEffect(() => {
+        if (typeof ResizeObserver !== 'function') return;
 
-        prevOpen.current = isOpen;
-    }, [animation, isMounted, isOpen]);
+        const resizeObserver = new ResizeObserver(([entry]) => {
+            const { borderBoxSize, target } = entry;
+            let width, height;
+            if (borderBoxSize) {
+                const { inlineSize, blockSize } = borderBoxSize[0] || borderBoxSize;
+                width = inlineSize;
+                height = blockSize;
+            } else {
+                const borderRect = target.getBoundingClientRect();
+                width = borderRect.width;
+                height = borderRect.height;
+            }
+
+            if (width === 0 || height === 0) return;
+            if (floatEqual(width, lastMenuSize.current.width)
+                && floatEqual(height, lastMenuSize.current.height)) return;
+            lastHandlePosition.current();
+        });
+
+        const observeTarget = menuRef.current;
+        resizeObserver.observe(observeTarget, { box: 'border-box' });
+        return () => resizeObserver.unobserve(observeTarget);
+    }, []);
 
     useEffect(() => {
         if (!isOpen) {
@@ -711,40 +746,37 @@ export const MenuList = defineName(React.memo(function MenuList({
     }, restProps);
 
     return (
-        <React.Fragment>
-            {isMounted &&
-                <ul role="menu"
-                    tabIndex="-1"
-                    aria-disabled={isDisabled || undefined}
-                    aria-label={ariaLabel}
-                    {...restProps}
-                    {...handlers}
-                    ref={menuRef}
-                    className={bem(menuClass, null, modifiers)(className, userModifiers)}
+        <ul role="menu"
+            tabIndex="-1"
+            aria-disabled={isDisabled || undefined}
+            aria-label={ariaLabel}
+            {...restProps}
+            {...handlers}
+            ref={menuRef}
+            className={bem(menuClass, null, modifiers)(className, userModifiers)}
+            style={{
+                ...flatStyles(styles, userModifiers),
+                ...overflowStyles,
+                left: `${menuPosition.x}px`,
+                top: `${menuPosition.y}px`
+            }}>
+
+            {arrow &&
+                <div className={bem(menuClass, menuArrowClass,
+                    arrowModifiers)(arrowClassName)}
                     style={{
-                        ...flatStyles(styles, userModifiers),
-                        ...overflowStyles,
-                        left: `${menuPosition.x}px`,
-                        top: `${menuPosition.y}px`
-                    }}>
+                        ...flatStyles(arrowStyles, arrowModifiers),
+                        left: arrowPosition.x && `${arrowPosition.x}px`,
+                        top: arrowPosition.y && `${arrowPosition.y}px`,
+                    }}
+                    ref={arrowRef}
+                    role="presentation" />
+            }
 
-                    {arrow &&
-                        <div className={bem(menuClass, menuArrowClass,
-                            arrowModifiers)(arrowClassName)}
-                            style={{
-                                ...flatStyles(arrowStyles, arrowModifiers),
-                                left: arrowPosition.x && `${arrowPosition.x}px`,
-                                top: arrowPosition.y && `${arrowPosition.y}px`,
-                            }}
-                            ref={arrowRef}
-                            role="presentation" />
-                    }
-
-                    <MenuListContext.Provider value={context}>
-                        {menuItems}
-                    </MenuListContext.Provider>
-                </ul>}
-        </React.Fragment>
+            <MenuListContext.Provider value={context}>
+                {menuItems}
+            </MenuListContext.Provider>
+        </ul>
     );
 }), 'MenuList');
 
