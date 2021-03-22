@@ -22,6 +22,7 @@ export const useMenuList = (
         viewScroll,
         portal,
         theming,
+        isMounted,
         onClick,
         onClose,
         skipClick
@@ -101,13 +102,14 @@ export const useMenuList = (
             onKeyDown={handleKeyDown}
             onBlur={handleBlur}>
 
-            <SettingsContext.Provider value={settings}>
-                <EventHandlersContext.Provider value={eventHandlers}>
-                    <MenuList {...menuListProps}
-                        containerRef={containerRef}
-                        onClose={onClose} />
-                </EventHandlersContext.Provider>
-            </SettingsContext.Provider>
+            {isMounted &&
+                <SettingsContext.Provider value={settings}>
+                    <EventHandlersContext.Provider value={eventHandlers}>
+                        <MenuList {...menuListProps}
+                            containerRef={containerRef}
+                            onClose={onClose} />
+                    </EventHandlersContext.Provider>
+                </SettingsContext.Provider>}
         </div>
     );
 

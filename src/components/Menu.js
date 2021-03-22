@@ -95,7 +95,6 @@ export const Menu = React.memo(function Menu({
                 : 'Menu'),
         anchorRef: buttonRef,
         isOpen,
-        isMounted,
         menuItemFocus,
     }, {
         id,
@@ -106,6 +105,7 @@ export const Menu = React.memo(function Menu({
         viewScroll,
         portal,
         theming,
+        isMounted,
         onClick,
         onClose: handleClose,
         skipClick

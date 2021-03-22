@@ -18,6 +18,7 @@ export const ControlledMenu = React.memo(function ControlledMenu({
     viewScroll,
     portal,
     theming,
+    isMounted,
     onClick,
     onClose,
     ...restProps }) {
@@ -34,6 +35,7 @@ export const ControlledMenu = React.memo(function ControlledMenu({
         viewScroll,
         portal,
         theming,
+        isMounted,
         onClick,
         onClose
     });
