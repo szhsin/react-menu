@@ -38,6 +38,10 @@ export const menuPropTypesBase = {
     boundingBoxRef: PropTypes.object,
     boundingBoxPadding: PropTypes.string,
     reposition: PropTypes.oneOf(['auto', 'initial']),
+    repositionFlag: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.number
+    ]),
     viewScroll: PropTypes.oneOf(['auto', 'close', 'initial']),
     portal: PropTypes.bool,
     theming: PropTypes.string,

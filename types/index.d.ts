@@ -119,7 +119,7 @@ interface BaseMenuProps extends Omit<SharedMenuProps, 'onClick'> {
     viewScroll?: MenuViewScroll;
     portal?: boolean;
     reposition?: MenuReposition;
-    repositionFlag?: any;
+    repositionFlag?: number | string;
     theming?: string;
     onClick?: EventHandler<ClickEvent>;
 }
