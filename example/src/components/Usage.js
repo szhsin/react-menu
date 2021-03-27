@@ -375,8 +375,9 @@ function FocusableItemExample() {
 
     return (
         <Example data={codeExamples.focusableItem} >
-            <Menu menuButton={<MenuButton>Open menu</MenuButton>}
-                align="center" onChange={e => e.open && setFilter('')}>
+            <Menu menuButton={<MenuButton>Open menu</MenuButton>} direction="top"
+                align="center" onChange={e => e.open && setFilter('')}
+                boundingBoxPadding={`${useContext(DomInfoContext).navbarHeight} 0 0 0`}>
                 <FocusableItem>
                     {({ ref }) => (
                         <input ref={ref} type="text" placeholder="Type to filter"

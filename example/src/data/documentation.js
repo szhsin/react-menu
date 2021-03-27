@@ -293,6 +293,33 @@ const menuPropsBase = [
             </>
     },
     {
+        name: 'reposition',
+        type: 'string',
+        defaultVal: "'auto'",
+        desc:
+            <>
+                <p>It specifies when menu is repositioned.</p>
+                <ul>
+                    <li><code>'initial'</code> Don't automatically reposition menu. Set to this value when you
+                    want to explicitly reposition menu using the <code>repositionFlag</code> prop.</li>
+                    <li><code>'auto'</code> Reposition menu whenever its size has changed, using
+                    the <code>ResizeObserver</code> API.</li>
+                </ul>
+            </>
+    },
+    {
+        name: 'repositionFlag',
+        type: 'number | string',
+        desc:
+            <>
+                <p>Use this prop to explicitly reposition menu. Whenever the prop has a new value, menu position
+                    will be recalculated and updated. You might use a counter and increase it every time.</p>
+                <p><em>Warning: don't update this prop in rapid succession, which is inefficient and might cause infinite
+                    rendering of component. E.g., changing the value of this prop in <code>window scroll</code> event.
+                </em></p>
+            </>
+    },
+    {
         name: 'viewScroll',
         type: 'string',
         defaultVal: "'initial'",
