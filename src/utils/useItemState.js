@@ -5,7 +5,7 @@ import {
     useEffect
 } from 'react';
 import {
-    MenuListContext,
+    MenuListItemContext,
     HoverIndexActionTypes,
     SUBMENU_CLOSE_DELAY
 } from './constants';
@@ -14,7 +14,7 @@ import {
 // This hook includes some common stateful logic in MenuItem and FocusableItem
 export const useItemState = (isDisabled, index) => {
     const ref = useRef(null);
-    const { isParentOpen, hoverIndex, isSubmenuOpen, dispatch } = useContext(MenuListContext);
+    const { isParentOpen, hoverIndex, isSubmenuOpen, dispatch } = useContext(MenuListItemContext);
     const isHovering = hoverIndex === index;
     const timeoutId = useRef();
 
