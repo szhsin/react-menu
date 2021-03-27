@@ -68,6 +68,7 @@ export const MenuList = defineName(React.memo(function MenuList({
         boundingBoxPadding,
         menuRootRef,
         scrollingRef,
+        reposition,
         viewScroll
     } = useContext(SettingsContext);
     const menuRef = useRef(null);
@@ -672,7 +673,7 @@ export const MenuList = defineName(React.memo(function MenuList({
     }, [scrollingRef, isOpen, overflow, onClose, viewScroll, handlePosition]);
 
     useEffect(() => {
-        if (typeof ResizeObserver !== 'function') return;
+        if (typeof ResizeObserver !== 'function' || reposition === 'initial') return;
 
         const resizeObserver = new ResizeObserver(([entry]) => {
             const { borderBoxSize, target } = entry;
@@ -697,7 +698,7 @@ export const MenuList = defineName(React.memo(function MenuList({
         const observeTarget = menuRef.current;
         resizeObserver.observe(observeTarget, { box: 'border-box' });
         return () => resizeObserver.unobserve(observeTarget);
-    }, []);
+    }, [reposition]);
 
     useEffect(() => {
         if (!isOpen) {

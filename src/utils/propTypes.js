@@ -37,6 +37,7 @@ export const menuPropTypesBase = {
     debugging: PropTypes.bool,
     boundingBoxRef: PropTypes.object,
     boundingBoxPadding: PropTypes.string,
+    reposition: PropTypes.oneOf(['auto', 'initial']),
     viewScroll: PropTypes.oneOf(['auto', 'close', 'initial']),
     portal: PropTypes.bool,
     theming: PropTypes.string,
@@ -55,5 +56,6 @@ export const sharedMenuDefaultProp = {
 export const menuDefaultPropsBase = {
     ...sharedMenuDefaultProp,
     animation: true,
+    reposition: 'auto',
     viewScroll: 'initial'
 };
