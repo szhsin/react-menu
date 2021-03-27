@@ -7,6 +7,7 @@ export type MenuAlign = 'start' | 'center' | 'end';
 export type MenuDirection = 'left' | 'right' | 'top' | 'bottom';
 export type MenuPosition = 'auto' | 'anchor' | 'initial';
 export type MenuOverflow = 'auto' | 'visible' | 'hidden';
+export type MenuReposition = 'auto' | 'initial';
 export type MenuViewScroll = 'auto' | 'close' | 'initial';
 export type MenuItemTypeProp = 'checkbox' | 'radio';
 export type FocusPosition = 'initial' | 'first' | 'last';
@@ -117,6 +118,7 @@ interface BaseMenuProps extends Omit<SharedMenuProps, 'onClick'> {
     debugging?: boolean;
     viewScroll?: MenuViewScroll;
     portal?: boolean;
+    reposition?: MenuReposition;
     repositionFlag?: any;
     theming?: string;
     onClick?: EventHandler<ClickEvent>;
