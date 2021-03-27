@@ -21,6 +21,7 @@ import {
     menuArrowClass,
     SettingsContext,
     MenuListContext,
+    MenuListItemContext,
     initialHoverIndex,
     CloseReason,
     Keys,
@@ -45,6 +46,7 @@ export const MenuList = defineName(React.memo(function MenuList({
     direction,
     position,
     overflow,
+    repositionFlag,
     captureFocus = true,
     isOpen,
     isDisabled,
@@ -71,9 +73,12 @@ export const MenuList = defineName(React.memo(function MenuList({
     const menuRef = useRef(null);
     const arrowRef = useRef(null);
     const menuItemsCount = useRef(0);
-    const prevOpen = useRef(isOpen);
-    const lastMenuSize = useRef({ width: 0, height: 0 });
-    const lastHandlePosition = useRef(() => { });
+    const reposFlag = useContext(MenuListContext) || repositionFlag;
+    const latestReposFlag = useRef(reposFlag);
+    const latestOpen = useRef(isOpen);
+    const latestMenuSize = useRef({ width: 0, height: 0 });
+    const latestHandlePosition = useRef(() => { });
+    const [reposSubmenu, forceReposSubmenu] = useReducer(c => c + 1, 1);
     const [{ hoverIndex, openSubmenuCount }, dispatch] = useReducer(reducer, {
         hoverIndex: initialHoverIndex,
         openSubmenuCount: 0
@@ -617,27 +622,31 @@ export const MenuList = defineName(React.memo(function MenuList({
 
         setMenuPosition({ x, y });
         setExpandedDirection(computedDirection);
-        lastMenuSize.current = { width: menuRect.width, height: menuRect.height };
+        latestMenuSize.current = { width: menuRect.width, height: menuRect.height };
     }, [
         anchorPoint, anchorRef, boundingBoxRef, boundingBoxPadding, overflow,
         positionHelpers, positionMenu, positionContextMenu
     ]);
 
     useLayoutEffect(() => {
-        if (isOpen) handlePosition();
-        lastHandlePosition.current = handlePosition;
-    }, [isOpen, handlePosition]);
+        if (isOpen) {
+            handlePosition();
+            if (latestReposFlag.current !== reposFlag) forceReposSubmenu();
+        }
+        latestReposFlag.current = reposFlag;
+        latestHandlePosition.current = handlePosition;
+    }, [isOpen, handlePosition, reposFlag]);
 
     useLayoutEffect(() => {
         if (animation) {
             if (isOpen) {
                 setClosing(false)
-            } else if (isOpen !== prevOpen.current) { // Skip the first effect run in which isOpen is false
+            } else if (isOpen !== latestOpen.current) { // Skip the first effect run in which isOpen is false
                 setClosing(true);
             }
         }
 
-        prevOpen.current = isOpen;
+        latestOpen.current = isOpen;
     }, [animation, isOpen]);
 
     useEffect(() => {
@@ -679,9 +688,10 @@ export const MenuList = defineName(React.memo(function MenuList({
             }
 
             if (width === 0 || height === 0) return;
-            if (floatEqual(width, lastMenuSize.current.width)
-                && floatEqual(height, lastMenuSize.current.height)) return;
-            lastHandlePosition.current();
+            if (floatEqual(width, latestMenuSize.current.width)
+                && floatEqual(height, latestMenuSize.current.height)) return;
+            latestHandlePosition.current();
+            forceReposSubmenu();
         });
 
         const observeTarget = menuRef.current;
@@ -773,8 +783,10 @@ export const MenuList = defineName(React.memo(function MenuList({
                     role="presentation" />
             }
 
-            <MenuListContext.Provider value={context}>
-                {menuItems}
+            <MenuListContext.Provider value={reposSubmenu}>
+                <MenuListItemContext.Provider value={context}>
+                    {menuItems}
+                </MenuListItemContext.Provider>
             </MenuListContext.Provider>
         </ul>
     );

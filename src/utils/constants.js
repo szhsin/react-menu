@@ -11,7 +11,8 @@ export const subMenuClass = 'submenu';
 export const radioGroupClass = 'radio-group';
 
 export const initialHoverIndex = -1;
-export const MenuListContext = React.createContext({ hoverIndex: initialHoverIndex });
+export const MenuListItemContext = React.createContext({});
+export const MenuListContext = React.createContext();
 export const EventHandlersContext = React.createContext({});
 export const RadioGroupContext = React.createContext({});
 export const SettingsContext = React.createContext({});

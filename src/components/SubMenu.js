@@ -11,7 +11,7 @@ import {
     menuClass,
     subMenuClass,
     menuItemClass,
-    MenuListContext,
+    MenuListItemContext,
     SettingsContext,
     Keys,
     HoverIndexActionTypes,
@@ -30,16 +30,17 @@ export const SubMenu = defineName(React.memo(function SubMenu({
     'aria-label': ariaLabel,
     itemClassName,
     itemStyles,
-    captureFocus: _,
     disabled,
     keepMounted,
     label,
     index,
     onChange,
+    captureFocus: _1,
+    repositionFlag: _2,
     ...restProps }) {
 
     const { isMounted, isOpen, menuItemFocus, openMenu, closeMenu } = useMenuState(keepMounted);
-    const { isParentOpen, hoverIndex, isSubmenuOpen, dispatch } = useContext(MenuListContext);
+    const { isParentOpen, hoverIndex, isSubmenuOpen, dispatch } = useContext(MenuListItemContext);
     const { debugging } = useContext(SettingsContext);
     const isHovering = hoverIndex === index;
     const isDisabled = Boolean(disabled);

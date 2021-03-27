@@ -29,7 +29,7 @@
     "no-unused-vars": [
       2,
       {
-        "argsIgnorePattern": "^_$"
+        "argsIgnorePattern": "^_\\d?$"
       }
     ],
     "react/prop-types": 0,
