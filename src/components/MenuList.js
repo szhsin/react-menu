@@ -74,11 +74,10 @@ export const MenuList = defineName(React.memo(function MenuList({
     const menuRef = useRef(null);
     const arrowRef = useRef(null);
     const menuItemsCount = useRef(0);
-    const reposFlag = useContext(MenuListContext) || repositionFlag;
-    const latestReposFlag = useRef(reposFlag);
     const latestOpen = useRef(isOpen);
     const latestMenuSize = useRef({ width: 0, height: 0 });
     const latestHandlePosition = useRef(() => { });
+    const reposFlag = useContext(MenuListContext) || repositionFlag;
     const [reposSubmenu, forceReposSubmenu] = useReducer(c => c + 1, 1);
     const [{ hoverIndex, openSubmenuCount }, dispatch] = useReducer(reducer, {
         hoverIndex: initialHoverIndex,
@@ -632,9 +631,10 @@ export const MenuList = defineName(React.memo(function MenuList({
     useLayoutEffect(() => {
         if (isOpen) {
             handlePosition();
-            if (latestReposFlag.current !== reposFlag) forceReposSubmenu();
+            // Reposition submenu whenever deps(except isOpen) have changed
+            // NOTE: this effect must come BEFORE the effect which updates latestOpen
+            if (latestOpen.current) forceReposSubmenu();
         }
-        latestReposFlag.current = reposFlag;
         latestHandlePosition.current = handlePosition;
     }, [isOpen, handlePosition, reposFlag]);
 
