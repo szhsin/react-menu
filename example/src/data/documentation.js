@@ -315,7 +315,7 @@ const menuPropsBase = [
                 <p>Use this prop to explicitly reposition menu. Whenever the prop has a new value, menu position
                     will be recalculated and updated. You might use a counter and increase it every time.</p>
                 <p><em>Warning: don't update this prop in rapid succession, which is inefficient and might cause infinite
-                    rendering of component. E.g., changing the value of this prop in <code>window scroll</code> event.
+                    rendering of component. E.g., don't change the value of this prop in <code>window scroll</code> event.
                 </em></p>
             </>
     },
