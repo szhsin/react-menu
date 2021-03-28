@@ -16,6 +16,7 @@ import {
     safeCall,
     bem,
     flatStyles,
+    isProd,
     parsePadding,
     menuClass,
     menuArrowClass,
@@ -577,8 +578,13 @@ export const MenuList = defineName(React.memo(function MenuList({
 
     const handlePosition = useCallback(() => {
         if (!menuRef.current) {
-            process.env.NODE_ENV !== 'production' &&
-                console.warn('Menu ref is null and might not be positioned properly. You could report an issue on GitHub.');
+            !isProd && console.warn('Menu ref is null and might not be positioned properly. You could report an issue on GitHub.');
+            return;
+        }
+
+        if (!containerRef.current) {
+            !isProd && console.error('Menu cannot be positioned properly as container ref is null.',
+                'If you initialise isOpen prop to true for ControlledMenu, please see this link for a solution: https://github.com/szhsin/react-menu/issues/2#issuecomment-719166062');
             return;
         }
 
@@ -624,7 +630,7 @@ export const MenuList = defineName(React.memo(function MenuList({
         setExpandedDirection(computedDirection);
         latestMenuSize.current = { width: menuRect.width, height: menuRect.height };
     }, [
-        anchorPoint, anchorRef, boundingBoxRef, boundingBoxPadding, overflow,
+        anchorPoint, anchorRef, containerRef, boundingBoxRef, boundingBoxPadding, overflow,
         positionHelpers, positionMenu, positionContextMenu
     ]);
 
