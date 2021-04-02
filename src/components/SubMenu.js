@@ -53,9 +53,9 @@ export const SubMenu = defineName(React.memo(function SubMenu({
     const timeoutId = useRef();
 
     const handleClose = useCallback(() => {
-        // let onBlur close the menu
+        closeMenu();
         itemRef.current.focus();
-    }, []);
+    }, [closeMenu]);
 
     const handleMouseEnter = () => {
         if (isDisabled || isOpen) return;
@@ -72,6 +72,12 @@ export const SubMenu = defineName(React.memo(function SubMenu({
         if (!isOpen) {
             dispatch({ type: HoverIndexActionTypes.UNSET, index });
         }
+    }
+
+    const handleClick = () => {
+        if (isDisabled) return;
+        if (!isHovering) dispatch({ type: HoverIndexActionTypes.SET, index });
+        openMenu();
     }
 
     const handleKeyDown = e => {
@@ -122,11 +128,6 @@ export const SubMenu = defineName(React.memo(function SubMenu({
         if (!e.currentTarget.contains(relatedTarget)) {
             closeMenu();
             dispatch({ type: HoverIndexActionTypes.UNSET, index });
-        } else if (itemRef.current.contains(relatedTarget)) {
-            // This handles clicking on submenu item when it's open
-            // First close the submenu and then let subsequent onClick event re-open it
-            // for maintaining the correct focus
-            closeMenu();
         }
     }
 
@@ -168,7 +169,7 @@ export const SubMenu = defineName(React.memo(function SubMenu({
                 ref={itemRef}
                 onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}
-                onClick={() => !isDisabled && openMenu()}
+                onClick={handleClick}
                 onKeyUp={handleKeyUp}
                 {...activeStateHandlers}>
                 {safeCall(label, modifiers)}
