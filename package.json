@@ -1,6 +1,6 @@
 {
   "name": "@szhsin/react-menu",
-  "version": "1.9.0",
+  "version": "1.9.1",
   "description": "React component for building accessible menu, dropdown, submenu, context menu and more.",
   "author": "Zheng Song",
   "license": "MIT",

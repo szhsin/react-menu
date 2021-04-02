@@ -37,6 +37,7 @@ test('Open and close submenu, and activate submenu item with mouse and keyboard'
     utils.expectMenuToBeInTheDocument(false, submenuOptions);
     utils.expectToBeDisabled(submenuItem, false);
     fireEvent.click(submenuItem);
+    utils.expectMenuItemToBeHover(submenuItem, true);
     utils.expectMenuToBeOpen(true, submenuOptions);
     expect(onChange).toHaveBeenLastCalledWith({ open: true });
     await waitFor(() => expect(utils.queryMenu(submenuOptions)).toHaveFocus());
@@ -87,19 +88,18 @@ test('Open and close submenu, and activate submenu item with mouse and keyboard'
     utils.expectMenuToBeOpen(false, submenuOptions);
     utils.expectMenuToBeOpen(false, menuOptions);
 
-    // Open submenu
+    // Open submenu and click submenu item, submenu keeps open and hovered
     utils.clickMenuButton();
     fireEvent.mouseEnter(submenuItem);
     await waitFor(() => expect(utils.queryMenu(submenuOptions)).toHaveFocus());
     utils.expectMenuItemToBeHover(submenuItem, true);
     utils.expectMenuToBeOpen(true, submenuOptions);
-    // When submenu item receives focus, submenu is closed
     submenuItem.focus();
-    utils.expectMenuItemToBeHover(submenuItem, true);
-    utils.expectMenuToBeOpen(false, submenuOptions);
-
     fireEvent.click(submenuItem);
     await waitFor(() => expect(utils.queryMenu(submenuOptions)).toHaveFocus());
+    utils.expectMenuItemToBeHover(submenuItem, true);
+    utils.expectMenuToBeOpen(true, submenuOptions);
+
     // When something outside submenu item receives focus, 
     // submenu is closed and submenu item loses hover state
     utils.queryMenu(menuOptions).focus();
