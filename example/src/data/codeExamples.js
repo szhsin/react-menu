@@ -1362,15 +1362,12 @@ export const installation = {
     id: 'installation',
     title: 'Installation',
     desc:
-        <>
-            <div className="install-command">
-                <p className="comment"># with npm</p>
-                <p>npm install @szhsin/react-menu</p>
-                <p className="comment"># with Yarn</p>
-                <p>yarn add @szhsin/react-menu</p>
-            </div>
-            <p>No peer dependency is required except React 16.8+.</p>
-        </>
+        <div className="install-command">
+            <p className="comment"># with npm</p>
+            <p>npm install @szhsin/react-menu</p>
+            <p className="comment"># with Yarn</p>
+            <p>yarn add @szhsin/react-menu</p>
+        </div>
 };
 
 const codeExamples = [features, installation, usageExamples];
