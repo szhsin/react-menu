@@ -23,6 +23,9 @@ export const expectMenuToBeInTheDocument = (truthy, options) =>
 export const expectMenuToBeOpen = (truthy, options) =>
     expectToBe(queryMenu(options), truthy).toHaveClass('rc-menu--open');
 
+export const expectMenuToBeClosing = (truthy, options) =>
+    expectToBe(queryMenu(options), truthy).toHaveClass('rc-menu--closing');
+
 export const expectButtonToBeExpanded = truthy =>
     expect(queryByRole('button')).toHaveAttribute('aria-expanded', String(truthy));
 

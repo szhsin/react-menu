@@ -89,3 +89,14 @@ test('Portal will render ControlledMenu into document.body', () => {
     expect(document.querySelector('.rc-menu-container')).toBeInTheDocument();
     utils.expectMenuToBeInTheDocument(true);
 });
+
+test('MenuList isClosing state is set properly', () => {
+    const props = { animation: true, isMounted: true };
+    const { rerender } = render(getMenu(props));
+    utils.expectMenuToBeInTheDocument(true);
+    utils.expectMenuToBeClosing(false);
+    rerender(getMenu({ ...props, isOpen: true }));
+    utils.expectMenuToBeClosing(false);
+    rerender(getMenu({ ...props, isOpen: false }));
+    utils.expectMenuToBeClosing(true);
+});
