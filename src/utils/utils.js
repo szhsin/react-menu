@@ -140,4 +140,4 @@ export const getScrollAncestor = node => {
 }
 
 export const floatEqual = (a, b) => Math.abs(a - b) < 0.001;
-export const isProd = process && process.env && process.env.NODE_ENV === 'production';
+export const isProd = process.env.NODE_ENV === 'production';
