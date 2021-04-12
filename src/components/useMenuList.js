@@ -31,17 +31,21 @@ export const useMenuList = (
 
     const containerRef = useRef(null);
     const scrollingRef = useRef(null);
+    const anchorScrollingRef = useRef(null);
+    const { anchorRef, isOpen } = menuListProps;
 
     const settings = useMemo(() => ({
         animation,
         boundingBoxRef,
         boundingBoxPadding,
-        menuRootRef: containerRef,
+        rootMenuRef: containerRef,
+        rootAnchorRef: anchorRef,
         scrollingRef,
+        anchorScrollingRef,
         debugging,
         reposition,
         viewScroll
-    }), [animation, boundingBoxRef, boundingBoxPadding, debugging, reposition, viewScroll]);
+    }), [animation, anchorRef, boundingBoxRef, boundingBoxPadding, debugging, reposition, viewScroll]);
 
     const eventHandlers = useMemo(() => ({
         handleClick(event, isStopPropagation, isCheckorRadio) {
@@ -78,7 +82,7 @@ export const useMenuList = (
     };
 
     const handleBlur = e => {
-        if (menuListProps.isOpen
+        if (isOpen
             && !e.currentTarget.contains(e.relatedTarget || document.activeElement)
             && !debugging) {
             safeCall(onClose, { reason: CloseReason.BLUR });

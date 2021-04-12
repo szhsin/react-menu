@@ -67,8 +67,10 @@ export const MenuList = defineName(React.memo(function MenuList({
         animation,
         boundingBoxRef,
         boundingBoxPadding,
-        menuRootRef,
+        rootMenuRef,
+        rootAnchorRef,
         scrollingRef,
+        anchorScrollingRef,
         reposition,
         viewScroll
     } = useContext(SettingsContext);
@@ -228,15 +230,9 @@ export const MenuList = defineName(React.memo(function MenuList({
         }
     }
 
-    const positionHelpers = useCallback((boundingBoxRef, boundingBoxPadding) => {
+    const positionHelpers = useCallback(() => {
         const menuRect = menuRef.current.getBoundingClientRect();
         const containerRect = containerRef.current.getBoundingClientRect();
-        if (!scrollingRef.current) {
-            scrollingRef.current = boundingBoxRef
-                ? boundingBoxRef.current // user explicitly sets boundingBoxRef
-                : getScrollAncestor(menuRootRef.current); // try to discover bounding box automatically
-        }
-
         const boundingRect = scrollingRef.current === window ? {
             left: 0,
             top: 0,
@@ -302,7 +298,7 @@ export const MenuList = defineName(React.memo(function MenuList({
             confineHorizontally,
             confineVertically
         };
-    }, [containerRef, menuRootRef, scrollingRef]);
+    }, [containerRef, scrollingRef, boundingBoxPadding]);
 
     const placeArrowX = useCallback((
         menuX,
@@ -578,17 +574,22 @@ export const MenuList = defineName(React.memo(function MenuList({
 
     const handlePosition = useCallback(() => {
         if (!menuRef.current) {
-            !isProd && console.warn('Menu ref is null and might not be positioned properly. You could report an issue on GitHub.');
+            if (!isProd) console.warn('[react-menu] Menu ref is null and might not be positioned properly. You could report an issue on GitHub.');
             return;
         }
 
         if (!containerRef.current) {
-            !isProd && console.error('Menu cannot be positioned properly as container ref is null.',
-                'If you initialise isOpen prop to true for ControlledMenu, please see this link for a solution: https://github.com/szhsin/react-menu/issues/2#issuecomment-719166062');
+            if (!isProd) throw new Error('[react-menu] Menu cannot be positioned properly as container ref is null. If you initialise isOpen prop to true for ControlledMenu, please see this link for a solution: https://github.com/szhsin/react-menu/issues/2#issuecomment-719166062');
             return;
         }
 
-        const helpers = positionHelpers(boundingBoxRef, boundingBoxPadding);
+        if (!scrollingRef.current) {
+            scrollingRef.current = boundingBoxRef
+                ? boundingBoxRef.current // user explicitly sets boundingBoxRef
+                : getScrollAncestor(rootMenuRef.current); // try to discover bounding box automatically
+        }
+
+        const helpers = positionHelpers();
         const { menuRect } = helpers;
         let results = { computedDirection: 'bottom' };
         if (anchorPoint) {
@@ -630,8 +631,8 @@ export const MenuList = defineName(React.memo(function MenuList({
         setExpandedDirection(computedDirection);
         latestMenuSize.current = { width: menuRect.width, height: menuRect.height };
     }, [
-        anchorPoint, anchorRef, containerRef, boundingBoxRef, boundingBoxPadding, overflow,
-        positionHelpers, positionMenu, positionContextMenu
+        anchorPoint, anchorRef, containerRef, boundingBoxRef, rootMenuRef, scrollingRef,
+        overflow, positionHelpers, positionMenu, positionContextMenu
     ]);
 
     useLayoutEffect(() => {
@@ -657,11 +658,21 @@ export const MenuList = defineName(React.memo(function MenuList({
     }, [animation, isOpen]);
 
     useEffect(() => {
-        if (!isOpen || viewScroll === 'initial') return;
+        if (!isOpen) return;
+
+        if (!anchorScrollingRef.current && rootAnchorRef && rootAnchorRef.current.tagName) {
+            anchorScrollingRef.current = getScrollAncestor(rootAnchorRef.current);
+        }
+        const scrollCurrent = scrollingRef.current;
+        const menuScroll = scrollCurrent && scrollCurrent.addEventListener ? scrollCurrent : window;
+        const anchorScroll = anchorScrollingRef.current || menuScroll;
+
+        let scroll = viewScroll;
+        if (anchorScroll !== menuScroll && scroll === 'initial') scroll = 'auto';
+        if (scroll === 'initial') return;
 
         // For best user experience, 
         // force to close menu in the following setting combination
-        let scroll = viewScroll;
         if (scroll === 'auto' && overflow !== 'visible') scroll = 'close';
 
         const handleScroll = () => {
@@ -672,11 +683,14 @@ export const MenuList = defineName(React.memo(function MenuList({
             }
         }
 
-        const target = scrollingRef.current.addEventListener ?
-            scrollingRef.current : window;
-        target.addEventListener('scroll', handleScroll);
-        return () => target.removeEventListener('scroll', handleScroll);
-    }, [scrollingRef, isOpen, overflow, onClose, viewScroll, handlePosition]);
+        const scrollObservers = anchorScroll !== menuScroll && viewScroll !== 'initial'
+            ? [anchorScroll, menuScroll] : [anchorScroll];
+        scrollObservers.forEach(o => o.addEventListener('scroll', handleScroll));
+        return () => scrollObservers.forEach(o => o.removeEventListener('scroll', handleScroll));
+    }, [
+        rootAnchorRef, anchorScrollingRef, scrollingRef,
+        isOpen, overflow, onClose, viewScroll, handlePosition
+    ]);
 
     useEffect(() => {
         if (typeof ResizeObserver !== 'function' || reposition === 'initial') return;

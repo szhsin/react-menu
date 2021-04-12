@@ -182,8 +182,7 @@ export const SubMenu = defineName(React.memo(function SubMenu({
                 containerRef={containerRef}
                 isOpen={isOpen}
                 isDisabled={isDisabled}
-                menuItemFocus={menuItemFocus}
-                onClose={handleClose} />}
+                menuItemFocus={menuItemFocus} />}
         </li>
     );
 }), 'SubMenu');
