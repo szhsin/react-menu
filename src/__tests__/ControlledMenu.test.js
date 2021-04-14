@@ -21,7 +21,7 @@ const getMenu = (props) => (
 test('Test ControlledMenu with an anchor element', async () => {
     const onClose = jest.fn();
     const onClick = jest.fn();
-    const anchorRef = {
+    const mockRef = {
         current: {
             getBoundingClientRect: () => ({
                 left: 0,
@@ -34,7 +34,12 @@ test('Test ControlledMenu with an anchor element', async () => {
         }
     };
 
-    const props = { anchorRef, onClose, onClick };
+    const props = {
+        anchorRef: mockRef,
+        boundingBoxRef: mockRef,
+        onClose, onClick,
+        viewScroll: 'auto'
+    };
     const { rerender } = render(getMenu({ ...props, isOpen: false }));
     utils.expectMenuToBeOpen(false);
 
