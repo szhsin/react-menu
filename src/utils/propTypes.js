@@ -43,6 +43,8 @@ export const menuPropTypesBase = {
         PropTypes.number
     ]),
     viewScroll: PropTypes.oneOf(['auto', 'close', 'initial']),
+    submenuOpenDelay: PropTypes.number,
+    submenuCloseDelay: PropTypes.number,
     portal: PropTypes.bool,
     theming: PropTypes.string,
     onClick: PropTypes.func
@@ -61,5 +63,7 @@ export const menuDefaultPropsBase = {
     ...sharedMenuDefaultProp,
     animation: true,
     reposition: 'auto',
-    viewScroll: 'initial'
+    viewScroll: 'initial',
+    submenuOpenDelay: 300,
+    submenuCloseDelay: 150
 };

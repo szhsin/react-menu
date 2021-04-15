@@ -5,26 +5,19 @@ import {
     useEffect
 } from 'react';
 import {
+    ItemSettingsContext,
     MenuListItemContext,
-    HoverIndexActionTypes,
-    SUBMENU_CLOSE_DELAY
+    HoverIndexActionTypes
 } from './constants';
 
 
 // This hook includes some common stateful logic in MenuItem and FocusableItem
 export const useItemState = (isDisabled, index) => {
     const ref = useRef(null);
+    const { submenuCloseDelay } = useContext(ItemSettingsContext);
     const { isParentOpen, hoverIndex, isSubmenuOpen, dispatch } = useContext(MenuListItemContext);
     const isHovering = hoverIndex === index;
     const timeoutId = useRef();
-
-    useEffect(() => {
-        // Don't set focus when parent menu is closed, otherwise focus will be lost
-        // and onBlur event will be fired with relatedTarget setting as null.
-        if (isHovering && isParentOpen) {
-            ref.current && ref.current.focus();
-        }
-    }, [isHovering, isParentOpen]);
 
     const setHover = useCallback(() => {
         if (!isDisabled) dispatch({ type: HoverIndexActionTypes.SET, index });
@@ -40,16 +33,25 @@ export const useItemState = (isDisabled, index) => {
 
     const onMouseEnter = useCallback(() => {
         if (isSubmenuOpen) {
-            timeoutId.current = setTimeout(setHover, SUBMENU_CLOSE_DELAY);
+            timeoutId.current = setTimeout(setHover, submenuCloseDelay);
         } else {
             setHover();
         }
-    }, [isSubmenuOpen, setHover]);
+    }, [isSubmenuOpen, submenuCloseDelay, setHover]);
 
     const onMouseLeave = useCallback((_, keepHover) => {
         timeoutId.current && clearTimeout(timeoutId.current);
         if (!keepHover) dispatch({ type: HoverIndexActionTypes.UNSET, index });
     }, [dispatch, index]);
+
+    useEffect(() => () => clearTimeout(timeoutId.current), []);
+    useEffect(() => {
+        // Don't set focus when parent menu is closed, otherwise focus will be lost
+        // and onBlur event will be fired with relatedTarget setting as null.
+        if (isHovering && isParentOpen) {
+            ref.current && ref.current.focus();
+        }
+    }, [isHovering, isParentOpen]);
 
     return {
         ref,

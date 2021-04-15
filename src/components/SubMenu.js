@@ -12,12 +12,10 @@ import {
     subMenuClass,
     menuItemClass,
     MenuListItemContext,
-    SettingsContext,
+    ItemSettingsContext,
     Keys,
     HoverIndexActionTypes,
     SubmenuActionTypes,
-    SUBMENU_CLOSE_DELAY,
-    SUBMENU_OPEN_DELAY,
     FocusPositions,
     useActiveState,
     useMenuChange,
@@ -41,7 +39,7 @@ export const SubMenu = defineName(React.memo(function SubMenu({
 
     const { isMounted, isOpen, menuItemFocus, openMenu, closeMenu } = useMenuState(keepMounted);
     const { isParentOpen, hoverIndex, isSubmenuOpen, dispatch } = useContext(MenuListItemContext);
-    const { debugging } = useContext(SettingsContext);
+    const { debugging, submenuOpenDelay, submenuCloseDelay } = useContext(ItemSettingsContext);
     const isHovering = hoverIndex === index;
     const isDisabled = Boolean(disabled);
     const {
@@ -57,14 +55,22 @@ export const SubMenu = defineName(React.memo(function SubMenu({
         itemRef.current.focus();
     }, [closeMenu]);
 
+    const delayOpen = delay => {
+        dispatch({ type: HoverIndexActionTypes.SET, index });
+        timeoutId.current = setTimeout(openMenu, Math.max(delay, 0));
+    }
+
     const handleMouseEnter = () => {
         if (isDisabled || isOpen) return;
 
-        if (!isSubmenuOpen) dispatch({ type: HoverIndexActionTypes.SET, index });
-        timeoutId.current = setTimeout(() => {
-            dispatch({ type: HoverIndexActionTypes.SET, index });
-            timeoutId.current = setTimeout(openMenu, SUBMENU_OPEN_DELAY);
-        }, SUBMENU_CLOSE_DELAY);
+        if (isSubmenuOpen) {
+            timeoutId.current = setTimeout(
+                () => delayOpen(submenuOpenDelay - submenuCloseDelay),
+                submenuCloseDelay
+            );
+        } else {
+            delayOpen(submenuOpenDelay);
+        }
     }
 
     const handleMouseLeave = () => {
@@ -76,7 +82,7 @@ export const SubMenu = defineName(React.memo(function SubMenu({
 
     const handleClick = () => {
         if (isDisabled) return;
-        if (!isHovering) dispatch({ type: HoverIndexActionTypes.SET, index });
+        clearTimeout(timeoutId.current);
         openMenu();
     }
 
@@ -131,6 +137,7 @@ export const SubMenu = defineName(React.memo(function SubMenu({
         }
     }
 
+    useEffect(() => () => clearTimeout(timeoutId.current), []);
     useEffect(() => {
         // Don't set focus when parent menu is closed, otherwise focus will be lost
         // and onBlur event will be fired with relatedTarget setting as null.
@@ -169,6 +176,7 @@ export const SubMenu = defineName(React.memo(function SubMenu({
                 ref={itemRef}
                 onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}
+                onMouseDown={() => !isHovering && dispatch({ type: HoverIndexActionTypes.SET, index })}
                 onClick={handleClick}
                 onKeyUp={handleKeyUp}
                 {...activeStateHandlers}>

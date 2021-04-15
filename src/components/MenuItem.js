@@ -34,6 +34,7 @@ export const MenuItem = defineName(React.memo(function MenuItem({
     const {
         ref,
         isHovering,
+        setHover,
         onBlur,
         onMouseEnter,
         onMouseLeave
@@ -106,6 +107,7 @@ export const MenuItem = defineName(React.memo(function MenuItem({
         ...activeStateHandlers,
         onMouseEnter,
         onMouseLeave,
+        onMouseDown: setHover,
         onKeyUp: handleKeyUp,
         onBlur: handleBlur,
         onClick: () => handleClick()

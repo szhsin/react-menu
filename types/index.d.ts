@@ -120,6 +120,8 @@ interface BaseMenuProps extends Omit<SharedMenuProps, 'onClick'> {
     portal?: boolean;
     reposition?: MenuReposition;
     repositionFlag?: number | string;
+    submenuOpenDelay?: number;
+    submenuCloseDelay?: number;
     theming?: string;
     onClick?: EventHandler<ClickEvent>;
 }
