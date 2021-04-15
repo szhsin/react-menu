@@ -16,9 +16,7 @@ export const MenuListContext = React.createContext();
 export const EventHandlersContext = React.createContext({});
 export const RadioGroupContext = React.createContext({});
 export const SettingsContext = React.createContext({});
-
-export const SUBMENU_CLOSE_DELAY = 160;
-export const SUBMENU_OPEN_DELAY = 160;
+export const ItemSettingsContext = React.createContext({});
 
 export const Keys = Object.freeze({
     'ENTER': 'Enter',

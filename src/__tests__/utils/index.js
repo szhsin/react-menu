@@ -6,12 +6,14 @@ import {
     MenuItem,
     MenuButton
 } from '../../';
-import { screen, render, fireEvent } from '@testing-library/react';
+import { screen, render, fireEvent, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 
 const { queryByRole } = screen;
 
 const expectToBe = (value, truthy) => truthy ? expect(value) : expect(value).not;
+
+export const delayFor = delay => waitFor(() => new Promise(resolve => setTimeout(resolve, delay)));
 
 export const queryMenu = ({ name, container } = {}) => name
     ? container.querySelector(`ul[aria-label="${name}"]`)

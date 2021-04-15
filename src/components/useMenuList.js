@@ -7,7 +7,8 @@ import {
     CloseReason,
     Keys,
     EventHandlersContext,
-    SettingsContext
+    SettingsContext,
+    ItemSettingsContext
 } from '../utils';
 import { MenuList } from './MenuList';
 
@@ -20,6 +21,8 @@ export const useMenuList = (
         boundingBoxPadding,
         debugging,
         reposition,
+        submenuOpenDelay,
+        submenuCloseDelay,
         viewScroll,
         portal,
         theming,
@@ -42,10 +45,15 @@ export const useMenuList = (
         rootAnchorRef: anchorRef,
         scrollingRef,
         anchorScrollingRef,
-        debugging,
         reposition,
         viewScroll
-    }), [animation, anchorRef, boundingBoxRef, boundingBoxPadding, debugging, reposition, viewScroll]);
+    }), [animation, anchorRef, boundingBoxRef, boundingBoxPadding, reposition, viewScroll]);
+
+    const itemSettings = useMemo(() => ({
+        debugging,
+        submenuOpenDelay,
+        submenuCloseDelay,
+    }), [debugging, submenuOpenDelay, submenuCloseDelay]);
 
     const eventHandlers = useMemo(() => ({
         handleClick(event, isStopPropagation, isCheckorRadio) {
@@ -110,11 +118,13 @@ export const useMenuList = (
 
             {isMounted &&
                 <SettingsContext.Provider value={settings}>
-                    <EventHandlersContext.Provider value={eventHandlers}>
-                        <MenuList {...menuListProps}
-                            containerRef={containerRef}
-                            onClose={onClose} />
-                    </EventHandlersContext.Provider>
+                    <ItemSettingsContext.Provider value={itemSettings}>
+                        <EventHandlersContext.Provider value={eventHandlers}>
+                            <MenuList {...menuListProps}
+                                containerRef={containerRef}
+                                onClose={onClose} />
+                        </EventHandlersContext.Provider>
+                    </ItemSettingsContext.Provider>
                 </SettingsContext.Provider>}
         </div>
     );
