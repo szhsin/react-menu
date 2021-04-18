@@ -320,6 +320,18 @@ const menuPropsBase = [
             </>
     },
     {
+        name: 'submenuCloseDelay',
+        type: 'number',
+        defaultVal: 150,
+        desc: <p>Set a delay in ms before closing a submenu when it's open and mouse is moving over other items in the parent menu list.</p>
+    },
+    {
+        name: 'submenuOpenDelay',
+        type: 'number',
+        defaultVal: 300,
+        desc: <p>Set a delay in ms before opening a submenu when mouse moves over it.</p>
+    },
+    {
         name: 'viewScroll',
         type: 'string',
         defaultVal: "'initial'",
