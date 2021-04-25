@@ -139,5 +139,5 @@ export const getScrollAncestor = node => {
     return window;
 }
 
-export const floatEqual = (a, b) => Math.abs(a - b) < 0.001;
+export const floatEqual = (a, b, diff = 0.001) => Math.abs(a - b) < diff;
 export const isProd = process.env.NODE_ENV === 'production';
