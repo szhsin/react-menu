@@ -28,6 +28,10 @@ export const MenuGroup = defineName(React.memo(function MenuGroup({
         setOverflowStyles(maxHeight >= 0 ? { maxHeight, overflow } : undefined);
     }, [takeOverflow, overflow, overflowAmt]);
 
+    useLayoutEffect(() => {
+        if (overflowStyles) ref.current.scrollTop = 0;
+    }, [overflowStyles]);
+
     return (
         <div ref={ref}
             {...restProps}

@@ -606,6 +606,10 @@ export const MenuList = defineName(React.memo(function MenuList({
     }, [isOpen, handlePosition, reposFlag]);
 
     useLayoutEffect(() => {
+        if (overflowData && !descendOverflowRef.current) menuRef.current.scrollTop = 0;
+    }, [overflowData]);
+
+    useLayoutEffect(() => {
         if (animation) {
             if (isOpen) {
                 setClosing(false)
