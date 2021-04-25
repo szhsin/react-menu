@@ -80,6 +80,10 @@
         position: relative;
     }
 
+    &__group {
+        box-sizing: border-box;
+    }
+
     &__radio-group {
         @include mixins.reset-list;
     }

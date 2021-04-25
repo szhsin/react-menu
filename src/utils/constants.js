@@ -7,6 +7,7 @@ export const menuArrowClass = 'arrow';
 export const menuItemClass = 'item';
 export const menuDividerClass = 'divider';
 export const menuHeaderClass = 'header';
+export const menuGroupClass = 'group';
 export const subMenuClass = 'submenu';
 export const radioGroupClass = 'radio-group';
 

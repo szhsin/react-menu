@@ -111,7 +111,6 @@ export const useMenuList = (
     const menuList = (
         <div id={id}
             className={bem(menuContainerClass, null, { theme: theming })()}
-            role="presentation"
             ref={containerRef}
             onKeyDown={handleKeyDown}
             onBlur={handleBlur}>
