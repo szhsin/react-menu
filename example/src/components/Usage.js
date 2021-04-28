@@ -12,12 +12,13 @@ import {
     MenuButton,
     FocusableItem,
     SubMenu,
+    MenuGroup,
     MenuRadioGroup,
     MenuHeader,
     MenuDivider,
     useMenuState
 } from '@szhsin/react-menu';
-import { SettingContext, DomInfoContext, withTheme } from '../utils';
+import { SettingContext, DomInfoContext, ToastContext, withTheme } from '../utils';
 import { TableContents } from './TableContents';
 import { Example } from './Example';
 import { HashHeading } from './HashHeading';
@@ -506,6 +507,8 @@ const overflowOptions = [
 function MenuOverflowExample() {
     const [overflow, setOverflow] = useState('auto');
     const [position, setPosition] = useState('auto');
+    const [filter, setFilter] = useState('');
+    const setToast = useContext(ToastContext);
 
     return (
         <Example data={codeExamples.overflow} >
@@ -518,12 +521,40 @@ function MenuOverflowExample() {
                     option={position} onOptionChange={setPosition} />
             </form>
 
-            <Menu menuButton={<MenuButton>Open menu</MenuButton>}
-                overflow={overflow} position={position} align="center">
-
-                {new Array(40).fill(0).map(
-                    (_, i) => <MenuItem key={i}>Item {i + 1}</MenuItem>)}
-            </Menu>
+            <div>
+                <Menu menuButton={<MenuButton>Overflow</MenuButton>}
+                    overflow={overflow} position={position} align="center">
+                    {new Array(40).fill(0).map(
+                        (_, i) => {
+                            const item = `Item ${i + 1}`;
+                            return (
+                                <MenuItem key={i} onClick={() => setToast(item + ' clicked')}>
+                                    {item}
+                                </MenuItem>
+                            );
+                        })}
+                </Menu>
+                <Menu menuButton={<MenuButton styles={{ marginTop: '2rem' }}>Grouping</MenuButton>}
+                    overflow={overflow} position={position} boundingBoxPadding="10"
+                    onChange={e => e.open && setFilter('')} align="center">
+                    <FocusableItem styles={{ padding: '0.375rem 1rem' }}>
+                        {({ ref }) => (
+                            <input ref={ref} type="text" placeholder="Type a number"
+                                value={filter} onChange={e => setFilter(e.target.value)} />
+                        )}
+                    </FocusableItem>
+                    <MenuGroup takeOverflow>
+                        {new Array(40).fill(0)
+                            .map((_, i) => `Item ${i + 1}`)
+                            .filter(item => item.includes(filter.trim()))
+                            .map((item, i) =>
+                                <MenuItem key={i} onClick={() => setToast(item + ' clicked')}>
+                                    {item}
+                                </MenuItem>)}
+                    </MenuGroup>
+                    <MenuItem>Bottom-fixed</MenuItem>
+                </Menu>
+            </div>
         </Example>
     );
 }

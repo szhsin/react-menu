@@ -177,6 +177,9 @@
 
         .rc-menu {
             z-index: 201;
+            input {
+                max-width: 7rem;
+            }
         }
     }
 }

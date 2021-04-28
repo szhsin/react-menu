@@ -26,12 +26,12 @@
         position: fixed;
         z-index: 200;
         left: 50%;
-        bottom: 50px;
+        top: 70px;
         transform: translateX(-50%);
         padding: 0.6rem 1.5rem;
         border-radius: var.$border-radius-medium;
         box-shadow: 0px 3px 7px rgba(0, 0, 0, 0.133), 0px 0.6px 2px rgba(0, 0, 0, 0.1);
-        background-color: #f5f6fa;
+        background-color: var.$btn-light;
         pointer-events: none;
         user-select: none;
     }
@@ -47,6 +47,12 @@
                 background-color: var.$block-dark;
                 border-color: var.$border-dark;
             }
+        }
+
+        .rc-app__toast {
+            background-color: var.$btn-dark;
+            border: 1px solid var.$border-dark;
+            box-shadow: 0 2px 9px 3px rgba(0, 0, 0, 0.25);
         }
     }
 }

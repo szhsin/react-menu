@@ -19,18 +19,30 @@
 }
 
 .rc-menu {
-    @include mixins.scrollbar;
     white-space: nowrap;
     &__item--active {
         color: #fff !important;
     }
+}
+
+.rc-menu,
+.rc-menu__group {
+    @include mixins.scrollbar;
     @media (max-width: 600px) {
         &::-webkit-scrollbar {
             width: 3px;
         }
     }
-
     .rc-app--theme-dark & {
         @include mixins.scrollbar-dark;
+    }
+}
+
+.rc-menu__group {
+    margin: 0.5rem 0;
+    @include mixins.border(border-top, $transition: false);
+    @include mixins.border(border-bottom);
+    .rc-app--theme-dark & {
+        border-color: var.$border-dark;
     }
 }
