@@ -557,33 +557,34 @@ export const MenuList = defineName(React.memo(function MenuList({
                 getBottomOverflow
             } = helpers;
 
-            setOverflowData(({ height: prevHeight } = {}) => {
-                let height = -1;
-                let overflowAmt = -1;
-
-                const bottomOverflow = getBottomOverflow(y);
-                // When bottomOverflow is 0, menu is on the bottom edge of viewport
-                // This might be the result of a previous maxHeight set on the menu.
-                // In this situation, we need to still apply a new maxHeight.
-                // Same reason for the top side
-                if (bottomOverflow > 0 || (floatEqual(bottomOverflow, 0) && prevHeight >= 0)) {
-                    height = menuRect.height - bottomOverflow;
-                    overflowAmt = bottomOverflow;
-                } else {
-                    const topOverflow = getTopOverflow(y);
-                    if (topOverflow < 0 || (floatEqual(topOverflow, 0) && prevHeight >= 0)) {
-                        height = menuRect.height + topOverflow;
-                        overflowAmt = -topOverflow;
-                        if (height >= 0) y -= topOverflow;
-                    }
+            let height, overflowAmt;
+            const prevHeight = latestMenuSize.current.height;
+            const bottomOverflow = getBottomOverflow(y);
+            // When bottomOverflow is 0, menu is on the bottom edge of viewport
+            // This might be the result of a previous maxHeight set on the menu.
+            // In this situation, we need to still apply a new maxHeight.
+            // Same reason for the top side
+            if (bottomOverflow > 0 ||
+                (floatEqual(bottomOverflow, 0) && floatEqual(menuHeight, prevHeight))) {
+                height = menuHeight - bottomOverflow;
+                overflowAmt = bottomOverflow;
+            } else {
+                const topOverflow = getTopOverflow(y);
+                if (topOverflow < 0 ||
+                    (floatEqual(topOverflow, 0) && floatEqual(menuHeight, prevHeight))) {
+                    height = menuHeight + topOverflow;
+                    overflowAmt = 0 - topOverflow; // avoid getting -0
+                    if (height >= 0) y -= topOverflow;
                 }
+            }
 
-                if (height >= 0) {
-                    // To avoid triggering reposition in the next ResizeObserver callback
-                    menuHeight = height;
-                    return { height, overflowAmt };
-                }
-            });
+            if (height >= 0) {
+                // To avoid triggering reposition in the next ResizeObserver callback
+                menuHeight = height;
+                setOverflowData({ height, overflowAmt });
+            } else {
+                setOverflowData();
+            }
         }
 
         if (arrow) setArrowPosition({ x: arrowX, y: arrowY });
@@ -705,7 +706,7 @@ export const MenuList = defineName(React.memo(function MenuList({
             } else if (menuItemFocus.position === FocusPositions.LAST) {
                 dispatch({ type: HoverIndexActionTypes.LAST });
             }
-        }, animation ? 150 : 100);
+        }, animation ? 170 : 100);
 
         return () => clearTimeout(id);
     }, [animation, captureFocus, isOpen, menuItemFocus]);
