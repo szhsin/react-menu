@@ -552,7 +552,7 @@ function MenuOverflowExample() {
                                     {item}
                                 </MenuItem>)}
                     </MenuGroup>
-                    <MenuItem>Bottom-fixed</MenuItem>
+                    <MenuItem onClick={() => setToast('Last item clicked')}>Last (fixed)</MenuItem>
                 </Menu>
             </div>
         </Example>

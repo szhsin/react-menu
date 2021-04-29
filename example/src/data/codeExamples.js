@@ -851,7 +851,7 @@ const [filter, setFilter] = useState('');
             .filter(item => item.includes(filter.trim()))
             .map((item, i) => <MenuItem key={i}>{item}</MenuItem>)}
     </MenuGroup>
-    <MenuItem>Bottom-fixed</MenuItem>
+    <MenuItem>Last (fixed)</MenuItem>
 </Menu>`
 };
 

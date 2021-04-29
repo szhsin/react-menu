@@ -44,6 +44,12 @@ const propsTable = {
 const dirModifier = <li><code>dir: string</code> direction in which the menu expands.
                         Can be 'left', 'right', 'top', or 'bottom'.</li>;
 
+const menuChildrenProp = {
+    name: 'children',
+    type: 'node',
+    desc: <p>Can be <code>MenuDivider</code>, <code>MenuHeader</code>, <code>MenuGroup</code>, <code>MenuItem</code>, <code>FocusableItem</code>, <code>MenuRadioGroup</code>, <code>SubMenu</code> or any of their combinations.</p>
+};
+
 const keepOpenEventProp = <li><code>keepOpen: bool</code> assign to this property in consuming code to control
                     whether to keep menu open after menu item is activated. Leaving it <code>undefined</code> will behave
                     in accordance with WAI-ARIA Authoring Practices.
@@ -168,6 +174,7 @@ const styleProps = (target, modifiers, className, styles) => [
 // Menu, SubMenu and ControlledMenu
 const sharedMenuProps = [
     ...styleProps('menu arrow', <ul>{dirModifier}</ul>, 'arrowClassName', 'arrowStyles'),
+    menuChildrenProp,
     {
         name: 'arrow',
         type: 'boolean',
@@ -234,11 +241,6 @@ const sharedMenuProps = [
                 <p>Limitation: an <code>overflow</code> value other than 'visible' can only be set on the last
                     level of menu cascading. (i.e. no more deeper level of submenu is allowed).</p>
             </>
-    },
-    {
-        name: 'children',
-        type: 'node',
-        desc: <p>Can be <code>MenuDivider</code>, <code>MenuHeader</code>, <code>MenuItem</code>, <code>FocusableItem</code>, <code>MenuRadioGroup</code>, <code>SubMenu</code> or any of their combinations.</p>
     }
 ];
 
@@ -614,6 +616,28 @@ const menuDivider = {
     ]
 };
 
+const menuGroup = {
+    id: 'menu-group',
+    title: 'MenuGroup',
+    contents: [
+        <p><code>MenuGroup</code> is used to render a wrapping <code>div</code> over a group of related menu items. The group can be made
+         scrollable or have some extra styles. It can contain nested <code>MenuGroup</code>.</p>,
+        {
+            ...propsTable,
+            rows: [
+                ...styleProps('menu group'),
+                menuChildrenProp,
+                {
+                    name: 'takeOverflow',
+                    type: 'boolean',
+                    desc: <p>Set <code>true</code> to apply overflow of the parent menu to the group.
+                        Only one <code>MenuGroup</code> in a menu is allowed to have this prop.</p>
+                }
+            ]
+        }
+    ]
+};
+
 const menuRadioGroup = {
     id: 'radio-group',
     title: 'MenuRadioGroup',
@@ -932,6 +956,7 @@ const components = {
         focusableItem,
         submenu,
         menuRadioGroup,
+        menuGroup,
         menuHeader,
         menuDivider,
         controlledMenu
