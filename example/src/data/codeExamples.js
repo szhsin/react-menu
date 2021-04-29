@@ -818,20 +818,40 @@ export const overflow = {
 
     desc:
         <>
-            <p>When there are too many menu items to be displayed in the viewport, you could use
+            <p>When there isn't enough space for all menu items, you could use
             the <code>overflow</code> prop to make the menu list scrollable. The value of this prop
             is similar to the CSS overflow property.</p>
+            <p>If you want to fix some items at the top or bottom, use a <code>MenuGroup</code> and
+            add <code>takeOverflow</code> prop to make the group scrollable.</p>
         </>,
 
     source:
         `const [overflow, setOverflow] = useState('auto');
 const [position, setPosition] = useState('auto');
+const [filter, setFilter] = useState('');
 
-<Menu menuButton={<MenuButton>Open menu</MenuButton>}
-    overflow={overflow} position={position} align="center">
-
+<Menu menuButton={<MenuButton>Overflow</MenuButton>}
+    overflow={overflow} position={position}>
     {new Array(40).fill(0).map(
         (_, i) => <MenuItem key={i}>Item {i + 1}</MenuItem>)}
+</Menu>
+
+<Menu menuButton={<MenuButton>Grouping</MenuButton>}
+    overflow={overflow} position={position} boundingBoxPadding="10"
+    onChange={e => e.open && setFilter('')}>
+    <FocusableItem>
+        {({ ref }) => (
+            <input ref={ref} type="text" placeholder="Type a number"
+                value={filter} onChange={e => setFilter(e.target.value)} />
+        )}
+    </FocusableItem>
+    <MenuGroup takeOverflow>
+        {new Array(40).fill(0)
+            .map((_, i) => \`Item \${i + 1}\`)
+            .filter(item => item.includes(filter.trim()))
+            .map((item, i) => <MenuItem key={i}>{item}</MenuItem>)}
+    </MenuGroup>
+    <MenuItem>Last (fixed)</MenuItem>
 </Menu>`
 };
 

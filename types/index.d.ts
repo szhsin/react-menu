@@ -254,6 +254,16 @@ export interface MenuHeaderProps extends BaseProps {
 export const MenuHeader: React.ExoticComponent<MenuHeaderProps>;
 
 //
+// MenuGroup
+// ----------------------------------------------------------------------
+export interface MenuGroupProps extends BaseProps {
+    children?: React.ReactNode;
+    takeOverflow?: boolean;
+}
+
+export const MenuGroup: React.ExoticComponent<MenuGroupProps>;
+
+//
 // MenuRadioGroup
 // ----------------------------------------------------------------------
 export interface MenuRadioGroupProps extends Omit<BaseProps, 'onChange'> {

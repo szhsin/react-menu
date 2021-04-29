@@ -9,9 +9,9 @@ import React, {
 } from 'react';
 import {
     attachHandlerProps,
+    cloneChildren,
     defineName,
     floatEqual,
-    getName,
     getScrollAncestor,
     safeCall,
     bem,
@@ -60,7 +60,7 @@ export const MenuList = defineName(React.memo(function MenuList({
 
     const [menuPosition, setMenuPosition] = useState({ x: 0, y: 0 });
     const [arrowPosition, setArrowPosition] = useState({});
-    const [maxHeight, setMaxHeight] = useState(-1);
+    const [overflowData, setOverflowData] = useState();
     const [isClosing, setClosing] = useState(false);
     const [expandedDirection, setExpandedDirection] = useState(direction);
     const {
@@ -80,7 +80,8 @@ export const MenuList = defineName(React.memo(function MenuList({
     const latestOpen = useRef(isOpen);
     const latestMenuSize = useRef({ width: 0, height: 0 });
     const latestHandlePosition = useRef(() => { });
-    const reposFlag = useContext(MenuListContext) || repositionFlag;
+    const descendOverflowRef = useRef(false);
+    const reposFlag = useContext(MenuListContext).reposSubmenu || repositionFlag;
     const [reposSubmenu, forceReposSubmenu] = useReducer(c => c + 1, 1);
     const [{ hoverIndex, openSubmenuCount }, dispatch] = useReducer(reducer, {
         hoverIndex: initialHoverIndex,
@@ -132,54 +133,11 @@ export const MenuList = defineName(React.memo(function MenuList({
     }
 
     const menuItems = useMemo(() => {
-        let index = 0;
-        const permittedChildren = ['MenuDivider', 'MenuHeader', 'MenuItem',
-            'FocusableItem', 'MenuRadioGroup', 'SubMenu'];
-        const validateChildren = (parent, child, permitted) => {
-            if (!child) return false;
-            if (!permitted.includes(getName(child.type))) {
-                console.warn(`${child.type || child} is ignored.\n`,
-                    `The permitted children inside a ${parent} are ${permitted.join(', ')}.`,
-                    'If you create HOC of these components, you can use the applyHOC or applyStatics helper, see more at: https://szhsin.github.io/react-menu/docs#utils-apply-hoc');
-                return false;
-            }
-
-            return true;
-        }
-
-        const items = React.Children.map(children, (child) => {
-            if (!validateChildren('Menu or SubMenu', child, permittedChildren)) return null;
-
-            const componentName = getName(child.type);
-            if (componentName === 'MenuDivider' || componentName === 'MenuHeader') {
-                return child;
-            } else if (componentName === 'MenuRadioGroup') {
-                const permittedChildren = ['MenuItem'];
-                const props = { type: 'radio' };
-
-                const radioItems = React.Children.map(child.props.children,
-                    (radioChild) => {
-                        if (!validateChildren('MenuRadioGroup', radioChild, permittedChildren)) return null;
-
-                        return radioChild.props.disabled
-                            ? React.cloneElement(radioChild, props)
-                            : React.cloneElement(radioChild, {
-                                ...props,
-                                index: index++
-                            })
-                    });
-
-                return React.cloneElement(child, { children: radioItems });
-            } else {
-                return child.props.disabled
-                    ? child
-                    : React.cloneElement(child, { index: index++ });
-            }
-        });
-
-        // Store the count of menu items in a ref rather than a local state
+        const { items, endIndex, descendOverflow } = cloneChildren(children);
+        // Store results in refs rather than local states
         // to avoid updating state during render
-        menuItemsCount.current = index;
+        menuItemsCount.current = endIndex;
+        descendOverflowRef.current = descendOverflow;
         return items;
     }, [children]);
 
@@ -226,7 +184,7 @@ export const MenuList = defineName(React.memo(function MenuList({
         // Check before changing state to avoid triggering unnecessary re-render
         if (isClosing) {
             setClosing(false);
-            setMaxHeight(-1); // reset maxHeight after closing
+            setOverflowData(); // reset overflowData after closing
         }
     }
 
@@ -306,13 +264,12 @@ export const MenuList = defineName(React.memo(function MenuList({
         containerRect,
         menuRect
     ) => {
-        if (!arrow) return;
         let x = anchorRect.left - containerRect.left - menuX + anchorRect.width / 2;
         const offset = arrowRef.current.offsetWidth * 1.25;
         x = Math.max(offset, x);
         x = Math.min(x, menuRect.width - offset);
-        setArrowPosition({ x });
-    }, [arrow]);
+        return x;
+    }, []);
 
     const placeArrowY = useCallback((
         menuY,
@@ -320,13 +277,12 @@ export const MenuList = defineName(React.memo(function MenuList({
         containerRect,
         menuRect
     ) => {
-        if (!arrow) return;
         let y = anchorRect.top - containerRect.top - menuY + anchorRect.height / 2;
         const offset = arrowRef.current.offsetHeight * 1.25;
         y = Math.max(offset, y);
         y = Math.min(y, menuRect.height - offset);
-        setArrowPosition({ y });
-    }, [arrow]);
+        return y;
+    }, []);
 
     const placeLeftorRight = useCallback(({
         anchorRect,
@@ -388,9 +344,9 @@ export const MenuList = defineName(React.memo(function MenuList({
         }
 
         if (position === 'auto') x = confineHorizontally(x);
-        placeArrowY(y, anchorRect, containerRect, menuRect);
-        return { x, y, computedDirection };
-    }, [placeArrowY, direction, position]);
+        const arrowY = arrow ? placeArrowY(y, anchorRect, containerRect, menuRect) : undefined;
+        return { arrowY, x, y, computedDirection };
+    }, [placeArrowY, arrow, direction, position]);
 
     const placeToporBottom = useCallback(({
         anchorRect,
@@ -453,9 +409,9 @@ export const MenuList = defineName(React.memo(function MenuList({
         }
 
         if (position === 'auto') y = confineVertically(y);
-        placeArrowX(x, anchorRect, containerRect, menuRect);
-        return { x, y, computedDirection };
-    }, [placeArrowX, direction, position]);
+        const arrowX = arrow ? placeArrowX(x, anchorRect, containerRect, menuRect) : undefined;
+        return { arrowX, x, y, computedDirection };
+    }, [placeArrowX, arrow, direction, position]);
 
     // handle menu positioning
     const positionMenu = useCallback((positionHelpers, anchorRef) => {
@@ -573,11 +529,6 @@ export const MenuList = defineName(React.memo(function MenuList({
     }, []);
 
     const handlePosition = useCallback(() => {
-        if (!menuRef.current) {
-            if (!isProd) console.warn('[react-menu] Menu ref is null and might not be positioned properly. You could report an issue on GitHub.');
-            return;
-        }
-
         if (!containerRef.current) {
             if (!isProd) throw new Error('[react-menu] Menu cannot be positioned properly as container ref is null. If you initialise isOpen prop to true for ControlledMenu, please see this link for a solution: https://github.com/szhsin/react-menu/issues/2#issuecomment-719166062');
             return;
@@ -597,7 +548,8 @@ export const MenuList = defineName(React.memo(function MenuList({
         } else if (anchorRef) {
             results = positionMenu(helpers, anchorRef);
         }
-        let { x, y, computedDirection } = results;
+        let { arrowX, arrowY, x, y, computedDirection } = results;
+        let menuHeight = menuRect.height;
 
         if (overflow !== 'visible') {
             const {
@@ -605,33 +557,42 @@ export const MenuList = defineName(React.memo(function MenuList({
                 getBottomOverflow
             } = helpers;
 
-            setMaxHeight(height => {
-                let newHeight = -1;
-
-                const bottomOverflow = getBottomOverflow(y);
-                // When bottomOverflow is 0, menu is on the bottom edge of viewport
-                // This might be the result of a previous maxHeight set on the menu.
-                // In this situation, we need to still apply a new maxHeight.
-                // Same reason for the top side
-                if (bottomOverflow > 0 || (floatEqual(bottomOverflow, 0) && height >= 0)) {
-                    newHeight = menuRect.height - bottomOverflow;
-                } else {
-                    const topOverflow = getTopOverflow(y);
-                    if (topOverflow < 0 || (floatEqual(topOverflow, 0) && height >= 0)) {
-                        newHeight = menuRect.height + topOverflow;
-                        if (newHeight >= 0) y -= topOverflow;
-                    }
+            let height, overflowAmt;
+            const prevHeight = latestMenuSize.current.height;
+            const bottomOverflow = getBottomOverflow(y);
+            // When bottomOverflow is 0, menu is on the bottom edge of viewport
+            // This might be the result of a previous maxHeight set on the menu.
+            // In this situation, we need to still apply a new maxHeight.
+            // Same reason for the top side
+            if (bottomOverflow > 0 ||
+                (floatEqual(bottomOverflow, 0) && floatEqual(menuHeight, prevHeight))) {
+                height = menuHeight - bottomOverflow;
+                overflowAmt = bottomOverflow;
+            } else {
+                const topOverflow = getTopOverflow(y);
+                if (topOverflow < 0 ||
+                    (floatEqual(topOverflow, 0) && floatEqual(menuHeight, prevHeight))) {
+                    height = menuHeight + topOverflow;
+                    overflowAmt = 0 - topOverflow; // avoid getting -0
+                    if (height >= 0) y -= topOverflow;
                 }
+            }
 
-                return newHeight;
-            });
+            if (height >= 0) {
+                // To avoid triggering reposition in the next ResizeObserver callback
+                menuHeight = height;
+                setOverflowData({ height, overflowAmt });
+            } else {
+                setOverflowData();
+            }
         }
 
+        if (arrow) setArrowPosition({ x: arrowX, y: arrowY });
         setMenuPosition({ x, y });
         setExpandedDirection(computedDirection);
-        latestMenuSize.current = { width: menuRect.width, height: menuRect.height };
+        latestMenuSize.current = { width: menuRect.width, height: menuHeight };
     }, [
-        anchorPoint, anchorRef, containerRef, boundingBoxRef, rootMenuRef, scrollingRef,
+        arrow, anchorPoint, anchorRef, containerRef, boundingBoxRef, rootMenuRef, scrollingRef,
         overflow, positionHelpers, positionMenu, positionContextMenu
     ]);
 
@@ -644,6 +605,10 @@ export const MenuList = defineName(React.memo(function MenuList({
         }
         latestHandlePosition.current = handlePosition;
     }, [isOpen, handlePosition, reposFlag]);
+
+    useLayoutEffect(() => {
+        if (overflowData && !descendOverflowRef.current) menuRef.current.scrollTop = 0;
+    }, [overflowData]);
 
     useLayoutEffect(() => {
         if (animation) {
@@ -709,8 +674,8 @@ export const MenuList = defineName(React.memo(function MenuList({
             }
 
             if (width === 0 || height === 0) return;
-            if (floatEqual(width, latestMenuSize.current.width)
-                && floatEqual(height, latestMenuSize.current.height)) return;
+            if (floatEqual(width, latestMenuSize.current.width, 1)
+                && floatEqual(height, latestMenuSize.current.height, 1)) return;
             latestHandlePosition.current();
             forceReposSubmenu();
         });
@@ -723,7 +688,7 @@ export const MenuList = defineName(React.memo(function MenuList({
     useEffect(() => {
         if (!isOpen) {
             dispatch({ type: HoverIndexActionTypes.RESET });
-            if (!animation) setMaxHeight(-1);
+            if (!animation) setOverflowData();
         }
 
         // Use a timeout here because if set focus immediately, page might scroll unexpectedly.
@@ -741,18 +706,32 @@ export const MenuList = defineName(React.memo(function MenuList({
             } else if (menuItemFocus.position === FocusPositions.LAST) {
                 dispatch({ type: HoverIndexActionTypes.LAST });
             }
-        }, animation ? 150 : 100);
+        }, animation ? 170 : 100);
 
         return () => clearTimeout(id);
     }, [animation, captureFocus, isOpen, menuItemFocus]);
 
     const isSubmenuOpen = openSubmenuCount > 0;
-    const context = useMemo(() => ({
+    const itemContext = useMemo(() => ({
         isParentOpen: isOpen,
         hoverIndex,
         isSubmenuOpen,
         dispatch
     }), [isOpen, hoverIndex, isSubmenuOpen]);
+
+    let maxHeight, overflowAmt;
+    if (overflowData) {
+        descendOverflowRef.current
+            ? (overflowAmt = overflowData.overflowAmt)
+            : (maxHeight = overflowData.height);
+    }
+
+    const listContext = useMemo(() => ({
+        reposSubmenu,
+        overflow,
+        overflowAmt
+    }), [reposSubmenu, overflow, overflowAmt]);
+    const overflowStyles = maxHeight >= 0 ? { maxHeight, overflow } : undefined;
 
     const modifiers = {
         open: isOpen,
@@ -765,11 +744,6 @@ export const MenuList = defineName(React.memo(function MenuList({
     // freeze them to prevent client code from accidentally altering them.
     const userModifiers = Object.freeze({ ...modifiers, dir: expandedDirection });
     const arrowModifiers = Object.freeze({ dir: expandedDirection });
-
-    let overflowStyles = null;
-    if (maxHeight >= 0) {
-        overflowStyles = { maxHeight, overflow };
-    }
 
     const handlers = attachHandlerProps({
         onKeyDown: handleKeyDown,
@@ -800,12 +774,11 @@ export const MenuList = defineName(React.memo(function MenuList({
                         left: arrowPosition.x && `${arrowPosition.x}px`,
                         top: arrowPosition.y && `${arrowPosition.y}px`,
                     }}
-                    ref={arrowRef}
-                    role="presentation" />
+                    ref={arrowRef} />
             }
 
-            <MenuListContext.Provider value={reposSubmenu}>
-                <MenuListItemContext.Provider value={context}>
+            <MenuListContext.Provider value={listContext}>
+                <MenuListItemContext.Provider value={itemContext}>
                     {menuItems}
                 </MenuListItemContext.Provider>
             </MenuListContext.Provider>

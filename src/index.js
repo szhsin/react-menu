@@ -7,4 +7,5 @@ export { MenuItem } from './components/MenuItem';
 export { FocusableItem } from './components/FocusableItem';
 export { MenuDivider } from './components/MenuDivider';
 export { MenuHeader } from './components/MenuHeader';
+export { MenuGroup } from './components/MenuGroup';
 export { MenuRadioGroup } from './components/MenuRadioGroup';
