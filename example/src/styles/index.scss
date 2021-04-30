@@ -320,7 +320,7 @@ $toc-animation: 0.22s ease-out;
 #usage {
     .features {
         font-size: 1.2rem;
-        @media (max-width: 600px) {
+        @media (max-width: var.$bp-sm) {
             font-size: 1.1rem;
         }
     }

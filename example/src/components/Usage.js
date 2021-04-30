@@ -373,12 +373,14 @@ function HoverAndActiveExample() {
 
 function FocusableItemExample() {
     const [filter, setFilter] = useState('');
+    const { vWidth, navbarHeight } = useContext(DomInfoContext);
 
     return (
         <Example data={codeExamples.focusableItem} >
-            <Menu menuButton={<MenuButton>Open menu</MenuButton>} direction="top"
+            <Menu menuButton={<MenuButton>Open menu</MenuButton>}
+                direction={vWidth < 600 ? 'top' : 'bottom'}
                 align="center" onChange={e => e.open && setFilter('')}
-                boundingBoxPadding={`${useContext(DomInfoContext).navbarHeight} 0 0 0`}>
+                boundingBoxPadding={`${navbarHeight} 0 0 0`}>
                 <FocusableItem>
                     {({ ref }) => (
                         <input ref={ref} type="text" placeholder="Type to filter"
@@ -523,7 +525,7 @@ function MenuOverflowExample() {
 
             <div>
                 <Menu menuButton={<MenuButton>Overflow</MenuButton>}
-                    overflow={overflow} position={position} align="center">
+                    overflow={overflow} position={position} align="end">
                     {new Array(40).fill(0).map(
                         (_, i) => {
                             const item = `Item ${i + 1}`;
@@ -536,7 +538,7 @@ function MenuOverflowExample() {
                 </Menu>
                 <Menu menuButton={<MenuButton styles={{ marginTop: '2rem' }}>Grouping</MenuButton>}
                     overflow={overflow} position={position} boundingBoxPadding="10"
-                    onChange={e => e.open && setFilter('')} align="center">
+                    onChange={e => e.open && setFilter('')} align="end">
                     <FocusableItem styles={{ padding: '0.375rem 1rem' }}>
                         {({ ref }) => (
                             <input ref={ref} type="text" placeholder="Type a number"

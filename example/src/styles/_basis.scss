@@ -179,7 +179,7 @@ label {
     td > :last-child {
         margin-bottom: 0;
     }
-    @media (max-width: 600px) {
+    @media (max-width: var.$bp-sm) {
         & {
             display: block;
             overflow-x: auto;
