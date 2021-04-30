@@ -9,6 +9,7 @@ import React, {
 } from 'react';
 import {
     attachHandlerProps,
+    batchedUpdates,
     cloneChildren,
     defineName,
     floatEqual,
@@ -642,7 +643,7 @@ export const MenuList = defineName(React.memo(function MenuList({
 
         const handleScroll = () => {
             if (scroll === 'auto') {
-                handlePosition();
+                batchedUpdates(handlePosition);
             } else {
                 safeCall(onClose, { reason: CloseReason.SCROLL });
             }
@@ -676,8 +677,10 @@ export const MenuList = defineName(React.memo(function MenuList({
             if (width === 0 || height === 0) return;
             if (floatEqual(width, latestMenuSize.current.width, 1)
                 && floatEqual(height, latestMenuSize.current.height, 1)) return;
-            latestHandlePosition.current();
-            forceReposSubmenu();
+            batchedUpdates(() => {
+                latestHandlePosition.current();
+                forceReposSubmenu();
+            });
         });
 
         const observeTarget = menuRef.current;
