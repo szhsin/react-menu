@@ -23,8 +23,11 @@ export const MenuGroup = defineName(React.memo(function MenuGroup({
     const { overflow, overflowAmt } = useContext(MenuListContext);
 
     useLayoutEffect(() => {
-        const maxHeight = takeOverflow && overflowAmt >= 0
-            ? ref.current.getBoundingClientRect().height - overflowAmt : -1;
+        let maxHeight;
+        if (takeOverflow && overflowAmt >= 0) {
+            maxHeight = ref.current.getBoundingClientRect().height - overflowAmt;
+            if (maxHeight < 0) maxHeight = 0;
+        }
         setOverflowStyles(maxHeight >= 0 ? { maxHeight, overflow } : undefined);
     }, [takeOverflow, overflow, overflowAmt]);
 
