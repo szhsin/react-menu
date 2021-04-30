@@ -1,3 +1,7 @@
+import { unstable_batchedUpdates } from 'react-dom';
+
+export const batchedUpdates = unstable_batchedUpdates || (callback => callback());
+
 export const defineName = (component, name) => name
     ? Object.defineProperty(component, '_reactMenu', { value: name, writable: false })
     : component;
@@ -139,5 +143,5 @@ export const getScrollAncestor = node => {
     return window;
 }
 
-export const floatEqual = (a, b, diff = 0.001) => Math.abs(a - b) < diff;
+export const floatEqual = (a, b, diff = 0.0001) => Math.abs(a - b) < diff;
 export const isProd = process.env.NODE_ENV === 'production';
