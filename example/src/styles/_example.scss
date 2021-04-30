@@ -166,7 +166,7 @@
                 max-width: 22rem;
             }
 
-            @media (max-width: 600px) {
+            @media (max-width: var.$bp-sm) {
                 margin-right: 0;
             }
         }
@@ -206,7 +206,7 @@
         padding-bottom: 24rem;
         display: flex;
         justify-content: space-around;
-        @media (max-width: 600px) {
+        @media (max-width: var.$bp-sm) {
             flex-direction: column;
             align-items: center;
         }
