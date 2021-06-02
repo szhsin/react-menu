@@ -11,11 +11,11 @@
   },
   "dependencies": {
     "@szhsin/react-menu": "file:..",
-    "highlight.js": "^10.7.2",
+    "highlight.js": "^11.0.0",
     "react": "file:../node_modules/react",
     "react-dom": "file:../node_modules/react-dom",
     "react-router-dom": "^5.2.0",
-    "react-router-hash-link": "^2.4.0",
+    "react-router-hash-link": "^2.4.3",
     "react-scripts": "file:../node_modules/react-scripts"
   },
   "devDependencies": {

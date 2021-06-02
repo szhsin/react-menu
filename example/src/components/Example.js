@@ -35,7 +35,7 @@ export const Example = React.memo(React.forwardRef(function Example({
     useEffect(() => {
         setToolTip(sourceBtnTitle);
         refSection.current.querySelectorAll('pre code')
-            .forEach(block => hljs.highlightBlock(block));
+            .forEach(elt => hljs.highlightElement(elt));
     }, [sourceBtnTitle]);
 
     return (
