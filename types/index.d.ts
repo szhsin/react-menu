@@ -212,7 +212,7 @@ export interface MenuItemProps extends Omit<BaseProps<MenuItemModifiers>, 'onCli
     type?: MenuItemTypeProp;
     checked?: boolean;
     disabled?: boolean;
-    onClick?: EventHandler<ClickEvent, boolean | void>;
+    onClick?: EventHandler<ClickEvent, boolean | void | Promise<void>>;
     children?: RenderProp<MenuItemModifiers>;
 }
 
