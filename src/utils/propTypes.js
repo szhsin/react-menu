@@ -47,6 +47,7 @@ export const menuPropTypesBase = {
     submenuCloseDelay: PropTypes.number,
     portal: PropTypes.bool,
     theming: PropTypes.string,
+    onItemClick: PropTypes.func,
     onClick: PropTypes.func
 };
 

@@ -1,6 +1,7 @@
 {
     "extends": "dtslint/dtslint.json",
     "rules": {
-        "void-return": false
+        "void-return": false,
+        "no-redundant-jsdoc": false
     }
 }

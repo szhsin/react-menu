@@ -30,6 +30,7 @@ export const Menu = React.memo(function Menu({
     submenuOpenDelay,
     submenuCloseDelay,
     theming,
+    onItemClick,
     onClick,
     onChange,
     ...restProps }) {
@@ -112,6 +113,7 @@ export const Menu = React.memo(function Menu({
         portal,
         theming,
         isMounted,
+        onItemClick,
         onClick,
         onClose: handleClose,
         skipClick
