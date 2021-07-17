@@ -62,6 +62,13 @@ export const clickMenuButton = ({ name, keyboard } = {}) => {
 
 export const queryMenuItem = name => queryByRole('menuitem', { name });
 
+export const clickEvent = ({ checked = false, ...rest } = {}) => expect.objectContaining({
+    checked, ...rest,
+    syntheticEvent: expect.objectContaining(
+        rest.key ? { type: 'keyup', key: rest.key } : { type: 'click' }
+    )
+});
+
 const enhance = (WrappedComponent, value) => {
     const Enhance = props => (
         <WrappedComponent children={value} value={value} {...props} />
