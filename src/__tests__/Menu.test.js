@@ -50,10 +50,10 @@ test('Clicking a menu item fires onClick event and closes the menu', () => {
     const onClick = jest.fn();
     const onChange = jest.fn();
     const onItemClick = jest.fn();
-    utils.renderMenu({ onClick, onChange }, {
+    utils.renderMenu({ onItemClick, onChange }, {
         children: menuItemText,
         value: menuItemText,
-        onClick: onItemClick
+        onClick
     });
 
     // Open menu and click a menu item, expecting onClick to fire on the menu item and menu
@@ -61,14 +61,24 @@ test('Clicking a menu item fires onClick event and closes the menu', () => {
     expect(onChange).toHaveBeenLastCalledWith({ open: true });
 
     fireEvent.click(utils.queryMenuItem(menuItemText));
-    expect(onItemClick).toHaveBeenLastCalledWith({ value: menuItemText, checked: false });
-    expect(onClick).toHaveBeenLastCalledWith({ value: menuItemText, checked: false });
+    expect(onClick).toHaveBeenLastCalledWith(utils.clickEvent({ value: menuItemText }));
+    expect(onItemClick).toHaveBeenLastCalledWith(utils.clickEvent({ value: menuItemText }));
     expect(onChange).toHaveBeenLastCalledWith({ open: false });
-    expect(onChange).toHaveBeenCalledTimes(2);
+    expect(onClick).toHaveBeenCalledTimes(1);
+    expect(onItemClick).toHaveBeenCalledTimes(1);
 
     // menu closes after clicking a menu item
     utils.expectButtonToBeExpanded(false);
     utils.expectMenuToBeOpen(false);
+
+    // onClick returning false skips subsequent onItemClick
+    onClick.mockImplementationOnce(() => false);
+    utils.clickMenuButton();
+    fireEvent.click(utils.queryMenuItem(menuItemText));
+    expect(onClick).toHaveBeenLastCalledWith(utils.clickEvent({ value: menuItemText }));
+    expect(onClick).toHaveBeenCalledTimes(2);
+    expect(onItemClick).toHaveBeenCalledTimes(1);
+    expect(onChange).toHaveBeenCalledTimes(4);
 });
 
 test.each([false, true])(

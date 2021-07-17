@@ -16,9 +16,10 @@ const { queryByRole, queryAllByRole } = screen;
 const LastItem = utils.LastItem;
 
 test('Test radio items', () => {
+    const onClick = jest.fn();
     const onChange = jest.fn();
     const getMenu = value => (
-        <Menu menuButton={<MenuButton>Color</MenuButton>}>
+        <Menu onClick={onClick} menuButton={<MenuButton>Color</MenuButton>}>
             <MenuRadioGroup value={value} name="color" onChange={onChange}>
                 <MenuItem value="red">Red</MenuItem>
                 <MenuItem value="green">Green</MenuItem>
@@ -37,7 +38,8 @@ test('Test radio items', () => {
     utils.expectMenuItemToBeChecked(queryByRole('menuitemradio', { name: 'Green' }), true);
 
     fireEvent.click(queryByRole('menuitemradio', { name: 'Blue' }));
-    expect(onChange).toHaveBeenLastCalledWith({ name: 'color', value: 'blue', checked: false });
+    expect(onChange).toHaveBeenCalledWith(utils.clickEvent({ name: 'color', value: 'blue' }));
+    expect(onClick).toHaveBeenCalledWith(utils.clickEvent({ name: 'color', value: 'blue' }));
     rerender(getMenu('blue'));
     utils.expectMenuItemToBeChecked(queryByRole('menuitemradio', { name: 'Blue' }), true);
     utils.expectMenuItemToBeChecked(queryByRole('menuitemradio', { name: 'Green' }), false);
@@ -62,9 +64,10 @@ test('Use keepOpen of onChange to customise when menu is closed', () => {
 });
 
 test('Test check box items', () => {
+    const onItemClick = jest.fn();
     const onClick = jest.fn();
     const getMenu = isBold => (
-        <Menu menuButton={<MenuButton>Text style</MenuButton>}>
+        <Menu onItemClick={onItemClick} menuButton={<MenuButton>Text style</MenuButton>}>
             <MenuItem type="checkbox" checked={isBold} onClick={onClick}>
                 Bold
             </MenuItem>
@@ -80,14 +83,24 @@ test('Test check box items', () => {
     const menuItems = queryAllByRole('menuitemcheckbox');
     expect(menuItems).toHaveLength(2);
     menuItems.forEach(item => expect(item).toHaveClass('rc-menu__item--type-checkbox'));
-    utils.expectMenuItemToBeChecked(queryByRole('menuitemcheckbox', { name: 'Bold' }), true);
+
+    const boldItem = queryByRole('menuitemcheckbox', { name: 'Bold' });
+    utils.expectMenuItemToBeChecked(boldItem, true);
     utils.expectMenuItemToBeChecked(queryByRole('menuitemcheckbox', { name: 'Italic' }), false);
 
-    fireEvent.click(queryByRole('menuitemcheckbox', { name: 'Bold' }));
-    expect(onClick).toHaveBeenLastCalledWith({ checked: false });
+    fireEvent.click(boldItem);
+    expect(onClick).toHaveBeenLastCalledWith(utils.clickEvent());
+    expect(onItemClick).toHaveBeenLastCalledWith(utils.clickEvent());
     rerender(getMenu(false));
-    utils.expectMenuItemToBeChecked(queryByRole('menuitemcheckbox', { name: 'Bold' }), false);
+    utils.expectMenuItemToBeChecked(boldItem, false);
     utils.expectMenuToBeOpen(false);
+
+    utils.clickMenuButton();
+    fireEvent.click(boldItem);
+    expect(onClick).toHaveBeenLastCalledWith(utils.clickEvent({ checked: true }));
+    expect(onItemClick).toHaveBeenLastCalledWith(utils.clickEvent({ checked: true }));
+    expect(onClick).toHaveBeenCalledTimes(2);
+    expect(onItemClick).toHaveBeenCalledTimes(2);
 });
 
 test('Hover and press a menu item', () => {
@@ -173,7 +186,7 @@ test('keyDown on one item and keyUp on another will not trigger click event', ()
 
     fireEvent.keyDown(anothorItem, { key: 'Enter' });
     fireEvent.keyUp(anothorItem, { key: 'Enter' });
-    expect(onClick).toHaveBeenLastCalledWith({ key: 'Enter', value: 'Middle', checked: false })
+    expect(onClick).toHaveBeenLastCalledWith(utils.clickEvent({ key: 'Enter', value: 'Middle' }))
 });
 
 test('MenuItem keeps hover and active states after focusing something inside it', () => {

@@ -63,7 +63,7 @@ test('Test ControlledMenu with an anchor element', async () => {
 
     // Click on a menu item
     fireEvent.click(utils.queryMenuItem('Middle'));
-    expect(onClick).toHaveBeenLastCalledWith({ value: 'Middle', checked: false });
+    expect(onClick).toHaveBeenLastCalledWith(utils.clickEvent({ value: 'Middle' }));
     expect(onClose).toHaveBeenLastCalledWith({ value: 'Middle', reason: 'click' });
 
     // Set isMounted to false, expect menu to be removed from DOM

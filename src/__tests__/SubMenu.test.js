@@ -119,8 +119,8 @@ test('Open and close submenu, and activate submenu item with mouse and keyboard'
     fireEvent.mouseDown(submenuItem);
     fireEvent.click(submenuItem);
     fireEvent.click(utils.queryMenuItem(menuItemText));
-    expect(onItemClick).toHaveBeenLastCalledWith({ value: menuItemText, checked: false });
-    expect(onClick).toHaveBeenLastCalledWith({ value: menuItemText, checked: false });
+    expect(onItemClick).toHaveBeenLastCalledWith(utils.clickEvent({ value: menuItemText }));
+    expect(onClick).toHaveBeenLastCalledWith(utils.clickEvent({ value: menuItemText }));
     utils.expectMenuToBeOpen(false, menuOptions);
 
     // Activate submenu item with space key
@@ -132,8 +132,8 @@ test('Open and close submenu, and activate submenu item with mouse and keyboard'
     fireEvent.keyDown(utils.queryMenu(submenuOptions), { key: 'ArrowDown' });
     fireEvent.keyDown(utils.queryMenuItem(menuItemText), { key: ' ' });
     fireEvent.keyUp(utils.queryMenuItem(menuItemText), { key: ' ' });
-    expect(onItemClick).toHaveBeenLastCalledWith({ value: menuItemText, key: ' ', checked: false });
-    expect(onClick).toHaveBeenLastCalledWith({ value: menuItemText, key: ' ', checked: false });
+    expect(onItemClick).toHaveBeenLastCalledWith(utils.clickEvent({ value: menuItemText, key: ' ' }));
+    expect(onClick).toHaveBeenLastCalledWith(utils.clickEvent({ value: menuItemText, key: ' ' }));
     utils.expectMenuToBeOpen(false, menuOptions);
 });
 
