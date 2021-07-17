@@ -52,11 +52,12 @@ export const MenuItem = defineName(React.memo(function MenuItem({
         ? radioGroup.value === value
         : (isCheckBox ? Boolean(checked) : false);
 
-    const handleClick = (key) => {
+    const handleClick = e => {
         if (isDisabled) return;
 
         let isStopPropagation = false;
-        const event = { value, key };
+        const event = { value, syntheticEvent: e };
+        if (e.key !== undefined) event.key = e.key;
 
         if (isRadio) {
             event.name = radioGroup.name;
@@ -83,7 +84,7 @@ export const MenuItem = defineName(React.memo(function MenuItem({
                 if (isAnchor) {
                     ref.current.click();
                 } else {
-                    handleClick(e.key);
+                    handleClick(e);
                 }
                 break;
         }
@@ -110,14 +111,14 @@ export const MenuItem = defineName(React.memo(function MenuItem({
         onMouseDown: setHover,
         onKeyUp: handleKeyUp,
         onBlur: handleBlur,
-        onClick: () => handleClick()
+        onClick: handleClick
     }, restProps);
 
     // Order of props overriding (same in all components):
     // 1. Preset props adhering to WAI-ARIA Authoring Practices.
-    // 2. restProps(client code overriding)
-    // 3. handlers (with client code handlers hooked)
-    // 4. ref, className, and styles (style prop is overriden, client code should 
+    // 2. restProps(consuming code overriding)
+    // 3. handlers (with consuming code handlers hooked)
+    // 4. ref, className, and styles (style prop is overriden, consuming code should 
     //    use the styles prop instead)
     const menuItemProps = {
         role: isRadio ? 'menuitemradio' : (isCheckBox ? 'menuitemcheckbox' : 'menuitem'),

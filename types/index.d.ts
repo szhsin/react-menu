@@ -45,6 +45,7 @@ export interface MenuCloseEvent extends Event {
 export interface RadioChangeEvent extends Event {
     name?: string;
     keepOpen?: boolean;
+    syntheticEvent: MouseEvent | KeyboardEvent;
 }
 
 export interface ClickEvent extends RadioChangeEvent {
@@ -123,7 +124,11 @@ interface BaseMenuProps extends Omit<SharedMenuProps, 'onClick'> {
     submenuOpenDelay?: number;
     submenuCloseDelay?: number;
     theming?: string;
+    /**
+     * @deprecated onClick will become the original DOM event in 2.0; use onItemClick instead
+     */
     onClick?: EventHandler<ClickEvent>;
+    onItemClick?: EventHandler<ClickEvent>;
 }
 
 //
