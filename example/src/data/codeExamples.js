@@ -15,7 +15,7 @@ export const basicMenu = {
 
     desc:
         <p>The most basic menu consists of several <code>MenuItem</code>s wrapped
-        in a <code>Menu</code>, and is controlled by a <code>MenuButton</code>.</p>,
+            in a <code>Menu</code>, and is controlled by a <code>MenuButton</code>.</p>,
 
     source:
         `<Menu menuButton={<MenuButton>Open menu</MenuButton>}>
@@ -51,7 +51,7 @@ export const subMenu = {
 
     desc:
         <p><code>SubMenu</code> can be placed in a <code>Menu</code> and has its
-        own <code>MenuItem</code>s as children. You might also create nested submenus under a submenu.</p>,
+            own <code>MenuItem</code>s as children. You might also create nested submenus under a submenu.</p>,
 
     source:
         `<Menu menuButton={<MenuButton>Open menu</MenuButton>}>
@@ -105,8 +105,8 @@ export const eventHandling = {
     desc:
         <>
             <p>When a menu item is activated, the <code>onClick</code> event first fires on
-            the menu item and then bubbles up to the root <code>Menu</code> component. To stop
-            bubbling, return <code>false</code> from the menu item event handler.</p>
+                menu item and then bubbles up to the <code>onItemClick</code> of root menu component. To stop
+                bubbling, return <code>false</code> from the menu item event handler.</p>
             <p>For details of the event object, please refer to {menuItemLink}.</p>
         </>,
 
@@ -128,7 +128,7 @@ const handleSaveClick = e => {
 
 <div>
     <Menu menuButton={<MenuButton>Open menu</MenuButton>}
-        onClick={handleMenuClick}>
+        onItemClick={handleMenuClick}>
 
         <MenuItem value="File" onClick={handleFileClick}>
             New File
@@ -182,7 +182,7 @@ export default function Example() {
         <>
             <div>
                 <Menu menuButton={<MenuButton>Open menu</MenuButton>}
-                    onClick={handleMenuClick}>
+                    onItemClick={handleMenuClick}>
 
                     <MenuItem value="File" onClick={handleFileClick}>
                         New File
@@ -213,7 +213,7 @@ export const radioGroup = {
 
     desc:
         <p>You could make menu items behave like radio buttons by wrapping them in a <code>MenuRadioGroup</code>.
-        The children menu item which has the same value (strict equality ===) as the radio group is marked as checked.</p>,
+            The children menu item which has the same value (strict equality ===) as the radio group is marked as checked.</p>,
 
     source:
         `const [textColor, setTextColor] = useState('red');
@@ -336,7 +336,7 @@ export const headerAndDivider = {
 
     desc:
         <p>You could use <code>MenuHeader</code> and <code>MenuDivider</code> to group related menu items.
-        In addition, <code>MenuHeader</code> can wrap anything for presentational purposes.</p>,
+            In addition, <code>MenuHeader</code> can wrap anything for presentational purposes.</p>,
 
     source:
         `<Menu menuButton={<MenuButton>Open menu</MenuButton>}>
@@ -461,8 +461,8 @@ export const linkAndDisabled = {
 
     desc:
         <p><code>MenuItem</code> can be made a hyperlink by giving it a <code>href</code> prop. Even if
-        it's a link, the <code>onClick</code> event still fires as normal. You could also disable
-        a menu item using the <code>disabled</code> prop.</p>,
+            it's a link, the <code>onClick</code> event still fires as normal. You could also disable
+            a menu item using the <code>disabled</code> prop.</p>,
 
     source:
         `<Menu menuButton={<MenuButton>Open menu</MenuButton>}>
@@ -506,8 +506,8 @@ export const iconAndImage = {
 
     desc:
         <p><LibName /> doesn't include any imagery. However, you are free to use your own or
-    third-party icons and images, as you could wrap anything in a <code>MenuItem</code>. This
-    example uses Google's Material icons.</p>,
+            third-party icons and images, as you could wrap anything in a <code>MenuItem</code>. This
+            example uses Google's Material icons.</p>,
 
     source:
         `<Menu menuButton={<MenuButton>Open menu</MenuButton>}>
@@ -631,8 +631,8 @@ export const hoverAndActive = {
     desc:
         <>
             <p><code>MenuItem</code> manages a number of internal states such as 'hover' and 'active'.
-            If you need to display different contents under different states, you are able to
-            use <code>children</code> as a render prop and pass it a callback function.</p>
+                If you need to display different contents under different states, you are able to
+                use <code>children</code> as a render prop and pass it a callback function.</p>
             <p>For more menu item states, please refer to {menuItemLink}.</p>
         </>,
 
@@ -693,7 +693,7 @@ export const openStateButton = {
 
     desc:
         <p>If you need to change the contents of a menu button when the menu opens,
-        you could use the <code>menuButton</code> as a render prop and pass it a callback function.</p>,
+            you could use the <code>menuButton</code> as a render prop and pass it a callback function.</p>,
 
     source:
         `<Menu menuButton={
@@ -734,15 +734,15 @@ export const customisedButton = {
     desc:
         <>
             <p>You are free to use a native button element with <code>Menu</code>, or use your
-            own React button component which implements a forwarding ref and
-            accepts <code>onClick</code> and <code>onKeyDown</code> event props.</p>
+                own React button component which implements a forwarding ref and
+                accepts <code>onClick</code> and <code>onKeyDown</code> event props.</p>
             <p><code>Menu</code> also works well with third-party React libraries,
-            such as the <b>Material-UI</b>.
-            See <a href="https://codesandbox.io/s/react-menu-material-ui-example-wvzpc"
+                such as the <b>Material-UI</b>.
+                See <a href="https://codesandbox.io/s/react-menu-material-ui-example-wvzpc"
                     target="_blank" rel="noopener noreferrer">
                     an example on CodeSandbox</a>.</p>
             <p>The benefit of {menuButtonLink} is it has additional <code>aria</code> attributes, and you will
-            always be able to style it by following the {styleGuideLink}.</p>
+                always be able to style it by following the {styleGuideLink}.</p>
         </>,
 
     source:
@@ -781,8 +781,8 @@ export const placement = {
     desc:
         <>
             <p>Thanks to <LibName />'s flexible positioning algorithm, you could control the
-            position of menu and how it behaves in response to window scroll event with
-            the <code>align</code>, <code>direction</code>, <code>position</code>, and <code>viewScroll</code> props.</p>
+                position of menu and how it behaves in response to window scroll event with
+                the <code>align</code>, <code>direction</code>, <code>position</code>, and <code>viewScroll</code> props.</p>
             <p>Optionally, menu can be set to display an arrow pointing to its anchor element or
                 add an offset using the <code>arrow</code>, <code>offsetX</code>, and <code>offsetY</code> props.</p>
         </>,
@@ -819,10 +819,10 @@ export const overflow = {
     desc:
         <>
             <p>When there isn't enough space for all menu items, you could use
-            the <code>overflow</code> prop to make the menu list scrollable. The value of this prop
-            is similar to the CSS overflow property.</p>
+                the <code>overflow</code> prop to make the menu list scrollable. The value of this prop
+                is similar to the CSS overflow property.</p>
             <p>If you want to fix some items at the top or bottom, use a <code>MenuGroup</code> and
-            add <code>takeOverflow</code> prop to make the group scrollable.</p>
+                add <code>takeOverflow</code> prop to make the group scrollable.</p>
         </>,
 
     source:
@@ -913,8 +913,8 @@ export const managingState = {
             <p>In some use cases you may need to control how and when a menu is open or closed, and it can
                 be implemented using a <code>ControlledMenu</code>.</p>
             <p>The minimum props you need to provide are a boolean <code>isOpen</code> state, and
-            a <code>ref</code> of an element to which menu will be positioned. You also need to
-            update <code>isOpen</code> in response to the <code>onClose</code> event.</p>
+                a <code>ref</code> of an element to which menu will be positioned. You also need to
+                update <code>isOpen</code> in response to the <code>onClose</code> event.</p>
         </>,
 
     source:
@@ -970,8 +970,8 @@ export const contextMenu = {
         <>
             <p>Context menu is implemented using a <code>ControlledMenu</code>.</p>
             <p>The minimum props you need to provide are a boolean <code>isOpen</code> state, and
-            an <code>anchorPoint</code> of viewport coordinates to which menu will be positioned. You also need to
-            update <code>isOpen</code> in response to the <code>onClose</code> event.</p>
+                an <code>anchorPoint</code> of viewport coordinates to which menu will be positioned. You also need to
+                update <code>isOpen</code> in response to the <code>onClose</code> event.</p>
         </>,
 
     source:
@@ -1032,9 +1032,9 @@ export const menuStateHook = {
     desc:
         <>
             <p>To fully make use of functionalities provided by <code>ControlledMenu</code>, you
-            need to give it three props: <code>isMounted</code>, <code>isOpen</code>, <code>menuItemFocus</code>. To ease this
-            task, you could use the <code>useMenuState</code> Hook which returns these three states and
-            methods that manage them.</p>
+                need to give it three props: <code>isMounted</code>, <code>isOpen</code>, <code>menuItemFocus</code>. To ease this
+                task, you could use the <code>useMenuState</code> Hook which returns these three states and
+                methods that manage them.</p>
             <p>Please see {menuStateHookLink} for more details.</p>
         </>,
 
@@ -1093,12 +1093,12 @@ export const stylesProp = {
     desc:
         <>
             <p>You could apply your style by giving an object to the <code>styles</code> prop. Regular styles
-            are put in the object directly just like React's <code>style</code> prop, and styles which are only applied to
-            specific component states are written in nested objects under corresponding keys. <LibName /> will
-            flatten the styles object by applying the properties from top to bottom, with later properties
-            overriding earlier ones of the same name.</p>
+                are put in the object directly just like React's <code>style</code> prop, and styles which are only applied to
+                specific component states are written in nested objects under corresponding keys. <LibName /> will
+                flatten the styles object by applying the properties from top to bottom, with later properties
+                overriding earlier ones of the same name.</p>
             <p>For more details about the state keys, please refer to the <code>styles</code> prop under
-            each <Link to={'/docs#menu-item'}>component</Link>.</p>
+                each <Link to={'/docs#menu-item'}>component</Link>.</p>
         </>,
 
     source:
@@ -1171,10 +1171,10 @@ export const classNameProp = {
     desc:
         <>
             <p>You could give components your CSS classes using the <code>className</code> prop.
-            Optionally, you may pass a function to the prop and return different CSS class names
-            under different component states.</p>
+                Optionally, you may pass a function to the prop and return different CSS class names
+                under different component states.</p>
             <p>For more details about available states, please refer to the <code>className</code> prop under
-            each <Link to={'/docs#menu-item'}>component</Link>.</p>
+                each <Link to={'/docs#menu-item'}>component</Link>.</p>
         </>,
 
     source:
@@ -1351,7 +1351,7 @@ export const usageExamples =
     title: 'Usage',
     desc:
         <p>Each of the following sections includes a live example. They are grouped into related categories.
-        You could toggle between the brief and full versions of source code.</p>,
+            You could toggle between the brief and full versions of source code.</p>,
     list: [
         menu,
         menuItem,

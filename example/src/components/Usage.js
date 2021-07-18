@@ -155,7 +155,7 @@ function EventHandlingExample() {
         <Example data={codeExamples.eventHandling} >
             <div className="buttons">
                 <Menu menuButton={<MenuButton>Open menu</MenuButton>}
-                    onClick={handleMenuClick}>
+                    onItemClick={handleMenuClick}>
 
                     <MenuItem value="File" onClick={handleFileClick}>
                         New File
