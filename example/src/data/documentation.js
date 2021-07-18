@@ -42,7 +42,7 @@ const propsTable = {
 };
 
 const dirModifier = <li><code>dir: string</code> direction in which the menu expands.
-                        Can be 'left', 'right', 'top', or 'bottom'.</li>;
+    Can be 'left', 'right', 'top', or 'bottom'.</li>;
 
 const menuChildrenProp = {
     name: 'children',
@@ -50,10 +50,12 @@ const menuChildrenProp = {
     desc: <p>Can be <code>MenuDivider</code>, <code>MenuHeader</code>, <code>MenuGroup</code>, <code>MenuItem</code>, <code>FocusableItem</code>, <code>MenuRadioGroup</code>, <code>SubMenu</code> or any of their combinations.</p>
 };
 
+const syntheticEventProp = <li><code>syntheticEvent: MouseEvent | KeyboardEvent</code> DOM event object (React synthetic event)</li>;
+
 const keepOpenEventProp = <li><code>keepOpen: bool</code> assign to this property in consuming code to control
-                    whether to keep menu open after menu item is activated. Leaving it <code>undefined</code> will behave
-                    in accordance with WAI-ARIA Authoring Practices.
-                    See a <a href="https://codesandbox.io/s/react-menu-keepopen-dzscw" target="_blank" rel="noopener noreferrer">Codesandbox example</a> for its usage.</li>;
+    whether to keep menu open after menu item is activated. Leaving it <code>undefined</code> will behave
+    in accordance with WAI-ARIA Authoring Practices.
+    See a <a href="https://codesandbox.io/s/react-menu-keepopen-dzscw" target="_blank" rel="noopener noreferrer">Codesandbox example</a> for its usage.</li>;
 
 const refObjectDesc = <p>Supports <code>ref</code> created by <code>React.createRef</code> or <code>useRef</code> Hook,
     or an object of <code>{'{ current: { getBoundingClientRect(): DOMRect } }'}</code>.
@@ -86,7 +88,7 @@ const menuItemModifiers = (
         <li><code>disabled: bool</code> indicates if the menu item is disabled.</li>
         <li><code>anchor: bool</code> indicates if the menu item has a URL link.</li>
         <li><code>type: string</code> 'radio' in radio item, 'checkbox' in checkbox item,
-        or <code>undefined</code> in other items.</li>
+            or <code>undefined</code> in other items.</li>
     </ul>
 );
 
@@ -99,10 +101,11 @@ const onClickEventObject = (
             <li><code>key: string</code> indicates the key if click is triggered by keyboard.
                 Can be {ENTER_KEY} or {SPACE_KEY}.</li>
             <li><code>checked: bool</code> indicates if the menu item is checked, only
-                 for <code>MenuItem</code> <code>type="checkbox"</code>.</li>
+                for <code>MenuItem</code> <code>type="checkbox"</code>.</li>
             <li><code>name: string</code> the <code>name</code> prop passed to the <code>MenuRadioGroup</code> when
                 the menu item is in a radio group.</li>
             {keepOpenEventProp}
+            {syntheticEventProp}
         </ul>
     </>
 );
@@ -145,7 +148,7 @@ const styleProps = (target, modifiers, className, styles) => [
                     modifiers &&
                     <>
                         <p>When a function is provided, it will be called by passing an object with the
-                        following properties and should return a CSS class name.</p>
+                            following properties and should return a CSS class name.</p>
                         {modifiers}
                     </>
                 }
@@ -221,10 +224,10 @@ const sharedMenuProps = [
                 <p>It sets the position of menu related to its anchor element.</p>
                 <ul>
                     <li><code>'auto'</code> menu position is adjusted to have it contained within
-                    the viewport, even if it will be detached from the anchor element. This option
-                    allows to display menu in the viewport as much as possible.</li>
+                        the viewport, even if it will be detached from the anchor element. This option
+                        allows to display menu in the viewport as much as possible.</li>
                     <li><code>'anchor'</code> menu position is adjusted to have it contained within
-                    the viewport, but it will be kept attached to the edges of anchor element.</li>
+                        the viewport, but it will be kept attached to the edges of anchor element.</li>
                     <li><code>'initial'</code> menu always stays at its initial position.</li>
                 </ul>
             </>
@@ -255,7 +258,7 @@ const menuPropsBase = [
             <>
                 <p>Sets <code>id</code> attribute on the root DOM element containing the menu.</p>
                 <p>It can be helpful when you need to style a specific menu differently
-                and use <code>id</code> in your CSS selectors.</p>
+                    and use <code>id</code> in your CSS selectors.</p>
                 <p>It also helps increase selector specificity when overriding the default style.</p>
             </>
     },
@@ -264,7 +267,7 @@ const menuPropsBase = [
         type: 'boolean',
         defaultVal: 'true',
         desc: <p>Enable or disable animation and transition effects in the <code>Menu</code>,
-        <code>MenuItem</code>, and any descendent <code>SubMenu</code>.</p>
+            <code>MenuItem</code>, and any descendent <code>SubMenu</code>.</p>
     },
     {
         name: 'boundingBoxRef',
@@ -272,8 +275,8 @@ const menuPropsBase = [
         desc:
             <>
                 <p>A ref object attached to a DOM element within which menu will be positioned. If not
-                provided, the nearest ancestor which has CSS <code>overflow</code> set to a value other
-                than 'visible' or the browser viewport will serve as the bounding box.</p>
+                    provided, the nearest ancestor which has CSS <code>overflow</code> set to a value other
+                    than 'visible' or the browser viewport will serve as the bounding box.</p>
                 {refObjectDesc}
             </>
     },
@@ -282,7 +285,7 @@ const menuPropsBase = [
         type: 'string',
         desc:
             <p>Specify bounding box padding in pixels. Use a syntax similar to the
-            CSS <code>padding</code> property but sizing units are discarded.</p>
+                CSS <code>padding</code> property but sizing units are discarded.</p>
     },
     {
         name: 'debugging',
@@ -291,7 +294,7 @@ const menuPropsBase = [
             <>
                 <p><em>Use this prop only when debugging.</em></p>
                 <p>If <code>true</code>, menu doesn't close when losing focus. It may be
-                helpful when you need to inspect and adjust styles in browser developer tools.</p>
+                    helpful when you need to inspect and adjust styles in browser developer tools.</p>
             </>
     },
     {
@@ -303,9 +306,9 @@ const menuPropsBase = [
                 <p>It specifies when menu is repositioned.</p>
                 <ul>
                     <li><code>'initial'</code> Don't automatically reposition menu. Set to this value when you
-                    want to explicitly reposition menu using the <code>repositionFlag</code> prop.</li>
+                        want to explicitly reposition menu using the <code>repositionFlag</code> prop.</li>
                     <li><code>'auto'</code> Reposition menu whenever its size has changed, using
-                    the <code>ResizeObserver</code> API.</li>
+                        the <code>ResizeObserver</code> API.</li>
                 </ul>
             </>
     },
@@ -340,14 +343,14 @@ const menuPropsBase = [
         desc:
             <>
                 <p>It sets the behaviour of menu and any of its descendent submenus
-                     when window is scrolling.</p>
+                    when window is scrolling.</p>
                 <ul>
                     <li><code>'initial'</code> The window scroll event is ignored and has no
-                    effect on menu.</li>
+                        effect on menu.</li>
                     <li><code>'auto'</code> Menu will reposition itself based on the value
-                    of <code>position</code> prop when window is scrolling. <p>Note: for the best
-                    user experience, if the <code>overflow</code> prop is set to a value other than
-                    'visible', <code>viewScroll</code> will behave as 'close'.</p></li>
+                        of <code>position</code> prop when window is scrolling. <p>Note: for the best
+                            user experience, if the <code>overflow</code> prop is set to a value other than
+                            'visible', <code>viewScroll</code> will behave as 'close'.</p></li>
                     <li><code>'close'</code> menu will be closed when window is scrolled.</li>
                 </ul>
             </>
@@ -362,7 +365,7 @@ const menuPropsBase = [
                 <ul>
                     <li>An ancestor container is positioned and CSS <code>overflow</code>is set to a value other than <code>visible</code>.</li>
                     <li>You have a DOM structure that creates a complex hierarchy of stacking contexts, and menu
-                    is overlapped regardless of <code>z-index</code>value.
+                        is overlapped regardless of <code>z-index</code>value.
                     </li>
                 </ul>
                 <p>Note: portal breaks tab sequence and may impact the accessibility of your website.</p>
@@ -375,13 +378,20 @@ const menuPropsBase = [
             add <code>rc-menu-container--theme-dark</code>.</p>
     },
     {
-        name: 'onClick',
+        name: 'onItemClick',
         type: 'function',
         desc:
             <>
                 <p>Event fired when descendent menu items are clicked.</p>
                 {onClickEventObject}
             </>
+    },
+    {
+        name: 'onClick',
+        type: 'function',
+        desc:
+            <p><em>@deprecated</em> <br />onClick will become the original DOM event
+                in 2.0; use <code>onItemClick</code> instead.</p>
     }
 ];
 
@@ -392,7 +402,7 @@ const menu = {
         <>
             <p><code>Menu</code> is a top-level component that contains menu items and other lower level submenus.</p>
             <p>Working with a {menuButtonLink} or a compatible button component, <code>Menu</code> manages states
-            which controls the display of its contents and maintains focus among its descendants.</p>
+                which controls the display of its contents and maintains focus among its descendants.</p>
             <p>It should be able to serve the majority of use cases. If you need more controls on how and
                 when a menu is open or closed, you might use a {controlledMenuLink}.</p>
         </>,
@@ -409,7 +419,7 @@ const menu = {
                         <>
                             <p>Sets <code>aria-label</code> attribute on the menu DOM element.</p>
                             <p>If not provided, one will be generated from the string content of
-                        menu button, or the default 'Menu'.</p>
+                                menu button, or the default 'Menu'.</p>
                         </>
                 },
                 {
@@ -419,20 +429,20 @@ const menu = {
                         <>
                             <p>Can be a {menuButtonLink}, a <code>button</code> element, or a React component.</p>
                             <p>It also accepts a function that returns one of the above.
-                        The function will be called by passing an object with the following properties:</p>
+                                The function will be called by passing an object with the following properties:</p>
                             <ul>
                                 <li><code>open: bool</code> indicates if the menu is open.</li>
                             </ul>
                             <p>If a React component is provided, it needs to implement the following requirements:</p>
                             <ul>
                                 <li><span>Accepts a </span><code>ref</code> prop that is forwarded to the element to which
-                        menu will be positioned. The element should be able to receive focus.</li>
+                                    menu will be positioned. The element should be able to receive focus.</li>
                                 <li><span>Accepts </span><code>onClick</code> and <code>onKeyDown</code> event props.</li>
                             </ul>
                             <p>Please note {menuButtonLink} has one additional benefit that it has
-                    managed <code>aria-haspopup</code> and <code>aria-expanded</code> attributes.
-                    When using a <code>button</code> element or your own React component, it's your job
-                    to set these <code>aria</code> attributes if you need correct accessibility support.</p>
+                                managed <code>aria-haspopup</code> and <code>aria-expanded</code> attributes.
+                                When using a <code>button</code> element or your own React component, it's your job
+                                to set these <code>aria</code> attributes if you need correct accessibility support.</p>
                         </>
                 }
             ]
@@ -447,7 +457,7 @@ const menuItem = {
         <>
             <p><code>MenuItem</code> represents an item under a menu which can be activated.</p>
             <p>It can be a regular menu item, a checkbox item (<code>type="checkbox"</code>),
-            or a radio item (direct child of {radioGroupLink}).</p>
+                or a radio item (direct child of {radioGroupLink}).</p>
         </>,
         {
             ...propsTable,
@@ -459,9 +469,9 @@ const menuItem = {
                     desc:
                         <>
                             <p>Any value provided to this prop will be included in the event object
-                        of the <code>onClick</code> event.</p>
+                                of the <code>onClick</code> event.</p>
                             <p>It's useful for helping identify which menu item is clicked
-                        when you listen the event on <code>Menu</code> component.</p>
+                                when you listen the event on <code>Menu</code> component.</p>
                         </>
                 },
                 {
@@ -490,7 +500,7 @@ const menuItem = {
                     desc:
                         <>
                             <p>Contents of the menu item, or a function that returns it.
-                        The function will be called by passing an object with the following properties:</p>
+                                The function will be called by passing an object with the following properties:</p>
                             {menuItemModifiers}
                         </>
                 },
@@ -499,8 +509,9 @@ const menuItem = {
                     type: 'function',
                     desc:
                         <>
-                            <p>Event fired when the menu item is clicked. The event will then bubble up to the root
-                        menu component. To stop bubbling, return <code>false</code> from the event handler.</p>
+                            <p>Event fired when the menu item is clicked. The event will then bubble up
+                                to <code>onItemClick</code> of the root menu component. To stop bubbling,
+                                return <code>false</code> from the event handler.</p>
                             {onClickEventObject}
                         </>
                 }
@@ -516,8 +527,8 @@ const submenu = {
         <>
             <p><code>SubMenu</code> is a menu container under other menu or submenu components.</p>
             <p>It consists of a menu item and a sub-level menu containing submenu items.
-             Use <code>label</code> prop to set its own contents,
-             and place the submenu items it contains in the <code>children</code> prop.</p>
+                Use <code>label</code> prop to set its own contents,
+                and place the submenu items it contains in the <code>children</code> prop.</p>
         </>,
         {
             ...propsTable,
@@ -534,7 +545,7 @@ const submenu = {
                         <>
                             <p>Sets <code>aria-label</code> attribute on the submenu DOM element.</p>
                             <p>If not provided, one will be generated from the string content
-                        of <code>label</code> prop, or the default 'Submenu'.</p>
+                                of <code>label</code> prop, or the default 'Submenu'.</p>
                         </>
                 },
                 {
@@ -548,7 +559,7 @@ const submenu = {
                     desc:
                         <>
                             <p>Contents of the submenu item, or a function that returns it.
-                        The function will be called by passing an object with the following properties:</p>
+                                The function will be called by passing an object with the following properties:</p>
                             {submenuItemModifiers}
                         </>
                 },
@@ -621,7 +632,7 @@ const menuGroup = {
     title: 'MenuGroup',
     contents: [
         <p><code>MenuGroup</code> is used to render a wrapping <code>div</code> over a group of related menu items. The group can be made
-         scrollable or have some extra styles. It can contain nested <code>MenuGroup</code>.</p>,
+            scrollable or have some extra styles. It can contain nested <code>MenuGroup</code>.</p>,
         {
             ...propsTable,
             rows: [
@@ -645,7 +656,7 @@ const menuRadioGroup = {
         <>
             <p><code>MenuRadioGroup</code> is a container of menu items which are similar to radio buttons.</p>
             <p>All menu items under a <code>MenuRadioGroup</code> are in the same radio group and
-            have <code>type="radio"</code>. It's <strong>unnecessary</strong> to manually set the property. </p>
+                have <code>type="radio"</code>. It's <strong>unnecessary</strong> to manually set the property. </p>
         </>,
         {
             ...propsTable,
@@ -667,7 +678,7 @@ const menuRadioGroup = {
                         <>
                             <p>Sets the radio group name (optional).</p>
                             <p>The name will be passed to the <code>onChange</code> event. It's useful for
-                    identifying radio groups if you attach the same event handler to multiple groups.</p>
+                                identifying radio groups if you attach the same event handler to multiple groups.</p>
                         </>
                 },
                 {
@@ -677,7 +688,7 @@ const menuRadioGroup = {
                         <>
                             <p>Sets value of the radio group.</p>
                             <p>The children menu item which has the same value (strict equality ===)
-                        as the radio group is marked as checked.</p>
+                                as the radio group is marked as checked.</p>
                         </>
                 },
                 {
@@ -696,8 +707,9 @@ const menuRadioGroup = {
                                 <li><code>name: string</code> the <code>name</code> prop passed to the <code>MenuRadioGroup</code> on which this event occurred.</li>
                                 <li><code>value: any</code> the value prop passed to the <code>MenuItem</code> being clicked.</li>
                                 <li><code>key: string</code> indicates the key if click is triggered by keyboard.
-                        Can be {ENTER_KEY} or {SPACE_KEY}.</li>
+                                    Can be {ENTER_KEY} or {SPACE_KEY}.</li>
                                 {keepOpenEventProp}
+                                {syntheticEventProp}
                             </ul>
                         </>
                 }
@@ -730,9 +742,9 @@ const focusableItem = {
                         <>
                             <p>Set <code>true</code> to disabled the item.</p>
                             <p>Please note this prop only removes the current item from mouse and keyboard
-                            interaction sequences. You still need to disable any focusable element
-                            which you have supplied in its children. This prop is passed to the
-                    children render function.</p>
+                                interaction sequences. You still need to disable any focusable element
+                                which you have supplied in its children. This prop is passed to the
+                                children render function.</p>
                         </>
                 },
                 {
@@ -741,16 +753,16 @@ const focusableItem = {
                     desc:
                         <>
                             <p>A function which returns what to be rendered. It will be called by passing an
-                        object with the following properties:</p>
+                                object with the following properties:</p>
                             <ul>
                                 <li><code>hover: bool</code> indicates if the focusable item is being hovered.</li>
                                 <li><code>disabled: bool</code> indicates if the focusable item is disabled.</li>
                                 <li><code>ref: object</code> A ref to be attached to the element which should receive
-                        focus when this focusable item is hovered. <br />If you render a React component,
-                        it needs to expose a <code>focus</code> method or supports ref forwarding.</li>
+                                    focus when this focusable item is hovered. <br />If you render a React component,
+                                    it needs to expose a <code>focus</code> method or supports ref forwarding.</li>
                                 <li><code>closeMenu: func</code> A function that requests to close the root menu.
-                        You could optionally pass a <code>key</code> parameter to indicate which key
-                        initiates the close request.</li>
+                                    You could optionally pass a <code>key</code> parameter to indicate which key
+                                    initiates the close request.</li>
                             </ul>
                         </>
                 },
@@ -766,13 +778,13 @@ const controlledMenu = {
         <>
             <p><code>ControlledMenu</code> is a top-level component that contains menu items and other lower level submenus.</p>
             <p>It's different from a {menuLink} that <code>ControlledMenu</code> allows you to control how and when
-            a menu is open or closed, rather than controlled by a menu button.</p>
+                a menu is open or closed, rather than controlled by a menu button.</p>
             <p>For example, you might need to open a menu when something on the page is hovered by a mouse, or
-            you need to position the menu to something other than the menu button. <code>ControlledMenu</code> can
-            be also use to implement a <Link to={'/#context-menu'}>context menu</Link>.</p>
+                you need to position the menu to something other than the menu button. <code>ControlledMenu</code> can
+                be also use to implement a <Link to={'/#context-menu'}>context menu</Link>.</p>
             <p>When using <code>ControlledMenu</code>, it's your job to set focus to the desirable item after menu opens
-            and move focus back to your menu button after it closes, which can be done by setting <code>menuItemFocus</code>, and in
-            the <code>onClose</code> event, respectively. However, depending on your requirements, both of them might be optional.</p>
+                and move focus back to your menu button after it closes, which can be done by setting <code>menuItemFocus</code>, and in
+                the <code>onClose</code> event, respectively. However, depending on your requirements, both of them might be optional.</p>
         </>,
         {
             ...propsTable,
@@ -826,7 +838,7 @@ const controlledMenu = {
                         <>
                             <p>Controls whether the menu is mounted or not.</p>
                             <p>Can be used to unmount menu when it's closed.
-                        Recommend using this prop with {menuStateHookLink}.</p>
+                                Recommend using this prop with {menuStateHookLink}.</p>
                         </>
                 },
                 {
@@ -836,7 +848,7 @@ const controlledMenu = {
                         <>
                             <p>Sets which menu item receives focus (hover) when menu opens.</p>
                             <p>You will usually set this prop when the menu is opened by keyboard events.
-                        Recommend using this prop with {menuStateHookLink}.</p>
+                                Recommend using this prop with {menuStateHookLink}.</p>
                             <p>It's an object with the shape of <code>{'{ position: string }'}</code>. The <code>position</code> can be one of the following values:</p>
                             <ul>
                                 <li><code>'initial'</code> don't set focus.</li>
@@ -854,11 +866,11 @@ const controlledMenu = {
                             <p>Event object properties:</p>
                             <ul>
                                 <li><code>reason: string</code> the reason that causes the close event.
-                        Can be 'click', 'cancel', 'blur', or 'scroll'.</li>
+                                    Can be 'click', 'cancel', 'blur', or 'scroll'.</li>
                                 <li><code>value: any</code> the value prop passed to the <code>MenuItem</code> being
-                        clicked.</li>
+                                    clicked.</li>
                                 <li><code>key: string</code> indicates the key if event is triggered by keyboard.
-                        Can be {ENTER_KEY}, {SPACE_KEY} or {ESC_KEY}.</li>
+                                    Can be {ENTER_KEY}, {SPACE_KEY} or {ESC_KEY}.</li>
                             </ul>
                         </>
                 }
@@ -875,20 +887,20 @@ const menuStateHook = {
             <p><code>useMenuState</code> is a custom Hook that helps manage the states of {controlledMenuLink}.</p>
             <p>The Hook returns several states which are used by <code>ControlledMenu</code> and can be spread to its props. See an <Link to={'/#use-menu-state'}>example</Link>.</p>
             <p>It accepts a boolean parameter <code>keepMounted</code>. If <code>true</code>, menu keeps
-            mounted in the DOM and is hidden by CSS when it's closed. Otherwise, menu is unmounted from DOM when closed. The default value is <code>true</code>.</p>
+                mounted in the DOM and is hidden by CSS when it's closed. Otherwise, menu is unmounted from DOM when closed. The default value is <code>true</code>.</p>
             <p>It returns an object with the following properties:</p>
             <ul>
                 <li><code>isMounted: bool</code></li>
                 <li><code>isOpen: bool</code></li>
                 <li><code>menuItemFocus: bool</code> see {controlledMenuLink} for more details of these properties.</li>
                 <li><code>openMenu: function</code> accepts 'initial', 'first', or 'last'.
-                <br />E.g. <code>openMenu('first')</code> will open menu and set focus to the first menu item.</li>
+                    <br />E.g. <code>openMenu('first')</code> will open menu and set focus to the first menu item.</li>
                 <li><code>closeMenu: function</code></li>
                 <li><code>toggleMenu: function</code> accepts the same parameter as <code>openMenu</code>.</li>
             </ul>
             <p>Using this Hook can take advantage of lazily creating menu and its descendent items, which means menu is
-            not created and mounted into DOM until it's opened for the first time.
-            The {menuLink} component uses this hook internally to manage its states.</p>
+                not created and mounted into DOM until it's opened for the first time.
+                The {menuLink} component uses this hook internally to manage its states.</p>
         </>
     ]
 };
@@ -899,10 +911,10 @@ const applyHOC = {
     contents: [
         <>
             <p>A helper function which copies statics if you create HOC on <LibName /> components. It accepts an HOC
-            and returns a new HOC with the same signature.
-            See a <a href="https://codesandbox.io/s/react-menu-hoc-0bipn" target="_blank" rel="noopener noreferrer">Codesandbox example</a> for its usage.</p>
+                and returns a new HOC with the same signature.
+                See a <a href="https://codesandbox.io/s/react-menu-hoc-0bipn" target="_blank" rel="noopener noreferrer">Codesandbox example</a> for its usage.</p>
             <p>Note: some third-party HOC utilities (such as the <code>connect</code> of react-redux) have already
-            copied statics so you don't need to call this helper.</p>
+                copied statics so you don't need to call this helper.</p>
         </>
     ]
 };
@@ -913,7 +925,7 @@ const applyStatics = {
     contents: [
         <>
             <p>It's similar to <code>applyHOC</code>, but accepts a source
-            component with statics to be copied and returns an HOC which accepts a wrapped component.</p>
+                component with statics to be copied and returns an HOC which accepts a wrapped component.</p>
             <p>It creates a composable HOC that can be placed at the leftmost of a compose utility.</p>
         </>
     ]
