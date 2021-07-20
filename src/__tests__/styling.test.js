@@ -48,11 +48,20 @@ test('className and styles props as functions', () => {
         open: true,
         dir: 'bottom'
     }));
+    expect(styles).toHaveBeenLastCalledWith(expect.objectContaining({
+        hover: false,
+        active: false
+    }));
 
-    const menuItem = queryByRole('menuitem', { name: 'Middle' })
+    // For testing className and styles memorisation
+    fireEvent.mouseEnter(queryByRole('menuitem', { name: 'First' }));
+    fireEvent.mouseEnter(queryByRole('menuitem', { name: 'Last' }));
+
+    const menuItem = queryByRole('menuitem', { name: 'Middle' });
     fireEvent.mouseEnter(menuItem);
     expect(styles).toHaveBeenLastCalledWith(expect.objectContaining({
-        hover: true
+        hover: true,
+        active: false
     }));
 
     fireEvent.keyDown(menuItem, { key: 'Enter' });
@@ -60,4 +69,7 @@ test('className and styles props as functions', () => {
         hover: true,
         active: true
     }));
+
+    expect(className).toHaveBeenCalledTimes(1);
+    expect(styles).toHaveBeenCalledTimes(3);
 });
