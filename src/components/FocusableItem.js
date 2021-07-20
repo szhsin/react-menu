@@ -1,11 +1,11 @@
-import React, { useContext } from 'react';
+import React, { useContext, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import {
     attachHandlerProps,
     defineName,
     safeCall,
-    bem,
-    flatStyles,
+    useBEM,
+    useFlatStyles,
     menuClass,
     menuItemClass,
     stylePropTypes,
@@ -33,21 +33,17 @@ export const FocusableItem = defineName(React.memo(function FocusableItem({
     } = useItemState(isDisabled, index);
     const { handleClose } = useContext(EventHandlersContext);
 
-    const baseParams = {
+    const modifiers = useMemo(() => Object.freeze({
         disabled: isDisabled,
-        hover: isHovering
-    };
-
-    const modifiers = Object.freeze({
-        ...baseParams,
+        hover: isHovering,
         focusable: true
-    });
+    }), [isDisabled, isHovering]);
 
-    const renderChildren = safeCall(children, {
-        ...baseParams,
+    const renderChildren = useMemo(() => safeCall(children, {
+        ...modifiers,
         ref,
         closeMenu: handleClose
-    });
+    }), [ref, children, modifiers, handleClose]);
 
     const handlers = attachHandlerProps({
         onMouseEnter,
@@ -62,8 +58,8 @@ export const FocusableItem = defineName(React.memo(function FocusableItem({
             tabIndex="-1"
             {...restProps}
             {...handlers}
-            className={bem(menuClass, menuItemClass, modifiers)(className)}
-            style={flatStyles(styles, modifiers)}>
+            className={useBEM({ block: menuClass, element: menuItemClass, modifiers, className })}
+            style={useFlatStyles(styles, modifiers)}>
             {renderChildren}
         </li>
     );

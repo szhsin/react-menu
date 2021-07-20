@@ -1,8 +1,8 @@
 import React from 'react';
 import {
     defineName,
-    bem,
-    flatStyles,
+    useBEM,
+    useFlatStyles,
     menuClass,
     menuDividerClass,
     stylePropTypes
@@ -17,8 +17,8 @@ export const MenuDivider = defineName(React.memo(function MenuDivider({
     return (
         <li role="separator"
             {...restProps}
-            className={bem(menuClass, menuDividerClass)(className)}
-            style={flatStyles(styles)} />
+            className={useBEM({ block: menuClass, element: menuDividerClass, className })}
+            style={useFlatStyles(styles)} />
     );
 }), 'MenuDivider');
 

@@ -2,8 +2,8 @@ import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import {
     defineName,
-    bem,
-    flatStyles,
+    useBEM,
+    useFlatStyles,
     stylePropTypes,
     menuClass,
     radioGroupClass,
@@ -29,8 +29,8 @@ export const MenuRadioGroup = defineName(React.memo(function MenuRadioGroup({
             <ul role="group"
                 aria-label={ariaLabel || name || 'Radio group'}
                 {...restProps}
-                className={bem(menuClass, radioGroupClass)(className)}
-                style={flatStyles(styles)}>
+                className={useBEM({ block: menuClass, element: radioGroupClass, className })}
+                style={useFlatStyles(styles)}>
                 <RadioGroupContext.Provider value={contextValue}>
                     {children}
                 </RadioGroupContext.Provider>

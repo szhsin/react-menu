@@ -2,8 +2,8 @@ import React, { useContext, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import {
     defineName,
-    bem,
-    flatStyles,
+    useBEM,
+    useFlatStyles,
     menuClass,
     menuGroupClass,
     stylePropTypes,
@@ -38,8 +38,8 @@ export const MenuGroup = defineName(React.memo(function MenuGroup({
     return (
         <div ref={ref}
             {...restProps}
-            className={bem(menuClass, menuGroupClass)(className)}
-            style={{ ...flatStyles(styles), ...overflowStyles }} />
+            className={useBEM({ block: menuClass, element: menuGroupClass, className })}
+            style={{ ...useFlatStyles(styles), ...overflowStyles }} />
     );
 }), 'MenuGroup');
 

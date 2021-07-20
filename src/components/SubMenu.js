@@ -1,10 +1,10 @@
-import React, { useRef, useContext, useEffect, useCallback } from 'react';
+import React, { useRef, useContext, useEffect, useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import {
     defineName,
     safeCall,
-    bem,
-    flatStyles,
+    useBEM,
+    useFlatStyles,
     stylePropTypes,
     sharedMenuPropTypes,
     sharedMenuDefaultProp,
@@ -153,21 +153,26 @@ export const SubMenu = defineName(React.memo(function SubMenu({
     }, [dispatch, isOpen]);
     useMenuChange(onChange, isOpen);
 
-    const modifiers = Object.freeze({
+    const modifiers = useMemo(() => Object.freeze({
         open: isOpen,
         hover: isHovering,
         active: isActive,
         disabled: isDisabled
-    });
+    }), [isOpen, isHovering, isActive, isDisabled]);
 
     return (
-        <li className={bem(menuClass, subMenuClass)()}
+        <li className={useBEM({ block: menuClass, element: subMenuClass })}
             role="presentation" ref={containerRef}
             onKeyDown={handleKeyDown}
             onBlur={handleBlur}>
 
-            <div className={bem(menuClass, menuItemClass, modifiers)(itemClassName)}
-                style={flatStyles(itemStyles, modifiers)}
+            <div className={useBEM({
+                block: menuClass,
+                element: menuItemClass,
+                modifiers,
+                className: itemClassName
+            })}
+                style={useFlatStyles(itemStyles, modifiers)}
                 role="menuitem"
                 aria-haspopup="true"
                 aria-expanded={isOpen}
@@ -180,7 +185,7 @@ export const SubMenu = defineName(React.memo(function SubMenu({
                 onClick={handleClick}
                 onKeyUp={handleKeyUp}
                 {...activeStateHandlers}>
-                {safeCall(label, modifiers)}
+                {useMemo(() => safeCall(label, modifiers), [label, modifiers])}
             </div>
 
             {isMounted && <MenuList

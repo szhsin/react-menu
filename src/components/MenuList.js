@@ -15,8 +15,8 @@ import {
     floatEqual,
     getScrollAncestor,
     safeCall,
-    bem,
-    flatStyles,
+    useBEM,
+    useFlatStyles,
     isProd,
     parsePadding,
     menuClass,
@@ -736,17 +736,22 @@ export const MenuList = defineName(React.memo(function MenuList({
     }), [reposSubmenu, overflow, overflowAmt]);
     const overflowStyles = maxHeight >= 0 ? { maxHeight, overflow } : undefined;
 
-    const modifiers = {
+    const modifiers = useMemo(() => ({
         open: isOpen,
         closing: isClosing,
         animation,
         dir: animation && expandedDirection
-    };
+    }), [isOpen, isClosing, animation, expandedDirection]);
 
     // Modifier object are shared between this project and client code,
     // freeze them to prevent client code from accidentally altering them.
-    const userModifiers = Object.freeze({ ...modifiers, dir: expandedDirection });
-    const arrowModifiers = Object.freeze({ dir: expandedDirection });
+    const externalModifiers = useMemo(() => Object.freeze({ ...modifiers, dir: expandedDirection }), [modifiers, expandedDirection]);
+    const arrowModifiers = useMemo(() => Object.freeze({ dir: expandedDirection }), [expandedDirection]);
+    const _arrowClass = useBEM({
+        block: menuClass, element: menuArrowClass,
+        modifiers: arrowModifiers, className: arrowClassName
+    });
+    const _arrowStyles = useFlatStyles(arrowStyles, arrowModifiers);
 
     const handlers = attachHandlerProps({
         onKeyDown: handleKeyDown,
@@ -761,19 +766,18 @@ export const MenuList = defineName(React.memo(function MenuList({
             {...restProps}
             {...handlers}
             ref={menuRef}
-            className={bem(menuClass, null, modifiers)(className, userModifiers)}
+            className={useBEM({ block: menuClass, modifiers, className, externalModifiers })}
             style={{
-                ...flatStyles(styles, userModifiers),
+                ...useFlatStyles(styles, externalModifiers),
                 ...overflowStyles,
                 left: `${menuPosition.x}px`,
                 top: `${menuPosition.y}px`
             }}>
 
             {arrow &&
-                <div className={bem(menuClass, menuArrowClass,
-                    arrowModifiers)(arrowClassName)}
+                <div className={_arrowClass}
                     style={{
-                        ...flatStyles(arrowStyles, arrowModifiers),
+                        ..._arrowStyles,
                         left: arrowPosition.x && `${arrowPosition.x}px`,
                         top: arrowPosition.y && `${arrowPosition.y}px`,
                     }}
