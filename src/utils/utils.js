@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { unstable_batchedUpdates } from 'react-dom';
 
 export const batchedUpdates = unstable_batchedUpdates || (callback => callback());
@@ -52,28 +53,30 @@ export const parsePadding = paddingStr => {
 
 // Generate className following BEM methodology: http://getbem.com/naming/
 // Modifier value can be one of the following types: boolean, string, undefined
-export const bem = (block, element, modifiers = {}) => (userClassName, userModifiers) => {
-    let blockElement = element ? `${block}__${element}` : block;
-    let className = blockElement;
-    for (const name of Object.keys(modifiers)) {
+export const useBEM = ({
+    block, element, modifiers, className, externalModifiers
+}) => useMemo(() => {
+    const blockElement = element ? `${block}__${element}` : block;
+    let classString = blockElement;
+    for (const name of Object.keys(modifiers || {})) {
         const value = modifiers[name];
         if (value) {
-            className += ` ${blockElement}--`;
-            className += (value === true ? name : `${name}-${value}`);
+            classString += ` ${blockElement}--`;
+            classString += (value === true ? name : `${name}-${value}`);
         }
     }
 
-    if (typeof userClassName === 'function') {
-        userClassName = userClassName(userModifiers || modifiers);
+    let expandedClassName = typeof className === 'function'
+        ? className(externalModifiers || modifiers)
+        : className
+
+    if (typeof expandedClassName === 'string') {
+        expandedClassName = expandedClassName.trim();
+        if (expandedClassName) classString += ` ${expandedClassName}`;
     }
 
-    if (typeof userClassName === 'string') {
-        userClassName = userClassName.trim();
-        if (userClassName) className += ` ${userClassName}`;
-    }
-
-    return className;
-}
+    return classString;
+}, [block, element, modifiers, className, externalModifiers]);
 
 /* 
 Flatten up to two levels of nesting styles.
@@ -101,7 +104,7 @@ Example style:
 const isObject = obj => obj && typeof obj === 'object';
 const sanitiseKey = key => key.charAt(0) === '$' ? key.slice(1) : key;
 
-export const flatStyles = (styles, modifiers) => {
+export const useFlatStyles = (styles, modifiers) => useMemo(() => {
     if (typeof styles === 'function') return styles(modifiers);
     if (!isObject(styles)) return undefined;
     if (!modifiers) return styles;
@@ -131,7 +134,7 @@ export const flatStyles = (styles, modifiers) => {
     }
 
     return style;
-}
+}, [styles, modifiers]);
 
 // Adapted from https://github.com/popperjs/popper-core/tree/v2.9.1/src/dom-utils
 export const getScrollAncestor = node => {

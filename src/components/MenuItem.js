@@ -1,11 +1,11 @@
-import React, { useContext } from 'react';
+import React, { useContext, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import {
     attachHandlerProps,
     defineName,
     safeCall,
-    bem,
-    flatStyles,
+    useBEM,
+    useFlatStyles,
     stylePropTypes,
     menuClass,
     menuItemClass,
@@ -95,14 +95,14 @@ export const MenuItem = defineName(React.memo(function MenuItem({
         onBlur(e);
     }
 
-    const modifiers = Object.freeze({
+    const modifiers = useMemo(() => Object.freeze({
         type,
         disabled: isDisabled,
         hover: isHovering,
         active: isActive,
         checked: isChecked,
         anchor: isAnchor
-    });
+    }), [type, isDisabled, isHovering, isActive, isChecked, isAnchor]);
 
     const handlers = attachHandlerProps({
         ...activeStateHandlers,
@@ -128,11 +128,11 @@ export const MenuItem = defineName(React.memo(function MenuItem({
         ...restProps,
         ...handlers,
         ref,
-        className: bem(menuClass, menuItemClass, modifiers)(className),
-        style: flatStyles(styles, modifiers),
+        className: useBEM({ block: menuClass, element: menuItemClass, modifiers, className }),
+        style: useFlatStyles(styles, modifiers),
     };
 
-    const renderChildren = safeCall(children, modifiers);
+    const renderChildren = useMemo(() => safeCall(children, modifiers), [children, modifiers]);
 
     if (isAnchor) {
         return (

@@ -232,6 +232,18 @@ test('Disabled menu item', () => {
     utils.expectMenuItemToBeHover(menuItem, false);
 });
 
+test('Children of MenuItem is a function', () => {
+    const renderFn = jest.fn();
+    utils.renderMenu(null, { children: renderFn });
+    utils.clickMenuButton();
+
+    fireEvent.keyDown(utils.queryMenu(), { key: 'ArrowDown' });
+    fireEvent.keyDown(utils.queryMenu(), { key: 'ArrowDown' });
+    expect(renderFn).toHaveBeenLastCalledWith(expect.objectContaining({ hover: true }));
+    fireEvent.keyDown(utils.queryMenu(), { key: 'ArrowDown' });
+    expect(renderFn).toHaveBeenCalledTimes(3);
+});
+
 test('Additional props are forwarded to MenuItem', () => {
     const onMouseEnter = jest.fn();
     const onKeyDown = jest.fn();
@@ -253,16 +265,21 @@ test('Additional props are forwarded to MenuItem', () => {
 });
 
 test('Test FocusableItem', () => {
+    const renderFn = jest.fn();
     render(
         <Menu menuButton={<MenuButton>Menu</MenuButton>}>
+            <MenuItem>First</MenuItem>
             <FocusableItem>
-                {({ ref, hover, closeMenu }) => (
-                    <button ref={ref}
-                        className={hover ? 'hover' : undefined}
-                        onClick={() => closeMenu()}>
-                        Close
-                    </button>
-                )}
+                {({ ref, hover, closeMenu }) => {
+                    renderFn(hover);
+                    return (
+                        <button ref={ref}
+                            className={hover ? 'hover' : undefined}
+                            onClick={() => closeMenu()}>
+                            Close
+                        </button>
+                    );
+                }}
             </FocusableItem>
             <MenuDivider />
             <MenuHeader>Header</MenuHeader>
@@ -272,19 +289,25 @@ test('Test FocusableItem', () => {
 
     utils.clickMenuButton({ name: 'Menu' });
     utils.expectMenuToBeOpen(true);
+    expect(renderFn).toHaveBeenLastCalledWith(false);
 
     const button = queryByRole('button', { name: 'Close' });
     fireEvent.mouseEnter(button);
     expect(button).toHaveFocus();
     expect(button).toHaveClass('hover');
+    expect(renderFn).toHaveBeenLastCalledWith(true);
 
     fireEvent.keyDown(button, { key: 'ArrowDown' });
     expect(button).not.toHaveFocus();
     expect(button).not.toHaveClass('hover');
+    expect(renderFn).toHaveBeenLastCalledWith(false);
 
-    fireEvent.keyDown(utils.queryMenuItem('Last'), { key: 'ArrowUp' });
+    fireEvent.keyDown(utils.queryMenu(), { key: 'ArrowDown' });
+    fireEvent.keyDown(utils.queryMenu(), { key: 'ArrowDown' });
     expect(button).toHaveFocus();
     expect(button).toHaveClass('hover');
+    expect(renderFn).toHaveBeenLastCalledWith(true);
+    expect(renderFn).toHaveBeenCalledTimes(4);
 
     fireEvent.click(button);
     utils.expectMenuToBeOpen(false);

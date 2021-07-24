@@ -1,8 +1,8 @@
 import React from 'react';
 import {
     defineName,
-    bem,
-    flatStyles,
+    useBEM,
+    useFlatStyles,
     menuClass,
     menuHeaderClass,
     stylePropTypes
@@ -17,8 +17,8 @@ export const MenuHeader = defineName(React.memo(function MenuHeader({
     return (
         <li role="presentation"
             {...restProps}
-            className={bem(menuClass, menuHeaderClass)(className)}
-            style={flatStyles(styles)} />
+            className={useBEM({ block: menuClass, element: menuHeaderClass, className })}
+            style={useFlatStyles(styles)} />
     );
 }), 'MenuHeader');
 

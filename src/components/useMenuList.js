@@ -2,7 +2,7 @@ import React, { useRef, useMemo } from 'react';
 import ReactDOM from 'react-dom';
 import {
     safeCall,
-    bem,
+    useBEM,
     menuContainerClass,
     CloseReason,
     Keys,
@@ -109,9 +109,10 @@ export const useMenuList = (
         }
     };
 
+    const modifiers = useMemo(() => ({ theme: theming }), [theming]);
     const menuList = (
         <div id={id}
-            className={bem(menuContainerClass, null, { theme: theming })()}
+            className={useBEM({ block: menuContainerClass, modifiers })}
             ref={containerRef}
             onKeyDown={handleKeyDown}
             onBlur={handleBlur}>
