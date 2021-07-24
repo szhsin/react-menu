@@ -1,10 +1,10 @@
 import React, { useRef, useContext, useEffect, useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
+import { useBEM, useFlatStyles, useActiveState, useMenuChange, useMenuState } from '../hooks';
+import { MenuList } from './MenuList';
 import {
     defineName,
     safeCall,
-    useBEM,
-    useFlatStyles,
     stylePropTypes,
     sharedMenuPropTypes,
     sharedMenuDefaultProp,
@@ -16,12 +16,8 @@ import {
     Keys,
     HoverIndexActionTypes,
     SubmenuActionTypes,
-    FocusPositions,
-    useActiveState,
-    useMenuChange,
-    useMenuState
+    FocusPositions
 } from '../utils';
-import { MenuList } from './MenuList';
 
 
 export const SubMenu = defineName(React.memo(function SubMenu({

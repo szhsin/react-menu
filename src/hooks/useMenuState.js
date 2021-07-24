@@ -1,10 +1,5 @@
 import { useState, useReducer, useCallback } from 'react';
-
-export const FocusPositions = Object.freeze({
-    'INITIAL': 'initial',
-    'FIRST': 'first',
-    'LAST': 'last'
-});
+import { FocusPositions } from '../utils';
 
 const MenuStates = Object.freeze({
     'UNMOUNTED': 0, // remove DOM elements when menu is closed

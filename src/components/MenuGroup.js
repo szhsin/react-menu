@@ -1,14 +1,12 @@
 import React, { useContext, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
+import { useBEM, useFlatStyles, useLayoutEffect } from '../hooks';
 import {
     defineName,
-    useBEM,
-    useFlatStyles,
     menuClass,
     menuGroupClass,
     stylePropTypes,
-    MenuListContext,
-    useLayoutEffect
+    MenuListContext
 } from '../utils';
 
 

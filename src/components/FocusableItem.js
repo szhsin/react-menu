@@ -1,16 +1,14 @@
 import React, { useContext, useMemo } from 'react';
 import PropTypes from 'prop-types';
+import { useBEM, useFlatStyles, useItemState } from '../hooks';
 import {
     attachHandlerProps,
     defineName,
     safeCall,
-    useBEM,
-    useFlatStyles,
     menuClass,
     menuItemClass,
     stylePropTypes,
-    EventHandlersContext,
-    useItemState
+    EventHandlersContext
 } from '../utils';
 
 

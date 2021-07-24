@@ -8,7 +8,7 @@ import {
     ItemSettingsContext,
     MenuListItemContext,
     HoverIndexActionTypes
-} from './constants';
+} from '../utils';
 
 
 // This hook includes some common stateful logic in MenuItem and FocusableItem

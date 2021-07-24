@@ -8,6 +8,11 @@ import React, {
     useContext
 } from 'react';
 import {
+    useBEM,
+    useFlatStyles,
+    useLayoutEffect
+} from '../hooks';
+import {
     attachHandlerProps,
     batchedUpdates,
     cloneChildren,
@@ -15,8 +20,6 @@ import {
     floatEqual,
     getScrollAncestor,
     safeCall,
-    useBEM,
-    useFlatStyles,
     isProd,
     parsePadding,
     menuClass,
@@ -29,8 +32,7 @@ import {
     Keys,
     FocusPositions,
     HoverIndexActionTypes,
-    SubmenuActionTypes,
-    useLayoutEffect,
+    SubmenuActionTypes
 } from '../utils';
 
 

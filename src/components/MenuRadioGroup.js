@@ -1,9 +1,8 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
+import { useBEM, useFlatStyles } from '../hooks';
 import {
     defineName,
-    useBEM,
-    useFlatStyles,
     stylePropTypes,
     menuClass,
     radioGroupClass,

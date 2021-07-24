@@ -1,5 +1,7 @@
 import React, { useRef, useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
+import { useMenuChange, useMenuState } from '../hooks';
+import { useMenuList } from './useMenuList';
 import {
     getName,
     attachHandlerProps,
@@ -7,11 +9,8 @@ import {
     menuPropTypesBase,
     menuDefaultPropsBase,
     Keys,
-    FocusPositions,
-    useMenuChange,
-    useMenuState
+    FocusPositions
 } from '../utils';
-import { useMenuList } from './useMenuList';
 
 
 export const Menu = React.memo(function Menu({

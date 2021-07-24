@@ -1,8 +1,7 @@
 import React from 'react';
+import { useBEM, useFlatStyles } from '../hooks';
 import {
     defineName,
-    useBEM,
-    useFlatStyles,
     menuClass,
     menuDividerClass,
     stylePropTypes

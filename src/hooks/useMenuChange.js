@@ -2,7 +2,7 @@ import {
     useRef,
     useEffect
 } from 'react';
-import { safeCall } from './utils';
+import { safeCall } from '../utils';
 
 
 export const useMenuChange = (onChange, isOpen) => {
