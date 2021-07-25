@@ -1,6 +1,20 @@
-import React, { useRef, useContext, useEffect, useCallback, useMemo } from 'react';
+import React, {
+    memo,
+    forwardRef,
+    useRef,
+    useContext,
+    useEffect,
+    useMemo
+} from 'react';
 import PropTypes from 'prop-types';
-import { useBEM, useFlatStyles, useActiveState, useMenuChange, useMenuState } from '../hooks';
+import {
+    useBEM,
+    useFlatStyles,
+    useActiveState,
+    useMenuChange,
+    useMenuState,
+    useCombinedRef
+} from '../hooks';
 import { MenuList } from './MenuList';
 import {
     defineName,
@@ -20,8 +34,9 @@ import {
 } from '../utils';
 
 
-export const SubMenu = defineName(React.memo(function SubMenu({
+export const SubMenu = defineName(memo(forwardRef(function SubMenu({
     'aria-label': ariaLabel,
+    itemRef: externaItemlRef,
     itemClassName,
     itemStyles,
     disabled,
@@ -31,7 +46,8 @@ export const SubMenu = defineName(React.memo(function SubMenu({
     onChange,
     captureFocus: _1,
     repositionFlag: _2,
-    ...restProps }) {
+    ...restProps
+}, externalRef) {
 
     const { isMounted, isOpen, menuItemFocus, openMenu, closeMenu } = useMenuState(keepMounted);
     const { isParentOpen, hoverIndex, isSubmenuOpen, dispatch } = useContext(MenuListItemContext);
@@ -45,11 +61,6 @@ export const SubMenu = defineName(React.memo(function SubMenu({
     const containerRef = useRef(null);
     const itemRef = useRef(null);
     const timeoutId = useRef();
-
-    const handleClose = useCallback(() => {
-        closeMenu();
-        itemRef.current.focus();
-    }, [closeMenu]);
 
     const delayOpen = delay => {
         dispatch({ type: HoverIndexActionTypes.SET, index });
@@ -89,7 +100,8 @@ export const SubMenu = defineName(React.memo(function SubMenu({
             // LEFT key is bubbled up from submenu items
             case Keys.LEFT:
                 if (isOpen) {
-                    handleClose();
+                    closeMenu();
+                    itemRef.current.focus();
                     handled = true;
                 }
                 break;
@@ -174,7 +186,7 @@ export const SubMenu = defineName(React.memo(function SubMenu({
                 aria-expanded={isOpen}
                 aria-disabled={isDisabled || undefined}
                 tabIndex={isHovering && !isOpen ? 0 : -1}
-                ref={itemRef}
+                ref={useCombinedRef(externaItemlRef, itemRef)}
                 onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}
                 onMouseDown={() => !isHovering && dispatch({ type: HoverIndexActionTypes.SET, index })}
@@ -189,12 +201,13 @@ export const SubMenu = defineName(React.memo(function SubMenu({
                 ariaLabel={ariaLabel || (typeof label === 'string' ? label : 'Submenu')}
                 anchorRef={itemRef}
                 containerRef={containerRef}
+                externalRef={externalRef}
                 isOpen={isOpen}
                 isDisabled={isDisabled}
                 menuItemFocus={menuItemFocus} />}
         </li>
     );
-}), 'SubMenu');
+})), 'SubMenu');
 
 SubMenu.propTypes = {
     ...sharedMenuPropTypes,

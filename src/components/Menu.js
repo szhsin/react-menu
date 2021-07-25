@@ -1,4 +1,4 @@
-import React, { useRef, useCallback, useMemo } from 'react';
+import React, { memo, forwardRef, useRef, useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { useMenuChange, useMenuState } from '../hooks';
 import { useMenuList } from './useMenuList';
@@ -13,7 +13,7 @@ import {
 } from '../utils';
 
 
-export const Menu = React.memo(function Menu({
+export const Menu = memo(forwardRef(function Menu({
     'aria-label': ariaLabel,
     id,
     animation,
@@ -32,7 +32,8 @@ export const Menu = React.memo(function Menu({
     onItemClick,
     onClick,
     onChange,
-    ...restProps }) {
+    ...restProps
+}, externalRef) {
 
     const {
         isMounted, isOpen, menuItemFocus,
@@ -97,8 +98,9 @@ export const Menu = React.memo(function Menu({
                 ? button.props.children
                 : 'Menu'),
         anchorRef: buttonRef,
+        externalRef,
         isOpen,
-        menuItemFocus,
+        menuItemFocus
     }, {
         id,
         animation,
@@ -126,7 +128,7 @@ export const Menu = React.memo(function Menu({
             {menuList}
         </React.Fragment>
     );
-});
+}));
 
 Menu.propTypes = {
     ...menuPropTypesBase,

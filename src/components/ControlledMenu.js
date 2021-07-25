@@ -1,4 +1,4 @@
-import React from 'react';
+import { memo, forwardRef } from 'react';
 import PropTypes from 'prop-types';
 import { useMenuList } from './useMenuList';
 import {
@@ -8,7 +8,7 @@ import {
 } from '../utils';
 
 
-export const ControlledMenu = React.memo(function ControlledMenu({
+export const ControlledMenu = memo(forwardRef(function ControlledMenu({
     'aria-label': ariaLabel,
     id,
     animation,
@@ -25,10 +25,12 @@ export const ControlledMenu = React.memo(function ControlledMenu({
     onItemClick,
     onClick,
     onClose,
-    ...restProps }) {
+    ...restProps
+}, externalRef) {
 
     return useMenuList({
         ...restProps,
+        externalRef,
         ariaLabel: ariaLabel || 'Menu'
     }, {
         id,
@@ -47,7 +49,7 @@ export const ControlledMenu = React.memo(function ControlledMenu({
         onClick,
         onClose
     });
-});
+}));
 
 ControlledMenu.propTypes = {
     ...menuPropTypesBase,

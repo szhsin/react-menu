@@ -1,6 +1,6 @@
-import React, { useContext, useRef, useState } from 'react';
+import React, { memo, forwardRef, useContext, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
-import { useBEM, useFlatStyles, useLayoutEffect } from '../hooks';
+import { useBEM, useFlatStyles, useLayoutEffect, useCombinedRef } from '../hooks';
 import {
     defineName,
     menuClass,
@@ -10,11 +10,12 @@ import {
 } from '../utils';
 
 
-export const MenuGroup = defineName(React.memo(function MenuGroup({
+export const MenuGroup = defineName(memo(forwardRef(function MenuGroup({
     className,
     styles,
     takeOverflow,
-    ...restProps }) {
+    ...restProps
+}, externalRef) {
 
     const ref = useRef(null);
     const [overflowStyles, setOverflowStyles] = useState();
@@ -34,12 +35,12 @@ export const MenuGroup = defineName(React.memo(function MenuGroup({
     }, [overflowStyles]);
 
     return (
-        <div ref={ref}
-            {...restProps}
+        <div {...restProps}
+            ref={useCombinedRef(externalRef, ref)}
             className={useBEM({ block: menuClass, element: menuGroupClass, className })}
             style={{ ...useFlatStyles(styles), ...overflowStyles }} />
     );
-}), 'MenuGroup');
+})), 'MenuGroup');
 
 MenuGroup.propTypes = {
     ...stylePropTypes(),

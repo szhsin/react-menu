@@ -1,10 +1,10 @@
-import React, { useMemo } from 'react';
+import React, { memo, forwardRef, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { useBEM, useFlatStyles } from '../hooks';
 import { defineName, menuButtonClass, stylePropTypes } from '../utils';
 
 
-export const MenuButton = defineName(React.memo(React.forwardRef(function MenuButton({
+export const MenuButton = defineName(memo(forwardRef(function MenuButton({
     className,
     styles,
     isOpen,
