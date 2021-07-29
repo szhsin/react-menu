@@ -220,3 +220,30 @@ test('Submenu is disabled', () => {
     utils.expectMenuItemToBeHover(utils.queryMenuItem('Two'), true);
     utils.expectMenuItemToBeHover(submenuItem, false);
 });
+
+test('ref is forwarded to <Menu>, <MenuItem> and <SubMenu>', () => {
+    let menu, item;
+    const ref = jest.fn(elt => menu = elt);
+    const itemRef = jest.fn(elt => item = elt);
+    const submenuRef = {};
+    const submenuItemRef = {};
+
+    renderMenu({ ref }, { ref: itemRef }, { ref: submenuRef, itemRef: submenuItemRef });
+    utils.clickMenuButton();
+    expect(ref).toHaveBeenCalledTimes(1);
+    expect(menu).toHaveAttribute('role', 'menu');
+    expect(menu).toHaveAttribute('aria-label', 'Menu');
+    expect(submenuItemRef.current).toHaveAttribute('role', 'menuitem');
+    expect(submenuItemRef.current).toHaveTextContent('Submenu');
+
+    expect(itemRef).toHaveBeenCalledTimes(0);
+    expect(submenuRef.current).toBe(undefined);
+
+    fireEvent.click(utils.queryMenuItem('Submenu'));
+    expect(itemRef).toHaveBeenCalledTimes(1);
+    expect(item).toHaveAttribute('role', 'menuitem');
+    expect(item).toHaveTextContent('Middle');
+
+    expect(submenuRef.current).toHaveAttribute('role', 'menu');
+    expect(submenuRef.current).toHaveAttribute('aria-label', 'Submenu');
+});
