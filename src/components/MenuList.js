@@ -1,4 +1,5 @@
 import React, {
+    memo,
     useState,
     useReducer,
     useEffect,
@@ -8,15 +9,18 @@ import React, {
     useContext
 } from 'react';
 import {
+    useBEM,
+    useFlatStyles,
+    useCombinedRef,
+    useLayoutEffect
+} from '../hooks';
+import {
     attachHandlerProps,
     batchedUpdates,
     cloneChildren,
-    defineName,
     floatEqual,
     getScrollAncestor,
     safeCall,
-    useBEM,
-    useFlatStyles,
     isProd,
     parsePadding,
     menuClass,
@@ -29,12 +33,11 @@ import {
     Keys,
     FocusPositions,
     HoverIndexActionTypes,
-    SubmenuActionTypes,
-    useLayoutEffect,
+    SubmenuActionTypes
 } from '../utils';
 
 
-export const MenuList = defineName(React.memo(function MenuList({
+export const MenuList = memo(function MenuList({
     ariaLabel,
     className,
     styles,
@@ -43,6 +46,7 @@ export const MenuList = defineName(React.memo(function MenuList({
     anchorPoint,
     anchorRef,
     containerRef,
+    externalRef,
     arrow,
     align,
     direction,
@@ -57,8 +61,8 @@ export const MenuList = defineName(React.memo(function MenuList({
     offsetY,
     children,
     onClose,
-    ...restProps }) {
-
+    ...restProps
+}) {
     const [menuPosition, setMenuPosition] = useState({ x: 0, y: 0 });
     const [arrowPosition, setArrowPosition] = useState({});
     const [overflowData, setOverflowData] = useState();
@@ -765,7 +769,7 @@ export const MenuList = defineName(React.memo(function MenuList({
             aria-label={ariaLabel}
             {...restProps}
             {...handlers}
-            ref={menuRef}
+            ref={useCombinedRef(externalRef, menuRef)}
             className={useBEM({ block: menuClass, modifiers, className, externalModifiers })}
             style={{
                 ...useFlatStyles(styles, externalModifiers),
@@ -791,7 +795,7 @@ export const MenuList = defineName(React.memo(function MenuList({
             </MenuListContext.Provider>
         </ul>
     );
-}), 'MenuList');
+});
 
 function submenuCountReducer(state, { type }) {
     switch (type) {

@@ -1,23 +1,26 @@
-import React, { useContext, useMemo } from 'react';
+import React, { memo, forwardRef, useContext, useMemo, useRef } from 'react';
 import PropTypes from 'prop-types';
+import {
+    useBEM,
+    useFlatStyles,
+    useActiveState,
+    useItemState,
+    useCombinedRef
+} from '../hooks';
 import {
     attachHandlerProps,
     defineName,
     safeCall,
-    useBEM,
-    useFlatStyles,
     stylePropTypes,
     menuClass,
     menuItemClass,
     EventHandlersContext,
     RadioGroupContext,
-    Keys,
-    useActiveState,
-    useItemState
+    Keys
 } from '../utils';
 
 
-export const MenuItem = defineName(React.memo(function MenuItem({
+export const MenuItem = defineName(memo(forwardRef(function MenuItem({
     className,
     styles,
     value,
@@ -28,17 +31,18 @@ export const MenuItem = defineName(React.memo(function MenuItem({
     index,
     children,
     onClick,
-    ...restProps }) {
+    ...restProps
+}, externalRef) {
 
     const isDisabled = Boolean(disabled);
+    const ref = useRef();
     const {
-        ref,
         isHovering,
         setHover,
         onBlur,
         onMouseEnter,
         onMouseLeave
-    } = useItemState(isDisabled, index);
+    } = useItemState(ref, isDisabled, index);
     const eventHandlers = useContext(EventHandlersContext);
     const radioGroup = useContext(RadioGroupContext);
     const {
@@ -127,7 +131,7 @@ export const MenuItem = defineName(React.memo(function MenuItem({
         tabIndex: isHovering ? 0 : -1,
         ...restProps,
         ...handlers,
-        ref,
+        ref: useCombinedRef(externalRef, ref),
         className: useBEM({ block: menuClass, element: menuItemClass, modifiers, className }),
         style: useFlatStyles(styles, modifiers),
     };
@@ -149,7 +153,7 @@ export const MenuItem = defineName(React.memo(function MenuItem({
             </li>
         );
     }
-}), 'MenuItem');
+})), 'MenuItem');
 
 MenuItem.propTypes = {
     ...stylePropTypes(),

@@ -1,9 +1,8 @@
-import React, { useMemo } from 'react';
+import React, { memo, forwardRef, useMemo } from 'react';
 import PropTypes from 'prop-types';
+import { useBEM, useFlatStyles } from '../hooks';
 import {
     defineName,
-    useBEM,
-    useFlatStyles,
     stylePropTypes,
     menuClass,
     radioGroupClass,
@@ -11,7 +10,7 @@ import {
 } from '../utils';
 
 
-export const MenuRadioGroup = defineName(React.memo(function MenuRadioGroup({
+export const MenuRadioGroup = defineName(memo(forwardRef(function MenuRadioGroup({
     'aria-label': ariaLabel,
     className,
     styles,
@@ -19,7 +18,8 @@ export const MenuRadioGroup = defineName(React.memo(function MenuRadioGroup({
     value,
     children,
     onChange,
-    ...restProps }) {
+    ...restProps
+}, externalRef) {
 
     const contextValue = useMemo(() => ({ name, value, onChange }),
         [name, value, onChange]);
@@ -29,6 +29,7 @@ export const MenuRadioGroup = defineName(React.memo(function MenuRadioGroup({
             <ul role="group"
                 aria-label={ariaLabel || name || 'Radio group'}
                 {...restProps}
+                ref={externalRef}
                 className={useBEM({ block: menuClass, element: radioGroupClass, className })}
                 style={useFlatStyles(styles)}>
                 <RadioGroupContext.Provider value={contextValue}>
@@ -37,7 +38,7 @@ export const MenuRadioGroup = defineName(React.memo(function MenuRadioGroup({
             </ul>
         </li>
     );
-}), 'MenuRadioGroup');
+})), 'MenuRadioGroup');
 
 MenuRadioGroup.propTypes = {
     ...stylePropTypes(),

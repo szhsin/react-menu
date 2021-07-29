@@ -1,4 +1,5 @@
-export { applyHOC, applyStatics, useMenuState } from './utils';
+export { applyHOC, applyStatics } from './utils';
+export { useMenuState } from './hooks';
 export { MenuButton } from './components/MenuButton';
 export { Menu } from './components/Menu';
 export { ControlledMenu } from './components/ControlledMenu';

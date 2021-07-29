@@ -1,5 +1,5 @@
 import { useState, useCallback, useMemo } from 'react';
-import { Keys } from './constants';
+import { Keys } from '../utils';
 
 // This function receive customKey as a single value rather than an array;
 // It's intentional for keeping the argument's identity stable across each render.

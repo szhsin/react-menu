@@ -1,8 +1,9 @@
 import React, { useRef, useMemo } from 'react';
 import ReactDOM from 'react-dom';
+import { useBEM } from '../hooks';
+import { MenuList } from './MenuList';
 import {
     safeCall,
-    useBEM,
     menuContainerClass,
     CloseReason,
     Keys,
@@ -10,7 +11,6 @@ import {
     SettingsContext,
     ItemSettingsContext
 } from '../utils';
-import { MenuList } from './MenuList';
 
 
 export const useMenuList = (

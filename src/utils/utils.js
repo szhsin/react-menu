@@ -1,4 +1,3 @@
-import { useMemo } from 'react';
 import { unstable_batchedUpdates } from 'react-dom';
 
 export const batchedUpdates = unstable_batchedUpdates || (callback => callback());
@@ -50,91 +49,6 @@ export const parsePadding = paddingStr => {
         left: !isNaN(padding[3]) ? padding[3] : right,
     };
 }
-
-// Generate className following BEM methodology: http://getbem.com/naming/
-// Modifier value can be one of the following types: boolean, string, undefined
-export const useBEM = ({
-    block, element, modifiers, className, externalModifiers
-}) => useMemo(() => {
-    const blockElement = element ? `${block}__${element}` : block;
-    let classString = blockElement;
-    for (const name of Object.keys(modifiers || {})) {
-        const value = modifiers[name];
-        if (value) {
-            classString += ` ${blockElement}--`;
-            classString += (value === true ? name : `${name}-${value}`);
-        }
-    }
-
-    let expandedClassName = typeof className === 'function'
-        ? className(externalModifiers || modifiers)
-        : className
-
-    if (typeof expandedClassName === 'string') {
-        expandedClassName = expandedClassName.trim();
-        if (expandedClassName) classString += ` ${expandedClassName}`;
-    }
-
-    return classString;
-}, [block, element, modifiers, className, externalModifiers]);
-
-/* 
-Flatten up to two levels of nesting styles.
-Modifier value can be one of the following types: boolean, string, undefined
-For string type modifiers, go one level deeper than other types of modifiers.
-
-Example style:
-{
-    color: 'green',
-    active: {
-        color: 'red'
-    },
-    theme: {
-        color: 'gray',
-        dark: {
-            color: 'black'
-        },
-        light: {
-            color: 'white'
-        }
-    }
-}
-*/
-
-const isObject = obj => obj && typeof obj === 'object';
-const sanitiseKey = key => key.charAt(0) === '$' ? key.slice(1) : key;
-
-export const useFlatStyles = (styles, modifiers) => useMemo(() => {
-    if (typeof styles === 'function') return styles(modifiers);
-    if (!isObject(styles)) return undefined;
-    if (!modifiers) return styles;
-
-    const style = {};
-    for (const prop of Object.keys(styles)) {
-        const value = styles[prop];
-        if (isObject(value)) {
-            const modifierValue = modifiers[sanitiseKey(prop)];
-            if (typeof modifierValue === 'string') {
-                for (const nestedProp of Object.keys(value)) {
-                    const nestedValue = value[nestedProp];
-                    if (isObject(nestedValue)) {
-                        if (sanitiseKey(nestedProp) === modifierValue) {
-                            Object.assign(style, nestedValue);
-                        }
-                    } else {
-                        style[nestedProp] = nestedValue;
-                    }
-                }
-            } else if (modifierValue) {
-                Object.assign(style, value);
-            }
-        } else {
-            style[prop] = value;
-        }
-    }
-
-    return style;
-}, [styles, modifiers]);
 
 // Adapted from https://github.com/popperjs/popper-core/tree/v2.9.1/src/dom-utils
 export const getScrollAncestor = node => {
