@@ -1,6 +1,6 @@
 import React, { memo, forwardRef, useRef, useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { useMenuChange, useMenuState } from '../hooks';
+import { useMenuChange, useMenuState, useCombinedRef } from '../hooks';
 import { useMenuList } from './useMenuList';
 import {
     getName,
@@ -77,9 +77,10 @@ export const Menu = memo(forwardRef(function Menu({
         if (handled) e.preventDefault();
     }, [openMenu]);
 
+    const combinedBtnRef = useCombinedRef(button.ref, buttonRef);
     const renderButton = useMemo(() => {
         const buttonProps = {
-            ref: buttonRef,
+            ref: combinedBtnRef,
             ...attachHandlerProps({
                 onClick: handleClick,
                 onKeyDown: handleKeyDown
@@ -89,7 +90,7 @@ export const Menu = memo(forwardRef(function Menu({
             buttonProps.isOpen = isOpen;
         }
         return React.cloneElement(button, buttonProps);
-    }, [button, isOpen, handleClick, handleKeyDown]);
+    }, [button, combinedBtnRef, isOpen, handleClick, handleKeyDown]);
 
     const menuList = useMenuList({
         ...restProps,

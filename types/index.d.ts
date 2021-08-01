@@ -29,6 +29,7 @@ type StylesProp<M, S = M> = Styles<S> | ((modifiers: M) => React.CSSProperties);
 type RenderProp<M, R = React.ReactNode> = R | ((modifiers: M) => R);
 
 interface BaseProps<M = undefined, S = M> extends Omit<React.HTMLAttributes<HTMLElement>, 'className'> {
+    ref?: React.Ref<any>;
     className?: ClassNameProp<M>;
     styles?: StylesProp<M, S>;
 }
@@ -143,7 +144,7 @@ export interface MenuButtonProps extends BaseProps<MenuButtonModifiers> {
     children?: React.ReactNode;
 }
 
-export const MenuButton: React.ForwardRefExoticComponent<MenuButtonProps & React.RefAttributes<HTMLButtonElement>>;
+export const MenuButton: React.NamedExoticComponent<MenuButtonProps>;
 
 //
 // Menu
@@ -154,7 +155,7 @@ export interface MenuProps extends Omit<BaseMenuProps, 'onChange'> {
     onChange?: EventHandler<MenuChangeEvent>;
 }
 
-export const Menu: React.ExoticComponent<MenuProps>;
+export const Menu: React.NamedExoticComponent<MenuProps>;
 
 //
 // ControlledMenu
@@ -174,7 +175,7 @@ export interface ControlledMenuProps extends BaseMenuProps {
     onClose?: EventHandler<MenuCloseEvent>;
 }
 
-export const ControlledMenu: React.ExoticComponent<ControlledMenuProps>;
+export const ControlledMenu: React.NamedExoticComponent<ControlledMenuProps>;
 
 //
 // SubMenu
@@ -186,16 +187,17 @@ export type SubMenuItemModifiers = Readonly<{
     disabled: boolean;
 }>;
 
-export interface SubMenuProps extends Omit<SharedMenuProps, 'onChange'> {
+export interface SubMenuProps extends Omit<SharedMenuProps, 'itemRef' | 'onChange'> {
     itemClassName?: ClassNameProp<SubMenuItemModifiers>;
     itemStyles?: StylesProp<SubMenuItemModifiers>;
+    itemRef?: React.Ref<any>;
     disabled?: boolean;
     keepMounted?: boolean;
     label?: RenderProp<SubMenuItemModifiers>;
     onChange?: EventHandler<MenuChangeEvent>;
 }
 
-export const SubMenu: React.ExoticComponent<SubMenuProps>;
+export const SubMenu: React.NamedExoticComponent<SubMenuProps>;
 
 //
 // MenuItem
@@ -221,7 +223,7 @@ export interface MenuItemProps extends Omit<BaseProps<MenuItemModifiers>, 'onCli
     children?: RenderProp<MenuItemModifiers>;
 }
 
-export const MenuItem: React.ExoticComponent<MenuItemProps>;
+export const MenuItem: React.NamedExoticComponent<MenuItemProps>;
 
 //
 // FocusableItem
@@ -242,12 +244,12 @@ export interface FocusableItemProps extends BaseProps<FocusableItemModifiers> {
     }) => React.ReactNode;
 }
 
-export const FocusableItem: React.ExoticComponent<FocusableItemProps>;
+export const FocusableItem: React.NamedExoticComponent<FocusableItemProps>;
 
 //
 // MenuDivider
 // ----------------------------------------------------------------------
-export const MenuDivider: React.ExoticComponent<BaseProps>;
+export const MenuDivider: React.NamedExoticComponent<BaseProps>;
 
 //
 // MenuHeader
@@ -256,7 +258,7 @@ export interface MenuHeaderProps extends BaseProps {
     children?: React.ReactNode;
 }
 
-export const MenuHeader: React.ExoticComponent<MenuHeaderProps>;
+export const MenuHeader: React.NamedExoticComponent<MenuHeaderProps>;
 
 //
 // MenuGroup
@@ -266,7 +268,7 @@ export interface MenuGroupProps extends BaseProps {
     takeOverflow?: boolean;
 }
 
-export const MenuGroup: React.ExoticComponent<MenuGroupProps>;
+export const MenuGroup: React.NamedExoticComponent<MenuGroupProps>;
 
 //
 // MenuRadioGroup
@@ -278,7 +280,7 @@ export interface MenuRadioGroupProps extends Omit<BaseProps, 'onChange'> {
     onChange?: EventHandler<RadioChangeEvent>;
 }
 
-export const MenuRadioGroup: React.ExoticComponent<MenuRadioGroupProps>;
+export const MenuRadioGroup: React.NamedExoticComponent<MenuRadioGroupProps>;
 
 //
 // useMenuState
@@ -298,6 +300,6 @@ export function useMenuState(keepMounted?: boolean): {
 // utils
 // ----------------------------------------------------------------------
 export function applyHOC<H>(hoc: H): H;
-export function applyStatics<W>(sourceComponent: React.ExoticComponent): (w: W) => W;
+export function applyStatics<W>(sourceComponent: React.NamedExoticComponent): (w: W) => W;
 
 export { };
