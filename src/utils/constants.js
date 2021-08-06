@@ -58,3 +58,11 @@ export const FocusPositions = Object.freeze({
     'FIRST': 'first',
     'LAST': 'last'
 });
+
+export const MenuStateMap = Object.freeze({
+    entering: 'opening',
+    entered: 'open',
+    exiting: 'closing',
+    exited: 'closed',
+    unmounted: 'unmounted'
+});

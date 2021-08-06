@@ -1,28 +1,22 @@
 import { useTransition } from './useTransition';
-import { getTransition } from '../utils';
-
-const STATE_MAP = {
-    entering: 'opening',
-    entered: 'open',
-    exiting: 'closing',
-    exited: 'closed',
-    unmounted: 'unmounted'
-};
+import { MenuStateMap, getTransition } from '../utils';
 
 export const useMenuState = ({
     initialMounted,
     unmountOnClose,
-    transition
+    transition,
+    transitionTimeout
 } = {}) => {
     const { state, transition: toggleMenu, endTransition } = useTransition({
         mountOnEnter: !initialMounted,
         unmountOnExit: unmountOnClose,
+        timeout: transitionTimeout,
         enter: getTransition(transition, 'open'),
         exit: getTransition(transition, 'close')
     });
 
     return {
-        state: STATE_MAP[state],
+        state: MenuStateMap[state],
         toggleMenu,
         endTransition
     };

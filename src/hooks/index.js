@@ -6,4 +6,5 @@ export * from './useIsomorphicLayoutEffect';
 export * from './useItemState';
 export * from './useMenuChange';
 export * from './useMenuState';
+export * from './useMenuStateAndFocus';
 export * from './useTransition';
