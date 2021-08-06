@@ -33,7 +33,17 @@ export const menuPropTypesBase = {
         PropTypes.string,
         PropTypes.number
     ]),
-    animation: PropTypes.bool,
+    initialMounted: PropTypes.bool,
+    unmountOnClose: PropTypes.bool,
+    transition: PropTypes.oneOfType([
+        PropTypes.bool,
+        PropTypes.exact({
+            open: PropTypes.bool,
+            close: PropTypes.bool,
+            item: PropTypes.bool
+        })
+    ]),
+    transitionTimeout: PropTypes.number,
     debugging: PropTypes.bool,
     boundingBoxRef: PropTypes.object,
     boundingBoxPadding: PropTypes.string,
@@ -62,9 +72,9 @@ export const sharedMenuDefaultProp = {
 
 export const menuDefaultPropsBase = {
     ...sharedMenuDefaultProp,
-    animation: true,
     reposition: 'auto',
     viewScroll: 'initial',
+    transitionTimeout: 200,
     submenuOpenDelay: 300,
     submenuCloseDelay: 150
 };

@@ -12,7 +12,7 @@ import {
     useFlatStyles,
     useActiveState,
     useMenuChange,
-    useMenuState,
+    useMenuStateAndFocus,
     useCombinedRef
 } from '../hooks';
 import { MenuList } from './MenuList';
@@ -25,12 +25,14 @@ import {
     menuClass,
     subMenuClass,
     menuItemClass,
+    SettingsContext,
     MenuListItemContext,
     ItemSettingsContext,
     Keys,
     HoverIndexActionTypes,
     SubmenuActionTypes,
-    FocusPositions
+    FocusPositions,
+    isMenuOpen
 } from '../utils';
 
 
@@ -40,7 +42,6 @@ export const SubMenu = defineName(memo(forwardRef(function SubMenu({
     itemClassName,
     itemStyles,
     disabled,
-    keepMounted,
     label,
     index,
     onChange,
@@ -49,9 +50,18 @@ export const SubMenu = defineName(memo(forwardRef(function SubMenu({
     ...restProps
 }, externalRef) {
 
-    const { isMounted, isOpen, menuItemFocus, openMenu, closeMenu } = useMenuState(keepMounted);
-    const { isParentOpen, hoverIndex, isSubmenuOpen, dispatch } = useContext(MenuListItemContext);
+    const { initialMounted, unmountOnClose, transition, transitionTimeout } = useContext(SettingsContext);
     const { debugging, submenuOpenDelay, submenuCloseDelay } = useContext(ItemSettingsContext);
+    const { isParentOpen, hoverIndex, isSubmenuOpen, dispatch } = useContext(MenuListItemContext);
+
+    const {
+        openMenu,
+        toggleMenu,
+        state,
+        ...otherStateProps
+    } = useMenuStateAndFocus({ initialMounted, unmountOnClose, transition, transitionTimeout });
+
+    const isOpen = isMenuOpen(state);
     const isHovering = hoverIndex === index;
     const isDisabled = Boolean(disabled);
     const {
@@ -100,7 +110,7 @@ export const SubMenu = defineName(memo(forwardRef(function SubMenu({
             // LEFT key is bubbled up from submenu items
             case Keys.LEFT:
                 if (isOpen) {
-                    closeMenu();
+                    toggleMenu(false);
                     itemRef.current.focus();
                     handled = true;
                 }
@@ -140,7 +150,7 @@ export const SubMenu = defineName(memo(forwardRef(function SubMenu({
         // Check if something which is not in the subtree get focus.
         // It handles situation such as clicking on a sibling disabled menu item
         if (!e.currentTarget.contains(relatedTarget)) {
-            closeMenu();
+            toggleMenu(false);
             dispatch({ type: HoverIndexActionTypes.UNSET, index });
         }
     }
@@ -152,9 +162,9 @@ export const SubMenu = defineName(memo(forwardRef(function SubMenu({
         if (isHovering && isParentOpen) {
             itemRef.current.focus();
         } else {
-            closeMenu();
+            toggleMenu(false);
         }
-    }, [isHovering, isParentOpen, closeMenu]);
+    }, [isHovering, isParentOpen, toggleMenu]);
 
     useEffect(() => {
         dispatch({ type: isOpen ? SubmenuActionTypes.OPEN : SubmenuActionTypes.CLOSE });
@@ -196,15 +206,15 @@ export const SubMenu = defineName(memo(forwardRef(function SubMenu({
                 {useMemo(() => safeCall(label, modifiers), [label, modifiers])}
             </div>
 
-            {isMounted && <MenuList
+            {state !== 'unmounted' && <MenuList
                 {...restProps}
+                {...otherStateProps}
+                state={state}
                 ariaLabel={ariaLabel || (typeof label === 'string' ? label : 'Submenu')}
                 anchorRef={itemRef}
                 containerRef={containerRef}
                 externalRef={externalRef}
-                isOpen={isOpen}
-                isDisabled={isDisabled}
-                menuItemFocus={menuItemFocus} />}
+                isDisabled={isDisabled} />}
         </li>
     );
 })), 'SubMenu');
@@ -213,7 +223,6 @@ SubMenu.propTypes = {
     ...sharedMenuPropTypes,
     ...stylePropTypes('item'),
     disabled: PropTypes.bool,
-    keepMounted: PropTypes.bool,
     label: PropTypes.oneOfType([
         PropTypes.node,
         PropTypes.func
@@ -223,6 +232,5 @@ SubMenu.propTypes = {
 
 SubMenu.defaultProps = {
     ...sharedMenuDefaultProp,
-    direction: 'right',
-    keepMounted: true
+    direction: 'right'
 };

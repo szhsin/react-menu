@@ -4,6 +4,8 @@ import { useBEM } from '../hooks';
 import { MenuList } from './MenuList';
 import {
     safeCall,
+    isMenuOpen,
+    getTransition,
     menuContainerClass,
     CloseReason,
     Keys,
@@ -16,7 +18,10 @@ import {
 export const useMenuList = (
     menuListProps, {
         id,
-        animation,
+        initialMounted,
+        unmountOnClose,
+        transition,
+        transitionTimeout,
         boundingBoxRef,
         boundingBoxPadding,
         debugging,
@@ -26,7 +31,6 @@ export const useMenuList = (
         viewScroll,
         portal,
         theming,
-        isMounted,
         onItemClick,
         onClick,
         onClose,
@@ -36,10 +40,13 @@ export const useMenuList = (
     const containerRef = useRef(null);
     const scrollingRef = useRef(null);
     const anchorScrollingRef = useRef(null);
-    const { anchorRef, isOpen } = menuListProps;
+    const { anchorRef, state } = menuListProps;
 
     const settings = useMemo(() => ({
-        animation,
+        initialMounted,
+        unmountOnClose,
+        transition,
+        transitionTimeout,
         boundingBoxRef,
         boundingBoxPadding,
         rootMenuRef: containerRef,
@@ -48,7 +55,10 @@ export const useMenuList = (
         anchorScrollingRef,
         reposition,
         viewScroll
-    }), [animation, anchorRef, boundingBoxRef, boundingBoxPadding, reposition, viewScroll]);
+    }), [
+        initialMounted, unmountOnClose, transition, transitionTimeout,
+        anchorRef, boundingBoxRef, boundingBoxPadding, reposition, viewScroll
+    ]);
 
     const itemSettings = useMemo(() => ({
         debugging,
@@ -91,7 +101,7 @@ export const useMenuList = (
     };
 
     const handleBlur = e => {
-        if (isOpen
+        if (isMenuOpen(state)
             && !e.currentTarget.contains(e.relatedTarget || document.activeElement)
             && !debugging) {
             safeCall(onClose, { reason: CloseReason.BLUR });
@@ -109,7 +119,8 @@ export const useMenuList = (
         }
     };
 
-    const modifiers = useMemo(() => ({ theme: theming }), [theming]);
+    const itemTransition = getTransition(transition, 'item');
+    const modifiers = useMemo(() => ({ theme: theming, itemTransition }), [theming, itemTransition]);
     const menuList = (
         <div id={id}
             className={useBEM({ block: menuContainerClass, modifiers })}
@@ -117,7 +128,7 @@ export const useMenuList = (
             onKeyDown={handleKeyDown}
             onBlur={handleBlur}>
 
-            {isMounted &&
+            {state !== 'unmounted' &&
                 <SettingsContext.Provider value={settings}>
                     <ItemSettingsContext.Provider value={itemSettings}>
                         <EventHandlersContext.Provider value={eventHandlers}>

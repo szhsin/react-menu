@@ -1,11 +1,12 @@
 import React, { memo, forwardRef, useRef, useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { useMenuChange, useMenuState, useCombinedRef } from '../hooks';
+import { useMenuChange, useMenuStateAndFocus, useCombinedRef } from '../hooks';
 import { useMenuList } from './useMenuList';
 import {
     getName,
     attachHandlerProps,
     safeCall,
+    isMenuOpen,
     menuPropTypesBase,
     menuDefaultPropsBase,
     Keys,
@@ -16,19 +17,21 @@ import {
 export const Menu = memo(forwardRef(function Menu({
     'aria-label': ariaLabel,
     id,
-    animation,
     boundingBoxRef,
     boundingBoxPadding,
     captureFocus: _,
     debugging,
     reposition,
     viewScroll,
-    keepMounted,
     menuButton,
     portal,
     submenuOpenDelay,
     submenuCloseDelay,
     theming,
+    initialMounted,
+    unmountOnClose,
+    transition,
+    transitionTimeout,
     onItemClick,
     onClick,
     onChange,
@@ -36,10 +39,11 @@ export const Menu = memo(forwardRef(function Menu({
 }, externalRef) {
 
     const {
-        isMounted, isOpen, menuItemFocus,
-        openMenu, closeMenu
-    } = useMenuState(keepMounted);
-
+        openMenu,
+        toggleMenu,
+        ...stateProps
+    } = useMenuStateAndFocus({ initialMounted, unmountOnClose, transition, transitionTimeout });
+    const isOpen = isMenuOpen(stateProps.state);
     const skipClick = useRef(false);
     const buttonRef = useRef(null);
 
@@ -47,9 +51,9 @@ export const Menu = memo(forwardRef(function Menu({
     if (!button) throw new Error('Menu requires a menuButton prop.');
 
     const handleClose = useCallback(e => {
-        closeMenu();
+        toggleMenu(false);
         if (e.key) buttonRef.current.focus();
-    }, [closeMenu]);
+    }, [toggleMenu]);
 
     const handleClick = useCallback(e => {
         if (skipClick.current) return;
@@ -94,17 +98,19 @@ export const Menu = memo(forwardRef(function Menu({
 
     const menuList = useMenuList({
         ...restProps,
+        ...stateProps,
         ariaLabel: ariaLabel ||
             (typeof button.props.children === 'string'
                 ? button.props.children
                 : 'Menu'),
         anchorRef: buttonRef,
-        externalRef,
-        isOpen,
-        menuItemFocus
+        externalRef
     }, {
         id,
-        animation,
+        initialMounted,
+        unmountOnClose,
+        transition,
+        transitionTimeout,
         boundingBoxRef,
         boundingBoxPadding,
         debugging,
@@ -114,7 +120,6 @@ export const Menu = memo(forwardRef(function Menu({
         viewScroll,
         portal,
         theming,
-        isMounted,
         onItemClick,
         onClick,
         onClose: handleClose,
@@ -133,7 +138,6 @@ export const Menu = memo(forwardRef(function Menu({
 
 Menu.propTypes = {
     ...menuPropTypesBase,
-    keepMounted: PropTypes.bool,
     menuButton: PropTypes.oneOfType([
         PropTypes.element,
         PropTypes.func
@@ -141,7 +145,4 @@ Menu.propTypes = {
     onChange: PropTypes.func
 };
 
-Menu.defaultProps = {
-    ...menuDefaultPropsBase,
-    keepMounted: true
-};
+Menu.defaultProps = menuDefaultPropsBase;
