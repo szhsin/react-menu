@@ -1,4 +1,4 @@
-import { useTransition } from './useTransition';
+import { useTransition } from 'react-transition-state';
 import { MenuStateMap, getTransition } from '../utils';
 
 export const useMenuState = ({
@@ -7,7 +7,7 @@ export const useMenuState = ({
     transition,
     transitionTimeout
 } = {}) => {
-    const { state, transition: toggleMenu, endTransition } = useTransition({
+    const [state, toggleMenu, endTransition] = useTransition({
         mountOnEnter: !initialMounted,
         unmountOnExit: unmountOnClose,
         timeout: transitionTimeout,

@@ -36,7 +36,8 @@
     "react-dom": ">=16.8.0"
   },
   "dependencies": {
-    "prop-types": "^15.7.2"
+    "prop-types": "^15.7.2",
+    "react-transition-state": "^0.0.1"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.14.7",
