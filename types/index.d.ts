@@ -3,6 +3,7 @@ import React = require('react');
 //
 // base types
 // ----------------------------------------------------------------------
+export type MenuState = 'opening' | 'open' | 'closing' | 'closed';
 export type MenuAlign = 'start' | 'center' | 'end';
 export type MenuDirection = 'left' | 'right' | 'top' | 'bottom';
 export type MenuPosition = 'auto' | 'anchor' | 'initial';
@@ -75,28 +76,34 @@ interface RectElement {
 //
 // Menu common types
 // ----------------------------------------------------------------------
-interface MenuModifiersBase {
-    open: boolean;
-    closing: boolean;
-}
-
-interface MenuStyleKeys extends MenuModifiersBase {
-    $animation: boolean;
+interface MenuStyleKeys {
+    state: MenuState;
     dir: DirStyleKey;
 }
+
+export type MenuModifiers = Readonly<{
+    state: MenuState;
+    dir: MenuDirection;
+}>;
 
 interface MenuArrowStyleKeys {
     dir: DirStyleKey;
 }
 
-export type MenuModifiers = Readonly<MenuModifiersBase & {
-    animation: boolean;
-    dir: MenuDirection;
-}>;
-
 export type MenuArrowModifiers = Readonly<{
     dir: MenuDirection;
 }>;
+
+export interface MenuStateOptions {
+    initialMounted?: boolean;
+    unmountOnClose?: boolean;
+    transition?: boolean | {
+        open?: boolean;
+        close?: boolean;
+        item?: boolean;
+    };
+    transitionTimeout?: number;
+}
 
 // Menu, SubMenu and ControlledMenu
 interface SharedMenuProps extends BaseProps<MenuModifiers, MenuStyleKeys> {
@@ -113,8 +120,7 @@ interface SharedMenuProps extends BaseProps<MenuModifiers, MenuStyleKeys> {
 }
 
 // Menu and ControlledMenu
-interface BaseMenuProps extends Omit<SharedMenuProps, 'onClick'> {
-    animation?: boolean;
+interface BaseMenuProps extends MenuStateOptions, Omit<SharedMenuProps, 'onClick'> {
     boundingBoxRef?: React.RefObject<Element | RectElement>;
     boundingBoxPadding?: string;
     debugging?: boolean;
@@ -150,7 +156,6 @@ export const MenuButton: React.NamedExoticComponent<MenuButtonProps>;
 // Menu
 // ----------------------------------------------------------------------
 export interface MenuProps extends Omit<BaseMenuProps, 'onChange'> {
-    keepMounted?: boolean;
     menuButton: RenderProp<MenuButtonModifiers, React.ReactElement>;
     onChange?: EventHandler<MenuChangeEvent>;
 }
@@ -167,8 +172,7 @@ export interface ControlledMenuProps extends BaseMenuProps {
     };
     anchorRef?: React.RefObject<Element | RectElement>;
     captureFocus?: boolean;
-    isOpen?: boolean;
-    isMounted?: boolean;
+    state?: MenuState;
     menuItemFocus?: {
         position: FocusPosition
     };
@@ -192,7 +196,6 @@ export interface SubMenuProps extends Omit<SharedMenuProps, 'itemRef' | 'onChang
     itemStyles?: StylesProp<SubMenuItemModifiers>;
     itemRef?: React.Ref<any>;
     disabled?: boolean;
-    keepMounted?: boolean;
     label?: RenderProp<SubMenuItemModifiers>;
     onChange?: EventHandler<MenuChangeEvent>;
 }
@@ -285,15 +288,10 @@ export const MenuRadioGroup: React.NamedExoticComponent<MenuRadioGroupProps>;
 //
 // useMenuState
 // ----------------------------------------------------------------------
-export function useMenuState(keepMounted?: boolean): {
-    isMounted: boolean;
-    isOpen: boolean;
-    menuItemFocus: {
-        position: FocusPosition
-    };
-    openMenu: (menuItemFocus?: FocusPosition) => void;
-    closeMenu: () => void;
-    toggleMenu: (menuItemFocus?: FocusPosition) => void;
+export function useMenuState(options?: MenuStateOptions): {
+    state?: MenuState;
+    toggleMenu: (open?: boolean) => void;
+    endTransition: () => void;
 };
 
 //

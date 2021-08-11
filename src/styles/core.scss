@@ -10,7 +10,6 @@
 .rc-menu {
     @include mixins.reset-list;
     @include mixins.remove-focus;
-    display: none;
     box-sizing: border-box;
     width: max-content;
     position: absolute;
@@ -18,9 +17,8 @@
     border: 1px solid var.$border-color;
     background-color: var.$background-color;
 
-    &--open,
-    &--closing {
-        display: block;
+    &--state-closed {
+        display: none;
     }
 
     &__arrow {

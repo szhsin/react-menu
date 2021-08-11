@@ -60,5 +60,8 @@ export const getScrollAncestor = node => {
     return window;
 }
 
+export const values = Object.values || (obj => Object.keys(obj).map(key => obj[key]));
 export const floatEqual = (a, b, diff = 0.0001) => Math.abs(a - b) < diff;
 export const isProd = process.env.NODE_ENV === 'production';
+export const isMenuOpen = state => state === 'open' || state === 'opening';
+export const getTransition = (transition, name) => Boolean(transition && transition[name]) || transition === true;

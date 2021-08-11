@@ -4,14 +4,19 @@ import { useMenuList } from './useMenuList';
 import {
     menuPropTypesBase,
     menuDefaultPropsBase,
-    FocusPositions
+    FocusPositions,
+    MenuStateMap,
+    values
 } from '../utils';
 
 
 export const ControlledMenu = memo(forwardRef(function ControlledMenu({
     'aria-label': ariaLabel,
     id,
-    animation,
+    initialMounted,
+    unmountOnClose,
+    transition,
+    transitionTimeout,
     boundingBoxRef,
     boundingBoxPadding,
     debugging,
@@ -21,7 +26,6 @@ export const ControlledMenu = memo(forwardRef(function ControlledMenu({
     viewScroll,
     portal,
     theming,
-    isMounted,
     onItemClick,
     onClick,
     onClose,
@@ -34,7 +38,10 @@ export const ControlledMenu = memo(forwardRef(function ControlledMenu({
         ariaLabel: ariaLabel || 'Menu'
     }, {
         id,
-        animation,
+        initialMounted,
+        unmountOnClose,
+        transition,
+        transitionTimeout,
         boundingBoxRef,
         boundingBoxPadding,
         debugging,
@@ -44,7 +51,6 @@ export const ControlledMenu = memo(forwardRef(function ControlledMenu({
         viewScroll,
         portal,
         theming,
-        isMounted,
         onItemClick,
         onClick,
         onClose
@@ -53,14 +59,13 @@ export const ControlledMenu = memo(forwardRef(function ControlledMenu({
 
 ControlledMenu.propTypes = {
     ...menuPropTypesBase,
+    state: PropTypes.oneOf(values(MenuStateMap)),
     anchorPoint: PropTypes.exact({
         x: PropTypes.number,
         y: PropTypes.number
     }),
     anchorRef: PropTypes.object,
     captureFocus: PropTypes.bool,
-    isOpen: PropTypes.bool,
-    isMounted: PropTypes.bool,
     menuItemFocus: PropTypes.exact({
         position: PropTypes.string
     }),
@@ -70,7 +75,5 @@ ControlledMenu.propTypes = {
 ControlledMenu.defaultProps = {
     ...menuDefaultPropsBase,
     captureFocus: true,
-    isOpen: false,
-    isMounted: true,
     menuItemFocus: { position: FocusPositions.INITIAL }
 };

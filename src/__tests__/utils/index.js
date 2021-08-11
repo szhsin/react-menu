@@ -23,10 +23,10 @@ export const expectMenuToBeInTheDocument = (truthy, options) =>
     expectToBe(queryMenu(options), truthy).toBeInTheDocument();
 
 export const expectMenuToBeOpen = (truthy, options) =>
-    expectToBe(queryMenu(options), truthy).toHaveClass('rc-menu--open');
+    expectToBe(queryMenu(options), truthy).toHaveClass('rc-menu--state-open');
 
-export const expectMenuToBeClosing = (truthy, options) =>
-    expectToBe(queryMenu(options), truthy).toHaveClass('rc-menu--closing');
+export const expectMenuToHaveState = (state, truthy, options) =>
+    expectToBe(queryMenu(options), truthy).toHaveClass(`rc-menu--state-${state}`);
 
 export const expectButtonToBeExpanded = truthy =>
     expect(queryByRole('button')).toHaveAttribute('aria-expanded', String(truthy));
@@ -81,7 +81,7 @@ export const FirstItem = applyStatics(MenuItem)(enhance(MenuItem, 'First'));
 export const LastItem = applyHOC(enhance)(MenuItem, 'Last');
 
 export const renderMenu = (props, itemProps) => render(
-    <Menu menuButton={<MenuButton>Open</MenuButton>} animation={false} {...props}>
+    <Menu menuButton={<MenuButton>Open</MenuButton>} {...props}>
         <FirstItem />
         <MenuItem children="Middle" {...itemProps} />
         <LastItem />

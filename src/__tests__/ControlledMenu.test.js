@@ -10,7 +10,7 @@ const { queryByRole } = screen;
 const getMenu = (props) => (
     <>
         <button />
-        <ControlledMenu animation={false} {...props}>
+        <ControlledMenu state="closed" {...props}>
             <MenuItem>First</MenuItem>
             <MenuItem value='Middle'>Middle</MenuItem>
             <MenuItem>Last</MenuItem>
@@ -40,11 +40,11 @@ test('Test ControlledMenu with an anchor element', async () => {
         onClose, onClick,
         viewScroll: 'auto'
     };
-    const { rerender } = render(getMenu({ ...props, isOpen: false }));
+    const { rerender } = render(getMenu({ ...props }));
     utils.expectMenuToBeOpen(false);
 
     // Open menu
-    rerender(getMenu({ ...props, isOpen: true }));
+    rerender(getMenu({ ...props, state: 'open' }));
     utils.expectMenuToBeOpen(true);
     await waitFor(() => expect(utils.queryMenu()).toHaveFocus());
 
@@ -53,8 +53,8 @@ test('Test ControlledMenu with an anchor element', async () => {
     expect(onClose).toHaveBeenLastCalledWith({ reason: 'blur' });
 
     // Close and re-open menu
-    rerender(getMenu({ ...props, isOpen: false }));
-    rerender(getMenu({ ...props, isOpen: true }));
+    rerender(getMenu({ ...props, state: 'closed' }));
+    rerender(getMenu({ ...props, state: 'open' }));
     await waitFor(() => expect(utils.queryMenu()).toHaveFocus());
 
     // Try to close menu with ESC key
@@ -66,8 +66,8 @@ test('Test ControlledMenu with an anchor element', async () => {
     expect(onClick).toHaveBeenLastCalledWith(utils.clickEvent({ value: 'Middle' }));
     expect(onClose).toHaveBeenLastCalledWith({ value: 'Middle', reason: 'click' });
 
-    // Set isMounted to false, expect menu to be removed from DOM
-    rerender(getMenu({ ...props, isMounted: false }));
+    // Set state to undefined, expect menu to be removed from DOM
+    rerender(getMenu({ ...props, state: undefined }));
     utils.expectMenuToBeInTheDocument(false);
 });
 
@@ -75,33 +75,21 @@ test('Test ControlledMenu as context menu', () => {
     const anchorPoint = { x: 0, y: 0 };
     const props = { anchorPoint };
 
-    const { rerender } = render(getMenu({ ...props, isOpen: false }));
+    const { rerender } = render(getMenu({ ...props }));
     utils.expectMenuToBeOpen(false);
 
     // Open and close menu
-    rerender(getMenu({ ...props, isOpen: true }));
+    rerender(getMenu({ ...props, state: 'open' }));
     utils.expectMenuToBeOpen(true);
-    rerender(getMenu({ ...props, isOpen: false }));
+    rerender(getMenu({ ...props, state: 'closed' }));
     utils.expectMenuToBeOpen(false);
 });
 
 test('Portal will render ControlledMenu into document.body', () => {
     const { container } = render(getMenu({ portal: true }));
-    utils.clickMenuButton();
-
+    
     expect(container.querySelector('.rc-menu-container')).toBe(null);
     expect(container.querySelector('.rc-menu')).toBe(null);
     expect(document.querySelector('.rc-menu-container')).toBeInTheDocument();
     utils.expectMenuToBeInTheDocument(true);
-});
-
-test('MenuList isClosing state is set properly', () => {
-    const props = { animation: true, isMounted: true };
-    const { rerender } = render(getMenu(props));
-    utils.expectMenuToBeInTheDocument(true);
-    utils.expectMenuToBeClosing(false);
-    rerender(getMenu({ ...props, isOpen: true }));
-    utils.expectMenuToBeClosing(false);
-    rerender(getMenu({ ...props, isOpen: false }));
-    utils.expectMenuToBeClosing(true);
 });

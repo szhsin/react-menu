@@ -20,6 +20,7 @@ import {
     cloneChildren,
     floatEqual,
     getScrollAncestor,
+    getTransition,
     safeCall,
     isProd,
     parsePadding,
@@ -29,6 +30,7 @@ import {
     MenuListContext,
     MenuListItemContext,
     initialHoverIndex,
+    isMenuOpen,
     CloseReason,
     Keys,
     FocusPositions,
@@ -54,7 +56,8 @@ export const MenuList = memo(function MenuList({
     overflow,
     repositionFlag,
     captureFocus = true,
-    isOpen,
+    state: menuState,
+    endTransition,
     isDisabled,
     menuItemFocus,
     offsetX,
@@ -63,13 +66,13 @@ export const MenuList = memo(function MenuList({
     onClose,
     ...restProps
 }) {
+    const isOpen = isMenuOpen(menuState);
     const [menuPosition, setMenuPosition] = useState({ x: 0, y: 0 });
     const [arrowPosition, setArrowPosition] = useState({});
     const [overflowData, setOverflowData] = useState();
-    const [isClosing, setClosing] = useState(false);
     const [expandedDirection, setExpandedDirection] = useState(direction);
     const {
-        animation,
+        transition,
         boundingBoxRef,
         boundingBoxPadding,
         rootMenuRef,
@@ -82,7 +85,7 @@ export const MenuList = memo(function MenuList({
     const menuRef = useRef(null);
     const arrowRef = useRef(null);
     const menuItemsCount = useRef(0);
-    const latestOpen = useRef(isOpen);
+    const prevOpen = useRef(isOpen);
     const latestMenuSize = useRef({ width: 0, height: 0 });
     const latestHandlePosition = useRef(() => { });
     const descendOverflowRef = useRef(false);
@@ -92,6 +95,8 @@ export const MenuList = memo(function MenuList({
         hoverIndex: initialHoverIndex,
         openSubmenuCount: 0
     });
+    const openTransition = getTransition(transition, 'open');
+    const closeTransition = getTransition(transition, 'close');
 
     function reducer({ hoverIndex, openSubmenuCount }, action) {
         return {
@@ -186,11 +191,11 @@ export const MenuList = memo(function MenuList({
     }
 
     const handleAnimationEnd = () => {
-        // Check before changing state to avoid triggering unnecessary re-render
-        if (isClosing) {
-            setClosing(false);
+        if (menuState === 'closing') {
             setOverflowData(); // reset overflowData after closing
         }
+
+        safeCall(endTransition);
     }
 
     const positionHelpers = useCallback(() => {
@@ -605,27 +610,15 @@ export const MenuList = memo(function MenuList({
         if (isOpen) {
             handlePosition();
             // Reposition submenu whenever deps(except isOpen) have changed
-            // NOTE: this effect must come BEFORE the effect which updates latestOpen
-            if (latestOpen.current) forceReposSubmenu();
+            if (prevOpen.current) forceReposSubmenu();
         }
+        prevOpen.current = isOpen;
         latestHandlePosition.current = handlePosition;
     }, [isOpen, handlePosition, reposFlag]);
 
     useLayoutEffect(() => {
         if (overflowData && !descendOverflowRef.current) menuRef.current.scrollTop = 0;
     }, [overflowData]);
-
-    useLayoutEffect(() => {
-        if (animation) {
-            if (isOpen) {
-                setClosing(false)
-            } else if (isOpen !== latestOpen.current) { // Skip the first effect run in which isOpen is false
-                setClosing(true);
-            }
-        }
-
-        latestOpen.current = isOpen;
-    }, [animation, isOpen]);
 
     useEffect(() => {
         if (!isOpen) return;
@@ -695,7 +688,7 @@ export const MenuList = memo(function MenuList({
     useEffect(() => {
         if (!isOpen) {
             dispatch({ type: HoverIndexActionTypes.RESET });
-            if (!animation) setOverflowData();
+            if (!closeTransition) setOverflowData();
         }
 
         // Use a timeout here because if set focus immediately, page might scroll unexpectedly.
@@ -713,10 +706,10 @@ export const MenuList = memo(function MenuList({
             } else if (menuItemFocus.position === FocusPositions.LAST) {
                 dispatch({ type: HoverIndexActionTypes.LAST });
             }
-        }, animation ? 170 : 100);
+        }, openTransition ? 170 : 100);
 
         return () => clearTimeout(id);
-    }, [animation, captureFocus, isOpen, menuItemFocus]);
+    }, [openTransition, closeTransition, captureFocus, isOpen, menuItemFocus]);
 
     const isSubmenuOpen = openSubmenuCount > 0;
     const itemContext = useMemo(() => ({
@@ -740,16 +733,12 @@ export const MenuList = memo(function MenuList({
     }), [reposSubmenu, overflow, overflowAmt]);
     const overflowStyles = maxHeight >= 0 ? { maxHeight, overflow } : undefined;
 
-    const modifiers = useMemo(() => ({
-        open: isOpen,
-        closing: isClosing,
-        animation,
-        dir: animation && expandedDirection
-    }), [isOpen, isClosing, animation, expandedDirection]);
-
     // Modifier object are shared between this project and client code,
     // freeze them to prevent client code from accidentally altering them.
-    const externalModifiers = useMemo(() => Object.freeze({ ...modifiers, dir: expandedDirection }), [modifiers, expandedDirection]);
+    const modifiers = useMemo(() => ({
+        state: menuState,
+        dir: expandedDirection
+    }), [menuState, expandedDirection]);
     const arrowModifiers = useMemo(() => Object.freeze({ dir: expandedDirection }), [expandedDirection]);
     const _arrowClass = useBEM({
         block: menuClass, element: menuArrowClass,
@@ -770,9 +759,9 @@ export const MenuList = memo(function MenuList({
             {...restProps}
             {...handlers}
             ref={useCombinedRef(externalRef, menuRef)}
-            className={useBEM({ block: menuClass, modifiers, className, externalModifiers })}
+            className={useBEM({ block: menuClass, modifiers, className })}
             style={{
-                ...useFlatStyles(styles, externalModifiers),
+                ...useFlatStyles(styles, modifiers),
                 ...overflowStyles,
                 left: `${menuPosition.x}px`,
                 top: `${menuPosition.y}px`

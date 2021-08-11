@@ -4,7 +4,7 @@ import { useMemo } from 'react';
 // Generate className following BEM methodology: http://getbem.com/naming/
 // Modifier value can be one of the following types: boolean, string, undefined
 export const useBEM = ({
-    block, element, modifiers, className, externalModifiers
+    block, element, modifiers, className
 }) => useMemo(() => {
     const blockElement = element ? `${block}__${element}` : block;
     let classString = blockElement;
@@ -17,7 +17,7 @@ export const useBEM = ({
     }
 
     let expandedClassName = typeof className === 'function'
-        ? className(externalModifiers || modifiers)
+        ? className(modifiers)
         : className
 
     if (typeof expandedClassName === 'string') {
@@ -26,4 +26,4 @@ export const useBEM = ({
     }
 
     return classString;
-}, [block, element, modifiers, className, externalModifiers]);
+}, [block, element, modifiers, className]);

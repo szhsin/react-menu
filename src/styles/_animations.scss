@@ -10,11 +10,11 @@ $directions: (
 );
 
 @mixin animation($name, $dir) {
-    &--open#{&}--dir-#{$dir} {
+    &--state-opening#{&}--dir-#{$dir} {
         animation: #{$menu}show-#{$name}-#{$dir} $duration ease-out;
     }
 
-    &--closing#{&}--dir-#{$dir} {
+    &--state-closing#{&}--dir-#{$dir} {
         animation: #{$menu}hide-#{$name}-#{$dir} $duration ease-in;
     }
 }
