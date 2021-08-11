@@ -6,7 +6,7 @@ import 'regenerator-runtime/runtime.js';
 import * as utils from './utils';
 
 const renderMenu = (props, itemProps, submenuProps) => render(
-    <Menu menuButton={<MenuButton>Menu</MenuButton>} animation={false} {...props}>
+    <Menu menuButton={<MenuButton>Menu</MenuButton>} {...props}>
         <MenuItem>One</MenuItem>
         <SubMenu label="Submenu" {...submenuProps}>
             <MenuItem>First</MenuItem>
@@ -139,7 +139,7 @@ test('Open and close submenu, and activate submenu item with mouse and keyboard'
 
 test('Delay closing submenu when hovering items in parent menu list', async () => {
     const { container } = render(
-        <Menu menuButton={<MenuButton>Menu</MenuButton>} animation={false} submenuCloseDelay={100}>
+        <Menu menuButton={<MenuButton>Menu</MenuButton>} submenuCloseDelay={100}>
             <MenuItem disabled>Disabled</MenuItem>
             <SubMenu label="Submenu1">
                 <MenuItem>1</MenuItem>

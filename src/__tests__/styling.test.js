@@ -45,7 +45,7 @@ test('className and styles props as functions', () => {
     utils.renderMenu({ className }, { styles });
     utils.clickMenuButton();
     expect(className).toHaveBeenLastCalledWith(expect.objectContaining({
-        open: true,
+        state: 'open',
         dir: 'bottom'
     }));
     expect(styles).toHaveBeenLastCalledWith(expect.objectContaining({

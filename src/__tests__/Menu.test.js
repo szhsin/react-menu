@@ -18,6 +18,7 @@ test.each([false, true])(
         // Click the menu button, menu is expected to mount and open, and get focus
         utils.clickMenuButton();
         utils.expectButtonToBeExpanded(true);
+        utils.expectMenuToHaveState('opening', false);
         utils.expectMenuToBeOpen(true);
         expect(utils.queryMenu()).toHaveAttribute('aria-label', 'Open');
         await waitFor(() => expect(utils.queryMenu()).toHaveFocus());
@@ -28,13 +29,30 @@ test.each([false, true])(
         // focus something outside menu, expecting menu to close but keep mounted
         queryByRole('button').focus();
         utils.expectButtonToBeExpanded(false);
+        utils.expectMenuToHaveState('closing', false);
         utils.expectMenuToBeOpen(false);
     });
 
 test.each([false, true])(
-    'Menu is removed from DOM after closing when keepMounted is false (portal = %s)',
+    'Menu moves through different states when transition is true (portal = %s)',
     async (portal) => {
-        utils.renderMenu({ portal, keepMounted: false });
+        utils.renderMenu({ portal, transition: true, transitionTimeout: 20 });
+        utils.clickMenuButton();
+        utils.expectMenuToHaveState('opening', true);
+        await waitFor(() => expect(utils.queryMenu()).toHaveFocus());
+        utils.expectMenuToHaveState('opening', false);
+        utils.expectMenuToHaveState('open', true);
+
+        queryByRole('button').focus();
+        utils.expectMenuToHaveState('closing', true);
+        await waitFor(() => utils.expectMenuToHaveState('closed', true));
+        utils.expectMenuToHaveState('closing', false);
+    });
+
+test.each([false, true])(
+    'Menu is removed from DOM after closing when unmountOnClose is true (portal = %s)',
+    async (portal) => {
+        utils.renderMenu({ portal, unmountOnClose: true });
         utils.expectMenuToBeInTheDocument(false);
 
         utils.clickMenuButton();
@@ -44,6 +62,12 @@ test.each([false, true])(
         queryByRole('button').focus();
         utils.expectMenuToBeInTheDocument(false);
     });
+
+test('Menu is in the DOM before first opening when initialMounted is true', () => {
+    utils.renderMenu({ initialMounted: true });
+    utils.expectMenuToBeInTheDocument(true);
+    utils.expectMenuToHaveState('closed', true);
+});
 
 test('Clicking a menu item fires onClick event and closes the menu', () => {
     const menuItemText = 'Save';
@@ -181,7 +205,7 @@ test.each([
         direction,
         align,
         position,
-        animation: true,
+        transition: { open: true, close: true },
         arrow: true,
         offsetX: 10,
         offsetY: -10,
