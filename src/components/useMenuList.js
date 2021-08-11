@@ -128,7 +128,7 @@ export const useMenuList = (
             onKeyDown={handleKeyDown}
             onBlur={handleBlur}>
 
-            {state !== 'unmounted' &&
+            {state &&
                 <SettingsContext.Provider value={settings}>
                     <ItemSettingsContext.Provider value={itemSettings}>
                         <EventHandlersContext.Provider value={eventHandlers}>

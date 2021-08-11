@@ -206,7 +206,7 @@ export const SubMenu = defineName(memo(forwardRef(function SubMenu({
                 {useMemo(() => safeCall(label, modifiers), [label, modifiers])}
             </div>
 
-            {state !== 'unmounted' && <MenuList
+            {state && <MenuList
                 {...restProps}
                 {...otherStateProps}
                 state={state}

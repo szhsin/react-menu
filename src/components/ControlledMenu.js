@@ -74,7 +74,6 @@ ControlledMenu.propTypes = {
 
 ControlledMenu.defaultProps = {
     ...menuDefaultPropsBase,
-    state: 'unmounted',
     captureFocus: true,
     menuItemFocus: { position: FocusPositions.INITIAL }
 };

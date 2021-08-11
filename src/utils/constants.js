@@ -63,6 +63,5 @@ export const MenuStateMap = Object.freeze({
     entering: 'opening',
     entered: 'open',
     exiting: 'closing',
-    exited: 'closed',
-    unmounted: 'unmounted'
+    exited: 'closed'
 });
