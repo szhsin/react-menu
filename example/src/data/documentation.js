@@ -288,16 +288,6 @@ const menuPropsBase = [
                 CSS <code>padding</code> property but sizing units are discarded.</p>
     },
     {
-        name: 'debugging',
-        type: 'boolean',
-        desc:
-            <>
-                <p><em>Use this prop only when debugging.</em></p>
-                <p>If <code>true</code>, menu doesn't close when losing focus. It may be
-                    helpful when you need to inspect and adjust styles in browser developer tools.</p>
-            </>
-    },
-    {
         name: 'reposition',
         type: 'string',
         defaultVal: "'auto'",

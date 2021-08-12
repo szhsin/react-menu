@@ -44,7 +44,6 @@ export const menuPropTypesBase = {
         })
     ]),
     transitionTimeout: PropTypes.number,
-    debugging: PropTypes.bool,
     boundingBoxRef: PropTypes.object,
     boundingBoxPadding: PropTypes.string,
     reposition: PropTypes.oneOf(['auto', 'initial']),

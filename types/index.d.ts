@@ -123,7 +123,6 @@ interface SharedMenuProps extends BaseProps<MenuModifiers, MenuStyleKeys> {
 interface BaseMenuProps extends MenuStateOptions, Omit<SharedMenuProps, 'onClick'> {
     boundingBoxRef?: React.RefObject<Element | RectElement>;
     boundingBoxPadding?: string;
-    debugging?: boolean;
     viewScroll?: MenuViewScroll;
     portal?: boolean;
     reposition?: MenuReposition;
