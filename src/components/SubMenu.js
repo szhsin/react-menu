@@ -51,7 +51,7 @@ export const SubMenu = defineName(memo(forwardRef(function SubMenu({
 }, externalRef) {
 
     const { initialMounted, unmountOnClose, transition, transitionTimeout } = useContext(SettingsContext);
-    const { debugging, submenuOpenDelay, submenuCloseDelay } = useContext(ItemSettingsContext);
+    const { submenuOpenDelay, submenuCloseDelay } = useContext(ItemSettingsContext);
     const { isParentOpen, hoverIndex, isSubmenuOpen, dispatch } = useContext(MenuListItemContext);
 
     const {
@@ -143,9 +143,6 @@ export const SubMenu = defineName(memo(forwardRef(function SubMenu({
     }
 
     const handleBlur = e => {
-        // In debugging mode, neither close menu nor reset hoverIndex.
-        if (debugging) return;
-
         const relatedTarget = e.relatedTarget || document.activeElement;
         // Check if something which is not in the subtree get focus.
         // It handles situation such as clicking on a sibling disabled menu item

@@ -24,7 +24,6 @@ export const useMenuList = (
         transitionTimeout,
         boundingBoxRef,
         boundingBoxPadding,
-        debugging,
         reposition,
         submenuOpenDelay,
         submenuCloseDelay,
@@ -61,10 +60,9 @@ export const useMenuList = (
     ]);
 
     const itemSettings = useMemo(() => ({
-        debugging,
         submenuOpenDelay,
         submenuCloseDelay,
-    }), [debugging, submenuOpenDelay, submenuCloseDelay]);
+    }), [submenuOpenDelay, submenuCloseDelay]);
 
     const eventHandlers = useMemo(() => ({
         handleClick(event, isStopPropagation, isCheckorRadio) {
@@ -102,8 +100,7 @@ export const useMenuList = (
 
     const handleBlur = e => {
         if (isMenuOpen(state)
-            && !e.currentTarget.contains(e.relatedTarget || document.activeElement)
-            && !debugging) {
+            && !e.currentTarget.contains(e.relatedTarget || document.activeElement)) {
             safeCall(onClose, { reason: CloseReason.BLUR });
 
             // If a user clicks on the menu button when a menu is open, we need to close the menu.
