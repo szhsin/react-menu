@@ -228,7 +228,7 @@ test('ref is forwarded to <Menu>, <MenuItem> and <SubMenu>', () => {
     const submenuRef = {};
     const submenuItemRef = {};
 
-    renderMenu({ ref }, { ref: itemRef }, { ref: submenuRef, itemRef: submenuItemRef });
+    renderMenu({ ref }, { ref: itemRef }, { ref: submenuRef, itemProps: { ref: submenuItemRef } });
     utils.clickMenuButton();
     expect(ref).toHaveBeenCalledTimes(1);
     expect(menu).toHaveAttribute('role', 'menu');
@@ -246,4 +246,22 @@ test('ref is forwarded to <Menu>, <MenuItem> and <SubMenu>', () => {
 
     expect(submenuRef.current).toHaveAttribute('role', 'menu');
     expect(submenuRef.current).toHaveAttribute('aria-label', 'Submenu');
+});
+
+test('Additional props are forwarded to submenu item via itemProps', () => {
+    const onMouseEnter = jest.fn();
+    renderMenu(null, null, {
+        itemProps: {
+            ['aria-haspopup']: false,
+            randomattr: 'random',
+            onMouseEnter
+        }
+    });
+    utils.clickMenuButton();
+
+    const menuItem = utils.queryMenuItem('Submenu');
+    expect(menuItem).toHaveAttribute('aria-haspopup', 'false');
+    expect(menuItem).toHaveAttribute('randomattr', 'random');
+    fireEvent.mouseEnter(menuItem);
+    expect(onMouseEnter).toHaveBeenCalledTimes(1);
 });
