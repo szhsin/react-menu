@@ -15,7 +15,6 @@ export const stylePropTypes = (name) => ({
 export const sharedMenuPropTypes = {
     ...stylePropTypes(),
     ...stylePropTypes('arrow'),
-    'aria-label': PropTypes.string,
     arrow: PropTypes.bool,
     offsetX: PropTypes.number,
     offsetY: PropTypes.number,

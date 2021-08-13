@@ -265,3 +265,31 @@ test('Additional props are forwarded to submenu item via itemProps', () => {
     fireEvent.mouseEnter(menuItem);
     expect(onMouseEnter).toHaveBeenCalledTimes(1);
 });
+
+test('className props are added to related elements in submenu', () => {
+    const { container } = renderMenu(null, null, {
+        className: 'submenu-root',
+        'data-testid': 'menu',
+        menuClassName: 'my-submenu',
+        styles: { color: 'green' },
+        menuStyles: { color: 'red' },
+        itemProps: {
+            'data-testid': 'item',
+            className: 'my-item'
+        }
+    });
+    utils.clickMenuButton();
+
+    const submenuRoot = container.querySelector('.rc-menu__submenu');
+    expect(submenuRoot).toHaveClass('submenu-root');
+
+    const submenuItem = screen.getByTestId('item');
+    expect(submenuItem).toHaveClass('my-item');
+
+    fireEvent.mouseDown(submenuItem);
+    fireEvent.click(submenuItem);
+
+    const menu = screen.getByTestId('menu');
+    expect(menu).toHaveClass('my-submenu');
+    expect(menu).toHaveStyle('color: red');
+});

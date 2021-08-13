@@ -39,6 +39,10 @@ import {
 
 export const SubMenu = defineName(memo(forwardRef(function SubMenu({
     'aria-label': ariaLabel,
+    className,
+    styles,
+    menuClassName,
+    menuStyles,
     disabled,
     label,
     index,
@@ -191,13 +195,13 @@ export const SubMenu = defineName(memo(forwardRef(function SubMenu({
     }, restItemProps);
 
     return (
-        <li className={useBEM({ block: menuClass, element: subMenuClass })}
+        <li className={useBEM({ block: menuClass, element: subMenuClass, className })}
             role="presentation" ref={containerRef}
             onKeyDown={handleKeyDown}
             onBlur={handleBlur}>
 
             <div role="menuitem"
-                aria-haspopup="true"
+                aria-haspopup={true}
                 aria-expanded={isOpen}
                 aria-disabled={isDisabled || undefined}
                 tabIndex={isHovering && !isOpen ? 0 : -1}
@@ -223,19 +227,24 @@ export const SubMenu = defineName(memo(forwardRef(function SubMenu({
                 anchorRef={itemRef}
                 containerRef={containerRef}
                 externalRef={externalRef}
-                isDisabled={isDisabled} />}
+                isDisabled={isDisabled}
+                className={menuClassName}
+                styles={menuStyles || styles} />}
         </li>
     );
 })), 'SubMenu');
 
 SubMenu.propTypes = {
     ...sharedMenuPropTypes,
-    ...stylePropTypes('item'),
+    ...stylePropTypes('menu'),
     disabled: PropTypes.bool,
     label: PropTypes.oneOfType([
         PropTypes.node,
         PropTypes.func
     ]).isRequired,
+    itemProps: PropTypes.shape({
+        ...stylePropTypes()
+    }),
     onChange: PropTypes.func
 };
 
