@@ -12,7 +12,7 @@ import {
 
 export const ControlledMenu = memo(forwardRef(function ControlledMenu({
     'aria-label': ariaLabel,
-    id,
+    containerProps,
     initialMounted,
     unmountOnClose,
     transition,
@@ -36,7 +36,7 @@ export const ControlledMenu = memo(forwardRef(function ControlledMenu({
         externalRef,
         ariaLabel: ariaLabel || 'Menu'
     }, {
-        id,
+        containerProps,
         initialMounted,
         unmountOnClose,
         transition,

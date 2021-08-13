@@ -16,7 +16,7 @@ import {
 
 export const Menu = memo(forwardRef(function Menu({
     'aria-label': ariaLabel,
-    id,
+    containerProps,
     boundingBoxRef,
     boundingBoxPadding,
     captureFocus: _,
@@ -105,7 +105,7 @@ export const Menu = memo(forwardRef(function Menu({
         anchorRef: buttonRef,
         externalRef
     }, {
-        id,
+        containerProps,
         initialMounted,
         unmountOnClose,
         transition,

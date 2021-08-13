@@ -28,10 +28,7 @@ export const sharedMenuPropTypes = {
 // Menu and ControlledMenu
 export const menuPropTypesBase = {
     ...sharedMenuPropTypes,
-    id: PropTypes.oneOfType([
-        PropTypes.string,
-        PropTypes.number
-    ]),
+    containerProps: PropTypes.object,
     initialMounted: PropTypes.bool,
     unmountOnClose: PropTypes.bool,
     transition: PropTypes.oneOfType([
