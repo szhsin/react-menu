@@ -16,7 +16,7 @@ export const MenuButton = defineName(memo(forwardRef(function MenuButton({
 
     return (
         <button
-            aria-haspopup="true"
+            aria-haspopup={true}
             aria-expanded={isOpen}
             aria-disabled={disabled || undefined}
             disabled={disabled}

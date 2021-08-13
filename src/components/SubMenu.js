@@ -17,6 +17,7 @@ import {
 } from '../hooks';
 import { MenuList } from './MenuList';
 import {
+    attachHandlerProps,
     defineName,
     safeCall,
     stylePropTypes,
@@ -38,15 +39,17 @@ import {
 
 export const SubMenu = defineName(memo(forwardRef(function SubMenu({
     'aria-label': ariaLabel,
-    itemRef: externaItemlRef,
-    itemClassName,
-    itemStyles,
+    className,
+    styles,
+    menuClassName,
+    menuStyles,
     disabled,
     label,
     index,
     onChange,
     captureFocus: _1,
     repositionFlag: _2,
+    itemProps = {},
     ...restProps
 }, externalRef) {
 
@@ -175,31 +178,44 @@ export const SubMenu = defineName(memo(forwardRef(function SubMenu({
         disabled: isDisabled
     }), [isOpen, isHovering, isActive, isDisabled]);
 
+    const {
+        ref: externaItemlRef,
+        className: itemClassName,
+        styles: itemStyles,
+        ...restItemProps
+    } = itemProps;
+
+    const itemHandlers = attachHandlerProps({
+        ...activeStateHandlers,
+        onMouseEnter: handleMouseEnter,
+        onMouseLeave: handleMouseLeave,
+        onMouseDown: () => !isHovering && dispatch({ type: HoverIndexActionTypes.SET, index }),
+        onClick: handleClick,
+        onKeyUp: handleKeyUp
+    }, restItemProps);
+
     return (
-        <li className={useBEM({ block: menuClass, element: subMenuClass })}
+        <li className={useBEM({ block: menuClass, element: subMenuClass, className })}
             role="presentation" ref={containerRef}
             onKeyDown={handleKeyDown}
             onBlur={handleBlur}>
 
-            <div className={useBEM({
-                block: menuClass,
-                element: menuItemClass,
-                modifiers,
-                className: itemClassName
-            })}
-                style={useFlatStyles(itemStyles, modifiers)}
-                role="menuitem"
-                aria-haspopup="true"
+            <div role="menuitem"
+                aria-haspopup={true}
                 aria-expanded={isOpen}
                 aria-disabled={isDisabled || undefined}
                 tabIndex={isHovering && !isOpen ? 0 : -1}
+                {...restItemProps}
+                {...itemHandlers}
                 ref={useCombinedRef(externaItemlRef, itemRef)}
-                onMouseEnter={handleMouseEnter}
-                onMouseLeave={handleMouseLeave}
-                onMouseDown={() => !isHovering && dispatch({ type: HoverIndexActionTypes.SET, index })}
-                onClick={handleClick}
-                onKeyUp={handleKeyUp}
-                {...activeStateHandlers}>
+                className={useBEM({
+                    block: menuClass,
+                    element: menuItemClass,
+                    modifiers,
+                    className: itemClassName
+                })}
+                style={useFlatStyles(itemStyles, modifiers)}
+            >
                 {useMemo(() => safeCall(label, modifiers), [label, modifiers])}
             </div>
 
@@ -211,19 +227,24 @@ export const SubMenu = defineName(memo(forwardRef(function SubMenu({
                 anchorRef={itemRef}
                 containerRef={containerRef}
                 externalRef={externalRef}
-                isDisabled={isDisabled} />}
+                isDisabled={isDisabled}
+                className={menuClassName}
+                styles={menuStyles || styles} />}
         </li>
     );
 })), 'SubMenu');
 
 SubMenu.propTypes = {
     ...sharedMenuPropTypes,
-    ...stylePropTypes('item'),
+    ...stylePropTypes('menu'),
     disabled: PropTypes.bool,
     label: PropTypes.oneOfType([
         PropTypes.node,
         PropTypes.func
     ]).isRequired,
+    itemProps: PropTypes.shape({
+        ...stylePropTypes()
+    }),
     onChange: PropTypes.func
 };
 

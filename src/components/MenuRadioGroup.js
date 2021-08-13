@@ -42,7 +42,6 @@ export const MenuRadioGroup = defineName(memo(forwardRef(function MenuRadioGroup
 
 MenuRadioGroup.propTypes = {
     ...stylePropTypes(),
-    'aria-label': PropTypes.string,
     name: PropTypes.string,
     value: PropTypes.any,
     children: PropTypes.node.isRequired,
