@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import { useBEM } from '../hooks';
 import { MenuList } from './MenuList';
 import {
+    attachHandlerProps,
     safeCall,
     isMenuOpen,
     getTransition,
@@ -17,7 +18,7 @@ import {
 
 export const useMenuList = (
     menuListProps, {
-        id,
+        containerProps = {},
         initialMounted,
         unmountOnClose,
         transition,
@@ -118,13 +119,22 @@ export const useMenuList = (
 
     const itemTransition = getTransition(transition, 'item');
     const modifiers = useMemo(() => ({ theme: theming, itemTransition }), [theming, itemTransition]);
-    const menuList = (
-        <div id={id}
-            className={useBEM({ block: menuContainerClass, modifiers })}
-            ref={containerRef}
-            onKeyDown={handleKeyDown}
-            onBlur={handleBlur}>
 
+    const handlers = attachHandlerProps({
+        onKeyDown: handleKeyDown,
+        onBlur: handleBlur
+    }, containerProps);
+
+    const menuList = (
+        <div {...containerProps}
+            {...handlers}
+            className={useBEM({
+                block: menuContainerClass,
+                modifiers,
+                className: containerProps.className
+            })}
+            ref={containerRef}
+        >
             {state &&
                 <SettingsContext.Provider value={settings}>
                     <ItemSettingsContext.Provider value={itemSettings}>

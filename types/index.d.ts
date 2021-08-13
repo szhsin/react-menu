@@ -121,6 +121,7 @@ interface SharedMenuProps extends BaseProps<MenuModifiers, MenuStyleKeys> {
 
 // Menu and ControlledMenu
 interface BaseMenuProps extends MenuStateOptions, Omit<SharedMenuProps, 'onClick'> {
+    containerProps?: React.HTMLAttributes<HTMLElement>;
     boundingBoxRef?: React.RefObject<Element | RectElement>;
     boundingBoxPadding?: string;
     viewScroll?: MenuViewScroll;
