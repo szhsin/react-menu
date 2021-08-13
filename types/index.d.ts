@@ -23,7 +23,7 @@ type Styles<S> = React.CSSProperties & {
     [K in keyof S]?: (S[K] extends string ? StringStyles<S[K]> : React.CSSProperties);
 };
 
-type ClassNameProp<M> = string | ((modifiers: M) => string);
+type ClassNameProp<M = undefined> = string | ((modifiers: M) => string);
 
 type StylesProp<M, S = M> = Styles<S> | ((modifiers: M) => React.CSSProperties);
 
@@ -190,12 +190,13 @@ export type SubMenuItemModifiers = Readonly<{
     disabled: boolean;
 }>;
 
-export interface SubMenuProps extends Omit<SharedMenuProps, 'itemRef' | 'onChange'> {
-    itemClassName?: ClassNameProp<SubMenuItemModifiers>;
-    itemStyles?: StylesProp<SubMenuItemModifiers>;
-    itemRef?: React.Ref<any>;
-    disabled?: boolean;
+export interface SubMenuProps extends Omit<SharedMenuProps, 'className' | 'onChange'> {
+    className?: ClassNameProp;
+    menuClassName?: ClassNameProp<MenuModifiers>;
+    menuStyles?: StylesProp<MenuModifiers, MenuStyleKeys>;
+    itemProps?: BaseProps<SubMenuItemModifiers>;
     label?: RenderProp<SubMenuItemModifiers>;
+    disabled?: boolean;
     onChange?: EventHandler<MenuChangeEvent>;
 }
 
