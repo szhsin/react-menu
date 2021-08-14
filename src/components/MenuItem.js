@@ -62,13 +62,12 @@ export const MenuItem = defineName(memo(forwardRef(function MenuItem({
         let isStopPropagation = false;
         const event = { value, syntheticEvent: e };
         if (e.key !== undefined) event.key = e.key;
-
+        if (isCheckBox) event.checked = !isChecked;
         if (isRadio) {
             event.name = radioGroup.name;
             safeCall(radioGroup.onChange, event);
         }
 
-        event.checked = isCheckBox ? !isChecked : false;
         isStopPropagation = safeCall(onClick, event) === false;
 
         eventHandlers.handleClick(

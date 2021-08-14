@@ -89,8 +89,8 @@ test('Test check box items', () => {
     utils.expectMenuItemToBeChecked(queryByRole('menuitemcheckbox', { name: 'Italic' }), false);
 
     fireEvent.click(boldItem);
-    expect(onClick).toHaveBeenLastCalledWith(utils.clickEvent());
-    expect(onItemClick).toHaveBeenLastCalledWith(utils.clickEvent());
+    expect(onClick).toHaveBeenLastCalledWith(utils.clickEvent({ checked: false }));
+    expect(onItemClick).toHaveBeenLastCalledWith(utils.clickEvent({ checked: false }));
     rerender(getMenu(false));
     utils.expectMenuItemToBeChecked(boldItem, false);
     utils.expectMenuToBeOpen(false);
