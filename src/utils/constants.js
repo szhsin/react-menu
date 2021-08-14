@@ -1,8 +1,8 @@
 import React from 'react';
 
-export const menuContainerClass = 'rc-menu-container';
-export const menuClass = 'rc-menu';
-export const menuButtonClass = 'rc-menu-button';
+export const menuContainerClass = 'szh-menu-container';
+export const menuClass = 'szh-menu';
+export const menuButtonClass = 'szh-menu-button';
 export const menuArrowClass = 'arrow';
 export const menuItemClass = 'item';
 export const menuDividerClass = 'divider';

@@ -10,10 +10,10 @@ const bem = block => element => modifier => {
     return className;
 }
 
-const menuClass = bem('.rc-menu');
+const menuClass = bem('.szh-menu');
 const menuArrowClass = menuClass('arrow');
 const menuItemClass = menuClass('item');
-const menuButtonClass = bem('.rc-menu-button');
+const menuButtonClass = bem('.szh-menu-button');
 const directions = ['left', 'right', 'top', 'bottom'];
 
 const selectorsTable = {
@@ -39,7 +39,7 @@ const stylesheet = {
          the <a href="http://getbem.com/naming/" target="_blank" rel="noopener noreferrer">BEM methodology</a> to name CSS selectors.
          You are able to override the default styles by placing your style sheets after its own. All default styles use CSS selectors
          with the lowest possible specificity, and you could always precede your selectors
-         with <code>.rc-menu-container</code> in case a specific style cannot be overridden.</p>
+         with <code>.szh-menu-container</code> in case a specific style cannot be overridden.</p>
             <p><LibName /> comes with the following CSS files:</p>
         </>,
         {
@@ -89,7 +89,7 @@ const stylesheet = {
                 ...selectorsTable,
                 rows: [
                     {
-                        name: '.rc-menu-container',
+                        name: '.szh-menu-container',
                         desc: 'Root element that contains the menu.'
                     },
                     {

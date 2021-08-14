@@ -171,9 +171,9 @@ test('Portal will render Menu into document.body', () => {
     const { container } = utils.renderMenu({ portal: true });
     utils.clickMenuButton();
 
-    expect(container.querySelector('.rc-menu-container')).toBe(null);
-    expect(container.querySelector('.rc-menu')).toBe(null);
-    expect(document.querySelector('.rc-menu-container')).toBeInTheDocument();
+    expect(container.querySelector('.szh-menu-container')).toBe(null);
+    expect(container.querySelector('.szh-menu')).toBe(null);
+    expect(document.querySelector('.szh-menu-container')).toBeInTheDocument();
     utils.expectMenuToBeInTheDocument(true);
 });
 
@@ -212,6 +212,6 @@ test.each([
         overflow: 'auto'
     });
     utils.clickMenuButton();
-    expect(utils.queryMenu()).toHaveClass(`rc-menu--dir-${direction}`);
-    expect(container.querySelector(`.rc-menu__arrow--dir-${direction}`)).toBeInTheDocument();
+    expect(utils.queryMenu()).toHaveClass(`szh-menu--dir-${direction}`);
+    expect(container.querySelector(`.szh-menu__arrow--dir-${direction}`)).toBeInTheDocument();
 });

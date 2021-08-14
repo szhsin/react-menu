@@ -1,13 +1,13 @@
 @use 'var';
 @use 'mixins';
 
-.rc-menu-container {
+.szh-menu-container {
     position: relative;
     width: 0px;
     height: 0px;
 }
 
-.rc-menu {
+.szh-menu {
     @include mixins.reset-list;
     @include mixins.remove-focus;
     box-sizing: border-box;
@@ -93,6 +93,6 @@
     }
 }
 
-.rc-menu-button {
+.szh-menu-button {
     box-sizing: border-box;
 }
