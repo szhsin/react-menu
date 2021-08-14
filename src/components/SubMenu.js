@@ -46,7 +46,7 @@ export const SubMenu = defineName(memo(forwardRef(function SubMenu({
     disabled,
     label,
     index,
-    onChange,
+    onMenuChange,
     captureFocus: _1,
     repositionFlag: _2,
     itemProps = {},
@@ -169,7 +169,7 @@ export const SubMenu = defineName(memo(forwardRef(function SubMenu({
     useEffect(() => {
         dispatch({ type: isOpen ? SubmenuActionTypes.OPEN : SubmenuActionTypes.CLOSE });
     }, [dispatch, isOpen]);
-    useMenuChange(onChange, isOpen);
+    useMenuChange(onMenuChange, isOpen);
 
     const modifiers = useMemo(() => Object.freeze({
         open: isOpen,
@@ -245,7 +245,7 @@ SubMenu.propTypes = {
     itemProps: PropTypes.shape({
         ...stylePropTypes()
     }),
-    onChange: PropTypes.func
+    onMenuChange: PropTypes.func
 };
 
 SubMenu.defaultProps = {

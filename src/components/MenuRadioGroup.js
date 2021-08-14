@@ -17,12 +17,12 @@ export const MenuRadioGroup = defineName(memo(forwardRef(function MenuRadioGroup
     name,
     value,
     children,
-    onChange,
+    onRadioChange,
     ...restProps
 }, externalRef) {
 
-    const contextValue = useMemo(() => ({ name, value, onChange }),
-        [name, value, onChange]);
+    const contextValue = useMemo(() => ({ name, value, onRadioChange }),
+        [name, value, onRadioChange]);
 
     return (
         <li role="presentation">
@@ -45,5 +45,5 @@ MenuRadioGroup.propTypes = {
     name: PropTypes.string,
     value: PropTypes.any,
     children: PropTypes.node.isRequired,
-    onChange: PropTypes.func
+    onRadioChange: PropTypes.func
 };

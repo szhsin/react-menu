@@ -121,7 +121,7 @@ interface SharedMenuProps extends BaseProps<MenuModifiers, MenuStyleKeys> {
 }
 
 // Menu and ControlledMenu
-interface BaseMenuProps extends MenuStateOptions, Omit<SharedMenuProps, 'onClick'> {
+interface BaseMenuProps extends MenuStateOptions, SharedMenuProps {
     containerProps?: React.HTMLAttributes<HTMLElement>;
     boundingBoxRef?: React.RefObject<Element | RectElement>;
     boundingBoxPadding?: string;
@@ -152,9 +152,9 @@ export const MenuButton: React.NamedExoticComponent<MenuButtonProps>;
 //
 // Menu
 // ----------------------------------------------------------------------
-export interface MenuProps extends Omit<BaseMenuProps, 'onChange'> {
+export interface MenuProps extends BaseMenuProps {
     menuButton: RenderProp<MenuButtonModifiers, React.ReactElement>;
-    onChange?: EventHandler<MenuChangeEvent>;
+    onMenuChange?: EventHandler<MenuChangeEvent>;
 }
 
 export const Menu: React.NamedExoticComponent<MenuProps>;
@@ -188,14 +188,14 @@ export type SubMenuItemModifiers = Readonly<{
     disabled: boolean;
 }>;
 
-export interface SubMenuProps extends Omit<SharedMenuProps, 'className' | 'onChange'> {
+export interface SubMenuProps extends Omit<SharedMenuProps, 'className'> {
     className?: ClassNameProp;
     menuClassName?: ClassNameProp<MenuModifiers>;
     menuStyles?: StylesProp<MenuModifiers, MenuStyleKeys>;
     itemProps?: BaseProps<SubMenuItemModifiers>;
     label?: RenderProp<SubMenuItemModifiers>;
     disabled?: boolean;
-    onChange?: EventHandler<MenuChangeEvent>;
+    onMenuChange?: EventHandler<MenuChangeEvent>;
 }
 
 export const SubMenu: React.NamedExoticComponent<SubMenuProps>;
@@ -274,11 +274,11 @@ export const MenuGroup: React.NamedExoticComponent<MenuGroupProps>;
 //
 // MenuRadioGroup
 // ----------------------------------------------------------------------
-export interface MenuRadioGroupProps extends Omit<BaseProps, 'onChange'> {
+export interface MenuRadioGroupProps extends BaseProps {
     name?: string;
     value?: any;
     children?: React.ReactNode;
-    onChange?: EventHandler<RadioChangeEvent>;
+    onRadioChange?: EventHandler<RadioChangeEvent>;
 }
 
 export const MenuRadioGroup: React.NamedExoticComponent<MenuRadioGroupProps>;

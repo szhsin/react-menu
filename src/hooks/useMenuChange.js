@@ -5,11 +5,11 @@ import {
 import { safeCall } from '../utils';
 
 
-export const useMenuChange = (onChange, isOpen) => {
+export const useMenuChange = (onMenuChange, isOpen) => {
     const prevOpen = useRef(isOpen);
 
     useEffect(() => {
-        if (prevOpen.current !== isOpen) safeCall(onChange, { open: isOpen });
+        if (prevOpen.current !== isOpen) safeCall(onMenuChange, { open: isOpen });
         prevOpen.current = isOpen;
-    }, [onChange, isOpen]);
+    }, [onMenuChange, isOpen]);
 }

@@ -26,7 +26,7 @@ test('Open and close submenu, and activate submenu item with mouse and keyboard'
         children: menuItemText,
         value: menuItemText,
         onClick
-    }, { onChange });
+    }, { onMenuChange: onChange });
 
     utils.clickMenuButton();
     const menuOptions = { name: 'Menu', container };

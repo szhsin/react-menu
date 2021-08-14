@@ -65,7 +65,7 @@ export const MenuItem = defineName(memo(forwardRef(function MenuItem({
         
         if (isRadio) {
             event.name = radioGroup.name;
-            safeCall(radioGroup.onChange, event);
+            safeCall(radioGroup.onRadioChange, event);
         }
 
         if (!event.stopPropagation) safeCall(onClick, event);

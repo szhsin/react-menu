@@ -20,7 +20,7 @@ test('Test radio items', () => {
     const onChange = jest.fn();
     const getMenu = value => (
         <Menu onItemClick={onItemClick} menuButton={<MenuButton>Color</MenuButton>}>
-            <MenuRadioGroup value={value} name="color" onChange={onChange}>
+            <MenuRadioGroup value={value} name="color" onRadioChange={onChange}>
                 <MenuItem value="red">Red</MenuItem>
                 <MenuItem value="green">Green</MenuItem>
                 <MenuItem value="blue">Blue</MenuItem>
@@ -50,7 +50,7 @@ test('Use keepOpen of onChange to customise when menu is closed', () => {
     render(
         <Menu menuButton={<MenuButton>Color</MenuButton>}>
             <MenuRadioGroup value="green"
-                onChange={e => e.keepOpen = true}>
+                onRadioChange={e => e.keepOpen = true}>
                 <MenuItem value="red">Red</MenuItem>
                 <MenuItem value="green">Green</MenuItem>
             </MenuRadioGroup>

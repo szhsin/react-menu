@@ -32,7 +32,7 @@ export const Menu = memo(forwardRef(function Menu({
     transition,
     transitionTimeout,
     onItemClick,
-    onChange,
+    onMenuChange,
     ...restProps
 }, externalRef) {
 
@@ -122,7 +122,7 @@ export const Menu = memo(forwardRef(function Menu({
         skipClick
     });
 
-    useMenuChange(onChange, isOpen);
+    useMenuChange(onMenuChange, isOpen);
 
     return (
         <React.Fragment>
@@ -138,7 +138,7 @@ Menu.propTypes = {
         PropTypes.element,
         PropTypes.func
     ]).isRequired,
-    onChange: PropTypes.func
+    onMenuChange: PropTypes.func
 };
 
 Menu.defaultProps = menuDefaultPropsBase;
