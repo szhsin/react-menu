@@ -51,7 +51,7 @@ export interface RadioChangeEvent extends Event {
 }
 
 export interface ClickEvent extends RadioChangeEvent {
-    checked: boolean;
+    checked?: boolean;
 }
 
 export interface MenuChangeEvent {
