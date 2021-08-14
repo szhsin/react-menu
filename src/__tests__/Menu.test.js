@@ -179,7 +179,7 @@ test('Portal will render Menu into document.body', () => {
 
 test('Use keepOpen of onClick to customise when menu is closed', () => {
     utils.renderMenu({
-        onClick: e => e.keepOpen = true
+        onItemClick: e => e.keepOpen = true
     }, {
         onClick: e => e.keepOpen = false
     });

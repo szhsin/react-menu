@@ -22,10 +22,10 @@ test('Open and close submenu, and activate submenu item with mouse and keyboard'
     const onClick = jest.fn();
     const onChange = jest.fn();
     const onItemClick = jest.fn();
-    const { container } = renderMenu({ submenuOpenDelay: 90, onClick }, {
+    const { container } = renderMenu({ submenuOpenDelay: 90, onItemClick }, {
         children: menuItemText,
         value: menuItemText,
-        onClick: onItemClick
+        onClick
     }, { onChange });
 
     utils.clickMenuButton();
@@ -119,8 +119,8 @@ test('Open and close submenu, and activate submenu item with mouse and keyboard'
     fireEvent.mouseDown(submenuItem);
     fireEvent.click(submenuItem);
     fireEvent.click(utils.queryMenuItem(menuItemText));
-    expect(onItemClick).toHaveBeenLastCalledWith(utils.clickEvent({ value: menuItemText }));
     expect(onClick).toHaveBeenLastCalledWith(utils.clickEvent({ value: menuItemText }));
+    expect(onItemClick).toHaveBeenLastCalledWith(utils.clickEvent({ value: menuItemText }));
     utils.expectMenuToBeOpen(false, menuOptions);
 
     // Activate submenu item with space key
@@ -132,8 +132,8 @@ test('Open and close submenu, and activate submenu item with mouse and keyboard'
     fireEvent.keyDown(utils.queryMenu(submenuOptions), { key: 'ArrowDown' });
     fireEvent.keyDown(utils.queryMenuItem(menuItemText), { key: ' ' });
     fireEvent.keyUp(utils.queryMenuItem(menuItemText), { key: ' ' });
-    expect(onItemClick).toHaveBeenLastCalledWith(utils.clickEvent({ value: menuItemText, key: ' ' }));
     expect(onClick).toHaveBeenLastCalledWith(utils.clickEvent({ value: menuItemText, key: ' ' }));
+    expect(onItemClick).toHaveBeenLastCalledWith(utils.clickEvent({ value: menuItemText, key: ' ' }));
     utils.expectMenuToBeOpen(false, menuOptions);
 });
 
