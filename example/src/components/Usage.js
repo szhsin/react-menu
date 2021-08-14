@@ -144,7 +144,7 @@ function EventHandlingExample() {
     const handleSaveClick = e => {
         addLine(`[MenuItem] ${e.value} clicked`);
         addLine('------');
-        return false;
+        e.stopPropagation = true;
     };
 
     useLayoutEffect(() => {

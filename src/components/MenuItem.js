@@ -59,21 +59,17 @@ export const MenuItem = defineName(memo(forwardRef(function MenuItem({
     const handleClick = e => {
         if (isDisabled) return;
 
-        let isStopPropagation = false;
         const event = { value, syntheticEvent: e };
         if (e.key !== undefined) event.key = e.key;
         if (isCheckBox) event.checked = !isChecked;
+        
         if (isRadio) {
             event.name = radioGroup.name;
             safeCall(radioGroup.onChange, event);
         }
 
-        isStopPropagation = safeCall(onClick, event) === false;
-
-        eventHandlers.handleClick(
-            event,
-            isStopPropagation,
-            isCheckBox || isRadio);
+        if (!event.stopPropagation) safeCall(onClick, event);
+        eventHandlers.handleClick(event, isCheckBox || isRadio);
     }
 
     const handleKeyUp = e => {

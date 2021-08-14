@@ -47,6 +47,7 @@ export interface MenuCloseEvent extends Event {
 export interface RadioChangeEvent extends Event {
     name?: string;
     keepOpen?: boolean;
+    stopPropagation?: boolean;
     syntheticEvent: MouseEvent | KeyboardEvent;
 }
 
@@ -58,8 +59,8 @@ export interface MenuChangeEvent {
     open: boolean;
 }
 
-interface EventHandler<E, R = void> {
-    (event: E): R;
+interface EventHandler<E> {
+    (event: E): void;
 }
 
 interface RectElement {
@@ -219,7 +220,7 @@ export interface MenuItemProps extends Omit<BaseProps<MenuItemModifiers>, 'onCli
     type?: MenuItemTypeProp;
     checked?: boolean;
     disabled?: boolean;
-    onClick?: EventHandler<ClickEvent, boolean | void | Promise<void>>;
+    onClick?: EventHandler<ClickEvent>;
     children?: RenderProp<MenuItemModifiers>;
 }
 
