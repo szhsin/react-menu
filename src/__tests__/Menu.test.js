@@ -74,7 +74,7 @@ test('Clicking a menu item fires onClick event and closes the menu', () => {
     const onClick = jest.fn();
     const onChange = jest.fn();
     const onItemClick = jest.fn();
-    utils.renderMenu({ onItemClick, onChange }, {
+    utils.renderMenu({ onItemClick, onMenuChange: onChange }, {
         children: menuItemText,
         value: menuItemText,
         onClick

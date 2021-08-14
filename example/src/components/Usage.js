@@ -189,7 +189,7 @@ function RadioGroupExample() {
         <Example data={codeExamples.radioGroup} >
             <Menu menuButton={<MenuButton>Text color</MenuButton>}>
                 <MenuRadioGroup value={textColor}
-                    onChange={e => setTextColor(e.value)}>
+                    onRadioChange={e => setTextColor(e.value)}>
                     <MenuItem value="red">Red</MenuItem>
                     <MenuItem value="green">Green</MenuItem>
                     <MenuItem value={isDark ? '#69a6f8' : 'blue'}>Blue</MenuItem>
@@ -273,7 +273,7 @@ function CombinedExample() {
                 <SubMenu label="Text color">
                     <MenuRadioGroup
                         value={textColor}
-                        onChange={e => setTextColor(e.value)}>
+                        onRadioChange={e => setTextColor(e.value)}>
                         <MenuItem value={'red'}>Red</MenuItem>
                         <MenuItem value={'green'}>Green</MenuItem>
                         <MenuItem value={isDark ? '#69a6f8' : 'blue'}>Blue</MenuItem>
@@ -379,7 +379,7 @@ function FocusableItemExample() {
         <Example data={codeExamples.focusableItem} >
             <Menu menuButton={<MenuButton>Open menu</MenuButton>}
                 direction={vWidth < 600 ? 'top' : 'bottom'}
-                align="center" onChange={e => e.open && setFilter('')}
+                align="center" onMenuChange={e => e.open && setFilter('')}
                 boundingBoxPadding={`${navbarHeight} 0 0 0`}>
                 <FocusableItem>
                     {({ ref }) => (
@@ -538,7 +538,7 @@ function MenuOverflowExample() {
                 </Menu>
                 <Menu menuButton={<MenuButton styles={{ marginTop: '2rem' }}>Grouping</MenuButton>}
                     overflow={overflow} position={position} boundingBoxPadding="10"
-                    onChange={e => e.open && setFilter('')} align="end">
+                    onMenuChange={e => e.open && setFilter('')} align="end">
                     <FocusableItem styles={{ padding: '0.375rem 1rem' }}>
                         {({ ref }) => (
                             <input ref={ref} type="text" placeholder="Type a number"
