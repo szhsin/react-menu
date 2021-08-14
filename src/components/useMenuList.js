@@ -65,8 +65,8 @@ export const useMenuList = (
     }), [submenuOpenDelay, submenuCloseDelay]);
 
     const eventHandlers = useMemo(() => ({
-        handleClick(event, isStopPropagation, isCheckorRadio) {
-            if (!isStopPropagation) safeCall(onItemClick, event);
+        handleClick(event, isCheckorRadio) {
+            if (!event.stopPropagation) safeCall(onItemClick, event);
 
             let keepOpen = event.keepOpen;
             if (keepOpen === undefined) {

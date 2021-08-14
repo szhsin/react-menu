@@ -95,11 +95,11 @@ test('Clicking a menu item fires onClick event and closes the menu', () => {
     utils.expectButtonToBeExpanded(false);
     utils.expectMenuToBeOpen(false);
 
-    // onClick returning false skips subsequent onItemClick
-    onClick.mockImplementationOnce(() => false);
+    // onClick stopPropagation skips subsequent onItemClick
+    onClick.mockImplementationOnce(e => e.stopPropagation = true);
     utils.clickMenuButton();
     fireEvent.click(utils.queryMenuItem(menuItemText));
-    expect(onClick).toHaveBeenLastCalledWith(utils.clickEvent({ value: menuItemText }));
+    expect(onClick).toHaveBeenLastCalledWith(utils.clickEvent({ value: menuItemText, stopPropagation: true }));
     expect(onClick).toHaveBeenCalledTimes(2);
     expect(onItemClick).toHaveBeenCalledTimes(1);
     expect(onChange).toHaveBeenCalledTimes(4);
@@ -181,7 +181,7 @@ test('Use keepOpen of onClick to customise when menu is closed', () => {
     utils.renderMenu({
         onItemClick: e => e.keepOpen = true
     }, {
-        onClick: e => e.keepOpen = false
+        onClick: e => e.stopPropagation = true
     });
     utils.clickMenuButton();
 
