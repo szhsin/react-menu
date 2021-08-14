@@ -32,7 +32,6 @@ export const Menu = memo(forwardRef(function Menu({
     transition,
     transitionTimeout,
     onItemClick,
-    onClick,
     onChange,
     ...restProps
 }, externalRef) {
@@ -119,7 +118,6 @@ export const Menu = memo(forwardRef(function Menu({
         portal,
         theming,
         onItemClick,
-        onClick,
         onClose: handleClose,
         skipClick
     });

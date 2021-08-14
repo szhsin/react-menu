@@ -32,7 +32,6 @@ export const useMenuList = (
         portal,
         theming,
         onItemClick,
-        onClick,
         onClose,
         skipClick
     }) => {
@@ -67,7 +66,7 @@ export const useMenuList = (
 
     const eventHandlers = useMemo(() => ({
         handleClick(event, isStopPropagation, isCheckorRadio) {
-            if (!isStopPropagation) safeCall(onItemClick || onClick, event);
+            if (!isStopPropagation) safeCall(onItemClick, event);
 
             let keepOpen = event.keepOpen;
             if (keepOpen === undefined) {
@@ -89,7 +88,7 @@ export const useMenuList = (
         handleClose(key) {
             safeCall(onClose, { key, reason: CloseReason.CLICK });
         }
-    }), [onItemClick, onClick, onClose]);
+    }), [onItemClick, onClose]);
 
     const handleKeyDown = ({ key }) => {
         switch (key) {

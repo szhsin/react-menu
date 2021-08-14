@@ -26,7 +26,6 @@ export const ControlledMenu = memo(forwardRef(function ControlledMenu({
     portal,
     theming,
     onItemClick,
-    onClick,
     onClose,
     ...restProps
 }, externalRef) {
@@ -50,7 +49,6 @@ export const ControlledMenu = memo(forwardRef(function ControlledMenu({
         portal,
         theming,
         onItemClick,
-        onClick,
         onClose
     });
 }));
