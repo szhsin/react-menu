@@ -1,6 +1,4 @@
 @use 'var';
-@use 'animations';
-@use 'sass:map';
 @use 'core';
 
 .szh-menu {
@@ -12,10 +10,6 @@
     min-width: 10rem;
     padding: 0.5rem 0;
 
-    @each $dir in map.keys(animations.$directions) {
-        @include animations.animation("slide", $dir);
-    }
-
     &__item {
         display: flex;
         align-items: center;
@@ -25,7 +19,7 @@
         .szh-menu-container--itemTransition & {
             transition: {
                 property: background-color, color;
-                duration: animations.$duration;
+                duration: 0.15s;
                 timing-function: ease-in-out;
             }
         }
