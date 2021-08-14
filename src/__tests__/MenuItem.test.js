@@ -16,10 +16,10 @@ const { queryByRole, queryAllByRole } = screen;
 const LastItem = utils.LastItem;
 
 test('Test radio items', () => {
-    const onClick = jest.fn();
+    const onItemClick = jest.fn();
     const onChange = jest.fn();
     const getMenu = value => (
-        <Menu onClick={onClick} menuButton={<MenuButton>Color</MenuButton>}>
+        <Menu onItemClick={onItemClick} menuButton={<MenuButton>Color</MenuButton>}>
             <MenuRadioGroup value={value} name="color" onChange={onChange}>
                 <MenuItem value="red">Red</MenuItem>
                 <MenuItem value="green">Green</MenuItem>
@@ -39,7 +39,7 @@ test('Test radio items', () => {
 
     fireEvent.click(queryByRole('menuitemradio', { name: 'Blue' }));
     expect(onChange).toHaveBeenCalledWith(utils.clickEvent({ name: 'color', value: 'blue' }));
-    expect(onClick).toHaveBeenCalledWith(utils.clickEvent({ name: 'color', value: 'blue' }));
+    expect(onItemClick).toHaveBeenCalledWith(utils.clickEvent({ name: 'color', value: 'blue' }));
     rerender(getMenu('blue'));
     utils.expectMenuItemToBeChecked(queryByRole('menuitemradio', { name: 'Blue' }), true);
     utils.expectMenuItemToBeChecked(queryByRole('menuitemradio', { name: 'Green' }), false);
@@ -159,8 +159,8 @@ test('Pointer press and leave a menu item', () => {
 });
 
 test('keyDown on one item and keyUp on another will not trigger click event', () => {
-    const onClick = jest.fn();
-    utils.renderMenu({ onClick }, { value: 'Middle' });
+    const onItemClick = jest.fn();
+    utils.renderMenu({ onItemClick }, { value: 'Middle' });
     utils.clickMenuButton();
 
     const menuItem = utils.queryMenuItem('First');
@@ -182,11 +182,11 @@ test('keyDown on one item and keyUp on another will not trigger click event', ()
     // Releasing 'Enter' key on this item will not trigger click event
     fireEvent.keyUp(anothorItem, { key: 'Enter' });
     utils.expectMenuItemToBeHover(anothorItem, true);
-    expect(onClick).not.toHaveBeenCalled();
+    expect(onItemClick).not.toHaveBeenCalled();
 
     fireEvent.keyDown(anothorItem, { key: 'Enter' });
     fireEvent.keyUp(anothorItem, { key: 'Enter' });
-    expect(onClick).toHaveBeenLastCalledWith(utils.clickEvent({ key: 'Enter', value: 'Middle' }))
+    expect(onItemClick).toHaveBeenLastCalledWith(utils.clickEvent({ key: 'Enter', value: 'Middle' }))
 });
 
 test('MenuItem keeps hover and active states after focusing something inside it', () => {

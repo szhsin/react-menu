@@ -20,7 +20,7 @@ const getMenu = (props) => (
 
 test('Test ControlledMenu with an anchor element', async () => {
     const onClose = jest.fn();
-    const onClick = jest.fn();
+    const onItemClick = jest.fn();
     const mockRef = {
         current: {
             getBoundingClientRect: () => ({
@@ -37,7 +37,7 @@ test('Test ControlledMenu with an anchor element', async () => {
     const props = {
         anchorRef: mockRef,
         boundingBoxRef: mockRef,
-        onClose, onClick,
+        onClose, onItemClick,
         viewScroll: 'auto'
     };
     const { rerender } = render(getMenu({ ...props }));
@@ -63,7 +63,7 @@ test('Test ControlledMenu with an anchor element', async () => {
 
     // Click on a menu item
     fireEvent.click(utils.queryMenuItem('Middle'));
-    expect(onClick).toHaveBeenLastCalledWith(utils.clickEvent({ value: 'Middle' }));
+    expect(onItemClick).toHaveBeenLastCalledWith(utils.clickEvent({ value: 'Middle' }));
     expect(onClose).toHaveBeenLastCalledWith({ value: 'Middle', reason: 'click' });
 
     // Set state to undefined, expect menu to be removed from DOM

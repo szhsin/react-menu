@@ -131,10 +131,6 @@ interface BaseMenuProps extends MenuStateOptions, Omit<SharedMenuProps, 'onClick
     submenuOpenDelay?: number;
     submenuCloseDelay?: number;
     theming?: string;
-    /**
-     * @deprecated onClick will become the original DOM event in 2.0; use onItemClick instead
-     */
-    onClick?: EventHandler<ClickEvent>;
     onItemClick?: EventHandler<ClickEvent>;
 }
 
