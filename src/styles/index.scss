@@ -17,6 +17,8 @@
     }
 
     &__item {
+        display: flex;
+        align-items: center;
         position: relative;
         padding: 0.375rem 1.5rem;
 
