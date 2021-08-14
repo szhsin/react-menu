@@ -88,8 +88,8 @@ test('Test ControlledMenu as context menu', () => {
 test('Portal will render ControlledMenu into document.body', () => {
     const { container } = render(getMenu({ portal: true }));
     
-    expect(container.querySelector('.rc-menu-container')).toBe(null);
-    expect(container.querySelector('.rc-menu')).toBe(null);
-    expect(document.querySelector('.rc-menu-container')).toBeInTheDocument();
+    expect(container.querySelector('.szh-menu-container')).toBe(null);
+    expect(container.querySelector('.szh-menu')).toBe(null);
+    expect(document.querySelector('.szh-menu-container')).toBeInTheDocument();
     utils.expectMenuToBeInTheDocument(true);
 });

@@ -14,7 +14,7 @@
     font-weight: 600;
 }
 
-.rc-app {
+.szh-app {
     padding-top: 4rem;
     line-height: 1.5;
     color: #212121;
@@ -49,7 +49,7 @@
             }
         }
 
-        .rc-app__toast {
+        .szh-app__toast {
             background-color: var.$btn-dark;
             border: 1px solid var.$border-dark;
             box-shadow: 0 2px 9px 3px rgba(0, 0, 0, 0.25);
@@ -117,7 +117,7 @@
         margin-right: 0.5rem;
     }
 
-    .rc-app--theme-dark & {
+    .szh-app--theme-dark & {
         color: var.$secondary-dark;
         background-color: var.$block-dark;
         border-color: var.$border-dark;
@@ -155,7 +155,7 @@
     h3 {
         margin-bottom: 0;
         color: var.$heading-light;
-        .rc-app--theme-dark & {
+        .szh-app--theme-dark & {
             color: var.$heading-dark;
         }
     }
@@ -195,7 +195,7 @@
         flex: 0 1 900px;
         padding: 0 2rem 3rem 2rem;
         @include mixins.border(border-left);
-        .rc-app--theme-dark & {
+        .szh-app--theme-dark & {
             border-color: var.$border-dark;
         }
         > .hash-heading:first-child {
@@ -397,7 +397,7 @@ $toc-animation: 0.22s ease-out;
             padding: 0 0.5rem;
             margin: 0.25rem 0.5rem 0.25rem 0;
             @include mixins.transition;
-            .rc-app--theme-dark & {
+            .szh-app--theme-dark & {
                 background-color: var.$btn-dark;
                 border-color: var.$border-dark;
             }

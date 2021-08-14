@@ -175,7 +175,7 @@ test('Delay closing submenu when hovering items in parent menu list', async () =
 
     await quickEnterLeave(utils.queryMenuItem('Submenu2'));
     await quickEnterLeave(utils.queryMenuItem('Two'));
-    await quickEnterLeave(container.querySelector('.rc-menu__item--focusable'));
+    await quickEnterLeave(container.querySelector('.szh-menu__item--focusable'));
 
     fireEvent.mouseEnter(utils.queryMenuItem('Disabled'));
     await utils.delayFor(400);
@@ -208,7 +208,7 @@ test('Submenu is disabled', () => {
     utils.clickMenuButton();
     const submenuItem = utils.queryMenuItem('Submenu');
 
-    expect(submenuItem).toHaveClass('rc-menu__item--disabled');
+    expect(submenuItem).toHaveClass('szh-menu__item--disabled');
     utils.expectToBeDisabled(submenuItem, true);
     fireEvent.click(submenuItem);
     utils.expectMenuToBeInTheDocument(false, { name: 'Submenu', container });
@@ -280,7 +280,7 @@ test('className props are added to related elements in submenu', () => {
     });
     utils.clickMenuButton();
 
-    const submenuRoot = container.querySelector('.rc-menu__submenu');
+    const submenuRoot = container.querySelector('.szh-menu__submenu');
     expect(submenuRoot).toHaveClass('submenu-root');
 
     const submenuItem = screen.getByTestId('item');

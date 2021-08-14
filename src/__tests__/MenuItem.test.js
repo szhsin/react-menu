@@ -34,7 +34,7 @@ test('Test radio items', () => {
     utils.clickMenuButton();
     const menuItems = queryAllByRole('menuitemradio');
     expect(menuItems).toHaveLength(4);
-    menuItems.forEach(item => expect(item).toHaveClass('rc-menu__item--type-radio'));
+    menuItems.forEach(item => expect(item).toHaveClass('szh-menu__item--type-radio'));
     utils.expectMenuItemToBeChecked(queryByRole('menuitemradio', { name: 'Green' }), true);
 
     fireEvent.click(queryByRole('menuitemradio', { name: 'Blue' }));
@@ -82,7 +82,7 @@ test('Test check box items', () => {
     utils.clickMenuButton();
     const menuItems = queryAllByRole('menuitemcheckbox');
     expect(menuItems).toHaveLength(2);
-    menuItems.forEach(item => expect(item).toHaveClass('rc-menu__item--type-checkbox'));
+    menuItems.forEach(item => expect(item).toHaveClass('szh-menu__item--type-checkbox'));
 
     const boldItem = queryByRole('menuitemcheckbox', { name: 'Bold' });
     utils.expectMenuItemToBeChecked(boldItem, true);

@@ -20,7 +20,7 @@
         }
         &--on {
             background-color: var.$border-light;
-            .rc-app--theme-dark & {
+            .szh-app--theme-dark & {
                 background-color: var.$border-dark;
             }
         }
@@ -38,7 +38,7 @@
 
 .example__actions,
 [aria-labelledby="bounding-box"] {
-    .rc-menu {
+    .szh-menu {
         min-width: initial;
         &__header {
             color: inherit;
@@ -84,7 +84,7 @@
             display: block;
         }
 
-        .rc-app--theme-dark & {
+        .szh-app--theme-dark & {
             border-color: var.$border-dark;
             legend {
                 background-color: var.$btn-dark;
@@ -115,7 +115,7 @@
             @include mixins.border;
             @include mixins.scrollbar;
 
-            .rc-app--theme-dark & {
+            .szh-app--theme-dark & {
                 @include mixins.scrollbar-dark;
                 border-color: var.$border-dark;
             }
@@ -149,7 +149,7 @@
             }
         }
 
-        .rc-menu-button {
+        .szh-menu-button {
             flex: 0 1 6rem;
         }
     }
@@ -171,11 +171,11 @@
             }
         }
 
-        .rc-menu-button {
+        .szh-menu-button {
             white-space: nowrap;
         }
 
-        .rc-menu {
+        .szh-menu {
             z-index: 201;
             input {
                 max-width: 7rem;
@@ -190,11 +190,11 @@
         height: 18rem;
         overflow: auto;
         @include mixins.scrollbar;
-        .rc-app--theme-dark & {
+        .szh-app--theme-dark & {
             @include mixins.scrollbar-dark;
         }
 
-        .rc-menu__header {
+        .szh-menu__header {
             max-width: 6rem;
             white-space: initial;
             text-align: center;
@@ -220,7 +220,7 @@
         background-color: var.$btn-light;
         @include mixins.border("border", 2px, false);
         @include mixins.transition((border-color, background-color));
-        .rc-app--theme-dark & {
+        .szh-app--theme-dark & {
             border-color: var.$border-dark;
             background-color: var.$background-dark;
         }

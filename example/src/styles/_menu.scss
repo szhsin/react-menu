@@ -1,7 +1,7 @@
 @use 'var';
 @use 'mixins';
 
-.rc-menu__item {
+.szh-menu__item {
     i {
         font-size: 1.25rem;
         margin-right: 0.5rem;
@@ -18,31 +18,31 @@
     }
 }
 
-.rc-menu {
+.szh-menu {
     white-space: nowrap;
     &__item--active {
         color: #fff !important;
     }
 }
 
-.rc-menu,
-.rc-menu__group {
+.szh-menu,
+.szh-menu__group {
     @include mixins.scrollbar;
     @media (max-width: var.$bp-sm) {
         &::-webkit-scrollbar {
             width: 3px;
         }
     }
-    .rc-app--theme-dark & {
+    .szh-app--theme-dark & {
         @include mixins.scrollbar-dark;
     }
 }
 
-.rc-menu__group {
+.szh-menu__group {
     margin: 0.5rem 0;
     @include mixins.border(border-top, $transition: false);
     @include mixins.border(border-bottom);
-    .rc-app--theme-dark & {
+    .szh-app--theme-dark & {
         border-color: var.$border-dark;
     }
 }

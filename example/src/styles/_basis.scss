@@ -17,7 +17,7 @@ code {
     padding: 0.2rem 0.4rem;
     font-size: 0.875rem;
     @include mixins.transition;
-    .rc-app--theme-dark & {
+    .szh-app--theme-dark & {
         background-color: var.$code-dark;
     }
 }
@@ -37,7 +37,7 @@ a {
         text-decoration: underline;
         color: var.$primary-light-lv2;
     }
-    .rc-app--theme-dark & {
+    .szh-app--theme-dark & {
         color: var.$primary-dark;
         &:hover {
             color: var.$primary-dark-lv2;
@@ -59,7 +59,7 @@ input[type="text"] {
     @include mixins.focus(2px);
     @include mixins.border($transition: false);
     @include mixins.transition((border-color, box-shadow));
-    .rc-app--theme-dark & {
+    .szh-app--theme-dark & {
         color: inherit;
         background-color: var.$background-dark;
         border-color: var.$border-dark;
@@ -72,7 +72,7 @@ label {
     @include mixins.transition(color);
     &.checked {
         color: var.$primary-light;
-        .rc-app--theme-dark & {
+        .szh-app--theme-dark & {
             color: var.$primary-dark;
         }
     }
@@ -96,7 +96,7 @@ label {
     }
 }
 
-.rc-menu-button,
+.szh-menu-button,
 .btn {
     cursor: pointer;
     font-size: 1rem;
@@ -120,7 +120,7 @@ label {
         border-color: var.$focus-light;
     }
 
-    .rc-app--theme-dark & {
+    .szh-app--theme-dark & {
         background-color: var.$btn-dark;
         border-color: var.$border-dark;
         @include mixins.focus($color: var.$focus-dark);
@@ -145,7 +145,7 @@ label {
     }
     @include mixins.focus(3px);
 
-    .rc-app--theme-dark & {
+    .szh-app--theme-dark & {
         background-color: var.$primary-light-lv2;
         @include mixins.focus(3px);
         &:hover,
@@ -168,7 +168,7 @@ label {
 
     tr {
         @include mixins.border(border-bottom);
-        .rc-app--theme-dark & {
+        .szh-app--theme-dark & {
             border-color: var.$border-dark;
         }
     }

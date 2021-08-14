@@ -23,10 +23,10 @@ export const expectMenuToBeInTheDocument = (truthy, options) =>
     expectToBe(queryMenu(options), truthy).toBeInTheDocument();
 
 export const expectMenuToBeOpen = (truthy, options) =>
-    expectToBe(queryMenu(options), truthy).toHaveClass('rc-menu--state-open');
+    expectToBe(queryMenu(options), truthy).toHaveClass('szh-menu--state-open');
 
 export const expectMenuToHaveState = (state, truthy, options) =>
-    expectToBe(queryMenu(options), truthy).toHaveClass(`rc-menu--state-${state}`);
+    expectToBe(queryMenu(options), truthy).toHaveClass(`szh-menu--state-${state}`);
 
 export const expectButtonToBeExpanded = truthy =>
     expect(queryByRole('button')).toHaveAttribute('aria-expanded', String(truthy));
@@ -40,13 +40,13 @@ export const expectToBeDisabled = (element, truthy) => {
 }
 
 export const expectMenuItemToBeHover = (menuItem, truthy) =>
-    expectToBe(menuItem, truthy).toHaveClass('rc-menu__item--hover');
+    expectToBe(menuItem, truthy).toHaveClass('szh-menu__item--hover');
 
 export const expectMenuItemToBeActive = (menuItem, truthy) =>
-    expectToBe(menuItem, truthy).toHaveClass('rc-menu__item--active');
+    expectToBe(menuItem, truthy).toHaveClass('szh-menu__item--active');
 
 export const expectMenuItemToBeChecked = (menuItem, truthy) => {
-    expectToBe(menuItem, truthy).toHaveClass('rc-menu__item--checked');
+    expectToBe(menuItem, truthy).toHaveClass('szh-menu__item--checked');
     if (truthy !== undefined) {
         expect(menuItem).toHaveAttribute('aria-checked', String(truthy));
     } else {
