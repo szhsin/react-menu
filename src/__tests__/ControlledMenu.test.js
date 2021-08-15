@@ -18,7 +18,7 @@ const getMenu = (props) => (
     </>
 );
 
-test('Test ControlledMenu with an anchor element', async () => {
+test('Test ControlledMenu with an anchor element; ref is forwarded', async () => {
     const onClose = jest.fn();
     const onItemClick = jest.fn();
     const mockRef = {
@@ -34,7 +34,9 @@ test('Test ControlledMenu with an anchor element', async () => {
         }
     };
 
+    const ref = React.createRef();
     const props = {
+        ref,
         anchorRef: mockRef,
         boundingBoxRef: mockRef,
         onClose, onItemClick,
@@ -42,6 +44,7 @@ test('Test ControlledMenu with an anchor element', async () => {
     };
     const { rerender } = render(getMenu({ ...props }));
     utils.expectMenuToBeOpen(false);
+    expect(ref.current).toHaveAttribute('role', 'menu');
 
     // Open menu
     rerender(getMenu({ ...props, state: 'open' }));
@@ -68,6 +71,7 @@ test('Test ControlledMenu with an anchor element', async () => {
 
     // Set state to undefined, expect menu to be removed from DOM
     rerender(getMenu({ ...props, state: undefined }));
+    expect(ref.current).toBe(null);
     utils.expectMenuToBeInTheDocument(false);
 });
 
@@ -87,7 +91,7 @@ test('Test ControlledMenu as context menu', () => {
 
 test('Portal will render ControlledMenu into document.body', () => {
     const { container } = render(getMenu({ portal: true }));
-    
+
     expect(container.querySelector('.szh-menu-container')).toBe(null);
     expect(container.querySelector('.szh-menu')).toBe(null);
     expect(document.querySelector('.szh-menu-container')).toBeInTheDocument();

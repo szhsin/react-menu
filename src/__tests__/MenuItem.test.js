@@ -266,10 +266,11 @@ test('Additional props are forwarded to MenuItem', () => {
 
 test('Test FocusableItem', () => {
     const renderFn = jest.fn();
+    const itemRef = React.createRef();
     render(
         <Menu menuButton={<MenuButton>Menu</MenuButton>}>
             <MenuItem>First</MenuItem>
-            <FocusableItem>
+            <FocusableItem ref={itemRef}>
                 {({ ref, hover, closeMenu }) => {
                     renderFn(hover);
                     return (
@@ -287,7 +288,9 @@ test('Test FocusableItem', () => {
         </Menu>
     );
 
+    expect(itemRef.current).toBe(null);
     utils.clickMenuButton({ name: 'Menu' });
+    expect(itemRef.current).toHaveClass('szh-menu__item--focusable');
     utils.expectMenuToBeOpen(true);
     expect(renderFn).toHaveBeenLastCalledWith(false);
 
