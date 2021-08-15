@@ -1,5 +1,4 @@
 import React, {
-    memo,
     useState,
     useReducer,
     useEffect,
@@ -43,7 +42,7 @@ import {
 } from '../utils';
 
 
-export const MenuList = memo(function MenuList({
+export const MenuList = ({
     ariaLabel,
     className,
     styles,
@@ -69,7 +68,7 @@ export const MenuList = memo(function MenuList({
     children,
     onClose,
     ...restProps
-}) {
+}) => {
     const isOpen = isMenuOpen(menuState);
     const [menuPosition, setMenuPosition] = useState({ x: 0, y: 0 });
     const [arrowPosition, setArrowPosition] = useState({});
@@ -463,7 +462,7 @@ export const MenuList = memo(function MenuList({
             </MenuListContext.Provider>
         </ul>
     );
-});
+};
 
 function submenuCountReducer(state, { type }) {
     switch (type) {

@@ -1,5 +1,4 @@
 import React, {
-    memo,
     forwardRef,
     useRef,
     useContext,
@@ -37,7 +36,7 @@ import {
 } from '../utils';
 
 
-export const SubMenu = defineName(memo(forwardRef(function SubMenu({
+export const SubMenu = defineName(forwardRef(function SubMenu({
     'aria-label': ariaLabel,
     className,
     styles,
@@ -232,7 +231,7 @@ export const SubMenu = defineName(memo(forwardRef(function SubMenu({
                 styles={menuStyles || styles} />}
         </li>
     );
-})), 'SubMenu');
+}), 'SubMenu');
 
 SubMenu.propTypes = {
     ...sharedMenuPropTypes,

@@ -1,4 +1,4 @@
-import React, { memo, forwardRef, useRef, useCallback, useMemo } from 'react';
+import React, { forwardRef, useRef, useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { useMenuChange, useMenuStateAndFocus, useCombinedRef } from '../hooks';
 import { useMenuList } from './useMenuList';
@@ -14,7 +14,7 @@ import {
 } from '../utils';
 
 
-export const Menu = memo(forwardRef(function Menu({
+export const Menu = forwardRef(function Menu({
     'aria-label': ariaLabel,
     containerProps,
     boundingBoxRef,
@@ -130,7 +130,7 @@ export const Menu = memo(forwardRef(function Menu({
             {menuList}
         </React.Fragment>
     );
-}));
+});
 
 Menu.propTypes = {
     ...menuPropTypesBase,

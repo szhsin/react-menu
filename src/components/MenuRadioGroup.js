@@ -1,4 +1,4 @@
-import React, { memo, forwardRef, useMemo } from 'react';
+import React, { forwardRef, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { useBEM, useFlatStyles } from '../hooks';
 import {
@@ -10,7 +10,7 @@ import {
 } from '../utils';
 
 
-export const MenuRadioGroup = defineName(memo(forwardRef(function MenuRadioGroup({
+export const MenuRadioGroup = defineName(forwardRef(function MenuRadioGroup({
     'aria-label': ariaLabel,
     className,
     styles,
@@ -38,7 +38,7 @@ export const MenuRadioGroup = defineName(memo(forwardRef(function MenuRadioGroup
             </ul>
         </li>
     );
-})), 'MenuRadioGroup');
+}), 'MenuRadioGroup');
 
 MenuRadioGroup.propTypes = {
     ...stylePropTypes(),
