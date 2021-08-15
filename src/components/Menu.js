@@ -1,4 +1,4 @@
-import React, { forwardRef, useRef, useCallback, useMemo } from 'react';
+import React, { forwardRef, useRef, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { ControlledMenu } from './ControlledMenu';
 import { useMenuChange, useMenuStateAndFocus, useCombinedRef } from '../hooks';
@@ -27,23 +27,20 @@ export const Menu = forwardRef(function Menu({
     const skipOpen = useRef(false);
     const buttonRef = useRef(null);
 
-    const button = useMemo(() => safeCall(menuButton, { open: isOpen }), [menuButton, isOpen]);
-    if (!button) throw new Error('Menu requires a menuButton prop.');
-
     const handleClose = useCallback(e => {
         toggleMenu(false);
         if (e.key) buttonRef.current.focus();
     }, [toggleMenu]);
 
-    const handleClick = useCallback(e => {
+    const handleClick = e => {
         if (skipOpen.current) return;
         // Focus (hover) the first menu item when onClick event is trigger by keyboard
         openMenu(e.detail === 0
             ? FocusPositions.FIRST
             : FocusPositions.INITIAL);
-    }, [openMenu]);
+    }
 
-    const handleKeyDown = useCallback(e => {
+    const handleKeyDown = e => {
         let handled = false;
 
         switch (e.key) {
@@ -59,22 +56,22 @@ export const Menu = forwardRef(function Menu({
         }
 
         if (handled) e.preventDefault();
-    }, [openMenu]);
+    }
 
-    const combinedBtnRef = useCombinedRef(button.ref, buttonRef);
-    const renderButton = useMemo(() => {
-        const buttonProps = {
-            ref: combinedBtnRef,
-            ...attachHandlerProps({
-                onClick: handleClick,
-                onKeyDown: handleKeyDown
-            }, button.props)
-        };
-        if (getName(button.type) === 'MenuButton') {
-            buttonProps.isOpen = isOpen;
-        }
-        return React.cloneElement(button, buttonProps);
-    }, [button, combinedBtnRef, isOpen, handleClick, handleKeyDown]);
+    const button = safeCall(menuButton, { open: isOpen });
+    if (!button) throw new Error('Menu requires a menuButton prop.');
+
+    const buttonProps = {
+        ref: useCombinedRef(button.ref, buttonRef),
+        ...attachHandlerProps({
+            onClick: handleClick,
+            onKeyDown: handleKeyDown
+        }, button.props)
+    };
+    if (getName(button.type) === 'MenuButton') {
+        buttonProps.isOpen = isOpen;
+    }
+    const renderButton = React.cloneElement(button, buttonProps);
 
     useMenuChange(onMenuChange, isOpen);
 
