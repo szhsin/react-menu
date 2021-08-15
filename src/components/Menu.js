@@ -1,7 +1,7 @@
 import React, { forwardRef, useRef, useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
+import { ControlledMenu } from './ControlledMenu';
 import { useMenuChange, useMenuStateAndFocus, useCombinedRef } from '../hooks';
-import { useMenuList } from './useMenuList';
 import {
     getName,
     attachHandlerProps,
@@ -16,33 +16,15 @@ import {
 
 export const Menu = forwardRef(function Menu({
     'aria-label': ariaLabel,
-    containerProps,
-    boundingBoxRef,
-    boundingBoxPadding,
     captureFocus: _,
-    reposition,
-    viewScroll,
     menuButton,
-    portal,
-    submenuOpenDelay,
-    submenuCloseDelay,
-    theming,
-    initialMounted,
-    unmountOnClose,
-    transition,
-    transitionTimeout,
-    onItemClick,
     onMenuChange,
     ...restProps
 }, externalRef) {
 
-    const {
-        openMenu,
-        toggleMenu,
-        ...stateProps
-    } = useMenuStateAndFocus({ initialMounted, unmountOnClose, transition, transitionTimeout });
+    const { openMenu, toggleMenu, ...stateProps } = useMenuStateAndFocus(restProps);
     const isOpen = isMenuOpen(stateProps.state);
-    const skipClick = useRef(false);
+    const skipOpen = useRef(false);
     const buttonRef = useRef(null);
 
     const button = useMemo(() => safeCall(menuButton, { open: isOpen }), [menuButton, isOpen]);
@@ -54,7 +36,7 @@ export const Menu = forwardRef(function Menu({
     }, [toggleMenu]);
 
     const handleClick = useCallback(e => {
-        if (skipClick.current) return;
+        if (skipOpen.current) return;
         // Focus (hover) the first menu item when onClick event is trigger by keyboard
         openMenu(e.detail === 0
             ? FocusPositions.FIRST
@@ -94,40 +76,25 @@ export const Menu = forwardRef(function Menu({
         return React.cloneElement(button, buttonProps);
     }, [button, combinedBtnRef, isOpen, handleClick, handleKeyDown]);
 
-    const menuList = useMenuList({
+    useMenuChange(onMenuChange, isOpen);
+
+    const menuProps = {
         ...restProps,
         ...stateProps,
-        ariaLabel: ariaLabel ||
+        'aria-label': ariaLabel ||
             (typeof button.props.children === 'string'
                 ? button.props.children
                 : 'Menu'),
         anchorRef: buttonRef,
-        externalRef
-    }, {
-        containerProps,
-        initialMounted,
-        unmountOnClose,
-        transition,
-        transitionTimeout,
-        boundingBoxRef,
-        boundingBoxPadding,
-        reposition,
-        submenuOpenDelay,
-        submenuCloseDelay,
-        viewScroll,
-        portal,
-        theming,
-        onItemClick,
+        ref: externalRef,
         onClose: handleClose,
-        skipClick
-    });
-
-    useMenuChange(onMenuChange, isOpen);
+        skipOpen
+    }
 
     return (
         <React.Fragment>
             {renderButton}
-            {menuList}
+            <ControlledMenu {...menuProps} />
         </React.Fragment>
     );
 });
