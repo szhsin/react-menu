@@ -1,35 +1,35 @@
-import React, { memo, forwardRef, useContext, useMemo, useRef } from 'react';
+import React, { memo, useContext, useMemo, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { useBEM, useFlatStyles, useItemState } from '../hooks';
 import {
     attachHandlerProps,
-    defineName,
     safeCall,
     menuClass,
     menuItemClass,
     stylePropTypes,
+    withHovering,
     EventHandlersContext
 } from '../utils';
 
 
-export const FocusableItem = defineName(memo(forwardRef(function FocusableItem({
+export const FocusableItem = withHovering(memo(function FocusableItem({
     className,
     styles,
     disabled,
     index,
     children,
+    isHovering,
+    externalRef,
     ...restProps
-}, externalRef) {
-
+}) {
     const isDisabled = Boolean(disabled);
     const ref = useRef(null);
     const {
-        isHovering,
         setHover,
         onBlur,
         onMouseEnter,
         onMouseLeave
-    } = useItemState(ref, isDisabled, index);
+    } = useItemState(ref, index, isHovering, isDisabled);
     const { handleClose } = useContext(EventHandlersContext);
 
     const modifiers = useMemo(() => Object.freeze({
@@ -63,7 +63,7 @@ export const FocusableItem = defineName(memo(forwardRef(function FocusableItem({
             {renderChildren}
         </li>
     );
-})), 'FocusableItem');
+}), 'FocusableItem');
 
 FocusableItem.propTypes = {
     ...stylePropTypes(),

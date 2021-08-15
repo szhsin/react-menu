@@ -3,10 +3,10 @@ import { unstable_batchedUpdates } from 'react-dom';
 export const batchedUpdates = unstable_batchedUpdates || (callback => callback());
 
 export const defineName = (component, name) => name
-    ? Object.defineProperty(component, '_reactMenu', { value: name, writable: false })
+    ? Object.defineProperty(component, '_szhsinMenu', { value: name, writable: false })
     : component;
 
-export const getName = component => component && component['_reactMenu'];
+export const getName = component => component && component['_szhsinMenu'];
 
 export const applyHOC = HOC => (...args) => defineName(HOC(...args), getName(args[0]));
 

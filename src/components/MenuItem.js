@@ -1,4 +1,4 @@
-import React, { memo, forwardRef, useContext, useMemo, useRef } from 'react';
+import React, { memo, useContext, useMemo, useRef } from 'react';
 import PropTypes from 'prop-types';
 import {
     useBEM,
@@ -9,18 +9,18 @@ import {
 } from '../hooks';
 import {
     attachHandlerProps,
-    defineName,
     safeCall,
     stylePropTypes,
     menuClass,
     menuItemClass,
+    withHovering,
     EventHandlersContext,
     RadioGroupContext,
     Keys
 } from '../utils';
 
 
-export const MenuItem = defineName(memo(forwardRef(function MenuItem({
+export const MenuItem = withHovering(memo(function MenuItem({
     className,
     styles,
     value,
@@ -31,18 +31,18 @@ export const MenuItem = defineName(memo(forwardRef(function MenuItem({
     index,
     children,
     onClick,
+    isHovering,
+    externalRef,
     ...restProps
-}, externalRef) {
-
+}) {
     const isDisabled = Boolean(disabled);
     const ref = useRef();
     const {
-        isHovering,
         setHover,
         onBlur,
         onMouseEnter,
         onMouseLeave
-    } = useItemState(ref, isDisabled, index);
+    } = useItemState(ref, index, isHovering, isDisabled);
     const eventHandlers = useContext(EventHandlersContext);
     const radioGroup = useContext(RadioGroupContext);
     const {
@@ -62,7 +62,7 @@ export const MenuItem = defineName(memo(forwardRef(function MenuItem({
         const event = { value, syntheticEvent: e };
         if (e.key !== undefined) event.key = e.key;
         if (isCheckBox) event.checked = !isChecked;
-        
+
         if (isRadio) {
             event.name = radioGroup.name;
             safeCall(radioGroup.onRadioChange, event);
@@ -148,7 +148,7 @@ export const MenuItem = defineName(memo(forwardRef(function MenuItem({
             </li>
         );
     }
-})), 'MenuItem');
+}), 'MenuItem');
 
 MenuItem.propTypes = {
     ...stylePropTypes(),

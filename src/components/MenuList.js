@@ -32,6 +32,7 @@ import {
     SettingsContext,
     MenuListContext,
     MenuListItemContext,
+    HoverIndexContext,
     initialHoverIndex,
     isMenuOpen,
     CloseReason,
@@ -392,10 +393,9 @@ export const MenuList = ({
     const isSubmenuOpen = openSubmenuCount > 0;
     const itemContext = useMemo(() => ({
         isParentOpen: isOpen,
-        hoverIndex,
         isSubmenuOpen,
         dispatch
-    }), [isOpen, hoverIndex, isSubmenuOpen]);
+    }), [isOpen, isSubmenuOpen]);
 
     let maxHeight, overflowAmt;
     if (overflowData) {
@@ -457,7 +457,9 @@ export const MenuList = ({
 
             <MenuListContext.Provider value={listContext}>
                 <MenuListItemContext.Provider value={itemContext}>
-                    {menuItems}
+                    <HoverIndexContext.Provider value={hoverIndex}>
+                        {menuItems}
+                    </HoverIndexContext.Provider>
                 </MenuListItemContext.Provider>
             </MenuListContext.Provider>
         </ul>

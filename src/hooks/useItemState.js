@@ -12,10 +12,9 @@ import {
 
 
 // This hook includes some common stateful logic in MenuItem and FocusableItem
-export const useItemState = (ref, isDisabled, index) => {
+export const useItemState = (ref, index, isHovering, isDisabled) => {
     const { submenuCloseDelay } = useContext(ItemSettingsContext);
-    const { isParentOpen, hoverIndex, isSubmenuOpen, dispatch } = useContext(MenuListItemContext);
-    const isHovering = hoverIndex === index;
+    const { isParentOpen, isSubmenuOpen, dispatch } = useContext(MenuListItemContext);
     const timeoutId = useRef();
 
     const setHover = useCallback(() => {
@@ -53,7 +52,6 @@ export const useItemState = (ref, isDisabled, index) => {
     }, [ref, isHovering, isParentOpen]);
 
     return {
-        isHovering,
         setHover,
         onBlur,
         onMouseEnter,
