@@ -1,7 +1,6 @@
 import React from 'react';
 import { Menu, MenuItem, MenuGroup, MenuButton, MenuDivider } from '../';
 import { render, fireEvent } from '@testing-library/react';
-import '@testing-library/jest-dom/extend-expect';
 import * as utils from './utils';
 
 test('MenuGroup should allow keyboard navigation to go thru its children', () => {

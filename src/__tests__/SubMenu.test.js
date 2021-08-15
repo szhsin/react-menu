@@ -1,8 +1,6 @@
 import React from 'react';
 import { Menu, MenuItem, FocusableItem, MenuButton, SubMenu } from '../';
 import { render, fireEvent, waitFor, screen } from '@testing-library/react';
-import '@testing-library/jest-dom/extend-expect';
-import 'regenerator-runtime/runtime.js';
 import * as utils from './utils';
 
 const renderMenu = (props, itemProps, submenuProps) => render(

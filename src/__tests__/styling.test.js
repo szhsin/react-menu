@@ -1,5 +1,4 @@
 import { screen, fireEvent } from '@testing-library/react';
-import '@testing-library/jest-dom/extend-expect';
 import * as utils from './utils';
 
 const { queryByRole } = screen;

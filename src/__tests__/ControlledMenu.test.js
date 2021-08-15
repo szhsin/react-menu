@@ -1,8 +1,6 @@
 import React from 'react';
 import { ControlledMenu, MenuItem } from '../';
 import { screen, render, fireEvent, waitFor } from '@testing-library/react';
-import '@testing-library/jest-dom/extend-expect';
-import 'regenerator-runtime/runtime.js';
 import * as utils from './utils';
 
 const { queryByRole } = screen;
