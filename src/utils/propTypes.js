@@ -13,7 +13,8 @@ export const stylePropTypes = (name) => ({
 
 // Menu, SubMenu and ControlledMenu
 export const sharedMenuPropTypes = {
-    ...stylePropTypes(),
+    className: PropTypes.string,
+    ...stylePropTypes('menu'),
     ...stylePropTypes('arrow'),
     arrow: PropTypes.bool,
     offsetX: PropTypes.number,

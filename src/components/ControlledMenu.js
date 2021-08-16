@@ -24,7 +24,8 @@ import {
 
 export const ControlledMenu = forwardRef(function ControlledMenu({
     'aria-label': ariaLabel,
-    containerProps = {},
+    className,
+    containerProps,
     initialMounted,
     unmountOnClose,
     transition,
@@ -137,7 +138,7 @@ export const ControlledMenu = forwardRef(function ControlledMenu({
             className={useBEM({
                 block: menuContainerClass,
                 modifiers,
-                className: containerProps.className
+                className
             })}
             ref={containerRef}
         >
@@ -181,6 +182,5 @@ ControlledMenu.propTypes = {
 
 ControlledMenu.defaultProps = {
     ...menuDefaultPropsBase,
-    captureFocus: true,
     menuItemFocus: { position: FocusPositions.INITIAL }
 };

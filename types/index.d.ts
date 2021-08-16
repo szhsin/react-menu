@@ -107,7 +107,9 @@ export interface MenuStateOptions {
 }
 
 // Menu, SubMenu and ControlledMenu
-interface SharedMenuProps extends BaseProps<MenuModifiers, MenuStyleKeys> {
+interface SharedMenuProps extends Omit<BaseProps, 'styles'> {
+    menuClassName?: ClassNameProp<MenuModifiers>;
+    menuStyles?: StylesProp<MenuModifiers, MenuStyleKeys>;
     arrowClassName?: ClassNameProp<MenuArrowModifiers>;
     arrowStyles?: StylesProp<MenuArrowModifiers, MenuArrowStyleKeys>;
     arrow?: boolean;
@@ -122,7 +124,7 @@ interface SharedMenuProps extends BaseProps<MenuModifiers, MenuStyleKeys> {
 
 // Menu and ControlledMenu
 interface BaseMenuProps extends MenuStateOptions, SharedMenuProps {
-    containerProps?: React.HTMLAttributes<HTMLElement>;
+    containerProps?: Omit<React.HTMLAttributes<HTMLElement>, 'className'>;
     boundingBoxRef?: React.RefObject<Element | RectElement>;
     boundingBoxPadding?: string;
     viewScroll?: MenuViewScroll;
@@ -189,10 +191,7 @@ export type SubMenuItemModifiers = Readonly<{
     disabled: boolean;
 }>;
 
-export interface SubMenuProps extends Omit<SharedMenuProps, 'className'> {
-    className?: ClassNameProp;
-    menuClassName?: ClassNameProp<MenuModifiers>;
-    menuStyles?: StylesProp<MenuModifiers, MenuStyleKeys>;
+export interface SubMenuProps extends SharedMenuProps {
     itemProps?: BaseProps<SubMenuItemModifiers>;
     label?: RenderProp<SubMenuItemModifiers>;
     disabled?: boolean;
