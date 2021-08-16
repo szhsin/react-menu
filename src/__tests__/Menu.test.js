@@ -151,18 +151,25 @@ test('Additional props are forwarded to Menu', () => {
         ['aria-haspopup']: true,
         randomattr: 'random',
         onMouseEnter,
-        onKeyDown
+        onKeyDown,
+        containerProps: {
+            'data-testid': 'container',
+            id: 'menu-container',
+            onMouseEnter,
+            onKeyDown
+        }
     });
     utils.clickMenuButton();
 
+    expect(screen.getByTestId('container')).toHaveAttribute('id', 'menu-container');
     const menu = utils.queryMenu()
     expect(menu).toHaveAttribute('aria-label', 'test');
     expect(menu).toHaveAttribute('aria-haspopup', 'true');
     expect(menu).toHaveAttribute('randomattr', 'random');
     fireEvent.mouseEnter(menu);
-    expect(onMouseEnter).toHaveBeenCalledTimes(1);
-    fireEvent.keyDown(menu, { key: 'ArrowDown' });
-    expect(onKeyDown).toHaveBeenCalledTimes(1);
+    expect(onMouseEnter).toHaveBeenCalledTimes(2);
+    fireEvent.keyDown(menu, { key: 'm' });
+    expect(onKeyDown).toHaveBeenCalledTimes(2);
 });
 
 test('Portal will render Menu into document.body', () => {
