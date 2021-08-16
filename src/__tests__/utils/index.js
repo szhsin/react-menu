@@ -7,7 +7,6 @@ import {
     MenuButton
 } from '../../';
 import { screen, render, fireEvent, waitFor } from '@testing-library/react';
-import '@testing-library/jest-dom/extend-expect';
 
 const { queryByRole } = screen;
 

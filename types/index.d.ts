@@ -168,6 +168,7 @@ export interface ControlledMenuProps extends BaseMenuProps {
         y: number;
     };
     anchorRef?: React.RefObject<Element | RectElement>;
+    skipOpen?: React.RefObject<boolean>;
     captureFocus?: boolean;
     state?: MenuState;
     menuItemFocus?: {

@@ -1,6 +1,5 @@
 import React, {
     memo,
-    forwardRef,
     useRef,
     useContext,
     useEffect,
@@ -18,7 +17,6 @@ import {
 import { MenuList } from './MenuList';
 import {
     attachHandlerProps,
-    defineName,
     safeCall,
     stylePropTypes,
     sharedMenuPropTypes,
@@ -26,18 +24,19 @@ import {
     menuClass,
     subMenuClass,
     menuItemClass,
+    isMenuOpen,
+    withHovering,
     SettingsContext,
-    MenuListItemContext,
     ItemSettingsContext,
+    MenuListItemContext,
     Keys,
     HoverIndexActionTypes,
     SubmenuActionTypes,
-    FocusPositions,
-    isMenuOpen
+    FocusPositions
 } from '../utils';
 
 
-export const SubMenu = defineName(memo(forwardRef(function SubMenu({
+export const SubMenu = withHovering(memo(function SubMenu({
     'aria-label': ariaLabel,
     className,
     styles,
@@ -47,15 +46,15 @@ export const SubMenu = defineName(memo(forwardRef(function SubMenu({
     label,
     index,
     onMenuChange,
+    isHovering,
     captureFocus: _1,
     repositionFlag: _2,
     itemProps = {},
     ...restProps
-}, externalRef) {
-
+}) {
     const { initialMounted, unmountOnClose, transition, transitionTimeout } = useContext(SettingsContext);
     const { submenuOpenDelay, submenuCloseDelay } = useContext(ItemSettingsContext);
-    const { isParentOpen, hoverIndex, isSubmenuOpen, dispatch } = useContext(MenuListItemContext);
+    const { isParentOpen, isSubmenuOpen, dispatch } = useContext(MenuListItemContext);
 
     const {
         openMenu,
@@ -65,7 +64,6 @@ export const SubMenu = defineName(memo(forwardRef(function SubMenu({
     } = useMenuStateAndFocus({ initialMounted, unmountOnClose, transition, transitionTimeout });
 
     const isOpen = isMenuOpen(state);
-    const isHovering = hoverIndex === index;
     const isDisabled = Boolean(disabled);
     const {
         isActive, onKeyUp,
@@ -226,13 +224,12 @@ export const SubMenu = defineName(memo(forwardRef(function SubMenu({
                 ariaLabel={ariaLabel || (typeof label === 'string' ? label : 'Submenu')}
                 anchorRef={itemRef}
                 containerRef={containerRef}
-                externalRef={externalRef}
                 isDisabled={isDisabled}
                 className={menuClassName}
                 styles={menuStyles || styles} />}
         </li>
     );
-})), 'SubMenu');
+}), 'SubMenu');
 
 SubMenu.propTypes = {
     ...sharedMenuPropTypes,
