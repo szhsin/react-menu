@@ -39,9 +39,6 @@ import {
 export const SubMenu = withHovering(memo(function SubMenu({
     'aria-label': ariaLabel,
     className,
-    styles,
-    menuClassName,
-    menuStyles,
     disabled,
     label,
     index,
@@ -224,16 +221,13 @@ export const SubMenu = withHovering(memo(function SubMenu({
                 ariaLabel={ariaLabel || (typeof label === 'string' ? label : 'Submenu')}
                 anchorRef={itemRef}
                 containerRef={containerRef}
-                isDisabled={isDisabled}
-                className={menuClassName}
-                styles={menuStyles || styles} />}
+                isDisabled={isDisabled} />}
         </li>
     );
 }), 'SubMenu');
 
 SubMenu.propTypes = {
     ...sharedMenuPropTypes,
-    ...stylePropTypes('menu'),
     disabled: PropTypes.bool,
     label: PropTypes.oneOfType([
         PropTypes.node,

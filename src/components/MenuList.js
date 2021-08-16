@@ -45,8 +45,8 @@ import {
 
 export const MenuList = ({
     ariaLabel,
-    className,
-    styles,
+    menuClassName,
+    menuStyles,
     arrowClassName,
     arrowStyles,
     anchorPoint,
@@ -437,9 +437,9 @@ export const MenuList = ({
             {...restProps}
             {...handlers}
             ref={useCombinedRef(externalRef, menuRef)}
-            className={useBEM({ block: menuClass, modifiers, className })}
+            className={useBEM({ block: menuClass, modifiers, className: menuClassName })}
             style={{
-                ...useFlatStyles(styles, modifiers),
+                ...useFlatStyles(menuStyles, modifiers),
                 ...overflowStyles,
                 left: `${menuPosition.x}px`,
                 top: `${menuPosition.y}px`

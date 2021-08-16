@@ -16,8 +16,9 @@ export const applyStatics = sourceComponent => wrappedComponent =>
 export const safeCall = (fn, ...args) => typeof fn === 'function' ? fn(...args) : fn;
 
 export const attachHandlerProps = (handlers, props) => {
-    const result = {};
+    if (!props) return handlers;
 
+    const result = {};
     for (const handlerName of Object.keys(handlers)) {
         const handler = handlers[handlerName];
         const propHandler = props[handlerName];
