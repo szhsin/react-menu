@@ -1,10 +1,12 @@
 import React, {
     memo,
+    useState,
     useRef,
     useContext,
     useEffect,
     useMemo
 } from 'react';
+import { createPortal } from 'react-dom';
 import PropTypes from 'prop-types';
 import {
     useBEM,
@@ -12,11 +14,13 @@ import {
     useActiveState,
     useMenuChange,
     useMenuStateAndFocus,
-    useCombinedRef
+    useCombinedRef,
+    useLayoutEffect
 } from '../hooks';
 import { MenuList } from './MenuList';
 import {
     attachHandlerProps,
+    getScrollAncestor,
     safeCall,
     stylePropTypes,
     sharedMenuPropTypes,
@@ -49,9 +53,12 @@ export const SubMenu = withHovering(memo(function SubMenu({
     itemProps = {},
     ...restProps
 }) {
-    const { initialMounted, unmountOnClose, transition, transitionTimeout } = useContext(SettingsContext);
+    const {
+        initialMounted, unmountOnClose, transition, transitionTimeout, rootMenuRef
+    } = useContext(SettingsContext);
     const { submenuOpenDelay, submenuCloseDelay } = useContext(ItemSettingsContext);
-    const { isParentOpen, isSubmenuOpen, dispatch } = useContext(MenuListItemContext);
+    const { parentMenuRef, isParentOpen, isSubmenuOpen, dispatch } = useContext(MenuListItemContext);
+    const [portal, setPortal] = useState(false);
 
     const {
         openMenu,
@@ -140,15 +147,12 @@ export const SubMenu = withHovering(memo(function SubMenu({
         }
     }
 
-    const handleBlur = e => {
-        const relatedTarget = e.relatedTarget || document.activeElement;
-        // Check if something which is not in the subtree get focus.
-        // It handles situation such as clicking on a sibling disabled menu item
-        if (!e.currentTarget.contains(relatedTarget)) {
-            toggleMenu(false);
-            dispatch({ type: HoverIndexActionTypes.UNSET, index });
-        }
-    }
+    useLayoutEffect(() => {
+        if (!isOpen) return;
+
+        const scrollContainer = getScrollAncestor(containerRef.current, rootMenuRef.current);
+        setPortal(rootMenuRef.current !== scrollContainer);
+    }, [rootMenuRef, isOpen]);
 
     useEffect(() => () => clearTimeout(timeoutId.current), []);
     useEffect(() => {
@@ -164,6 +168,7 @@ export const SubMenu = withHovering(memo(function SubMenu({
     useEffect(() => {
         dispatch({ type: isOpen ? SubmenuActionTypes.OPEN : SubmenuActionTypes.CLOSE });
     }, [dispatch, isOpen]);
+
     useMenuChange(onMenuChange, isOpen);
 
     const modifiers = useMemo(() => Object.freeze({
@@ -189,11 +194,25 @@ export const SubMenu = withHovering(memo(function SubMenu({
         onKeyUp: handleKeyUp
     }, restItemProps);
 
+    const getMenuList = () => {
+        const menuList = (
+            <MenuList
+                {...restProps}
+                {...otherStateProps}
+                state={state}
+                ariaLabel={ariaLabel || (typeof label === 'string' ? label : 'Submenu')}
+                anchorRef={itemRef}
+                containerRef={portal ? rootMenuRef : containerRef}
+                parentScrollingRef={portal && parentMenuRef}
+                isDisabled={isDisabled} />
+        );
+        return portal ? createPortal(menuList, rootMenuRef.current) : menuList;
+    }
+
     return (
         <li className={useBEM({ block: menuClass, element: subMenuClass, className })}
             role="presentation" ref={containerRef}
-            onKeyDown={handleKeyDown}
-            onBlur={handleBlur}>
+            onKeyDown={handleKeyDown}>
 
             <div role="menuitem"
                 aria-haspopup={true}
@@ -214,14 +233,7 @@ export const SubMenu = withHovering(memo(function SubMenu({
                 {useMemo(() => safeCall(label, modifiers), [label, modifiers])}
             </div>
 
-            {state && <MenuList
-                {...restProps}
-                {...otherStateProps}
-                state={state}
-                ariaLabel={ariaLabel || (typeof label === 'string' ? label : 'Submenu')}
-                anchorRef={itemRef}
-                containerRef={containerRef}
-                isDisabled={isDisabled} />}
+            {state && getMenuList()}
         </li>
     );
 }), 'SubMenu');

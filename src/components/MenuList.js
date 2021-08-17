@@ -53,6 +53,7 @@ export const MenuList = ({
     anchorRef,
     containerRef,
     externalRef,
+    parentScrollingRef,
     arrow,
     align,
     direction,
@@ -335,6 +336,15 @@ export const MenuList = ({
     ]);
 
     useEffect(() => {
+        if (!isOpen || !parentScrollingRef || overflowData) return;
+
+        const handleScroll = () => batchedUpdates(handlePosition);
+        const parentScroll = parentScrollingRef.current;
+        parentScroll.addEventListener('scroll', handleScroll);
+        return () => parentScroll.removeEventListener('scroll', handleScroll);
+    }, [isOpen, parentScrollingRef, overflowData, handlePosition]);
+
+    useEffect(() => {
         if (typeof ResizeObserver !== 'function' || reposition === 'initial') return;
 
         const resizeObserver = new ResizeObserver(([entry]) => {
@@ -392,6 +402,7 @@ export const MenuList = ({
 
     const isSubmenuOpen = openSubmenuCount > 0;
     const itemContext = useMemo(() => ({
+        parentMenuRef: menuRef,
         isParentOpen: isOpen,
         isSubmenuOpen,
         dispatch
