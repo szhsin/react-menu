@@ -3,7 +3,8 @@ import { HashHeading } from './HashHeading';
 import { bem, DomInfoContext, SettingContext } from '../utils';
 import {
     ControlledMenu,
-    MenuHeader
+    MenuHeader,
+    useMenuState
 } from '@szhsin/react-menu';
 import hljs from 'highlight.js';
 
@@ -19,7 +20,7 @@ export const Example = React.memo(React.forwardRef(function Example({
     const [isFullSource, setIsFullSource] = useState(initialFullSource);
     const sourceCode = isFullSource ? fullSource : source;
     const sourceBtnTitle = `${isFullSource ? 'Hide' : 'Show'} full source code`;
-    const [isOpen, setOpen] = useState(false);
+    const { state, toggleMenu } = useMenuState({ unmountOnClose: true });
     const refCopy = useRef(null);
     const refSource = useRef(null);
     const [anchorRef, setAnchorRef] = useState();
@@ -56,9 +57,9 @@ export const Example = React.memo(React.forwardRef(function Example({
                         onMouseEnter={() => {
                             setAnchorRef(refCopy);
                             setToolTip('Copy code')
-                            setOpen(true);
+                            toggleMenu(true);
                         }}
-                        onMouseLeave={() => setOpen(false)}>
+                        onMouseLeave={() => toggleMenu(false)}>
                         <i className="material-icons">content_copy</i>
                     </button>}
                 {fullSource &&
@@ -69,16 +70,16 @@ export const Example = React.memo(React.forwardRef(function Example({
                         onMouseEnter={() => {
                             setAnchorRef(refSource);
                             setToolTip(sourceBtnTitle)
-                            setOpen(true);
+                            toggleMenu(true);
                         }}
-                        onMouseLeave={() => setOpen(false)}>
+                        onMouseLeave={() => toggleMenu(false)}>
                         <i className="material-icons">code</i>
                     </button>}
 
                 <ControlledMenu
                     theming={useContext(SettingContext).theme}
-                    anchorRef={anchorRef} isOpen={isOpen} isMounted={isOpen}
-                    captureFocus={false} animation={false} role="tooltip"
+                    anchorRef={anchorRef} state={state}
+                    captureFocus={false} role="tooltip"
                     arrow direction="top" align="center"
                     boundingBoxPadding={`${navbarHeight} 0 0 0`}>
                     <MenuHeader>{toolTip}</MenuHeader>

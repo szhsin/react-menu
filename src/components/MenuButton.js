@@ -1,15 +1,10 @@
-import React, { useMemo } from 'react';
+import React, { forwardRef, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import {
-    defineName,
-    useBEM,
-    useFlatStyles,
-    menuButtonClass,
-    stylePropTypes
-} from '../utils';
+import { useBEM, useFlatStyles } from '../hooks';
+import { defineName, menuButtonClass, stylePropTypes } from '../utils';
 
 
-export const MenuButton = defineName(React.memo(React.forwardRef(function MenuButton({
+export const MenuButton = defineName(forwardRef(function MenuButton({
     className,
     styles,
     isOpen,
@@ -21,7 +16,7 @@ export const MenuButton = defineName(React.memo(React.forwardRef(function MenuBu
 
     return (
         <button
-            aria-haspopup="true"
+            aria-haspopup={true}
             aria-expanded={isOpen}
             aria-disabled={disabled || undefined}
             disabled={disabled}
@@ -32,7 +27,7 @@ export const MenuButton = defineName(React.memo(React.forwardRef(function MenuBu
             {children}
         </button>
     );
-})), 'MenuButton');
+}), 'MenuButton');
 
 MenuButton.propTypes = {
     ...stylePropTypes(),

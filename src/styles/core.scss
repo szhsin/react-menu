@@ -1,16 +1,15 @@
 @use 'var';
 @use 'mixins';
 
-.rc-menu-container {
+.szh-menu-container {
     position: relative;
     width: 0px;
     height: 0px;
 }
 
-.rc-menu {
+.szh-menu {
     @include mixins.reset-list;
     @include mixins.remove-focus;
-    display: none;
     box-sizing: border-box;
     width: max-content;
     position: absolute;
@@ -18,9 +17,8 @@
     border: 1px solid var.$border-color;
     background-color: var.$background-color;
 
-    &--open,
-    &--closing {
-        display: block;
+    &--state-closed {
+        display: none;
     }
 
     &__arrow {
@@ -57,8 +55,6 @@
 
     &__item {
         @include mixins.remove-focus;
-        display: flex;
-        align-items: center;
         cursor: pointer;
 
         &--hover {
@@ -95,6 +91,6 @@
     }
 }
 
-.rc-menu-button {
+.szh-menu-button {
     box-sizing: border-box;
 }

@@ -18,14 +18,14 @@ import {
     MenuDivider,
     useMenuState
 } from '@szhsin/react-menu';
-import { SettingContext, DomInfoContext, ToastContext, withTheme } from '../utils';
+import { SettingContext, DomInfoContext, ToastContext, withPresetProps } from '../utils';
 import { TableContents } from './TableContents';
 import { Example } from './Example';
 import { HashHeading } from './HashHeading';
 import data, * as codeExamples from '../data/codeExamples';
 
-const Menu = withTheme(ReactMenu);
-const ControlledMenu = withTheme(ReactControlledMenu);
+const Menu = withPresetProps(ReactMenu);
+const ControlledMenu = withPresetProps(ReactControlledMenu);
 
 export const Usage = React.memo(function Usage() {
 
@@ -144,7 +144,7 @@ function EventHandlingExample() {
     const handleSaveClick = e => {
         addLine(`[MenuItem] ${e.value} clicked`);
         addLine('------');
-        return false;
+        e.stopPropagation = true;
     };
 
     useLayoutEffect(() => {
@@ -189,7 +189,7 @@ function RadioGroupExample() {
         <Example data={codeExamples.radioGroup} >
             <Menu menuButton={<MenuButton>Text color</MenuButton>}>
                 <MenuRadioGroup value={textColor}
-                    onChange={e => setTextColor(e.value)}>
+                    onRadioChange={e => setTextColor(e.value)}>
                     <MenuItem value="red">Red</MenuItem>
                     <MenuItem value="green">Green</MenuItem>
                     <MenuItem value={isDark ? '#69a6f8' : 'blue'}>Blue</MenuItem>
@@ -273,7 +273,7 @@ function CombinedExample() {
                 <SubMenu label="Text color">
                     <MenuRadioGroup
                         value={textColor}
-                        onChange={e => setTextColor(e.value)}>
+                        onRadioChange={e => setTextColor(e.value)}>
                         <MenuItem value={'red'}>Red</MenuItem>
                         <MenuItem value={'green'}>Green</MenuItem>
                         <MenuItem value={isDark ? '#69a6f8' : 'blue'}>Blue</MenuItem>
@@ -379,7 +379,7 @@ function FocusableItemExample() {
         <Example data={codeExamples.focusableItem} >
             <Menu menuButton={<MenuButton>Open menu</MenuButton>}
                 direction={vWidth < 600 ? 'top' : 'bottom'}
-                align="center" onChange={e => e.open && setFilter('')}
+                align="center" onMenuChange={e => e.open && setFilter('')}
                 boundingBoxPadding={`${navbarHeight} 0 0 0`}>
                 <FocusableItem>
                     {({ ref }) => (
@@ -492,7 +492,7 @@ function MenuPlacementExample() {
                     option={position} onOptionChange={setPosition} />
             </form>
             <p className="alert-warning"><i className="material-icons">info</i> Try to select
-            different option combinations and scroll page up and down to see the behaviour.</p>
+                different option combinations and scroll page up and down to see the behaviour.</p>
             <div className="menus">
                 {menus}
             </div>
@@ -538,7 +538,7 @@ function MenuOverflowExample() {
                 </Menu>
                 <Menu menuButton={<MenuButton styles={{ marginTop: '2rem' }}>Grouping</MenuButton>}
                     overflow={overflow} position={position} boundingBoxPadding="10"
-                    onChange={e => e.open && setFilter('')} align="end">
+                    onMenuChange={e => e.open && setFilter('')} align="end">
                     <FocusableItem styles={{ padding: '0.375rem 1rem' }}>
                         {({ ref }) => (
                             <input ref={ref} type="text" placeholder="Type a number"
@@ -565,15 +565,14 @@ function BoundingBoxExample() {
     const ref = useRef(null);
     const leftAnchor = useRef(null);
     const rightAnchor = useRef(null);
-    const [isOpen, setOpen] = useState(false);
+    const { state, toggleMenu } = useMenuState();
     useEffect(() => {
-        setOpen(true);
-    }, []);
+        toggleMenu(true);
+    }, [toggleMenu]);
 
     const tooltipProps = {
-        isOpen,
+        state,
         captureFocus: false,
-        animation: false,
         arrow: true,
         role: 'tooltip',
         align: 'center',
@@ -604,18 +603,18 @@ function BoundingBoxExample() {
 
 function ManagingStateExample() {
 
-    const [isOpen, setOpen] = useState(false);
+    const [state, setState] = useState('closed');
     const ref = useRef(null);
 
     return (
         <Example data={codeExamples.managingState}>
             <button ref={ref} className="btn"
-                onClick={() => setOpen(true)}>
+                onClick={() => setState('open')}>
                 Open menu
             </button>
 
-            <ControlledMenu anchorRef={ref} isOpen={isOpen}
-                onClose={() => setOpen(false)}>
+            <ControlledMenu anchorRef={ref} state={state}
+                onClose={() => setState('closed')}>
                 <MenuItem>New File</MenuItem>
                 <MenuItem>Save</MenuItem>
                 <MenuItem>Close Window</MenuItem>
@@ -626,7 +625,7 @@ function ManagingStateExample() {
 
 function ContextMenuExample() {
 
-    const [isOpen, setOpen] = useState(false);
+    const { state, toggleMenu } = useMenuState();
     const [anchorPoint, setAnchorPoint] = useState({ x: 0, y: 0 });
 
     return (
@@ -634,13 +633,13 @@ function ContextMenuExample() {
             onContextMenu={e => {
                 e.preventDefault();
                 setAnchorPoint({ x: e.clientX, y: e.clientY });
-                setOpen(true);
+                toggleMenu(true);
             }}>
 
             Right click to open context menu
 
-            <ControlledMenu anchorPoint={anchorPoint} isOpen={isOpen}
-                onClose={() => setOpen(false)} animation={false}>
+            <ControlledMenu anchorPoint={anchorPoint} state={state}
+                onClose={() => toggleMenu(false)}>
                 <MenuItem>Cut</MenuItem>
                 <MenuItem>Copy</MenuItem>
                 <MenuItem>Paste</MenuItem>
@@ -651,19 +650,18 @@ function ContextMenuExample() {
 
 function MenuStateHookExample() {
 
-    const { openMenu, closeMenu, toggleMenu,
-        ...menuProps } = useMenuState();
+    const { toggleMenu, ...menuProps } = useMenuState({ transition: true });
     const ref = useRef(null);
 
     return (
         <Example data={codeExamples.menuStateHook}>
             <button ref={ref} className="btn"
-                onClick={() => openMenu()}>
+                onClick={() => toggleMenu(true)}>
                 Open menu
             </button>
 
             <ControlledMenu {...menuProps} anchorRef={ref}
-                onClose={() => closeMenu()}>
+                onClose={() => toggleMenu(false)}>
                 <MenuItem>New File</MenuItem>
                 <MenuItem>Save</MenuItem>
                 <MenuItem>Close Window</MenuItem>
@@ -678,7 +676,7 @@ function StylesPropExample() {
         <Example data={codeExamples.stylesProp} >
             <Menu menuButton={<MenuButton>Open menu</MenuButton>}
                 align="center"
-                styles={{
+                menuStyles={{
                     border: '2px dashed green',
                     boxShadow: 'none'
                 }}>
@@ -707,7 +705,7 @@ function ClassNamePropExample() {
     return (
         <Example data={codeExamples.classNameProp} >
             <Menu menuButton={<MenuButton>Open menu</MenuButton>}
-                className="my-menu" align="center">
+                menuClassName="my-menu" align="center">
                 <MenuItem>New File</MenuItem>
                 <MenuItem>Save</MenuItem>
                 <MenuItem className={

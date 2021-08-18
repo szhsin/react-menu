@@ -21,6 +21,6 @@ export const bem = (block, element, modifiers = {}) => {
     return className;
 }
 
-export const withTheme = WrappedComponent => props => (
-    <WrappedComponent {...props} theming={React.useContext(SettingContext).theme} />
+export const withPresetProps = MenuComponent => props => (
+    <MenuComponent {...props} transition theming={React.useContext(SettingContext).theme} />
 );

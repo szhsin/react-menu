@@ -1,6 +1,4 @@
 import { screen, fireEvent, waitFor } from '@testing-library/react';
-import '@testing-library/jest-dom/extend-expect';
-import 'regenerator-runtime/runtime.js';
 import * as utils from './utils';
 
 const { queryByRole, queryAllByRole } = screen;
@@ -18,6 +16,7 @@ test.each([false, true])(
         // Click the menu button, menu is expected to mount and open, and get focus
         utils.clickMenuButton();
         utils.expectButtonToBeExpanded(true);
+        utils.expectMenuToHaveState('opening', false);
         utils.expectMenuToBeOpen(true);
         expect(utils.queryMenu()).toHaveAttribute('aria-label', 'Open');
         await waitFor(() => expect(utils.queryMenu()).toHaveFocus());
@@ -28,13 +27,30 @@ test.each([false, true])(
         // focus something outside menu, expecting menu to close but keep mounted
         queryByRole('button').focus();
         utils.expectButtonToBeExpanded(false);
+        utils.expectMenuToHaveState('closing', false);
         utils.expectMenuToBeOpen(false);
     });
 
 test.each([false, true])(
-    'Menu is removed from DOM after closing when keepMounted is false (portal = %s)',
+    'Menu moves through different states when transition is true (portal = %s)',
     async (portal) => {
-        utils.renderMenu({ portal, keepMounted: false });
+        utils.renderMenu({ portal, transition: true, transitionTimeout: 20 });
+        utils.clickMenuButton();
+        utils.expectMenuToHaveState('opening', true);
+        await waitFor(() => expect(utils.queryMenu()).toHaveFocus());
+        utils.expectMenuToHaveState('opening', false);
+        utils.expectMenuToHaveState('open', true);
+
+        queryByRole('button').focus();
+        utils.expectMenuToHaveState('closing', true);
+        await waitFor(() => utils.expectMenuToHaveState('closed', true));
+        utils.expectMenuToHaveState('closing', false);
+    });
+
+test.each([false, true])(
+    'Menu is removed from DOM after closing when unmountOnClose is true (portal = %s)',
+    async (portal) => {
+        utils.renderMenu({ portal, unmountOnClose: true });
         utils.expectMenuToBeInTheDocument(false);
 
         utils.clickMenuButton();
@@ -45,12 +61,18 @@ test.each([false, true])(
         utils.expectMenuToBeInTheDocument(false);
     });
 
+test('Menu is in the DOM before first opening when initialMounted is true', () => {
+    utils.renderMenu({ initialMounted: true });
+    utils.expectMenuToBeInTheDocument(true);
+    utils.expectMenuToHaveState('closed', true);
+});
+
 test('Clicking a menu item fires onClick event and closes the menu', () => {
     const menuItemText = 'Save';
     const onClick = jest.fn();
     const onChange = jest.fn();
     const onItemClick = jest.fn();
-    utils.renderMenu({ onItemClick, onChange }, {
+    utils.renderMenu({ onItemClick, onMenuChange: onChange }, {
         children: menuItemText,
         value: menuItemText,
         onClick
@@ -71,11 +93,11 @@ test('Clicking a menu item fires onClick event and closes the menu', () => {
     utils.expectButtonToBeExpanded(false);
     utils.expectMenuToBeOpen(false);
 
-    // onClick returning false skips subsequent onItemClick
-    onClick.mockImplementationOnce(() => false);
+    // onClick stopPropagation skips subsequent onItemClick
+    onClick.mockImplementationOnce(e => e.stopPropagation = true);
     utils.clickMenuButton();
     fireEvent.click(utils.queryMenuItem(menuItemText));
-    expect(onClick).toHaveBeenLastCalledWith(utils.clickEvent({ value: menuItemText }));
+    expect(onClick).toHaveBeenLastCalledWith(utils.clickEvent({ value: menuItemText, stopPropagation: true }));
     expect(onClick).toHaveBeenCalledTimes(2);
     expect(onItemClick).toHaveBeenCalledTimes(1);
     expect(onChange).toHaveBeenCalledTimes(4);
@@ -129,35 +151,42 @@ test('Additional props are forwarded to Menu', () => {
         ['aria-haspopup']: true,
         randomattr: 'random',
         onMouseEnter,
-        onKeyDown
+        onKeyDown,
+        containerProps: {
+            'data-testid': 'container',
+            id: 'menu-container',
+            onMouseEnter,
+            onKeyDown
+        }
     });
     utils.clickMenuButton();
 
+    expect(screen.getByTestId('container')).toHaveAttribute('id', 'menu-container');
     const menu = utils.queryMenu()
     expect(menu).toHaveAttribute('aria-label', 'test');
     expect(menu).toHaveAttribute('aria-haspopup', 'true');
     expect(menu).toHaveAttribute('randomattr', 'random');
     fireEvent.mouseEnter(menu);
-    expect(onMouseEnter).toHaveBeenCalledTimes(1);
-    fireEvent.keyDown(menu, { key: 'ArrowDown' });
-    expect(onKeyDown).toHaveBeenCalledTimes(1);
+    expect(onMouseEnter).toHaveBeenCalledTimes(2);
+    fireEvent.keyDown(menu, { key: 'm' });
+    expect(onKeyDown).toHaveBeenCalledTimes(2);
 });
 
 test('Portal will render Menu into document.body', () => {
     const { container } = utils.renderMenu({ portal: true });
     utils.clickMenuButton();
 
-    expect(container.querySelector('.rc-menu-container')).toBe(null);
-    expect(container.querySelector('.rc-menu')).toBe(null);
-    expect(document.querySelector('.rc-menu-container')).toBeInTheDocument();
+    expect(container.querySelector('.szh-menu-container')).toBe(null);
+    expect(container.querySelector('.szh-menu')).toBe(null);
+    expect(document.querySelector('.szh-menu-container')).toBeInTheDocument();
     utils.expectMenuToBeInTheDocument(true);
 });
 
 test('Use keepOpen of onClick to customise when menu is closed', () => {
     utils.renderMenu({
-        onClick: e => e.keepOpen = true
+        onItemClick: e => e.keepOpen = true
     }, {
-        onClick: e => e.keepOpen = false
+        onClick: e => e.stopPropagation = true
     });
     utils.clickMenuButton();
 
@@ -181,13 +210,13 @@ test.each([
         direction,
         align,
         position,
-        animation: true,
+        transition: { open: true, close: true },
         arrow: true,
         offsetX: 10,
         offsetY: -10,
         overflow: 'auto'
     });
     utils.clickMenuButton();
-    expect(utils.queryMenu()).toHaveClass(`rc-menu--dir-${direction}`);
-    expect(container.querySelector(`.rc-menu__arrow--dir-${direction}`)).toBeInTheDocument();
+    expect(utils.queryMenu()).toHaveClass(`szh-menu--dir-${direction}`);
+    expect(container.querySelector(`.szh-menu__arrow--dir-${direction}`)).toBeInTheDocument();
 });

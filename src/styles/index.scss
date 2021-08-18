@@ -1,9 +1,7 @@
 @use 'var';
-@use 'animations';
-@use 'sass:map';
 @use 'core';
 
-.rc-menu {
+.szh-menu {
     user-select: none;
     color: var.$color;
     border: none;
@@ -12,18 +10,16 @@
     min-width: 10rem;
     padding: 0.5rem 0;
 
-    @each $dir in map.keys(animations.$directions) {
-        @include animations.animation("slide", $dir);
-    }
-
     &__item {
+        display: flex;
+        align-items: center;
         position: relative;
         padding: 0.375rem 1.5rem;
 
-        .rc-menu--animation & {
+        .szh-menu-container--itemTransition & {
             transition: {
                 property: background-color, color;
-                duration: animations.$duration;
+                duration: 0.15s;
                 timing-function: ease-in-out;
             }
         }
@@ -61,7 +57,7 @@
         }
     }
 
-    &__submenu > .rc-menu__item {
+    &__submenu > .szh-menu__item {
         padding-right: 2.5rem;
         &::after {
             content: "\276f";

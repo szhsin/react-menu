@@ -1,46 +1,73 @@
-import React, { useRef, useContext, useEffect, useCallback, useMemo } from 'react';
+import React, {
+    memo,
+    useRef,
+    useContext,
+    useEffect,
+    useMemo
+} from 'react';
+import { createPortal } from 'react-dom';
 import PropTypes from 'prop-types';
 import {
-    defineName,
-    safeCall,
     useBEM,
     useFlatStyles,
+    useActiveState,
+    useMenuChange,
+    useMenuStateAndFocus,
+    useCombinedRef
+} from '../hooks';
+import { MenuList } from './MenuList';
+import {
+    attachHandlerProps,
+    safeCall,
     stylePropTypes,
     sharedMenuPropTypes,
     sharedMenuDefaultProp,
     menuClass,
     subMenuClass,
     menuItemClass,
-    MenuListItemContext,
+    isMenuOpen,
+    withHovering,
+    SettingsContext,
     ItemSettingsContext,
+    MenuListItemContext,
     Keys,
     HoverIndexActionTypes,
     SubmenuActionTypes,
-    FocusPositions,
-    useActiveState,
-    useMenuChange,
-    useMenuState
+    FocusPositions
 } from '../utils';
-import { MenuList } from './MenuList';
 
 
-export const SubMenu = defineName(React.memo(function SubMenu({
+export const SubMenu = withHovering(memo(function SubMenu({
     'aria-label': ariaLabel,
-    itemClassName,
-    itemStyles,
+    className,
     disabled,
-    keepMounted,
     label,
     index,
-    onChange,
+    onMenuChange,
+    isHovering,
     captureFocus: _1,
     repositionFlag: _2,
-    ...restProps }) {
+    itemProps = {},
+    ...restProps
+}) {
+    const {
+        initialMounted, unmountOnClose, transition, transitionTimeout, rootMenuRef
+    } = useContext(SettingsContext);
+    const { submenuOpenDelay, submenuCloseDelay } = useContext(ItemSettingsContext);
+    const {
+        parentMenuRef, parentOverflow,
+        isParentOpen, isSubmenuOpen, dispatch
+    } = useContext(MenuListItemContext);
+    const isPortal = parentOverflow !== 'visible';
 
-    const { isMounted, isOpen, menuItemFocus, openMenu, closeMenu } = useMenuState(keepMounted);
-    const { isParentOpen, hoverIndex, isSubmenuOpen, dispatch } = useContext(MenuListItemContext);
-    const { debugging, submenuOpenDelay, submenuCloseDelay } = useContext(ItemSettingsContext);
-    const isHovering = hoverIndex === index;
+    const {
+        openMenu,
+        toggleMenu,
+        state,
+        ...otherStateProps
+    } = useMenuStateAndFocus({ initialMounted, unmountOnClose, transition, transitionTimeout });
+
+    const isOpen = isMenuOpen(state);
     const isDisabled = Boolean(disabled);
     const {
         isActive, onKeyUp,
@@ -49,11 +76,6 @@ export const SubMenu = defineName(React.memo(function SubMenu({
     const containerRef = useRef(null);
     const itemRef = useRef(null);
     const timeoutId = useRef();
-
-    const handleClose = useCallback(() => {
-        closeMenu();
-        itemRef.current.focus();
-    }, [closeMenu]);
 
     const delayOpen = delay => {
         dispatch({ type: HoverIndexActionTypes.SET, index });
@@ -93,7 +115,8 @@ export const SubMenu = defineName(React.memo(function SubMenu({
             // LEFT key is bubbled up from submenu items
             case Keys.LEFT:
                 if (isOpen) {
-                    handleClose();
+                    toggleMenu(false);
+                    itemRef.current.focus();
                     handled = true;
                 }
                 break;
@@ -124,19 +147,6 @@ export const SubMenu = defineName(React.memo(function SubMenu({
         }
     }
 
-    const handleBlur = e => {
-        // In debugging mode, neither close menu nor reset hoverIndex.
-        if (debugging) return;
-
-        const relatedTarget = e.relatedTarget || document.activeElement;
-        // Check if something which is not in the subtree get focus.
-        // It handles situation such as clicking on a sibling disabled menu item
-        if (!e.currentTarget.contains(relatedTarget)) {
-            closeMenu();
-            dispatch({ type: HoverIndexActionTypes.UNSET, index });
-        }
-    }
-
     useEffect(() => () => clearTimeout(timeoutId.current), []);
     useEffect(() => {
         // Don't set focus when parent menu is closed, otherwise focus will be lost
@@ -144,14 +154,15 @@ export const SubMenu = defineName(React.memo(function SubMenu({
         if (isHovering && isParentOpen) {
             itemRef.current.focus();
         } else {
-            closeMenu();
+            toggleMenu(false);
         }
-    }, [isHovering, isParentOpen, closeMenu]);
+    }, [isHovering, isParentOpen, toggleMenu]);
 
     useEffect(() => {
         dispatch({ type: isOpen ? SubmenuActionTypes.OPEN : SubmenuActionTypes.CLOSE });
     }, [dispatch, isOpen]);
-    useMenuChange(onChange, isOpen);
+
+    useMenuChange(onMenuChange, isOpen);
 
     const modifiers = useMemo(() => Object.freeze({
         open: isOpen,
@@ -160,60 +171,80 @@ export const SubMenu = defineName(React.memo(function SubMenu({
         disabled: isDisabled
     }), [isOpen, isHovering, isActive, isDisabled]);
 
-    return (
-        <li className={useBEM({ block: menuClass, element: subMenuClass })}
-            role="presentation" ref={containerRef}
-            onKeyDown={handleKeyDown}
-            onBlur={handleBlur}>
+    const {
+        ref: externaItemlRef,
+        className: itemClassName,
+        styles: itemStyles,
+        ...restItemProps
+    } = itemProps;
 
-            <div className={useBEM({
-                block: menuClass,
-                element: menuItemClass,
-                modifiers,
-                className: itemClassName
-            })}
-                style={useFlatStyles(itemStyles, modifiers)}
-                role="menuitem"
-                aria-haspopup="true"
+    const itemHandlers = attachHandlerProps({
+        ...activeStateHandlers,
+        onMouseEnter: handleMouseEnter,
+        onMouseLeave: handleMouseLeave,
+        onMouseDown: () => !isHovering && dispatch({ type: HoverIndexActionTypes.SET, index }),
+        onClick: handleClick,
+        onKeyUp: handleKeyUp
+    }, restItemProps);
+
+    const getMenuList = () => {
+        const menuList = (
+            <MenuList
+                {...restProps}
+                {...otherStateProps}
+                state={state}
+                ariaLabel={ariaLabel || (typeof label === 'string' ? label : 'Submenu')}
+                anchorRef={itemRef}
+                containerRef={isPortal ? rootMenuRef : containerRef}
+                parentScrollingRef={isPortal && parentMenuRef}
+                isDisabled={isDisabled} />
+        );
+        return isPortal ? createPortal(menuList, rootMenuRef.current) : menuList;
+    }
+
+    return (
+        <li className={useBEM({ block: menuClass, element: subMenuClass, className })}
+            role="presentation" ref={containerRef}
+            onKeyDown={handleKeyDown}>
+
+            <div role="menuitem"
+                aria-haspopup={true}
                 aria-expanded={isOpen}
                 aria-disabled={isDisabled || undefined}
                 tabIndex={isHovering && !isOpen ? 0 : -1}
-                ref={itemRef}
-                onMouseEnter={handleMouseEnter}
-                onMouseLeave={handleMouseLeave}
-                onMouseDown={() => !isHovering && dispatch({ type: HoverIndexActionTypes.SET, index })}
-                onClick={handleClick}
-                onKeyUp={handleKeyUp}
-                {...activeStateHandlers}>
+                {...restItemProps}
+                {...itemHandlers}
+                ref={useCombinedRef(externaItemlRef, itemRef)}
+                className={useBEM({
+                    block: menuClass,
+                    element: menuItemClass,
+                    modifiers,
+                    className: itemClassName
+                })}
+                style={useFlatStyles(itemStyles, modifiers)}
+            >
                 {useMemo(() => safeCall(label, modifiers), [label, modifiers])}
             </div>
 
-            {isMounted && <MenuList
-                {...restProps}
-                ariaLabel={ariaLabel || (typeof label === 'string' ? label : 'Submenu')}
-                anchorRef={itemRef}
-                containerRef={containerRef}
-                isOpen={isOpen}
-                isDisabled={isDisabled}
-                menuItemFocus={menuItemFocus} />}
+            {state && getMenuList()}
         </li>
     );
 }), 'SubMenu');
 
 SubMenu.propTypes = {
     ...sharedMenuPropTypes,
-    ...stylePropTypes('item'),
     disabled: PropTypes.bool,
-    keepMounted: PropTypes.bool,
     label: PropTypes.oneOfType([
         PropTypes.node,
         PropTypes.func
     ]).isRequired,
-    onChange: PropTypes.func
+    itemProps: PropTypes.shape({
+        ...stylePropTypes()
+    }),
+    onMenuChange: PropTypes.func
 };
 
 SubMenu.defaultProps = {
     ...sharedMenuDefaultProp,
-    direction: 'right',
-    keepMounted: true
+    direction: 'right'
 };

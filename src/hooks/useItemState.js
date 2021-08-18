@@ -1,48 +1,45 @@
 import {
     useRef,
     useContext,
-    useCallback,
     useEffect
 } from 'react';
 import {
     ItemSettingsContext,
     MenuListItemContext,
     HoverIndexActionTypes
-} from './constants';
+} from '../utils';
 
 
 // This hook includes some common stateful logic in MenuItem and FocusableItem
-export const useItemState = (isDisabled, index) => {
-    const ref = useRef(null);
+export const useItemState = (ref, index, isHovering, isDisabled) => {
     const { submenuCloseDelay } = useContext(ItemSettingsContext);
-    const { isParentOpen, hoverIndex, isSubmenuOpen, dispatch } = useContext(MenuListItemContext);
-    const isHovering = hoverIndex === index;
+    const { isParentOpen, isSubmenuOpen, dispatch } = useContext(MenuListItemContext);
     const timeoutId = useRef();
 
-    const setHover = useCallback(() => {
+    const setHover = () => {
         if (!isDisabled) dispatch({ type: HoverIndexActionTypes.SET, index });
-    }, [isDisabled, dispatch, index]);
+    }
 
-    const onBlur = useCallback(e => {
+    const onBlur = e => {
         // Focus has moved out of the entire item
         // It handles situation such as clicking on a sibling disabled menu item
         if (!e.currentTarget.contains(e.relatedTarget)) {
             dispatch({ type: HoverIndexActionTypes.UNSET, index });
         }
-    }, [dispatch, index]);
+    }
 
-    const onMouseEnter = useCallback(() => {
+    const onMouseEnter = () => {
         if (isSubmenuOpen) {
             timeoutId.current = setTimeout(setHover, submenuCloseDelay);
         } else {
             setHover();
         }
-    }, [isSubmenuOpen, submenuCloseDelay, setHover]);
+    }
 
-    const onMouseLeave = useCallback((_, keepHover) => {
+    const onMouseLeave = (_, keepHover) => {
         timeoutId.current && clearTimeout(timeoutId.current);
         if (!keepHover) dispatch({ type: HoverIndexActionTypes.UNSET, index });
-    }, [dispatch, index]);
+    }
 
     useEffect(() => () => clearTimeout(timeoutId.current), []);
     useEffect(() => {
@@ -51,11 +48,9 @@ export const useItemState = (isDisabled, index) => {
         if (isHovering && isParentOpen) {
             ref.current && ref.current.focus();
         }
-    }, [isHovering, isParentOpen]);
+    }, [ref, isHovering, isParentOpen]);
 
     return {
-        ref,
-        isHovering,
         setHover,
         onBlur,
         onMouseEnter,

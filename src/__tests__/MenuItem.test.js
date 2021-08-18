@@ -9,18 +9,17 @@ import {
     MenuRadioGroup
 } from '../';
 import { screen, render, fireEvent } from '@testing-library/react';
-import '@testing-library/jest-dom/extend-expect';
 import * as utils from './utils';
 
 const { queryByRole, queryAllByRole } = screen;
 const LastItem = utils.LastItem;
 
 test('Test radio items', () => {
-    const onClick = jest.fn();
+    const onItemClick = jest.fn();
     const onChange = jest.fn();
     const getMenu = value => (
-        <Menu onClick={onClick} menuButton={<MenuButton>Color</MenuButton>}>
-            <MenuRadioGroup value={value} name="color" onChange={onChange}>
+        <Menu onItemClick={onItemClick} menuButton={<MenuButton>Color</MenuButton>}>
+            <MenuRadioGroup value={value} name="color" onRadioChange={onChange}>
                 <MenuItem value="red">Red</MenuItem>
                 <MenuItem value="green">Green</MenuItem>
                 <MenuItem value="blue">Blue</MenuItem>
@@ -34,12 +33,12 @@ test('Test radio items', () => {
     utils.clickMenuButton();
     const menuItems = queryAllByRole('menuitemradio');
     expect(menuItems).toHaveLength(4);
-    menuItems.forEach(item => expect(item).toHaveClass('rc-menu__item--type-radio'));
+    menuItems.forEach(item => expect(item).toHaveClass('szh-menu__item--type-radio'));
     utils.expectMenuItemToBeChecked(queryByRole('menuitemradio', { name: 'Green' }), true);
 
     fireEvent.click(queryByRole('menuitemradio', { name: 'Blue' }));
     expect(onChange).toHaveBeenCalledWith(utils.clickEvent({ name: 'color', value: 'blue' }));
-    expect(onClick).toHaveBeenCalledWith(utils.clickEvent({ name: 'color', value: 'blue' }));
+    expect(onItemClick).toHaveBeenCalledWith(utils.clickEvent({ name: 'color', value: 'blue' }));
     rerender(getMenu('blue'));
     utils.expectMenuItemToBeChecked(queryByRole('menuitemradio', { name: 'Blue' }), true);
     utils.expectMenuItemToBeChecked(queryByRole('menuitemradio', { name: 'Green' }), false);
@@ -50,7 +49,7 @@ test('Use keepOpen of onChange to customise when menu is closed', () => {
     render(
         <Menu menuButton={<MenuButton>Color</MenuButton>}>
             <MenuRadioGroup value="green"
-                onChange={e => e.keepOpen = true}>
+                onRadioChange={e => e.keepOpen = true}>
                 <MenuItem value="red">Red</MenuItem>
                 <MenuItem value="green">Green</MenuItem>
             </MenuRadioGroup>
@@ -82,15 +81,15 @@ test('Test check box items', () => {
     utils.clickMenuButton();
     const menuItems = queryAllByRole('menuitemcheckbox');
     expect(menuItems).toHaveLength(2);
-    menuItems.forEach(item => expect(item).toHaveClass('rc-menu__item--type-checkbox'));
+    menuItems.forEach(item => expect(item).toHaveClass('szh-menu__item--type-checkbox'));
 
     const boldItem = queryByRole('menuitemcheckbox', { name: 'Bold' });
     utils.expectMenuItemToBeChecked(boldItem, true);
     utils.expectMenuItemToBeChecked(queryByRole('menuitemcheckbox', { name: 'Italic' }), false);
 
     fireEvent.click(boldItem);
-    expect(onClick).toHaveBeenLastCalledWith(utils.clickEvent());
-    expect(onItemClick).toHaveBeenLastCalledWith(utils.clickEvent());
+    expect(onClick).toHaveBeenLastCalledWith(utils.clickEvent({ checked: false }));
+    expect(onItemClick).toHaveBeenLastCalledWith(utils.clickEvent({ checked: false }));
     rerender(getMenu(false));
     utils.expectMenuItemToBeChecked(boldItem, false);
     utils.expectMenuToBeOpen(false);
@@ -159,8 +158,8 @@ test('Pointer press and leave a menu item', () => {
 });
 
 test('keyDown on one item and keyUp on another will not trigger click event', () => {
-    const onClick = jest.fn();
-    utils.renderMenu({ onClick }, { value: 'Middle' });
+    const onItemClick = jest.fn();
+    utils.renderMenu({ onItemClick }, { value: 'Middle' });
     utils.clickMenuButton();
 
     const menuItem = utils.queryMenuItem('First');
@@ -182,11 +181,11 @@ test('keyDown on one item and keyUp on another will not trigger click event', ()
     // Releasing 'Enter' key on this item will not trigger click event
     fireEvent.keyUp(anothorItem, { key: 'Enter' });
     utils.expectMenuItemToBeHover(anothorItem, true);
-    expect(onClick).not.toHaveBeenCalled();
+    expect(onItemClick).not.toHaveBeenCalled();
 
     fireEvent.keyDown(anothorItem, { key: 'Enter' });
     fireEvent.keyUp(anothorItem, { key: 'Enter' });
-    expect(onClick).toHaveBeenLastCalledWith(utils.clickEvent({ key: 'Enter', value: 'Middle' }))
+    expect(onItemClick).toHaveBeenLastCalledWith(utils.clickEvent({ key: 'Enter', value: 'Middle' }))
 });
 
 test('MenuItem keeps hover and active states after focusing something inside it', () => {
@@ -266,10 +265,11 @@ test('Additional props are forwarded to MenuItem', () => {
 
 test('Test FocusableItem', () => {
     const renderFn = jest.fn();
+    const itemRef = React.createRef();
     render(
         <Menu menuButton={<MenuButton>Menu</MenuButton>}>
             <MenuItem>First</MenuItem>
-            <FocusableItem>
+            <FocusableItem ref={itemRef}>
                 {({ ref, hover, closeMenu }) => {
                     renderFn(hover);
                     return (
@@ -287,7 +287,9 @@ test('Test FocusableItem', () => {
         </Menu>
     );
 
+    expect(itemRef.current).toBe(null);
     utils.clickMenuButton({ name: 'Menu' });
+    expect(itemRef.current).toHaveClass('szh-menu__item--focusable');
     utils.expectMenuToBeOpen(true);
     expect(renderFn).toHaveBeenLastCalledWith(false);
 

@@ -1,23 +1,26 @@
-import React, { useContext, useMemo } from 'react';
+import React, { memo, useContext, useMemo, useRef } from 'react';
 import PropTypes from 'prop-types';
 import {
-    attachHandlerProps,
-    defineName,
-    safeCall,
     useBEM,
     useFlatStyles,
+    useActiveState,
+    useItemState,
+    useCombinedRef
+} from '../hooks';
+import {
+    attachHandlerProps,
+    safeCall,
     stylePropTypes,
     menuClass,
     menuItemClass,
+    withHovering,
     EventHandlersContext,
     RadioGroupContext,
-    Keys,
-    useActiveState,
-    useItemState
+    Keys
 } from '../utils';
 
 
-export const MenuItem = defineName(React.memo(function MenuItem({
+export const MenuItem = withHovering(memo(function MenuItem({
     className,
     styles,
     value,
@@ -28,17 +31,18 @@ export const MenuItem = defineName(React.memo(function MenuItem({
     index,
     children,
     onClick,
-    ...restProps }) {
-
+    isHovering,
+    externalRef,
+    ...restProps
+}) {
     const isDisabled = Boolean(disabled);
+    const ref = useRef();
     const {
-        ref,
-        isHovering,
         setHover,
         onBlur,
         onMouseEnter,
         onMouseLeave
-    } = useItemState(isDisabled, index);
+    } = useItemState(ref, index, isHovering, isDisabled);
     const eventHandlers = useContext(EventHandlersContext);
     const radioGroup = useContext(RadioGroupContext);
     const {
@@ -55,22 +59,17 @@ export const MenuItem = defineName(React.memo(function MenuItem({
     const handleClick = e => {
         if (isDisabled) return;
 
-        let isStopPropagation = false;
         const event = { value, syntheticEvent: e };
         if (e.key !== undefined) event.key = e.key;
+        if (isCheckBox) event.checked = !isChecked;
 
         if (isRadio) {
             event.name = radioGroup.name;
-            safeCall(radioGroup.onChange, event);
+            safeCall(radioGroup.onRadioChange, event);
         }
 
-        event.checked = isCheckBox ? !isChecked : false;
-        isStopPropagation = safeCall(onClick, event) === false;
-
-        eventHandlers.handleClick(
-            event,
-            isStopPropagation,
-            isCheckBox || isRadio);
+        if (!event.stopPropagation) safeCall(onClick, event);
+        eventHandlers.handleClick(event, isCheckBox || isRadio);
     }
 
     const handleKeyUp = e => {
@@ -127,7 +126,7 @@ export const MenuItem = defineName(React.memo(function MenuItem({
         tabIndex: isHovering ? 0 : -1,
         ...restProps,
         ...handlers,
-        ref,
+        ref: useCombinedRef(externalRef, ref),
         className: useBEM({ block: menuClass, element: menuItemClass, modifiers, className }),
         style: useFlatStyles(styles, modifiers),
     };

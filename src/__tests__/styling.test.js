@@ -1,11 +1,10 @@
 import { screen, fireEvent } from '@testing-library/react';
-import '@testing-library/jest-dom/extend-expect';
 import * as utils from './utils';
 
 const { queryByRole } = screen;
 
 test('className and styles props', () => {
-    const className = 'my-class1 my-class2';
+    const menuClassName = 'my-class1 my-class2';
     const baseStyle = {
         backgroundColor: 'yellow',
         fontSize: '1.2rem'
@@ -25,9 +24,9 @@ test('className and styles props', () => {
         }
     };
 
-    utils.renderMenu({ className }, { styles, type: 'checkbox' });
+    utils.renderMenu({ menuClassName }, { styles, type: 'checkbox' });
     utils.clickMenuButton();
-    expect(utils.queryMenu()).toHaveClass(className);
+    expect(utils.queryMenu()).toHaveClass(menuClassName);
 
     const menuItem = queryByRole('menuitemcheckbox', { name: 'Middle' })
     expect(menuItem).toHaveStyle({ ...baseStyle, color: 'red' });
@@ -40,12 +39,12 @@ test('className and styles props', () => {
 });
 
 test('className and styles props as functions', () => {
-    const className = jest.fn();
+    const menuClassName = jest.fn();
     const styles = jest.fn();
-    utils.renderMenu({ className }, { styles });
+    utils.renderMenu({ menuClassName }, { styles });
     utils.clickMenuButton();
-    expect(className).toHaveBeenLastCalledWith(expect.objectContaining({
-        open: true,
+    expect(menuClassName).toHaveBeenLastCalledWith(expect.objectContaining({
+        state: 'open',
         dir: 'bottom'
     }));
     expect(styles).toHaveBeenLastCalledWith(expect.objectContaining({
@@ -70,6 +69,6 @@ test('className and styles props as functions', () => {
         active: true
     }));
 
-    expect(className).toHaveBeenCalledTimes(1);
+    expect(menuClassName).toHaveBeenCalledTimes(1);
     expect(styles).toHaveBeenCalledTimes(3);
 });

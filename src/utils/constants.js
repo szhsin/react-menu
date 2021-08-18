@@ -1,8 +1,8 @@
 import React from 'react';
 
-export const menuContainerClass = 'rc-menu-container';
-export const menuClass = 'rc-menu';
-export const menuButtonClass = 'rc-menu-button';
+export const menuContainerClass = 'szh-menu-container';
+export const menuClass = 'szh-menu';
+export const menuButtonClass = 'szh-menu-button';
 export const menuArrowClass = 'arrow';
 export const menuItemClass = 'item';
 export const menuDividerClass = 'divider';
@@ -12,6 +12,7 @@ export const subMenuClass = 'submenu';
 export const radioGroupClass = 'radio-group';
 
 export const initialHoverIndex = -1;
+export const HoverIndexContext = React.createContext(initialHoverIndex);
 export const MenuListItemContext = React.createContext({});
 export const MenuListContext = React.createContext({});
 export const EventHandlersContext = React.createContext({});
@@ -51,4 +52,17 @@ export const CloseReason = Object.freeze({
     'CANCEL': 'cancel',
     'BLUR': 'blur',
     'SCROLL': 'scroll'
+});
+
+export const FocusPositions = Object.freeze({
+    'INITIAL': 'initial',
+    'FIRST': 'first',
+    'LAST': 'last'
+});
+
+export const MenuStateMap = Object.freeze({
+    entering: 'opening',
+    entered: 'open',
+    exiting: 'closing',
+    exited: 'closed'
 });

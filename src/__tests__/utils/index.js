@@ -7,7 +7,6 @@ import {
     MenuButton
 } from '../../';
 import { screen, render, fireEvent, waitFor } from '@testing-library/react';
-import '@testing-library/jest-dom/extend-expect';
 
 const { queryByRole } = screen;
 
@@ -23,10 +22,10 @@ export const expectMenuToBeInTheDocument = (truthy, options) =>
     expectToBe(queryMenu(options), truthy).toBeInTheDocument();
 
 export const expectMenuToBeOpen = (truthy, options) =>
-    expectToBe(queryMenu(options), truthy).toHaveClass('rc-menu--open');
+    expectToBe(queryMenu(options), truthy).toHaveClass('szh-menu--state-open');
 
-export const expectMenuToBeClosing = (truthy, options) =>
-    expectToBe(queryMenu(options), truthy).toHaveClass('rc-menu--closing');
+export const expectMenuToHaveState = (state, truthy, options) =>
+    expectToBe(queryMenu(options), truthy).toHaveClass(`szh-menu--state-${state}`);
 
 export const expectButtonToBeExpanded = truthy =>
     expect(queryByRole('button')).toHaveAttribute('aria-expanded', String(truthy));
@@ -40,13 +39,13 @@ export const expectToBeDisabled = (element, truthy) => {
 }
 
 export const expectMenuItemToBeHover = (menuItem, truthy) =>
-    expectToBe(menuItem, truthy).toHaveClass('rc-menu__item--hover');
+    expectToBe(menuItem, truthy).toHaveClass('szh-menu__item--hover');
 
 export const expectMenuItemToBeActive = (menuItem, truthy) =>
-    expectToBe(menuItem, truthy).toHaveClass('rc-menu__item--active');
+    expectToBe(menuItem, truthy).toHaveClass('szh-menu__item--active');
 
 export const expectMenuItemToBeChecked = (menuItem, truthy) => {
-    expectToBe(menuItem, truthy).toHaveClass('rc-menu__item--checked');
+    expectToBe(menuItem, truthy).toHaveClass('szh-menu__item--checked');
     if (truthy !== undefined) {
         expect(menuItem).toHaveAttribute('aria-checked', String(truthy));
     } else {
@@ -62,10 +61,10 @@ export const clickMenuButton = ({ name, keyboard } = {}) => {
 
 export const queryMenuItem = name => queryByRole('menuitem', { name });
 
-export const clickEvent = ({ checked = false, ...rest } = {}) => expect.objectContaining({
-    checked, ...rest,
+export const clickEvent = (event) => ({
+    ...event,
     syntheticEvent: expect.objectContaining(
-        rest.key ? { type: 'keyup', key: rest.key } : { type: 'click' }
+        event.key ? { type: 'keyup', key: event.key } : { type: 'click' }
     )
 });
 
@@ -81,7 +80,7 @@ export const FirstItem = applyStatics(MenuItem)(enhance(MenuItem, 'First'));
 export const LastItem = applyHOC(enhance)(MenuItem, 'Last');
 
 export const renderMenu = (props, itemProps) => render(
-    <Menu menuButton={<MenuButton>Open</MenuButton>} animation={false} {...props}>
+    <Menu menuButton={<MenuButton>Open</MenuButton>} {...props}>
         <FirstItem />
         <MenuItem children="Middle" {...itemProps} />
         <LastItem />

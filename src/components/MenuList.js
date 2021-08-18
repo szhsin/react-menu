@@ -8,41 +8,52 @@ import React, {
     useContext
 } from 'react';
 import {
+    useBEM,
+    useFlatStyles,
+    useCombinedRef,
+    useLayoutEffect
+} from '../hooks';
+import {
+    getPositionHelpers,
+    positionMenu,
+    positionContextMenu
+} from '../positionUtils';
+import {
     attachHandlerProps,
     batchedUpdates,
     cloneChildren,
-    defineName,
     floatEqual,
     getScrollAncestor,
+    getTransition,
     safeCall,
-    useBEM,
-    useFlatStyles,
     isProd,
-    parsePadding,
     menuClass,
     menuArrowClass,
     SettingsContext,
     MenuListContext,
     MenuListItemContext,
+    HoverIndexContext,
     initialHoverIndex,
+    isMenuOpen,
     CloseReason,
     Keys,
     FocusPositions,
     HoverIndexActionTypes,
-    SubmenuActionTypes,
-    useLayoutEffect,
+    SubmenuActionTypes
 } from '../utils';
 
 
-export const MenuList = defineName(React.memo(function MenuList({
+export const MenuList = ({
     ariaLabel,
-    className,
-    styles,
+    menuClassName,
+    menuStyles,
     arrowClassName,
     arrowStyles,
     anchorPoint,
     anchorRef,
     containerRef,
+    externalRef,
+    parentScrollingRef,
     arrow,
     align,
     direction,
@@ -50,22 +61,23 @@ export const MenuList = defineName(React.memo(function MenuList({
     overflow,
     repositionFlag,
     captureFocus = true,
-    isOpen,
+    state: menuState,
+    endTransition,
     isDisabled,
     menuItemFocus,
     offsetX,
     offsetY,
     children,
     onClose,
-    ...restProps }) {
-
+    ...restProps
+}) => {
+    const isOpen = isMenuOpen(menuState);
     const [menuPosition, setMenuPosition] = useState({ x: 0, y: 0 });
     const [arrowPosition, setArrowPosition] = useState({});
     const [overflowData, setOverflowData] = useState();
-    const [isClosing, setClosing] = useState(false);
     const [expandedDirection, setExpandedDirection] = useState(direction);
     const {
-        animation,
+        transition,
         boundingBoxRef,
         boundingBoxPadding,
         rootMenuRef,
@@ -78,7 +90,7 @@ export const MenuList = defineName(React.memo(function MenuList({
     const menuRef = useRef(null);
     const arrowRef = useRef(null);
     const menuItemsCount = useRef(0);
-    const latestOpen = useRef(isOpen);
+    const prevOpen = useRef(isOpen);
     const latestMenuSize = useRef({ width: 0, height: 0 });
     const latestHandlePosition = useRef(() => { });
     const descendOverflowRef = useRef(false);
@@ -88,6 +100,8 @@ export const MenuList = defineName(React.memo(function MenuList({
         hoverIndex: initialHoverIndex,
         openSubmenuCount: 0
     });
+    const openTransition = getTransition(transition, 'open');
+    const closeTransition = getTransition(transition, 'close');
 
     function reducer({ hoverIndex, openSubmenuCount }, action) {
         return {
@@ -182,352 +196,12 @@ export const MenuList = defineName(React.memo(function MenuList({
     }
 
     const handleAnimationEnd = () => {
-        // Check before changing state to avoid triggering unnecessary re-render
-        if (isClosing) {
-            setClosing(false);
+        if (menuState === 'closing') {
             setOverflowData(); // reset overflowData after closing
         }
+
+        safeCall(endTransition);
     }
-
-    const positionHelpers = useCallback(() => {
-        const menuRect = menuRef.current.getBoundingClientRect();
-        const containerRect = containerRef.current.getBoundingClientRect();
-        const boundingRect = scrollingRef.current === window ? {
-            left: 0,
-            top: 0,
-            right: document.documentElement.clientWidth,
-            bottom: window.innerHeight
-        } : scrollingRef.current.getBoundingClientRect();
-        const padding = parsePadding(boundingBoxPadding);
-
-        // For left and top, overflows are negative value.
-        // For right and bottom, overflows are positive value.
-        const getLeftOverflow = x => x + containerRect.left - boundingRect.left - padding.left;
-        const getRightOverflow = x => x + containerRect.left + menuRect.width - boundingRect.right + padding.right;
-        const getTopOverflow = y => y + containerRect.top - boundingRect.top - padding.top;
-        const getBottomOverflow = y => y + containerRect.top + menuRect.height - boundingRect.bottom + padding.bottom;
-
-        const confineHorizontally = x => {
-            // If menu overflows to the left side, adjust x to have the menu contained within the viewport
-            // and there is no need to check the right side;
-            // if it doesn't overflow to the left, then check the right side
-            let leftOverflow = getLeftOverflow(x);
-            if (leftOverflow < 0) {
-                x -= leftOverflow;
-            } else {
-                const rightOverflow = getRightOverflow(x);
-                if (rightOverflow > 0) {
-                    x -= rightOverflow;
-                    // Check again to make sure menu doesn't overflow to the left 
-                    // because it may go off screen and cannot be scroll into view.
-                    leftOverflow = getLeftOverflow(x);
-                    if (leftOverflow < 0) x -= leftOverflow;
-                }
-            }
-
-            return x;
-        }
-
-        const confineVertically = y => {
-            // Similar logic to confineHorizontally above
-            let topOverflow = getTopOverflow(y);
-            if (topOverflow < 0) {
-                y -= topOverflow;
-            } else {
-                const bottomOverflow = getBottomOverflow(y);
-                if (bottomOverflow > 0) {
-                    y -= bottomOverflow;
-                    // Check again to make sure menu doesn't overflow to the bottom
-                    // because it may go off screen and cannot be scroll into view.
-                    topOverflow = getTopOverflow(y);
-                    if (topOverflow < 0) y -= topOverflow;
-                }
-            }
-
-            return y;
-        }
-
-        return {
-            menuRect,
-            containerRect,
-            getLeftOverflow,
-            getRightOverflow,
-            getTopOverflow,
-            getBottomOverflow,
-            confineHorizontally,
-            confineVertically
-        };
-    }, [containerRef, scrollingRef, boundingBoxPadding]);
-
-    const placeArrowX = useCallback((
-        menuX,
-        anchorRect,
-        containerRect,
-        menuRect
-    ) => {
-        let x = anchorRect.left - containerRect.left - menuX + anchorRect.width / 2;
-        const offset = arrowRef.current.offsetWidth * 1.25;
-        x = Math.max(offset, x);
-        x = Math.min(x, menuRect.width - offset);
-        return x;
-    }, []);
-
-    const placeArrowY = useCallback((
-        menuY,
-        anchorRect,
-        containerRect,
-        menuRect
-    ) => {
-        let y = anchorRect.top - containerRect.top - menuY + anchorRect.height / 2;
-        const offset = arrowRef.current.offsetHeight * 1.25;
-        y = Math.max(offset, y);
-        y = Math.min(y, menuRect.height - offset);
-        return y;
-    }, []);
-
-    const placeLeftorRight = useCallback(({
-        anchorRect,
-        containerRect,
-        menuRect
-    }, {
-        placeLeftorRightY,
-        placeLeftX,
-        placeRightX
-    }, {
-        getLeftOverflow,
-        getRightOverflow,
-        confineHorizontally,
-        confineVertically
-    }) => {
-        let computedDirection = direction;
-        let y = placeLeftorRightY;
-        if (position !== 'initial') {
-            y = confineVertically(y);
-            if (position === 'anchor') {
-                // restrict menu to the edge of anchor element
-                y = Math.min(y, anchorRect.bottom - containerRect.top);
-                y = Math.max(y, anchorRect.top - containerRect.top - menuRect.height);
-            }
-        }
-
-        let x, leftOverflow, rightOverflow;
-        if (computedDirection === 'left') {
-            x = placeLeftX;
-
-            if (position !== 'initial') {
-                // if menu overflows to the left, 
-                // try to reposition it to the right of the anchor.
-                leftOverflow = getLeftOverflow(x);
-                if (leftOverflow < 0) {
-                    // if menu overflows to the right after repositioning,
-                    // choose a side which has less overflow
-                    rightOverflow = getRightOverflow(placeRightX);
-                    if (rightOverflow <= 0 || -leftOverflow > rightOverflow) {
-                        x = placeRightX;
-                        computedDirection = 'right';
-                    }
-                }
-            }
-        } else {
-            // Opposite logic to the 'left' direction above
-            x = placeRightX;
-
-            if (position !== 'initial') {
-                rightOverflow = getRightOverflow(x);
-                if (rightOverflow > 0) {
-                    leftOverflow = getLeftOverflow(placeLeftX);
-                    if (leftOverflow >= 0 || -leftOverflow < rightOverflow) {
-                        x = placeLeftX;
-                        computedDirection = 'left';
-                    }
-                }
-            }
-        }
-
-        if (position === 'auto') x = confineHorizontally(x);
-        const arrowY = arrow ? placeArrowY(y, anchorRect, containerRect, menuRect) : undefined;
-        return { arrowY, x, y, computedDirection };
-    }, [placeArrowY, arrow, direction, position]);
-
-    const placeToporBottom = useCallback(({
-        anchorRect,
-        containerRect,
-        menuRect
-    }, {
-        placeToporBottomX,
-        placeTopY,
-        placeBottomY
-    }, {
-        getTopOverflow,
-        getBottomOverflow,
-        confineHorizontally,
-        confineVertically
-    }) => {
-        // make sure invalid direction is treated as 'bottom'
-        let computedDirection = direction === 'top' ? 'top' : 'bottom';
-        let x = placeToporBottomX;
-        if (position !== 'initial') {
-            x = confineHorizontally(x);
-            if (position === 'anchor') {
-                // restrict menu to the edge of anchor element
-                x = Math.min(x, anchorRect.right - containerRect.left);
-                x = Math.max(x, anchorRect.left - containerRect.left - menuRect.width);
-            }
-        }
-
-        let y, topOverflow, bottomOverflow;
-        if (computedDirection === 'top') {
-            y = placeTopY;
-
-            if (position !== 'initial') {
-                // if menu overflows to the top, 
-                // try to reposition it to the bottom of the anchor.
-                topOverflow = getTopOverflow(y);
-                if (topOverflow < 0) {
-                    // if menu overflows to the bottom after repositioning,
-                    // choose a side which has less overflow
-                    bottomOverflow = getBottomOverflow(placeBottomY);
-                    if (bottomOverflow <= 0 || -topOverflow > bottomOverflow) {
-                        y = placeBottomY;
-                        computedDirection = 'bottom';
-                    }
-                }
-            }
-        } else {
-            // Opposite logic to the 'top' direction above
-            y = placeBottomY;
-
-            if (position !== 'initial') {
-                bottomOverflow = getBottomOverflow(y);
-                if (bottomOverflow > 0) {
-                    topOverflow = getTopOverflow(placeTopY);
-                    if (topOverflow >= 0 || -topOverflow < bottomOverflow) {
-                        y = placeTopY;
-                        computedDirection = 'top';
-                    }
-                }
-            }
-        }
-
-        if (position === 'auto') y = confineVertically(y);
-        const arrowX = arrow ? placeArrowX(x, anchorRect, containerRect, menuRect) : undefined;
-        return { arrowX, x, y, computedDirection };
-    }, [placeArrowX, arrow, direction, position]);
-
-    // handle menu positioning
-    const positionMenu = useCallback((positionHelpers, anchorRef) => {
-        const {
-            menuRect,
-            containerRect,
-            ...helpers
-        } = positionHelpers;
-
-        let horizontalOffset = offsetX;
-        let verticalOffset = offsetY;
-        if (arrow) {
-            if (direction === 'left' || direction === 'right') {
-                horizontalOffset += arrowRef.current.offsetWidth;
-            } else {
-                verticalOffset += arrowRef.current.offsetHeight;
-            }
-        }
-
-        const anchorRect = anchorRef.current.getBoundingClientRect();
-        const placeLeftX = anchorRect.left - containerRect.left - menuRect.width - horizontalOffset;
-        const placeRightX = anchorRect.right - containerRect.left + horizontalOffset;
-        const placeTopY = anchorRect.top - containerRect.top - menuRect.height - verticalOffset;
-        const placeBottomY = anchorRect.bottom - containerRect.top + verticalOffset;
-
-        let placeToporBottomX, placeLeftorRightY;
-        if (align === 'end') {
-            placeToporBottomX = anchorRect.right - containerRect.left - menuRect.width;
-            placeLeftorRightY = anchorRect.bottom - containerRect.top - menuRect.height;
-        } else if (align === 'center') {
-            placeToporBottomX = anchorRect.left - containerRect.left
-                - (menuRect.width - anchorRect.width) / 2;
-            placeLeftorRightY = anchorRect.top - containerRect.top
-                - (menuRect.height - anchorRect.height) / 2;
-        } else {
-            placeToporBottomX = anchorRect.left - containerRect.left;
-            placeLeftorRightY = anchorRect.top - containerRect.top;
-        }
-        placeToporBottomX += horizontalOffset;
-        placeLeftorRightY += verticalOffset;
-
-        const rects = { anchorRect, containerRect, menuRect };
-        const placements = {
-            placeLeftX,
-            placeRightX,
-            placeLeftorRightY,
-            placeTopY,
-            placeBottomY,
-            placeToporBottomX
-        };
-
-        switch (direction) {
-            case 'left':
-            case 'right':
-                return placeLeftorRight(rects, placements, helpers);
-
-            case 'top':
-            case 'bottom':
-            default:
-                return placeToporBottom(rects, placements, helpers);
-        }
-    }, [
-        arrow, align, direction, offsetX, offsetY,
-        placeLeftorRight, placeToporBottom
-    ]);
-
-    // handle context menu positioning
-    const positionContextMenu = useCallback((positionHelpers, anchorPoint) => {
-        const {
-            menuRect,
-            containerRect,
-            getLeftOverflow,
-            getRightOverflow,
-            getTopOverflow,
-            getBottomOverflow,
-            confineHorizontally,
-            confineVertically,
-        } = positionHelpers;
-
-        let x, y;
-
-        // position the menu with cursor pointing to its top-left corner
-        x = anchorPoint.x - containerRect.left;
-        y = anchorPoint.y - containerRect.top;
-
-        // If menu overflows to the right of viewport,
-        // try to reposition it on the left side of cursor.
-        // If menu overflows to the left of viewport after repositioning,
-        // choose a side which has less overflow
-        // and adjust x to have it contained within the viewport.
-        const rightOverflow = getRightOverflow(x);
-        if (rightOverflow > 0) {
-            const adjustedX = x - menuRect.width;
-            const leftOverflow = getLeftOverflow(adjustedX);
-            if (leftOverflow >= 0 || -leftOverflow < rightOverflow) {
-                x = adjustedX;
-            }
-            x = confineHorizontally(x);
-        }
-
-        // Similar logic to the left and right side above.
-        let computedDirection = 'bottom';
-        const bottomOverflow = getBottomOverflow(y);
-        if (bottomOverflow > 0) {
-            const adjustedY = y - menuRect.height;
-            const topOverflow = getTopOverflow(adjustedY);
-            if (topOverflow >= 0 || -topOverflow < bottomOverflow) {
-                y = adjustedY;
-                computedDirection = 'top';
-            }
-            y = confineVertically(y);
-        }
-
-        return { x, y, computedDirection };
-    }, []);
 
     const handlePosition = useCallback(() => {
         if (!containerRef.current) {
@@ -541,13 +215,28 @@ export const MenuList = defineName(React.memo(function MenuList({
                 : getScrollAncestor(rootMenuRef.current); // try to discover bounding box automatically
         }
 
-        const helpers = positionHelpers();
-        const { menuRect } = helpers;
+        const positionHelpers = getPositionHelpers({
+            menuRef,
+            containerRef,
+            scrollingRef,
+            boundingBoxPadding
+        });
+        const { menuRect } = positionHelpers;
         let results = { computedDirection: 'bottom' };
         if (anchorPoint) {
-            results = positionContextMenu(helpers, anchorPoint);
+            results = positionContextMenu({ positionHelpers, anchorPoint });
         } else if (anchorRef) {
-            results = positionMenu(helpers, anchorRef);
+            results = positionMenu({
+                arrow,
+                align,
+                direction,
+                offsetX,
+                offsetY,
+                position,
+                anchorRef,
+                arrowRef,
+                positionHelpers
+            });
         }
         let { arrowX, arrowY, x, y, computedDirection } = results;
         let menuHeight = menuRect.height;
@@ -556,7 +245,7 @@ export const MenuList = defineName(React.memo(function MenuList({
             const {
                 getTopOverflow,
                 getBottomOverflow
-            } = helpers;
+            } = positionHelpers;
 
             let height, overflowAmt;
             const prevHeight = latestMenuSize.current.height;
@@ -593,35 +282,23 @@ export const MenuList = defineName(React.memo(function MenuList({
         setExpandedDirection(computedDirection);
         latestMenuSize.current = { width: menuRect.width, height: menuHeight };
     }, [
-        arrow, anchorPoint, anchorRef, containerRef, boundingBoxRef, rootMenuRef, scrollingRef,
-        overflow, positionHelpers, positionMenu, positionContextMenu
+        arrow, align, boundingBoxPadding, direction, offsetX, offsetY, position, overflow,
+        anchorPoint, anchorRef, containerRef, boundingBoxRef, rootMenuRef, scrollingRef
     ]);
 
     useLayoutEffect(() => {
         if (isOpen) {
             handlePosition();
             // Reposition submenu whenever deps(except isOpen) have changed
-            // NOTE: this effect must come BEFORE the effect which updates latestOpen
-            if (latestOpen.current) forceReposSubmenu();
+            if (prevOpen.current) forceReposSubmenu();
         }
+        prevOpen.current = isOpen;
         latestHandlePosition.current = handlePosition;
     }, [isOpen, handlePosition, reposFlag]);
 
     useLayoutEffect(() => {
         if (overflowData && !descendOverflowRef.current) menuRef.current.scrollTop = 0;
     }, [overflowData]);
-
-    useLayoutEffect(() => {
-        if (animation) {
-            if (isOpen) {
-                setClosing(false)
-            } else if (isOpen !== latestOpen.current) { // Skip the first effect run in which isOpen is false
-                setClosing(true);
-            }
-        }
-
-        latestOpen.current = isOpen;
-    }, [animation, isOpen]);
 
     useEffect(() => {
         if (!isOpen) return;
@@ -658,6 +335,16 @@ export const MenuList = defineName(React.memo(function MenuList({
         isOpen, overflow, onClose, viewScroll, handlePosition
     ]);
 
+    const hasOverflow = Boolean(overflowData) && overflowData.overflowAmt > 0;
+    useEffect(() => {
+        if (hasOverflow || !isOpen || !parentScrollingRef) return;
+
+        const handleScroll = () => batchedUpdates(handlePosition);
+        const parentScroll = parentScrollingRef.current;
+        parentScroll.addEventListener('scroll', handleScroll);
+        return () => parentScroll.removeEventListener('scroll', handleScroll);
+    }, [isOpen, hasOverflow, parentScrollingRef, handlePosition]);
+
     useEffect(() => {
         if (typeof ResizeObserver !== 'function' || reposition === 'initial') return;
 
@@ -691,7 +378,7 @@ export const MenuList = defineName(React.memo(function MenuList({
     useEffect(() => {
         if (!isOpen) {
             dispatch({ type: HoverIndexActionTypes.RESET });
-            if (!animation) setOverflowData();
+            if (!closeTransition) setOverflowData();
         }
 
         // Use a timeout here because if set focus immediately, page might scroll unexpectedly.
@@ -709,18 +396,19 @@ export const MenuList = defineName(React.memo(function MenuList({
             } else if (menuItemFocus.position === FocusPositions.LAST) {
                 dispatch({ type: HoverIndexActionTypes.LAST });
             }
-        }, animation ? 170 : 100);
+        }, openTransition ? 170 : 100);
 
         return () => clearTimeout(id);
-    }, [animation, captureFocus, isOpen, menuItemFocus]);
+    }, [openTransition, closeTransition, captureFocus, isOpen, menuItemFocus]);
 
     const isSubmenuOpen = openSubmenuCount > 0;
     const itemContext = useMemo(() => ({
+        parentMenuRef: menuRef,
+        parentOverflow: overflow,
         isParentOpen: isOpen,
-        hoverIndex,
         isSubmenuOpen,
         dispatch
-    }), [isOpen, hoverIndex, isSubmenuOpen]);
+    }), [isOpen, isSubmenuOpen, overflow]);
 
     let maxHeight, overflowAmt;
     if (overflowData) {
@@ -736,16 +424,12 @@ export const MenuList = defineName(React.memo(function MenuList({
     }), [reposSubmenu, overflow, overflowAmt]);
     const overflowStyles = maxHeight >= 0 ? { maxHeight, overflow } : undefined;
 
-    const modifiers = useMemo(() => ({
-        open: isOpen,
-        closing: isClosing,
-        animation,
-        dir: animation && expandedDirection
-    }), [isOpen, isClosing, animation, expandedDirection]);
-
     // Modifier object are shared between this project and client code,
     // freeze them to prevent client code from accidentally altering them.
-    const externalModifiers = useMemo(() => Object.freeze({ ...modifiers, dir: expandedDirection }), [modifiers, expandedDirection]);
+    const modifiers = useMemo(() => ({
+        state: menuState,
+        dir: expandedDirection
+    }), [menuState, expandedDirection]);
     const arrowModifiers = useMemo(() => Object.freeze({ dir: expandedDirection }), [expandedDirection]);
     const _arrowClass = useBEM({
         block: menuClass, element: menuArrowClass,
@@ -765,10 +449,10 @@ export const MenuList = defineName(React.memo(function MenuList({
             aria-label={ariaLabel}
             {...restProps}
             {...handlers}
-            ref={menuRef}
-            className={useBEM({ block: menuClass, modifiers, className, externalModifiers })}
+            ref={useCombinedRef(externalRef, menuRef)}
+            className={useBEM({ block: menuClass, modifiers, className: menuClassName })}
             style={{
-                ...useFlatStyles(styles, externalModifiers),
+                ...useFlatStyles(menuStyles, modifiers),
                 ...overflowStyles,
                 left: `${menuPosition.x}px`,
                 top: `${menuPosition.y}px`
@@ -786,12 +470,14 @@ export const MenuList = defineName(React.memo(function MenuList({
 
             <MenuListContext.Provider value={listContext}>
                 <MenuListItemContext.Provider value={itemContext}>
-                    {menuItems}
+                    <HoverIndexContext.Provider value={hoverIndex}>
+                        {menuItems}
+                    </HoverIndexContext.Provider>
                 </MenuListItemContext.Provider>
             </MenuListContext.Provider>
         </ul>
     );
-}), 'MenuList');
+};
 
 function submenuCountReducer(state, { type }) {
     switch (type) {

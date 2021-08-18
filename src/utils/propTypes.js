@@ -13,9 +13,9 @@ export const stylePropTypes = (name) => ({
 
 // Menu, SubMenu and ControlledMenu
 export const sharedMenuPropTypes = {
-    ...stylePropTypes(),
+    className: PropTypes.string,
+    ...stylePropTypes('menu'),
     ...stylePropTypes('arrow'),
-    'aria-label': PropTypes.string,
     arrow: PropTypes.bool,
     offsetX: PropTypes.number,
     offsetY: PropTypes.number,
@@ -29,12 +29,18 @@ export const sharedMenuPropTypes = {
 // Menu and ControlledMenu
 export const menuPropTypesBase = {
     ...sharedMenuPropTypes,
-    id: PropTypes.oneOfType([
-        PropTypes.string,
-        PropTypes.number
+    containerProps: PropTypes.object,
+    initialMounted: PropTypes.bool,
+    unmountOnClose: PropTypes.bool,
+    transition: PropTypes.oneOfType([
+        PropTypes.bool,
+        PropTypes.exact({
+            open: PropTypes.bool,
+            close: PropTypes.bool,
+            item: PropTypes.bool
+        })
     ]),
-    animation: PropTypes.bool,
-    debugging: PropTypes.bool,
+    transitionTimeout: PropTypes.number,
     boundingBoxRef: PropTypes.object,
     boundingBoxPadding: PropTypes.string,
     reposition: PropTypes.oneOf(['auto', 'initial']),
@@ -47,8 +53,7 @@ export const menuPropTypesBase = {
     submenuCloseDelay: PropTypes.number,
     portal: PropTypes.bool,
     theming: PropTypes.string,
-    onItemClick: PropTypes.func,
-    onClick: PropTypes.func
+    onItemClick: PropTypes.func
 };
 
 export const sharedMenuDefaultProp = {
@@ -62,9 +67,9 @@ export const sharedMenuDefaultProp = {
 
 export const menuDefaultPropsBase = {
     ...sharedMenuDefaultProp,
-    animation: true,
     reposition: 'auto',
     viewScroll: 'initial',
+    transitionTimeout: 200,
     submenuOpenDelay: 300,
     submenuCloseDelay: 150
 };
