@@ -4,7 +4,8 @@ import { render, fireEvent, waitFor, screen } from '@testing-library/react';
 import * as utils from './utils';
 
 const renderMenu = (props, itemProps, submenuProps) => render(
-    <Menu menuButton={<MenuButton>Menu</MenuButton>} {...props}>
+    <Menu menuButton={<MenuButton>Menu</MenuButton>}
+        submenuOpenDelay={90} {...props}>
         <MenuItem>One</MenuItem>
         <SubMenu label="Submenu" {...submenuProps}>
             <MenuItem>First</MenuItem>
@@ -15,19 +16,10 @@ const renderMenu = (props, itemProps, submenuProps) => render(
     </Menu>
 );
 
-test('Open and close submenu, and activate submenu item with mouse and keyboard', async () => {
-    const menuItemText = 'Save';
-    const onClick = jest.fn();
+test('Open and close submenu with mouse', async () => {
     const onChange = jest.fn();
-    const onItemClick = jest.fn();
-    const { container } = renderMenu({ submenuOpenDelay: 90, onItemClick }, {
-        children: menuItemText,
-        value: menuItemText,
-        onClick
-    }, { onMenuChange: onChange });
-
+    const { container } = renderMenu(null, null, { onMenuChange: onChange });
     utils.clickMenuButton();
-    const menuOptions = { name: 'Menu', container };
     const submenuOptions = { name: 'Submenu', container };
     const submenuItem = utils.queryMenuItem('Submenu');
 
@@ -47,24 +39,37 @@ test('Open and close submenu, and activate submenu item with mouse and keyboard'
     expect(onChange).toHaveBeenLastCalledWith({ open: false });
     expect(utils.queryMenuItem('One')).toHaveFocus();
 
-    // Open submenu with mouse enter event
-    fireEvent.mouseEnter(submenuItem);
-    utils.expectMenuItemToBeHover(submenuItem, true);
-    await waitFor(() => utils.expectMenuToBeOpen(true, submenuOptions));
-    await waitFor(() => expect(utils.queryMenu(submenuOptions)).toHaveFocus());
-
-    // Close menu
-    screen.getByRole('button').focus();
-    utils.expectMenuToBeOpen(false, menuOptions);
-    utils.clickMenuButton();
-    utils.expectMenuToBeOpen(false, submenuOptions);
-
     // Mouse enter and leave submenu item in short succession will not open submenu
     fireEvent.mouseEnter(submenuItem);
     await utils.delayFor(60);
     fireEvent.mouseLeave(submenuItem);
     await utils.delayFor(400);
     utils.expectMenuToBeOpen(false, submenuOptions);
+
+    // Open submenu with mouse enter event
+    fireEvent.mouseEnter(submenuItem);
+    utils.expectMenuItemToBeHover(submenuItem, true);
+    await waitFor(() => utils.expectMenuToBeOpen(true, submenuOptions));
+    await waitFor(() => expect(utils.queryMenu(submenuOptions)).toHaveFocus());
+
+    // Click submenu item, submenu keeps open and hovered
+    fireEvent.mouseDown(submenuItem);
+    fireEvent.click(submenuItem);
+    submenuItem.focus();
+    await waitFor(() => expect(utils.queryMenu(submenuOptions)).toHaveFocus());
+    utils.expectMenuItemToBeHover(submenuItem, true);
+    utils.expectMenuToBeOpen(true, submenuOptions);
+
+    expect(onChange).toHaveBeenCalledTimes(3);
+});
+
+test('Open and close submenu with keyboard', async () => {
+    const onChange = jest.fn();
+    const { container } = renderMenu(null, null, { onMenuChange: onChange });
+    utils.clickMenuButton();
+    const menuOptions = { name: 'Menu', container };
+    const submenuOptions = { name: 'Submenu', container };
+    const submenuItem = utils.queryMenuItem('Submenu');
 
     // Open submenu with right arrow key
     fireEvent.mouseDown(submenuItem);
@@ -93,25 +98,23 @@ test('Open and close submenu, and activate submenu item with mouse and keyboard'
     utils.expectMenuToBeOpen(false, submenuOptions);
     utils.expectMenuToBeOpen(false, menuOptions);
 
-    // Open submenu and click submenu item, submenu keeps open and hovered
-    utils.clickMenuButton();
-    fireEvent.mouseEnter(submenuItem);
-    await waitFor(() => expect(utils.queryMenu(submenuOptions)).toHaveFocus());
-    utils.expectMenuItemToBeHover(submenuItem, true);
-    utils.expectMenuToBeOpen(true, submenuOptions);
-    fireEvent.mouseDown(submenuItem);
-    submenuItem.focus();
-    fireEvent.click(submenuItem);
-    await waitFor(() => expect(utils.queryMenu(submenuOptions)).toHaveFocus());
-    utils.expectMenuItemToBeHover(submenuItem, true);
-    utils.expectMenuToBeOpen(true, submenuOptions);
+    expect(onChange).toHaveBeenCalledTimes(4);
+});
 
-    // When something outside submenu item receives focus, 
-    // submenu is closed and submenu item loses hover state
-    utils.queryMenu(menuOptions).focus();
-    utils.expectMenuItemToBeHover(submenuItem, false);
-    utils.expectMenuToBeOpen(false, submenuOptions);
-    utils.expectMenuToBeOpen(true, menuOptions);
+test('onItemClick and onClick are fired when activating item with mouse or keyboard', async () => {
+    const menuItemText = 'Save';
+    const onClick = jest.fn();
+    const onItemClick = jest.fn();
+    const { container } = renderMenu({ onItemClick }, {
+        children: menuItemText,
+        value: menuItemText,
+        onClick
+    });
+
+    utils.clickMenuButton();
+    const menuOptions = { name: 'Menu', container };
+    const submenuOptions = { name: 'Submenu', container };
+    const submenuItem = utils.queryMenuItem('Submenu');
 
     // Open submenu and click a menu item, expecting onClick to fire on the menu item and root menu
     fireEvent.mouseDown(submenuItem);
@@ -298,4 +301,26 @@ test('className props are added to related elements in menu and submenu', () => 
     const submenu = screen.getByTestId('submenu');
     expect(submenu).toHaveClass('my-submenu');
     expect(submenu).toHaveStyle('color: red');
+});
+
+test.each([false, true])('Submenu renders differently when parent menu overflow is %s', (overflow) => {
+    renderMenu({
+        'data-testid': 'menu',
+        overflow: overflow ? 'auto' : undefined,
+        containerProps: { 'data-testid': 'container' }
+    }, null,
+        { 'data-testid': 'submenu' });
+    utils.clickMenuButton();
+    const submenuItem = utils.queryMenuItem('Submenu');
+    fireEvent.mouseDown(submenuItem);
+    fireEvent.click(submenuItem);
+
+    const menu = screen.getByTestId('menu')
+    const submenu = screen.getByTestId('submenu');
+    expect(screen.getByTestId('container')).toContainElement(submenu);
+    if (overflow) {
+        expect(menu).not.toContainElement(submenu);
+    } else {
+        expect(menu).toContainElement(submenu);
+    }
 });
