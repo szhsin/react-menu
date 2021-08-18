@@ -1,6 +1,5 @@
 import React, {
     memo,
-    useState,
     useRef,
     useContext,
     useEffect,
@@ -14,13 +13,11 @@ import {
     useActiveState,
     useMenuChange,
     useMenuStateAndFocus,
-    useCombinedRef,
-    useLayoutEffect
+    useCombinedRef
 } from '../hooks';
 import { MenuList } from './MenuList';
 import {
     attachHandlerProps,
-    getScrollAncestor,
     safeCall,
     stylePropTypes,
     sharedMenuPropTypes,
@@ -57,8 +54,11 @@ export const SubMenu = withHovering(memo(function SubMenu({
         initialMounted, unmountOnClose, transition, transitionTimeout, rootMenuRef
     } = useContext(SettingsContext);
     const { submenuOpenDelay, submenuCloseDelay } = useContext(ItemSettingsContext);
-    const { parentMenuRef, isParentOpen, isSubmenuOpen, dispatch } = useContext(MenuListItemContext);
-    const [portal, setPortal] = useState(false);
+    const {
+        parentMenuRef, parentOverflow,
+        isParentOpen, isSubmenuOpen, dispatch
+    } = useContext(MenuListItemContext);
+    const isPortal = parentOverflow !== 'visible';
 
     const {
         openMenu,
@@ -147,13 +147,6 @@ export const SubMenu = withHovering(memo(function SubMenu({
         }
     }
 
-    useLayoutEffect(() => {
-        if (!isOpen) return;
-
-        const scrollContainer = getScrollAncestor(containerRef.current, rootMenuRef.current);
-        setPortal(rootMenuRef.current !== scrollContainer);
-    }, [rootMenuRef, isOpen]);
-
     useEffect(() => () => clearTimeout(timeoutId.current), []);
     useEffect(() => {
         // Don't set focus when parent menu is closed, otherwise focus will be lost
@@ -202,11 +195,11 @@ export const SubMenu = withHovering(memo(function SubMenu({
                 state={state}
                 ariaLabel={ariaLabel || (typeof label === 'string' ? label : 'Submenu')}
                 anchorRef={itemRef}
-                containerRef={portal ? rootMenuRef : containerRef}
-                parentScrollingRef={portal && parentMenuRef}
+                containerRef={isPortal ? rootMenuRef : containerRef}
+                parentScrollingRef={isPortal && parentMenuRef}
                 isDisabled={isDisabled} />
         );
-        return portal ? createPortal(menuList, rootMenuRef.current) : menuList;
+        return isPortal ? createPortal(menuList, rootMenuRef.current) : menuList;
     }
 
     return (

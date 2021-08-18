@@ -335,14 +335,15 @@ export const MenuList = ({
         isOpen, overflow, onClose, viewScroll, handlePosition
     ]);
 
+    const hasOverflow = Boolean(overflowData) && overflowData.overflowAmt > 0;
     useEffect(() => {
-        if (!isOpen || !parentScrollingRef || overflowData) return;
+        if (hasOverflow || !isOpen || !parentScrollingRef) return;
 
         const handleScroll = () => batchedUpdates(handlePosition);
         const parentScroll = parentScrollingRef.current;
         parentScroll.addEventListener('scroll', handleScroll);
         return () => parentScroll.removeEventListener('scroll', handleScroll);
-    }, [isOpen, parentScrollingRef, overflowData, handlePosition]);
+    }, [isOpen, hasOverflow, parentScrollingRef, handlePosition]);
 
     useEffect(() => {
         if (typeof ResizeObserver !== 'function' || reposition === 'initial') return;
@@ -403,10 +404,11 @@ export const MenuList = ({
     const isSubmenuOpen = openSubmenuCount > 0;
     const itemContext = useMemo(() => ({
         parentMenuRef: menuRef,
+        parentOverflow: overflow,
         isParentOpen: isOpen,
         isSubmenuOpen,
         dispatch
-    }), [isOpen, isSubmenuOpen]);
+    }), [isOpen, isSubmenuOpen, overflow]);
 
     let maxHeight, overflowAmt;
     if (overflowData) {
