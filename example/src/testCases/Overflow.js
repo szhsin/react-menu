@@ -8,7 +8,8 @@ import {
     MenuHeader,
     MenuDivider,
     SubMenu,
-    ControlledMenu
+    ControlledMenu,
+    useMenuState
 } from '@szhsin/react-menu';
 import { bem } from '../utils';
 
@@ -29,7 +30,7 @@ const Test1 = () => {
                     onChange={({ target }) => setTake2(target.checked)} />
             </label>
             <Menu menuButton={<MenuButton>Overflow</MenuButton>} align="end"
-                overflow="auto" position="anchor" keepMounted={true} animation={false}>
+                overflow="auto" position="anchor" keepMounted={true} transition={false}>
                 <MenuItem disabled>Disabled 1</MenuItem>
                 <MenuItem>Two</MenuItem>
                 <MenuGroup styles={{ border: '3px solid' }} takeOverflow={take1}>
@@ -81,7 +82,7 @@ const Test1 = () => {
 }
 
 const Test2 = () => {
-    const [isOpen, setOpen] = useState(false);
+    const { toggleMenu, ...states } = useMenuState({ transition: true });
     const [anchorPoint, setAnchorPoint] = useState({ x: 0, y: 0 });
     const [isLeft, setLeft] = useState(false);
 
@@ -90,7 +91,7 @@ const Test2 = () => {
             onContextMenu={e => {
                 e.preventDefault();
                 setAnchorPoint({ x: e.clientX, y: e.clientY });
-                setOpen(true);
+                toggleMenu(true);
             }}>
             <div className={bem('test-case', 'hover')}
                 onMouseEnter={() => setLeft(d => !d)}>
@@ -98,8 +99,8 @@ const Test2 = () => {
             </div>
 
             context menu
-            <ControlledMenu anchorPoint={anchorPoint} isOpen={isOpen}
-                onClose={() => setOpen(false)} animation={true}
+            <ControlledMenu anchorPoint={anchorPoint} {...states}
+                onClose={() => toggleMenu(false)}
                 overflow="auto">
                 <MenuItem>TOP</MenuItem>
                 <MenuGroup takeOverflow className="a1">
@@ -109,7 +110,7 @@ const Test2 = () => {
             </ControlledMenu>
 
             <Menu menuButton={<MenuButton>Overflow</MenuButton>}
-                overflow="auto" position="initial" animation={true} align="end"
+                overflow="auto" position="initial" transition={true} align="end"
                 direction={isLeft ? 'left' : 'right'}>
                 {new Array(40).fill(0).map(
                     (_, i) => <MenuItem key={i}>Item {i + 1}</MenuItem>)}
