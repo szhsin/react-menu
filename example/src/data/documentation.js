@@ -13,7 +13,6 @@ const menuButtonLink = <Link to={'#menu-button'}>MenuButton</Link>;
 const controlledMenuLink = <Link to={'#controlled-menu'}>ControlledMenu</Link>;
 const radioGroupLink = <Link to={'#radio-group'}>MenuRadioGroup</Link>;
 const menuHeaderLink = <Link to={'#menu-header'}>MenuHeader</Link>;
-const menuStateHookLink = <Link to={'#use-menu-state'}>useMenuState</Link>;
 
 const propsTable = {
     heading: <h3>Props</h3>,
@@ -52,10 +51,12 @@ const menuChildrenProp = {
 
 const syntheticEventProp = <li><code>syntheticEvent: MouseEvent | KeyboardEvent</code> DOM event object (React synthetic event)</li>;
 
-const keepOpenEventProp = <li><code>keepOpen: bool</code> assign to this property in consuming code to control
+const keepOpenEventProp = <li><code>keepOpen: bool</code> set this property in event handler to control
     whether to keep menu open after menu item is activated. Leaving it <code>undefined</code> will behave
     in accordance with WAI-ARIA Authoring Practices.
     See a <a href="https://codesandbox.io/s/react-menu-keepopen-dzscw" target="_blank" rel="noopener noreferrer">Codesandbox example</a> for its usage.</li>;
+
+const stopPropagationEventProp = <li><code>stopPropagation: bool</code> setting this property to <code>true</code> in event handler will skip subsequent <code>onClick</code> or <code>onItemClick</code> events.</li>;
 
 const refObjectDesc = <p>Supports <code>ref</code> created by <code>React.createRef</code> or <code>useRef</code> Hook,
     or an object of <code>{'{ current: { getBoundingClientRect(): DOMRect } }'}</code>.
@@ -63,10 +64,7 @@ const refObjectDesc = <p>Supports <code>ref</code> created by <code>React.create
 
 const menuModifiers = (
     <ul>
-        <li><code>open: bool</code> indicates if the menu is open.</li>
-        <li><code>closing: bool</code> indicates if the menu is closing.
-            (Only <code>true</code> when animation is enabled and closing animation is playing)</li>
-        <li><code>animation: bool</code> indicates if animation is enabled.</li>
+        <li><code>state: string</code> indicates the state of menu. Can be 'opening', 'open', 'closing', 'closed'</li>
         {dirModifier}
     </ul>
 );
@@ -105,27 +103,14 @@ const onClickEventObject = (
             <li><code>name: string</code> the <code>name</code> prop passed to the <code>MenuRadioGroup</code> when
                 the menu item is in a radio group.</li>
             {keepOpenEventProp}
+            {stopPropagationEventProp}
             {syntheticEventProp}
         </ul>
     </>
 );
 
-const keepMountedProp = {
-    name: 'keepMounted',
-    type: 'boolean',
-    defaultVal: 'true',
-    desc: <>
-        <p>If <code>true</code>, menu keeps mounted in the DOM and is hidden by CSS
-            when it's closed. Otherwise, menu is unmounted from DOM when closed.</p>
-        <p>Setting this prop to <code>false</code> will result in unintended consequence of losing
-            menu close animation.</p>
-        <p>Please note menu won't be created and mounted into DOM until it's opened for the first time,
-            even if <code>keepMounted</code> is <code>true</code>.</p>
-    </>
-};
-
-const onChangeProp = {
-    name: 'onChange',
+const onMenuChangeProp = {
+    name: 'onMenuChange',
     type: 'function',
     desc:
         <>
@@ -176,6 +161,7 @@ const styleProps = (target, modifiers, className, styles) => [
 
 // Menu, SubMenu and ControlledMenu
 const sharedMenuProps = [
+    ...styleProps('menu', menuModifiers, 'menuClassName', 'menuStyles'),
     ...styleProps('menu arrow', <ul>{dirModifier}</ul>, 'arrowClassName', 'arrowStyles'),
     menuChildrenProp,
     {
@@ -241,33 +227,47 @@ const sharedMenuProps = [
                 <p>Can be 'visible', 'auto', or 'hidden'.</p>
                 <p>It makes the menu list scrollable or hidden when there is not enough viewport
                     space to display all menu items. The value is similar to the CSS <code>overflow</code> property.</p>
-                <p>Limitation: an <code>overflow</code> value other than 'visible' can only be set on the last
-                    level of menu cascading. (i.e. no more deeper level of submenu is allowed).</p>
             </>
     }
 ];
 
 // Menu and ControlledMenu
 const menuPropsBase = [
-    ...styleProps('menu', menuModifiers),
     ...sharedMenuProps,
     {
-        name: 'id',
-        type: 'string | number',
-        desc:
-            <>
-                <p>Sets <code>id</code> attribute on the root DOM element containing the menu.</p>
-                <p>It can be helpful when you need to style a specific menu differently
-                    and use <code>id</code> in your CSS selectors.</p>
-                <p>It also helps increase selector specificity when overriding the default style.</p>
-            </>
+        name: 'transition',
+        type: <pre>{`boolean |
+{
+  open?: boolean;
+  close?: boolean;
+  item?: boolean;
+}`}</pre>,
+        desc: <>
+            <p>Enable or disable transition effects in the <code>Menu</code>,
+                <code>MenuItem</code>, and any descendent <code>SubMenu</code>.</p>
+            <p>You can set 'open', 'close', 'item' at the same time with one
+                boolean value or separately with an object.</p>
+        </>
     },
     {
-        name: 'animation',
+        name: 'transitionTimeout',
+        type: 'number',
+        defaultVal: '200',
+        desc:
+            <p>A fallback timeout to stop transition if <code>onAnimationEnd</code> or <code>onTransitionEnd</code> events are not fired.</p>
+    },
+    {
+        name: 'initialMounted',
         type: 'boolean',
-        defaultVal: 'true',
-        desc: <p>Enable or disable animation and transition effects in the <code>Menu</code>,
-            <code>MenuItem</code>, and any descendent <code>SubMenu</code>.</p>
+        desc:
+            <p>By default menu isn't mounted into DOM until it's opened for the first time.
+                Setting the prop to <code>true</code> will change this behaviour.</p>
+    },
+    {
+        name: 'unmountOnClose',
+        type: 'boolean',
+        desc:
+            <p>By default menu remains in DOM when it's closed. Setting the prop to <code>true</code> will change this behaviour.</p>
     },
     {
         name: 'boundingBoxRef',
@@ -286,6 +286,12 @@ const menuPropsBase = [
         desc:
             <p>Specify bounding box padding in pixels. Use a syntax similar to the
                 CSS <code>padding</code> property but sizing units are discarded.</p>
+    },
+    {
+        name: 'containerProps',
+        type: 'object',
+        desc:
+            <p>Properties of this object are spread to the root DOM element containing the menu.</p>
     },
     {
         name: 'reposition',
@@ -375,13 +381,6 @@ const menuPropsBase = [
                 <p>Event fired when descendent menu items are clicked.</p>
                 {onClickEventObject}
             </>
-    },
-    {
-        name: 'onClick',
-        type: 'function',
-        desc:
-            <p><em>@deprecated</em> <br />onClick will become the original DOM event
-                in 2.0; use <code>onItemClick</code> instead.</p>
     }
 ];
 
@@ -400,8 +399,7 @@ const menu = {
             ...propsTable,
             rows: [
                 ...menuPropsBase,
-                keepMountedProp,
-                onChangeProp,
+                onMenuChangeProp,
                 {
                     name: 'aria-label',
                     type: 'string',
@@ -523,11 +521,9 @@ const submenu = {
         {
             ...propsTable,
             rows: [
-                ...styleProps('submenu', menuModifiers),
-                ...styleProps('submenu item', submenuItemModifiers, 'itemClassName', 'itemStyles'),
+                ...styleProps('submenu item', submenuItemModifiers, 'itemProps.className', 'itemProps.styles'),
                 ...sharedMenuProps,
-                keepMountedProp,
-                onChangeProp,
+                onMenuChangeProp,
                 {
                     name: 'aria-label',
                     type: 'string',
@@ -553,6 +549,12 @@ const submenu = {
                             {submenuItemModifiers}
                         </>
                 },
+                {
+                    name: 'itemProps',
+                    type: 'object',
+                    desc:
+                        <p>Properties of this object are spread to the submenu item DOM element.</p>
+                }
             ]
         }
     ]
@@ -667,7 +669,7 @@ const menuRadioGroup = {
                     desc:
                         <>
                             <p>Sets the radio group name (optional).</p>
-                            <p>The name will be passed to the <code>onChange</code> event. It's useful for
+                            <p>The name will be passed to the <code>onRadioChange</code> event. It's useful for
                                 identifying radio groups if you attach the same event handler to multiple groups.</p>
                         </>
                 },
@@ -687,7 +689,7 @@ const menuRadioGroup = {
                     desc: <p>The only permitted children is <code>MenuItem</code>.</p>
                 },
                 {
-                    name: 'onChange',
+                    name: 'onRadioChange',
                     type: 'function',
                     desc:
                         <>
@@ -699,6 +701,7 @@ const menuRadioGroup = {
                                 <li><code>key: string</code> indicates the key if click is triggered by keyboard.
                                     Can be {ENTER_KEY} or {SPACE_KEY}.</li>
                                 {keepOpenEventProp}
+                                {stopPropagationEventProp}
                                 {syntheticEventProp}
                             </ul>
                         </>
@@ -816,20 +819,10 @@ const controlledMenu = {
                     desc: <p>If <code>true</code>, the menu list element will gain focus after menu is open.</p>
                 },
                 {
-                    name: 'isOpen',
-                    type: 'boolean',
-                    desc: 'Controls whether the menu is open or not.'
-                },
-                {
-                    name: 'isMounted',
-                    type: 'boolean',
-                    defaultVal: 'true',
-                    desc:
-                        <>
-                            <p>Controls whether the menu is mounted or not.</p>
-                            <p>Can be used to unmount menu when it's closed.
-                                Recommend using this prop with {menuStateHookLink}.</p>
-                        </>
+                    name: 'state',
+                    type: 'string',
+                    desc: <p>Controls the state of menu: <code>'opening' | 'open' | 'closing' | 'closed'</code>. When
+                        the value is undefined, menu will be unmounted from DOM.</p>
                 },
                 {
                     name: 'menuItemFocus',
@@ -837,14 +830,14 @@ const controlledMenu = {
                     desc:
                         <>
                             <p>Sets which menu item receives focus (hover) when menu opens.</p>
-                            <p>You will usually set this prop when the menu is opened by keyboard events.
-                                Recommend using this prop with {menuStateHookLink}.</p>
+                            <p>You will usually set this prop when the menu is opened by keyboard events.</p>
                             <p>It's an object with the shape of <code>{'{ position: string }'}</code>. The <code>position</code> can be one of the following values:</p>
                             <ul>
                                 <li><code>'initial'</code> don't set focus.</li>
                                 <li><code>'first'</code> focus the first item in the menu.</li>
                                 <li><code>'last'</code> focus the last item in the menu.</li>
                             </ul>
+                            <p><em>You need to keep this prop's identity stable when your component re-renders.</em></p>
                         </>
                 },
                 {
@@ -876,21 +869,29 @@ const menuStateHook = {
         <>
             <p><code>useMenuState</code> is a custom Hook that helps manage the states of {controlledMenuLink}.</p>
             <p>The Hook returns several states which are used by <code>ControlledMenu</code> and can be spread to its props. See an <Link to={'/#use-menu-state'}>example</Link>.</p>
-            <p>It accepts a boolean parameter <code>keepMounted</code>. If <code>true</code>, menu keeps
-                mounted in the DOM and is hidden by CSS when it's closed. Otherwise, menu is unmounted from DOM when closed. The default value is <code>true</code>.</p>
-            <p>It returns an object with the following properties:</p>
+            <p><pre><code className="hljs">{
+                `function useMenuState(options?: {
+    initialMounted?: boolean;
+    unmountOnClose?: boolean;
+    transition?: boolean | {
+        open?: boolean;
+        close?: boolean;
+        item?: boolean;
+    };
+    transitionTimeout?: number;
+}): {
+    state?: 'opening' | 'open' | 'closing' | 'closed';
+    toggleMenu: (open?: boolean) => void;
+    endTransition: () => void;
+};`}</code></pre></p>
+
+            <p>The hook function options are the same as props on <code>Menu</code> component.</p>
+            <p><code>toggleMenu</code>:</p>
             <ul>
-                <li><code>isMounted: bool</code></li>
-                <li><code>isOpen: bool</code></li>
-                <li><code>menuItemFocus: bool</code> see {controlledMenuLink} for more details of these properties.</li>
-                <li><code>openMenu: function</code> accepts 'initial', 'first', or 'last'.
-                    <br />E.g. <code>openMenu('first')</code> will open menu and set focus to the first menu item.</li>
-                <li><code>closeMenu: function</code></li>
-                <li><code>toggleMenu: function</code> accepts the same parameter as <code>openMenu</code>.</li>
+                <li>If no parameter is supplied, this function will toggle state between open and close phases.</li>
+                <li>You can set a boolean parameter to explicitly switch into one of the two phases.</li>
             </ul>
-            <p>Using this Hook can take advantage of lazily creating menu and its descendent items, which means menu is
-                not created and mounted into DOM until it's opened for the first time.
-                The {menuLink} component uses this hook internally to manage its states.</p>
+            <p>The {menuLink} component uses this hook internally to manage its states.</p>
         </>
     ]
 };

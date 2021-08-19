@@ -221,7 +221,7 @@ export const radioGroup = {
 
 <Menu menuButton={<MenuButton>Text color</MenuButton>}>
     <MenuRadioGroup value={textColor}
-        onChange={e => setTextColor(e.value)}>
+        onRadioChange={e => setTextColor(e.value)}>
         <MenuItem value="red">Red</MenuItem>
         <MenuItem value="green">Green</MenuItem>
         <MenuItem value="blue">Blue</MenuItem>
@@ -245,7 +245,7 @@ export default function Example() {
         <>
             <Menu menuButton={<MenuButton>Text color</MenuButton>}>
                 <MenuRadioGroup value={textColor}
-                    onChange={e => setTextColor(e.value)}>
+                    onRadioChange={e => setTextColor(e.value)}>
                     <MenuItem value="red">Red</MenuItem>
                     <MenuItem value="green">Green</MenuItem>
                     <MenuItem value="blue">Blue</MenuItem>
@@ -421,7 +421,7 @@ export default function Example() {
                 <SubMenu label="Text color">
                     <MenuRadioGroup
                         value={textColor}
-                        onChange={e => setTextColor(e.value)}>
+                        onRadioChange={e => setTextColor(e.value)}>
                         <MenuItem value={'red'}>Red</MenuItem>
                         <MenuItem value={'green'}>Green</MenuItem>
                         <MenuItem value={'blue'}>Blue</MenuItem>
@@ -574,7 +574,7 @@ export const focusableItem = {
         `const [filter, setFilter] = useState('');
 
 <Menu menuButton={<MenuButton>Open menu</MenuButton>}
-    onChange={e => e.open && setFilter('')}>
+    onMenuChange={e => e.open && setFilter('')}>
     <FocusableItem>
         {({ ref }) => (
             <input ref={ref} type="text" placeholder="Type to filter"
@@ -605,7 +605,7 @@ export default function Example() {
 
     return (
         <Menu menuButton={<MenuButton>Open menu</MenuButton>}
-            onChange={e => e.open && setFilter('')}>
+            onMenuChange={e => e.open && setFilter('')}>
             <FocusableItem>
                 {({ ref }) => (
                     <input ref={ref} type="text" placeholder="Type to filter"
@@ -838,7 +838,7 @@ const [filter, setFilter] = useState('');
 
 <Menu menuButton={<MenuButton>Grouping</MenuButton>}
     overflow={overflow} position={position} boundingBoxPadding="10"
-    onChange={e => e.open && setFilter('')}>
+    onMenuChange={e => e.open && setFilter('')}>
     <FocusableItem>
         {({ ref }) => (
             <input ref={ref} type="text" placeholder="Type a number"
@@ -917,7 +917,7 @@ export const managingState = {
         </>,
 
     source:
-        `const [state, setState] = useState('closed');
+        `const [state, setState] = useState();
 const ref = useRef(null);
 
 <button ref={ref} onClick={() => setState('open')}>
@@ -940,7 +940,7 @@ import {
 import '@szhsin/react-menu/dist/index.css';
 
 export default function Example() {
-    const [state, setState] = useState('closed');
+    const [state, setState] = useState();
     const skipOpen = useRef(false);
     const ref = useRef(null);
 
@@ -1328,7 +1328,7 @@ export const customisedStyle = {
     desc:
         <>
             <p><LibName /> provides multiple ways for customising style. You can use css/sass stylesheets
-                 or styled-components to override the default ones. Please see the {styleGuideLink} for more details.</p>
+                or styled-components to override the default ones. Please see the {styleGuideLink} for more details.</p>
             <p>In addition, you can use <code>styles</code> or <code>className</code> props.</p>
         </>,
     list: [

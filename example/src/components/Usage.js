@@ -603,7 +603,7 @@ function BoundingBoxExample() {
 
 function ManagingStateExample() {
 
-    const [state, setState] = useState('closed');
+    const [state, setState] = useState();
     const skipOpen = useRef(false);
     const ref = useRef(null);
 
