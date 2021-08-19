@@ -104,9 +104,9 @@ export const eventHandling = {
 
     desc:
         <>
-            <p>When a menu item is activated, the <code>onClick</code> event first fires on
-                menu item and then bubbles up to the <code>onItemClick</code> of root menu component. To stop
-                bubbling, return <code>false</code> from the menu item event handler.</p>
+            <p>When a menu item is activated, the <code>onClick</code> event fires on
+                menu item. Unless you set <code>stopPropagation</code> of event object to true,
+                the <code>onItemClick</code> of root menu component will then fires.</p>
             <p>For details of the event object, please refer to {menuItemLink}.</p>
         </>,
 
@@ -123,7 +123,7 @@ const handleFileClick = e => {
 
 const handleSaveClick = e => {
     setText(t => t + \`[MenuItem] \${e.value} clicked\\n\\n\`);
-    return false;
+    e.stopPropagation = true;
 };
 
 <div>
@@ -131,14 +131,14 @@ const handleSaveClick = e => {
         onItemClick={handleMenuClick}>
 
         <MenuItem value="File" onClick={handleFileClick}>
-            New File
+            File
         </MenuItem>
 
         <MenuItem value="Save" onClick={handleSaveClick}>
             Save
         </MenuItem>
 
-        <MenuItem value="Close">Close Window</MenuItem>
+        <MenuItem value="Close">Close</MenuItem>
     </Menu>
 
     <button onClick={() => setText('')}>
@@ -171,7 +171,7 @@ export default function Example() {
 
     const handleSaveClick = e => {
         setText(t => t + \`[MenuItem] \${e.value} clicked\\n\\n\`);
-        return false;
+        e.stopPropagation = true;
     };
 
     useLayoutEffect(() => {
@@ -185,14 +185,14 @@ export default function Example() {
                     onItemClick={handleMenuClick}>
 
                     <MenuItem value="File" onClick={handleFileClick}>
-                        New File
+                        File
                     </MenuItem>
 
                     <MenuItem value="Save" onClick={handleSaveClick}>
                         Save
                     </MenuItem>
 
-                    <MenuItem value="Close">Close Window</MenuItem>
+                    <MenuItem value="Close">Close</MenuItem>
                 </Menu>
 
                 <button onClick={() => setText('')}>
@@ -741,8 +741,7 @@ export const customisedButton = {
                 See <a href="https://codesandbox.io/s/react-menu-material-ui-example-wvzpc"
                     target="_blank" rel="noopener noreferrer">
                     an example on CodeSandbox</a>.</p>
-            <p>The benefit of {menuButtonLink} is it has additional <code>aria</code> attributes, and you will
-                always be able to style it by following the {styleGuideLink}.</p>
+            <p>The benefit of using {menuButtonLink} is it has additional <code>aria</code> attributes.</p>
         </>,
 
     source:
@@ -869,15 +868,14 @@ export const boundingBox = {
         `const ref = useRef(null);
 const leftAnchor = useRef(null);
 const rightAnchor = useRef(null);
-const [isOpen, setOpen] = useState(false);
+const { state, toggleMenu } = useMenuState();
 useEffect(() => {
-    setOpen(true);
-}, []);
+    toggleMenu(true);
+}, [toggleMenu]);
 
 const tooltipProps = {
-    isOpen,
+    state,
     captureFocus: false,
-    animation: false,
     arrow: true,
     role: 'tooltip',
     align: 'center',
@@ -912,21 +910,21 @@ export const managingState = {
         <>
             <p>In some use cases you may need to control how and when a menu is open or closed, and it can
                 be implemented using a <code>ControlledMenu</code>.</p>
-            <p>The minimum props you need to provide are a boolean <code>isOpen</code> state, and
+            <p>You need to provide at least a <code>state</code> prop, and
                 a <code>ref</code> of an element to which menu will be positioned. You also need to
-                update <code>isOpen</code> in response to the <code>onClose</code> event.</p>
+                update <code>state</code> in response to the <code>onClose</code> event.</p>
         </>,
 
     source:
-        `const [isOpen, setOpen] = useState(false);
+        `const [state, setState] = useState('closed');
 const ref = useRef(null);
 
-<button ref={ref} onClick={() => setOpen(true)}>
+<button ref={ref} onClick={() => setState('open')}>
     Open menu
 </button>
 
-<ControlledMenu anchorRef={ref} isOpen={isOpen}
-    onClose={() => setOpen(false)}>
+<ControlledMenu anchorRef={ref} state={state}
+    onClose={() => setState('closed')}>
     <MenuItem>New File</MenuItem>
     <MenuItem>Save</MenuItem>
     <MenuItem>Close Window</MenuItem>
@@ -941,17 +939,18 @@ import {
 import '@szhsin/react-menu/dist/index.css';
 
 export default function Example() {
-    const [isOpen, setOpen] = useState(false);
+    const [state, setState] = useState('closed');
+    const skipOpen = useRef(false);
     const ref = useRef(null);
 
     return (
         <>
-            <button ref={ref} onClick={() => setOpen(true)}>
+            <button ref={ref} onClick={() => !skipOpen.current && setState('open')}>
                 Open menu
             </button>
 
-            <ControlledMenu anchorRef={ref} isOpen={isOpen}
-                onClose={() => setOpen(false)}>
+            <ControlledMenu anchorRef={ref} state={state}
+                skipOpen={skipOpen} onClose={() => setState('closed')}>
                 <MenuItem>New File</MenuItem>
                 <MenuItem>Save</MenuItem>
                 <MenuItem>Close Window</MenuItem>
@@ -969,24 +968,22 @@ export const contextMenu = {
     desc:
         <>
             <p>Context menu is implemented using a <code>ControlledMenu</code>.</p>
-            <p>The minimum props you need to provide are a boolean <code>isOpen</code> state, and
-                an <code>anchorPoint</code> of viewport coordinates to which menu will be positioned. You also need to
-                update <code>isOpen</code> in response to the <code>onClose</code> event.</p>
+            <p>You need to provide an <code>anchorPoint</code> of viewport coordinates to which menu will be positioned.</p>
         </>,
 
     source:
-        `const [isOpen, setOpen] = useState(false);
+        `const { toggleMenu, ...menuProps } = useMenuState();
 const [anchorPoint, setAnchorPoint] = useState({ x: 0, y: 0 });
 
 <div onContextMenu={e => {
     e.preventDefault();
     setAnchorPoint({ x: e.clientX, y: e.clientY });
-    setOpen(true);
+    toggleMenu(true);
 }}>
     Right click to open context menu
 
-    <ControlledMenu anchorPoint={anchorPoint} isOpen={isOpen}
-        onClose={() => setOpen(false)}>
+    <ControlledMenu {...menuProps} anchorPoint={anchorPoint}
+        onClose={() => toggleMenu(false)}>
         <MenuItem>Cut</MenuItem>
         <MenuItem>Copy</MenuItem>
         <MenuItem>Paste</MenuItem>
@@ -1002,19 +999,19 @@ import {
 import '@szhsin/react-menu/dist/index.css';
 
 export default function Example() {
-    const [isOpen, setOpen] = useState(false);
+    const { toggleMenu, ...menuProps } = useMenuState();
     const [anchorPoint, setAnchorPoint] = useState({ x: 0, y: 0 });
 
     return (
         <div onContextMenu={e => {
             e.preventDefault();
             setAnchorPoint({ x: e.clientX, y: e.clientY });
-            setOpen(true);
+            toggleMenu(true);
         }}>
             Right click to open context menu
 
-            <ControlledMenu anchorPoint={anchorPoint} isOpen={isOpen}
-                onClose={() => setOpen(false)}>
+            <ControlledMenu {...menuProps} anchorPoint={anchorPoint}
+                onClose={() => toggleMenu(false)}>
                 <MenuItem>Cut</MenuItem>
                 <MenuItem>Copy</MenuItem>
                 <MenuItem>Paste</MenuItem>
@@ -1031,24 +1028,22 @@ export const menuStateHook = {
 
     desc:
         <>
-            <p>To fully make use of functionalities provided by <code>ControlledMenu</code>, you
-                need to give it three props: <code>isMounted</code>, <code>isOpen</code>, <code>menuItemFocus</code>. To ease this
-                task, you could use the <code>useMenuState</code> Hook which returns these three states and
-                methods that manage them.</p>
+            <p><code>useMenuState</code> Hook works with <code>ControlledMenu</code> and help you
+                manage the state transition when menu opens and closes. It's the recommended way to
+                use <code>ControlledMenu</code></p>
             <p>Please see {menuStateHookLink} for more details.</p>
         </>,
 
     source:
-        `const { openMenu, closeMenu, toggleMenu,
-    ...menuProps } = useMenuState();
+        `const { toggleMenu, ...menuProps } = useMenuState({ transition: true });
 const ref = useRef(null);
 
-<button ref={ref} onClick={() => openMenu()}>
+<button ref={ref} onClick={() => toggleMenu(true)}>
     Open menu
 </button>
 
 <ControlledMenu {...menuProps} anchorRef={ref}
-    onClose={() => closeMenu()}>
+    onClose={() => toggleMenu(false)}>
     <MenuItem>New File</MenuItem>
     <MenuItem>Save</MenuItem>
     <MenuItem>Close Window</MenuItem>
@@ -1064,8 +1059,7 @@ import {
 import '@szhsin/react-menu/dist/index.css';
 
 export default function Example() {
-    const { openMenu, closeMenu, toggleMenu,
-        ...menuProps } = useMenuState();
+    const { toggleMenu, ...menuProps } = useMenuState({ transition: true });
     const ref = useRef(null);
 
     return (
@@ -1075,7 +1069,7 @@ export default function Example() {
             </button>
 
             <ControlledMenu {...menuProps} anchorRef={ref}
-                onClose={() => closeMenu()}>
+                onClose={() => toggleMenu(false)}>
                 <MenuItem>New File</MenuItem>
                 <MenuItem>Save</MenuItem>
                 <MenuItem>Close Window</MenuItem>
@@ -1092,7 +1086,7 @@ export const stylesProp = {
 
     desc:
         <>
-            <p>You could apply your style by giving an object to the <code>styles</code> prop. Regular styles
+            <p>You can apply your style by giving an object to the <code>styles</code> prop. Regular styles
                 are put in the object directly just like React's <code>style</code> prop, and styles which are only applied to
                 specific component states are written in nested objects under corresponding keys. <LibName /> will
                 flatten the styles object by applying the properties from top to bottom, with later properties
@@ -1103,7 +1097,7 @@ export const stylesProp = {
 
     source:
         `<Menu menuButton={<MenuButton>Open menu</MenuButton>}
-    styles={{
+    menuStyles={{
         border: '2px dashed green',
         boxShadow: 'none'
     }}>
@@ -1138,7 +1132,7 @@ export default function Example() {
 
     return (
         <Menu menuButton={<MenuButton>Open menu</MenuButton>}
-            styles={{
+            menuStyles={{
                 border: '2px dashed green',
                 boxShadow: 'none'
             }}>
@@ -1170,7 +1164,7 @@ export const classNameProp = {
 
     desc:
         <>
-            <p>You could give components your CSS classes using the <code>className</code> prop.
+            <p>You can give components your CSS classes using the <code>className</code> prop.
                 Optionally, you may pass a function to the prop and return different CSS class names
                 under different component states.</p>
             <p>For more details about available states, please refer to the <code>className</code> prop under
@@ -1179,7 +1173,7 @@ export const classNameProp = {
 
     source:
         `<Menu menuButton={<MenuButton>Open menu</MenuButton>}
-    className="my-menu">
+    menuClassName="my-menu">
     <MenuItem>New File</MenuItem>
     <MenuItem>Save</MenuItem>
     <MenuItem className={
@@ -1226,7 +1220,7 @@ export default function Example() {
 
     return (
         <Menu menuButton={<MenuButton>Open menu</MenuButton>}
-            className="my-menu">
+            menuClassName="my-menu">
             <MenuItem>New File</MenuItem>
             <MenuItem>Save</MenuItem>
             <MenuItem className={
@@ -1322,8 +1316,8 @@ export const controlledMenu = {
         <p>Get more control of the states with <code>ControlledMenu</code>.</p>,
     list: [
         managingState,
-        contextMenu,
-        menuStateHook
+        menuStateHook,
+        contextMenu
     ]
 };
 
@@ -1332,12 +1326,9 @@ export const customisedStyle = {
     title: 'Customised style',
     desc:
         <>
-            <p><LibName /> provides multiple ways to modify its default style. Using your own stylesheets
-                to override the default ones is the most efficient and recommended approach. Please see
-                the {styleGuideLink} for more details.</p>
-            <p>Sometimes you may need to style a specific menu or menu item differently. One of the solutions
-                is to give that menu a <code>id</code> prop and precede your CSS selectors with the id.
-                In addition, you could use <code>styles</code> or <code>className</code> props.</p>
+            <p><LibName /> provides multiple ways for customising style. You can use css/sass stylesheets
+                 or styled-components to override the default ones. Please see the {styleGuideLink} for more details.</p>
+            <p>In addition, you can use <code>styles</code> or <code>className</code> props.</p>
         </>,
     list: [
         stylesProp,
