@@ -75,7 +75,7 @@ const App = () => {
             <SettingContext.Provider value={setting}>
                 <TocContext.Provider value={tocContext}>
                     <ToastContext.Provider value={setToast}>
-                        <Router basename="/react-menu">
+                        <Router basename="/react-menu-v1">
                             <Header />
                             <PageContent />
                             <Footer />
