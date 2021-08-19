@@ -30,7 +30,7 @@ const Test1 = () => {
                     onChange={({ target }) => setTake2(target.checked)} />
             </label>
             <Menu menuButton={<MenuButton>Overflow</MenuButton>} align="end"
-                overflow="auto" position="anchor" keepMounted={true} transition={false}>
+                overflow="auto" position="anchor" transition={false}>
                 <MenuItem disabled>Disabled 1</MenuItem>
                 <MenuItem>Two</MenuItem>
                 <MenuGroup styles={{ border: '3px solid' }} takeOverflow={take1}>
@@ -119,11 +119,40 @@ const Test2 = () => {
     );
 }
 
+const Test3 = () => {
+    return (
+        <div className={bem('test-case')}>
+            <Menu menuButton={<MenuButton>Submenu Overflow</MenuButton>}
+                overflow="auto" position="anchor" transition>
+                {new Array(20).fill(0).map(
+                    (_, i) => <MenuItem key={i}>Item {i + 1}</MenuItem>)}
+
+                <SubMenu label="submenu 1" overflow="auto" offsetX={15}>
+                    {new Array(20).fill(0).map(
+                        (_, i) => <MenuItem key={i}>Item {i + 1}</MenuItem>)}
+
+                    <SubMenu label="submenu 2" offsetX={15}>
+                        {new Array(5).fill(0).map(
+                            (_, i) => <MenuItem key={i}>Item {i + 1}</MenuItem>)}
+                    </SubMenu>
+
+                    {new Array(20).fill(0).map(
+                        (_, i) => <MenuItem key={i}>Item {i + 1}</MenuItem>)}
+                </SubMenu>
+
+                {new Array(20).fill(0).map(
+                    (_, i) => <MenuItem key={i}>Item {i + 1}</MenuItem>)}
+            </Menu>
+        </div>
+    );
+}
+
 const Overflow = () => {
     return (
         <>
             <Test1 />
             <Test2 />
+            <Test3 />
         </>
     );
 }
