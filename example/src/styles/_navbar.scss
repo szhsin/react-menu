@@ -3,6 +3,12 @@
 @use 'sass:color';
 
 #header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 200;
+
     a {
         display: block;
         @include mixins.transition((color, border-bottom-color), 0.15s);
@@ -17,14 +23,37 @@
         }
     }
 
-    .navbar {
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
+    .header-banner {
+        background-color: var.$alert-light;
+        padding: 0.5rem 1rem;
         display: flex;
         align-items: center;
-        z-index: 200;
+        justify-content: center;
+        a {
+            color: inherit;
+            margin: 0 1.5rem;
+            text-decoration: underline;
+            &:hover {
+                color: inherit;
+            }
+        }
+
+        .close-btn {
+            cursor: pointer;
+        }
+
+        .rc-app--theme-dark & {
+            background-color: var.$alert-dark;
+        }
+
+        @media (max-width: 680px) {
+            display: none;
+        }
+    }
+
+    .navbar {
+        display: flex;
+        align-items: center;
         font-weight: 700;
         padding: 0 1rem;
         white-space: nowrap;

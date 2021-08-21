@@ -4,7 +4,7 @@ import {
     Route,
     useLocation
 } from 'react-router-dom';
-import { TocContext } from '../utils';
+import { SettingContext, TocContext } from '../utils';
 import { Usage } from './Usage';
 import { PageView } from './PageView';
 import styleGuide from '../data/styleGuide';
@@ -15,6 +15,7 @@ import { NotFound } from './NotFound';
 export const PageContent = React.memo(function PageContent() {
 
     const location = useLocation();
+    const { showBanner } = useContext(SettingContext);
     const { setTocOpen } = useContext(TocContext);
     useEffect(() => {
         if (!location.hash) window.scrollTo(0, 0);
@@ -23,7 +24,7 @@ export const PageContent = React.memo(function PageContent() {
     }, [location, setTocOpen]);
 
     return (
-        <div id="content">
+        <div id="content" style={showBanner ? { marginTop: '40px' } : undefined}>
             <Switch>
                 <Route exact path="/">
                     <Usage />
