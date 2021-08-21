@@ -7,7 +7,7 @@ import { Footer } from './components/Footer';
 
 
 const App = () => {
-    const [showBanner, setShowBanner] = useState(false);
+    const [showBanner, setShowBanner] = useState(true);
     const [theme, setTheme] = useState(() => {
         let theme
         try {
