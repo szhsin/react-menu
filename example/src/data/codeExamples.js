@@ -1332,12 +1332,9 @@ export const customisedStyle = {
     title: 'Customised style',
     desc:
         <>
-            <p><LibName /> provides multiple ways to modify its default style. Using your own stylesheets
-                to override the default ones is the most efficient and recommended approach. Please see
-                the {styleGuideLink} for more details.</p>
-            <p>Sometimes you may need to style a specific menu or menu item differently. One of the solutions
-                is to give that menu a <code>id</code> prop and precede your CSS selectors with the id.
-                In addition, you could use <code>styles</code> or <code>className</code> props.</p>
+            <p><LibName /> provides multiple ways for customising style. You can use css/sass stylesheets or styled-components
+                to override the default ones. Please see the {styleGuideLink} for more details.</p>
+            <p>In addition, you can use <code>styles</code> or <code>className</code> props.</p>
         </>,
     list: [
         stylesProp,
