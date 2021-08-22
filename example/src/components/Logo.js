@@ -1,13 +1,24 @@
 import React from 'react';
-import { version } from '../utils';
+import {
+    Menu,
+    MenuItem
+} from '@szhsin/react-menu';
+import { version, SettingContext } from '../utils';
 
 export const Logo = React.memo(function Logo() {
 
+    const menuButton = (
+        <div className="app-logo">
+            React-Menu
+            <div className="version">v{version}</div>
+            <i className="material-icons drop-down">arrow_drop_down</i>
+        </div>
+    );
+
     return (
-        <a className="app-logo"
-            href="https://www.npmjs.com/package/@szhsin/react-menu"
-            target="_blank" rel="noopener noreferrer">
-            React-Menu<span>v{version}</span>
-        </a>
+        <Menu menuButton={menuButton} offsetY={10}
+            theming={React.useContext(SettingContext).theme}>
+            <MenuItem href="https://szhsin.github.io/react-menu-v1">v1.11.x</MenuItem>
+        </Menu>
     );
 });

@@ -10,6 +10,10 @@ body {
     -moz-osx-font-smoothing: grayscale;
 }
 
+pre {
+    font-family: inherit;
+}
+
 code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
     background-color: var.$code-light;
@@ -166,6 +170,9 @@ label {
     text-align: left;
     border-collapse: collapse;
 
+    th:last-of-type {
+        min-width: 20rem;
+    }
     tr {
         @include mixins.border(border-bottom);
         .szh-app--theme-dark & {
