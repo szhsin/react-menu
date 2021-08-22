@@ -837,7 +837,7 @@ const controlledMenu = {
                                 <li><code>'first'</code> focus the first item in the menu.</li>
                                 <li><code>'last'</code> focus the last item in the menu.</li>
                             </ul>
-                            <p><em>You need to keep this prop's identity stable when your component re-renders.</em></p>
+                            <p><em>If you don't intend to update focus (hover) position, it's important to keep this prop's identity stable when your component re-renders.</em></p>
                         </>
                 },
                 {
@@ -918,6 +918,9 @@ const applyStatics = {
             <p>It's similar to <code>applyHOC</code>, but accepts a source
                 component with statics to be copied and returns an HOC which accepts a wrapped component.</p>
             <p>It creates a composable HOC that can be placed at the leftmost of a compose utility.</p>
+            <p>It also can be used to create new components which wrap and return one of react-menu's components.
+                See a <a href="https://codesandbox.io/s/react-menu-wrapping-q0b59" target="_blank" rel="noopener noreferrer">Codesandbox example</a>
+            </p>
         </>
     ]
 };
