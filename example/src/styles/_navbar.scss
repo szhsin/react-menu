@@ -29,9 +29,12 @@
         display: flex;
         align-items: center;
         justify-content: center;
+        .banner-text {
+            margin-right: 2rem;
+        }
         a {
             color: inherit;
-            margin: 0 1.5rem;
+            margin-right: 1.5rem;
             text-decoration: underline;
             &:hover {
                 color: inherit;
@@ -42,12 +45,8 @@
             cursor: pointer;
         }
 
-        .rc-app--theme-dark & {
+        .szh-app--theme-dark & {
             background-color: var.$alert-dark;
-        }
-
-        @media (max-width: 680px) {
-            display: none;
         }
     }
 
