@@ -461,9 +461,17 @@ export const linkAndDisabled = {
     title: 'Link and disabled',
 
     desc:
-        <p><code>MenuItem</code> can be made a hyperlink by giving it a <code>href</code> prop. Even if
-            it's a link, the <code>onClick</code> event still fires as normal. You could also disable
-            a menu item using the <code>disabled</code> prop.</p>,
+        <>
+            <p><code>MenuItem</code> can be made a hyperlink by giving it a <code>href</code> prop. Even if
+                it's a link, the <code>onClick</code> event still fires as normal. You could also disable
+                a menu item using the <code>disabled</code> prop.</p>
+            <p><strong>Note:</strong> the <code>href</code> prop is meant to be a redirect which causes browser to reload the document at the URL specified.
+                If you want to prevent the reload or work with <strong>React Router</strong>,
+                please <a href="https://codesandbox.io/s/react-menu-react-router-example-dw4ku"
+                    target="_blank" rel="noopener noreferrer">
+                    see this exmaple</a>.
+            </p>
+        </>,
 
     source:
         `<Menu menuButton={<MenuButton>Open menu</MenuButton>}>
@@ -1036,7 +1044,7 @@ export const menuStateHook = {
         </>,
 
     source:
-        `const { toggleMenu, ...menuProps } = useMenuState({ transition: true });
+        `const { toggleMenu, ...menuProps } = useMenuState();
 const ref = useRef(null);
 
 <button ref={ref} onClick={() => toggleMenu(true)}>
@@ -1058,6 +1066,7 @@ import {
     useMenuState
 } from '@szhsin/react-menu';
 import '@szhsin/react-menu/dist/index.css';
+import '@szhsin/react-menu/dist/transitions/slide.css';
 
 export default function Example() {
     const { toggleMenu, ...menuProps } = useMenuState({ transition: true });
@@ -1065,7 +1074,7 @@ export default function Example() {
 
     return (
         <>
-            <button ref={ref} onClick={() => openMenu()}>
+            <button ref={ref} onClick={() => toggleMenu(true)}>
                 Open menu
             </button>
 
