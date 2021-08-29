@@ -461,9 +461,17 @@ export const linkAndDisabled = {
     title: 'Link and disabled',
 
     desc:
-        <p><code>MenuItem</code> can be made a hyperlink by giving it a <code>href</code> prop. Even if
-            it's a link, the <code>onClick</code> event still fires as normal. You could also disable
-            a menu item using the <code>disabled</code> prop.</p>,
+        <>
+            <p><code>MenuItem</code> can be made a hyperlink by giving it a <code>href</code> prop. Even if
+                it's a link, the <code>onClick</code> event still fires as normal. You could also disable
+                a menu item using the <code>disabled</code> prop.</p>
+            <p><strong>Note:</strong> the <code>href</code> prop is meant to be a redirect which causes browser to reload the document at the URL specified.
+                If you want to prevent the reload or work with <strong>React Router</strong>,
+                please <a href="https://codesandbox.io/s/react-menu-react-router-example-dw4ku"
+                    target="_blank" rel="noopener noreferrer">
+                    see this exmaple</a>.
+            </p>
+        </>,
 
     source:
         `<Menu menuButton={<MenuButton>Open menu</MenuButton>}>
@@ -909,22 +917,23 @@ export const managingState = {
 
     desc:
         <>
-            <p>In some use cases you may need to control how and when a menu is open or closed, and it can
-                be implemented using a <code>ControlledMenu</code>.</p>
+            <p>In some use cases you may need to control how and when a menu is open or closed, e.g. when something is hovered.
+                This can be implemented using a <code>ControlledMenu</code>.</p>
             <p>You need to provide at least a <code>state</code> prop, and
                 a <code>ref</code> of an element to which menu will be positioned. You also need to
                 update <code>state</code> in response to the <code>onClose</code> event.</p>
         </>,
 
     source:
-        `const [state, setState] = useState();
-const ref = useRef(null);
+        `const ref = useRef(null);
+const [state, setState] = useState();
 
-<button ref={ref} onClick={() => setState('open')}>
-    Open menu
-</button>
+<div ref={ref} onMouseEnter={() => setState('open')}>
+    Hover to Open
+</div>
 
-<ControlledMenu anchorRef={ref} state={state}
+<ControlledMenu state={state} anchorRef={ref}
+    onMouseLeave={() => setState('closed')}
     onClose={() => setState('closed')}>
     <MenuItem>New File</MenuItem>
     <MenuItem>Save</MenuItem>
@@ -940,18 +949,18 @@ import {
 import '@szhsin/react-menu/dist/index.css';
 
 export default function Example() {
-    const [state, setState] = useState();
-    const skipOpen = useRef(false);
     const ref = useRef(null);
+    const [state, setState] = useState();
 
     return (
         <>
-            <button ref={ref} onClick={() => !skipOpen.current && setState('open')}>
-                Open menu
-            </button>
-
-            <ControlledMenu anchorRef={ref} state={state}
-                skipOpen={skipOpen} onClose={() => setState('closed')}>
+            <div ref={ref} onMouseEnter={() => setState('open')}>
+                Hover to Open
+            </div>
+            
+            <ControlledMenu state={state} anchorRef={ref}
+                onMouseLeave={() => setState('closed')}
+                onClose={() => setState('closed')}>
                 <MenuItem>New File</MenuItem>
                 <MenuItem>Save</MenuItem>
                 <MenuItem>Close Window</MenuItem>
@@ -1036,14 +1045,15 @@ export const menuStateHook = {
         </>,
 
     source:
-        `const { toggleMenu, ...menuProps } = useMenuState({ transition: true });
-const ref = useRef(null);
+        `const ref = useRef(null);
+const { toggleMenu, ...menuProps } = useMenuState({ transition: true });
 
-<button ref={ref} onClick={() => toggleMenu(true)}>
-    Open menu
-</button>
+<div ref={ref} onMouseEnter={() => toggleMenu(true)}>
+    Hover to Open
+</div>
 
 <ControlledMenu {...menuProps} anchorRef={ref}
+    onMouseLeave={() => toggleMenu(false)}
     onClose={() => toggleMenu(false)}>
     <MenuItem>New File</MenuItem>
     <MenuItem>Save</MenuItem>
@@ -1058,18 +1068,20 @@ import {
     useMenuState
 } from '@szhsin/react-menu';
 import '@szhsin/react-menu/dist/index.css';
+import '@szhsin/react-menu/dist/transitions/slide.css';
 
 export default function Example() {
-    const { toggleMenu, ...menuProps } = useMenuState({ transition: true });
     const ref = useRef(null);
+    const { toggleMenu, ...menuProps } = useMenuState({ transition: true });
 
     return (
         <>
-            <button ref={ref} onClick={() => openMenu()}>
-                Open menu
-            </button>
+            <div ref={ref} onMouseEnter={() => toggleMenu(true)}>
+                Hover to Open
+            </div>
 
             <ControlledMenu {...menuProps} anchorRef={ref}
+                onMouseLeave={() => toggleMenu(false)}
                 onClose={() => toggleMenu(false)}>
                 <MenuItem>New File</MenuItem>
                 <MenuItem>Save</MenuItem>

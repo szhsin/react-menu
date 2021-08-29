@@ -602,20 +602,19 @@ function BoundingBoxExample() {
 }
 
 function ManagingStateExample() {
-
-    const [state, setState] = useState();
-    const skipOpen = useRef(false);
     const ref = useRef(null);
+    const [state, setState] = useState();
 
     return (
         <Example data={codeExamples.managingState}>
-            <button ref={ref} className="btn"
-                onClick={() => !skipOpen.current && setState('open')}>
-                Open menu
-            </button>
+            <div ref={ref} className="btn"
+                onMouseEnter={() => setState('open')}>
+                Hover to Open
+            </div>
 
-            <ControlledMenu anchorRef={ref} state={state}
-                skipOpen={skipOpen} onClose={() => setState('closed')}>
+            <ControlledMenu state={state} anchorRef={ref}
+                onMouseLeave={() => setState('closed')}
+                onClose={() => setState('closed')}>
                 <MenuItem>New File</MenuItem>
                 <MenuItem>Save</MenuItem>
                 <MenuItem>Close Window</MenuItem>
@@ -625,19 +624,18 @@ function ManagingStateExample() {
 }
 
 function MenuStateHookExample() {
-
-    const { toggleMenu, ...menuProps } = useMenuState({ transition: true });
-    const skipOpen = useRef(false);
     const ref = useRef(null);
+    const { toggleMenu, ...menuProps } = useMenuState({ transition: true });
 
     return (
         <Example data={codeExamples.menuStateHook}>
-            <button ref={ref} className="btn"
-                onClick={() => !skipOpen.current && toggleMenu(true)}>
-                Open menu
-            </button>
+            <div ref={ref} className="btn"
+                onMouseEnter={() => toggleMenu(true)}>
+                Hover to Open
+            </div>
 
-            <ControlledMenu {...menuProps} anchorRef={ref} skipOpen={skipOpen}
+            <ControlledMenu {...menuProps} anchorRef={ref}
+                onMouseLeave={() => toggleMenu(false)}
                 onClose={() => toggleMenu(false)}>
                 <MenuItem>New File</MenuItem>
                 <MenuItem>Save</MenuItem>

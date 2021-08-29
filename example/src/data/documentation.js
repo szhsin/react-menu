@@ -247,6 +247,9 @@ const menuPropsBase = [
                 <code>MenuItem</code>, and any descendent <code>SubMenu</code>.</p>
             <p>You can set 'open', 'close', 'item' at the same time with one
                 boolean value or separately with an object.</p>
+            <p><em className="block">If you enable transition on menu, make sure to
+                add <code>import '@szhsin/react-menu/dist/transitions/slide.css'</code>, or add your own
+                animation styles, otherwise menu cannot be closed or have delay to close.</em></p>
         </>
     },
     {
@@ -254,7 +257,7 @@ const menuPropsBase = [
         type: 'number',
         defaultVal: '200',
         desc:
-            <p>A fallback timeout to stop transition if <code>onAnimationEnd</code> or <code>onTransitionEnd</code> events are not fired.</p>
+            <p>A fallback timeout to stop transition if <code>onAnimationEnd</code> events are not fired.</p>
     },
     {
         name: 'initialMounted',
@@ -315,7 +318,7 @@ const menuPropsBase = [
             <>
                 <p>Use this prop to explicitly reposition menu. Whenever the prop has a new value, menu position
                     will be recalculated and updated. You might use a counter and increase it every time.</p>
-                <p><em>Warning: don't update this prop in rapid succession, which is inefficient and might cause infinite
+                <p><em className="block">Warning: don't update this prop in rapid succession, which is inefficient and might cause infinite
                     rendering of component. E.g., don't change the value of this prop in <code>window scroll</code> event.
                 </em></p>
             </>
@@ -837,7 +840,7 @@ const controlledMenu = {
                                 <li><code>'first'</code> focus the first item in the menu.</li>
                                 <li><code>'last'</code> focus the last item in the menu.</li>
                             </ul>
-                            <p><em>If you don't intend to update focus (hover) position, it's important to keep this prop's identity stable when your component re-renders.</em></p>
+                            <p><em className="block">If you don't intend to update focus (hover) position, it's important to keep this prop's identity stable when your component re-renders.</em></p>
                         </>
                 },
                 {

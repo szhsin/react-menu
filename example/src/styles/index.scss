@@ -148,6 +148,10 @@
         border-radius: var.$border-radius-medium;
         background-color: var.$highlight-color;
         padding: 0.25rem 0.75rem;
+        &.block {
+            display: block;
+            font-style: normal;
+        }
     }
 
     h1,
@@ -412,6 +416,14 @@ $toc-animation: 0.22s ease-out;
 
     table ul {
         @include mixins.reset-list;
+    }
+
+    [aria-labelledby="menu"],
+    [aria-labelledby="menu-item"],
+    [aria-labelledby="others"] {
+        th {
+            min-width: 13.5rem;
+        }
     }
 }
 
