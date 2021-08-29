@@ -249,7 +249,7 @@ const menuPropsBase = [
                 boolean value or separately with an object.</p>
             <p><em className="block">If you enable transition on menu, make sure to
                 add <code>import '@szhsin/react-menu/dist/transitions/slide.css'</code>, or add your own
-                transition styles, otherwise menu cannot be closed or have delay to close.</em></p>
+                animation styles, otherwise menu cannot be closed or have delay to close.</em></p>
         </>
     },
     {
@@ -257,7 +257,7 @@ const menuPropsBase = [
         type: 'number',
         defaultVal: '200',
         desc:
-            <p>A fallback timeout to stop transition if <code>onAnimationEnd</code> or <code>onTransitionEnd</code> events are not fired.</p>
+            <p>A fallback timeout to stop transition if <code>onAnimationEnd</code> events are not fired.</p>
     },
     {
         name: 'initialMounted',
