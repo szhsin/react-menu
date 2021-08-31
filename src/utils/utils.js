@@ -1,19 +1,21 @@
 import { unstable_batchedUpdates } from 'react-dom';
 
 export const batchedUpdates = unstable_batchedUpdates || (callback => callback());
+export const values = Object.values || (obj => Object.keys(obj).map(key => obj[key]));
+export const floatEqual = (a, b, diff = 0.0001) => Math.abs(a - b) < diff;
+export const isProd = process.env.NODE_ENV === 'production';
+export const isMenuOpen = state => state === 'open' || state === 'opening';
+export const getTransition = (transition, name) => Boolean(transition && transition[name]) || transition === true;
+export const safeCall = (fn, ...args) => typeof fn === 'function' ? fn(...args) : fn;
 
+export const getName = component => component && component['_szhsinMenu'];
 export const defineName = (component, name) => name
     ? Object.defineProperty(component, '_szhsinMenu', { value: name, writable: false })
     : component;
 
-export const getName = component => component && component['_szhsinMenu'];
-
 export const applyHOC = HOC => (...args) => defineName(HOC(...args), getName(args[0]));
-
 export const applyStatics = sourceComponent => wrappedComponent =>
     defineName(wrappedComponent, getName(sourceComponent));
-
-export const safeCall = (fn, ...args) => typeof fn === 'function' ? fn(...args) : fn;
 
 export const attachHandlerProps = (handlers, props) => {
     if (!props) return handlers;
@@ -61,8 +63,12 @@ export const getScrollAncestor = node => {
     return window;
 }
 
-export const values = Object.values || (obj => Object.keys(obj).map(key => obj[key]));
-export const floatEqual = (a, b, diff = 0.0001) => Math.abs(a - b) < diff;
-export const isProd = process.env.NODE_ENV === 'production';
-export const isMenuOpen = state => state === 'open' || state === 'opening';
-export const getTransition = (transition, name) => Boolean(transition && transition[name]) || transition === true;
+export const validateIndex = (index, isDisabled, node) => {
+    if (!isProd && index === undefined && !isDisabled) {
+        const error = `Validate item '${node && node.toString()}' failed.
+You're probably creating your own components or HOC over MenuItem, SubMenu or FocusableItem.
+To create wrapping components, see: https://codesandbox.io/s/react-menu-wrapping-q0b59
+To create HOCs, see: https://codesandbox.io/s/react-menu-hoc-0bipn`;
+        throw new Error(error);
+    }
+}

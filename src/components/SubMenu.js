@@ -26,6 +26,7 @@ import {
     subMenuClass,
     menuItemClass,
     isMenuOpen,
+    validateIndex,
     withHovering,
     SettingsContext,
     ItemSettingsContext,
@@ -50,6 +51,9 @@ export const SubMenu = withHovering(memo(function SubMenu({
     itemProps = {},
     ...restProps
 }) {
+    const isDisabled = Boolean(disabled);
+    validateIndex(index, isDisabled, label);
+
     const {
         initialMounted, unmountOnClose, transition, transitionTimeout, rootMenuRef
     } = useContext(SettingsContext);
@@ -68,7 +72,6 @@ export const SubMenu = withHovering(memo(function SubMenu({
     } = useMenuStateAndFocus({ initialMounted, unmountOnClose, transition, transitionTimeout });
 
     const isOpen = isMenuOpen(state);
-    const isDisabled = Boolean(disabled);
     const {
         isActive, onKeyUp,
         ...activeStateHandlers

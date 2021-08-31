@@ -16,7 +16,6 @@ export const MenuRadioGroup = defineName(forwardRef(function MenuRadioGroup({
     styles,
     name,
     value,
-    children,
     onRadioChange,
     ...restProps
 }, externalRef) {
@@ -25,18 +24,16 @@ export const MenuRadioGroup = defineName(forwardRef(function MenuRadioGroup({
         [name, value, onRadioChange]);
 
     return (
-        <li role="presentation">
-            <ul role="group"
-                aria-label={ariaLabel || name || 'Radio group'}
-                {...restProps}
-                ref={externalRef}
-                className={useBEM({ block: menuClass, element: radioGroupClass, className })}
-                style={useFlatStyles(styles)}>
-                <RadioGroupContext.Provider value={contextValue}>
-                    {children}
-                </RadioGroupContext.Provider>
-            </ul>
-        </li>
+        <RadioGroupContext.Provider value={contextValue}>
+            <li role="presentation">
+                <ul role="group"
+                    aria-label={ariaLabel || name || 'Radio group'}
+                    {...restProps}
+                    ref={externalRef}
+                    className={useBEM({ block: menuClass, element: radioGroupClass, className })}
+                    style={useFlatStyles(styles)} />
+            </li>
+        </RadioGroupContext.Provider>
     );
 }), 'MenuRadioGroup');
 

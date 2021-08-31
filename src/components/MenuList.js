@@ -148,10 +148,10 @@ export const MenuList = ({
     }
 
     const menuItems = useMemo(() => {
-        const { items, endIndex, descendOverflow } = cloneChildren(children);
+        const { items, index, descendOverflow } = cloneChildren(children);
         // Store results in refs rather than local states
         // to avoid updating state during render
-        menuItemsCount.current = endIndex;
+        menuItemsCount.current = index;
         descendOverflowRef.current = descendOverflow;
         return items;
     }, [children]);
