@@ -208,6 +208,10 @@ const stylesheet = {
                         desc: 'MenuHeader element.'
                     },
                     {
+                        name: menuClass('group')(),
+                        desc: 'MenuGroup element.'
+                    },
+                    {
                         name: menuClass('radio-group')(),
                         desc: 'MenuRadioGroup element.'
                     },

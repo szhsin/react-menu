@@ -336,8 +336,7 @@ export const headerAndDivider = {
     title: 'Header and divider',
 
     desc:
-        <p>You could use <code>MenuHeader</code> and <code>MenuDivider</code> to group related menu items.
-            In addition, <code>MenuHeader</code> can wrap anything for presentational purposes.</p>,
+        <p>You could use <code>MenuHeader</code> and <code>MenuDivider</code> to group related menu items.</p>,
 
     source:
         `<Menu menuButton={<MenuButton>Open menu</MenuButton>}>
@@ -897,14 +896,14 @@ const tooltipProps = {
     <div ref={leftAnchor} />
     <ControlledMenu {...tooltipProps}
         anchorRef={leftAnchor} direction="top">
-        <MenuHeader>I can flip if you scroll this block</MenuHeader>
+        I can flip if you scroll this block
     </ControlledMenu>
 
     <div ref={rightAnchor} />
     {/* explicitly set bounding box with the boundingBoxRef prop */}
     <ControlledMenu {...tooltipProps} boundingBoxRef={ref}
         anchorRef={rightAnchor} direction="right">
-        <MenuHeader>I'm a tooltip built with React-Menu</MenuHeader>
+        I'm a tooltip built with React-Menu
     </ControlledMenu>
 </div>`
 }
@@ -1382,9 +1381,9 @@ export const features = {
         </ul>
 };
 
-export const installation = {
-    id: 'installation',
-    title: 'Installation',
+export const install = {
+    id: 'install',
+    title: 'Install',
     desc:
         <div className="install-command">
             <p className="comment"># with npm</p>
@@ -1394,5 +1393,5 @@ export const installation = {
         </div>
 };
 
-const codeExamples = [features, installation, usageExamples];
+const codeExamples = [features, install, usageExamples];
 export default codeExamples;

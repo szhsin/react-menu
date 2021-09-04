@@ -12,7 +12,6 @@ const menuLink = <Link to={'#menu'}>Menu</Link>;
 const menuButtonLink = <Link to={'#menu-button'}>MenuButton</Link>;
 const controlledMenuLink = <Link to={'#controlled-menu'}>ControlledMenu</Link>;
 const radioGroupLink = <Link to={'#radio-group'}>MenuRadioGroup</Link>;
-const menuHeaderLink = <Link to={'#menu-header'}>MenuHeader</Link>;
 
 const propsTable = {
     heading: <h3>Props</h3>,
@@ -42,12 +41,6 @@ const propsTable = {
 
 const dirModifier = <li><code>dir: string</code> direction in which the menu expands.
     Can be 'left', 'right', 'top', or 'bottom'.</li>;
-
-const menuChildrenProp = {
-    name: 'children',
-    type: 'node',
-    desc: <p>Can be <code>MenuDivider</code>, <code>MenuHeader</code>, <code>MenuGroup</code>, <code>MenuItem</code>, <code>FocusableItem</code>, <code>MenuRadioGroup</code>, <code>SubMenu</code> or any of their combinations.</p>
-};
 
 const syntheticEventProp = <li><code>syntheticEvent: MouseEvent | KeyboardEvent</code> DOM event object (React synthetic event)</li>;
 
@@ -163,7 +156,6 @@ const styleProps = (target, modifiers, className, styles) => [
 const sharedMenuProps = [
     ...styleProps('menu', menuModifiers, 'menuClassName', 'menuStyles'),
     ...styleProps('menu arrow', <ul>{dirModifier}</ul>, 'arrowClassName', 'arrowStyles'),
-    menuChildrenProp,
     {
         name: 'arrow',
         type: 'boolean',
@@ -595,12 +587,7 @@ const menuHeader = {
         {
             ...propsTable,
             rows: [
-                ...styleProps('menu header'),
-                {
-                    name: 'children',
-                    type: 'node',
-                    desc: 'Contents of the menu header. Can be anything that is usually for presentational purpose and not supposed to receive focus.'
-                },
+                ...styleProps('menu header')
             ]
         }
     ]
@@ -611,8 +598,7 @@ const menuDivider = {
     title: 'MenuDivider',
     contents: [
         <p><code>MenuDivider</code> can be used to make a group of related menu items visually separated from other items.
-            It has <code>aria</code> roles that can be recognised by assistive technologies. If you need to put
-            something presentational in a menu, use a {menuHeaderLink} instead.</p>,
+            It has <code>aria</code> roles that can be recognised by assistive technologies.</p>,
         {
             ...propsTable,
             rows: [
@@ -626,13 +612,12 @@ const menuGroup = {
     id: 'menu-group',
     title: 'MenuGroup',
     contents: [
-        <p><code>MenuGroup</code> is used to render a wrapping <code>div</code> over a group of related menu items. The group can be made
-            scrollable or have some extra styles. It can contain nested <code>MenuGroup</code>.</p>,
+        <p><code>MenuGroup</code> is used to wrap a group of related menu items and make the items
+            scrollable.</p>,
         {
             ...propsTable,
             rows: [
                 ...styleProps('menu group'),
-                menuChildrenProp,
                 {
                     name: 'takeOverflow',
                     type: 'boolean',

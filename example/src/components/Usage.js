@@ -37,7 +37,7 @@ export const Usage = React.memo(function Usage() {
 
             <main id="usage">
                 <GroupingSection heading="h1" data={codeExamples.features} />
-                <GroupingSection heading="h1" data={codeExamples.installation} />
+                <GroupingSection heading="h1" data={codeExamples.install} />
                 <GroupingSection heading="h1" data={codeExamples.usageExamples} />
 
                 <GroupingSection data={codeExamples.menu} />
@@ -587,14 +587,14 @@ function BoundingBoxExample() {
                 <div className="anchor" ref={leftAnchor} />
                 <ControlledMenu {...tooltipProps}
                     anchorRef={leftAnchor} direction="top">
-                    <MenuHeader>I can flip if you scroll this block</MenuHeader>
+                    I can flip if you scroll this block
                 </ControlledMenu>
 
                 <div className="anchor" ref={rightAnchor} />
                 {/* explicitly set bounding box with the boundingBoxRef prop */}
                 <ControlledMenu {...tooltipProps} boundingBoxRef={ref}
                     anchorRef={rightAnchor} direction="right">
-                    <MenuHeader>I'm a tooltip built with React-Menu</MenuHeader>
+                    I'm a tooltip built with React-Menu
                 </ControlledMenu>
             </div>
         </Example>
@@ -606,7 +606,7 @@ function ManagingStateExample() {
     const [state, setState] = useState();
 
     return (
-        <Example data={codeExamples.managingState}>
+        <Example data={codeExamples.managingState} style={{ flexWrap: 'wrap' }}>
             <div ref={ref} className="btn"
                 onMouseEnter={() => setState('open')}>
                 Hover to Open
@@ -619,7 +619,9 @@ function ManagingStateExample() {
                 <MenuItem>Save</MenuItem>
                 <MenuItem>Close Window</MenuItem>
             </ControlledMenu>
-        </Example >
+
+            <i style={{ padding: '0.25rem 1rem' }}>Tip: try the example with a mouse</i>
+        </Example>
     );
 }
 

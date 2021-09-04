@@ -42,7 +42,7 @@
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^12.0.0",
     "@types/estree": "^0.0.50",
-    "@types/react": "^17.0.14",
+    "@types/react": "^17.0.19",
     "babel-eslint": "^10.1.0",
     "babel-jest": "^27.0.6",
     "cross-env": "^7.0.3",
@@ -59,8 +59,7 @@
     "react": "^17.0.1",
     "react-dom": "^17.0.2",
     "react-scripts": "^4.0.3",
-    "react-test-renderer": "^17.0.2",
-    "sass": "^1.38.0",
+    "sass": "^1.39.0",
     "typescript": "^4.3.5"
   },
   "files": [

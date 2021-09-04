@@ -65,7 +65,7 @@ export const getScrollAncestor = node => {
 
 export const validateIndex = (index, isDisabled, node) => {
     if (!isProd && index === undefined && !isDisabled) {
-        const error = `Validate item '${node && node.toString()}' failed.
+        const error = `[react-menu] Validate item '${node && node.toString()}' failed.
 You're probably creating your own components or HOC over MenuItem, SubMenu or FocusableItem.
 To create wrapping components, see: https://codesandbox.io/s/react-menu-wrapping-q0b59
 To create HOCs, see: https://codesandbox.io/s/react-menu-hoc-0bipn`;

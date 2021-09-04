@@ -3,7 +3,6 @@ import { HashHeading } from './HashHeading';
 import { bem, DomInfoContext, SettingContext } from '../utils';
 import {
     ControlledMenu,
-    MenuHeader,
     useMenuState
 } from '@szhsin/react-menu';
 import hljs from 'highlight.js';
@@ -82,7 +81,7 @@ export const Example = React.memo(React.forwardRef(function Example({
                     captureFocus={false} role="tooltip"
                     arrow direction="top" align="center"
                     boundingBoxPadding={`${navbarHeight} 0 0 0`}>
-                    <MenuHeader>{toolTip}</MenuHeader>
+                    {toolTip}
                 </ControlledMenu>
             </div>
 
