@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import { NavLink } from 'react-router-dom';
 import { bem, DomInfoContext, SettingContext, TocContext } from '../utils';
 import { Logo } from './Logo';
+import { HeaderBanner } from './HeaderBanner';
 import { ThemeSwitch } from './ThemeSwitch';
 
 const blockName = 'navbar';
@@ -9,11 +10,12 @@ const blockName = 'navbar';
 export const Header = React.memo(function Header() {
 
     const isFullSize = useContext(DomInfoContext).vWidth > 500;
-    const { theme, isDark } = useContext(SettingContext);
+    const { theme, isDark, showBanner, setShowBanner } = useContext(SettingContext);
     const { setTocOpen } = useContext(TocContext);
 
     return (
         <header id="header">
+            {showBanner && <HeaderBanner onClose={() => setShowBanner(false)} />}
             <nav className={bem(blockName, null, { theme })}
                 aria-label="Site">
                 <button className={bem(blockName, 'toggle')} aria-label="Open table of contents"

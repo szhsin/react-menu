@@ -66,8 +66,8 @@ export const Usage = React.memo(function Usage() {
 
                 <GroupingSection data={codeExamples.controlledMenu} />
                 <ManagingStateExample />
-                <ContextMenuExample />
                 <MenuStateHookExample />
+                <ContextMenuExample />
 
                 <GroupingSection data={codeExamples.customisedStyle} />
                 <StylesPropExample />
@@ -158,14 +158,14 @@ function EventHandlingExample() {
                     onItemClick={handleMenuClick}>
 
                     <MenuItem value="File" onClick={handleFileClick}>
-                        New File
+                        File
                     </MenuItem>
 
                     <MenuItem value="Save" onClick={handleSaveClick}>
                         Save
                     </MenuItem>
 
-                    <MenuItem value="Close">Close Window</MenuItem>
+                    <MenuItem value="Close">Close</MenuItem>
                 </Menu>
 
                 <button className="btn"
@@ -602,19 +602,41 @@ function BoundingBoxExample() {
 }
 
 function ManagingStateExample() {
-
-    const [state, setState] = useState('closed');
     const ref = useRef(null);
+    const [state, setState] = useState();
 
     return (
         <Example data={codeExamples.managingState}>
-            <button ref={ref} className="btn"
-                onClick={() => setState('open')}>
-                Open menu
-            </button>
+            <div ref={ref} className="btn"
+                onMouseEnter={() => setState('open')}>
+                Hover to Open
+            </div>
 
-            <ControlledMenu anchorRef={ref} state={state}
+            <ControlledMenu state={state} anchorRef={ref}
+                onMouseLeave={() => setState('closed')}
                 onClose={() => setState('closed')}>
+                <MenuItem>New File</MenuItem>
+                <MenuItem>Save</MenuItem>
+                <MenuItem>Close Window</MenuItem>
+            </ControlledMenu>
+        </Example >
+    );
+}
+
+function MenuStateHookExample() {
+    const ref = useRef(null);
+    const { toggleMenu, ...menuProps } = useMenuState({ transition: true });
+
+    return (
+        <Example data={codeExamples.menuStateHook}>
+            <div ref={ref} className="btn"
+                onMouseEnter={() => toggleMenu(true)}>
+                Hover to Open
+            </div>
+
+            <ControlledMenu {...menuProps} anchorRef={ref}
+                onMouseLeave={() => toggleMenu(false)}
+                onClose={() => toggleMenu(false)}>
                 <MenuItem>New File</MenuItem>
                 <MenuItem>Save</MenuItem>
                 <MenuItem>Close Window</MenuItem>
@@ -625,7 +647,7 @@ function ManagingStateExample() {
 
 function ContextMenuExample() {
 
-    const { state, toggleMenu } = useMenuState();
+    const { toggleMenu, ...menuProps } = useMenuState();
     const [anchorPoint, setAnchorPoint] = useState({ x: 0, y: 0 });
 
     return (
@@ -638,35 +660,13 @@ function ContextMenuExample() {
 
             Right click to open context menu
 
-            <ControlledMenu anchorPoint={anchorPoint} state={state}
+            <ControlledMenu {...menuProps} anchorPoint={anchorPoint}
                 onClose={() => toggleMenu(false)}>
                 <MenuItem>Cut</MenuItem>
                 <MenuItem>Copy</MenuItem>
                 <MenuItem>Paste</MenuItem>
             </ControlledMenu>
         </Example >
-    );
-}
-
-function MenuStateHookExample() {
-
-    const { toggleMenu, ...menuProps } = useMenuState({ transition: true });
-    const ref = useRef(null);
-
-    return (
-        <Example data={codeExamples.menuStateHook}>
-            <button ref={ref} className="btn"
-                onClick={() => toggleMenu(true)}>
-                Open menu
-            </button>
-
-            <ControlledMenu {...menuProps} anchorRef={ref}
-                onClose={() => toggleMenu(false)}>
-                <MenuItem>New File</MenuItem>
-                <MenuItem>Save</MenuItem>
-                <MenuItem>Close Window</MenuItem>
-            </ControlledMenu>
-        </Example>
     );
 }
 

@@ -161,6 +161,7 @@ test('Additional props are forwarded to Menu', () => {
     });
     utils.clickMenuButton();
 
+    expect(screen.getByText('Some texts')).toHaveClass('some-class');
     expect(screen.getByTestId('container')).toHaveAttribute('id', 'menu-container');
     const menu = utils.queryMenu()
     expect(menu).toHaveAttribute('aria-label', 'test');

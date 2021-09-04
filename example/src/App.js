@@ -7,6 +7,7 @@ import { Footer } from './components/Footer';
 
 
 const App = () => {
+    const [showBanner, setShowBanner] = useState(false);
     const [theme, setTheme] = useState(() => {
         let theme
         try {
@@ -28,8 +29,10 @@ const App = () => {
     const setting = useMemo(() => ({
         isDark: theme === 'dark',
         theme,
-        setTheme: setAndSaveTheme
-    }), [theme, setAndSaveTheme]);
+        setTheme: setAndSaveTheme,
+        showBanner,
+        setShowBanner
+    }), [theme, setAndSaveTheme, showBanner]);
     useEffect(() => {
         document.body.className = bem('szh-app', null, { theme });
     }, [theme]);
@@ -45,7 +48,7 @@ const App = () => {
                 vWidth: document.documentElement.clientWidth,
                 vHeight: window.innerHeight,
 
-                navbarHeight: document.querySelector('#header .navbar').offsetHeight,
+                navbarHeight: document.querySelector('#header').offsetHeight,
                 // Table of Contents position
                 tocPosition: getComputedStyle(document.querySelector('.table-contents'))
                     .getPropertyValue('position')
@@ -61,7 +64,7 @@ const App = () => {
         return () => {
             window.removeEventListener('resize', handleResize);
         }
-    }, []);
+    }, [showBanner]);
 
     const [toast, setToast] = useState(null);
     useEffect(() => {

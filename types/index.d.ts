@@ -106,6 +106,11 @@ export interface MenuStateOptions {
     transitionTimeout?: number;
 }
 
+interface Hoverable {
+    disabled?: boolean;
+    index?: number;
+}
+
 // Menu, SubMenu and ControlledMenu
 interface SharedMenuProps extends Omit<BaseProps, 'styles'> {
     menuClassName?: ClassNameProp<MenuModifiers>;
@@ -191,10 +196,9 @@ export type SubMenuItemModifiers = Readonly<{
     disabled: boolean;
 }>;
 
-export interface SubMenuProps extends SharedMenuProps {
+export interface SubMenuProps extends SharedMenuProps, Hoverable {
     itemProps?: BaseProps<SubMenuItemModifiers>;
     label?: RenderProp<SubMenuItemModifiers>;
-    disabled?: boolean;
     onMenuChange?: EventHandler<MenuChangeEvent>;
 }
 
@@ -212,14 +216,13 @@ export type MenuItemModifiers = Readonly<{
     anchor: boolean;
 }>;
 
-export interface MenuItemProps extends Omit<BaseProps<MenuItemModifiers>, 'onClick'> {
+export interface MenuItemProps extends Omit<BaseProps<MenuItemModifiers>, 'onClick'>, Hoverable {
     value?: any;
     href?: string;
     rel?: string;
     target?: string;
     type?: MenuItemTypeProp;
     checked?: boolean;
-    disabled?: boolean;
     onClick?: EventHandler<ClickEvent>;
     children?: RenderProp<MenuItemModifiers>;
 }
@@ -235,8 +238,7 @@ export type FocusableItemModifiers = Readonly<{
     focusable: true;
 }>;
 
-export interface FocusableItemProps extends BaseProps<FocusableItemModifiers> {
-    disabled?: boolean;
+export interface FocusableItemProps extends BaseProps<FocusableItemModifiers>, Hoverable {
     children: (modifiers: {
         disabled: boolean;
         hover: boolean;

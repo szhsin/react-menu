@@ -15,6 +15,7 @@ const menuArrowClass = menuClass('arrow');
 const menuItemClass = menuClass('item');
 const menuButtonClass = bem('.szh-menu-button');
 const directions = ['left', 'right', 'top', 'bottom'];
+const menuStates = ['opening', 'open', 'closing', 'closed'];
 
 const selectorsTable = {
     contentType: 'table',
@@ -36,10 +37,10 @@ const stylesheet = {
     contents: [
         <>
             <p><LibName /> uses regular CSS to style components. It follows
-         the <a href="http://getbem.com/naming/" target="_blank" rel="noopener noreferrer">BEM methodology</a> to name CSS selectors.
-         You are able to override the default styles by placing your style sheets after its own. All default styles use CSS selectors
-         with the lowest possible specificity, and you could always precede your selectors
-         with <code>.szh-menu-container</code> in case a specific style cannot be overridden.</p>
+                the <a href="http://getbem.com/naming/" target="_blank" rel="noopener noreferrer">BEM methodology</a> to name CSS selectors.
+                You are able to override the default styles by placing your style sheets after its own. All default styles use CSS selectors
+                with the lowest possible specificity, and you could always precede your selectors
+                with <code>.szh-menu-container</code> in case a specific style cannot be overridden.</p>
             <p><LibName /> comes with the following CSS files:</p>
         </>,
         {
@@ -57,7 +58,7 @@ const stylesheet = {
             rows: [
                 {
                     name: 'index.css',
-                    desc: 'Default styles with menu sliding animation.'
+                    desc: 'Default styles.'
                 },
                 {
                     name: 'theme-dark.css',
@@ -72,9 +73,14 @@ const stylesheet = {
                     desc:
                         <>
                             <p>Includes only essential styles that make menu functional (positioning, arrow display).
-                            This is a good starting point for adding your own styles.</p>
-                            <p>Note: because animation is not included in this file, you need to set
-                                the <code>animation</code> prop to <code>false</code> to allow it to work properly.</p>
+                                This is a good starting point for adding your own styles.</p>
+                        </>
+                },
+                {
+                    name: 'transitions/*.css',
+                    desc:
+                        <>
+                            <p>Different transition animations when menu opens or closes. Currently there is only one as <code>slide.css</code>.</p>
                         </>
                 }
             ]
@@ -97,12 +103,13 @@ const stylesheet = {
                         desc: 'Menu element.'
                     },
                     {
-                        name: menuClass()('open'),
-                        desc: 'Menu is open.'
-                    },
-                    {
-                        name: menuClass()('animation'),
-                        desc: 'Animation is enabled.'
+                        name: <ul>
+                            {
+                                menuStates.map((state, i) =>
+                                    <li key={i}>{menuClass()(`state-${state}`)}</li>)
+                            }
+                        </ul>,
+                        desc: 'Menu state.'
                     },
                     {
                         name:
@@ -222,8 +229,8 @@ const stylesheet = {
             contents: [
                 <>
                     <p><LibName /> has a default <code>z-index</code> of 100 for positioned menu.
-                    If this value is not appropriate for your app, you could adjust it by overriding
-                    the <code>{menuClass()()}</code> selector.</p>
+                        If this value is not appropriate for your app, you could adjust it by overriding
+                        the <code>{menuClass()()}</code> selector.</p>
                     <p>E.g., set <code>z-index</code> to 1000:</p>
                     <pre><code className="hljs">
                         {`${menuClass()()} {
@@ -244,7 +251,7 @@ const classNameProp = {
             <p>This prop can be used to style a specific menu in the page differently. Also, projects
                 using <b>CSS Module</b> can use this prop to add locally scoped class names.
             </p>
-            <p>Every component accepts a <code>className</code> prop which allows you to supply a custom CSS class.</p>
+            <p>Every component accepts <code>className</code> props which allow you to supply a custom CSS class.</p>
             <p>Optionally, you may pass a function to the prop and receive additional states about the component.</p>
             <p>For more details, please refer to the <code>className</code> prop under
                 each <Link to={'/docs#menu'}>component</Link>, or see
@@ -274,13 +281,13 @@ const stylesProp = {
     contents: [
         <>
             <p>This is another prop that can be used to style a specific menu in the page differently.</p>
-            <p>Every component accepts a <code>styles</code> prop as an object which allows you to add inline styles.
-            Regular styles are put in the object directly just like React's <code>style</code> prop, and styles which
-            are only applied to specific component states are written in nested objects under corresponding keys.</p>
+            <p>Every component accepts <code>styles</code> props as an object which allow you to add inline styles.
+                Regular styles are put in the object directly just like React's <code>style</code> prop, and styles which
+                are only applied to specific component states are written in nested objects under corresponding keys.</p>
             <p>For example:</p>
             <pre><code className="hljs">{stylesSample}</code></pre>
             <p><LibName /> will flatten the styles object by applying the properties from top to bottom,
-            with later properties overriding earlier ones of the same name.</p>
+                with later properties overriding earlier ones of the same name.</p>
             <p>Optionally, you may pass a function to the prop and receive states about the component.</p>
             <p>For more details, please refer to the <code>styles</code> prop under
                 each <Link to={'/docs#menu'}>component</Link>, or see

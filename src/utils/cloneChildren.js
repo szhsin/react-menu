@@ -1,74 +1,49 @@
-import React from 'react';
+import { Children, cloneElement } from 'react';
 import { getName, isProd } from './utils';
 
-const validateChildren = (parent, child, permitted) => {
-    if (!child) return false;
-    if (!permitted.includes(getName(child.type))) {
-        !isProd && console.warn(`[react-menu] ${child.type || child} is ignored.\n`,
-            `The permitted children inside a ${parent} are ${permitted.join(', ')}.`,
-            'If you create HOC of these components, you can use the applyHOC or applyStatics helper, see more at: https://szhsin.github.io/react-menu/docs#utils-apply-hoc');
-        return false;
-    }
-
-    return true;
-}
-
-export const cloneChildren = (children, startIndex = 0) => {
+export const cloneChildren = (children, startIndex = 0, inRadioGroup) => {
     let index = startIndex;
     let descendOverflow = false;
-    const permittedChildren = ['MenuDivider', 'MenuGroup', 'MenuHeader', 'MenuItem',
-        'FocusableItem', 'MenuRadioGroup', 'SubMenu'];
 
-    const items = React.Children.map(children, child => {
-        if (!validateChildren('Menu or SubMenu', child, permittedChildren)) return null;
+    const items = Children.map(children, child => {
+        if (child === undefined || child === null) return null;
+        if (!child.type) return child;
 
-        switch (getName(child.type)) {
-            case 'MenuDivider':
-            case 'MenuHeader':
-                return child;
-
-            case 'MenuRadioGroup': {
-                const permittedChildren = ['MenuItem'];
-                const props = { type: 'radio' };
-
-                const radioItems = React.Children.map(child.props.children,
-                    radioChild => {
-                        if (!validateChildren('MenuRadioGroup', radioChild, permittedChildren)) return null;
-
-                        return radioChild.props.disabled
-                            ? React.cloneElement(radioChild, props)
-                            : React.cloneElement(radioChild, {
-                                ...props,
-                                index: index++
-                            })
-                    });
-
-                return React.cloneElement(child, { children: radioItems });
-            }
-
-            case 'MenuGroup': {
-                const {
-                    items,
-                    endIndex,
-                    descendOverflow: descOverflow
-                } = cloneChildren(child.props.children, index);
-
-                index = endIndex;
-                const takeOverflow = Boolean(child.props.takeOverflow);
-                // https://stackoverflow.com/questions/3076078/check-if-at-least-two-out-of-three-booleans-are-true
-                if (!isProd &&
-                    (descendOverflow === descOverflow ? descOverflow : takeOverflow)
-                ) throw new Error('[react-menu] Only one MenuGroup in a menu is allowed to have takeOverflow prop.');
-                descendOverflow = descendOverflow || descOverflow || takeOverflow;
-                return React.cloneElement(child, { children: items });
-            }
-
-            default:
+        const name = getName(child.type);
+        switch (name) {
+            case 'MenuItem': {
+                if (inRadioGroup) {
+                    const props = { type: 'radio' };
+                    if (!child.props.disabled) props.index = index++;
+                    return cloneElement(child, props);
+                }
+            } // Fall through when inRadioGroup is false
+            case 'SubMenu': // eslint-disable-line no-fallthrough
+            case 'FocusableItem':
                 return child.props.disabled
                     ? child
-                    : React.cloneElement(child, { index: index++ });
+                    : cloneElement(child, { index: index++ });
+
+            default: {
+                const innerChildren = child.props.children;
+                if (innerChildren === null || typeof innerChildren !== "object") return child;
+                const desc = cloneChildren(innerChildren, index,
+                    inRadioGroup || name === 'MenuRadioGroup');
+                index = desc.index;
+
+                if (name === 'MenuGroup') {
+                    const takeOverflow = Boolean(child.props.takeOverflow);
+                    const descOverflow = desc.descendOverflow;
+                    // https://stackoverflow.com/questions/3076078/check-if-at-least-two-out-of-three-booleans-are-true
+                    if (!isProd &&
+                        (descendOverflow === descOverflow ? descOverflow : takeOverflow)
+                    ) throw new Error('[react-menu] Only one MenuGroup in a menu is allowed to have takeOverflow prop.');
+                    descendOverflow = descendOverflow || descOverflow || takeOverflow;
+                }
+                return cloneElement(child, { children: desc.items });
+            }
         }
     });
 
-    return { items, endIndex: index, descendOverflow };
+    return { items, index, descendOverflow };
 }
