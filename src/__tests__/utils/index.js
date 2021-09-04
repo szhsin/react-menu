@@ -81,8 +81,11 @@ export const LastItem = applyHOC(enhance)(MenuItem, 'Last');
 
 export const renderMenu = (props, itemProps) => render(
     <Menu menuButton={<MenuButton>Open</MenuButton>} {...props}>
+        <span className="some-class">Some texts</span>
         <FirstItem />
-        <MenuItem children="Middle" {...itemProps} />
-        <LastItem />
+        <div>
+            <MenuItem children="Middle" {...itemProps} />
+            <LastItem />
+        </div>
     </Menu>
 );
