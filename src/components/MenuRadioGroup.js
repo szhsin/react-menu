@@ -41,6 +41,5 @@ MenuRadioGroup.propTypes = {
     ...stylePropTypes(),
     name: PropTypes.string,
     value: PropTypes.any,
-    children: PropTypes.node.isRequired,
     onRadioChange: PropTypes.func
 };

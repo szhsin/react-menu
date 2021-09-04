@@ -162,6 +162,6 @@ MenuItem.propTypes = {
     children: PropTypes.oneOfType([
         PropTypes.node,
         PropTypes.func
-    ]).isRequired,
+    ]),
     onClick: PropTypes.func
 };

@@ -240,7 +240,7 @@ SubMenu.propTypes = {
     label: PropTypes.oneOfType([
         PropTypes.node,
         PropTypes.func
-    ]).isRequired,
+    ]),
     itemProps: PropTypes.shape({
         ...stylePropTypes()
     }),

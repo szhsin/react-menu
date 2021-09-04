@@ -70,5 +70,5 @@ export const FocusableItem = withHovering(memo(function FocusableItem({
 FocusableItem.propTypes = {
     ...stylePropTypes(),
     disabled: PropTypes.bool,
-    children: PropTypes.func.isRequired
+    children: PropTypes.func
 };

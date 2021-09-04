@@ -1,6 +1,6 @@
 {
   "name": "@szhsin/react-menu",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "React component for building accessible menu, dropdown, submenu, context menu and more.",
   "author": "Zheng Song",
   "license": "MIT",
@@ -10,9 +10,6 @@
   "module": "dist/index.modern.js",
   "types": "dist/index.d.ts",
   "source": "src/index.js",
-  "engines": {
-    "node": ">=10"
-  },
   "scripts": {
     "bundle": "microbundle-crl --no-compress --css-modules false --sourcemap false",
     "watch": "microbundle-crl watch --no-compress --format modern,cjs --css-modules false --sourcemap false",
@@ -37,7 +34,7 @@
   },
   "dependencies": {
     "prop-types": "^15.7.2",
-    "react-transition-state": "^0.2.0"
+    "react-transition-state": "^0.3.0"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.15.0",
@@ -74,8 +71,9 @@
     "menu",
     "component",
     "submenu",
-    "contextmenu",
+    "context menu",
     "dropdown",
+    "tooltip",
     "checkbox",
     "radio button",
     "accessibility",

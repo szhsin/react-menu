@@ -22,8 +22,7 @@ export const sharedMenuPropTypes = {
     align: PropTypes.oneOf(['start', 'center', 'end']),
     direction: PropTypes.oneOf(['left', 'right', 'top', 'bottom']),
     position: PropTypes.oneOf(['auto', 'anchor', 'initial']),
-    overflow: PropTypes.oneOf(['auto', 'visible', 'hidden']),
-    children: PropTypes.node.isRequired
+    overflow: PropTypes.oneOf(['auto', 'visible', 'hidden'])
 }
 
 // Menu and ControlledMenu
