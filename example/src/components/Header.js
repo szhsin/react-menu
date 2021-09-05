@@ -28,9 +28,7 @@ export const Header = React.memo(function Header() {
                 <ul className={bem(blockName, 'link-list')}>
                     <NavBarLink exact to="/">Home</NavBarLink>
 
-                    <NavBarLink to="/docs">
-                        {isFullSize ? 'Documentation' : 'Docs'}
-                    </NavBarLink>
+                    <NavBarLink to="/docs">Docs</NavBarLink>
 
                     <NavBarLink to="/style-guide">
                         {isFullSize ? 'Style Guide' : 'Styling'}

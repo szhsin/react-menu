@@ -33,13 +33,13 @@ export const Keys = Object.freeze({
 });
 
 export const HoverIndexActionTypes = Object.freeze({
-    'RESET': 'HOVER_INDEX_RESET',
-    'SET': 'HOVER_INDEX_SET',
-    'UNSET': 'HOVER_INDEX_UNSET',
-    'INCREASE': 'HOVER_INDEX_INCREASE',
-    'DECREASE': 'HOVER_INDEX_DECREASE',
-    'FIRST': 'HOVER_INDEX_FIRST',
-    'LAST': 'HOVER_INDEX_LAST'
+    'RESET': 'HOVER_RESET',
+    'SET': 'HOVER_SET',
+    'UNSET': 'HOVER_UNSET',
+    'INCREASE': 'HOVER_INCREASE',
+    'DECREASE': 'HOVER_DECREASE',
+    'FIRST': 'HOVER_FIRST',
+    'LAST': 'HOVER_LAST'
 });
 
 export const SubmenuActionTypes = Object.freeze({

@@ -19,7 +19,7 @@
 - Comprehensive keyboard interactions.
 - Adheres to [WAI-ARIA Authoring Practices](https://www.w3.org/TR/wai-aria-practices/#menu).
 
-## Installation
+## Install
 
 ```bash
 # with npm
@@ -60,4 +60,4 @@ export default function Example() {
 
 ## License
 
-MIT Licensed. Copyright (c) 2021 Zheng Song.
+[MIT](https://github.com/szhsin/react-menu/blob/master/LICENSE) Licensed.

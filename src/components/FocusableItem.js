@@ -7,6 +7,7 @@ import {
     menuClass,
     menuItemClass,
     stylePropTypes,
+    validateIndex,
     withHovering,
     EventHandlersContext
 } from '../utils';
@@ -23,6 +24,7 @@ export const FocusableItem = withHovering(memo(function FocusableItem({
     ...restProps
 }) {
     const isDisabled = Boolean(disabled);
+    validateIndex(index, isDisabled, children);
     const ref = useRef(null);
     const {
         setHover,
@@ -68,5 +70,5 @@ export const FocusableItem = withHovering(memo(function FocusableItem({
 FocusableItem.propTypes = {
     ...stylePropTypes(),
     disabled: PropTypes.bool,
-    children: PropTypes.func.isRequired
+    children: PropTypes.func
 };

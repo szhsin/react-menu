@@ -13,6 +13,7 @@ import {
     stylePropTypes,
     menuClass,
     menuItemClass,
+    validateIndex,
     withHovering,
     EventHandlersContext,
     RadioGroupContext,
@@ -36,6 +37,7 @@ export const MenuItem = withHovering(memo(function MenuItem({
     ...restProps
 }) {
     const isDisabled = Boolean(disabled);
+    validateIndex(index, isDisabled, children);
     const ref = useRef();
     const {
         setHover,
@@ -160,6 +162,6 @@ MenuItem.propTypes = {
     children: PropTypes.oneOfType([
         PropTypes.node,
         PropTypes.func
-    ]).isRequired,
+    ]),
     onClick: PropTypes.func
 };

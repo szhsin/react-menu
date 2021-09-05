@@ -32,8 +32,5 @@ export const MenuButton = defineName(forwardRef(function MenuButton({
 MenuButton.propTypes = {
     ...stylePropTypes(),
     isOpen: PropTypes.bool,
-    disabled: PropTypes.bool,
-    children: PropTypes.node.isRequired,
-    onClick: PropTypes.func,
-    onKeyDown: PropTypes.func
+    disabled: PropTypes.bool
 };

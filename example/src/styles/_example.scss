@@ -40,12 +40,7 @@
 [aria-labelledby="bounding-box"] {
     .szh-menu {
         min-width: initial;
-        &__header {
-            color: inherit;
-            font-size: inherit;
-            text-transform: none;
-            padding: 0.125rem 1rem;
-        }
+        padding: 0.625rem 1rem;
     }
 }
 
@@ -194,11 +189,11 @@
             @include mixins.scrollbar-dark;
         }
 
-        .szh-menu__header {
-            max-width: 6rem;
+        .szh-menu {
+            max-width: 7.125rem;
             white-space: initial;
             text-align: center;
-            padding: 0.125rem 0.5rem;
+            padding: 0.625rem 0.5rem;
         }
     }
 
