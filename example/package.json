@@ -14,7 +14,7 @@
     "highlight.js": "^11.2.0",
     "react": "file:../node_modules/react",
     "react-dom": "file:../node_modules/react-dom",
-    "react-router-dom": "^5.2.1",
+    "react-router-dom": "^5.3.0",
     "react-router-hash-link": "^2.4.3",
     "react-scripts": "file:../node_modules/react-scripts"
   },
