@@ -34,7 +34,7 @@
   },
   "dependencies": {
     "prop-types": "^15.7.2",
-    "react-transition-state": "^0.3.0"
+    "react-transition-state": "^1.0.1"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.15.0",
