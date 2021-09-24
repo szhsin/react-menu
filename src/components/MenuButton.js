@@ -19,6 +19,7 @@ export const MenuButton = defineName(forwardRef(function MenuButton({
             aria-haspopup={true}
             aria-expanded={isOpen}
             aria-disabled={disabled || undefined}
+            type="button"
             disabled={disabled}
             {...restProps}
             ref={ref}
