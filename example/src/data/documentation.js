@@ -102,19 +102,6 @@ const onClickEventObject = (
     </>
 );
 
-const onMenuChangeProp = {
-    name: 'onMenuChange',
-    type: 'function',
-    desc:
-        <>
-            <p>Event fired when menu states have changed.</p>
-            <p>Event object properties:</p>
-            <ul>
-                <li><code>open: bool</code> indicates if the menu is open.</li>
-            </ul>
-        </>
-};
-
 const styleProps = (target, modifiers, className, styles) => [
     {
         name: className || 'className',
@@ -223,8 +210,37 @@ const sharedMenuProps = [
     }
 ];
 
+// Menu and SubMenu
+const uncontrolledMenuProps = [
+    {
+        name: 'instanceRef',
+        type: 'React.Ref <MenuInstance>',
+        desc:
+            <>
+                <p>A ref which attaches to menu component and provides the follow methods:</p>
+                <ul>
+                    <li><code>openMenu: (position?: 'first' | 'last' | number, alwaysUpdate?: boolean) =&gt; void</code> open menu,
+                        optional request which menu item will be hovered.</li>
+                    <li><code>closeMenu: () =&gt; void</code> close menu</li>
+                </ul>
+            </>
+    },
+    {
+        name: 'onMenuChange',
+        type: 'function',
+        desc:
+            <>
+                <p>Event fired when menu states have changed.</p>
+                <p>Event object properties:</p>
+                <ul>
+                    <li><code>open: bool</code> indicates if the menu is open.</li>
+                </ul>
+            </>
+    }
+];
+
 // Menu and ControlledMenu
-const menuPropsBase = [
+const rootMenuProps = [
     ...sharedMenuProps,
     {
         name: 'transition',
@@ -393,8 +409,8 @@ const menu = {
         {
             ...propsTable,
             rows: [
-                ...menuPropsBase,
-                onMenuChangeProp,
+                ...rootMenuProps,
+                ...uncontrolledMenuProps,
                 {
                     name: 'aria-label',
                     type: 'string',
@@ -518,7 +534,7 @@ const submenu = {
             rows: [
                 ...styleProps('submenu item', submenuItemModifiers, 'itemProps.className', 'itemProps.styles'),
                 ...sharedMenuProps,
-                onMenuChangeProp,
+                ...uncontrolledMenuProps,
                 {
                     name: 'aria-label',
                     type: 'string',
@@ -770,7 +786,7 @@ const controlledMenu = {
         {
             ...propsTable,
             rows: [
-                ...menuPropsBase,
+                ...rootMenuProps,
                 {
                     name: 'aria-label',
                     type: 'string',
@@ -819,11 +835,16 @@ const controlledMenu = {
                         <>
                             <p>Sets which menu item receives focus (hover) when menu opens.</p>
                             <p>You will usually set this prop when the menu is opened by keyboard events.</p>
-                            <p>It's an object with the shape of <code>{'{ position: string }'}</code>. The <code>position</code> can be one of the following values:</p>
+                            <p>It's an object with the shape of:</p>
+                            <pre><code className="hljs">{`{
+    position?: 'first' | 'last' | number;
+    alwaysUpdate?: boolean;
+}`}</code></pre>
+                            <p>The <code>position</code> can be one of the following values:</p>
                             <ul>
-                                <li><code>'initial'</code> don't set focus.</li>
                                 <li><code>'first'</code> focus the first item in the menu.</li>
                                 <li><code>'last'</code> focus the last item in the menu.</li>
+                                <li><code>number</code> focus item at the specific position.</li>
                             </ul>
                             <p><em className="block">If you don't intend to update focus (hover) position, it's important to keep this prop's identity stable when your component re-renders.</em></p>
                         </>
@@ -857,7 +878,7 @@ const menuStateHook = {
         <>
             <p><code>useMenuState</code> is a custom Hook that helps manage the states of {controlledMenuLink}.</p>
             <p>The Hook returns several states which are used by <code>ControlledMenu</code> and can be spread to its props. See an <Link to={'/#use-menu-state'}>example</Link>.</p>
-            <p><pre><code className="hljs">{
+            <pre><code className="hljs">{
                 `function useMenuState(options?: {
     initialMounted?: boolean;
     unmountOnClose?: boolean;
@@ -871,8 +892,7 @@ const menuStateHook = {
     state?: 'opening' | 'open' | 'closing' | 'closed';
     toggleMenu: (open?: boolean) => void;
     endTransition: () => void;
-};`}</code></pre></p>
-
+};`}</code></pre>
             <p>The hook function options are the same as props on <code>Menu</code> component.</p>
             <p><code>toggleMenu</code>:</p>
             <ul>

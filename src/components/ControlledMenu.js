@@ -4,8 +4,8 @@ import PropTypes from 'prop-types';
 import { MenuList } from './MenuList';
 import { useBEM } from '../hooks';
 import {
-    menuPropTypesBase,
-    menuDefaultPropsBase,
+    rootMenuPropTypes,
+    rootMenuDefaultProps,
     menuContainerClass,
     attachHandlerProps,
     safeCall,
@@ -14,7 +14,6 @@ import {
     values,
     CloseReason,
     Keys,
-    FocusPositions,
     MenuStateMap,
     EventHandlersContext,
     SettingsContext,
@@ -165,7 +164,7 @@ export const ControlledMenu = forwardRef(function ControlledMenu({
 });
 
 ControlledMenu.propTypes = {
-    ...menuPropTypesBase,
+    ...rootMenuPropTypes,
     state: PropTypes.oneOf(values(MenuStateMap)),
     anchorPoint: PropTypes.exact({
         x: PropTypes.number,
@@ -175,12 +174,16 @@ ControlledMenu.propTypes = {
     skipOpen: PropTypes.object,
     captureFocus: PropTypes.bool,
     menuItemFocus: PropTypes.exact({
-        position: PropTypes.string
+        position: PropTypes.oneOfType([
+            PropTypes.string,
+            PropTypes.number
+        ]),
+        alwaysUpdate: PropTypes.bool
     }),
     onClose: PropTypes.func
 };
 
 ControlledMenu.defaultProps = {
-    ...menuDefaultPropsBase,
-    menuItemFocus: { position: FocusPositions.INITIAL }
+    ...rootMenuDefaultProps,
+    menuItemFocus: {}
 };

@@ -27,19 +27,19 @@ import {
     getTransition,
     safeCall,
     isProd,
+    isMenuOpen,
+    initialHoverIndex,
     menuClass,
     menuArrowClass,
-    SettingsContext,
-    MenuListContext,
-    MenuListItemContext,
-    HoverIndexContext,
-    initialHoverIndex,
-    isMenuOpen,
     CloseReason,
     Keys,
     FocusPositions,
     HoverIndexActionTypes,
-    SubmenuActionTypes
+    SubmenuActionTypes,
+    SettingsContext,
+    MenuListContext,
+    MenuListItemContext,
+    HoverIndexContext
 } from '../utils';
 
 
@@ -379,22 +379,24 @@ export const MenuList = ({
         if (!isOpen) {
             dispatch({ type: HoverIndexActionTypes.RESET });
             if (!closeTransition) setOverflowData();
+            return;
         }
 
         // Use a timeout here because if set focus immediately, page might scroll unexpectedly.
         const id = setTimeout(() => {
-            // We are seeing the old isOpen value when closure was created
-            // However it should not be a issue since the timeout is cleared whenever states change
-            // Don't set focus when menu is closed, otherwise focus will be lost
-            // and onBlur event will be fired with relatedTarget setting as null.
-            // If focus has already been set to a children element, don't set focus on the menu;
-            // this happens in some edge cases because of the timeout delay.
-            if (!isOpen || !menuRef.current || menuRef.current.contains(document.activeElement)) return;
+            if (!menuRef.current) return;
+            const { position, alwaysUpdate } = menuItemFocus || {};
+            // If focus has already been set to a children element, 
+            // don't set focus on the menu unless alwaysUpdate is true
+            if (!alwaysUpdate && menuRef.current.contains(document.activeElement)) return;
             if (captureFocus) menuRef.current.focus();
-            if (menuItemFocus.position === FocusPositions.FIRST) {
+
+            if (position === FocusPositions.FIRST) {
                 dispatch({ type: HoverIndexActionTypes.FIRST });
-            } else if (menuItemFocus.position === FocusPositions.LAST) {
+            } else if (position === FocusPositions.LAST) {
                 dispatch({ type: HoverIndexActionTypes.LAST });
+            } else if (position >= 0 && position < menuItemsCount.current) {
+                dispatch({ type: HoverIndexActionTypes.SET, index: position });
             }
         }, openTransition ? 170 : 100);
 

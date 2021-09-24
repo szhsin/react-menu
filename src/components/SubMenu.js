@@ -3,7 +3,8 @@ import React, {
     useRef,
     useContext,
     useEffect,
-    useMemo
+    useMemo,
+    useImperativeHandle
 } from 'react';
 import { createPortal } from 'react-dom';
 import PropTypes from 'prop-types';
@@ -20,8 +21,9 @@ import {
     attachHandlerProps,
     safeCall,
     stylePropTypes,
-    sharedMenuPropTypes,
-    sharedMenuDefaultProp,
+    uncontrolledMenuPropTypes,
+    menuPropTypes,
+    menuDefaultProps,
     menuClass,
     subMenuClass,
     menuItemClass,
@@ -46,6 +48,7 @@ export const SubMenu = withHovering(memo(function SubMenu({
     index,
     onMenuChange,
     isHovering,
+    instanceRef,
     captureFocus: _1,
     repositionFlag: _2,
     itemProps = {},
@@ -79,6 +82,8 @@ export const SubMenu = withHovering(memo(function SubMenu({
     const containerRef = useRef(null);
     const itemRef = useRef(null);
     const timeoutId = useRef();
+
+    const setHover = () => !isHovering && dispatch({ type: HoverIndexActionTypes.SET, index });
 
     const delayOpen = delay => {
         dispatch({ type: HoverIndexActionTypes.SET, index });
@@ -118,8 +123,8 @@ export const SubMenu = withHovering(memo(function SubMenu({
             // LEFT key is bubbled up from submenu items
             case Keys.LEFT:
                 if (isOpen) {
-                    toggleMenu(false);
                     itemRef.current.focus();
+                    toggleMenu(false);
                     handled = true;
                 }
                 break;
@@ -167,6 +172,21 @@ export const SubMenu = withHovering(memo(function SubMenu({
 
     useMenuChange(onMenuChange, isOpen);
 
+    useImperativeHandle(instanceRef, () => ({
+        openMenu: (...args) => {
+            if (isParentOpen) {
+                setHover();
+                openMenu(...args);
+            }
+        },
+        closeMenu: () => {
+            if (isOpen) {
+                itemRef.current.focus();
+                toggleMenu(false);
+            }
+        }
+    }));
+
     const modifiers = useMemo(() => Object.freeze({
         open: isOpen,
         hover: isHovering,
@@ -185,7 +205,7 @@ export const SubMenu = withHovering(memo(function SubMenu({
         ...activeStateHandlers,
         onMouseEnter: handleMouseEnter,
         onMouseLeave: handleMouseLeave,
-        onMouseDown: () => !isHovering && dispatch({ type: HoverIndexActionTypes.SET, index }),
+        onMouseDown: setHover,
         onClick: handleClick,
         onKeyUp: handleKeyUp
     }, restItemProps);
@@ -235,7 +255,8 @@ export const SubMenu = withHovering(memo(function SubMenu({
 }), 'SubMenu');
 
 SubMenu.propTypes = {
-    ...sharedMenuPropTypes,
+    ...menuPropTypes,
+    ...uncontrolledMenuPropTypes,
     disabled: PropTypes.bool,
     label: PropTypes.oneOfType([
         PropTypes.node,
@@ -243,11 +264,10 @@ SubMenu.propTypes = {
     ]),
     itemProps: PropTypes.shape({
         ...stylePropTypes()
-    }),
-    onMenuChange: PropTypes.func
+    })
 };
 
 SubMenu.defaultProps = {
-    ...sharedMenuDefaultProp,
+    ...menuDefaultProps,
     direction: 'right'
 };
