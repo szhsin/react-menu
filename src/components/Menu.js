@@ -1,4 +1,4 @@
-import React, { forwardRef, useRef, useCallback } from 'react';
+import React, { forwardRef, useRef, useCallback, useImperativeHandle } from 'react';
 import PropTypes from 'prop-types';
 import { ControlledMenu } from './ControlledMenu';
 import { useMenuChange, useMenuStateAndFocus, useCombinedRef } from '../hooks';
@@ -7,8 +7,9 @@ import {
     attachHandlerProps,
     safeCall,
     isMenuOpen,
-    menuPropTypesBase,
-    menuDefaultPropsBase,
+    uncontrolledMenuPropTypes,
+    rootMenuPropTypes,
+    rootMenuDefaultProps,
     Keys,
     FocusPositions
 } from '../utils';
@@ -18,6 +19,7 @@ export const Menu = forwardRef(function Menu({
     'aria-label': ariaLabel,
     captureFocus: _,
     menuButton,
+    instanceRef,
     onMenuChange,
     ...restProps
 }, externalRef) {
@@ -35,9 +37,7 @@ export const Menu = forwardRef(function Menu({
     const handleClick = e => {
         if (skipOpen.current) return;
         // Focus (hover) the first menu item when onClick event is trigger by keyboard
-        openMenu(e.detail === 0
-            ? FocusPositions.FIRST
-            : FocusPositions.INITIAL);
+        openMenu(e.detail === 0 ? FocusPositions.FIRST : undefined);
     }
 
     const handleKeyDown = e => {
@@ -75,6 +75,11 @@ export const Menu = forwardRef(function Menu({
 
     useMenuChange(onMenuChange, isOpen);
 
+    useImperativeHandle(instanceRef, () => ({
+        openMenu,
+        closeMenu: () => toggleMenu(false)
+    }));
+
     const menuProps = {
         ...restProps,
         ...stateProps,
@@ -97,12 +102,12 @@ export const Menu = forwardRef(function Menu({
 });
 
 Menu.propTypes = {
-    ...menuPropTypesBase,
+    ...rootMenuPropTypes,
+    ...uncontrolledMenuPropTypes,
     menuButton: PropTypes.oneOfType([
         PropTypes.element,
         PropTypes.func
-    ]).isRequired,
-    onMenuChange: PropTypes.func
+    ]).isRequired
 };
 
-Menu.defaultProps = menuDefaultPropsBase;
+Menu.defaultProps = rootMenuDefaultProps;

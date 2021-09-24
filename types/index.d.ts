@@ -11,7 +11,7 @@ export type MenuOverflow = 'auto' | 'visible' | 'hidden';
 export type MenuReposition = 'auto' | 'initial';
 export type MenuViewScroll = 'auto' | 'close' | 'initial';
 export type MenuItemTypeProp = 'checkbox' | 'radio';
-export type FocusPosition = 'initial' | 'first' | 'last';
+export type FocusPosition = 'initial' | 'first' | 'last' | number;
 export type CloseReason = 'click' | 'cancel' | 'blur' | 'scroll';
 type DirStyleKey = '$left' | '$right' | '$top' | '$bottom';
 
@@ -112,7 +112,7 @@ interface Hoverable {
 }
 
 // Menu, SubMenu and ControlledMenu
-interface SharedMenuProps extends Omit<BaseProps, 'styles'> {
+interface BaseMenuProps extends Omit<BaseProps, 'styles'> {
     menuClassName?: ClassNameProp<MenuModifiers>;
     menuStyles?: StylesProp<MenuModifiers, MenuStyleKeys>;
     arrowClassName?: ClassNameProp<MenuArrowModifiers>;
@@ -128,7 +128,7 @@ interface SharedMenuProps extends Omit<BaseProps, 'styles'> {
 }
 
 // Menu and ControlledMenu
-interface BaseMenuProps extends MenuStateOptions, SharedMenuProps {
+interface RootMenuProps extends BaseMenuProps, MenuStateOptions {
     containerProps?: Omit<React.HTMLAttributes<HTMLElement>, 'className'>;
     boundingBoxRef?: React.RefObject<Element | RectElement>;
     boundingBoxPadding?: string;
@@ -140,6 +140,17 @@ interface BaseMenuProps extends MenuStateOptions, SharedMenuProps {
     submenuCloseDelay?: number;
     theming?: string;
     onItemClick?: EventHandler<ClickEvent>;
+}
+
+export interface MenuInstance {
+    openMenu: (position?: FocusPosition, alwaysUpdate?: boolean) => void;
+    closeMenu: () => void;
+}
+
+// Menu and SubMenu
+interface UncontrolledMenuProps {
+    instanceRef?: React.Ref<MenuInstance>;
+    onMenuChange?: EventHandler<MenuChangeEvent>;
 }
 
 //
@@ -159,9 +170,8 @@ export const MenuButton: React.NamedExoticComponent<MenuButtonProps>;
 //
 // Menu
 // ----------------------------------------------------------------------
-export interface MenuProps extends BaseMenuProps {
+export interface MenuProps extends RootMenuProps, UncontrolledMenuProps {
     menuButton: RenderProp<MenuButtonModifiers, React.ReactElement>;
-    onMenuChange?: EventHandler<MenuChangeEvent>;
 }
 
 export const Menu: React.NamedExoticComponent<MenuProps>;
@@ -169,7 +179,7 @@ export const Menu: React.NamedExoticComponent<MenuProps>;
 //
 // ControlledMenu
 // ----------------------------------------------------------------------
-export interface ControlledMenuProps extends BaseMenuProps {
+export interface ControlledMenuProps extends RootMenuProps {
     anchorPoint?: {
         x: number;
         y: number;
@@ -179,7 +189,8 @@ export interface ControlledMenuProps extends BaseMenuProps {
     captureFocus?: boolean;
     state?: MenuState;
     menuItemFocus?: {
-        position: FocusPosition
+        position?: FocusPosition;
+        alwaysUpdate?: boolean;
     };
     onClose?: EventHandler<MenuCloseEvent>;
 }
@@ -196,10 +207,9 @@ export type SubMenuItemModifiers = Readonly<{
     disabled: boolean;
 }>;
 
-export interface SubMenuProps extends SharedMenuProps, Hoverable {
+export interface SubMenuProps extends BaseMenuProps, Hoverable, UncontrolledMenuProps {
     itemProps?: BaseProps<SubMenuItemModifiers>;
     label?: RenderProp<SubMenuItemModifiers>;
-    onMenuChange?: EventHandler<MenuChangeEvent>;
 }
 
 export const SubMenu: React.NamedExoticComponent<SubMenuProps>;

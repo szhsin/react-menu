@@ -1,14 +1,13 @@
 
 import { useState } from 'react';
 import { useMenuState } from './useMenuState';
-import { FocusPositions } from '../utils';
 
 export const useMenuStateAndFocus = (options) => {
     const menuState = useMenuState(options);
-    const [menuItemFocus, setMenuItemFocus] = useState({ position: FocusPositions.INITIAL });
+    const [menuItemFocus, setMenuItemFocus] = useState({});
 
-    const openMenu = (position = FocusPositions.INITIAL) => {
-        setMenuItemFocus({ position });
+    const openMenu = (position, alwaysUpdate) => {
+        setMenuItemFocus({ position, alwaysUpdate });
         menuState.toggleMenu(true);
     }
 

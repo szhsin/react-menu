@@ -12,7 +12,7 @@ export const stylePropTypes = (name) => ({
 });
 
 // Menu, SubMenu and ControlledMenu
-export const sharedMenuPropTypes = {
+export const menuPropTypes = {
     className: PropTypes.string,
     ...stylePropTypes('menu'),
     ...stylePropTypes('arrow'),
@@ -26,8 +26,8 @@ export const sharedMenuPropTypes = {
 }
 
 // Menu and ControlledMenu
-export const menuPropTypesBase = {
-    ...sharedMenuPropTypes,
+export const rootMenuPropTypes = {
+    ...menuPropTypes,
     containerProps: PropTypes.object,
     initialMounted: PropTypes.bool,
     unmountOnClose: PropTypes.bool,
@@ -55,7 +55,16 @@ export const menuPropTypesBase = {
     onItemClick: PropTypes.func
 };
 
-export const sharedMenuDefaultProp = {
+// Menu and SubMenu
+export const uncontrolledMenuPropTypes = {
+    instanceRef: PropTypes.oneOfType([
+        PropTypes.object,
+        PropTypes.func
+    ]),
+    onMenuChange: PropTypes.func
+}
+
+export const menuDefaultProps = {
     offsetX: 0,
     offsetY: 0,
     align: 'start',
@@ -64,8 +73,8 @@ export const sharedMenuDefaultProp = {
     overflow: 'visible'
 };
 
-export const menuDefaultPropsBase = {
-    ...sharedMenuDefaultProp,
+export const rootMenuDefaultProps = {
+    ...menuDefaultProps,
     reposition: 'auto',
     viewScroll: 'initial',
     transitionTimeout: 200,
