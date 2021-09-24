@@ -1,6 +1,6 @@
 import React from 'react';
 import { Menu, MenuItem, FocusableItem, MenuButton, SubMenu } from '../';
-import { render, fireEvent, waitFor, screen } from '@testing-library/react';
+import { render, fireEvent, waitFor, screen, act } from '@testing-library/react';
 import * as utils from './utils';
 
 const renderMenu = (props, itemProps, submenuProps) => render(
@@ -301,6 +301,48 @@ test('className props are added to related elements in menu and submenu', () => 
     const submenu = screen.getByTestId('submenu');
     expect(submenu).toHaveClass('my-submenu');
     expect(submenu).toHaveStyle('color: red');
+});
+
+test('Open and close menu with instanceRef', async () => {
+    const menuRef = React.createRef();
+    const submenuRef = React.createRef();
+    const { container } = renderMenu({ instanceRef: menuRef }, null, { instanceRef: submenuRef });
+    const menuOptions = { name: 'Menu', container };
+    const submenuOptions = { name: 'Submenu', container };
+    utils.expectMenuToBeInTheDocument(false, menuOptions);
+
+    act(() => {
+        menuRef.current.openMenu(1);
+    });
+    utils.expectMenuToBeOpen(true, menuOptions);
+    await waitFor(() => utils.expectMenuItemToBeHover(utils.queryMenuItem('Submenu'), true));
+
+    act(() => {
+        menuRef.current.openMenu('last', true);
+    });
+    await waitFor(() => utils.expectMenuItemToBeHover(utils.queryMenuItem('Two'), true));
+
+    act(() => {
+        menuRef.current.closeMenu();
+    });
+    utils.expectMenuToBeOpen(false, menuOptions);
+
+    act(() => {
+        menuRef.current.openMenu();
+    });
+    act(() => {
+        submenuRef.current.openMenu('first');
+    });
+    utils.expectMenuToBeOpen(true, menuOptions);
+    utils.expectMenuToBeOpen(true, submenuOptions);
+    utils.expectMenuItemToBeHover(utils.queryMenuItem('Submenu'), true)
+    await waitFor(() => utils.expectMenuItemToBeHover(utils.queryMenuItem('First'), true));
+
+    act(() => {
+        submenuRef.current.closeMenu();
+    });
+    utils.expectMenuToBeOpen(false, submenuOptions);
+    expect(utils.queryMenuItem('Submenu')).toHaveFocus();
 });
 
 test.each([false, true])('Submenu renders differently when parent menu overflow is %s', (overflow) => {
