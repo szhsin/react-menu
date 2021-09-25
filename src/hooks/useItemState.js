@@ -23,7 +23,7 @@ export const useItemState = (ref, index, isHovering, isDisabled) => {
     const onBlur = e => {
         // Focus has moved out of the entire item
         // It handles situation such as clicking on a sibling disabled menu item
-        if (!e.currentTarget.contains(e.relatedTarget)) {
+        if (isHovering && !e.currentTarget.contains(e.relatedTarget)) {
             dispatch({ type: HoverIndexActionTypes.UNSET, index });
         }
     }

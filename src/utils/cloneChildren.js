@@ -32,12 +32,12 @@ export const cloneChildren = (children, startIndex = 0, inRadioGroup) => {
                 index = desc.index;
 
                 if (name === 'MenuGroup') {
-                    const takeOverflow = Boolean(child.props.takeOverflow);
+                    const takeOverflow = !!child.props.takeOverflow;
                     const descOverflow = desc.descendOverflow;
                     // https://stackoverflow.com/questions/3076078/check-if-at-least-two-out-of-three-booleans-are-true
                     if (!isProd &&
                         (descendOverflow === descOverflow ? descOverflow : takeOverflow)
-                    ) throw new Error('[react-menu] Only one MenuGroup in a menu is allowed to have takeOverflow prop.');
+                    ) throw new Error('[React-Menu] Only one MenuGroup in a menu is allowed to have takeOverflow prop.');
                     descendOverflow = descendOverflow || descOverflow || takeOverflow;
                 }
                 return cloneElement(child, { children: desc.items });

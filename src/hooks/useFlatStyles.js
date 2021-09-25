@@ -25,7 +25,7 @@ Example style:
 */
 
 const isObject = obj => obj && typeof obj === 'object';
-const sanitiseKey = key => key.charAt(0) === '$' ? key.slice(1) : key;
+const sanitiseKey = key => key[0] === '$' ? key.slice(1) : key;
 
 export const useFlatStyles = (styles, modifiers) => useMemo(() => {
     if (typeof styles === 'function') return styles(modifiers);

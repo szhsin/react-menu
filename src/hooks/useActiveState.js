@@ -3,9 +3,9 @@ import { Keys } from '../utils';
 
 export const useActiveState = (isHovering, isDisabled, ...moreKeys) => {
     const [active, setActive] = useState(false);
-    const activeKeys = [Keys.SPACE, Keys.ENTER, ...moreKeys];
+    const activeKeys = [Keys.ENTER, Keys.SPACE, ...moreKeys];
 
-    const cancelActive = () => setActive(false);
+    const cancelActive = () => active && setActive(false);
 
     return {
         isActive: active,
@@ -19,19 +19,19 @@ export const useActiveState = (isHovering, isDisabled, ...moreKeys) => {
         onPointerLeave: cancelActive,
 
         onKeyDown: e => {
-            if (isHovering && !isDisabled && activeKeys.includes(e.key)) {
+            if (!active && isHovering && !isDisabled && activeKeys.indexOf(e.key) !== -1) {
                 setActive(true);
             }
         },
 
         onKeyUp: e => {
-            if (activeKeys.includes(e.key)) {
+            if (activeKeys.indexOf(e.key) !== -1) {
                 setActive(false);
             }
         },
 
         onBlur: e => {
-            if (!e.currentTarget.contains(e.relatedTarget)) {
+            if (active && !e.currentTarget.contains(e.relatedTarget)) {
                 setActive(false);
             }
         }

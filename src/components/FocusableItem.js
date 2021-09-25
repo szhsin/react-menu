@@ -23,7 +23,7 @@ export const FocusableItem = withHovering(memo(function FocusableItem({
     externalRef,
     ...restProps
 }) {
-    const isDisabled = Boolean(disabled);
+    const isDisabled = !!disabled;
     validateIndex(index, isDisabled, children);
     const ref = useRef(null);
     const {

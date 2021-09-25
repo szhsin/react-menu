@@ -54,7 +54,7 @@ export const SubMenu = withHovering(memo(function SubMenu({
     itemProps = {},
     ...restProps
 }) {
-    const isDisabled = Boolean(disabled);
+    const isDisabled = !!disabled;
     validateIndex(index, isDisabled, label);
 
     const {
@@ -147,8 +147,8 @@ export const SubMenu = withHovering(memo(function SubMenu({
 
         onKeyUp(e);
         switch (e.key) {
-            case Keys.SPACE:
             case Keys.ENTER:
+            case Keys.SPACE:
             case Keys.RIGHT:
                 openMenu(FocusPositions.FIRST);
                 break;
