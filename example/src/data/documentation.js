@@ -44,12 +44,12 @@ const dirModifier = <li><code>dir: string</code> direction in which the menu exp
 
 const syntheticEventProp = <li><code>syntheticEvent: MouseEvent | KeyboardEvent</code> DOM event object (React synthetic event)</li>;
 
-const keepOpenEventProp = <li><code>keepOpen: bool</code> set this property in event handler to control
+const keepOpenEventProp = <li><code>keepOpen: bool</code> set this property on event object to control
     whether to keep menu open after menu item is activated. Leaving it <code>undefined</code> will behave
     in accordance with WAI-ARIA Authoring Practices.
     See a <a href="https://codesandbox.io/s/react-menu-keepopen-dzscw" target="_blank" rel="noopener noreferrer">Codesandbox example</a> for its usage.</li>;
 
-const stopPropagationEventProp = <li><code>stopPropagation: bool</code> setting this property to <code>true</code> in event handler will skip subsequent <code>onClick</code> or <code>onItemClick</code> events.</li>;
+const stopPropagationEventProp = <li><code>stopPropagation: bool</code> setting this property on event object to <code>true</code> will skip <code>onItemClick</code> event on root menu component.</li>;
 
 const refObjectDesc = <p>Supports <code>ref</code> created by <code>React.createRef</code> or <code>useRef</code> Hook,
     or an object of <code>{'{ current: { getBoundingClientRect(): DOMRect } }'}</code>.
