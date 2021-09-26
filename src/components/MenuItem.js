@@ -64,13 +64,9 @@ export const MenuItem = withHovering(memo(function MenuItem({
         const event = { value, syntheticEvent: e };
         if (e.key !== undefined) event.key = e.key;
         if (isCheckBox) event.checked = !isChecked;
-
-        if (isRadio) {
-            event.name = radioGroup.name;
-            safeCall(radioGroup.onRadioChange, event);
-        }
-
-        if (!event.stopPropagation) safeCall(onClick, event);
+        if (isRadio) event.name = radioGroup.name;
+        safeCall(onClick, event);
+        if (isRadio) safeCall(radioGroup.onRadioChange, event);
         eventHandlers.handleClick(event, isCheckBox || isRadio);
     }
 
