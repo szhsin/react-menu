@@ -183,7 +183,7 @@ export const MenuList = ({
             // prevent browser from scrolling the page when SPACE is pressed
             case Keys.SPACE:
                 // Don't preventDefault on children of FocusableItem 
-                if (e.target && e.target.className.includes(menuClass)) {
+                if (e.target && e.target.className.indexOf(menuClass) !== -1) {
                     e.preventDefault();
                 }
                 break;
@@ -205,7 +205,7 @@ export const MenuList = ({
 
     const handlePosition = useCallback(() => {
         if (!containerRef.current) {
-            if (!isProd) throw new Error('[react-menu] Menu cannot be positioned properly as container ref is null. If you initialise isOpen prop to true for ControlledMenu, please see this link for a solution: https://github.com/szhsin/react-menu/issues/2#issuecomment-719166062');
+            if (!isProd) throw new Error('[React-Menu] Menu cannot be positioned properly as container ref is null. If you initialise isOpen prop to true for ControlledMenu, please see this link for a solution: https://github.com/szhsin/react-menu/issues/2#issuecomment-719166062');
             return;
         }
 
@@ -335,7 +335,7 @@ export const MenuList = ({
         isOpen, overflow, onClose, viewScroll, handlePosition
     ]);
 
-    const hasOverflow = Boolean(overflowData) && overflowData.overflowAmt > 0;
+    const hasOverflow = !!overflowData && overflowData.overflowAmt > 0;
     useEffect(() => {
         if (hasOverflow || !isOpen || !parentScrollingRef) return;
 

@@ -36,7 +36,7 @@ export const MenuItem = withHovering(memo(function MenuItem({
     externalRef,
     ...restProps
 }) {
-    const isDisabled = Boolean(disabled);
+    const isDisabled = !!disabled;
     validateIndex(index, isDisabled, children);
     const ref = useRef();
     const {
@@ -53,10 +53,10 @@ export const MenuItem = withHovering(memo(function MenuItem({
     } = useActiveState(isHovering, isDisabled);
     const isRadio = type === 'radio';
     const isCheckBox = type === 'checkbox';
-    const isAnchor = Boolean(href) && !isDisabled && !isRadio && !isCheckBox;
+    const isAnchor = !!href && !isDisabled && !isRadio && !isCheckBox;
     const isChecked = isRadio
         ? radioGroup.value === value
-        : (isCheckBox ? Boolean(checked) : false);
+        : (isCheckBox ? !!checked : false);
 
     const handleClick = e => {
         if (isDisabled) return;
@@ -80,8 +80,8 @@ export const MenuItem = withHovering(memo(function MenuItem({
 
         onKeyUp(e);
         switch (e.key) {
-            case Keys.SPACE:
             case Keys.ENTER:
+            case Keys.SPACE:
                 if (isAnchor) {
                     ref.current.click();
                 } else {
