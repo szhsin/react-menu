@@ -1372,8 +1372,8 @@ export const features = {
         <ul className="features">
             <li>React menu components for easy and fast web development.</li>
             <li>Unlimited levels of submenu.</li>
+            <li>Supports dropdown or context menu.</li>
             <li>Supports radio and checkbox menu items.</li>
-            <li>Supports context menu.</li>
             <li>Flexible menu positioning.</li>
             <li>Customisable styling.</li>
             <li>Comprehensive keyboard interactions.</li>
