@@ -1,0 +1,26 @@
+.szh-menu-container--theme-dark .szh-menu {
+  color: #cad1d8;
+  background-color: #22262c;
+  border: 1px solid #333;
+  box-shadow: 0 2px 9px 3px rgba(0, 0, 0, 0.25);
+}
+.szh-menu-container--theme-dark .szh-menu__arrow {
+  background-color: #22262c;
+  border-left-color: #333;
+  border-top-color: #333;
+}
+.szh-menu-container--theme-dark .szh-menu__item--hover {
+  background-color: #31363c;
+}
+.szh-menu-container--theme-dark .szh-menu__item--active {
+  background-color: #007bff;
+}
+.szh-menu-container--theme-dark .szh-menu__item--focusable {
+  background-color: inherit;
+}
+.szh-menu-container--theme-dark .szh-menu__item--disabled {
+  color: #666;
+}
+.szh-menu-container--theme-dark .szh-menu__divider {
+  background-color: #3a3a3a;
+}
