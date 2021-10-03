@@ -1,11 +1,17 @@
-function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
+'use strict';
+
+Object.defineProperty(exports, '__esModule', { value: true });
 
 var React = require('react');
-var React__default = _interopDefault(React);
 var ReactDOM = require('react-dom');
-var ReactDOM__default = _interopDefault(ReactDOM);
-var PropTypes = _interopDefault(require('prop-types'));
+var PropTypes = require('prop-types');
 var reactTransitionState = require('react-transition-state');
+
+function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
+
+var React__default = /*#__PURE__*/_interopDefaultLegacy(React);
+var ReactDOM__default = /*#__PURE__*/_interopDefaultLegacy(ReactDOM);
+var PropTypes__default = /*#__PURE__*/_interopDefaultLegacy(PropTypes);
 
 var menuContainerClass = 'szh-menu-container';
 var menuClass = 'szh-menu';
@@ -18,13 +24,13 @@ var menuGroupClass = 'group';
 var subMenuClass = 'submenu';
 var radioGroupClass = 'radio-group';
 var initialHoverIndex = -1;
-var HoverIndexContext = /*#__PURE__*/React__default.createContext(initialHoverIndex);
-var MenuListItemContext = /*#__PURE__*/React__default.createContext({});
-var MenuListContext = /*#__PURE__*/React__default.createContext({});
-var EventHandlersContext = /*#__PURE__*/React__default.createContext({});
-var RadioGroupContext = /*#__PURE__*/React__default.createContext({});
-var SettingsContext = /*#__PURE__*/React__default.createContext({});
-var ItemSettingsContext = /*#__PURE__*/React__default.createContext({});
+var HoverIndexContext = React__default["default"].createContext(initialHoverIndex);
+var MenuListItemContext = React__default["default"].createContext({});
+var MenuListContext = React__default["default"].createContext({});
+var EventHandlersContext = React__default["default"].createContext({});
+var RadioGroupContext = React__default["default"].createContext({});
+var SettingsContext = React__default["default"].createContext({});
+var ItemSettingsContext = React__default["default"].createContext({});
 var Keys = Object.freeze({
   'ENTER': 'Enter',
   'ESC': 'Escape',
@@ -66,6 +72,55 @@ var MenuStateMap = Object.freeze({
   exiting: 'closing',
   exited: 'closed'
 });
+
+function _typeof(obj) {
+  "@babel/helpers - typeof";
+
+  if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
+    _typeof = function (obj) {
+      return typeof obj;
+    };
+  } else {
+    _typeof = function (obj) {
+      return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+    };
+  }
+
+  return _typeof(obj);
+}
+
+function _extends() {
+  _extends = Object.assign || function (target) {
+    for (var i = 1; i < arguments.length; i++) {
+      var source = arguments[i];
+
+      for (var key in source) {
+        if (Object.prototype.hasOwnProperty.call(source, key)) {
+          target[key] = source[key];
+        }
+      }
+    }
+
+    return target;
+  };
+
+  return _extends.apply(this, arguments);
+}
+
+function _objectWithoutPropertiesLoose(source, excluded) {
+  if (source == null) return {};
+  var target = {};
+  var sourceKeys = Object.keys(source);
+  var key, i;
+
+  for (i = 0; i < sourceKeys.length; i++) {
+    key = sourceKeys[i];
+    if (excluded.indexOf(key) >= 0) continue;
+    target[key] = source[key];
+  }
+
+  return target;
+}
 
 var isProd = process.env.NODE_ENV === 'production';
 var isMenuOpen = function isMenuOpen(state) {
@@ -119,8 +174,8 @@ var attachHandlerProps = function attachHandlerProps(handlers, props) {
   if (!props) return handlers;
   var result = {};
 
-  var _loop = function _loop() {
-    var handlerName = _Object$keys[_i];
+  var _loop = function _loop(_i2, _Object$keys2) {
+    var handlerName = _Object$keys2[_i2];
     var handler = handlers[handlerName];
     var propHandler = props[handlerName];
     var attachedHandler = void 0;
@@ -137,8 +192,8 @@ var attachHandlerProps = function attachHandlerProps(handlers, props) {
     result[handlerName] = attachedHandler;
   };
 
-  for (var _i = 0, _Object$keys = Object.keys(handlers); _i < _Object$keys.length; _i++) {
-    _loop();
+  for (var _i2 = 0, _Object$keys2 = Object.keys(handlers); _i2 < _Object$keys2.length; _i2++) {
+    _loop(_i2, _Object$keys2);
   }
 
   return result;
@@ -200,20 +255,20 @@ var cloneChildren = function cloneChildren(children, startIndex, inRadioGroup) {
               type: 'radio'
             };
             if (!child.props.disabled) props.index = index++;
-            return /*#__PURE__*/React.cloneElement(child, props);
+            return React.cloneElement(child, props);
           }
         }
 
       case 'SubMenu':
       case 'FocusableItem':
-        return child.props.disabled ? child : /*#__PURE__*/React.cloneElement(child, {
+        return child.props.disabled ? child : React.cloneElement(child, {
           index: index++
         });
 
       default:
         {
           var innerChildren = child.props.children;
-          if (innerChildren === null || typeof innerChildren !== "object") return child;
+          if (innerChildren === null || _typeof(innerChildren) !== "object") return child;
           var desc = cloneChildren(innerChildren, index, inRadioGroup || name === 'MenuRadioGroup');
           index = desc.index;
 
@@ -224,7 +279,7 @@ var cloneChildren = function cloneChildren(children, startIndex, inRadioGroup) {
             descendOverflow = descendOverflow || descOverflow || takeOverflow;
           }
 
-          return /*#__PURE__*/React.cloneElement(child, {
+          return React.cloneElement(child, {
             children: desc.items
           });
         }
@@ -237,79 +292,46 @@ var cloneChildren = function cloneChildren(children, startIndex, inRadioGroup) {
   };
 };
 
-function _extends() {
-  _extends = Object.assign || function (target) {
-    for (var i = 1; i < arguments.length; i++) {
-      var source = arguments[i];
-
-      for (var key in source) {
-        if (Object.prototype.hasOwnProperty.call(source, key)) {
-          target[key] = source[key];
-        }
-      }
-    }
-
-    return target;
-  };
-
-  return _extends.apply(this, arguments);
-}
-
-function _objectWithoutPropertiesLoose(source, excluded) {
-  if (source == null) return {};
-  var target = {};
-  var sourceKeys = Object.keys(source);
-  var key, i;
-
-  for (i = 0; i < sourceKeys.length; i++) {
-    key = sourceKeys[i];
-    if (excluded.indexOf(key) >= 0) continue;
-    target[key] = source[key];
-  }
-
-  return target;
-}
-
 var stylePropTypes = function stylePropTypes(name) {
   var _ref;
 
-  return _ref = {}, _ref[name ? name + "ClassName" : 'className'] = PropTypes.oneOfType([PropTypes.string, PropTypes.func]), _ref[name ? name + "Styles" : 'styles'] = PropTypes.oneOfType([PropTypes.object, PropTypes.func]), _ref;
+  return _ref = {}, _ref[name ? name + "ClassName" : 'className'] = PropTypes__default["default"].oneOfType([PropTypes__default["default"].string, PropTypes__default["default"].func]), _ref[name ? name + "Styles" : 'styles'] = PropTypes__default["default"].oneOfType([PropTypes__default["default"].object, PropTypes__default["default"].func]), _ref;
 };
 var menuPropTypes = _extends({
-  className: PropTypes.string
+  className: PropTypes__default["default"].string
 }, stylePropTypes('menu'), stylePropTypes('arrow'), {
-  arrow: PropTypes.bool,
-  offsetX: PropTypes.number,
-  offsetY: PropTypes.number,
-  align: PropTypes.oneOf(['start', 'center', 'end']),
-  direction: PropTypes.oneOf(['left', 'right', 'top', 'bottom']),
-  position: PropTypes.oneOf(['auto', 'anchor', 'initial']),
-  overflow: PropTypes.oneOf(['auto', 'visible', 'hidden'])
+  arrow: PropTypes__default["default"].bool,
+  offsetX: PropTypes__default["default"].number,
+  offsetY: PropTypes__default["default"].number,
+  align: PropTypes__default["default"].oneOf(['start', 'center', 'end']),
+  direction: PropTypes__default["default"].oneOf(['left', 'right', 'top', 'bottom']),
+  position: PropTypes__default["default"].oneOf(['auto', 'anchor', 'initial']),
+  overflow: PropTypes__default["default"].oneOf(['auto', 'visible', 'hidden'])
 });
 var rootMenuPropTypes = _extends({}, menuPropTypes, {
-  containerProps: PropTypes.object,
-  initialMounted: PropTypes.bool,
-  unmountOnClose: PropTypes.bool,
-  transition: PropTypes.oneOfType([PropTypes.bool, PropTypes.exact({
-    open: PropTypes.bool,
-    close: PropTypes.bool,
-    item: PropTypes.bool
+  containerProps: PropTypes__default["default"].object,
+  initialMounted: PropTypes__default["default"].bool,
+  unmountOnClose: PropTypes__default["default"].bool,
+  transition: PropTypes__default["default"].oneOfType([PropTypes__default["default"].bool, PropTypes__default["default"].exact({
+    open: PropTypes__default["default"].bool,
+    close: PropTypes__default["default"].bool,
+    item: PropTypes__default["default"].bool
   })]),
-  transitionTimeout: PropTypes.number,
-  boundingBoxRef: PropTypes.object,
-  boundingBoxPadding: PropTypes.string,
-  reposition: PropTypes.oneOf(['auto', 'initial']),
-  repositionFlag: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  viewScroll: PropTypes.oneOf(['auto', 'close', 'initial']),
-  submenuOpenDelay: PropTypes.number,
-  submenuCloseDelay: PropTypes.number,
-  portal: PropTypes.bool,
-  theming: PropTypes.string,
-  onItemClick: PropTypes.func
+  transitionTimeout: PropTypes__default["default"].number,
+  boundingBoxRef: PropTypes__default["default"].object,
+  boundingBoxPadding: PropTypes__default["default"].string,
+  reposition: PropTypes__default["default"].oneOf(['auto', 'initial']),
+  repositionFlag: PropTypes__default["default"].oneOfType([PropTypes__default["default"].string, PropTypes__default["default"].number]),
+  viewScroll: PropTypes__default["default"].oneOf(['auto', 'close', 'initial']),
+  submenuOpenDelay: PropTypes__default["default"].number,
+  submenuCloseDelay: PropTypes__default["default"].number,
+  portal: PropTypes__default["default"].bool,
+  theming: PropTypes__default["default"].string,
+  onItemClick: PropTypes__default["default"].func
 });
 var uncontrolledMenuPropTypes = {
-  instanceRef: PropTypes.oneOfType([PropTypes.object, PropTypes.func]),
-  onMenuChange: PropTypes.func
+  instanceRef: PropTypes__default["default"].oneOfType([PropTypes__default["default"].object, PropTypes__default["default"].func]),
+  onMenuChange: PropTypes__default["default"].func
 };
 var menuDefaultProps = {
   offsetX: 0,
@@ -328,8 +350,8 @@ var rootMenuDefaultProps = _extends({}, menuDefaultProps, {
 });
 
 var withHovering = function withHovering(WrapppedComponent, name) {
-  var WithHovering = defineName( /*#__PURE__*/React.forwardRef(function (props, ref) {
-    return /*#__PURE__*/React__default.createElement(WrapppedComponent, _extends({}, props, {
+  var WithHovering = defineName(React.forwardRef(function (props, ref) {
+    return React__default["default"].createElement(WrapppedComponent, _extends({}, props, {
       externalRef: ref,
       isHovering: React.useContext(HoverIndexContext) === props.index
     }));
@@ -387,8 +409,8 @@ var useBEM = function useBEM(_ref) {
     var blockElement = element ? block + "__" + element : block;
     var classString = blockElement;
 
-    for (var _i = 0, _Object$keys = Object.keys(modifiers || {}); _i < _Object$keys.length; _i++) {
-      var name = _Object$keys[_i];
+    for (var _i2 = 0, _Object$keys2 = Object.keys(modifiers || {}); _i2 < _Object$keys2.length; _i2++) {
+      var name = _Object$keys2[_i2];
       var value = modifiers[name];
 
       if (value) {
@@ -428,7 +450,7 @@ var useCombinedRef = function useCombinedRef(refA, refB) {
 };
 
 var isObject = function isObject(obj) {
-  return obj && typeof obj === 'object';
+  return obj && _typeof(obj) === 'object';
 };
 
 var sanitiseKey = function sanitiseKey(key) {
@@ -442,16 +464,16 @@ var useFlatStyles = function useFlatStyles(styles, modifiers) {
     if (!modifiers) return styles;
     var style = {};
 
-    for (var _i = 0, _Object$keys = Object.keys(styles); _i < _Object$keys.length; _i++) {
-      var prop = _Object$keys[_i];
+    for (var _i2 = 0, _Object$keys2 = Object.keys(styles); _i2 < _Object$keys2.length; _i2++) {
+      var prop = _Object$keys2[_i2];
       var value = styles[prop];
 
       if (isObject(value)) {
         var modifierValue = modifiers[sanitiseKey(prop)];
 
         if (typeof modifierValue === 'string') {
-          for (var _i2 = 0, _Object$keys2 = Object.keys(value); _i2 < _Object$keys2.length; _i2++) {
-            var nestedProp = _Object$keys2[_i2];
+          for (var _i4 = 0, _Object$keys4 = Object.keys(value); _i4 < _Object$keys4.length; _i4++) {
+            var nestedProp = _Object$keys4[_i4];
             var nestedValue = value[nestedProp];
 
             if (isObject(nestedValue)) {
@@ -593,21 +615,21 @@ var useMenuStateAndFocus = function useMenuStateAndFocus(options) {
   });
 };
 
-var _excluded = ["className", "styles", "isOpen", "disabled", "children"];
-var MenuButton = defineName( /*#__PURE__*/React.forwardRef(function MenuButton(_ref, ref) {
+var _excluded$a = ["className", "styles", "isOpen", "disabled", "children"];
+var MenuButton = defineName(React.forwardRef(function MenuButton(_ref, ref) {
   var className = _ref.className,
       styles = _ref.styles,
       isOpen = _ref.isOpen,
       disabled = _ref.disabled,
       children = _ref.children,
-      restProps = _objectWithoutPropertiesLoose(_ref, _excluded);
+      restProps = _objectWithoutPropertiesLoose(_ref, _excluded$a);
 
   var modifiers = React.useMemo(function () {
     return Object.freeze({
       open: isOpen
     });
   }, [isOpen]);
-  return /*#__PURE__*/React__default.createElement("button", _extends({
+  return React__default["default"].createElement("button", _extends({
     "aria-haspopup": true,
     "aria-expanded": isOpen,
     "aria-disabled": disabled || undefined,
@@ -624,8 +646,8 @@ var MenuButton = defineName( /*#__PURE__*/React.forwardRef(function MenuButton(_
   }), children);
 }), 'MenuButton');
 MenuButton.propTypes = _extends({}, stylePropTypes(), {
-  isOpen: PropTypes.bool,
-  disabled: PropTypes.bool
+  isOpen: PropTypes__default["default"].bool,
+  disabled: PropTypes__default["default"].bool
 });
 
 var getPositionHelpers = function getPositionHelpers(_ref) {
@@ -1006,7 +1028,7 @@ var positionMenu = function positionMenu(_ref) {
   }
 };
 
-var _excluded$1 = ["ariaLabel", "menuClassName", "menuStyles", "arrowClassName", "arrowStyles", "anchorPoint", "anchorRef", "containerRef", "externalRef", "parentScrollingRef", "arrow", "align", "direction", "position", "overflow", "repositionFlag", "captureFocus", "state", "endTransition", "isDisabled", "menuItemFocus", "offsetX", "offsetY", "children", "onClose"];
+var _excluded$9 = ["ariaLabel", "menuClassName", "menuStyles", "arrowClassName", "arrowStyles", "anchorPoint", "anchorRef", "containerRef", "externalRef", "parentScrollingRef", "arrow", "align", "direction", "position", "overflow", "repositionFlag", "captureFocus", "state", "endTransition", "isDisabled", "menuItemFocus", "offsetX", "offsetY", "children", "onClose"];
 var MenuList = function MenuList(_ref) {
   var ariaLabel = _ref.ariaLabel,
       menuClassName = _ref.menuClassName,
@@ -1034,7 +1056,7 @@ var MenuList = function MenuList(_ref) {
       offsetY = _ref.offsetY,
       children = _ref.children,
       onClose = _ref.onClose,
-      restProps = _objectWithoutPropertiesLoose(_ref, _excluded$1);
+      restProps = _objectWithoutPropertiesLoose(_ref, _excluded$9);
 
   var isOpen = isMenuOpen(menuState);
 
@@ -1495,7 +1517,7 @@ var MenuList = function MenuList(_ref) {
     onKeyDown: handleKeyDown,
     onAnimationEnd: handleAnimationEnd
   }, restProps);
-  return /*#__PURE__*/React__default.createElement("ul", _extends({
+  return React__default["default"].createElement("ul", _extends({
     role: "menu",
     tabIndex: "-1",
     "aria-disabled": isDisabled || undefined,
@@ -1511,18 +1533,18 @@ var MenuList = function MenuList(_ref) {
       left: menuPosition.x + "px",
       top: menuPosition.y + "px"
     })
-  }), arrow && /*#__PURE__*/React__default.createElement("div", {
+  }), arrow && React__default["default"].createElement("div", {
     className: _arrowClass,
     style: _extends({}, _arrowStyles, {
       left: arrowPosition.x && arrowPosition.x + "px",
       top: arrowPosition.y && arrowPosition.y + "px"
     }),
     ref: arrowRef
-  }), /*#__PURE__*/React__default.createElement(MenuListContext.Provider, {
+  }), React__default["default"].createElement(MenuListContext.Provider, {
     value: listContext
-  }, /*#__PURE__*/React__default.createElement(MenuListItemContext.Provider, {
+  }, React__default["default"].createElement(MenuListItemContext.Provider, {
     value: itemContext
-  }, /*#__PURE__*/React__default.createElement(HoverIndexContext.Provider, {
+  }, React__default["default"].createElement(HoverIndexContext.Provider, {
     value: hoverIndex
   }, menuItems))));
 };
@@ -1542,8 +1564,8 @@ function submenuCountReducer(state, _ref7) {
   }
 }
 
-var _excluded$2 = ["aria-label", "className", "containerProps", "initialMounted", "unmountOnClose", "transition", "transitionTimeout", "boundingBoxRef", "boundingBoxPadding", "reposition", "submenuOpenDelay", "submenuCloseDelay", "skipOpen", "viewScroll", "portal", "theming", "onItemClick", "onClose"];
-var ControlledMenu = /*#__PURE__*/React.forwardRef(function ControlledMenu(_ref, externalRef) {
+var _excluded$8 = ["aria-label", "className", "containerProps", "initialMounted", "unmountOnClose", "transition", "transitionTimeout", "boundingBoxRef", "boundingBoxPadding", "reposition", "submenuOpenDelay", "submenuCloseDelay", "skipOpen", "viewScroll", "portal", "theming", "onItemClick", "onClose"];
+var ControlledMenu = React.forwardRef(function ControlledMenu(_ref, externalRef) {
   var ariaLabel = _ref['aria-label'],
       className = _ref.className,
       containerProps = _ref.containerProps,
@@ -1562,7 +1584,7 @@ var ControlledMenu = /*#__PURE__*/React.forwardRef(function ControlledMenu(_ref,
       theming = _ref.theming,
       onItemClick = _ref.onItemClick,
       onClose = _ref.onClose,
-      restProps = _objectWithoutPropertiesLoose(_ref, _excluded$2);
+      restProps = _objectWithoutPropertiesLoose(_ref, _excluded$8);
 
   var containerRef = React.useRef(null);
   var scrollingRef = React.useRef(null);
@@ -1657,20 +1679,20 @@ var ControlledMenu = /*#__PURE__*/React.forwardRef(function ControlledMenu(_ref,
     onKeyDown: handleKeyDown,
     onBlur: handleBlur
   }, containerProps);
-  var menuList = /*#__PURE__*/React__default.createElement("div", _extends({}, containerProps, handlers, {
+  var menuList = React__default["default"].createElement("div", _extends({}, containerProps, handlers, {
     className: useBEM({
       block: menuContainerClass,
       modifiers: modifiers,
       className: className
     }),
     ref: containerRef
-  }), state && /*#__PURE__*/React__default.createElement(SettingsContext.Provider, {
+  }), state && React__default["default"].createElement(SettingsContext.Provider, {
     value: settings
-  }, /*#__PURE__*/React__default.createElement(ItemSettingsContext.Provider, {
+  }, React__default["default"].createElement(ItemSettingsContext.Provider, {
     value: itemSettings
-  }, /*#__PURE__*/React__default.createElement(EventHandlersContext.Provider, {
+  }, React__default["default"].createElement(EventHandlersContext.Provider, {
     value: eventHandlers
-  }, /*#__PURE__*/React__default.createElement(MenuList, _extends({}, restProps, {
+  }, React__default["default"].createElement(MenuList, _extends({}, restProps, {
     ariaLabel: ariaLabel || 'Menu',
     externalRef: externalRef,
     containerRef: containerRef,
@@ -1678,43 +1700,44 @@ var ControlledMenu = /*#__PURE__*/React.forwardRef(function ControlledMenu(_ref,
   }))))));
 
   if (portal) {
-    return /*#__PURE__*/ReactDOM__default.createPortal(menuList, document.body);
+    return ReactDOM__default["default"].createPortal(menuList, document.body);
   } else {
     return menuList;
   }
 });
 ControlledMenu.propTypes = _extends({}, rootMenuPropTypes, {
-  state: PropTypes.oneOf(values(MenuStateMap)),
-  anchorPoint: PropTypes.exact({
-    x: PropTypes.number,
-    y: PropTypes.number
+  state: PropTypes__default["default"].oneOf(values(MenuStateMap)),
+  anchorPoint: PropTypes__default["default"].exact({
+    x: PropTypes__default["default"].number,
+    y: PropTypes__default["default"].number
   }),
-  anchorRef: PropTypes.object,
-  skipOpen: PropTypes.object,
-  captureFocus: PropTypes.bool,
-  menuItemFocus: PropTypes.exact({
-    position: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-    alwaysUpdate: PropTypes.bool
+  anchorRef: PropTypes__default["default"].object,
+  skipOpen: PropTypes__default["default"].object,
+  captureFocus: PropTypes__default["default"].bool,
+  menuItemFocus: PropTypes__default["default"].exact({
+    position: PropTypes__default["default"].oneOfType([PropTypes__default["default"].string, PropTypes__default["default"].number]),
+    alwaysUpdate: PropTypes__default["default"].bool
   }),
-  onClose: PropTypes.func
+  onClose: PropTypes__default["default"].func
 });
 ControlledMenu.defaultProps = _extends({}, rootMenuDefaultProps, {
   menuItemFocus: {}
 });
 
-var _excluded$3 = ["aria-label", "captureFocus", "menuButton", "instanceRef", "onMenuChange"],
-    _excluded2 = ["openMenu", "toggleMenu"];
-var Menu = /*#__PURE__*/React.forwardRef(function Menu(_ref, externalRef) {
-  var ariaLabel = _ref['aria-label'],
-      menuButton = _ref.menuButton,
+var _excluded$7 = ["aria-label", "captureFocus", "menuButton", "instanceRef", "onMenuChange"],
+    _excluded2$2 = ["openMenu", "toggleMenu"];
+var Menu = React.forwardRef(function Menu(_ref, externalRef) {
+  var ariaLabel = _ref['aria-label'];
+      _ref.captureFocus;
+      var menuButton = _ref.menuButton,
       instanceRef = _ref.instanceRef,
       onMenuChange = _ref.onMenuChange,
-      restProps = _objectWithoutPropertiesLoose(_ref, _excluded$3);
+      restProps = _objectWithoutPropertiesLoose(_ref, _excluded$7);
 
   var _useMenuStateAndFocus = useMenuStateAndFocus(restProps),
       openMenu = _useMenuStateAndFocus.openMenu,
       toggleMenu = _useMenuStateAndFocus.toggleMenu,
-      stateProps = _objectWithoutPropertiesLoose(_useMenuStateAndFocus, _excluded2);
+      stateProps = _objectWithoutPropertiesLoose(_useMenuStateAndFocus, _excluded2$2);
 
   var isOpen = isMenuOpen(stateProps.state);
   var skipOpen = React.useRef(false);
@@ -1763,7 +1786,7 @@ var Menu = /*#__PURE__*/React.forwardRef(function Menu(_ref, externalRef) {
     buttonProps.isOpen = isOpen;
   }
 
-  var renderButton = /*#__PURE__*/React__default.cloneElement(button, buttonProps);
+  var renderButton = React__default["default"].cloneElement(button, buttonProps);
   useMenuChange(onMenuChange, isOpen);
   React.useImperativeHandle(instanceRef, function () {
     return {
@@ -1782,18 +1805,18 @@ var Menu = /*#__PURE__*/React.forwardRef(function Menu(_ref, externalRef) {
     skipOpen: skipOpen
   });
 
-  return /*#__PURE__*/React__default.createElement(React__default.Fragment, null, renderButton, /*#__PURE__*/React__default.createElement(ControlledMenu, menuProps));
+  return React__default["default"].createElement(React__default["default"].Fragment, null, renderButton, React__default["default"].createElement(ControlledMenu, menuProps));
 });
 Menu.propTypes = _extends({}, rootMenuPropTypes, uncontrolledMenuPropTypes, {
-  menuButton: PropTypes.oneOfType([PropTypes.element, PropTypes.func]).isRequired
+  menuButton: PropTypes__default["default"].oneOfType([PropTypes__default["default"].element, PropTypes__default["default"].func]).isRequired
 });
 Menu.defaultProps = rootMenuDefaultProps;
 
-var _excluded$4 = ["aria-label", "className", "disabled", "label", "index", "onMenuChange", "isHovering", "instanceRef", "captureFocus", "repositionFlag", "itemProps"],
+var _excluded$6 = ["aria-label", "className", "disabled", "label", "index", "onMenuChange", "isHovering", "instanceRef", "captureFocus", "repositionFlag", "itemProps"],
     _excluded2$1 = ["openMenu", "toggleMenu", "state"],
     _excluded3 = ["isActive", "onKeyUp"],
     _excluded4 = ["ref", "className", "styles"];
-var SubMenu = withHovering( /*#__PURE__*/React.memo(function SubMenu(_ref) {
+var SubMenu = withHovering(React.memo(function SubMenu(_ref) {
   var ariaLabel = _ref['aria-label'],
       className = _ref.className,
       disabled = _ref.disabled,
@@ -1801,10 +1824,12 @@ var SubMenu = withHovering( /*#__PURE__*/React.memo(function SubMenu(_ref) {
       index = _ref.index,
       onMenuChange = _ref.onMenuChange,
       isHovering = _ref.isHovering,
-      instanceRef = _ref.instanceRef,
-      _ref$itemProps = _ref.itemProps,
+      instanceRef = _ref.instanceRef;
+      _ref.captureFocus;
+      _ref.repositionFlag;
+      var _ref$itemProps = _ref.itemProps,
       itemProps = _ref$itemProps === void 0 ? {} : _ref$itemProps,
-      restProps = _objectWithoutPropertiesLoose(_ref, _excluded$4);
+      restProps = _objectWithoutPropertiesLoose(_ref, _excluded$6);
 
   var isDisabled = !!disabled;
   validateIndex(index, isDisabled, label);
@@ -1992,7 +2017,7 @@ var SubMenu = withHovering( /*#__PURE__*/React.memo(function SubMenu(_ref) {
   }), restItemProps);
 
   var getMenuList = function getMenuList() {
-    var menuList = /*#__PURE__*/React__default.createElement(MenuList, _extends({}, restProps, otherStateProps, {
+    var menuList = React__default["default"].createElement(MenuList, _extends({}, restProps, otherStateProps, {
       state: state,
       ariaLabel: ariaLabel || (typeof label === 'string' ? label : 'Submenu'),
       anchorRef: itemRef,
@@ -2000,10 +2025,10 @@ var SubMenu = withHovering( /*#__PURE__*/React.memo(function SubMenu(_ref) {
       parentScrollingRef: isPortal && parentMenuRef,
       isDisabled: isDisabled
     }));
-    return isPortal ? /*#__PURE__*/ReactDOM.createPortal(menuList, rootMenuRef.current) : menuList;
+    return isPortal ? ReactDOM.createPortal(menuList, rootMenuRef.current) : menuList;
   };
 
-  return /*#__PURE__*/React__default.createElement("li", {
+  return React__default["default"].createElement("li", {
     className: useBEM({
       block: menuClass,
       element: subMenuClass,
@@ -2012,7 +2037,7 @@ var SubMenu = withHovering( /*#__PURE__*/React.memo(function SubMenu(_ref) {
     role: "presentation",
     ref: containerRef,
     onKeyDown: handleKeyDown
-  }, /*#__PURE__*/React__default.createElement("div", _extends({
+  }, React__default["default"].createElement("div", _extends({
     role: "menuitem",
     "aria-haspopup": true,
     "aria-expanded": isOpen,
@@ -2032,17 +2057,17 @@ var SubMenu = withHovering( /*#__PURE__*/React.memo(function SubMenu(_ref) {
   }, [label, modifiers])), state && getMenuList());
 }), 'SubMenu');
 SubMenu.propTypes = _extends({}, menuPropTypes, uncontrolledMenuPropTypes, {
-  disabled: PropTypes.bool,
-  label: PropTypes.oneOfType([PropTypes.node, PropTypes.func]),
-  itemProps: PropTypes.shape(_extends({}, stylePropTypes()))
+  disabled: PropTypes__default["default"].bool,
+  label: PropTypes__default["default"].oneOfType([PropTypes__default["default"].node, PropTypes__default["default"].func]),
+  itemProps: PropTypes__default["default"].shape(_extends({}, stylePropTypes()))
 });
 SubMenu.defaultProps = _extends({}, menuDefaultProps, {
   direction: 'right'
 });
 
 var _excluded$5 = ["className", "styles", "value", "href", "type", "checked", "disabled", "index", "children", "onClick", "isHovering", "externalRef"],
-    _excluded2$2 = ["isActive", "onKeyUp", "onBlur"];
-var MenuItem = withHovering( /*#__PURE__*/React.memo(function MenuItem(_ref) {
+    _excluded2 = ["isActive", "onKeyUp", "onBlur"];
+var MenuItem = withHovering(React.memo(function MenuItem(_ref) {
   var className = _ref.className,
       styles = _ref.styles,
       value = _ref.value,
@@ -2074,7 +2099,7 @@ var MenuItem = withHovering( /*#__PURE__*/React.memo(function MenuItem(_ref) {
       isActive = _useActiveState.isActive,
       onKeyUp = _useActiveState.onKeyUp,
       activeStateBlur = _useActiveState.onBlur,
-      activeStateHandlers = _objectWithoutPropertiesLoose(_useActiveState, _excluded2$2);
+      activeStateHandlers = _objectWithoutPropertiesLoose(_useActiveState, _excluded2);
 
   var isRadio = type === 'radio';
   var isCheckBox = type === 'checkbox';
@@ -2157,27 +2182,27 @@ var MenuItem = withHovering( /*#__PURE__*/React.memo(function MenuItem(_ref) {
   }, [children, modifiers]);
 
   if (isAnchor) {
-    return /*#__PURE__*/React__default.createElement("li", {
+    return React__default["default"].createElement("li", {
       role: "presentation"
-    }, /*#__PURE__*/React__default.createElement("a", _extends({}, menuItemProps, {
+    }, React__default["default"].createElement("a", _extends({}, menuItemProps, {
       href: href
     }), renderChildren));
   } else {
-    return /*#__PURE__*/React__default.createElement("li", menuItemProps, renderChildren);
+    return React__default["default"].createElement("li", menuItemProps, renderChildren);
   }
 }), 'MenuItem');
 MenuItem.propTypes = _extends({}, stylePropTypes(), {
-  value: PropTypes.any,
-  href: PropTypes.string,
-  type: PropTypes.oneOf(['checkbox', 'radio']),
-  checked: PropTypes.bool,
-  disabled: PropTypes.bool,
-  children: PropTypes.oneOfType([PropTypes.node, PropTypes.func]),
-  onClick: PropTypes.func
+  value: PropTypes__default["default"].any,
+  href: PropTypes__default["default"].string,
+  type: PropTypes__default["default"].oneOf(['checkbox', 'radio']),
+  checked: PropTypes__default["default"].bool,
+  disabled: PropTypes__default["default"].bool,
+  children: PropTypes__default["default"].oneOfType([PropTypes__default["default"].node, PropTypes__default["default"].func]),
+  onClick: PropTypes__default["default"].func
 });
 
-var _excluded$6 = ["className", "styles", "disabled", "index", "children", "isHovering", "externalRef"];
-var FocusableItem = withHovering( /*#__PURE__*/React.memo(function FocusableItem(_ref) {
+var _excluded$4 = ["className", "styles", "disabled", "index", "children", "isHovering", "externalRef"];
+var FocusableItem = withHovering(React.memo(function FocusableItem(_ref) {
   var className = _ref.className,
       styles = _ref.styles,
       disabled = _ref.disabled,
@@ -2185,7 +2210,7 @@ var FocusableItem = withHovering( /*#__PURE__*/React.memo(function FocusableItem
       children = _ref.children,
       isHovering = _ref.isHovering,
       externalRef = _ref.externalRef,
-      restProps = _objectWithoutPropertiesLoose(_ref, _excluded$6);
+      restProps = _objectWithoutPropertiesLoose(_ref, _excluded$4);
 
   var isDisabled = !!disabled;
   validateIndex(index, isDisabled, children);
@@ -2221,7 +2246,7 @@ var FocusableItem = withHovering( /*#__PURE__*/React.memo(function FocusableItem
     onFocus: setHover,
     onBlur: onBlur
   }, restProps);
-  return /*#__PURE__*/React__default.createElement("li", _extends({
+  return React__default["default"].createElement("li", _extends({
     "aria-disabled": isDisabled || undefined,
     role: "menuitem",
     tabIndex: "-1"
@@ -2237,17 +2262,17 @@ var FocusableItem = withHovering( /*#__PURE__*/React.memo(function FocusableItem
   }), renderChildren);
 }), 'FocusableItem');
 FocusableItem.propTypes = _extends({}, stylePropTypes(), {
-  disabled: PropTypes.bool,
-  children: PropTypes.func
+  disabled: PropTypes__default["default"].bool,
+  children: PropTypes__default["default"].func
 });
 
-var _excluded$7 = ["className", "styles"];
-var MenuDivider = /*#__PURE__*/React.memo( /*#__PURE__*/React.forwardRef(function MenuDivider(_ref, externalRef) {
+var _excluded$3 = ["className", "styles"];
+var MenuDivider = React.memo(React.forwardRef(function MenuDivider(_ref, externalRef) {
   var className = _ref.className,
       styles = _ref.styles,
-      restProps = _objectWithoutPropertiesLoose(_ref, _excluded$7);
+      restProps = _objectWithoutPropertiesLoose(_ref, _excluded$3);
 
-  return /*#__PURE__*/React__default.createElement("li", _extends({
+  return React__default["default"].createElement("li", _extends({
     role: "separator"
   }, restProps, {
     ref: externalRef,
@@ -2261,13 +2286,13 @@ var MenuDivider = /*#__PURE__*/React.memo( /*#__PURE__*/React.forwardRef(functio
 }));
 MenuDivider.propTypes = _extends({}, stylePropTypes());
 
-var _excluded$8 = ["className", "styles"];
-var MenuHeader = /*#__PURE__*/React.memo( /*#__PURE__*/React.forwardRef(function MenuHeader(_ref, externalRef) {
+var _excluded$2 = ["className", "styles"];
+var MenuHeader = React.memo(React.forwardRef(function MenuHeader(_ref, externalRef) {
   var className = _ref.className,
       styles = _ref.styles,
-      restProps = _objectWithoutPropertiesLoose(_ref, _excluded$8);
+      restProps = _objectWithoutPropertiesLoose(_ref, _excluded$2);
 
-  return /*#__PURE__*/React__default.createElement("li", _extends({
+  return React__default["default"].createElement("li", _extends({
     role: "presentation"
   }, restProps, {
     ref: externalRef,
@@ -2281,12 +2306,12 @@ var MenuHeader = /*#__PURE__*/React.memo( /*#__PURE__*/React.forwardRef(function
 }));
 MenuHeader.propTypes = _extends({}, stylePropTypes());
 
-var _excluded$9 = ["className", "styles", "takeOverflow"];
-var MenuGroup = defineName( /*#__PURE__*/React.forwardRef(function MenuGroup(_ref, externalRef) {
+var _excluded$1 = ["className", "styles", "takeOverflow"];
+var MenuGroup = defineName(React.forwardRef(function MenuGroup(_ref, externalRef) {
   var className = _ref.className,
       styles = _ref.styles,
       takeOverflow = _ref.takeOverflow,
-      restProps = _objectWithoutPropertiesLoose(_ref, _excluded$9);
+      restProps = _objectWithoutPropertiesLoose(_ref, _excluded$1);
 
   var ref = React.useRef(null);
 
@@ -2314,7 +2339,7 @@ var MenuGroup = defineName( /*#__PURE__*/React.forwardRef(function MenuGroup(_re
   useIsomorphicLayoutEffect(function () {
     if (overflowStyles) ref.current.scrollTop = 0;
   }, [overflowStyles]);
-  return /*#__PURE__*/React__default.createElement("div", _extends({}, restProps, {
+  return React__default["default"].createElement("div", _extends({}, restProps, {
     ref: useCombinedRef(externalRef, ref),
     className: useBEM({
       block: menuClass,
@@ -2325,18 +2350,18 @@ var MenuGroup = defineName( /*#__PURE__*/React.forwardRef(function MenuGroup(_re
   }));
 }), 'MenuGroup');
 MenuGroup.propTypes = _extends({}, stylePropTypes(), {
-  takeOverflow: PropTypes.bool
+  takeOverflow: PropTypes__default["default"].bool
 });
 
-var _excluded$a = ["aria-label", "className", "styles", "name", "value", "onRadioChange"];
-var MenuRadioGroup = defineName( /*#__PURE__*/React.forwardRef(function MenuRadioGroup(_ref, externalRef) {
+var _excluded = ["aria-label", "className", "styles", "name", "value", "onRadioChange"];
+var MenuRadioGroup = defineName(React.forwardRef(function MenuRadioGroup(_ref, externalRef) {
   var ariaLabel = _ref['aria-label'],
       className = _ref.className,
       styles = _ref.styles,
       name = _ref.name,
       value = _ref.value,
       onRadioChange = _ref.onRadioChange,
-      restProps = _objectWithoutPropertiesLoose(_ref, _excluded$a);
+      restProps = _objectWithoutPropertiesLoose(_ref, _excluded);
 
   var contextValue = React.useMemo(function () {
     return {
@@ -2345,11 +2370,11 @@ var MenuRadioGroup = defineName( /*#__PURE__*/React.forwardRef(function MenuRadi
       onRadioChange: onRadioChange
     };
   }, [name, value, onRadioChange]);
-  return /*#__PURE__*/React__default.createElement(RadioGroupContext.Provider, {
+  return React__default["default"].createElement(RadioGroupContext.Provider, {
     value: contextValue
-  }, /*#__PURE__*/React__default.createElement("li", {
+  }, React__default["default"].createElement("li", {
     role: "presentation"
-  }, /*#__PURE__*/React__default.createElement("ul", _extends({
+  }, React__default["default"].createElement("ul", _extends({
     role: "group",
     "aria-label": ariaLabel || name || 'Radio group'
   }, restProps, {
@@ -2363,9 +2388,9 @@ var MenuRadioGroup = defineName( /*#__PURE__*/React.forwardRef(function MenuRadi
   }))));
 }), 'MenuRadioGroup');
 MenuRadioGroup.propTypes = _extends({}, stylePropTypes(), {
-  name: PropTypes.string,
-  value: PropTypes.any,
-  onRadioChange: PropTypes.func
+  name: PropTypes__default["default"].string,
+  value: PropTypes__default["default"].any,
+  onRadioChange: PropTypes__default["default"].func
 });
 
 exports.ControlledMenu = ControlledMenu;
