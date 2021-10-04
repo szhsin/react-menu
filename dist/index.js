@@ -476,14 +476,14 @@ var useFlatStyles = function useFlatStyles(styles, modifiers) {
 
             if (isObject(nestedValue)) {
               if (sanitiseKey(nestedProp) === modifierValue) {
-                Object.assign(style, nestedValue);
+                style = _extends({}, style, nestedValue);
               }
             } else {
               style[nestedProp] = nestedValue;
             }
           }
         } else if (modifierValue) {
-          Object.assign(style, value);
+          style = _extends({}, style, value);
         }
       } else {
         style[prop] = value;

@@ -32,7 +32,7 @@ export const useFlatStyles = (styles, modifiers) => useMemo(() => {
     if (!isObject(styles)) return undefined;
     if (!modifiers) return styles;
 
-    const style = {};
+    let style = {};
     for (const prop of Object.keys(styles)) {
         const value = styles[prop];
         if (isObject(value)) {
@@ -42,14 +42,14 @@ export const useFlatStyles = (styles, modifiers) => useMemo(() => {
                     const nestedValue = value[nestedProp];
                     if (isObject(nestedValue)) {
                         if (sanitiseKey(nestedProp) === modifierValue) {
-                            Object.assign(style, nestedValue);
+                            style = { ...style, ...nestedValue };
                         }
                     } else {
                         style[nestedProp] = nestedValue;
                     }
                 }
             } else if (modifierValue) {
-                Object.assign(style, value);
+                style = { ...style, ...value };
             }
         } else {
             style[prop] = value;
