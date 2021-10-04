@@ -594,7 +594,7 @@ function BoundingBoxExample() {
                 {/* explicitly set bounding box with the boundingBoxRef prop */}
                 <ControlledMenu {...tooltipProps} boundingBoxRef={ref}
                     anchorRef={rightAnchor} direction="right">
-                    I'm a tooltip built with React-Menu
+                    I&apos;m a tooltip built with React-Menu
                 </ControlledMenu>
             </div>
         </Example>
@@ -695,7 +695,7 @@ function StylesPropExample() {
                         backgroundColor: '#333'
                     }
                 }}>
-                    I'm special
+                    I&apos;m special
                 </MenuItem>
             </Menu>
         </Example>
@@ -716,7 +716,7 @@ function ClassNamePropExample() {
                             : hover ? 'my-menuitem-hover'
                                 : 'my-menuitem'
                 }>
-                    I'm special
+                    I&apos;m special
                 </MenuItem>
             </Menu>
         </Example>

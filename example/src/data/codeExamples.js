@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 import React from 'react';
 import { LibName } from '../components/LibName';
 import { ARIAPracticesLink } from '../components/ARIAPracticesLink';

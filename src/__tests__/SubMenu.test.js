@@ -1,3 +1,4 @@
+/* eslint-disable react/no-children-prop */
 import React from 'react';
 import { Menu, MenuItem, FocusableItem, MenuButton, SubMenu } from '../';
 import { render, fireEvent, waitFor, screen, act } from '@testing-library/react';

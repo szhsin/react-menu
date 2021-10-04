@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 import React from 'react';
 import { LibName } from '../components/LibName';
 import { HashLink as Link } from 'react-router-hash-link';
@@ -575,7 +576,7 @@ const menuButton = {
     id: 'menu-button',
     title: 'MenuButton',
     contents: [
-        <p><code>MenuButton</code> works with a {menuLink} and controls its open and close.</p>,
+        <p key={0}><code>MenuButton</code> works with a {menuLink} and controls its open and close.</p>,
         {
             ...propsTable,
             rows: [
@@ -599,7 +600,7 @@ const menuHeader = {
     id: 'menu-header',
     title: 'MenuHeader',
     contents: [
-        <p><code>MenuHeader</code> can be used to provide presentational information for a group of related menu items.</p>,
+        <p key={0}><code>MenuHeader</code> can be used to provide presentational information for a group of related menu items.</p>,
         {
             ...propsTable,
             rows: [
@@ -613,7 +614,7 @@ const menuDivider = {
     id: 'menu-divider',
     title: 'MenuDivider',
     contents: [
-        <p><code>MenuDivider</code> can be used to make a group of related menu items visually separated from other items.
+        <p key={0}><code>MenuDivider</code> can be used to make a group of related menu items visually separated from other items.
             It has <code>aria</code> roles that can be recognised by assistive technologies.</p>,
         {
             ...propsTable,
@@ -628,7 +629,7 @@ const menuGroup = {
     id: 'menu-group',
     title: 'MenuGroup',
     contents: [
-        <p><code>MenuGroup</code> is used to wrap a group of related menu items and make the items
+        <p key={0}><code>MenuGroup</code> is used to wrap a group of related menu items and make the items
             scrollable.</p>,
         {
             ...propsTable,
@@ -719,7 +720,7 @@ const focusableItem = {
     id: 'focusable-item',
     title: 'FocusableItem',
     contents: [
-        <p><code>FocusableItem</code> can be used to wrap focusable element (input, button) in a
+        <p key={0}><code>FocusableItem</code> can be used to wrap focusable element (input, button) in a
             menu item. It manages focus automatically among other menu items during mouse and keyboard
             interactions.</p>,
         {
@@ -998,7 +999,7 @@ const accessibility = {
     id: 'accessibility',
     title: 'Accessibility',
     contents: [
-        <p><LibName /> supports WAI-ARIA roles, states, and properties which adhere to
+        <p key={0}><LibName /> supports WAI-ARIA roles, states, and properties which adhere to
             the <ARIAPracticesLink />. For more details, please refer to the website.</p>
     ],
     list: [
