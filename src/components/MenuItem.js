@@ -1,5 +1,5 @@
 import React, { memo, useContext, useMemo, useRef } from 'react';
-import PropTypes from 'prop-types';
+import { any, string, bool, func, node, oneOf, oneOfType } from 'prop-types';
 import {
     useBEM,
     useFlatStyles,
@@ -150,14 +150,14 @@ export const MenuItem = withHovering(memo(function MenuItem({
 
 MenuItem.propTypes = {
     ...stylePropTypes(),
-    value: PropTypes.any,
-    href: PropTypes.string,
-    type: PropTypes.oneOf(['checkbox', 'radio']),
-    checked: PropTypes.bool,
-    disabled: PropTypes.bool,
-    children: PropTypes.oneOfType([
-        PropTypes.node,
-        PropTypes.func
+    value: any,
+    href: string,
+    type: oneOf(['checkbox', 'radio']),
+    checked: bool,
+    disabled: bool,
+    children: oneOfType([
+        node,
+        func
     ]),
-    onClick: PropTypes.func
+    onClick: func
 };

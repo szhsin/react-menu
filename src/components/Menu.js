@@ -1,5 +1,5 @@
 import React, { forwardRef, useRef, useCallback, useImperativeHandle } from 'react';
-import PropTypes from 'prop-types';
+import { element, func, oneOfType } from 'prop-types';
 import { ControlledMenu } from './ControlledMenu';
 import { useMenuChange, useMenuStateAndFocus, useCombinedRef } from '../hooks';
 import {
@@ -104,9 +104,9 @@ export const Menu = forwardRef(function Menu({
 Menu.propTypes = {
     ...rootMenuPropTypes,
     ...uncontrolledMenuPropTypes,
-    menuButton: PropTypes.oneOfType([
-        PropTypes.element,
-        PropTypes.func
+    menuButton: oneOfType([
+        element,
+        func
     ]).isRequired
 };
 

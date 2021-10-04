@@ -1,6 +1,6 @@
 import React, { Children, cloneElement, forwardRef, useContext, useState, useMemo, useLayoutEffect, useEffect, useRef, useReducer, useCallback, useImperativeHandle, memo } from 'react';
 import ReactDOM, { unstable_batchedUpdates, createPortal } from 'react-dom';
-import PropTypes from 'prop-types';
+import { string, oneOfType, func, object, bool, number, oneOf, exact, element, node, shape, any } from 'prop-types';
 import { useTransition } from 'react-transition-state';
 
 const menuContainerClass = 'szh-menu-container';
@@ -194,45 +194,45 @@ const cloneChildren = (children, startIndex = 0, inRadioGroup) => {
 };
 
 const stylePropTypes = name => ({
-  [name ? `${name}ClassName` : 'className']: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
-  [name ? `${name}Styles` : 'styles']: PropTypes.oneOfType([PropTypes.object, PropTypes.func])
+  [name ? `${name}ClassName` : 'className']: oneOfType([string, func]),
+  [name ? `${name}Styles` : 'styles']: oneOfType([object, func])
 });
 const menuPropTypes = {
-  className: PropTypes.string,
+  className: string,
   ...stylePropTypes('menu'),
   ...stylePropTypes('arrow'),
-  arrow: PropTypes.bool,
-  offsetX: PropTypes.number,
-  offsetY: PropTypes.number,
-  align: PropTypes.oneOf(['start', 'center', 'end']),
-  direction: PropTypes.oneOf(['left', 'right', 'top', 'bottom']),
-  position: PropTypes.oneOf(['auto', 'anchor', 'initial']),
-  overflow: PropTypes.oneOf(['auto', 'visible', 'hidden'])
+  arrow: bool,
+  offsetX: number,
+  offsetY: number,
+  align: oneOf(['start', 'center', 'end']),
+  direction: oneOf(['left', 'right', 'top', 'bottom']),
+  position: oneOf(['auto', 'anchor', 'initial']),
+  overflow: oneOf(['auto', 'visible', 'hidden'])
 };
 const rootMenuPropTypes = { ...menuPropTypes,
-  containerProps: PropTypes.object,
-  initialMounted: PropTypes.bool,
-  unmountOnClose: PropTypes.bool,
-  transition: PropTypes.oneOfType([PropTypes.bool, PropTypes.exact({
-    open: PropTypes.bool,
-    close: PropTypes.bool,
-    item: PropTypes.bool
+  containerProps: object,
+  initialMounted: bool,
+  unmountOnClose: bool,
+  transition: oneOfType([bool, exact({
+    open: bool,
+    close: bool,
+    item: bool
   })]),
-  transitionTimeout: PropTypes.number,
-  boundingBoxRef: PropTypes.object,
-  boundingBoxPadding: PropTypes.string,
-  reposition: PropTypes.oneOf(['auto', 'initial']),
-  repositionFlag: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  viewScroll: PropTypes.oneOf(['auto', 'close', 'initial']),
-  submenuOpenDelay: PropTypes.number,
-  submenuCloseDelay: PropTypes.number,
-  portal: PropTypes.bool,
-  theming: PropTypes.string,
-  onItemClick: PropTypes.func
+  transitionTimeout: number,
+  boundingBoxRef: object,
+  boundingBoxPadding: string,
+  reposition: oneOf(['auto', 'initial']),
+  repositionFlag: oneOfType([string, number]),
+  viewScroll: oneOf(['auto', 'close', 'initial']),
+  submenuOpenDelay: number,
+  submenuCloseDelay: number,
+  portal: bool,
+  theming: string,
+  onItemClick: func
 };
 const uncontrolledMenuPropTypes = {
-  instanceRef: PropTypes.oneOfType([PropTypes.object, PropTypes.func]),
-  onMenuChange: PropTypes.func
+  instanceRef: oneOfType([object, func]),
+  onMenuChange: func
 };
 const menuDefaultProps = {
   offsetX: 0,
@@ -511,8 +511,8 @@ const MenuButton = defineName(forwardRef(function MenuButton({
   }, children);
 }), 'MenuButton');
 MenuButton.propTypes = { ...stylePropTypes(),
-  isOpen: PropTypes.bool,
-  disabled: PropTypes.bool
+  isOpen: bool,
+  disabled: bool
 };
 
 const getPositionHelpers = ({
@@ -1528,19 +1528,19 @@ const ControlledMenu = forwardRef(function ControlledMenu({
   }
 });
 ControlledMenu.propTypes = { ...rootMenuPropTypes,
-  state: PropTypes.oneOf(values(MenuStateMap)),
-  anchorPoint: PropTypes.exact({
-    x: PropTypes.number,
-    y: PropTypes.number
+  state: oneOf(values(MenuStateMap)),
+  anchorPoint: exact({
+    x: number,
+    y: number
   }),
-  anchorRef: PropTypes.object,
-  skipOpen: PropTypes.object,
-  captureFocus: PropTypes.bool,
-  menuItemFocus: PropTypes.exact({
-    position: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-    alwaysUpdate: PropTypes.bool
+  anchorRef: object,
+  skipOpen: object,
+  captureFocus: bool,
+  menuItemFocus: exact({
+    position: oneOfType([string, number]),
+    alwaysUpdate: bool
   }),
-  onClose: PropTypes.func
+  onClose: func
 };
 ControlledMenu.defaultProps = { ...rootMenuDefaultProps,
   menuItemFocus: {}
@@ -1625,7 +1625,7 @@ const Menu = forwardRef(function Menu({
 });
 Menu.propTypes = { ...rootMenuPropTypes,
   ...uncontrolledMenuPropTypes,
-  menuButton: PropTypes.oneOfType([PropTypes.element, PropTypes.func]).isRequired
+  menuButton: oneOfType([element, func]).isRequired
 };
 Menu.defaultProps = rootMenuDefaultProps;
 
@@ -1852,9 +1852,9 @@ const SubMenu = withHovering(memo(function SubMenu({
 }), 'SubMenu');
 SubMenu.propTypes = { ...menuPropTypes,
   ...uncontrolledMenuPropTypes,
-  disabled: PropTypes.bool,
-  label: PropTypes.oneOfType([PropTypes.node, PropTypes.func]),
-  itemProps: PropTypes.shape({ ...stylePropTypes()
+  disabled: bool,
+  label: oneOfType([node, func]),
+  itemProps: shape({ ...stylePropTypes()
   })
 };
 SubMenu.defaultProps = { ...menuDefaultProps,
@@ -1980,13 +1980,13 @@ const MenuItem = withHovering(memo(function MenuItem({
   }
 }), 'MenuItem');
 MenuItem.propTypes = { ...stylePropTypes(),
-  value: PropTypes.any,
-  href: PropTypes.string,
-  type: PropTypes.oneOf(['checkbox', 'radio']),
-  checked: PropTypes.bool,
-  disabled: PropTypes.bool,
-  children: PropTypes.oneOfType([PropTypes.node, PropTypes.func]),
-  onClick: PropTypes.func
+  value: any,
+  href: string,
+  type: oneOf(['checkbox', 'radio']),
+  checked: bool,
+  disabled: bool,
+  children: oneOfType([node, func]),
+  onClick: func
 };
 
 const FocusableItem = withHovering(memo(function FocusableItem({
@@ -2043,8 +2043,8 @@ const FocusableItem = withHovering(memo(function FocusableItem({
   }, renderChildren);
 }), 'FocusableItem');
 FocusableItem.propTypes = { ...stylePropTypes(),
-  disabled: PropTypes.bool,
-  children: PropTypes.func
+  disabled: bool,
+  children: func
 };
 
 const MenuDivider = memo(forwardRef(function MenuDivider({
@@ -2128,7 +2128,7 @@ const MenuGroup = defineName(forwardRef(function MenuGroup({
   });
 }), 'MenuGroup');
 MenuGroup.propTypes = { ...stylePropTypes(),
-  takeOverflow: PropTypes.bool
+  takeOverflow: bool
 };
 
 const MenuRadioGroup = defineName(forwardRef(function MenuRadioGroup({
@@ -2163,9 +2163,9 @@ const MenuRadioGroup = defineName(forwardRef(function MenuRadioGroup({
   })));
 }), 'MenuRadioGroup');
 MenuRadioGroup.propTypes = { ...stylePropTypes(),
-  name: PropTypes.string,
-  value: PropTypes.any,
-  onRadioChange: PropTypes.func
+  name: string,
+  value: any,
+  onRadioChange: func
 };
 
 export { ControlledMenu, FocusableItem, Menu, MenuButton, MenuDivider, MenuGroup, MenuHeader, MenuItem, MenuRadioGroup, SubMenu, applyHOC, applyStatics, useMenuState };

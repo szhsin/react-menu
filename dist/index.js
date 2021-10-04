@@ -4,14 +4,13 @@ Object.defineProperty(exports, '__esModule', { value: true });
 
 var React = require('react');
 var ReactDOM = require('react-dom');
-var PropTypes = require('prop-types');
+var propTypes = require('prop-types');
 var reactTransitionState = require('react-transition-state');
 
 function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
 
 var React__default = /*#__PURE__*/_interopDefaultLegacy(React);
 var ReactDOM__default = /*#__PURE__*/_interopDefaultLegacy(ReactDOM);
-var PropTypes__default = /*#__PURE__*/_interopDefaultLegacy(PropTypes);
 
 var menuContainerClass = 'szh-menu-container';
 var menuClass = 'szh-menu';
@@ -295,43 +294,43 @@ var cloneChildren = function cloneChildren(children, startIndex, inRadioGroup) {
 var stylePropTypes = function stylePropTypes(name) {
   var _ref;
 
-  return _ref = {}, _ref[name ? name + "ClassName" : 'className'] = PropTypes__default["default"].oneOfType([PropTypes__default["default"].string, PropTypes__default["default"].func]), _ref[name ? name + "Styles" : 'styles'] = PropTypes__default["default"].oneOfType([PropTypes__default["default"].object, PropTypes__default["default"].func]), _ref;
+  return _ref = {}, _ref[name ? name + "ClassName" : 'className'] = propTypes.oneOfType([propTypes.string, propTypes.func]), _ref[name ? name + "Styles" : 'styles'] = propTypes.oneOfType([propTypes.object, propTypes.func]), _ref;
 };
 var menuPropTypes = _extends({
-  className: PropTypes__default["default"].string
+  className: propTypes.string
 }, stylePropTypes('menu'), stylePropTypes('arrow'), {
-  arrow: PropTypes__default["default"].bool,
-  offsetX: PropTypes__default["default"].number,
-  offsetY: PropTypes__default["default"].number,
-  align: PropTypes__default["default"].oneOf(['start', 'center', 'end']),
-  direction: PropTypes__default["default"].oneOf(['left', 'right', 'top', 'bottom']),
-  position: PropTypes__default["default"].oneOf(['auto', 'anchor', 'initial']),
-  overflow: PropTypes__default["default"].oneOf(['auto', 'visible', 'hidden'])
+  arrow: propTypes.bool,
+  offsetX: propTypes.number,
+  offsetY: propTypes.number,
+  align: propTypes.oneOf(['start', 'center', 'end']),
+  direction: propTypes.oneOf(['left', 'right', 'top', 'bottom']),
+  position: propTypes.oneOf(['auto', 'anchor', 'initial']),
+  overflow: propTypes.oneOf(['auto', 'visible', 'hidden'])
 });
 var rootMenuPropTypes = _extends({}, menuPropTypes, {
-  containerProps: PropTypes__default["default"].object,
-  initialMounted: PropTypes__default["default"].bool,
-  unmountOnClose: PropTypes__default["default"].bool,
-  transition: PropTypes__default["default"].oneOfType([PropTypes__default["default"].bool, PropTypes__default["default"].exact({
-    open: PropTypes__default["default"].bool,
-    close: PropTypes__default["default"].bool,
-    item: PropTypes__default["default"].bool
+  containerProps: propTypes.object,
+  initialMounted: propTypes.bool,
+  unmountOnClose: propTypes.bool,
+  transition: propTypes.oneOfType([propTypes.bool, propTypes.exact({
+    open: propTypes.bool,
+    close: propTypes.bool,
+    item: propTypes.bool
   })]),
-  transitionTimeout: PropTypes__default["default"].number,
-  boundingBoxRef: PropTypes__default["default"].object,
-  boundingBoxPadding: PropTypes__default["default"].string,
-  reposition: PropTypes__default["default"].oneOf(['auto', 'initial']),
-  repositionFlag: PropTypes__default["default"].oneOfType([PropTypes__default["default"].string, PropTypes__default["default"].number]),
-  viewScroll: PropTypes__default["default"].oneOf(['auto', 'close', 'initial']),
-  submenuOpenDelay: PropTypes__default["default"].number,
-  submenuCloseDelay: PropTypes__default["default"].number,
-  portal: PropTypes__default["default"].bool,
-  theming: PropTypes__default["default"].string,
-  onItemClick: PropTypes__default["default"].func
+  transitionTimeout: propTypes.number,
+  boundingBoxRef: propTypes.object,
+  boundingBoxPadding: propTypes.string,
+  reposition: propTypes.oneOf(['auto', 'initial']),
+  repositionFlag: propTypes.oneOfType([propTypes.string, propTypes.number]),
+  viewScroll: propTypes.oneOf(['auto', 'close', 'initial']),
+  submenuOpenDelay: propTypes.number,
+  submenuCloseDelay: propTypes.number,
+  portal: propTypes.bool,
+  theming: propTypes.string,
+  onItemClick: propTypes.func
 });
 var uncontrolledMenuPropTypes = {
-  instanceRef: PropTypes__default["default"].oneOfType([PropTypes__default["default"].object, PropTypes__default["default"].func]),
-  onMenuChange: PropTypes__default["default"].func
+  instanceRef: propTypes.oneOfType([propTypes.object, propTypes.func]),
+  onMenuChange: propTypes.func
 };
 var menuDefaultProps = {
   offsetX: 0,
@@ -646,8 +645,8 @@ var MenuButton = defineName(React.forwardRef(function MenuButton(_ref, ref) {
   }), children);
 }), 'MenuButton');
 MenuButton.propTypes = _extends({}, stylePropTypes(), {
-  isOpen: PropTypes__default["default"].bool,
-  disabled: PropTypes__default["default"].bool
+  isOpen: propTypes.bool,
+  disabled: propTypes.bool
 });
 
 var getPositionHelpers = function getPositionHelpers(_ref) {
@@ -1706,19 +1705,19 @@ var ControlledMenu = React.forwardRef(function ControlledMenu(_ref, externalRef)
   }
 });
 ControlledMenu.propTypes = _extends({}, rootMenuPropTypes, {
-  state: PropTypes__default["default"].oneOf(values(MenuStateMap)),
-  anchorPoint: PropTypes__default["default"].exact({
-    x: PropTypes__default["default"].number,
-    y: PropTypes__default["default"].number
+  state: propTypes.oneOf(values(MenuStateMap)),
+  anchorPoint: propTypes.exact({
+    x: propTypes.number,
+    y: propTypes.number
   }),
-  anchorRef: PropTypes__default["default"].object,
-  skipOpen: PropTypes__default["default"].object,
-  captureFocus: PropTypes__default["default"].bool,
-  menuItemFocus: PropTypes__default["default"].exact({
-    position: PropTypes__default["default"].oneOfType([PropTypes__default["default"].string, PropTypes__default["default"].number]),
-    alwaysUpdate: PropTypes__default["default"].bool
+  anchorRef: propTypes.object,
+  skipOpen: propTypes.object,
+  captureFocus: propTypes.bool,
+  menuItemFocus: propTypes.exact({
+    position: propTypes.oneOfType([propTypes.string, propTypes.number]),
+    alwaysUpdate: propTypes.bool
   }),
-  onClose: PropTypes__default["default"].func
+  onClose: propTypes.func
 });
 ControlledMenu.defaultProps = _extends({}, rootMenuDefaultProps, {
   menuItemFocus: {}
@@ -1808,7 +1807,7 @@ var Menu = React.forwardRef(function Menu(_ref, externalRef) {
   return React__default["default"].createElement(React__default["default"].Fragment, null, renderButton, React__default["default"].createElement(ControlledMenu, menuProps));
 });
 Menu.propTypes = _extends({}, rootMenuPropTypes, uncontrolledMenuPropTypes, {
-  menuButton: PropTypes__default["default"].oneOfType([PropTypes__default["default"].element, PropTypes__default["default"].func]).isRequired
+  menuButton: propTypes.oneOfType([propTypes.element, propTypes.func]).isRequired
 });
 Menu.defaultProps = rootMenuDefaultProps;
 
@@ -2057,9 +2056,9 @@ var SubMenu = withHovering(React.memo(function SubMenu(_ref) {
   }, [label, modifiers])), state && getMenuList());
 }), 'SubMenu');
 SubMenu.propTypes = _extends({}, menuPropTypes, uncontrolledMenuPropTypes, {
-  disabled: PropTypes__default["default"].bool,
-  label: PropTypes__default["default"].oneOfType([PropTypes__default["default"].node, PropTypes__default["default"].func]),
-  itemProps: PropTypes__default["default"].shape(_extends({}, stylePropTypes()))
+  disabled: propTypes.bool,
+  label: propTypes.oneOfType([propTypes.node, propTypes.func]),
+  itemProps: propTypes.shape(_extends({}, stylePropTypes()))
 });
 SubMenu.defaultProps = _extends({}, menuDefaultProps, {
   direction: 'right'
@@ -2192,13 +2191,13 @@ var MenuItem = withHovering(React.memo(function MenuItem(_ref) {
   }
 }), 'MenuItem');
 MenuItem.propTypes = _extends({}, stylePropTypes(), {
-  value: PropTypes__default["default"].any,
-  href: PropTypes__default["default"].string,
-  type: PropTypes__default["default"].oneOf(['checkbox', 'radio']),
-  checked: PropTypes__default["default"].bool,
-  disabled: PropTypes__default["default"].bool,
-  children: PropTypes__default["default"].oneOfType([PropTypes__default["default"].node, PropTypes__default["default"].func]),
-  onClick: PropTypes__default["default"].func
+  value: propTypes.any,
+  href: propTypes.string,
+  type: propTypes.oneOf(['checkbox', 'radio']),
+  checked: propTypes.bool,
+  disabled: propTypes.bool,
+  children: propTypes.oneOfType([propTypes.node, propTypes.func]),
+  onClick: propTypes.func
 });
 
 var _excluded$4 = ["className", "styles", "disabled", "index", "children", "isHovering", "externalRef"];
@@ -2262,8 +2261,8 @@ var FocusableItem = withHovering(React.memo(function FocusableItem(_ref) {
   }), renderChildren);
 }), 'FocusableItem');
 FocusableItem.propTypes = _extends({}, stylePropTypes(), {
-  disabled: PropTypes__default["default"].bool,
-  children: PropTypes__default["default"].func
+  disabled: propTypes.bool,
+  children: propTypes.func
 });
 
 var _excluded$3 = ["className", "styles"];
@@ -2350,7 +2349,7 @@ var MenuGroup = defineName(React.forwardRef(function MenuGroup(_ref, externalRef
   }));
 }), 'MenuGroup');
 MenuGroup.propTypes = _extends({}, stylePropTypes(), {
-  takeOverflow: PropTypes__default["default"].bool
+  takeOverflow: propTypes.bool
 });
 
 var _excluded = ["aria-label", "className", "styles", "name", "value", "onRadioChange"];
@@ -2388,9 +2387,9 @@ var MenuRadioGroup = defineName(React.forwardRef(function MenuRadioGroup(_ref, e
   }))));
 }), 'MenuRadioGroup');
 MenuRadioGroup.propTypes = _extends({}, stylePropTypes(), {
-  name: PropTypes__default["default"].string,
-  value: PropTypes__default["default"].any,
-  onRadioChange: PropTypes__default["default"].func
+  name: propTypes.string,
+  value: propTypes.any,
+  onRadioChange: propTypes.func
 });
 
 exports.ControlledMenu = ControlledMenu;

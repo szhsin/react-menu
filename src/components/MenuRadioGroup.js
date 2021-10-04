@@ -1,5 +1,5 @@
 import React, { forwardRef, useMemo } from 'react';
-import PropTypes from 'prop-types';
+import { any, string, func } from 'prop-types';
 import { useBEM, useFlatStyles } from '../hooks';
 import {
     defineName,
@@ -39,7 +39,7 @@ export const MenuRadioGroup = defineName(forwardRef(function MenuRadioGroup({
 
 MenuRadioGroup.propTypes = {
     ...stylePropTypes(),
-    name: PropTypes.string,
-    value: PropTypes.any,
-    onRadioChange: PropTypes.func
+    name: string,
+    value: any,
+    onRadioChange: func
 };

@@ -7,7 +7,7 @@ import React, {
     useImperativeHandle
 } from 'react';
 import { createPortal } from 'react-dom';
-import PropTypes from 'prop-types';
+import { node, func, bool, shape, oneOfType } from 'prop-types';
 import {
     useBEM,
     useFlatStyles,
@@ -257,12 +257,12 @@ export const SubMenu = withHovering(memo(function SubMenu({
 SubMenu.propTypes = {
     ...menuPropTypes,
     ...uncontrolledMenuPropTypes,
-    disabled: PropTypes.bool,
-    label: PropTypes.oneOfType([
-        PropTypes.node,
-        PropTypes.func
+    disabled: bool,
+    label: oneOfType([
+        node,
+        func
     ]),
-    itemProps: PropTypes.shape({
+    itemProps: shape({
         ...stylePropTypes()
     })
 };

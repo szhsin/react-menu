@@ -1,5 +1,5 @@
 import React, { memo, useContext, useMemo, useRef } from 'react';
-import PropTypes from 'prop-types';
+import { bool, func } from 'prop-types';
 import { useBEM, useFlatStyles, useItemState } from '../hooks';
 import {
     attachHandlerProps,
@@ -69,6 +69,6 @@ export const FocusableItem = withHovering(memo(function FocusableItem({
 
 FocusableItem.propTypes = {
     ...stylePropTypes(),
-    disabled: PropTypes.bool,
-    children: PropTypes.func
+    disabled: bool,
+    children: func
 };

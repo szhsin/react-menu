@@ -1,5 +1,5 @@
 import React, { forwardRef, useContext, useRef, useState } from 'react';
-import PropTypes from 'prop-types';
+import { bool } from 'prop-types';
 import { useBEM, useFlatStyles, useLayoutEffect, useCombinedRef } from '../hooks';
 import {
     defineName,
@@ -44,5 +44,5 @@ export const MenuGroup = defineName(forwardRef(function MenuGroup({
 
 MenuGroup.propTypes = {
     ...stylePropTypes(),
-    takeOverflow: PropTypes.bool
+    takeOverflow: bool
 };

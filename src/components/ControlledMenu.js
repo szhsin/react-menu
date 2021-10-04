@@ -1,6 +1,6 @@
 import React, { forwardRef, useRef, useMemo } from 'react';
 import ReactDOM from 'react-dom';
-import PropTypes from 'prop-types';
+import { string, number, bool, func, object, oneOf, oneOfType, exact } from 'prop-types';
 import { MenuList } from './MenuList';
 import { useBEM } from '../hooks';
 import {
@@ -165,22 +165,22 @@ export const ControlledMenu = forwardRef(function ControlledMenu({
 
 ControlledMenu.propTypes = {
     ...rootMenuPropTypes,
-    state: PropTypes.oneOf(values(MenuStateMap)),
-    anchorPoint: PropTypes.exact({
-        x: PropTypes.number,
-        y: PropTypes.number
+    state: oneOf(values(MenuStateMap)),
+    anchorPoint: exact({
+        x: number,
+        y: number
     }),
-    anchorRef: PropTypes.object,
-    skipOpen: PropTypes.object,
-    captureFocus: PropTypes.bool,
-    menuItemFocus: PropTypes.exact({
-        position: PropTypes.oneOfType([
-            PropTypes.string,
-            PropTypes.number
+    anchorRef: object,
+    skipOpen: object,
+    captureFocus: bool,
+    menuItemFocus: exact({
+        position: oneOfType([
+            string,
+            number
         ]),
-        alwaysUpdate: PropTypes.bool
+        alwaysUpdate: bool
     }),
-    onClose: PropTypes.func
+    onClose: func
 };
 
 ControlledMenu.defaultProps = {

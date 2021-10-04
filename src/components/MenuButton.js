@@ -1,5 +1,5 @@
 import React, { forwardRef, useMemo } from 'react';
-import PropTypes from 'prop-types';
+import { bool } from 'prop-types';
 import { useBEM, useFlatStyles } from '../hooks';
 import { defineName, menuButtonClass, stylePropTypes } from '../utils';
 
@@ -32,6 +32,6 @@ export const MenuButton = defineName(forwardRef(function MenuButton({
 
 MenuButton.propTypes = {
     ...stylePropTypes(),
-    isOpen: PropTypes.bool,
-    disabled: PropTypes.bool
+    isOpen: bool,
+    disabled: bool
 };
