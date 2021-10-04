@@ -1,5 +1,5 @@
 import React, { forwardRef, useRef, useMemo } from 'react';
-import ReactDOM from 'react-dom';
+import { createPortal } from 'react-dom';
 import { string, number, bool, func, object, oneOf, oneOfType, exact } from 'prop-types';
 import { MenuList } from './MenuList';
 import { useBEM } from '../hooks';
@@ -157,7 +157,7 @@ export const ControlledMenu = forwardRef(function ControlledMenu({
     );
 
     if (portal) {
-        return ReactDOM.createPortal(menuList, document.body);
+        return createPortal(menuList, document.body);
     } else {
         return menuList;
     }

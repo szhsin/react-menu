@@ -3,14 +3,13 @@
 Object.defineProperty(exports, '__esModule', { value: true });
 
 var React = require('react');
-var ReactDOM = require('react-dom');
+var reactDom = require('react-dom');
 var propTypes = require('prop-types');
 var reactTransitionState = require('react-transition-state');
 
 function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
 
 var React__default = /*#__PURE__*/_interopDefaultLegacy(React);
-var ReactDOM__default = /*#__PURE__*/_interopDefaultLegacy(ReactDOM);
 
 var menuContainerClass = 'szh-menu-container';
 var menuClass = 'szh-menu';
@@ -23,13 +22,13 @@ var menuGroupClass = 'group';
 var subMenuClass = 'submenu';
 var radioGroupClass = 'radio-group';
 var initialHoverIndex = -1;
-var HoverIndexContext = React__default["default"].createContext(initialHoverIndex);
-var MenuListItemContext = React__default["default"].createContext({});
-var MenuListContext = React__default["default"].createContext({});
-var EventHandlersContext = React__default["default"].createContext({});
-var RadioGroupContext = React__default["default"].createContext({});
-var SettingsContext = React__default["default"].createContext({});
-var ItemSettingsContext = React__default["default"].createContext({});
+var HoverIndexContext = React.createContext(initialHoverIndex);
+var MenuListItemContext = React.createContext({});
+var MenuListContext = React.createContext({});
+var EventHandlersContext = React.createContext({});
+var RadioGroupContext = React.createContext({});
+var SettingsContext = React.createContext({});
+var ItemSettingsContext = React.createContext({});
 var Keys = Object.freeze({
   'ENTER': 'Enter',
   'ESC': 'Escape',
@@ -125,7 +124,7 @@ var isProd = process.env.NODE_ENV === 'production';
 var isMenuOpen = function isMenuOpen(state) {
   return !!state && state[0] === 'o';
 };
-var batchedUpdates = ReactDOM.unstable_batchedUpdates || function (callback) {
+var batchedUpdates = reactDom.unstable_batchedUpdates || function (callback) {
   return callback();
 };
 var values = Object.values || function (obj) {
@@ -1699,7 +1698,7 @@ var ControlledMenu = React.forwardRef(function ControlledMenu(_ref, externalRef)
   }))))));
 
   if (portal) {
-    return ReactDOM__default["default"].createPortal(menuList, document.body);
+    return reactDom.createPortal(menuList, document.body);
   } else {
     return menuList;
   }
@@ -1785,7 +1784,7 @@ var Menu = React.forwardRef(function Menu(_ref, externalRef) {
     buttonProps.isOpen = isOpen;
   }
 
-  var renderButton = React__default["default"].cloneElement(button, buttonProps);
+  var renderButton = React.cloneElement(button, buttonProps);
   useMenuChange(onMenuChange, isOpen);
   React.useImperativeHandle(instanceRef, function () {
     return {
@@ -1804,7 +1803,7 @@ var Menu = React.forwardRef(function Menu(_ref, externalRef) {
     skipOpen: skipOpen
   });
 
-  return React__default["default"].createElement(React__default["default"].Fragment, null, renderButton, React__default["default"].createElement(ControlledMenu, menuProps));
+  return React__default["default"].createElement(React.Fragment, null, renderButton, React__default["default"].createElement(ControlledMenu, menuProps));
 });
 Menu.propTypes = _extends({}, rootMenuPropTypes, uncontrolledMenuPropTypes, {
   menuButton: propTypes.oneOfType([propTypes.element, propTypes.func]).isRequired
@@ -2024,7 +2023,7 @@ var SubMenu = withHovering(React.memo(function SubMenu(_ref) {
       parentScrollingRef: isPortal && parentMenuRef,
       isDisabled: isDisabled
     }));
-    return isPortal ? ReactDOM.createPortal(menuList, rootMenuRef.current) : menuList;
+    return isPortal ? reactDom.createPortal(menuList, rootMenuRef.current) : menuList;
   };
 
   return React__default["default"].createElement("li", {

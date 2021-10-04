@@ -1,4 +1,4 @@
-import React from 'react';
+import { createContext } from 'react';
 
 export const menuContainerClass = 'szh-menu-container';
 export const menuClass = 'szh-menu';
@@ -12,13 +12,13 @@ export const subMenuClass = 'submenu';
 export const radioGroupClass = 'radio-group';
 
 export const initialHoverIndex = -1;
-export const HoverIndexContext = React.createContext(initialHoverIndex);
-export const MenuListItemContext = React.createContext({});
-export const MenuListContext = React.createContext({});
-export const EventHandlersContext = React.createContext({});
-export const RadioGroupContext = React.createContext({});
-export const SettingsContext = React.createContext({});
-export const ItemSettingsContext = React.createContext({});
+export const HoverIndexContext = createContext(initialHoverIndex);
+export const MenuListItemContext = createContext({});
+export const MenuListContext = createContext({});
+export const EventHandlersContext = createContext({});
+export const RadioGroupContext = createContext({});
+export const SettingsContext = createContext({});
+export const ItemSettingsContext = createContext({});
 
 export const Keys = Object.freeze({
     'ENTER': 'Enter',

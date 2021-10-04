@@ -1,4 +1,4 @@
-import React, { forwardRef, useRef, useCallback, useImperativeHandle } from 'react';
+import React, { cloneElement, Fragment, forwardRef, useRef, useCallback, useImperativeHandle } from 'react';
 import { element, func, oneOfType } from 'prop-types';
 import { ControlledMenu } from './ControlledMenu';
 import { useMenuChange, useMenuStateAndFocus, useCombinedRef } from '../hooks';
@@ -71,7 +71,7 @@ export const Menu = forwardRef(function Menu({
     if (getName(button.type) === 'MenuButton') {
         buttonProps.isOpen = isOpen;
     }
-    const renderButton = React.cloneElement(button, buttonProps);
+    const renderButton = cloneElement(button, buttonProps);
 
     useMenuChange(onMenuChange, isOpen);
 
@@ -94,10 +94,10 @@ export const Menu = forwardRef(function Menu({
     }
 
     return (
-        <React.Fragment>
+        <Fragment>
             {renderButton}
             <ControlledMenu {...menuProps} />
-        </React.Fragment>
+        </Fragment>
     );
 });
 

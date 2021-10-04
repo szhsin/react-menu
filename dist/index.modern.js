@@ -1,5 +1,5 @@
-import React, { Children, cloneElement, forwardRef, useContext, useState, useMemo, useLayoutEffect, useEffect, useRef, useReducer, useCallback, useImperativeHandle, memo } from 'react';
-import ReactDOM, { unstable_batchedUpdates, createPortal } from 'react-dom';
+import React, { createContext, Children, cloneElement, forwardRef, useContext, useState, useMemo, useLayoutEffect, useEffect, useRef, useReducer, useCallback, useImperativeHandle, Fragment, memo } from 'react';
+import { unstable_batchedUpdates, createPortal } from 'react-dom';
 import { string, oneOfType, func, object, bool, number, oneOf, exact, element, node, shape, any } from 'prop-types';
 import { useTransition } from 'react-transition-state';
 
@@ -14,13 +14,13 @@ const menuGroupClass = 'group';
 const subMenuClass = 'submenu';
 const radioGroupClass = 'radio-group';
 const initialHoverIndex = -1;
-const HoverIndexContext = React.createContext(initialHoverIndex);
-const MenuListItemContext = React.createContext({});
-const MenuListContext = React.createContext({});
-const EventHandlersContext = React.createContext({});
-const RadioGroupContext = React.createContext({});
-const SettingsContext = React.createContext({});
-const ItemSettingsContext = React.createContext({});
+const HoverIndexContext = createContext(initialHoverIndex);
+const MenuListItemContext = createContext({});
+const MenuListContext = createContext({});
+const EventHandlersContext = createContext({});
+const RadioGroupContext = createContext({});
+const SettingsContext = createContext({});
+const ItemSettingsContext = createContext({});
 const Keys = Object.freeze({
   'ENTER': 'Enter',
   'ESC': 'Escape',
@@ -1522,7 +1522,7 @@ const ControlledMenu = forwardRef(function ControlledMenu({
   })))));
 
   if (portal) {
-    return ReactDOM.createPortal(menuList, document.body);
+    return createPortal(menuList, document.body);
   } else {
     return menuList;
   }
@@ -1606,7 +1606,7 @@ const Menu = forwardRef(function Menu({
     buttonProps.isOpen = isOpen;
   }
 
-  const renderButton = React.cloneElement(button, buttonProps);
+  const renderButton = cloneElement(button, buttonProps);
   useMenuChange(onMenuChange, isOpen);
   useImperativeHandle(instanceRef, () => ({
     openMenu,
@@ -1620,7 +1620,7 @@ const Menu = forwardRef(function Menu({
     onClose: handleClose,
     skipOpen
   };
-  return React.createElement(React.Fragment, null, renderButton, React.createElement(ControlledMenu, { ...menuProps
+  return React.createElement(Fragment, null, renderButton, React.createElement(ControlledMenu, { ...menuProps
   }));
 });
 Menu.propTypes = { ...rootMenuPropTypes,
