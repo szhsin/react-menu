@@ -1,5 +1,5 @@
 module.exports = {
   testEnvironment: 'jsdom',
-  testPathIgnorePatterns: ['/node_modules/', '/__tests__/utils/'],
-  setupFilesAfterEnv: ['./jest-setup.js']
+  testPathIgnorePatterns: ['/__tests__/utils/'],
+  setupFilesAfterEnv: ['@testing-library/jest-dom','regenerator-runtime/runtime.js']
 };
