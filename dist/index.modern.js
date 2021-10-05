@@ -22,39 +22,39 @@ const RadioGroupContext = createContext({});
 const SettingsContext = createContext({});
 const ItemSettingsContext = createContext({});
 const Keys = Object.freeze({
-  'ENTER': 'Enter',
-  'ESC': 'Escape',
-  'SPACE': ' ',
-  'HOME': 'Home',
-  'END': 'End',
-  'LEFT': 'ArrowLeft',
-  'RIGHT': 'ArrowRight',
-  'UP': 'ArrowUp',
-  'DOWN': 'ArrowDown'
+  ENTER: 'Enter',
+  ESC: 'Escape',
+  SPACE: ' ',
+  HOME: 'Home',
+  END: 'End',
+  LEFT: 'ArrowLeft',
+  RIGHT: 'ArrowRight',
+  UP: 'ArrowUp',
+  DOWN: 'ArrowDown'
 });
 const HoverIndexActionTypes = Object.freeze({
-  'RESET': 'HOVER_RESET',
-  'SET': 'HOVER_SET',
-  'UNSET': 'HOVER_UNSET',
-  'INCREASE': 'HOVER_INCREASE',
-  'DECREASE': 'HOVER_DECREASE',
-  'FIRST': 'HOVER_FIRST',
-  'LAST': 'HOVER_LAST'
+  RESET: 'HOVER_RESET',
+  SET: 'HOVER_SET',
+  UNSET: 'HOVER_UNSET',
+  INCREASE: 'HOVER_INCREASE',
+  DECREASE: 'HOVER_DECREASE',
+  FIRST: 'HOVER_FIRST',
+  LAST: 'HOVER_LAST'
 });
 const SubmenuActionTypes = Object.freeze({
-  'OPEN': 'SUBMENU_OPEN',
-  'CLOSE': 'SUBMENU_CLOSE'
+  OPEN: 'SUBMENU_OPEN',
+  CLOSE: 'SUBMENU_CLOSE'
 });
 const CloseReason = Object.freeze({
-  'CLICK': 'click',
-  'CANCEL': 'cancel',
-  'BLUR': 'blur',
-  'SCROLL': 'scroll'
+  CLICK: 'click',
+  CANCEL: 'cancel',
+  BLUR: 'blur',
+  SCROLL: 'scroll'
 });
 const FocusPositions = Object.freeze({
-  'INITIAL': 'initial',
-  'FIRST': 'first',
-  'LAST': 'last'
+  INITIAL: 'initial',
+  FIRST: 'first',
+  LAST: 'last'
 });
 const MenuStateMap = Object.freeze({
   entering: 'opening',
@@ -169,7 +169,7 @@ const cloneChildren = (children, startIndex = 0, inRadioGroup) => {
       default:
         {
           const innerChildren = child.props.children;
-          if (innerChildren === null || typeof innerChildren !== "object") return child;
+          if (innerChildren === null || typeof innerChildren !== 'object') return child;
           const desc = cloneChildren(innerChildren, index, inRadioGroup || name === 'MenuRadioGroup');
           index = desc.index;
 

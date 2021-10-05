@@ -10,23 +10,24 @@ const menuStateHookLink = <Link to={'/docs#use-menu-state'}>useMenuState</Link>;
 const styleGuideLink = <Link to={'/style-guide'}>style guide</Link>;
 
 export const basicMenu = {
-    id: 'basic-menu',
+  id: 'basic-menu',
 
-    title: 'Basic menu',
+  title: 'Basic menu',
 
-    desc:
-        <p>The most basic menu consists of several <code>MenuItem</code>s wrapped
-            in a <code>Menu</code>, and is controlled by a <code>MenuButton</code>.</p>,
+  desc: (
+    <p>
+      The most basic menu consists of several <code>MenuItem</code>s wrapped in a <code>Menu</code>,
+      and is controlled by a <code>MenuButton</code>.
+    </p>
+  ),
 
-    source:
-        `<Menu menuButton={<MenuButton>Open menu</MenuButton>}>
+  source: `<Menu menuButton={<MenuButton>Open menu</MenuButton>}>
     <MenuItem>New File</MenuItem>
     <MenuItem>Save</MenuItem>
     <MenuItem>Close Window</MenuItem>
 </Menu>`,
 
-    fullSource:
-        `import React from 'react';
+  fullSource: `import React from 'react';
 import {
     Menu,
     MenuItem,
@@ -47,16 +48,18 @@ export default function Example() {
 };
 
 export const subMenu = {
-    id: 'submenu',
+  id: 'submenu',
 
-    title: 'Submenu',
+  title: 'Submenu',
 
-    desc:
-        <p><code>SubMenu</code> can be placed in a <code>Menu</code> and has its
-            own <code>MenuItem</code>s as children. You might also create nested submenus under a submenu.</p>,
+  desc: (
+    <p>
+      <code>SubMenu</code> can be placed in a <code>Menu</code> and has its own{' '}
+      <code>MenuItem</code>s as children. You might also create nested submenus under a submenu.
+    </p>
+  ),
 
-    source:
-        `<Menu menuButton={<MenuButton>Open menu</MenuButton>}>
+  source: `<Menu menuButton={<MenuButton>Open menu</MenuButton>}>
     <MenuItem>New File</MenuItem>
     <SubMenu label="Open">
         <MenuItem>index.html</MenuItem>
@@ -70,8 +73,7 @@ export const subMenu = {
     <MenuItem>Save</MenuItem>
 </Menu>`,
 
-    fullSource:
-        `import React from 'react';
+  fullSource: `import React from 'react';
 import {
     Menu,
     MenuItem,
@@ -100,20 +102,22 @@ export default function Example() {
 };
 
 export const eventHandling = {
-    id: 'event-handling',
+  id: 'event-handling',
 
-    title: 'Event handling',
+  title: 'Event handling',
 
-    desc:
-        <>
-            <p>When a menu item is activated, the <code>onClick</code> event fires on
-                menu item. Unless you set <code>stopPropagation</code> of event object to true,
-                the <code>onItemClick</code> of root menu component will then fires.</p>
-            <p>For details of the event object, please refer to {menuItemLink}.</p>
-        </>,
+  desc: (
+    <>
+      <p>
+        When a menu item is activated, the <code>onClick</code> event fires on menu item. Unless you
+        set <code>stopPropagation</code> of event object to true, the <code>onItemClick</code> of
+        root menu component will then fires.
+      </p>
+      <p>For details of the event object, please refer to {menuItemLink}.</p>
+    </>
+  ),
 
-    source:
-        `const [text, setText] = useState('');
+  source: `const [text, setText] = useState('');
 
 const handleMenuClick = e => {
     setText(t => t + \`[Menu] \${e.value} clicked\\n\\n\`);
@@ -150,8 +154,7 @@ const handleSaveClick = e => {
 
 <textarea readOnly ref={ref} value={text} />`,
 
-    fullSource:
-        `import React, { useRef, useState, useLayoutEffect } from 'react';
+  fullSource: `import React, { useRef, useState, useLayoutEffect } from 'react';
 import {
     Menu,
     MenuItem,
@@ -209,16 +212,19 @@ export default function Example() {
 };
 
 export const radioGroup = {
-    id: 'radio-group',
+  id: 'radio-group',
 
-    title: 'Radio group',
+  title: 'Radio group',
 
-    desc:
-        <p>You could make menu items behave like radio buttons by wrapping them in a <code>MenuRadioGroup</code>.
-            The children menu item which has the same value (strict equality ===) as the radio group is marked as checked.</p>,
+  desc: (
+    <p>
+      You could make menu items behave like radio buttons by wrapping them in a{' '}
+      <code>MenuRadioGroup</code>. The children menu item which has the same value (strict equality
+      ===) as the radio group is marked as checked.
+    </p>
+  ),
 
-    source:
-        `const [textColor, setTextColor] = useState('red');
+  source: `const [textColor, setTextColor] = useState('red');
 
 <Menu menuButton={<MenuButton>Text color</MenuButton>}>
     <MenuRadioGroup value={textColor}
@@ -229,8 +235,7 @@ export const radioGroup = {
     </MenuRadioGroup>
 </Menu>`,
 
-    fullSource:
-        `import React, { useState } from 'react';
+  fullSource: `import React, { useState } from 'react';
 import {
     Menu,
     MenuItem,
@@ -263,15 +268,17 @@ export default function Example() {
 };
 
 export const checkBox = {
-    id: 'checkbox',
+  id: 'checkbox',
 
-    title: 'Checkbox',
+  title: 'Checkbox',
 
-    desc:
-        <p>You could make menu items behave like checkboxes by setting <code>type="checkbox"</code>.</p>,
+  desc: (
+    <p>
+      You could make menu items behave like checkboxes by setting <code>type="checkbox"</code>.
+    </p>
+  ),
 
-    source:
-        `const [isBold, setBold] = useState(true);
+  source: `const [isBold, setBold] = useState(true);
 const [isItalic, setItalic] = useState(true);
 const [isUnderline, setUnderline] = useState(false);
 
@@ -290,8 +297,7 @@ const [isUnderline, setUnderline] = useState(false);
     </MenuItem>
 </Menu>`,
 
-    fullSource:
-        `import React, { useState } from 'react';
+  fullSource: `import React, { useState } from 'react';
 import {
     Menu,
     MenuItem,
@@ -332,15 +338,18 @@ export default function Example() {
 };
 
 export const headerAndDivider = {
-    id: 'header-divider',
+  id: 'header-divider',
 
-    title: 'Header and divider',
+  title: 'Header and divider',
 
-    desc:
-        <p>You could use <code>MenuHeader</code> and <code>MenuDivider</code> to group related menu items.</p>,
+  desc: (
+    <p>
+      You could use <code>MenuHeader</code> and <code>MenuDivider</code> to group related menu
+      items.
+    </p>
+  ),
 
-    source:
-        `<Menu menuButton={<MenuButton>Open menu</MenuButton>}>
+  source: `<Menu menuButton={<MenuButton>Open menu</MenuButton>}>
     <MenuItem>New File</MenuItem>
     <MenuItem>Save</MenuItem>
     <MenuItem>Close Window</MenuItem>
@@ -353,8 +362,7 @@ export const headerAndDivider = {
     <MenuItem>Print</MenuItem>
 </Menu>`,
 
-    fullSource:
-        `import React from 'react';
+  fullSource: `import React from 'react';
 import {
     Menu,
     MenuItem,
@@ -384,14 +392,13 @@ export default function Example() {
 };
 
 export const combined = {
-    id: 'combined',
+  id: 'combined',
 
-    title: 'Combined example',
+  title: 'Combined example',
 
-    desc: <p>An example combines the usage of several components.</p>,
+  desc: <p>An example combines the usage of several components.</p>,
 
-    fullSource:
-        `import React, { useState } from 'react';
+  fullSource: `import React, { useState } from 'react';
 import {
     Menu,
     MenuItem,
@@ -456,25 +463,34 @@ export default function Example() {
 };
 
 export const linkAndDisabled = {
-    id: 'link-disabled',
+  id: 'link-disabled',
 
-    title: 'Link and disabled',
+  title: 'Link and disabled',
 
-    desc:
-        <>
-            <p><code>MenuItem</code> can be made a hyperlink by giving it a <code>href</code> prop. Even if
-                it's a link, the <code>onClick</code> event still fires as normal. You could also disable
-                a menu item using the <code>disabled</code> prop.</p>
-            <p><strong>Note:</strong> the <code>href</code> prop is meant to be a redirect which causes browser to reload the document at the URL specified.
-                If you want to prevent the reload or work with <strong>React Router</strong>,
-                please <a href="https://codesandbox.io/s/react-menu-react-router-example-dw4ku"
-                    target="_blank" rel="noopener noreferrer">
-                    see this exmaple</a>.
-            </p>
-        </>,
+  desc: (
+    <>
+      <p>
+        <code>MenuItem</code> can be made a hyperlink by giving it a <code>href</code> prop. Even if
+        it's a link, the <code>onClick</code> event still fires as normal. You could also disable a
+        menu item using the <code>disabled</code> prop.
+      </p>
+      <p>
+        <strong>Note:</strong> the <code>href</code> prop is meant to be a redirect which causes
+        browser to reload the document at the URL specified. If you want to prevent the reload or
+        work with <strong>React Router</strong>, please{' '}
+        <a
+          href="https://codesandbox.io/s/react-menu-react-router-example-dw4ku"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          see this exmaple
+        </a>
+        .
+      </p>
+    </>
+  ),
 
-    source:
-        `<Menu menuButton={<MenuButton>Open menu</MenuButton>}>
+  source: `<Menu menuButton={<MenuButton>Open menu</MenuButton>}>
     <MenuItem href="https://www.google.com/">Google</MenuItem>
     <MenuItem href="https://github.com/szhsin/react-menu/"
         target="_blank" rel="noopener noreferrer">
@@ -484,8 +500,7 @@ export const linkAndDisabled = {
     <MenuItem disabled>Disabled item</MenuItem>
 </Menu>`,
 
-    fullSource:
-        `import React from 'react';
+  fullSource: `import React from 'react';
 import {
     Menu,
     MenuItem,
@@ -509,17 +524,19 @@ export default function Example() {
 };
 
 export const iconAndImage = {
-    id: 'icon-image',
+  id: 'icon-image',
 
-    title: 'Icon and image',
+  title: 'Icon and image',
 
-    desc:
-        <p><LibName /> doesn't include any imagery. However, you are free to use your own or
-            third-party icons and images, as you could wrap anything in a <code>MenuItem</code>. This
-            example uses Google's Material icons.</p>,
+  desc: (
+    <p>
+      <LibName /> doesn't include any imagery. However, you are free to use your own or third-party
+      icons and images, as you could wrap anything in a <code>MenuItem</code>. This example uses
+      Google's Material icons.
+    </p>
+  ),
 
-    source:
-        `<Menu menuButton={<MenuButton>Open menu</MenuButton>}>
+  source: `<Menu menuButton={<MenuButton>Open menu</MenuButton>}>
     <MenuItem>
         <i className="material-icons">content_cut</i>Cut
     </MenuItem>
@@ -535,8 +552,7 @@ export const iconAndImage = {
     </MenuItem>
 </Menu>`,
 
-    fullSource:
-        `import React from 'react';
+  fullSource: `import React from 'react';
 import {
     Menu,
     MenuItem,
@@ -567,19 +583,22 @@ export default function Example() {
 };
 
 export const focusableItem = {
-    id: 'focusable-item',
-    title: 'Focusable item',
-    desc:
-        <>
-            <p><code>FocusableItem</code> is a special menu item. It's used to wrap elements
-                which are able to receive focus, such as input or button.</p>
-            <p>It receives a render prop as children and passes down a <code>ref</code> and
-                several other states. This example demonstrates how to use an input element to filter
-                menu items.</p>
-        </>,
+  id: 'focusable-item',
+  title: 'Focusable item',
+  desc: (
+    <>
+      <p>
+        <code>FocusableItem</code> is a special menu item. It's used to wrap elements which are able
+        to receive focus, such as input or button.
+      </p>
+      <p>
+        It receives a render prop as children and passes down a <code>ref</code> and several other
+        states. This example demonstrates how to use an input element to filter menu items.
+      </p>
+    </>
+  ),
 
-    source:
-        `const [filter, setFilter] = useState('');
+  source: `const [filter, setFilter] = useState('');
 
 <Menu menuButton={<MenuButton>Open menu</MenuButton>}
     onMenuChange={e => e.open && setFilter('')}>
@@ -597,8 +616,7 @@ export const focusableItem = {
     }
 </Menu>`,
 
-    fullSource:
-        `import React, { useState } from 'react';
+  fullSource: `import React, { useState } from 'react';
 import {
     Menu,
     MenuItem,
@@ -631,22 +649,23 @@ export default function Example() {
 }`
 };
 
-
 export const hoverAndActive = {
-    id: 'hover-active',
+  id: 'hover-active',
 
-    title: 'Hover and active',
+  title: 'Hover and active',
 
-    desc:
-        <>
-            <p><code>MenuItem</code> manages a number of internal states such as 'hover' and 'active'.
-                If you need to display different contents under different states, you are able to
-                use <code>children</code> as a render prop and pass it a callback function.</p>
-            <p>For more menu item states, please refer to {menuItemLink}.</p>
-        </>,
+  desc: (
+    <>
+      <p>
+        <code>MenuItem</code> manages a number of internal states such as 'hover' and 'active'. If
+        you need to display different contents under different states, you are able to use{' '}
+        <code>children</code> as a render prop and pass it a callback function.
+      </p>
+      <p>For more menu item states, please refer to {menuItemLink}.</p>
+    </>
+  ),
 
-    source:
-        `<Menu menuButton={<MenuButton>Open menu</MenuButton>}>
+  source: `<Menu menuButton={<MenuButton>Open menu</MenuButton>}>
     <MenuItem>
         {({ hover, active }) =>
             active ? 'Pressed' : hover ? 'Press me' : 'Hover me'}
@@ -663,8 +682,7 @@ export const hoverAndActive = {
     </MenuItem>
 </Menu>`,
 
-    fullSource:
-        `import React from 'react';
+  fullSource: `import React from 'react';
 import {
     Menu,
     MenuItem,
@@ -696,16 +714,18 @@ export default function Example() {
 };
 
 export const openStateButton = {
-    id: 'open-state',
+  id: 'open-state',
 
-    title: 'Menu open state',
+  title: 'Menu open state',
 
-    desc:
-        <p>If you need to change the contents of a menu button when the menu opens,
-            you could use the <code>menuButton</code> as a render prop and pass it a callback function.</p>,
+  desc: (
+    <p>
+      If you need to change the contents of a menu button when the menu opens, you could use the{' '}
+      <code>menuButton</code> as a render prop and pass it a callback function.
+    </p>
+  ),
 
-    source:
-        `<Menu menuButton={
+  source: `<Menu menuButton={
     ({ open }) =>
         <MenuButton>{open ? 'Close' : 'Open'}</MenuButton>}>
     <MenuItem>New File</MenuItem>
@@ -713,8 +733,7 @@ export const openStateButton = {
     <MenuItem>Close Window</MenuItem>
 </Menu>`,
 
-    fullSource:
-        `import React from 'react';
+  fullSource: `import React from 'react';
 import {
     Menu,
     MenuItem,
@@ -736,33 +755,43 @@ export default function Example() {
 };
 
 export const customisedButton = {
-    id: 'customised-btn',
+  id: 'customised-btn',
 
-    title: 'Customised button',
+  title: 'Customised button',
 
-    desc:
-        <>
-            <p>You are free to use a native button element with <code>Menu</code>, or use your
-                own React button component which implements a forwarding ref and
-                accepts <code>onClick</code> and <code>onKeyDown</code> event props.</p>
-            <p><code>Menu</code> also works well with third-party React libraries,
-                such as the <b>Material-UI</b>.
-                See <a href="https://codesandbox.io/s/react-menu-material-ui-example-wvzpc"
-                    target="_blank" rel="noopener noreferrer">
-                    an example on CodeSandbox</a>.</p>
-            <p>The benefit of using {menuButtonLink} is it has additional <code>aria</code> attributes.</p>
-        </>,
+  desc: (
+    <>
+      <p>
+        You are free to use a native button element with <code>Menu</code>, or use your own React
+        button component which implements a forwarding ref and accepts <code>onClick</code> and{' '}
+        <code>onKeyDown</code> event props.
+      </p>
+      <p>
+        <code>Menu</code> also works well with third-party React libraries, such as the{' '}
+        <b>Material-UI</b>. See{' '}
+        <a
+          href="https://codesandbox.io/s/react-menu-material-ui-example-wvzpc"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          an example on CodeSandbox
+        </a>
+        .
+      </p>
+      <p>
+        The benefit of using {menuButtonLink} is it has additional <code>aria</code> attributes.
+      </p>
+    </>
+  ),
 
-    source:
-        `<Menu menuButton={
+  source: `<Menu menuButton={
     <button className="btn-primary">Open menu</button>}>
     <MenuItem>New File</MenuItem>
     <MenuItem>Save</MenuItem>
     <MenuItem>Close Window</MenuItem>
 </Menu>`,
 
-    fullSource:
-        `import React from 'react';
+  fullSource: `import React from 'react';
 import {
     Menu,
     MenuItem
@@ -782,21 +811,26 @@ export default function Example() {
 };
 
 export const placement = {
-    id: 'menu-placement',
+  id: 'menu-placement',
 
-    title: 'Placement',
+  title: 'Placement',
 
-    desc:
-        <>
-            <p>Thanks to <LibName />'s flexible positioning algorithm, you could control the
-                position of menu and how it behaves in response to window scroll event with
-                the <code>align</code>, <code>direction</code>, <code>position</code>, and <code>viewScroll</code> props.</p>
-            <p>Optionally, menu can be set to display an arrow pointing to its anchor element or
-                add an offset using the <code>arrow</code>, <code>offsetX</code>, and <code>offsetY</code> props.</p>
-        </>,
+  desc: (
+    <>
+      <p>
+        Thanks to <LibName />
+        's flexible positioning algorithm, you could control the position of menu and how it behaves
+        in response to window scroll event with the <code>align</code>, <code>direction</code>,{' '}
+        <code>position</code>, and <code>viewScroll</code> props.
+      </p>
+      <p>
+        Optionally, menu can be set to display an arrow pointing to its anchor element or add an
+        offset using the <code>arrow</code>, <code>offsetX</code>, and <code>offsetY</code> props.
+      </p>
+    </>
+  ),
 
-    source:
-        `const [display, setDisplay] = useState('arrow');
+  source: `const [display, setDisplay] = useState('arrow');
 const [align, setAlign] = useState('center');
 const [position, setPosition] = useState('anchor');
 const [viewScroll, setViewScroll] = useState('auto');
@@ -820,21 +854,25 @@ const menus = ['right', 'top', 'bottom', 'left'].map(direction => (
 };
 
 export const overflow = {
-    id: 'menu-overflow',
+  id: 'menu-overflow',
 
-    title: 'Overflow',
+  title: 'Overflow',
 
-    desc:
-        <>
-            <p>When there isn't enough space for all menu items, you could use
-                the <code>overflow</code> prop to make the menu list scrollable. The value of this prop
-                is similar to the CSS overflow property.</p>
-            <p>If you want to fix some items at the top or bottom, use a <code>MenuGroup</code> and
-                add <code>takeOverflow</code> prop to make the group scrollable.</p>
-        </>,
+  desc: (
+    <>
+      <p>
+        When there isn't enough space for all menu items, you could use the <code>overflow</code>{' '}
+        prop to make the menu list scrollable. The value of this prop is similar to the CSS overflow
+        property.
+      </p>
+      <p>
+        If you want to fix some items at the top or bottom, use a <code>MenuGroup</code> and add{' '}
+        <code>takeOverflow</code> prop to make the group scrollable.
+      </p>
+    </>
+  ),
 
-    source:
-        `const [overflow, setOverflow] = useState('auto');
+  source: `const [overflow, setOverflow] = useState('auto');
 const [position, setPosition] = useState('auto');
 const [filter, setFilter] = useState('');
 
@@ -864,17 +902,20 @@ const [filter, setFilter] = useState('');
 };
 
 export const boundingBox = {
-    id: 'bounding-box',
+  id: 'bounding-box',
 
-    title: 'Bounding box',
+  title: 'Bounding box',
 
-    desc: <p>Normally menu positions itself within its nearest ancestor which has
-        CSS <code>overflow</code> set to a value other than 'visible', or the browser viewport.
-        Also, you can specify a container in the page as the bounding box for a menu using
-        the <code>boundingBoxRef</code> prop. Menu will try to position itself within that container.</p>,
+  desc: (
+    <p>
+      Normally menu positions itself within its nearest ancestor which has CSS <code>overflow</code>{' '}
+      set to a value other than 'visible', or the browser viewport. Also, you can specify a
+      container in the page as the bounding box for a menu using the <code>boundingBoxRef</code>{' '}
+      prop. Menu will try to position itself within that container.
+    </p>
+  ),
 
-    source:
-        `const ref = useRef(null);
+  source: `const ref = useRef(null);
 const leftAnchor = useRef(null);
 const rightAnchor = useRef(null);
 const { state, toggleMenu } = useMenuState();
@@ -907,25 +948,28 @@ const tooltipProps = {
         I'm a tooltip built with React-Menu
     </ControlledMenu>
 </div>`
-}
-
+};
 
 export const managingState = {
-    id: 'managing-state',
+  id: 'managing-state',
 
-    title: 'Managing state',
+  title: 'Managing state',
 
-    desc:
-        <>
-            <p>In some use cases you may need to control how and when a menu is open or closed, e.g. when something is hovered.
-                This can be implemented using a <code>ControlledMenu</code>.</p>
-            <p>You need to provide at least a <code>state</code> prop, and
-                a <code>ref</code> of an element to which menu will be positioned. You also need to
-                update <code>state</code> in response to the <code>onClose</code> event.</p>
-        </>,
+  desc: (
+    <>
+      <p>
+        In some use cases you may need to control how and when a menu is open or closed, e.g. when
+        something is hovered. This can be implemented using a <code>ControlledMenu</code>.
+      </p>
+      <p>
+        You need to provide at least a <code>state</code> prop, and a <code>ref</code> of an element
+        to which menu will be positioned. You also need to update <code>state</code> in response to
+        the <code>onClose</code> event.
+      </p>
+    </>
+  ),
 
-    source:
-        `const ref = useRef(null);
+  source: `const ref = useRef(null);
 const [state, setState] = useState();
 
 <div ref={ref} onMouseEnter={() => setState('open')}>
@@ -940,8 +984,7 @@ const [state, setState] = useState();
     <MenuItem>Close Window</MenuItem>
 </ControlledMenu>`,
 
-    fullSource:
-        `import React, { useState, useRef } from 'react';
+  fullSource: `import React, { useState, useRef } from 'react';
 import {
     ControlledMenu,
     MenuItem
@@ -971,18 +1014,23 @@ export default function Example() {
 };
 
 export const contextMenu = {
-    id: 'context-menu',
+  id: 'context-menu',
 
-    title: 'Context menu',
+  title: 'Context menu',
 
-    desc:
-        <>
-            <p>Context menu is implemented using a <code>ControlledMenu</code>.</p>
-            <p>You need to provide an <code>anchorPoint</code> of viewport coordinates to which menu will be positioned.</p>
-        </>,
+  desc: (
+    <>
+      <p>
+        Context menu is implemented using a <code>ControlledMenu</code>.
+      </p>
+      <p>
+        You need to provide an <code>anchorPoint</code> of viewport coordinates to which menu will
+        be positioned.
+      </p>
+    </>
+  ),
 
-    source:
-        `const { toggleMenu, ...menuProps } = useMenuState();
+  source: `const { toggleMenu, ...menuProps } = useMenuState();
 const [anchorPoint, setAnchorPoint] = useState({ x: 0, y: 0 });
 
 <div onContextMenu={e => {
@@ -1000,8 +1048,7 @@ const [anchorPoint, setAnchorPoint] = useState({ x: 0, y: 0 });
     </ControlledMenu>
 </div >`,
 
-    fullSource:
-        `import React, { useState } from 'react';
+  fullSource: `import React, { useState } from 'react';
 import {
     ControlledMenu,
     MenuItem
@@ -1032,20 +1079,22 @@ export default function Example() {
 };
 
 export const menuStateHook = {
-    id: 'use-menu-state',
+  id: 'use-menu-state',
 
-    title: 'useMenuState',
+  title: 'useMenuState',
 
-    desc:
-        <>
-            <p><code>useMenuState</code> Hook works with <code>ControlledMenu</code> and help you
-                manage the state transition when menu opens and closes. It's the recommended way to
-                use <code>ControlledMenu</code></p>
-            <p>Please see {menuStateHookLink} for more details.</p>
-        </>,
+  desc: (
+    <>
+      <p>
+        <code>useMenuState</code> Hook works with <code>ControlledMenu</code> and help you manage
+        the state transition when menu opens and closes. It's the recommended way to use{' '}
+        <code>ControlledMenu</code>
+      </p>
+      <p>Please see {menuStateHookLink} for more details.</p>
+    </>
+  ),
 
-    source:
-        `const ref = useRef(null);
+  source: `const ref = useRef(null);
 const { toggleMenu, ...menuProps } = useMenuState({ transition: true });
 
 <div ref={ref} onMouseEnter={() => toggleMenu(true)}>
@@ -1060,8 +1109,7 @@ const { toggleMenu, ...menuProps } = useMenuState({ transition: true });
     <MenuItem>Close Window</MenuItem>
 </ControlledMenu>`,
 
-    fullSource:
-        `import React, { useRef } from 'react';
+  fullSource: `import React, { useRef } from 'react';
 import {
     ControlledMenu,
     MenuItem,
@@ -1093,23 +1141,27 @@ export default function Example() {
 };
 
 export const stylesProp = {
-    id: 'styles-prop',
+  id: 'styles-prop',
 
-    title: 'styles prop',
+  title: 'styles prop',
 
-    desc:
-        <>
-            <p>You can apply your style by giving an object to the <code>styles</code> prop. Regular styles
-                are put in the object directly just like React's <code>style</code> prop, and styles which are only applied to
-                specific component states are written in nested objects under corresponding keys. <LibName /> will
-                flatten the styles object by applying the properties from top to bottom, with later properties
-                overriding earlier ones of the same name.</p>
-            <p>For more details about the state keys, please refer to the <code>styles</code> prop under
-                each <Link to={'/docs#menu-item'}>component</Link>.</p>
-        </>,
+  desc: (
+    <>
+      <p>
+        You can apply your style by giving an object to the <code>styles</code> prop. Regular styles
+        are put in the object directly just like React's <code>style</code> prop, and styles which
+        are only applied to specific component states are written in nested objects under
+        corresponding keys. <LibName /> will flatten the styles object by applying the properties
+        from top to bottom, with later properties overriding earlier ones of the same name.
+      </p>
+      <p>
+        For more details about the state keys, please refer to the <code>styles</code> prop under
+        each <Link to={'/docs#menu-item'}>component</Link>.
+      </p>
+    </>
+  ),
 
-    source:
-        `<Menu menuButton={<MenuButton>Open menu</MenuButton>}
+  source: `<Menu menuButton={<MenuButton>Open menu</MenuButton>}
     menuStyles={{
         border: '2px dashed green',
         boxShadow: 'none'
@@ -1132,8 +1184,7 @@ export const stylesProp = {
     </MenuItem>
 </Menu>`,
 
-    fullSource:
-        `import React from 'react';
+  fullSource: `import React from 'react';
 import {
     Menu,
     MenuItem,
@@ -1171,21 +1222,25 @@ export default function Example() {
 };
 
 export const classNameProp = {
-    id: 'classname-prop',
+  id: 'classname-prop',
 
-    title: 'className prop',
+  title: 'className prop',
 
-    desc:
-        <>
-            <p>You can give components your CSS classes using the <code>className</code> prop.
-                Optionally, you may pass a function to the prop and return different CSS class names
-                under different component states.</p>
-            <p>For more details about available states, please refer to the <code>className</code> prop under
-                each <Link to={'/docs#menu-item'}>component</Link>.</p>
-        </>,
+  desc: (
+    <>
+      <p>
+        You can give components your CSS classes using the <code>className</code> prop. Optionally,
+        you may pass a function to the prop and return different CSS class names under different
+        component states.
+      </p>
+      <p>
+        For more details about available states, please refer to the <code>className</code> prop
+        under each <Link to={'/docs#menu-item'}>component</Link>.
+      </p>
+    </>
+  ),
 
-    source:
-        `<Menu menuButton={<MenuButton>Open menu</MenuButton>}
+  source: `<Menu menuButton={<MenuButton>Open menu</MenuButton>}
     menuClassName="my-menu">
     <MenuItem>New File</MenuItem>
     <MenuItem>Save</MenuItem>
@@ -1220,8 +1275,7 @@ export const classNameProp = {
     background-color: #333;
 }`,
 
-    fullSource:
-        `import React from 'react';
+  fullSource: `import React from 'react';
 import {
     Menu,
     MenuItem,
@@ -1271,127 +1325,109 @@ export default function Example() {
 };
 
 export const menu = {
-    id: 'menu',
-    title: 'Menu',
-    desc:
-        <p>The group includes common usage examples of <code>Menu</code>, <code>SubMenu</code>, and <code>MenuItem</code>.</p>,
-    list: [
-        basicMenu,
-        subMenu,
-        eventHandling,
-        radioGroup,
-        checkBox,
-        headerAndDivider,
-        combined
-    ]
+  id: 'menu',
+  title: 'Menu',
+  desc: (
+    <p>
+      The group includes common usage examples of <code>Menu</code>, <code>SubMenu</code>, and{' '}
+      <code>MenuItem</code>.
+    </p>
+  ),
+  list: [basicMenu, subMenu, eventHandling, radioGroup, checkBox, headerAndDivider, combined]
 };
 
 export const menuItem = {
-    id: 'menu-item',
-    title: 'Menu item',
-    desc:
-        <p>Advanced usage examples with menu items.</p>,
-    list: [
-        linkAndDisabled,
-        iconAndImage,
-        hoverAndActive,
-        focusableItem
-    ]
+  id: 'menu-item',
+  title: 'Menu item',
+  desc: <p>Advanced usage examples with menu items.</p>,
+  list: [linkAndDisabled, iconAndImage, hoverAndActive, focusableItem]
 };
 
 export const menuButton = {
-    id: 'menu-button',
-    title: 'Menu button',
-    desc:
-        <p>Change the look and contents of your menu button.</p>,
-    list: [
-        openStateButton,
-        customisedButton,
-    ]
+  id: 'menu-button',
+  title: 'Menu button',
+  desc: <p>Change the look and contents of your menu button.</p>,
+  list: [openStateButton, customisedButton]
 };
 
 export const menuOptions = {
-    id: 'menu-options',
-    title: 'Menu options',
-    desc:
-        <p>Control the display and position of menu related to menu button.</p>,
-    list: [
-        placement,
-        overflow,
-        boundingBox
-    ]
+  id: 'menu-options',
+  title: 'Menu options',
+  desc: <p>Control the display and position of menu related to menu button.</p>,
+  list: [placement, overflow, boundingBox]
 };
 
 export const controlledMenu = {
-    id: 'controlled-menu',
-    title: 'Controlled menu',
-    desc:
-        <p>Get more control of the states with <code>ControlledMenu</code>.</p>,
-    list: [
-        managingState,
-        menuStateHook,
-        contextMenu
-    ]
+  id: 'controlled-menu',
+  title: 'Controlled menu',
+  desc: (
+    <p>
+      Get more control of the states with <code>ControlledMenu</code>.
+    </p>
+  ),
+  list: [managingState, menuStateHook, contextMenu]
 };
 
 export const customisedStyle = {
-    id: 'customised-style',
-    title: 'Customised style',
-    desc:
-        <>
-            <p><LibName /> provides multiple ways for customising style. You can use css/sass stylesheets
-                or styled-components to override the default ones. Please see the {styleGuideLink} for more details.</p>
-            <p>In addition, you can use <code>styles</code> or <code>className</code> props.</p>
-        </>,
-    list: [
-        stylesProp,
-        classNameProp
-    ]
+  id: 'customised-style',
+  title: 'Customised style',
+  desc: (
+    <>
+      <p>
+        <LibName /> provides multiple ways for customising style. You can use css/sass stylesheets
+        or styled-components to override the default ones. Please see the {styleGuideLink} for more
+        details.
+      </p>
+      <p>
+        In addition, you can use <code>styles</code> or <code>className</code> props.
+      </p>
+    </>
+  ),
+  list: [stylesProp, classNameProp]
 };
 
-export const usageExamples =
-{
-    id: 'usage-examples',
-    title: 'Usage',
-    desc:
-        <p>Each of the following sections includes a live example. They are grouped into related categories.
-            You could toggle between the brief and full versions of source code.</p>,
-    list: [
-        menu,
-        menuItem,
-        menuOptions,
-        menuButton,
-        controlledMenu,
-        customisedStyle
-    ]
+export const usageExamples = {
+  id: 'usage-examples',
+  title: 'Usage',
+  desc: (
+    <p>
+      Each of the following sections includes a live example. They are grouped into related
+      categories. You could toggle between the brief and full versions of source code.
+    </p>
+  ),
+  list: [menu, menuItem, menuOptions, menuButton, controlledMenu, customisedStyle]
 };
 
 export const features = {
-    id: 'features',
-    title: 'Features',
-    desc:
-        <ul className="features">
-            <li>React menu components for easy and fast web development.</li>
-            <li>Unlimited levels of submenu.</li>
-            <li>Supports dropdown or context menu.</li>
-            <li>Supports radio and checkbox menu items.</li>
-            <li>Flexible menu positioning.</li>
-            <li>Customisable styling.</li>
-            <li>Comprehensive keyboard interactions.</li>
-            <li>Adheres to <ARIAPracticesLink />.</li>
-        </ul>
+  id: 'features',
+  title: 'Features',
+  desc: (
+    <ul className="features">
+      <li>React menu components for easy and fast web development.</li>
+      <li>Unlimited levels of submenu.</li>
+      <li>Supports dropdown or context menu.</li>
+      <li>Supports radio and checkbox menu items.</li>
+      <li>Flexible menu positioning.</li>
+      <li>Customisable styling.</li>
+      <li>Comprehensive keyboard interactions.</li>
+      <li>
+        Adheres to <ARIAPracticesLink />.
+      </li>
+    </ul>
+  )
 };
 
 export const install = {
-    id: 'install',
-    title: 'Install',
-    desc:
-        <div className="install-command">
-            <p className="comment"># with npm</p>
-            <p>npm install @szhsin/react-menu</p>
-            <p className="comment"># with Yarn</p>
-            <p>yarn add @szhsin/react-menu</p>
-        </div>
+  id: 'install',
+  title: 'Install',
+  desc: (
+    <div className="install-command">
+      <p className="comment"># with npm</p>
+      <p>npm install @szhsin/react-menu</p>
+      <p className="comment"># with Yarn</p>
+      <p>yarn add @szhsin/react-menu</p>
+    </div>
+  )
 };
 
 const codeExamples = [features, install, usageExamples];

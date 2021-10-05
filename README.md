@@ -33,12 +33,7 @@ yarn add @szhsin/react-menu
 
 ```jsx
 import React from 'react';
-import {
-  Menu,
-  MenuItem,
-  MenuButton,
-  SubMenu
-} from '@szhsin/react-menu';
+import { Menu, MenuItem, MenuButton, SubMenu } from '@szhsin/react-menu';
 import '@szhsin/react-menu/dist/index.css';
 
 export default function App() {

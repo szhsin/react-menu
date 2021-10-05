@@ -2,62 +2,62 @@
 @use 'sass:color';
 
 @mixin reset-list {
-    margin: 0;
-    padding: 0;
-    list-style: none;
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
 @mixin remove-focus {
-    &:focus {
-        outline: none;
-    }
+  &:focus {
+    outline: none;
+  }
 }
 
 // $axis: 'b' -- both, 'm' -- main axis, 'c' -- cross axis
-@mixin flex-center($axis: "b", $column: false) {
-    display: flex;
-    flex-direction: if($column, column, row);
-    justify-content: if($axis == "b" or $axis == "m", center, flex-start);
-    align-items: if($axis == "b" or $axis == "c", center, flex-start);
+@mixin flex-center($axis: 'b', $column: false) {
+  display: flex;
+  flex-direction: if($column, column, row);
+  justify-content: if($axis == 'b' or $axis == 'm', center, flex-start);
+  align-items: if($axis == 'b' or $axis == 'c', center, flex-start);
 }
 
 @mixin focus($width: 1px, $color: var.$focus-light) {
-    &:focus {
-        border-color: $color;
-        box-shadow: 0 0 0 $width $color;
-    }
+  &:focus {
+    border-color: $color;
+    box-shadow: 0 0 0 $width $color;
+  }
 }
 
 @mixin transition($property: background-color, $duration: 0.15s, $timing-function: ease-in-out) {
-    transition-property: $property;
-    transition-duration: $duration;
-    transition-timing-function: $timing-function;
+  transition-property: $property;
+  transition-duration: $duration;
+  transition-timing-function: $timing-function;
 }
 
-@mixin border($border: "border", $width: 1px, $transition: true) {
-    #{$border}: $width solid var.$border-light;
-    @if $transition {
-        @include transition(border-color);
-    }
+@mixin border($border: 'border', $width: 1px, $transition: true) {
+  #{$border}: $width solid var.$border-light;
+  @if $transition {
+    @include transition(border-color);
+  }
 }
 
 @mixin scrollbar($width: 7px) {
-    &::-webkit-scrollbar {
-        width: $width;
-    }
-    &::-webkit-scrollbar-thumb {
-        background-color: color.scale(var.$border-light, $lightness: -15%);
-    }
-    &::-webkit-scrollbar-track {
-        background-color: var.$border-light;
-    }
+  &::-webkit-scrollbar {
+    width: $width;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: color.scale(var.$border-light, $lightness: -15%);
+  }
+  &::-webkit-scrollbar-track {
+    background-color: var.$border-light;
+  }
 }
 
 @mixin scrollbar-dark {
-    &::-webkit-scrollbar-thumb {
-        background-color: color.scale(var.$border-dark, $lightness: 25%);
-    }
-    &::-webkit-scrollbar-track {
-        background-color: var.$border-dark;
-    }
+  &::-webkit-scrollbar-thumb {
+    background-color: color.scale(var.$border-dark, $lightness: 25%);
+  }
+  &::-webkit-scrollbar-track {
+    background-color: var.$border-dark;
+  }
 }

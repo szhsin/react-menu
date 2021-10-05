@@ -30,39 +30,39 @@ var RadioGroupContext = React.createContext({});
 var SettingsContext = React.createContext({});
 var ItemSettingsContext = React.createContext({});
 var Keys = Object.freeze({
-  'ENTER': 'Enter',
-  'ESC': 'Escape',
-  'SPACE': ' ',
-  'HOME': 'Home',
-  'END': 'End',
-  'LEFT': 'ArrowLeft',
-  'RIGHT': 'ArrowRight',
-  'UP': 'ArrowUp',
-  'DOWN': 'ArrowDown'
+  ENTER: 'Enter',
+  ESC: 'Escape',
+  SPACE: ' ',
+  HOME: 'Home',
+  END: 'End',
+  LEFT: 'ArrowLeft',
+  RIGHT: 'ArrowRight',
+  UP: 'ArrowUp',
+  DOWN: 'ArrowDown'
 });
 var HoverIndexActionTypes = Object.freeze({
-  'RESET': 'HOVER_RESET',
-  'SET': 'HOVER_SET',
-  'UNSET': 'HOVER_UNSET',
-  'INCREASE': 'HOVER_INCREASE',
-  'DECREASE': 'HOVER_DECREASE',
-  'FIRST': 'HOVER_FIRST',
-  'LAST': 'HOVER_LAST'
+  RESET: 'HOVER_RESET',
+  SET: 'HOVER_SET',
+  UNSET: 'HOVER_UNSET',
+  INCREASE: 'HOVER_INCREASE',
+  DECREASE: 'HOVER_DECREASE',
+  FIRST: 'HOVER_FIRST',
+  LAST: 'HOVER_LAST'
 });
 var SubmenuActionTypes = Object.freeze({
-  'OPEN': 'SUBMENU_OPEN',
-  'CLOSE': 'SUBMENU_CLOSE'
+  OPEN: 'SUBMENU_OPEN',
+  CLOSE: 'SUBMENU_CLOSE'
 });
 var CloseReason = Object.freeze({
-  'CLICK': 'click',
-  'CANCEL': 'cancel',
-  'BLUR': 'blur',
-  'SCROLL': 'scroll'
+  CLICK: 'click',
+  CANCEL: 'cancel',
+  BLUR: 'blur',
+  SCROLL: 'scroll'
 });
 var FocusPositions = Object.freeze({
-  'INITIAL': 'initial',
-  'FIRST': 'first',
-  'LAST': 'last'
+  INITIAL: 'initial',
+  FIRST: 'first',
+  LAST: 'last'
 });
 var MenuStateMap = Object.freeze({
   entering: 'opening',
@@ -262,7 +262,7 @@ var cloneChildren = function cloneChildren(children, startIndex, inRadioGroup) {
       default:
         {
           var innerChildren = child.props.children;
-          if (innerChildren === null || _typeof(innerChildren) !== "object") return child;
+          if (innerChildren === null || _typeof(innerChildren) !== 'object') return child;
           var desc = cloneChildren(innerChildren, index, inRadioGroup || name === 'MenuRadioGroup');
           index = desc.index;
 

@@ -2,18 +2,18 @@ import React, { memo, useContext, useMemo, useRef } from 'react';
 import { bool, func } from 'prop-types';
 import { useBEM, useFlatStyles, useItemState } from '../hooks';
 import {
-    attachHandlerProps,
-    safeCall,
-    menuClass,
-    menuItemClass,
-    stylePropTypes,
-    validateIndex,
-    withHovering,
-    EventHandlersContext
+  attachHandlerProps,
+  safeCall,
+  menuClass,
+  menuItemClass,
+  stylePropTypes,
+  validateIndex,
+  withHovering,
+  EventHandlersContext
 } from '../utils';
 
-
-export const FocusableItem = withHovering(memo(function FocusableItem({
+export const FocusableItem = withHovering(
+  memo(function FocusableItem({
     className,
     styles,
     disabled,
@@ -22,53 +22,68 @@ export const FocusableItem = withHovering(memo(function FocusableItem({
     isHovering,
     externalRef,
     ...restProps
-}) {
+  }) {
     const isDisabled = !!disabled;
     validateIndex(index, isDisabled, children);
     const ref = useRef(null);
-    const {
-        setHover,
-        onBlur,
-        onMouseEnter,
-        onMouseLeave
-    } = useItemState(ref, index, isHovering, isDisabled);
+    const { setHover, onBlur, onMouseEnter, onMouseLeave } = useItemState(
+      ref,
+      index,
+      isHovering,
+      isDisabled
+    );
     const { handleClose } = useContext(EventHandlersContext);
 
-    const modifiers = useMemo(() => Object.freeze({
-        disabled: isDisabled,
-        hover: isHovering,
-        focusable: true
-    }), [isDisabled, isHovering]);
+    const modifiers = useMemo(
+      () =>
+        Object.freeze({
+          disabled: isDisabled,
+          hover: isHovering,
+          focusable: true
+        }),
+      [isDisabled, isHovering]
+    );
 
-    const renderChildren = useMemo(() => safeCall(children, {
-        ...modifiers,
-        ref,
-        closeMenu: handleClose
-    }), [children, modifiers, handleClose]);
+    const renderChildren = useMemo(
+      () =>
+        safeCall(children, {
+          ...modifiers,
+          ref,
+          closeMenu: handleClose
+        }),
+      [children, modifiers, handleClose]
+    );
 
-    const handlers = attachHandlerProps({
+    const handlers = attachHandlerProps(
+      {
         onMouseEnter,
-        onMouseLeave: e => onMouseLeave(e, true),
+        onMouseLeave: (e) => onMouseLeave(e, true),
         onFocus: setHover,
         onBlur
-    }, restProps);
+      },
+      restProps
+    );
 
     return (
-        <li aria-disabled={isDisabled || undefined}
-            role="menuitem"
-            tabIndex="-1"
-            {...restProps}
-            {...handlers}
-            ref={externalRef}
-            className={useBEM({ block: menuClass, element: menuItemClass, modifiers, className })}
-            style={useFlatStyles(styles, modifiers)}>
-            {renderChildren}
-        </li>
+      <li
+        aria-disabled={isDisabled || undefined}
+        role="menuitem"
+        tabIndex="-1"
+        {...restProps}
+        {...handlers}
+        ref={externalRef}
+        className={useBEM({ block: menuClass, element: menuItemClass, modifiers, className })}
+        style={useFlatStyles(styles, modifiers)}
+      >
+        {renderChildren}
+      </li>
     );
-}), 'FocusableItem');
+  }),
+  'FocusableItem'
+);
 
 FocusableItem.propTypes = {
-    ...stylePropTypes(),
-    disabled: bool,
-    children: func
+  ...stylePropTypes(),
+  disabled: bool,
+  children: func
 };

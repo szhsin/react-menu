@@ -8,50 +8,54 @@ import { ThemeSwitch } from './ThemeSwitch';
 const blockName = 'navbar';
 
 export const Header = React.memo(function Header() {
+  const isFullSize = useContext(DomInfoContext).vWidth > 500;
+  const { theme, isDark, showBanner, setShowBanner } = useContext(SettingContext);
+  const { setTocOpen } = useContext(TocContext);
 
-    const isFullSize = useContext(DomInfoContext).vWidth > 500;
-    const { theme, isDark, showBanner, setShowBanner } = useContext(SettingContext);
-    const { setTocOpen } = useContext(TocContext);
+  return (
+    <header id="header">
+      {showBanner && <HeaderBanner onClose={() => setShowBanner(false)} />}
+      <nav className={bem(blockName, null, { theme })} aria-label="Site">
+        <button
+          className={bem(blockName, 'toggle')}
+          aria-label="Open table of contents"
+          onClick={() => setTocOpen(true)}
+        >
+          <i className="material-icons">menu</i>
+        </button>
 
-    return (
-        <header id="header">
-            {showBanner && <HeaderBanner onClose={() => setShowBanner(false)} />}
-            <nav className={bem(blockName, null, { theme })}
-                aria-label="Site">
-                <button className={bem(blockName, 'toggle')} aria-label="Open table of contents"
-                    onClick={() => setTocOpen(true)}>
-                    <i className="material-icons">menu</i>
-                </button>
+        <Logo />
 
-                <Logo />
+        <ul className={bem(blockName, 'link-list')}>
+          <NavBarLink exact to="/">
+            Home
+          </NavBarLink>
 
-                <ul className={bem(blockName, 'link-list')}>
-                    <NavBarLink exact to="/">Home</NavBarLink>
+          <NavBarLink to="/docs">Docs</NavBarLink>
 
-                    <NavBarLink to="/docs">Docs</NavBarLink>
+          <NavBarLink to="/style-guide">{isFullSize ? 'Style Guide' : 'Styling'}</NavBarLink>
+        </ul>
 
-                    <NavBarLink to="/style-guide">
-                        {isFullSize ? 'Style Guide' : 'Styling'}
-                    </NavBarLink>
-                </ul>
+        <ThemeSwitch />
 
-                <ThemeSwitch />
-
-                <a className={bem(blockName, 'github')} title="GitHub"
-                    href="https://github.com/szhsin/react-menu"
-                    target="_blank" rel="noopener noreferrer">
-                    <img src={`GitHub-Mark-${isDark ? 'Light-' : ''}64px.png`}
-                        alt="GitHub" />
-                </a>
-            </nav>
-        </header>
-    );
+        <a
+          className={bem(blockName, 'github')}
+          title="GitHub"
+          href="https://github.com/szhsin/react-menu"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <img src={`GitHub-Mark-${isDark ? 'Light-' : ''}64px.png`} alt="GitHub" />
+        </a>
+      </nav>
+    </header>
+  );
 });
 
 function NavBarLink(props) {
-    return (
-        <li className={bem(blockName, 'link')}>
-            <NavLink {...props} />
-        </li>
-    );
+  return (
+    <li className={bem(blockName, 'link')}>
+      <NavLink {...props} />
+    </li>
+  );
 }
