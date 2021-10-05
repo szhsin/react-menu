@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { Keys } from '../utils';
 
-export const useActiveState = (isHovering, isDisabled, ...moreKeys) => {
+export const useActiveState = (isHovering, isDisabled, moreKeys) => {
     const [active, setActive] = useState(false);
-    const activeKeys = [Keys.ENTER, Keys.SPACE, ...moreKeys];
+    const activeKeys = [Keys.ENTER, Keys.SPACE].concat(moreKeys);
 
     const cancelActive = () => active && setActive(false);
 

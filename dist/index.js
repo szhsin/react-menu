@@ -142,12 +142,8 @@ var floatEqual = function floatEqual(a, b, diff) {
 var getTransition = function getTransition(transition, name) {
   return !!(transition && transition[name]) || transition === true;
 };
-var safeCall = function safeCall(fn) {
-  for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-    args[_key - 1] = arguments[_key];
-  }
-
-  return typeof fn === 'function' ? fn.apply(void 0, args) : fn;
+var safeCall = function safeCall(fn, arg) {
+  return typeof fn === 'function' ? fn(arg) : fn;
 };
 var getName = function getName(component) {
   return component && component['_szhsinMenu'];
@@ -358,14 +354,10 @@ var withHovering = function withHovering(WrapppedComponent, name) {
   return WithHovering;
 };
 
-var useActiveState = function useActiveState(isHovering, isDisabled) {
+var useActiveState = function useActiveState(isHovering, isDisabled, moreKeys) {
   var _useState = React.useState(false),
       active = _useState[0],
       setActive = _useState[1];
-
-  for (var _len = arguments.length, moreKeys = new Array(_len > 2 ? _len - 2 : 0), _key = 2; _key < _len; _key++) {
-    moreKeys[_key - 2] = arguments[_key];
-  }
 
   var activeKeys = [Keys.ENTER, Keys.SPACE].concat(moreKeys);
 

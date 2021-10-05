@@ -69,7 +69,7 @@ const batchedUpdates = unstable_batchedUpdates || (callback => callback());
 const values = Object.values || (obj => Object.keys(obj).map(key => obj[key]));
 const floatEqual = (a, b, diff = 0.0001) => Math.abs(a - b) < diff;
 const getTransition = (transition, name) => !!(transition && transition[name]) || transition === true;
-const safeCall = (fn, ...args) => typeof fn === 'function' ? fn(...args) : fn;
+const safeCall = (fn, arg) => typeof fn === 'function' ? fn(arg) : fn;
 const getName = component => component && component['_szhsinMenu'];
 const defineName = (component, name) => name ? Object.defineProperty(component, '_szhsinMenu', {
   value: name,
@@ -261,9 +261,9 @@ const withHovering = (WrapppedComponent, name) => {
   return WithHovering;
 };
 
-const useActiveState = (isHovering, isDisabled, ...moreKeys) => {
+const useActiveState = (isHovering, isDisabled, moreKeys) => {
   const [active, setActive] = useState(false);
-  const activeKeys = [Keys.ENTER, Keys.SPACE, ...moreKeys];
+  const activeKeys = [Keys.ENTER, Keys.SPACE].concat(moreKeys);
 
   const cancelActive = () => active && setActive(false);
 

@@ -6,7 +6,7 @@ export const batchedUpdates = unstable_batchedUpdates || (callback => callback()
 export const values = Object.values || (obj => Object.keys(obj).map(key => obj[key]));
 export const floatEqual = (a, b, diff = 0.0001) => Math.abs(a - b) < diff;
 export const getTransition = (transition, name) => !!(transition && transition[name]) || transition === true;
-export const safeCall = (fn, ...args) => typeof fn === 'function' ? fn(...args) : fn;
+export const safeCall = (fn, arg) => typeof fn === 'function' ? fn(arg) : fn;
 
 export const getName = component => component && component['_szhsinMenu'];
 export const defineName = (component, name) => name
