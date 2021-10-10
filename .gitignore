@@ -1,26 +1,18 @@
-
-# See https://help.github.com/ignore-files/ for more about ignoring files.
-
 # dependencies
 node_modules
 
 # builds
 build
-dist
-.rpt2_cache
+
+# tests
+coverage
+
+# logs
+logs
+*.log
 
 # misc
 .DS_Store
+.npm
 .env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
 .eslintcache
-
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
-# test
-coverage

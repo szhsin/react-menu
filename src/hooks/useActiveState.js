@@ -1,39 +1,39 @@
 import { useState } from 'react';
 import { Keys } from '../utils';
 
-export const useActiveState = (isHovering, isDisabled, ...moreKeys) => {
-    const [active, setActive] = useState(false);
-    const activeKeys = [Keys.ENTER, Keys.SPACE, ...moreKeys];
+export const useActiveState = (isHovering, isDisabled, moreKeys) => {
+  const [active, setActive] = useState(false);
+  const activeKeys = [Keys.ENTER, Keys.SPACE].concat(moreKeys);
 
-    const cancelActive = () => active && setActive(false);
+  const cancelActive = () => active && setActive(false);
 
-    return {
-        isActive: active,
+  return {
+    isActive: active,
 
-        onPointerDown: () => {
-            if (!isDisabled) setActive(true);
-        },
+    onPointerDown: () => {
+      if (!isDisabled) setActive(true);
+    },
 
-        onPointerUp: cancelActive,
+    onPointerUp: cancelActive,
 
-        onPointerLeave: cancelActive,
+    onPointerLeave: cancelActive,
 
-        onKeyDown: e => {
-            if (!active && isHovering && !isDisabled && activeKeys.indexOf(e.key) !== -1) {
-                setActive(true);
-            }
-        },
+    onKeyDown: (e) => {
+      if (!active && isHovering && !isDisabled && activeKeys.indexOf(e.key) !== -1) {
+        setActive(true);
+      }
+    },
 
-        onKeyUp: e => {
-            if (activeKeys.indexOf(e.key) !== -1) {
-                setActive(false);
-            }
-        },
+    onKeyUp: (e) => {
+      if (activeKeys.indexOf(e.key) !== -1) {
+        setActive(false);
+      }
+    },
 
-        onBlur: e => {
-            if (active && !e.currentTarget.contains(e.relatedTarget)) {
-                setActive(false);
-            }
-        }
+    onBlur: (e) => {
+      if (active && !e.currentTarget.contains(e.relatedTarget)) {
+        setActive(false);
+      }
     }
-}
+  };
+};

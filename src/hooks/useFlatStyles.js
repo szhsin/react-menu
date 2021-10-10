@@ -1,4 +1,3 @@
-
 import { useMemo } from 'react';
 
 /* 
@@ -24,37 +23,38 @@ Example style:
 }
 */
 
-const isObject = obj => obj && typeof obj === 'object';
-const sanitiseKey = key => key[0] === '$' ? key.slice(1) : key;
+const isObject = (obj) => obj && typeof obj === 'object';
+const sanitiseKey = (key) => (key[0] === '$' ? key.slice(1) : key);
 
-export const useFlatStyles = (styles, modifiers) => useMemo(() => {
+export const useFlatStyles = (styles, modifiers) =>
+  useMemo(() => {
     if (typeof styles === 'function') return styles(modifiers);
     if (!isObject(styles)) return undefined;
     if (!modifiers) return styles;
 
-    const style = {};
+    let style = {};
     for (const prop of Object.keys(styles)) {
-        const value = styles[prop];
-        if (isObject(value)) {
-            const modifierValue = modifiers[sanitiseKey(prop)];
-            if (typeof modifierValue === 'string') {
-                for (const nestedProp of Object.keys(value)) {
-                    const nestedValue = value[nestedProp];
-                    if (isObject(nestedValue)) {
-                        if (sanitiseKey(nestedProp) === modifierValue) {
-                            Object.assign(style, nestedValue);
-                        }
-                    } else {
-                        style[nestedProp] = nestedValue;
-                    }
-                }
-            } else if (modifierValue) {
-                Object.assign(style, value);
+      const value = styles[prop];
+      if (isObject(value)) {
+        const modifierValue = modifiers[sanitiseKey(prop)];
+        if (typeof modifierValue === 'string') {
+          for (const nestedProp of Object.keys(value)) {
+            const nestedValue = value[nestedProp];
+            if (isObject(nestedValue)) {
+              if (sanitiseKey(nestedProp) === modifierValue) {
+                style = { ...style, ...nestedValue };
+              }
+            } else {
+              style[nestedProp] = nestedValue;
             }
-        } else {
-            style[prop] = value;
+          }
+        } else if (modifierValue) {
+          style = { ...style, ...value };
         }
+      } else {
+        style[prop] = value;
+      }
     }
 
     return style;
-}, [styles, modifiers]);
+  }, [styles, modifiers]);

@@ -1,26 +1,26 @@
 @use 'mixins';
 
 #content .hash-heading {
-    display: flex;
-    align-items: flex-end;
-    margin-top: -4.5rem;
-    width: max-content;
+  display: flex;
+  align-items: flex-end;
+  margin-top: -4.5rem;
+  width: max-content;
 
-    &__heading {
-        padding: 4.5rem 0.5rem 0 0;
-        position: relative;
-        z-index: -1;
-    }
+  &__heading {
+    padding: 4.5rem 0.5rem 0 0;
+    position: relative;
+    z-index: -1;
+  }
 
-    &__link {
-        opacity: 0;
-        @include mixins.transition(opacity, 0.15s);
-        line-height: 1.2;
-        margin-bottom: 0.25rem;
-        &--hover,
-        &:focus {
-            opacity: 1;
-            text-decoration: none;
-        }
+  &__link {
+    opacity: 0;
+    @include mixins.transition(opacity, 0.15s);
+    line-height: 1.2;
+    margin-bottom: 0.25rem;
+    &--hover,
+    &:focus {
+      opacity: 1;
+      text-decoration: none;
     }
+  }
 }

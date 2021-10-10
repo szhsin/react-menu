@@ -2,198 +2,198 @@
 @use 'mixins';
 
 body {
-    margin: 0;
-    padding: 0;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans",
-        "Droid Sans", "Helvetica Neue", sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu',
+    'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 pre {
-    font-family: inherit;
+  font-family: inherit;
 }
 
 code {
-    font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
-    background-color: var.$code-light;
-    border-radius: var.$border-radius-medium;
-    padding: 0.2rem 0.4rem;
-    font-size: 0.875rem;
-    @include mixins.transition;
-    .szh-app--theme-dark & {
-        background-color: var.$code-dark;
-    }
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+  background-color: var.$code-light;
+  border-radius: var.$border-radius-medium;
+  padding: 0.2rem 0.4rem;
+  font-size: 0.875rem;
+  @include mixins.transition;
+  .szh-app--theme-dark & {
+    background-color: var.$code-dark;
+  }
 }
 
 p,
 ul,
 pre {
-    margin-top: 0;
-    margin-bottom: 1rem;
+  margin-top: 0;
+  margin-bottom: 1rem;
 }
 
 a {
-    color: var.$primary-light;
-    text-decoration: none;
-    @include mixins.transition(color, 0.15s);
+  color: var.$primary-light;
+  text-decoration: none;
+  @include mixins.transition(color, 0.15s);
+  &:hover {
+    text-decoration: underline;
+    color: var.$primary-light-lv2;
+  }
+  .szh-app--theme-dark & {
+    color: var.$primary-dark;
     &:hover {
-        text-decoration: underline;
-        color: var.$primary-light-lv2;
+      color: var.$primary-dark-lv2;
     }
-    .szh-app--theme-dark & {
-        color: var.$primary-dark;
-        &:hover {
-            color: var.$primary-dark-lv2;
-        }
-    }
+  }
 }
 
 input {
-    -moz-appearance: none;
-    -webkit-appearance: none;
-    appearance: none;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  appearance: none;
 }
 
-input[type="text"] {
-    font-size: 1rem;
-    padding: 0.375rem 0.75rem;
-    border-radius: var.$border-radius-medium;
-    @include mixins.remove-focus;
-    @include mixins.focus(2px);
-    @include mixins.border($transition: false);
-    @include mixins.transition((border-color, box-shadow));
-    .szh-app--theme-dark & {
-        color: inherit;
-        background-color: var.$background-dark;
-        border-color: var.$border-dark;
-        @include mixins.focus(2px, $color: var.$focus-dark);
-    }
+input[type='text'] {
+  font-size: 1rem;
+  padding: 0.375rem 0.75rem;
+  border-radius: var.$border-radius-medium;
+  @include mixins.remove-focus;
+  @include mixins.focus(2px);
+  @include mixins.border($transition: false);
+  @include mixins.transition((border-color, box-shadow));
+  .szh-app--theme-dark & {
+    color: inherit;
+    background-color: var.$background-dark;
+    border-color: var.$border-dark;
+    @include mixins.focus(2px, $color: var.$focus-dark);
+  }
 }
 
 label {
+  cursor: pointer;
+  @include mixins.transition(color);
+  &.checked {
+    color: var.$primary-light;
+    .szh-app--theme-dark & {
+      color: var.$primary-dark;
+    }
+  }
+  input[type='radio'] {
+    color: inherit;
+    margin-right: 0.5rem;
+    font-family: 'Material Icons';
     cursor: pointer;
-    @include mixins.transition(color);
-    &.checked {
-        color: var.$primary-light;
-        .szh-app--theme-dark & {
-            color: var.$primary-dark;
-        }
-    }
-    input[type="radio"] {
-        color: inherit;
-        margin-right: 0.5rem;
-        font-family: "Material Icons";
-        cursor: pointer;
-        @include mixins.remove-focus;
-        border: none;
+    @include mixins.remove-focus;
+    border: none;
 
-        &::before {
-            font-size: 1.25rem;
-            top: 0.3rem;
-            position: relative;
-            content: "radio_button_unchecked";
-        }
-        &:checked::before {
-            content: "radio_button_checked";
-        }
+    &::before {
+      font-size: 1.25rem;
+      top: 0.3rem;
+      position: relative;
+      content: 'radio_button_unchecked';
     }
+    &:checked::before {
+      content: 'radio_button_checked';
+    }
+  }
 }
 
 .szh-menu-button,
 .btn {
-    cursor: pointer;
-    font-size: 1rem;
-    font-weight: 500;
-    padding: 0.375rem 0.75rem;
-    line-height: 1.5;
-    color: inherit;
-    background-color: var.$btn-light;
-    border-radius: var.$border-radius-medium;
-    @include mixins.border($transition: false);
-    @include mixins.transition((background-color, border-color, color, box-shadow));
-    @include mixins.remove-focus;
-    @include mixins.focus;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 500;
+  padding: 0.375rem 0.75rem;
+  line-height: 1.5;
+  color: inherit;
+  background-color: var.$btn-light;
+  border-radius: var.$border-radius-medium;
+  @include mixins.border($transition: false);
+  @include mixins.transition((background-color, border-color, color, box-shadow));
+  @include mixins.remove-focus;
+  @include mixins.focus;
 
+  &:hover {
+    background-color: var.$btn-light-lv2;
+    border-color: var.$border-hover-light;
+  }
+  &:active {
+    background-color: var.$btn-light-lv3;
+    border-color: var.$focus-light;
+  }
+
+  .szh-app--theme-dark & {
+    background-color: var.$btn-dark;
+    border-color: var.$border-dark;
+    @include mixins.focus($color: var.$focus-dark);
     &:hover {
-        background-color: var.$btn-light-lv2;
-        border-color: var.$border-hover-light;
+      background-color: var.$btn-dark-lv2;
+      border-color: var.$border-hover-dark;
     }
     &:active {
-        background-color: var.$btn-light-lv3;
-        border-color: var.$focus-light;
+      background-color: var.$block-dark;
+      border-color: var.$focus-dark;
     }
-
-    .szh-app--theme-dark & {
-        background-color: var.$btn-dark;
-        border-color: var.$border-dark;
-        @include mixins.focus($color: var.$focus-dark);
-        &:hover {
-            background-color: var.$btn-dark-lv2;
-            border-color: var.$border-hover-dark;
-        }
-        &:active {
-            background-color: var.$block-dark;
-            border-color: var.$focus-dark;
-        }
-    }
+  }
 }
 
 .btn-primary {
-    color: white;
-    background-color: var.$primary-light;
-    border: none;
+  color: white;
+  background-color: var.$primary-light;
+  border: none;
+  &:hover,
+  &:active {
+    background-color: var.$primary-light-lv2;
+  }
+  @include mixins.focus(3px);
+
+  .szh-app--theme-dark & {
+    background-color: var.$primary-light-lv2;
+    @include mixins.focus(3px);
     &:hover,
     &:active {
-        background-color: var.$primary-light-lv2;
+      background-color: var.$primary-light-lv3;
     }
-    @include mixins.focus(3px);
-
-    .szh-app--theme-dark & {
-        background-color: var.$primary-light-lv2;
-        @include mixins.focus(3px);
-        &:hover,
-        &:active {
-            background-color: var.$primary-light-lv3;
-        }
-    }
+  }
 }
 
 .alert-warning {
-    background-color: var.$highlight-color;
-    border-radius: var.$border-radius-medium;
-    padding: 0.5rem 1.25rem 0.75rem 1.25rem;
+  background-color: var.$highlight-color;
+  border-radius: var.$border-radius-medium;
+  padding: 0.5rem 1.25rem 0.75rem 1.25rem;
 }
 
 .table {
-    width: 100%;
-    text-align: left;
-    border-collapse: collapse;
+  width: 100%;
+  text-align: left;
+  border-collapse: collapse;
 
-    th:last-of-type {
-        min-width: 20rem;
+  th:last-of-type {
+    min-width: 20rem;
+  }
+  tr {
+    @include mixins.border(border-bottom);
+    .szh-app--theme-dark & {
+      border-color: var.$border-dark;
     }
-    tr {
-        @include mixins.border(border-bottom);
-        .szh-app--theme-dark & {
-            border-color: var.$border-dark;
-        }
+  }
+  th,
+  td {
+    padding: 1rem;
+  }
+  td > :last-child {
+    margin-bottom: 0;
+  }
+  @media (max-width: var.$bp-sm) {
+    & {
+      display: block;
+      overflow-x: auto;
+      th,
+      td {
+        padding: 0.75rem;
+      }
     }
-    th,
-    td {
-        padding: 1rem;
-    }
-    td > :last-child {
-        margin-bottom: 0;
-    }
-    @media (max-width: var.$bp-sm) {
-        & {
-            display: block;
-            overflow-x: auto;
-            th,
-            td {
-                padding: 0.75rem;
-            }
-        }
-    }
+  }
 }

@@ -2,95 +2,95 @@
 @use 'mixins';
 
 .szh-menu-container {
-    position: relative;
-    width: 0px;
-    height: 0px;
+  position: relative;
+  width: 0px;
+  height: 0px;
 }
 
 .szh-menu {
-    @include mixins.reset-list;
-    @include mixins.remove-focus;
+  @include mixins.reset-list;
+  @include mixins.remove-focus;
+  box-sizing: border-box;
+  width: max-content;
+  position: absolute;
+  z-index: 100;
+  border: 1px solid var.$border-color;
+  background-color: var.$background-color;
+
+  &--state-closed {
+    display: none;
+  }
+
+  &__arrow {
     box-sizing: border-box;
-    width: max-content;
-    position: absolute;
-    z-index: 100;
-    border: 1px solid var.$border-color;
+    width: var.$arrow-size;
+    height: var.$arrow-size;
     background-color: var.$background-color;
+    border: 1px solid transparent;
+    border-left-color: var.$border-color;
+    border-top-color: var.$border-color;
+    position: absolute;
+    z-index: -1;
 
-    &--state-closed {
-        display: none;
+    &--dir-left {
+      right: var.$arrow-pos;
+      transform: translateY(-50%) rotate(135deg);
     }
 
-    &__arrow {
-        box-sizing: border-box;
-        width: var.$arrow-size;
-        height: var.$arrow-size;
-        background-color: var.$background-color;
-        border: 1px solid transparent;
-        border-left-color: var.$border-color;
-        border-top-color: var.$border-color;
-        position: absolute;
-        z-index: -1;
-
-        &--dir-left {
-            right: var.$arrow-pos;
-            transform: translateY(-50%) rotate(135deg);
-        }
-
-        &--dir-right {
-            left: var.$arrow-pos;
-            transform: translateY(-50%) rotate(-45deg);
-        }
-
-        &--dir-top {
-            bottom: var.$arrow-pos;
-            transform: translateX(-50%) rotate(-135deg);
-        }
-
-        &--dir-bottom {
-            top: var.$arrow-pos;
-            transform: translateX(-50%) rotate(45deg);
-        }
+    &--dir-right {
+      left: var.$arrow-pos;
+      transform: translateY(-50%) rotate(-45deg);
     }
 
-    &__item {
-        @include mixins.remove-focus;
-        cursor: pointer;
-
-        &--hover {
-            background-color: var.$background-color-hover;
-        }
-
-        &--focusable {
-            cursor: default;
-            background-color: inherit;
-        }
-
-        &--disabled {
-            cursor: default;
-            color: var.$color-disabled;
-        }
+    &--dir-top {
+      bottom: var.$arrow-pos;
+      transform: translateX(-50%) rotate(-135deg);
     }
 
-    &__submenu {
-        position: relative;
+    &--dir-bottom {
+      top: var.$arrow-pos;
+      transform: translateX(-50%) rotate(45deg);
+    }
+  }
+
+  &__item {
+    @include mixins.remove-focus;
+    cursor: pointer;
+
+    &--hover {
+      background-color: var.$background-color-hover;
     }
 
-    &__group {
-        box-sizing: border-box;
+    &--focusable {
+      cursor: default;
+      background-color: inherit;
     }
 
-    &__radio-group {
-        @include mixins.reset-list;
+    &--disabled {
+      cursor: default;
+      color: var.$color-disabled;
     }
+  }
 
-    &__divider {
-        height: 1px;
-        margin: 0.5rem 0;
-        background-color: var.$divider-color;
-    }
+  &__submenu {
+    position: relative;
+  }
+
+  &__group {
+    box-sizing: border-box;
+  }
+
+  &__radio-group {
+    @include mixins.reset-list;
+  }
+
+  &__divider {
+    height: 1px;
+    margin: 0.5rem 0;
+    background-color: var.$divider-color;
+  }
 }
 
 .szh-menu-button {
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
