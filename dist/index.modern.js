@@ -140,59 +140,6 @@ To create HOCs, see: https://codesandbox.io/s/react-menu-hoc-0bipn`;
   }
 };
 
-const cloneChildren = (children, startIndex = 0, inRadioGroup) => {
-  let index = startIndex;
-  let descendOverflow = false;
-  const items = Children.map(children, child => {
-    if (child === undefined || child === null) return null;
-    if (!child.type) return child;
-    const name = getName(child.type);
-
-    switch (name) {
-      case 'MenuItem':
-        {
-          if (inRadioGroup) {
-            const props = {
-              type: 'radio'
-            };
-            if (!child.props.disabled) props.index = index++;
-            return cloneElement(child, props);
-          }
-        }
-
-      case 'SubMenu':
-      case 'FocusableItem':
-        return child.props.disabled ? child : cloneElement(child, {
-          index: index++
-        });
-
-      default:
-        {
-          const innerChildren = child.props.children;
-          if (innerChildren === null || typeof innerChildren !== 'object') return child;
-          const desc = cloneChildren(innerChildren, index, inRadioGroup || name === 'MenuRadioGroup');
-          index = desc.index;
-
-          if (name === 'MenuGroup') {
-            const takeOverflow = !!child.props.takeOverflow;
-            const descOverflow = desc.descendOverflow;
-            if (!isProd && (descendOverflow === descOverflow ? descOverflow : takeOverflow)) throw new Error('[React-Menu] Only one MenuGroup in a menu is allowed to have takeOverflow prop.');
-            descendOverflow = descendOverflow || descOverflow || takeOverflow;
-          }
-
-          return cloneElement(child, {
-            children: desc.items
-          });
-        }
-    }
-  });
-  return {
-    items,
-    index,
-    descendOverflow
-  };
-};
-
 const stylePropTypes = name => ({
   [name ? `${name}ClassName` : 'className']: oneOfType([string, func]),
   [name ? `${name}Styles` : 'styles']: oneOfType([object, func])
@@ -248,6 +195,59 @@ const rootMenuDefaultProps = { ...menuDefaultProps,
   transitionTimeout: 200,
   submenuOpenDelay: 300,
   submenuCloseDelay: 150
+};
+
+const cloneChildren = (children, startIndex = 0, inRadioGroup) => {
+  let index = startIndex;
+  let descendOverflow = false;
+  const items = Children.map(children, child => {
+    if (child === undefined || child === null) return null;
+    if (!child.type) return child;
+    const name = getName(child.type);
+
+    switch (name) {
+      case 'MenuItem':
+        {
+          if (inRadioGroup) {
+            const props = {
+              type: 'radio'
+            };
+            if (!child.props.disabled) props.index = index++;
+            return cloneElement(child, props);
+          }
+        }
+
+      case 'SubMenu':
+      case 'FocusableItem':
+        return child.props.disabled ? child : cloneElement(child, {
+          index: index++
+        });
+
+      default:
+        {
+          const innerChildren = child.props.children;
+          if (innerChildren === null || typeof innerChildren !== 'object') return child;
+          const desc = cloneChildren(innerChildren, index, inRadioGroup || name === 'MenuRadioGroup');
+          index = desc.index;
+
+          if (name === 'MenuGroup') {
+            const takeOverflow = !!child.props.takeOverflow;
+            const descOverflow = desc.descendOverflow;
+            if (!isProd && (descendOverflow === descOverflow ? descOverflow : takeOverflow)) throw new Error('[React-Menu] Only one MenuGroup in a menu is allowed to have takeOverflow prop.');
+            descendOverflow = descendOverflow || descOverflow || takeOverflow;
+          }
+
+          return cloneElement(child, {
+            children: desc.items
+          });
+        }
+    }
+  });
+  return {
+    items,
+    index,
+    descendOverflow
+  };
 };
 
 const withHovering = (WrapppedComponent, name) => {

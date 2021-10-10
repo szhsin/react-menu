@@ -71,55 +71,6 @@ var MenuStateMap = Object.freeze({
   exited: 'closed'
 });
 
-function _typeof(obj) {
-  "@babel/helpers - typeof";
-
-  if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
-    _typeof = function (obj) {
-      return typeof obj;
-    };
-  } else {
-    _typeof = function (obj) {
-      return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
-    };
-  }
-
-  return _typeof(obj);
-}
-
-function _extends() {
-  _extends = Object.assign || function (target) {
-    for (var i = 1; i < arguments.length; i++) {
-      var source = arguments[i];
-
-      for (var key in source) {
-        if (Object.prototype.hasOwnProperty.call(source, key)) {
-          target[key] = source[key];
-        }
-      }
-    }
-
-    return target;
-  };
-
-  return _extends.apply(this, arguments);
-}
-
-function _objectWithoutPropertiesLoose(source, excluded) {
-  if (source == null) return {};
-  var target = {};
-  var sourceKeys = Object.keys(source);
-  var key, i;
-
-  for (i = 0; i < sourceKeys.length; i++) {
-    key = sourceKeys[i];
-    if (excluded.indexOf(key) >= 0) continue;
-    target[key] = source[key];
-  }
-
-  return target;
-}
-
 var isProd = process.env.NODE_ENV === 'production';
 var isMenuOpen = function isMenuOpen(state) {
   return !!state && state[0] === 'o';
@@ -229,62 +180,54 @@ var validateIndex = function validateIndex(index, isDisabled, node) {
   }
 };
 
-var cloneChildren = function cloneChildren(children, startIndex, inRadioGroup) {
-  if (startIndex === void 0) {
-    startIndex = 0;
+function _typeof(obj) {
+  "@babel/helpers - typeof";
+
+  if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
+    _typeof = function (obj) {
+      return typeof obj;
+    };
+  } else {
+    _typeof = function (obj) {
+      return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+    };
   }
 
-  var index = startIndex;
-  var descendOverflow = false;
-  var items = React.Children.map(children, function (child) {
-    if (child === undefined || child === null) return null;
-    if (!child.type) return child;
-    var name = getName(child.type);
+  return _typeof(obj);
+}
 
-    switch (name) {
-      case 'MenuItem':
-        {
-          if (inRadioGroup) {
-            var props = {
-              type: 'radio'
-            };
-            if (!child.props.disabled) props.index = index++;
-            return React.cloneElement(child, props);
-          }
+function _extends() {
+  _extends = Object.assign || function (target) {
+    for (var i = 1; i < arguments.length; i++) {
+      var source = arguments[i];
+
+      for (var key in source) {
+        if (Object.prototype.hasOwnProperty.call(source, key)) {
+          target[key] = source[key];
         }
-
-      case 'SubMenu':
-      case 'FocusableItem':
-        return child.props.disabled ? child : React.cloneElement(child, {
-          index: index++
-        });
-
-      default:
-        {
-          var innerChildren = child.props.children;
-          if (innerChildren === null || _typeof(innerChildren) !== 'object') return child;
-          var desc = cloneChildren(innerChildren, index, inRadioGroup || name === 'MenuRadioGroup');
-          index = desc.index;
-
-          if (name === 'MenuGroup') {
-            var takeOverflow = !!child.props.takeOverflow;
-            var descOverflow = desc.descendOverflow;
-            if (!isProd && (descendOverflow === descOverflow ? descOverflow : takeOverflow)) throw new Error('[React-Menu] Only one MenuGroup in a menu is allowed to have takeOverflow prop.');
-            descendOverflow = descendOverflow || descOverflow || takeOverflow;
-          }
-
-          return React.cloneElement(child, {
-            children: desc.items
-          });
-        }
+      }
     }
-  });
-  return {
-    items: items,
-    index: index,
-    descendOverflow: descendOverflow
+
+    return target;
   };
-};
+
+  return _extends.apply(this, arguments);
+}
+
+function _objectWithoutPropertiesLoose(source, excluded) {
+  if (source == null) return {};
+  var target = {};
+  var sourceKeys = Object.keys(source);
+  var key, i;
+
+  for (i = 0; i < sourceKeys.length; i++) {
+    key = sourceKeys[i];
+    if (excluded.indexOf(key) >= 0) continue;
+    target[key] = source[key];
+  }
+
+  return target;
+}
 
 var stylePropTypes = function stylePropTypes(name) {
   var _ref;
@@ -342,6 +285,63 @@ var rootMenuDefaultProps = _extends({}, menuDefaultProps, {
   submenuOpenDelay: 300,
   submenuCloseDelay: 150
 });
+
+var cloneChildren = function cloneChildren(children, startIndex, inRadioGroup) {
+  if (startIndex === void 0) {
+    startIndex = 0;
+  }
+
+  var index = startIndex;
+  var descendOverflow = false;
+  var items = React.Children.map(children, function (child) {
+    if (child === undefined || child === null) return null;
+    if (!child.type) return child;
+    var name = getName(child.type);
+
+    switch (name) {
+      case 'MenuItem':
+        {
+          if (inRadioGroup) {
+            var props = {
+              type: 'radio'
+            };
+            if (!child.props.disabled) props.index = index++;
+            return React.cloneElement(child, props);
+          }
+        }
+
+      case 'SubMenu':
+      case 'FocusableItem':
+        return child.props.disabled ? child : React.cloneElement(child, {
+          index: index++
+        });
+
+      default:
+        {
+          var innerChildren = child.props.children;
+          if (innerChildren === null || _typeof(innerChildren) !== 'object') return child;
+          var desc = cloneChildren(innerChildren, index, inRadioGroup || name === 'MenuRadioGroup');
+          index = desc.index;
+
+          if (name === 'MenuGroup') {
+            var takeOverflow = !!child.props.takeOverflow;
+            var descOverflow = desc.descendOverflow;
+            if (!isProd && (descendOverflow === descOverflow ? descOverflow : takeOverflow)) throw new Error('[React-Menu] Only one MenuGroup in a menu is allowed to have takeOverflow prop.');
+            descendOverflow = descendOverflow || descOverflow || takeOverflow;
+          }
+
+          return React.cloneElement(child, {
+            children: desc.items
+          });
+        }
+    }
+  });
+  return {
+    items: items,
+    index: index,
+    descendOverflow: descendOverflow
+  };
+};
 
 var withHovering = function withHovering(WrapppedComponent, name) {
   var WithHovering = defineName(React.forwardRef(function (props, ref) {
