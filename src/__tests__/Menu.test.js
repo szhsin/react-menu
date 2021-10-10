@@ -183,8 +183,8 @@ test('Portal will render Menu into document.body', () => {
   const { container } = utils.renderMenu({ portal: true });
   utils.clickMenuButton();
 
-  expect(container.querySelector('.szh-menu-container')).toBe(null);
-  expect(container.querySelector('.szh-menu')).toBe(null);
+  expect(container.querySelector('.szh-menu-container')).toBeNull();
+  expect(container.querySelector('.szh-menu')).toBeNull();
   expect(document.querySelector('.szh-menu-container')).toBeInTheDocument();
   utils.expectMenuToBeInTheDocument(true);
 });

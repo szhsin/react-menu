@@ -14,7 +14,7 @@ import * as utils from './utils';
 const { queryByRole, queryAllByRole } = screen;
 const LastItem = utils.LastItem;
 
-test('Test radio items', () => {
+test('Radio menu items', () => {
   const onItemClick = jest.fn();
   const onChange = jest.fn();
   const getMenu = (value) => (
@@ -61,7 +61,7 @@ test('Use keepOpen of onChange to customise when menu is closed', () => {
   utils.expectMenuToBeOpen(true);
 });
 
-test('Test check box items', () => {
+test('Checkbox menu items', () => {
   const onItemClick = jest.fn();
   const onClick = jest.fn();
   const getMenu = (isBold) => (
@@ -262,7 +262,7 @@ test('Additional props are forwarded to MenuItem', () => {
   expect(onKeyDown).toHaveBeenCalledTimes(1);
 });
 
-test('Test FocusableItem', () => {
+test('FocusableItem', () => {
   const renderFn = jest.fn();
   const itemRef = React.createRef();
   render(
@@ -284,7 +284,7 @@ test('Test FocusableItem', () => {
     </Menu>
   );
 
-  expect(itemRef.current).toBe(null);
+  expect(itemRef.current).toBeNull();
   utils.clickMenuButton({ name: 'Menu' });
   expect(itemRef.current).toHaveClass('szh-menu__item--focusable');
   utils.expectMenuToBeOpen(true);

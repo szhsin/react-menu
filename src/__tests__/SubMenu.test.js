@@ -240,7 +240,7 @@ test('ref is forwarded to <Menu>, <MenuItem> and <SubMenu>', () => {
   expect(submenuItemRef.current).toHaveTextContent('Submenu');
 
   expect(itemRef).toHaveBeenCalledTimes(0);
-  expect(submenuRef.current).toBe(undefined);
+  expect(submenuRef.current).toBeUndefined();
 
   fireEvent.click(utils.queryMenuItem('Submenu'));
   expect(itemRef).toHaveBeenCalledTimes(1);
@@ -371,10 +371,12 @@ test.each([false, true])(
     const menu = screen.getByTestId('menu');
     const submenu = screen.getByTestId('submenu');
     expect(screen.getByTestId('container')).toContainElement(submenu);
+    /* eslint-disable jest/no-conditional-expect */
     if (overflow) {
       expect(menu).not.toContainElement(submenu);
     } else {
       expect(menu).toContainElement(submenu);
     }
+    /* eslint-enable jest/no-conditional-expect */
   }
 );

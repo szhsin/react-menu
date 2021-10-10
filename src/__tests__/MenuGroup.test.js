@@ -20,7 +20,7 @@ test('MenuGroup should allow keyboard navigation to go thru its children', () =>
     </Menu>
   );
 
-  expect(ref.current).toBe(null);
+  expect(ref.current).toBeNull();
   utils.clickMenuButton();
   expect(ref.current).toHaveClass('szh-menu__group');
   const menu = utils.queryMenu();

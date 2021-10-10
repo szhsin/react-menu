@@ -15,14 +15,22 @@
       "version": "detect"
     }
   },
-  "plugins": ["react", "react-hooks"],
+  "plugins": ["jest", "react", "react-hooks"],
   "extends": [
+    "plugin:jest/recommended",
+    "plugin:jest/style",
     "eslint:recommended",
     "plugin:react/recommended",
     "prettier",
     "plugin:react-hooks/recommended"
   ],
   "rules": {
+    "jest/expect-expect": [
+      "error",
+      {
+        "assertFunctionNames": ["expect", "utils.expect*"]
+      }
+    ],
     "no-unused-vars": [
       "error",
       {

@@ -5,6 +5,7 @@ import { screen, render, fireEvent, waitFor } from '@testing-library/react';
 
 const { queryByRole } = screen;
 
+/* eslint-disable-next-line jest/valid-expect */
 const expectToBe = (value, truthy) => (truthy ? expect(value) : expect(value).not);
 
 export const delayFor = (delay) =>
