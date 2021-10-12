@@ -14,13 +14,13 @@ const menuGroupClass = 'group';
 const subMenuClass = 'submenu';
 const radioGroupClass = 'radio-group';
 const initialHoverIndex = -1;
-const HoverIndexContext = createContext(initialHoverIndex);
-const MenuListItemContext = createContext({});
-const MenuListContext = createContext({});
-const EventHandlersContext = createContext({});
-const RadioGroupContext = createContext({});
-const SettingsContext = createContext({});
-const ItemSettingsContext = createContext({});
+const HoverIndexContext = /*#__PURE__*/createContext(initialHoverIndex);
+const MenuListItemContext = /*#__PURE__*/createContext({});
+const MenuListContext = /*#__PURE__*/createContext({});
+const EventHandlersContext = /*#__PURE__*/createContext({});
+const RadioGroupContext = /*#__PURE__*/createContext({});
+const SettingsContext = /*#__PURE__*/createContext({});
+const ItemSettingsContext = /*#__PURE__*/createContext({});
 const Keys = Object.freeze({
   ENTER: 'Enter',
   ESC: 'Escape',
@@ -213,13 +213,13 @@ const cloneChildren = (children, startIndex = 0, inRadioGroup) => {
               type: 'radio'
             };
             if (!child.props.disabled) props.index = index++;
-            return cloneElement(child, props);
+            return /*#__PURE__*/cloneElement(child, props);
           }
         }
 
       case 'SubMenu':
       case 'FocusableItem':
-        return child.props.disabled ? child : cloneElement(child, {
+        return child.props.disabled ? child : /*#__PURE__*/cloneElement(child, {
           index: index++
         });
 
@@ -237,7 +237,7 @@ const cloneChildren = (children, startIndex = 0, inRadioGroup) => {
             descendOverflow = descendOverflow || descOverflow || takeOverflow;
           }
 
-          return cloneElement(child, {
+          return /*#__PURE__*/cloneElement(child, {
             children: desc.items
           });
         }
@@ -251,8 +251,8 @@ const cloneChildren = (children, startIndex = 0, inRadioGroup) => {
 };
 
 const withHovering = (WrapppedComponent, name) => {
-  const WithHovering = defineName(forwardRef((props, ref) => {
-    return React.createElement(WrapppedComponent, { ...props,
+  const WithHovering = defineName( /*#__PURE__*/forwardRef((props, ref) => {
+    return /*#__PURE__*/React.createElement(WrapppedComponent, { ...props,
       externalRef: ref,
       isHovering: useContext(HoverIndexContext) === props.index
     });
@@ -487,7 +487,7 @@ const useMenuStateAndFocus = options => {
   };
 };
 
-const MenuButton = defineName(forwardRef(function MenuButton({
+const MenuButton = defineName( /*#__PURE__*/forwardRef(function MenuButton({
   className,
   styles,
   isOpen,
@@ -498,7 +498,7 @@ const MenuButton = defineName(forwardRef(function MenuButton({
   const modifiers = useMemo(() => Object.freeze({
     open: isOpen
   }), [isOpen]);
-  return React.createElement("button", {
+  return /*#__PURE__*/React.createElement("button", {
     "aria-haspopup": true,
     "aria-expanded": isOpen,
     "aria-disabled": disabled || undefined,
@@ -1347,7 +1347,7 @@ const MenuList = ({
     onKeyDown: handleKeyDown,
     onAnimationEnd: handleAnimationEnd
   }, restProps);
-  return React.createElement("ul", {
+  return /*#__PURE__*/React.createElement("ul", {
     role: "menu",
     tabIndex: "-1",
     "aria-disabled": isDisabled || undefined,
@@ -1365,18 +1365,18 @@ const MenuList = ({
       left: `${menuPosition.x}px`,
       top: `${menuPosition.y}px`
     }
-  }, arrow && React.createElement("div", {
+  }, arrow && /*#__PURE__*/React.createElement("div", {
     className: _arrowClass,
     style: { ..._arrowStyles,
       left: arrowPosition.x && `${arrowPosition.x}px`,
       top: arrowPosition.y && `${arrowPosition.y}px`
     },
     ref: arrowRef
-  }), React.createElement(MenuListContext.Provider, {
+  }), /*#__PURE__*/React.createElement(MenuListContext.Provider, {
     value: listContext
-  }, React.createElement(MenuListItemContext.Provider, {
+  }, /*#__PURE__*/React.createElement(MenuListItemContext.Provider, {
     value: itemContext
-  }, React.createElement(HoverIndexContext.Provider, {
+  }, /*#__PURE__*/React.createElement(HoverIndexContext.Provider, {
     value: hoverIndex
   }, menuItems))));
 };
@@ -1396,7 +1396,7 @@ function submenuCountReducer(state, {
   }
 }
 
-const ControlledMenu = forwardRef(function ControlledMenu({
+const ControlledMenu = /*#__PURE__*/forwardRef(function ControlledMenu({
   'aria-label': ariaLabel,
   className,
   containerProps,
@@ -1504,7 +1504,7 @@ const ControlledMenu = forwardRef(function ControlledMenu({
     onKeyDown: handleKeyDown,
     onBlur: handleBlur
   }, containerProps);
-  const menuList = React.createElement("div", { ...containerProps,
+  const menuList = /*#__PURE__*/React.createElement("div", { ...containerProps,
     ...handlers,
     className: useBEM({
       block: menuContainerClass,
@@ -1512,13 +1512,13 @@ const ControlledMenu = forwardRef(function ControlledMenu({
       className
     }),
     ref: containerRef
-  }, state && React.createElement(SettingsContext.Provider, {
+  }, state && /*#__PURE__*/React.createElement(SettingsContext.Provider, {
     value: settings
-  }, React.createElement(ItemSettingsContext.Provider, {
+  }, /*#__PURE__*/React.createElement(ItemSettingsContext.Provider, {
     value: itemSettings
-  }, React.createElement(EventHandlersContext.Provider, {
+  }, /*#__PURE__*/React.createElement(EventHandlersContext.Provider, {
     value: eventHandlers
-  }, React.createElement(MenuList, { ...restProps,
+  }, /*#__PURE__*/React.createElement(MenuList, { ...restProps,
     ariaLabel: ariaLabel || 'Menu',
     externalRef: externalRef,
     containerRef: containerRef,
@@ -1526,7 +1526,7 @@ const ControlledMenu = forwardRef(function ControlledMenu({
   })))));
 
   if (portal) {
-    return createPortal(menuList, document.body);
+    return /*#__PURE__*/createPortal(menuList, document.body);
   } else {
     return menuList;
   }
@@ -1550,7 +1550,7 @@ ControlledMenu.defaultProps = { ...rootMenuDefaultProps,
   menuItemFocus: {}
 };
 
-const Menu = forwardRef(function Menu({
+const Menu = /*#__PURE__*/forwardRef(function Menu({
   'aria-label': ariaLabel,
   captureFocus: _,
   menuButton,
@@ -1610,7 +1610,7 @@ const Menu = forwardRef(function Menu({
     buttonProps.isOpen = isOpen;
   }
 
-  const renderButton = cloneElement(button, buttonProps);
+  const renderButton = /*#__PURE__*/cloneElement(button, buttonProps);
   useMenuChange(onMenuChange, isOpen);
   useImperativeHandle(instanceRef, () => ({
     openMenu,
@@ -1624,7 +1624,7 @@ const Menu = forwardRef(function Menu({
     onClose: handleClose,
     skipOpen
   };
-  return React.createElement(Fragment, null, renderButton, React.createElement(ControlledMenu, { ...menuProps
+  return /*#__PURE__*/React.createElement(Fragment, null, renderButton, /*#__PURE__*/React.createElement(ControlledMenu, { ...menuProps
   }));
 });
 Menu.propTypes = { ...rootMenuPropTypes,
@@ -1633,7 +1633,7 @@ Menu.propTypes = { ...rootMenuPropTypes,
 };
 Menu.defaultProps = rootMenuDefaultProps;
 
-const SubMenu = withHovering(memo(function SubMenu({
+const SubMenu = withHovering( /*#__PURE__*/memo(function SubMenu({
   'aria-label': ariaLabel,
   className,
   disabled,
@@ -1815,7 +1815,7 @@ const SubMenu = withHovering(memo(function SubMenu({
   }, restItemProps);
 
   const getMenuList = () => {
-    const menuList = React.createElement(MenuList, { ...restProps,
+    const menuList = /*#__PURE__*/React.createElement(MenuList, { ...restProps,
       ...otherStateProps,
       state: state,
       ariaLabel: ariaLabel || (typeof label === 'string' ? label : 'Submenu'),
@@ -1824,10 +1824,10 @@ const SubMenu = withHovering(memo(function SubMenu({
       parentScrollingRef: isPortal && parentMenuRef,
       isDisabled: isDisabled
     });
-    return isPortal ? createPortal(menuList, rootMenuRef.current) : menuList;
+    return isPortal ? /*#__PURE__*/createPortal(menuList, rootMenuRef.current) : menuList;
   };
 
-  return React.createElement("li", {
+  return /*#__PURE__*/React.createElement("li", {
     className: useBEM({
       block: menuClass,
       element: subMenuClass,
@@ -1836,7 +1836,7 @@ const SubMenu = withHovering(memo(function SubMenu({
     role: "presentation",
     ref: containerRef,
     onKeyDown: handleKeyDown
-  }, React.createElement("div", {
+  }, /*#__PURE__*/React.createElement("div", {
     role: "menuitem",
     "aria-haspopup": true,
     "aria-expanded": isOpen,
@@ -1865,7 +1865,7 @@ SubMenu.defaultProps = { ...menuDefaultProps,
   direction: 'right'
 };
 
-const MenuItem = withHovering(memo(function MenuItem({
+const MenuItem = withHovering( /*#__PURE__*/memo(function MenuItem({
   className,
   styles,
   value,
@@ -1973,13 +1973,13 @@ const MenuItem = withHovering(memo(function MenuItem({
   const renderChildren = useMemo(() => safeCall(children, modifiers), [children, modifiers]);
 
   if (isAnchor) {
-    return React.createElement("li", {
+    return /*#__PURE__*/React.createElement("li", {
       role: "presentation"
-    }, React.createElement("a", { ...menuItemProps,
+    }, /*#__PURE__*/React.createElement("a", { ...menuItemProps,
       href: href
     }, renderChildren));
   } else {
-    return React.createElement("li", { ...menuItemProps
+    return /*#__PURE__*/React.createElement("li", { ...menuItemProps
     }, renderChildren);
   }
 }), 'MenuItem');
@@ -1993,7 +1993,7 @@ MenuItem.propTypes = { ...stylePropTypes(),
   onClick: func
 };
 
-const FocusableItem = withHovering(memo(function FocusableItem({
+const FocusableItem = withHovering( /*#__PURE__*/memo(function FocusableItem({
   className,
   styles,
   disabled,
@@ -2030,7 +2030,7 @@ const FocusableItem = withHovering(memo(function FocusableItem({
     onFocus: setHover,
     onBlur
   }, restProps);
-  return React.createElement("li", {
+  return /*#__PURE__*/React.createElement("li", {
     "aria-disabled": isDisabled || undefined,
     role: "menuitem",
     tabIndex: "-1",
@@ -2051,12 +2051,12 @@ FocusableItem.propTypes = { ...stylePropTypes(),
   children: func
 };
 
-const MenuDivider = memo(forwardRef(function MenuDivider({
+const MenuDivider = /*#__PURE__*/memo( /*#__PURE__*/forwardRef(function MenuDivider({
   className,
   styles,
   ...restProps
 }, externalRef) {
-  return React.createElement("li", {
+  return /*#__PURE__*/React.createElement("li", {
     role: "separator",
     ...restProps,
     ref: externalRef,
@@ -2071,12 +2071,12 @@ const MenuDivider = memo(forwardRef(function MenuDivider({
 MenuDivider.propTypes = { ...stylePropTypes()
 };
 
-const MenuHeader = memo(forwardRef(function MenuHeader({
+const MenuHeader = /*#__PURE__*/memo( /*#__PURE__*/forwardRef(function MenuHeader({
   className,
   styles,
   ...restProps
 }, externalRef) {
-  return React.createElement("li", {
+  return /*#__PURE__*/React.createElement("li", {
     role: "presentation",
     ...restProps,
     ref: externalRef,
@@ -2091,7 +2091,7 @@ const MenuHeader = memo(forwardRef(function MenuHeader({
 MenuHeader.propTypes = { ...stylePropTypes()
 };
 
-const MenuGroup = defineName(forwardRef(function MenuGroup({
+const MenuGroup = defineName( /*#__PURE__*/forwardRef(function MenuGroup({
   className,
   styles,
   takeOverflow,
@@ -2119,7 +2119,7 @@ const MenuGroup = defineName(forwardRef(function MenuGroup({
   useIsomorphicLayoutEffect(() => {
     if (overflowStyles) ref.current.scrollTop = 0;
   }, [overflowStyles]);
-  return React.createElement("div", { ...restProps,
+  return /*#__PURE__*/React.createElement("div", { ...restProps,
     ref: useCombinedRef(externalRef, ref),
     className: useBEM({
       block: menuClass,
@@ -2135,7 +2135,7 @@ MenuGroup.propTypes = { ...stylePropTypes(),
   takeOverflow: bool
 };
 
-const MenuRadioGroup = defineName(forwardRef(function MenuRadioGroup({
+const MenuRadioGroup = defineName( /*#__PURE__*/forwardRef(function MenuRadioGroup({
   'aria-label': ariaLabel,
   className,
   styles,
@@ -2149,11 +2149,11 @@ const MenuRadioGroup = defineName(forwardRef(function MenuRadioGroup({
     value,
     onRadioChange
   }), [name, value, onRadioChange]);
-  return React.createElement(RadioGroupContext.Provider, {
+  return /*#__PURE__*/React.createElement(RadioGroupContext.Provider, {
     value: contextValue
-  }, React.createElement("li", {
+  }, /*#__PURE__*/React.createElement("li", {
     role: "presentation"
-  }, React.createElement("ul", {
+  }, /*#__PURE__*/React.createElement("ul", {
     role: "group",
     "aria-label": ariaLabel || name || 'Radio group',
     ...restProps,
