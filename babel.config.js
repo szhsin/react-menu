@@ -13,10 +13,8 @@ module.exports = {
     skipForOfIteratorClosing: true
   },
   shouldPrintComment: (val) => /[@#]__PURE__/.test(val),
-  presets: [['@babel/preset-env', { bugfixes: true }], '@babel/preset-react'],
-  env: {
-    modern: {
-      presets: [['@babel/preset-react', { useSpread: true }]]
-    }
-  }
+  presets: [
+    ['@babel/preset-env', { bugfixes: true, exclude: ['@babel/plugin-transform-typeof-symbol'] }],
+    '@babel/preset-react'
+  ]
 };

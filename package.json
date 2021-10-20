@@ -7,8 +7,11 @@
   "repository": "szhsin/react-menu",
   "homepage": "https://szhsin.github.io/react-menu/",
   "main": "dist/index.js",
-  "module": "dist/index.modern.js",
+  "module": "dist/es/index.js",
   "types": "dist/index.d.ts",
+  "sideEffects": [
+    "*.css"
+  ],
   "scripts": {
     "bundle": "rollup -c",
     "watch": "rollup -c -w",

@@ -3,8 +3,8 @@
 Object.defineProperty(exports, '__esModule', { value: true });
 
 var React = require('react');
-var reactDom = require('react-dom');
 var propTypes = require('prop-types');
+var reactDom = require('react-dom');
 var reactTransitionState = require('react-transition-state');
 
 function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
@@ -180,22 +180,6 @@ var validateIndex = function validateIndex(index, isDisabled, node) {
   }
 };
 
-function _typeof(obj) {
-  "@babel/helpers - typeof";
-
-  if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
-    _typeof = function (obj) {
-      return typeof obj;
-    };
-  } else {
-    _typeof = function (obj) {
-      return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
-    };
-  }
-
-  return _typeof(obj);
-}
-
 function _extends() {
   _extends = Object.assign || function (target) {
     for (var i = 1; i < arguments.length; i++) {
@@ -319,7 +303,7 @@ var cloneChildren = function cloneChildren(children, startIndex, inRadioGroup) {
       default:
         {
           var innerChildren = child.props.children;
-          if (innerChildren === null || _typeof(innerChildren) !== 'object') return child;
+          if (innerChildren === null || typeof innerChildren !== 'object') return child;
           var desc = cloneChildren(innerChildren, index, inRadioGroup || name === 'MenuRadioGroup');
           index = desc.index;
 
@@ -440,7 +424,7 @@ var useCombinedRef = function useCombinedRef(refA, refB) {
 };
 
 var isObject = function isObject(obj) {
-  return obj && _typeof(obj) === 'object';
+  return obj && typeof obj === 'object';
 };
 
 var sanitiseKey = function sanitiseKey(key) {
@@ -1717,9 +1701,8 @@ ControlledMenu.defaultProps = _extends({}, rootMenuDefaultProps, {
 var _excluded$7 = ["aria-label", "captureFocus", "menuButton", "instanceRef", "onMenuChange"],
     _excluded2$2 = ["openMenu", "toggleMenu"];
 var Menu = /*#__PURE__*/React.forwardRef(function Menu(_ref, externalRef) {
-  var ariaLabel = _ref['aria-label'];
-      _ref.captureFocus;
-      var menuButton = _ref.menuButton,
+  var ariaLabel = _ref['aria-label'],
+      menuButton = _ref.menuButton,
       instanceRef = _ref.instanceRef,
       onMenuChange = _ref.onMenuChange,
       restProps = _objectWithoutPropertiesLoose(_ref, _excluded$7);
@@ -1814,10 +1797,8 @@ var SubMenu = withHovering( /*#__PURE__*/React.memo(function SubMenu(_ref) {
       index = _ref.index,
       onMenuChange = _ref.onMenuChange,
       isHovering = _ref.isHovering,
-      instanceRef = _ref.instanceRef;
-      _ref.captureFocus;
-      _ref.repositionFlag;
-      var _ref$itemProps = _ref.itemProps,
+      instanceRef = _ref.instanceRef,
+      _ref$itemProps = _ref.itemProps,
       itemProps = _ref$itemProps === void 0 ? {} : _ref$itemProps,
       restProps = _objectWithoutPropertiesLoose(_ref, _excluded$6);
 
