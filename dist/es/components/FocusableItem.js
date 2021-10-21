@@ -69,9 +69,9 @@ var FocusableItem = /*#__PURE__*/withHovering( /*#__PURE__*/memo(function Focusa
     style: useFlatStyles(styles, modifiers)
   }), renderChildren);
 }), 'FocusableItem');
-FocusableItem.propTypes = /*#__PURE__*/_extends({}, /*#__PURE__*/stylePropTypes(), {
+process.env.NODE_ENV !== "production" ? FocusableItem.propTypes = /*#__PURE__*/_extends({}, /*#__PURE__*/stylePropTypes(), {
   disabled: bool,
   children: func
-});
+}) : void 0;
 
 export { FocusableItem };

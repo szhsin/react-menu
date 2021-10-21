@@ -41,10 +41,10 @@ var MenuRadioGroup = /*#__PURE__*/defineName( /*#__PURE__*/forwardRef(function M
     style: useFlatStyles(styles)
   }))));
 }), 'MenuRadioGroup');
-MenuRadioGroup.propTypes = /*#__PURE__*/_extends({}, /*#__PURE__*/stylePropTypes(), {
+process.env.NODE_ENV !== "production" ? MenuRadioGroup.propTypes = /*#__PURE__*/_extends({}, /*#__PURE__*/stylePropTypes(), {
   name: string,
   value: any,
   onRadioChange: func
-});
+}) : void 0;
 
 export { MenuRadioGroup };

@@ -37,9 +37,9 @@ var MenuButton = /*#__PURE__*/defineName( /*#__PURE__*/forwardRef(function MenuB
     style: useFlatStyles(styles, modifiers)
   }), children);
 }), 'MenuButton');
-MenuButton.propTypes = /*#__PURE__*/_extends({}, /*#__PURE__*/stylePropTypes(), {
+process.env.NODE_ENV !== "production" ? MenuButton.propTypes = /*#__PURE__*/_extends({}, /*#__PURE__*/stylePropTypes(), {
   isOpen: bool,
   disabled: bool
-});
+}) : void 0;
 
 export { MenuButton };

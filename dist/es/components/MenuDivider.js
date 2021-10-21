@@ -23,6 +23,6 @@ var MenuDivider = /*#__PURE__*/memo( /*#__PURE__*/forwardRef(function MenuDivide
     style: useFlatStyles(styles)
   }));
 }));
-MenuDivider.propTypes = /*#__PURE__*/_extends({}, /*#__PURE__*/stylePropTypes());
+process.env.NODE_ENV !== "production" ? MenuDivider.propTypes = /*#__PURE__*/_extends({}, /*#__PURE__*/stylePropTypes()) : void 0;
 
 export { MenuDivider };

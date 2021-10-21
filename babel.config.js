@@ -5,6 +5,7 @@ module.exports = {
     ignoreToPrimitiveHint: true,
     iterableIsArray: true,
     noDocumentAll: true,
+    noIncompleteNsImportDetection: true,
     noNewArrows: true,
     objectRestNoSymbols: true,
     pureGetters: true,
@@ -13,7 +14,7 @@ module.exports = {
     skipForOfIteratorClosing: true
   },
   shouldPrintComment: (val) => /[@#]__PURE__/.test(val),
-  plugins: ['pure-annotations'],
+  plugins: ['pure-annotations', ['transform-react-remove-prop-types', { mode: 'unsafe-wrap' }]],
   presets: [
     ['@babel/preset-env', { bugfixes: true, exclude: ['@babel/plugin-transform-typeof-symbol'] }],
     '@babel/preset-react'

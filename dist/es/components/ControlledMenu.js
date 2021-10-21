@@ -149,7 +149,7 @@ var ControlledMenu = /*#__PURE__*/forwardRef(function ControlledMenu(_ref, exter
     return menuList;
   }
 });
-ControlledMenu.propTypes = /*#__PURE__*/_extends({}, rootMenuPropTypes, {
+process.env.NODE_ENV !== "production" ? ControlledMenu.propTypes = /*#__PURE__*/_extends({}, rootMenuPropTypes, {
   state: /*#__PURE__*/oneOf( /*#__PURE__*/values(MenuStateMap)),
   anchorPoint: /*#__PURE__*/exact({
     x: number,
@@ -163,7 +163,7 @@ ControlledMenu.propTypes = /*#__PURE__*/_extends({}, rootMenuPropTypes, {
     alwaysUpdate: bool
   }),
   onClose: func
-});
+}) : void 0;
 ControlledMenu.defaultProps = /*#__PURE__*/_extends({}, rootMenuDefaultProps, {
   menuItemFocus: {}
 });

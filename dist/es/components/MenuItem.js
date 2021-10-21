@@ -137,7 +137,7 @@ var MenuItem = /*#__PURE__*/withHovering( /*#__PURE__*/memo(function MenuItem(_r
     return /*#__PURE__*/React.createElement("li", menuItemProps, renderChildren);
   }
 }), 'MenuItem');
-MenuItem.propTypes = /*#__PURE__*/_extends({}, /*#__PURE__*/stylePropTypes(), {
+process.env.NODE_ENV !== "production" ? MenuItem.propTypes = /*#__PURE__*/_extends({}, /*#__PURE__*/stylePropTypes(), {
   value: any,
   href: string,
   type: /*#__PURE__*/oneOf(['checkbox', 'radio']),
@@ -145,6 +145,6 @@ MenuItem.propTypes = /*#__PURE__*/_extends({}, /*#__PURE__*/stylePropTypes(), {
   disabled: bool,
   children: /*#__PURE__*/oneOfType([node, func]),
   onClick: func
-});
+}) : void 0;
 
 export { MenuItem };

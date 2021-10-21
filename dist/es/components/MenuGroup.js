@@ -52,8 +52,8 @@ var MenuGroup = /*#__PURE__*/defineName( /*#__PURE__*/forwardRef(function MenuGr
     style: _extends({}, useFlatStyles(styles), overflowStyles)
   }));
 }), 'MenuGroup');
-MenuGroup.propTypes = /*#__PURE__*/_extends({}, /*#__PURE__*/stylePropTypes(), {
+process.env.NODE_ENV !== "production" ? MenuGroup.propTypes = /*#__PURE__*/_extends({}, /*#__PURE__*/stylePropTypes(), {
   takeOverflow: bool
-});
+}) : void 0;
 
 export { MenuGroup };

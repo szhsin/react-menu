@@ -619,10 +619,10 @@ var MenuButton = /*#__PURE__*/defineName( /*#__PURE__*/React.forwardRef(function
     style: useFlatStyles(styles, modifiers)
   }), children);
 }), 'MenuButton');
-MenuButton.propTypes = /*#__PURE__*/_extends({}, /*#__PURE__*/stylePropTypes(), {
+process.env.NODE_ENV !== "production" ? MenuButton.propTypes = /*#__PURE__*/_extends({}, /*#__PURE__*/stylePropTypes(), {
   isOpen: propTypes.bool,
   disabled: propTypes.bool
-});
+}) : void 0;
 
 var getPositionHelpers = function getPositionHelpers(_ref) {
   var menuRef = _ref.menuRef,
@@ -1679,7 +1679,7 @@ var ControlledMenu = /*#__PURE__*/React.forwardRef(function ControlledMenu(_ref,
     return menuList;
   }
 });
-ControlledMenu.propTypes = /*#__PURE__*/_extends({}, rootMenuPropTypes, {
+process.env.NODE_ENV !== "production" ? ControlledMenu.propTypes = /*#__PURE__*/_extends({}, rootMenuPropTypes, {
   state: /*#__PURE__*/propTypes.oneOf( /*#__PURE__*/values(MenuStateMap)),
   anchorPoint: /*#__PURE__*/propTypes.exact({
     x: propTypes.number,
@@ -1693,7 +1693,7 @@ ControlledMenu.propTypes = /*#__PURE__*/_extends({}, rootMenuPropTypes, {
     alwaysUpdate: propTypes.bool
   }),
   onClose: propTypes.func
-});
+}) : void 0;
 ControlledMenu.defaultProps = /*#__PURE__*/_extends({}, rootMenuDefaultProps, {
   menuItemFocus: {}
 });
@@ -1780,9 +1780,9 @@ var Menu = /*#__PURE__*/React.forwardRef(function Menu(_ref, externalRef) {
 
   return /*#__PURE__*/React__default["default"].createElement(React.Fragment, null, renderButton, /*#__PURE__*/React__default["default"].createElement(ControlledMenu, menuProps));
 });
-Menu.propTypes = /*#__PURE__*/_extends({}, rootMenuPropTypes, uncontrolledMenuPropTypes, {
+process.env.NODE_ENV !== "production" ? Menu.propTypes = /*#__PURE__*/_extends({}, rootMenuPropTypes, uncontrolledMenuPropTypes, {
   menuButton: propTypes.oneOfType([propTypes.element, propTypes.func]).isRequired
-});
+}) : void 0;
 Menu.defaultProps = rootMenuDefaultProps;
 
 var _excluded$6 = ["aria-label", "className", "disabled", "label", "index", "onMenuChange", "isHovering", "instanceRef", "captureFocus", "repositionFlag", "itemProps"],
@@ -2027,11 +2027,11 @@ var SubMenu = /*#__PURE__*/withHovering( /*#__PURE__*/React.memo(function SubMen
     return safeCall(label, modifiers);
   }, [label, modifiers])), state && getMenuList());
 }), 'SubMenu');
-SubMenu.propTypes = /*#__PURE__*/_extends({}, menuPropTypes, uncontrolledMenuPropTypes, {
+process.env.NODE_ENV !== "production" ? SubMenu.propTypes = /*#__PURE__*/_extends({}, menuPropTypes, uncontrolledMenuPropTypes, {
   disabled: propTypes.bool,
   label: /*#__PURE__*/propTypes.oneOfType([propTypes.node, propTypes.func]),
   itemProps: /*#__PURE__*/propTypes.shape( /*#__PURE__*/_extends({}, /*#__PURE__*/stylePropTypes()))
-});
+}) : void 0;
 SubMenu.defaultProps = /*#__PURE__*/_extends({}, menuDefaultProps, {
   direction: 'right'
 });
@@ -2162,7 +2162,7 @@ var MenuItem = /*#__PURE__*/withHovering( /*#__PURE__*/React.memo(function MenuI
     return /*#__PURE__*/React__default["default"].createElement("li", menuItemProps, renderChildren);
   }
 }), 'MenuItem');
-MenuItem.propTypes = /*#__PURE__*/_extends({}, /*#__PURE__*/stylePropTypes(), {
+process.env.NODE_ENV !== "production" ? MenuItem.propTypes = /*#__PURE__*/_extends({}, /*#__PURE__*/stylePropTypes(), {
   value: propTypes.any,
   href: propTypes.string,
   type: /*#__PURE__*/propTypes.oneOf(['checkbox', 'radio']),
@@ -2170,7 +2170,7 @@ MenuItem.propTypes = /*#__PURE__*/_extends({}, /*#__PURE__*/stylePropTypes(), {
   disabled: propTypes.bool,
   children: /*#__PURE__*/propTypes.oneOfType([propTypes.node, propTypes.func]),
   onClick: propTypes.func
-});
+}) : void 0;
 
 var _excluded$4 = ["className", "styles", "disabled", "index", "children", "isHovering", "externalRef"];
 var FocusableItem = /*#__PURE__*/withHovering( /*#__PURE__*/React.memo(function FocusableItem(_ref) {
@@ -2232,10 +2232,10 @@ var FocusableItem = /*#__PURE__*/withHovering( /*#__PURE__*/React.memo(function 
     style: useFlatStyles(styles, modifiers)
   }), renderChildren);
 }), 'FocusableItem');
-FocusableItem.propTypes = /*#__PURE__*/_extends({}, /*#__PURE__*/stylePropTypes(), {
+process.env.NODE_ENV !== "production" ? FocusableItem.propTypes = /*#__PURE__*/_extends({}, /*#__PURE__*/stylePropTypes(), {
   disabled: propTypes.bool,
   children: propTypes.func
-});
+}) : void 0;
 
 var _excluded$3 = ["className", "styles"];
 var MenuDivider = /*#__PURE__*/React.memo( /*#__PURE__*/React.forwardRef(function MenuDivider(_ref, externalRef) {
@@ -2255,7 +2255,7 @@ var MenuDivider = /*#__PURE__*/React.memo( /*#__PURE__*/React.forwardRef(functio
     style: useFlatStyles(styles)
   }));
 }));
-MenuDivider.propTypes = /*#__PURE__*/_extends({}, /*#__PURE__*/stylePropTypes());
+process.env.NODE_ENV !== "production" ? MenuDivider.propTypes = /*#__PURE__*/_extends({}, /*#__PURE__*/stylePropTypes()) : void 0;
 
 var _excluded$2 = ["className", "styles"];
 var MenuHeader = /*#__PURE__*/React.memo( /*#__PURE__*/React.forwardRef(function MenuHeader(_ref, externalRef) {
@@ -2275,7 +2275,7 @@ var MenuHeader = /*#__PURE__*/React.memo( /*#__PURE__*/React.forwardRef(function
     style: useFlatStyles(styles)
   }));
 }));
-MenuHeader.propTypes = /*#__PURE__*/_extends({}, /*#__PURE__*/stylePropTypes());
+process.env.NODE_ENV !== "production" ? MenuHeader.propTypes = /*#__PURE__*/_extends({}, /*#__PURE__*/stylePropTypes()) : void 0;
 
 var _excluded$1 = ["className", "styles", "takeOverflow"];
 var MenuGroup = /*#__PURE__*/defineName( /*#__PURE__*/React.forwardRef(function MenuGroup(_ref, externalRef) {
@@ -2320,9 +2320,9 @@ var MenuGroup = /*#__PURE__*/defineName( /*#__PURE__*/React.forwardRef(function 
     style: _extends({}, useFlatStyles(styles), overflowStyles)
   }));
 }), 'MenuGroup');
-MenuGroup.propTypes = /*#__PURE__*/_extends({}, /*#__PURE__*/stylePropTypes(), {
+process.env.NODE_ENV !== "production" ? MenuGroup.propTypes = /*#__PURE__*/_extends({}, /*#__PURE__*/stylePropTypes(), {
   takeOverflow: propTypes.bool
-});
+}) : void 0;
 
 var _excluded = ["aria-label", "className", "styles", "name", "value", "onRadioChange"];
 var MenuRadioGroup = /*#__PURE__*/defineName( /*#__PURE__*/React.forwardRef(function MenuRadioGroup(_ref, externalRef) {
@@ -2358,11 +2358,11 @@ var MenuRadioGroup = /*#__PURE__*/defineName( /*#__PURE__*/React.forwardRef(func
     style: useFlatStyles(styles)
   }))));
 }), 'MenuRadioGroup');
-MenuRadioGroup.propTypes = /*#__PURE__*/_extends({}, /*#__PURE__*/stylePropTypes(), {
+process.env.NODE_ENV !== "production" ? MenuRadioGroup.propTypes = /*#__PURE__*/_extends({}, /*#__PURE__*/stylePropTypes(), {
   name: propTypes.string,
   value: propTypes.any,
   onRadioChange: propTypes.func
-});
+}) : void 0;
 
 exports.ControlledMenu = ControlledMenu;
 exports.FocusableItem = FocusableItem;

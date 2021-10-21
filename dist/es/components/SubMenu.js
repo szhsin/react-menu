@@ -256,11 +256,11 @@ var SubMenu = /*#__PURE__*/withHovering( /*#__PURE__*/memo(function SubMenu(_ref
     return safeCall(label, modifiers);
   }, [label, modifiers])), state && getMenuList());
 }), 'SubMenu');
-SubMenu.propTypes = /*#__PURE__*/_extends({}, menuPropTypes, uncontrolledMenuPropTypes, {
+process.env.NODE_ENV !== "production" ? SubMenu.propTypes = /*#__PURE__*/_extends({}, menuPropTypes, uncontrolledMenuPropTypes, {
   disabled: bool,
   label: /*#__PURE__*/oneOfType([node, func]),
   itemProps: /*#__PURE__*/shape( /*#__PURE__*/_extends({}, /*#__PURE__*/stylePropTypes()))
-});
+}) : void 0;
 SubMenu.defaultProps = /*#__PURE__*/_extends({}, menuDefaultProps, {
   direction: 'right'
 });
