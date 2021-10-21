@@ -5,8 +5,8 @@ import { oneOf, exact, number, object, bool, oneOfType, string, func } from 'pro
 import { MenuList } from './MenuList.js';
 import { useBEM } from '../hooks/useBEM.js';
 import { CloseReason, menuContainerClass, SettingsContext, ItemSettingsContext, EventHandlersContext, MenuStateMap, Keys } from '../utils/constants.js';
-import { safeCall, attachHandlerProps, values, getTransition, isMenuOpen } from '../utils/utils.js';
 import { rootMenuPropTypes, rootMenuDefaultProps } from '../utils/propTypes.js';
+import { safeCall, attachHandlerProps, values, getTransition, isMenuOpen } from '../utils/utils.js';
 
 var _excluded = ["aria-label", "className", "containerProps", "initialMounted", "unmountOnClose", "transition", "transitionTimeout", "boundingBoxRef", "boundingBoxPadding", "reposition", "submenuOpenDelay", "submenuCloseDelay", "skipOpen", "viewScroll", "portal", "theming", "onItemClick", "onClose"];
 var ControlledMenu = /*#__PURE__*/forwardRef(function ControlledMenu(_ref, externalRef) {
@@ -149,22 +149,22 @@ var ControlledMenu = /*#__PURE__*/forwardRef(function ControlledMenu(_ref, exter
     return menuList;
   }
 });
-ControlledMenu.propTypes = _extends({}, rootMenuPropTypes, {
-  state: oneOf(values(MenuStateMap)),
-  anchorPoint: exact({
+ControlledMenu.propTypes = /*#__PURE__*/_extends({}, rootMenuPropTypes, {
+  state: /*#__PURE__*/oneOf( /*#__PURE__*/values(MenuStateMap)),
+  anchorPoint: /*#__PURE__*/exact({
     x: number,
     y: number
   }),
   anchorRef: object,
   skipOpen: object,
   captureFocus: bool,
-  menuItemFocus: exact({
-    position: oneOfType([string, number]),
+  menuItemFocus: /*#__PURE__*/exact({
+    position: /*#__PURE__*/oneOfType([string, number]),
     alwaysUpdate: bool
   }),
   onClose: func
 });
-ControlledMenu.defaultProps = _extends({}, rootMenuDefaultProps, {
+ControlledMenu.defaultProps = /*#__PURE__*/_extends({}, rootMenuDefaultProps, {
   menuItemFocus: {}
 });
 

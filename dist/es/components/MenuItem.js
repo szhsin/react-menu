@@ -13,7 +13,7 @@ import { stylePropTypes } from '../utils/propTypes.js';
 
 var _excluded = ["className", "styles", "value", "href", "type", "checked", "disabled", "index", "children", "onClick", "isHovering", "externalRef"],
     _excluded2 = ["isActive", "onKeyUp", "onBlur"];
-var MenuItem = withHovering( /*#__PURE__*/memo(function MenuItem(_ref) {
+var MenuItem = /*#__PURE__*/withHovering( /*#__PURE__*/memo(function MenuItem(_ref) {
   var className = _ref.className,
       styles = _ref.styles,
       value = _ref.value,
@@ -137,13 +137,13 @@ var MenuItem = withHovering( /*#__PURE__*/memo(function MenuItem(_ref) {
     return /*#__PURE__*/React.createElement("li", menuItemProps, renderChildren);
   }
 }), 'MenuItem');
-MenuItem.propTypes = _extends({}, stylePropTypes(), {
+MenuItem.propTypes = /*#__PURE__*/_extends({}, /*#__PURE__*/stylePropTypes(), {
   value: any,
   href: string,
-  type: oneOf(['checkbox', 'radio']),
+  type: /*#__PURE__*/oneOf(['checkbox', 'radio']),
   checked: bool,
   disabled: bool,
-  children: oneOfType([node, func]),
+  children: /*#__PURE__*/oneOfType([node, func]),
   onClick: func
 });
 

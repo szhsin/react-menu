@@ -13,6 +13,7 @@ module.exports = {
     skipForOfIteratorClosing: true
   },
   shouldPrintComment: (val) => /[@#]__PURE__/.test(val),
+  plugins: ['pure-annotations'],
   presets: [
     ['@babel/preset-env', { bugfixes: true, exclude: ['@babel/plugin-transform-typeof-symbol'] }],
     '@babel/preset-react'

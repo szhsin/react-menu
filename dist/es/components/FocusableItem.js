@@ -10,7 +10,7 @@ import { EventHandlersContext, menuClass, menuItemClass } from '../utils/constan
 import { stylePropTypes } from '../utils/propTypes.js';
 
 var _excluded = ["className", "styles", "disabled", "index", "children", "isHovering", "externalRef"];
-var FocusableItem = withHovering( /*#__PURE__*/memo(function FocusableItem(_ref) {
+var FocusableItem = /*#__PURE__*/withHovering( /*#__PURE__*/memo(function FocusableItem(_ref) {
   var className = _ref.className,
       styles = _ref.styles,
       disabled = _ref.disabled,
@@ -69,7 +69,7 @@ var FocusableItem = withHovering( /*#__PURE__*/memo(function FocusableItem(_ref)
     style: useFlatStyles(styles, modifiers)
   }), renderChildren);
 }), 'FocusableItem');
-FocusableItem.propTypes = _extends({}, stylePropTypes(), {
+FocusableItem.propTypes = /*#__PURE__*/_extends({}, /*#__PURE__*/stylePropTypes(), {
   disabled: bool,
   children: func
 });

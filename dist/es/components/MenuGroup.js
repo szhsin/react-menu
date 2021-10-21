@@ -10,7 +10,7 @@ import { defineName } from '../utils/utils.js';
 import { stylePropTypes } from '../utils/propTypes.js';
 
 var _excluded = ["className", "styles", "takeOverflow"];
-var MenuGroup = defineName( /*#__PURE__*/forwardRef(function MenuGroup(_ref, externalRef) {
+var MenuGroup = /*#__PURE__*/defineName( /*#__PURE__*/forwardRef(function MenuGroup(_ref, externalRef) {
   var className = _ref.className,
       styles = _ref.styles,
       takeOverflow = _ref.takeOverflow,
@@ -52,7 +52,7 @@ var MenuGroup = defineName( /*#__PURE__*/forwardRef(function MenuGroup(_ref, ext
     style: _extends({}, useFlatStyles(styles), overflowStyles)
   }));
 }), 'MenuGroup');
-MenuGroup.propTypes = _extends({}, stylePropTypes(), {
+MenuGroup.propTypes = /*#__PURE__*/_extends({}, /*#__PURE__*/stylePropTypes(), {
   takeOverflow: bool
 });
 

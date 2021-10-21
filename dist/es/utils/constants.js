@@ -18,7 +18,7 @@ var EventHandlersContext = /*#__PURE__*/createContext({});
 var RadioGroupContext = /*#__PURE__*/createContext({});
 var SettingsContext = /*#__PURE__*/createContext({});
 var ItemSettingsContext = /*#__PURE__*/createContext({});
-var Keys = Object.freeze({
+var Keys = /*#__PURE__*/Object.freeze({
   ENTER: 'Enter',
   ESC: 'Escape',
   SPACE: ' ',
@@ -29,7 +29,7 @@ var Keys = Object.freeze({
   UP: 'ArrowUp',
   DOWN: 'ArrowDown'
 });
-var HoverIndexActionTypes = Object.freeze({
+var HoverIndexActionTypes = /*#__PURE__*/Object.freeze({
   RESET: 'HOVER_RESET',
   SET: 'HOVER_SET',
   UNSET: 'HOVER_UNSET',
@@ -38,22 +38,22 @@ var HoverIndexActionTypes = Object.freeze({
   FIRST: 'HOVER_FIRST',
   LAST: 'HOVER_LAST'
 });
-var SubmenuActionTypes = Object.freeze({
+var SubmenuActionTypes = /*#__PURE__*/Object.freeze({
   OPEN: 'SUBMENU_OPEN',
   CLOSE: 'SUBMENU_CLOSE'
 });
-var CloseReason = Object.freeze({
+var CloseReason = /*#__PURE__*/Object.freeze({
   CLICK: 'click',
   CANCEL: 'cancel',
   BLUR: 'blur',
   SCROLL: 'scroll'
 });
-var FocusPositions = Object.freeze({
+var FocusPositions = /*#__PURE__*/Object.freeze({
   INITIAL: 'initial',
   FIRST: 'first',
   LAST: 'last'
 });
-var MenuStateMap = Object.freeze({
+var MenuStateMap = /*#__PURE__*/Object.freeze({
   entering: 'opening',
   entered: 'open',
   exiting: 'closing',

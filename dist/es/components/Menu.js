@@ -91,7 +91,7 @@ var Menu = /*#__PURE__*/forwardRef(function Menu(_ref, externalRef) {
 
   return /*#__PURE__*/React.createElement(Fragment, null, renderButton, /*#__PURE__*/React.createElement(ControlledMenu, menuProps));
 });
-Menu.propTypes = _extends({}, rootMenuPropTypes, uncontrolledMenuPropTypes, {
+Menu.propTypes = /*#__PURE__*/_extends({}, rootMenuPropTypes, uncontrolledMenuPropTypes, {
   menuButton: oneOfType([element, func]).isRequired
 });
 Menu.defaultProps = rootMenuDefaultProps;

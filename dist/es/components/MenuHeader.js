@@ -23,6 +23,6 @@ var MenuHeader = /*#__PURE__*/memo( /*#__PURE__*/forwardRef(function MenuHeader(
     style: useFlatStyles(styles)
   }));
 }));
-MenuHeader.propTypes = _extends({}, stylePropTypes());
+MenuHeader.propTypes = /*#__PURE__*/_extends({}, /*#__PURE__*/stylePropTypes());
 
 export { MenuHeader };

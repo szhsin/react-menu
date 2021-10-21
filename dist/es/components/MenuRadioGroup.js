@@ -8,7 +8,7 @@ import { defineName } from '../utils/utils.js';
 import { stylePropTypes } from '../utils/propTypes.js';
 
 var _excluded = ["aria-label", "className", "styles", "name", "value", "onRadioChange"];
-var MenuRadioGroup = defineName( /*#__PURE__*/forwardRef(function MenuRadioGroup(_ref, externalRef) {
+var MenuRadioGroup = /*#__PURE__*/defineName( /*#__PURE__*/forwardRef(function MenuRadioGroup(_ref, externalRef) {
   var ariaLabel = _ref['aria-label'],
       className = _ref.className,
       styles = _ref.styles,
@@ -41,7 +41,7 @@ var MenuRadioGroup = defineName( /*#__PURE__*/forwardRef(function MenuRadioGroup
     style: useFlatStyles(styles)
   }))));
 }), 'MenuRadioGroup');
-MenuRadioGroup.propTypes = _extends({}, stylePropTypes(), {
+MenuRadioGroup.propTypes = /*#__PURE__*/_extends({}, /*#__PURE__*/stylePropTypes(), {
   name: string,
   value: any,
   onRadioChange: func

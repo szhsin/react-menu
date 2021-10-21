@@ -18,7 +18,7 @@ var _excluded = ["aria-label", "className", "disabled", "label", "index", "onMen
     _excluded2 = ["openMenu", "toggleMenu", "state"],
     _excluded3 = ["isActive", "onKeyUp"],
     _excluded4 = ["ref", "className", "styles"];
-var SubMenu = withHovering( /*#__PURE__*/memo(function SubMenu(_ref) {
+var SubMenu = /*#__PURE__*/withHovering( /*#__PURE__*/memo(function SubMenu(_ref) {
   var ariaLabel = _ref['aria-label'],
       className = _ref.className,
       disabled = _ref.disabled,
@@ -256,12 +256,12 @@ var SubMenu = withHovering( /*#__PURE__*/memo(function SubMenu(_ref) {
     return safeCall(label, modifiers);
   }, [label, modifiers])), state && getMenuList());
 }), 'SubMenu');
-SubMenu.propTypes = _extends({}, menuPropTypes, uncontrolledMenuPropTypes, {
+SubMenu.propTypes = /*#__PURE__*/_extends({}, menuPropTypes, uncontrolledMenuPropTypes, {
   disabled: bool,
-  label: oneOfType([node, func]),
-  itemProps: shape(_extends({}, stylePropTypes()))
+  label: /*#__PURE__*/oneOfType([node, func]),
+  itemProps: /*#__PURE__*/shape( /*#__PURE__*/_extends({}, /*#__PURE__*/stylePropTypes()))
 });
-SubMenu.defaultProps = _extends({}, menuDefaultProps, {
+SubMenu.defaultProps = /*#__PURE__*/_extends({}, menuDefaultProps, {
   direction: 'right'
 });
 
