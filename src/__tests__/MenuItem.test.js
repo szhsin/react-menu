@@ -7,7 +7,7 @@ import {
   MenuDivider,
   MenuButton,
   MenuRadioGroup
-} from '../';
+} from './entry';
 import { screen, render, fireEvent } from '@testing-library/react';
 import * as utils from './utils';
 

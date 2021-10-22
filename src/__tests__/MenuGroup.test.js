@@ -1,5 +1,5 @@
 import React from 'react';
-import { Menu, MenuItem, MenuGroup, MenuButton, MenuDivider } from '../';
+import { Menu, MenuItem, MenuGroup, MenuButton, MenuDivider } from './entry';
 import { render, fireEvent } from '@testing-library/react';
 import * as utils from './utils';
 
