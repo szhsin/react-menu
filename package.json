@@ -38,7 +38,7 @@
   },
   "dependencies": {
     "prop-types": "^15.7.2",
-    "react-transition-state": "^1.0.1"
+    "react-transition-state": "^1.1.1"
   },
   "devDependencies": {
     "@babel/core": "^7.15.5",
