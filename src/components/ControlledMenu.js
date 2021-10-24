@@ -186,7 +186,7 @@ export const ControlledMenu = forwardRef(function ControlledMenu(
   }
 });
 
-ControlledMenu.propTypes = {
+ControlledMenu.propTypes /* remove-proptypes */ = {
   ...rootMenuPropTypes,
   state: oneOf(values(MenuStateMap)),
   anchorPoint: exact({

@@ -17,7 +17,6 @@ import {
   getScrollAncestor,
   getTransition,
   safeCall,
-  isProd,
   isMenuOpen,
   initialHoverIndex,
   menuClass,
@@ -194,10 +193,11 @@ export const MenuList = ({
 
   const handlePosition = useCallback(() => {
     if (!containerRef.current) {
-      if (!isProd)
+      if (process.env.NODE_ENV !== 'production') {
         throw new Error(
           '[React-Menu] Menu cannot be positioned properly as container ref is null. If you initialise isOpen prop to true for ControlledMenu, please see this link for a solution: https://github.com/szhsin/react-menu/issues/2#issuecomment-719166062'
         );
+      }
       return;
     }
 

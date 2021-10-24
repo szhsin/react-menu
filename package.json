@@ -1,14 +1,17 @@
 {
   "name": "@szhsin/react-menu",
-  "version": "2.1.1",
+  "version": "2.2.0",
   "description": "React component for building accessible menu, dropdown, submenu, context menu and more.",
   "author": "Zheng Song",
   "license": "MIT",
   "repository": "szhsin/react-menu",
   "homepage": "https://szhsin.github.io/react-menu/",
   "main": "dist/index.js",
-  "module": "dist/index.modern.js",
+  "module": "dist/es/index.js",
   "types": "dist/index.d.ts",
+  "sideEffects": [
+    "*.css"
+  ],
   "scripts": {
     "bundle": "rollup -c",
     "watch": "rollup -c -w",
@@ -35,7 +38,7 @@
   },
   "dependencies": {
     "prop-types": "^15.7.2",
-    "react-transition-state": "^1.0.1"
+    "react-transition-state": "^1.1.1"
   },
   "devDependencies": {
     "@babel/core": "^7.15.5",
@@ -46,6 +49,8 @@
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^12.1.2",
     "@types/react": "^17.0.27",
+    "babel-plugin-pure-annotations": "^0.1.2",
+    "babel-plugin-transform-react-remove-prop-types": "^0.4.24",
     "dtslint": "^4.1.6",
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.3.0",

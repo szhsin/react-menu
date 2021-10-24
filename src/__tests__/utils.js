@@ -1,6 +1,6 @@
 /* eslint-disable react/no-children-prop */
 import React from 'react';
-import { applyHOC, applyStatics, Menu, MenuItem, MenuButton } from '../../';
+import { applyHOC, applyStatics, Menu, MenuItem, MenuButton } from './entry';
 import { screen, render, fireEvent, waitFor } from '@testing-library/react';
 
 const { queryByRole } = screen;

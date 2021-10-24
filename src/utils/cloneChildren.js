@@ -1,5 +1,5 @@
 import { Children, cloneElement } from 'react';
-import { getName, isProd } from './utils';
+import { getName } from './utils';
 
 export const cloneChildren = (children, startIndex = 0, inRadioGroup) => {
   let index = startIndex;
@@ -32,10 +32,14 @@ export const cloneChildren = (children, startIndex = 0, inRadioGroup) => {
           const takeOverflow = !!child.props.takeOverflow;
           const descOverflow = desc.descendOverflow;
           // https://stackoverflow.com/questions/3076078/check-if-at-least-two-out-of-three-booleans-are-true
-          if (!isProd && (descendOverflow === descOverflow ? descOverflow : takeOverflow))
+          if (
+            process.env.NODE_ENV !== 'production' &&
+            (descendOverflow === descOverflow ? descOverflow : takeOverflow)
+          ) {
             throw new Error(
               '[React-Menu] Only one MenuGroup in a menu is allowed to have takeOverflow prop.'
             );
+          }
           descendOverflow = descendOverflow || descOverflow || takeOverflow;
         }
         return cloneElement(child, { children: desc.items });
