@@ -2,7 +2,7 @@ import { objectWithoutPropertiesLoose as _objectWithoutPropertiesLoose, extends 
 import React, { useState, useContext, useRef, useReducer, useMemo, useCallback, useEffect } from 'react';
 import { SettingsContext, MenuListContext, initialHoverIndex, HoverIndexActionTypes, FocusPositions, MenuListItemContext, HoverIndexContext, SubmenuActionTypes, Keys, menuClass, CloseReason, menuArrowClass } from '../utils/constants.js';
 import { cloneChildren } from '../utils/cloneChildren.js';
-import { isProd, getScrollAncestor, floatEqual, batchedUpdates, attachHandlerProps, isMenuOpen, getTransition, safeCall } from '../utils/utils.js';
+import { getScrollAncestor, floatEqual, batchedUpdates, attachHandlerProps, isMenuOpen, getTransition, safeCall } from '../utils/utils.js';
 import { getPositionHelpers } from '../positionUtils/getPositionHelpers.js';
 import { positionContextMenu } from '../positionUtils/positionContextMenu.js';
 import { positionMenu } from '../positionUtils/positionMenu.js';
@@ -220,7 +220,10 @@ var MenuList = function MenuList(_ref) {
 
   var handlePosition = useCallback(function () {
     if (!containerRef.current) {
-      if (!isProd) throw new Error('[React-Menu] Menu cannot be positioned properly as container ref is null. If you initialise isOpen prop to true for ControlledMenu, please see this link for a solution: https://github.com/szhsin/react-menu/issues/2#issuecomment-719166062');
+      if (process.env.NODE_ENV !== 'production') {
+        throw new Error('[React-Menu] Menu cannot be positioned properly as container ref is null. If you initialise isOpen prop to true for ControlledMenu, please see this link for a solution: https://github.com/szhsin/react-menu/issues/2#issuecomment-719166062');
+      }
+
       return;
     }
 

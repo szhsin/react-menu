@@ -71,7 +71,6 @@ var MenuStateMap = /*#__PURE__*/Object.freeze({
   exited: 'closed'
 });
 
-var isProd = process.env.NODE_ENV === 'production';
 var isMenuOpen = function isMenuOpen(state) {
   return !!state && state[0] === 'o';
 };
@@ -101,8 +100,7 @@ var getName = function getName(component) {
 };
 var defineName = function defineName(component, name) {
   return name ? Object.defineProperty(component, '_szhsinMenu', {
-    value: name,
-    writable: false
+    value: name
   }) : component;
 };
 var applyHOC = function applyHOC(HOC) {
@@ -174,7 +172,7 @@ var getScrollAncestor = function getScrollAncestor(node) {
   return window;
 };
 var validateIndex = function validateIndex(index, isDisabled, node) {
-  if (!isProd && index === undefined && !isDisabled) {
+  if (process.env.NODE_ENV !== 'production' && index === undefined && !isDisabled) {
     var error = "[React-Menu] Validate item '" + (node && node.toString()) + "' failed.\nYou're probably creating wrapping components or HOC over MenuItem, SubMenu or FocusableItem.\nTo create wrapping components, see: https://codesandbox.io/s/react-menu-wrapping-q0b59\nTo create HOCs, see: https://codesandbox.io/s/react-menu-hoc-0bipn";
     throw new Error(error);
   }
@@ -310,7 +308,11 @@ var cloneChildren = function cloneChildren(children, startIndex, inRadioGroup) {
           if (name === 'MenuGroup') {
             var takeOverflow = !!child.props.takeOverflow;
             var descOverflow = desc.descendOverflow;
-            if (!isProd && (descendOverflow === descOverflow ? descOverflow : takeOverflow)) throw new Error('[React-Menu] Only one MenuGroup in a menu is allowed to have takeOverflow prop.');
+
+            if (process.env.NODE_ENV !== 'production' && (descendOverflow === descOverflow ? descOverflow : takeOverflow)) {
+              throw new Error('[React-Menu] Only one MenuGroup in a menu is allowed to have takeOverflow prop.');
+            }
+
             descendOverflow = descendOverflow || descOverflow || takeOverflow;
           }
 
@@ -1211,7 +1213,10 @@ var MenuList = function MenuList(_ref) {
 
   var handlePosition = React.useCallback(function () {
     if (!containerRef.current) {
-      if (!isProd) throw new Error('[React-Menu] Menu cannot be positioned properly as container ref is null. If you initialise isOpen prop to true for ControlledMenu, please see this link for a solution: https://github.com/szhsin/react-menu/issues/2#issuecomment-719166062');
+      if (process.env.NODE_ENV !== 'production') {
+        throw new Error('[React-Menu] Menu cannot be positioned properly as container ref is null. If you initialise isOpen prop to true for ControlledMenu, please see this link for a solution: https://github.com/szhsin/react-menu/issues/2#issuecomment-719166062');
+      }
+
       return;
     }
 

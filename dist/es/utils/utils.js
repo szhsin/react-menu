@@ -1,6 +1,5 @@
 import { unstable_batchedUpdates } from 'react-dom';
 
-var isProd = process.env.NODE_ENV === 'production';
 var isMenuOpen = function isMenuOpen(state) {
   return !!state && state[0] === 'o';
 };
@@ -30,8 +29,7 @@ var getName = function getName(component) {
 };
 var defineName = function defineName(component, name) {
   return name ? Object.defineProperty(component, '_szhsinMenu', {
-    value: name,
-    writable: false
+    value: name
   }) : component;
 };
 var applyHOC = function applyHOC(HOC) {
@@ -103,10 +101,10 @@ var getScrollAncestor = function getScrollAncestor(node) {
   return window;
 };
 var validateIndex = function validateIndex(index, isDisabled, node) {
-  if (!isProd && index === undefined && !isDisabled) {
+  if (process.env.NODE_ENV !== 'production' && index === undefined && !isDisabled) {
     var error = "[React-Menu] Validate item '" + (node && node.toString()) + "' failed.\nYou're probably creating wrapping components or HOC over MenuItem, SubMenu or FocusableItem.\nTo create wrapping components, see: https://codesandbox.io/s/react-menu-wrapping-q0b59\nTo create HOCs, see: https://codesandbox.io/s/react-menu-hoc-0bipn";
     throw new Error(error);
   }
 };
 
-export { applyHOC, applyStatics, attachHandlerProps, batchedUpdates, defineName, floatEqual, getName, getScrollAncestor, getTransition, isMenuOpen, isProd, parsePadding, safeCall, validateIndex, values };
+export { applyHOC, applyStatics, attachHandlerProps, batchedUpdates, defineName, floatEqual, getName, getScrollAncestor, getTransition, isMenuOpen, parsePadding, safeCall, validateIndex, values };

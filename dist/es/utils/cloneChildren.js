@@ -1,5 +1,5 @@
 import { Children, cloneElement } from 'react';
-import { isProd, getName } from './utils.js';
+import { getName } from './utils.js';
 
 var cloneChildren = function cloneChildren(children, startIndex, inRadioGroup) {
   if (startIndex === void 0) {
@@ -41,7 +41,11 @@ var cloneChildren = function cloneChildren(children, startIndex, inRadioGroup) {
           if (name === 'MenuGroup') {
             var takeOverflow = !!child.props.takeOverflow;
             var descOverflow = desc.descendOverflow;
-            if (!isProd && (descendOverflow === descOverflow ? descOverflow : takeOverflow)) throw new Error('[React-Menu] Only one MenuGroup in a menu is allowed to have takeOverflow prop.');
+
+            if (process.env.NODE_ENV !== 'production' && (descendOverflow === descOverflow ? descOverflow : takeOverflow)) {
+              throw new Error('[React-Menu] Only one MenuGroup in a menu is allowed to have takeOverflow prop.');
+            }
+
             descendOverflow = descendOverflow || descOverflow || takeOverflow;
           }
 

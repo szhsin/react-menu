@@ -1,6 +1,5 @@
 import { unstable_batchedUpdates } from 'react-dom';
 
-export const isProd = process.env.NODE_ENV === 'production';
 export const isMenuOpen = (state) => !!state && state[0] === 'o';
 export const batchedUpdates = unstable_batchedUpdates || ((callback) => callback());
 export const values = Object.values || ((obj) => Object.keys(obj).map((key) => obj[key]));
@@ -11,9 +10,7 @@ export const safeCall = (fn, arg) => (typeof fn === 'function' ? fn(arg) : fn);
 
 export const getName = (component) => component && component['_szhsinMenu'];
 export const defineName = (component, name) =>
-  name
-    ? Object.defineProperty(component, '_szhsinMenu', { value: name, writable: false })
-    : component;
+  name ? Object.defineProperty(component, '_szhsinMenu', { value: name }) : component;
 
 export const applyHOC =
   (HOC) =>
@@ -69,7 +66,7 @@ export const getScrollAncestor = (node) => {
 };
 
 export const validateIndex = (index, isDisabled, node) => {
-  if (!isProd && index === undefined && !isDisabled) {
+  if (process.env.NODE_ENV !== 'production' && index === undefined && !isDisabled) {
     const error = `[React-Menu] Validate item '${node && node.toString()}' failed.
 You're probably creating wrapping components or HOC over MenuItem, SubMenu or FocusableItem.
 To create wrapping components, see: https://codesandbox.io/s/react-menu-wrapping-q0b59
