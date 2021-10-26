@@ -1051,7 +1051,8 @@ const [anchorPoint, setAnchorPoint] = useState({ x: 0, y: 0 });
   fullSource: `import React, { useState } from 'react';
 import {
     ControlledMenu,
-    MenuItem
+    MenuItem,
+    useMenuState
 } from '@szhsin/react-menu';
 import '@szhsin/react-menu/dist/index.css';
 

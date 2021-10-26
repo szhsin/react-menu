@@ -5,7 +5,7 @@ import { useMenuState } from './useMenuState.js';
 var useMenuStateAndFocus = function useMenuStateAndFocus(options) {
   var menuState = useMenuState(options);
 
-  var _useState = useState({}),
+  var _useState = useState(),
       menuItemFocus = _useState[0],
       setMenuItemFocus = _useState[1];
 

@@ -1,6 +1,6 @@
 import { objectWithoutPropertiesLoose as _objectWithoutPropertiesLoose, extends as _extends } from '../_virtual/_rollupPluginBabelHelpers.js';
 import React, { useState, useContext, useRef, useReducer, useMemo, useCallback, useEffect } from 'react';
-import { SettingsContext, MenuListContext, initialHoverIndex, HoverIndexActionTypes, FocusPositions, MenuListItemContext, HoverIndexContext, SubmenuActionTypes, Keys, menuClass, CloseReason, menuArrowClass } from '../utils/constants.js';
+import { SettingsContext, MenuListContext, initialHoverIndex, HoverIndexActionTypes, MenuListItemContext, HoverIndexContext, Keys, menuClass, CloseReason, FocusPositions, menuArrowClass, SubmenuActionTypes } from '../utils/constants.js';
 import { cloneChildren } from '../utils/cloneChildren.js';
 import { getScrollAncestor, floatEqual, batchedUpdates, attachHandlerProps, isMenuOpen, getTransition, safeCall } from '../utils/utils.js';
 import { getPositionHelpers } from '../positionUtils/getPositionHelpers.js';
@@ -31,7 +31,7 @@ var MenuList = function MenuList(_ref) {
       repositionFlag = _ref.repositionFlag,
       _ref$captureFocus = _ref.captureFocus,
       captureFocus = _ref$captureFocus === void 0 ? true : _ref$captureFocus,
-      menuState = _ref.state,
+      state = _ref.state,
       endTransition = _ref.endTransition,
       isDisabled = _ref.isDisabled,
       menuItemFocus = _ref.menuItemFocus,
@@ -40,8 +40,6 @@ var MenuList = function MenuList(_ref) {
       children = _ref.children,
       onClose = _ref.onClose,
       restProps = _objectWithoutPropertiesLoose(_ref, _excluded);
-
-  var isOpen = isMenuOpen(menuState);
 
   var _useState = useState({
     x: 0,
@@ -73,85 +71,44 @@ var MenuList = function MenuList(_ref) {
       reposition = _useContext.reposition,
       viewScroll = _useContext.viewScroll;
 
+  var reposFlag = useContext(MenuListContext).reposSubmenu || repositionFlag;
   var menuRef = useRef(null);
   var arrowRef = useRef(null);
   var menuItemsCount = useRef(0);
-  var prevOpen = useRef(isOpen);
+  var prevOpen = useRef(false);
   var latestMenuSize = useRef({
     width: 0,
     height: 0
   });
   var latestHandlePosition = useRef(function () {});
   var descendOverflowRef = useRef(false);
-  var reposFlag = useContext(MenuListContext).reposSubmenu || repositionFlag;
-
-  var _useReducer = useReducer(function (c) {
-    return c + 1;
-  }, 1),
-      reposSubmenu = _useReducer[0],
-      forceReposSubmenu = _useReducer[1];
-
-  var _useReducer2 = useReducer(reducer, {
-    hoverIndex: initialHoverIndex,
-    openSubmenuCount: 0
-  }),
-      _useReducer2$ = _useReducer2[0],
-      hoverIndex = _useReducer2$.hoverIndex,
-      openSubmenuCount = _useReducer2$.openSubmenuCount,
-      dispatch = _useReducer2[1];
-
+  var isOpen = isMenuOpen(state);
   var openTransition = getTransition(transition, 'open');
   var closeTransition = getTransition(transition, 'close');
 
-  function reducer(_ref2, action) {
+  var reducer = function reducer(_ref2, action) {
     var hoverIndex = _ref2.hoverIndex,
         openSubmenuCount = _ref2.openSubmenuCount;
     return {
-      hoverIndex: hoverIndexReducer(hoverIndex, action),
+      hoverIndex: hoverIndexReducer(hoverIndex, action, menuItemsCount),
       openSubmenuCount: submenuCountReducer(openSubmenuCount, action)
     };
-  }
+  };
 
-  function hoverIndexReducer(state, _ref3) {
-    var type = _ref3.type,
-        index = _ref3.index;
+  var _useReducer = useReducer(reducer, {
+    hoverIndex: initialHoverIndex,
+    openSubmenuCount: 0
+  }),
+      _useReducer$ = _useReducer[0],
+      hoverIndex = _useReducer$.hoverIndex,
+      openSubmenuCount = _useReducer$.openSubmenuCount,
+      dispatch = _useReducer[1];
 
-    switch (type) {
-      case HoverIndexActionTypes.RESET:
-        return initialHoverIndex;
-
-      case HoverIndexActionTypes.SET:
-        return index;
-
-      case HoverIndexActionTypes.UNSET:
-        return state === index ? initialHoverIndex : state;
-
-      case HoverIndexActionTypes.DECREASE:
-        {
-          var i = state;
-          i--;
-          if (i < 0) i = menuItemsCount.current - 1;
-          return i;
-        }
-
-      case HoverIndexActionTypes.INCREASE:
-        {
-          var _i = state;
-          _i++;
-          if (_i >= menuItemsCount.current) _i = 0;
-          return _i;
-        }
-
-      case HoverIndexActionTypes.FIRST:
-        return menuItemsCount.current > 0 ? 0 : initialHoverIndex;
-
-      case HoverIndexActionTypes.LAST:
-        return menuItemsCount.current > 0 ? menuItemsCount.current - 1 : initialHoverIndex;
-
-      default:
-        return state;
-    }
-  }
+  var _useReducer2 = useReducer(function (c) {
+    return c + 1;
+  }, 1),
+      reposSubmenu = _useReducer2[0],
+      forceReposSubmenu = _useReducer2[1];
 
   var menuItems = useMemo(function () {
     var _cloneChildren = cloneChildren(children),
@@ -211,7 +168,7 @@ var MenuList = function MenuList(_ref) {
   };
 
   var handleAnimationEnd = function handleAnimationEnd() {
-    if (menuState === 'closing') {
+    if (state === 'closing') {
       setOverflowData();
     }
 
@@ -379,16 +336,16 @@ var MenuList = function MenuList(_ref) {
   }, [isOpen, hasOverflow, parentScrollingRef, handlePosition]);
   useEffect(function () {
     if (typeof ResizeObserver !== 'function' || reposition === 'initial') return;
-    var resizeObserver = new ResizeObserver(function (_ref4) {
-      var entry = _ref4[0];
+    var resizeObserver = new ResizeObserver(function (_ref3) {
+      var entry = _ref3[0];
       var borderBoxSize = entry.borderBoxSize,
           target = entry.target;
       var width, height;
 
       if (borderBoxSize) {
-        var _ref5 = borderBoxSize[0] || borderBoxSize,
-            inlineSize = _ref5.inlineSize,
-            blockSize = _ref5.blockSize;
+        var _ref4 = borderBoxSize[0] || borderBoxSize,
+            inlineSize = _ref4.inlineSize,
+            blockSize = _ref4.blockSize;
 
         width = inlineSize;
         height = blockSize;
@@ -422,16 +379,11 @@ var MenuList = function MenuList(_ref) {
       return;
     }
 
-    var id = setTimeout(function () {
-      if (!menuRef.current) return;
+    var _ref5 = menuItemFocus || {},
+        position = _ref5.position,
+        alwaysUpdate = _ref5.alwaysUpdate;
 
-      var _ref6 = menuItemFocus || {},
-          position = _ref6.position,
-          alwaysUpdate = _ref6.alwaysUpdate;
-
-      if (!alwaysUpdate && menuRef.current.contains(document.activeElement)) return;
-      if (captureFocus) menuRef.current.focus();
-
+    var setItemFocus = function setItemFocus() {
       if (position === FocusPositions.FIRST) {
         dispatch({
           type: HoverIndexActionTypes.FIRST
@@ -446,10 +398,21 @@ var MenuList = function MenuList(_ref) {
           index: position
         });
       }
-    }, openTransition ? 170 : 100);
-    return function () {
-      return clearTimeout(id);
     };
+
+    if (alwaysUpdate) {
+      setItemFocus();
+    } else if (captureFocus) {
+      var id = setTimeout(function () {
+        if (menuRef.current && !menuRef.current.contains(document.activeElement)) {
+          menuRef.current.focus();
+          setItemFocus();
+        }
+      }, openTransition ? 170 : 100);
+      return function () {
+        return clearTimeout(id);
+      };
+    }
   }, [openTransition, closeTransition, captureFocus, isOpen, menuItemFocus]);
   var isSubmenuOpen = openSubmenuCount > 0;
   var itemContext = useMemo(function () {
@@ -480,10 +443,10 @@ var MenuList = function MenuList(_ref) {
   } : undefined;
   var modifiers = useMemo(function () {
     return {
-      state: menuState,
+      state: state,
       dir: expandedDirection
     };
-  }, [menuState, expandedDirection]);
+  }, [state, expandedDirection]);
   var arrowModifiers = useMemo(function () {
     return Object.freeze({
       dir: expandedDirection
@@ -534,6 +497,47 @@ var MenuList = function MenuList(_ref) {
     value: hoverIndex
   }, menuItems))));
 };
+
+function hoverIndexReducer(state, _ref6, menuItemsCount) {
+  var type = _ref6.type,
+      index = _ref6.index;
+
+  switch (type) {
+    case HoverIndexActionTypes.RESET:
+      return initialHoverIndex;
+
+    case HoverIndexActionTypes.SET:
+      return index;
+
+    case HoverIndexActionTypes.UNSET:
+      return state === index ? initialHoverIndex : state;
+
+    case HoverIndexActionTypes.DECREASE:
+      {
+        var i = state;
+        i--;
+        if (i < 0) i = menuItemsCount.current - 1;
+        return i;
+      }
+
+    case HoverIndexActionTypes.INCREASE:
+      {
+        var _i = state;
+        _i++;
+        if (_i >= menuItemsCount.current) _i = 0;
+        return _i;
+      }
+
+    case HoverIndexActionTypes.FIRST:
+      return menuItemsCount.current > 0 ? 0 : initialHoverIndex;
+
+    case HoverIndexActionTypes.LAST:
+      return menuItemsCount.current > 0 ? menuItemsCount.current - 1 : initialHoverIndex;
+
+    default:
+      return state;
+  }
+}
 
 function submenuCountReducer(state, _ref7) {
   var type = _ref7.type;

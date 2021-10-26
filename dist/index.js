@@ -7,10 +7,6 @@ var propTypes = require('prop-types');
 var reactDom = require('react-dom');
 var reactTransitionState = require('react-transition-state');
 
-function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
-
-var React__default = /*#__PURE__*/_interopDefaultLegacy(React);
-
 var menuContainerClass = 'szh-menu-container';
 var menuClass = 'szh-menu';
 var menuButtonClass = 'szh-menu-button';
@@ -331,7 +327,7 @@ var cloneChildren = function cloneChildren(children, startIndex, inRadioGroup) {
 
 var withHovering = function withHovering(WrapppedComponent, name) {
   var WithHovering = defineName( /*#__PURE__*/React.forwardRef(function (props, ref) {
-    return /*#__PURE__*/React__default["default"].createElement(WrapppedComponent, _extends({}, props, {
+    return /*#__PURE__*/React.createElement(WrapppedComponent, _extends({}, props, {
       externalRef: ref,
       isHovering: React.useContext(HoverIndexContext) === props.index
     }));
@@ -573,7 +569,7 @@ var useMenuState = function useMenuState(_temp) {
 var useMenuStateAndFocus = function useMenuStateAndFocus(options) {
   var menuState = useMenuState(options);
 
-  var _useState = React.useState({}),
+  var _useState = React.useState(),
       menuItemFocus = _useState[0],
       setMenuItemFocus = _useState[1];
 
@@ -605,7 +601,7 @@ var MenuButton = /*#__PURE__*/defineName( /*#__PURE__*/React.forwardRef(function
       open: isOpen
     });
   }, [isOpen]);
-  return /*#__PURE__*/React__default["default"].createElement("button", _extends({
+  return /*#__PURE__*/React.createElement("button", _extends({
     "aria-haspopup": true,
     "aria-expanded": isOpen,
     "aria-disabled": disabled || undefined,
@@ -1024,7 +1020,7 @@ var MenuList = function MenuList(_ref) {
       repositionFlag = _ref.repositionFlag,
       _ref$captureFocus = _ref.captureFocus,
       captureFocus = _ref$captureFocus === void 0 ? true : _ref$captureFocus,
-      menuState = _ref.state,
+      state = _ref.state,
       endTransition = _ref.endTransition,
       isDisabled = _ref.isDisabled,
       menuItemFocus = _ref.menuItemFocus,
@@ -1033,8 +1029,6 @@ var MenuList = function MenuList(_ref) {
       children = _ref.children,
       onClose = _ref.onClose,
       restProps = _objectWithoutPropertiesLoose(_ref, _excluded$9);
-
-  var isOpen = isMenuOpen(menuState);
 
   var _useState = React.useState({
     x: 0,
@@ -1066,85 +1060,44 @@ var MenuList = function MenuList(_ref) {
       reposition = _useContext.reposition,
       viewScroll = _useContext.viewScroll;
 
+  var reposFlag = React.useContext(MenuListContext).reposSubmenu || repositionFlag;
   var menuRef = React.useRef(null);
   var arrowRef = React.useRef(null);
   var menuItemsCount = React.useRef(0);
-  var prevOpen = React.useRef(isOpen);
+  var prevOpen = React.useRef(false);
   var latestMenuSize = React.useRef({
     width: 0,
     height: 0
   });
   var latestHandlePosition = React.useRef(function () {});
   var descendOverflowRef = React.useRef(false);
-  var reposFlag = React.useContext(MenuListContext).reposSubmenu || repositionFlag;
-
-  var _useReducer = React.useReducer(function (c) {
-    return c + 1;
-  }, 1),
-      reposSubmenu = _useReducer[0],
-      forceReposSubmenu = _useReducer[1];
-
-  var _useReducer2 = React.useReducer(reducer, {
-    hoverIndex: initialHoverIndex,
-    openSubmenuCount: 0
-  }),
-      _useReducer2$ = _useReducer2[0],
-      hoverIndex = _useReducer2$.hoverIndex,
-      openSubmenuCount = _useReducer2$.openSubmenuCount,
-      dispatch = _useReducer2[1];
-
+  var isOpen = isMenuOpen(state);
   var openTransition = getTransition(transition, 'open');
   var closeTransition = getTransition(transition, 'close');
 
-  function reducer(_ref2, action) {
+  var reducer = function reducer(_ref2, action) {
     var hoverIndex = _ref2.hoverIndex,
         openSubmenuCount = _ref2.openSubmenuCount;
     return {
-      hoverIndex: hoverIndexReducer(hoverIndex, action),
+      hoverIndex: hoverIndexReducer(hoverIndex, action, menuItemsCount),
       openSubmenuCount: submenuCountReducer(openSubmenuCount, action)
     };
-  }
+  };
 
-  function hoverIndexReducer(state, _ref3) {
-    var type = _ref3.type,
-        index = _ref3.index;
+  var _useReducer = React.useReducer(reducer, {
+    hoverIndex: initialHoverIndex,
+    openSubmenuCount: 0
+  }),
+      _useReducer$ = _useReducer[0],
+      hoverIndex = _useReducer$.hoverIndex,
+      openSubmenuCount = _useReducer$.openSubmenuCount,
+      dispatch = _useReducer[1];
 
-    switch (type) {
-      case HoverIndexActionTypes.RESET:
-        return initialHoverIndex;
-
-      case HoverIndexActionTypes.SET:
-        return index;
-
-      case HoverIndexActionTypes.UNSET:
-        return state === index ? initialHoverIndex : state;
-
-      case HoverIndexActionTypes.DECREASE:
-        {
-          var i = state;
-          i--;
-          if (i < 0) i = menuItemsCount.current - 1;
-          return i;
-        }
-
-      case HoverIndexActionTypes.INCREASE:
-        {
-          var _i = state;
-          _i++;
-          if (_i >= menuItemsCount.current) _i = 0;
-          return _i;
-        }
-
-      case HoverIndexActionTypes.FIRST:
-        return menuItemsCount.current > 0 ? 0 : initialHoverIndex;
-
-      case HoverIndexActionTypes.LAST:
-        return menuItemsCount.current > 0 ? menuItemsCount.current - 1 : initialHoverIndex;
-
-      default:
-        return state;
-    }
-  }
+  var _useReducer2 = React.useReducer(function (c) {
+    return c + 1;
+  }, 1),
+      reposSubmenu = _useReducer2[0],
+      forceReposSubmenu = _useReducer2[1];
 
   var menuItems = React.useMemo(function () {
     var _cloneChildren = cloneChildren(children),
@@ -1204,7 +1157,7 @@ var MenuList = function MenuList(_ref) {
   };
 
   var handleAnimationEnd = function handleAnimationEnd() {
-    if (menuState === 'closing') {
+    if (state === 'closing') {
       setOverflowData();
     }
 
@@ -1372,16 +1325,16 @@ var MenuList = function MenuList(_ref) {
   }, [isOpen, hasOverflow, parentScrollingRef, handlePosition]);
   React.useEffect(function () {
     if (typeof ResizeObserver !== 'function' || reposition === 'initial') return;
-    var resizeObserver = new ResizeObserver(function (_ref4) {
-      var entry = _ref4[0];
+    var resizeObserver = new ResizeObserver(function (_ref3) {
+      var entry = _ref3[0];
       var borderBoxSize = entry.borderBoxSize,
           target = entry.target;
       var width, height;
 
       if (borderBoxSize) {
-        var _ref5 = borderBoxSize[0] || borderBoxSize,
-            inlineSize = _ref5.inlineSize,
-            blockSize = _ref5.blockSize;
+        var _ref4 = borderBoxSize[0] || borderBoxSize,
+            inlineSize = _ref4.inlineSize,
+            blockSize = _ref4.blockSize;
 
         width = inlineSize;
         height = blockSize;
@@ -1415,16 +1368,11 @@ var MenuList = function MenuList(_ref) {
       return;
     }
 
-    var id = setTimeout(function () {
-      if (!menuRef.current) return;
+    var _ref5 = menuItemFocus || {},
+        position = _ref5.position,
+        alwaysUpdate = _ref5.alwaysUpdate;
 
-      var _ref6 = menuItemFocus || {},
-          position = _ref6.position,
-          alwaysUpdate = _ref6.alwaysUpdate;
-
-      if (!alwaysUpdate && menuRef.current.contains(document.activeElement)) return;
-      if (captureFocus) menuRef.current.focus();
-
+    var setItemFocus = function setItemFocus() {
       if (position === FocusPositions.FIRST) {
         dispatch({
           type: HoverIndexActionTypes.FIRST
@@ -1439,10 +1387,21 @@ var MenuList = function MenuList(_ref) {
           index: position
         });
       }
-    }, openTransition ? 170 : 100);
-    return function () {
-      return clearTimeout(id);
     };
+
+    if (alwaysUpdate) {
+      setItemFocus();
+    } else if (captureFocus) {
+      var id = setTimeout(function () {
+        if (menuRef.current && !menuRef.current.contains(document.activeElement)) {
+          menuRef.current.focus();
+          setItemFocus();
+        }
+      }, openTransition ? 170 : 100);
+      return function () {
+        return clearTimeout(id);
+      };
+    }
   }, [openTransition, closeTransition, captureFocus, isOpen, menuItemFocus]);
   var isSubmenuOpen = openSubmenuCount > 0;
   var itemContext = React.useMemo(function () {
@@ -1473,10 +1432,10 @@ var MenuList = function MenuList(_ref) {
   } : undefined;
   var modifiers = React.useMemo(function () {
     return {
-      state: menuState,
+      state: state,
       dir: expandedDirection
     };
-  }, [menuState, expandedDirection]);
+  }, [state, expandedDirection]);
   var arrowModifiers = React.useMemo(function () {
     return Object.freeze({
       dir: expandedDirection
@@ -1496,7 +1455,7 @@ var MenuList = function MenuList(_ref) {
     onKeyDown: handleKeyDown,
     onAnimationEnd: handleAnimationEnd
   }, restProps);
-  return /*#__PURE__*/React__default["default"].createElement("ul", _extends({
+  return /*#__PURE__*/React.createElement("ul", _extends({
     role: "menu",
     tabIndex: "-1",
     "aria-disabled": isDisabled || undefined,
@@ -1512,21 +1471,62 @@ var MenuList = function MenuList(_ref) {
       left: menuPosition.x + "px",
       top: menuPosition.y + "px"
     })
-  }), arrow && /*#__PURE__*/React__default["default"].createElement("div", {
+  }), arrow && /*#__PURE__*/React.createElement("div", {
     className: _arrowClass,
     style: _extends({}, _arrowStyles, {
       left: arrowPosition.x && arrowPosition.x + "px",
       top: arrowPosition.y && arrowPosition.y + "px"
     }),
     ref: arrowRef
-  }), /*#__PURE__*/React__default["default"].createElement(MenuListContext.Provider, {
+  }), /*#__PURE__*/React.createElement(MenuListContext.Provider, {
     value: listContext
-  }, /*#__PURE__*/React__default["default"].createElement(MenuListItemContext.Provider, {
+  }, /*#__PURE__*/React.createElement(MenuListItemContext.Provider, {
     value: itemContext
-  }, /*#__PURE__*/React__default["default"].createElement(HoverIndexContext.Provider, {
+  }, /*#__PURE__*/React.createElement(HoverIndexContext.Provider, {
     value: hoverIndex
   }, menuItems))));
 };
+
+function hoverIndexReducer(state, _ref6, menuItemsCount) {
+  var type = _ref6.type,
+      index = _ref6.index;
+
+  switch (type) {
+    case HoverIndexActionTypes.RESET:
+      return initialHoverIndex;
+
+    case HoverIndexActionTypes.SET:
+      return index;
+
+    case HoverIndexActionTypes.UNSET:
+      return state === index ? initialHoverIndex : state;
+
+    case HoverIndexActionTypes.DECREASE:
+      {
+        var i = state;
+        i--;
+        if (i < 0) i = menuItemsCount.current - 1;
+        return i;
+      }
+
+    case HoverIndexActionTypes.INCREASE:
+      {
+        var _i = state;
+        _i++;
+        if (_i >= menuItemsCount.current) _i = 0;
+        return _i;
+      }
+
+    case HoverIndexActionTypes.FIRST:
+      return menuItemsCount.current > 0 ? 0 : initialHoverIndex;
+
+    case HoverIndexActionTypes.LAST:
+      return menuItemsCount.current > 0 ? menuItemsCount.current - 1 : initialHoverIndex;
+
+    default:
+      return state;
+  }
+}
 
 function submenuCountReducer(state, _ref7) {
   var type = _ref7.type;
@@ -1658,20 +1658,20 @@ var ControlledMenu = /*#__PURE__*/React.forwardRef(function ControlledMenu(_ref,
     onKeyDown: handleKeyDown,
     onBlur: handleBlur
   }, containerProps);
-  var menuList = /*#__PURE__*/React__default["default"].createElement("div", _extends({}, containerProps, handlers, {
+  var menuList = /*#__PURE__*/React.createElement("div", _extends({}, containerProps, handlers, {
     className: useBEM({
       block: menuContainerClass,
       modifiers: modifiers,
       className: className
     }),
     ref: containerRef
-  }), state && /*#__PURE__*/React__default["default"].createElement(SettingsContext.Provider, {
+  }), state && /*#__PURE__*/React.createElement(SettingsContext.Provider, {
     value: settings
-  }, /*#__PURE__*/React__default["default"].createElement(ItemSettingsContext.Provider, {
+  }, /*#__PURE__*/React.createElement(ItemSettingsContext.Provider, {
     value: itemSettings
-  }, /*#__PURE__*/React__default["default"].createElement(EventHandlersContext.Provider, {
+  }, /*#__PURE__*/React.createElement(EventHandlersContext.Provider, {
     value: eventHandlers
-  }, /*#__PURE__*/React__default["default"].createElement(MenuList, _extends({}, restProps, {
+  }, /*#__PURE__*/React.createElement(MenuList, _extends({}, restProps, {
     ariaLabel: ariaLabel || 'Menu',
     externalRef: externalRef,
     containerRef: containerRef,
@@ -1783,7 +1783,7 @@ var Menu = /*#__PURE__*/React.forwardRef(function Menu(_ref, externalRef) {
     skipOpen: skipOpen
   });
 
-  return /*#__PURE__*/React__default["default"].createElement(React.Fragment, null, renderButton, /*#__PURE__*/React__default["default"].createElement(ControlledMenu, menuProps));
+  return /*#__PURE__*/React.createElement(React.Fragment, null, renderButton, /*#__PURE__*/React.createElement(ControlledMenu, menuProps));
 });
 process.env.NODE_ENV !== "production" ? Menu.propTypes = /*#__PURE__*/_extends({}, rootMenuPropTypes, uncontrolledMenuPropTypes, {
   menuButton: propTypes.oneOfType([propTypes.element, propTypes.func]).isRequired
@@ -1993,7 +1993,7 @@ var SubMenu = /*#__PURE__*/withHovering( /*#__PURE__*/React.memo(function SubMen
   }), restItemProps);
 
   var getMenuList = function getMenuList() {
-    var menuList = /*#__PURE__*/React__default["default"].createElement(MenuList, _extends({}, restProps, otherStateProps, {
+    var menuList = /*#__PURE__*/React.createElement(MenuList, _extends({}, restProps, otherStateProps, {
       state: state,
       ariaLabel: ariaLabel || (typeof label === 'string' ? label : 'Submenu'),
       anchorRef: itemRef,
@@ -2004,7 +2004,7 @@ var SubMenu = /*#__PURE__*/withHovering( /*#__PURE__*/React.memo(function SubMen
     return isPortal ? /*#__PURE__*/reactDom.createPortal(menuList, rootMenuRef.current) : menuList;
   };
 
-  return /*#__PURE__*/React__default["default"].createElement("li", {
+  return /*#__PURE__*/React.createElement("li", {
     className: useBEM({
       block: menuClass,
       element: subMenuClass,
@@ -2013,7 +2013,7 @@ var SubMenu = /*#__PURE__*/withHovering( /*#__PURE__*/React.memo(function SubMen
     role: "presentation",
     ref: containerRef,
     onKeyDown: handleKeyDown
-  }, /*#__PURE__*/React__default["default"].createElement("div", _extends({
+  }, /*#__PURE__*/React.createElement("div", _extends({
     role: "menuitem",
     "aria-haspopup": true,
     "aria-expanded": isOpen,
@@ -2158,13 +2158,13 @@ var MenuItem = /*#__PURE__*/withHovering( /*#__PURE__*/React.memo(function MenuI
   }, [children, modifiers]);
 
   if (isAnchor) {
-    return /*#__PURE__*/React__default["default"].createElement("li", {
+    return /*#__PURE__*/React.createElement("li", {
       role: "presentation"
-    }, /*#__PURE__*/React__default["default"].createElement("a", _extends({}, menuItemProps, {
+    }, /*#__PURE__*/React.createElement("a", _extends({}, menuItemProps, {
       href: href
     }), renderChildren));
   } else {
-    return /*#__PURE__*/React__default["default"].createElement("li", menuItemProps, renderChildren);
+    return /*#__PURE__*/React.createElement("li", menuItemProps, renderChildren);
   }
 }), 'MenuItem');
 process.env.NODE_ENV !== "production" ? MenuItem.propTypes = /*#__PURE__*/_extends({}, /*#__PURE__*/stylePropTypes(), {
@@ -2222,7 +2222,7 @@ var FocusableItem = /*#__PURE__*/withHovering( /*#__PURE__*/React.memo(function 
     onFocus: setHover,
     onBlur: onBlur
   }, restProps);
-  return /*#__PURE__*/React__default["default"].createElement("li", _extends({
+  return /*#__PURE__*/React.createElement("li", _extends({
     "aria-disabled": isDisabled || undefined,
     role: "menuitem",
     tabIndex: "-1"
@@ -2248,7 +2248,7 @@ var MenuDivider = /*#__PURE__*/React.memo( /*#__PURE__*/React.forwardRef(functio
       styles = _ref.styles,
       restProps = _objectWithoutPropertiesLoose(_ref, _excluded$3);
 
-  return /*#__PURE__*/React__default["default"].createElement("li", _extends({
+  return /*#__PURE__*/React.createElement("li", _extends({
     role: "separator"
   }, restProps, {
     ref: externalRef,
@@ -2268,7 +2268,7 @@ var MenuHeader = /*#__PURE__*/React.memo( /*#__PURE__*/React.forwardRef(function
       styles = _ref.styles,
       restProps = _objectWithoutPropertiesLoose(_ref, _excluded$2);
 
-  return /*#__PURE__*/React__default["default"].createElement("li", _extends({
+  return /*#__PURE__*/React.createElement("li", _extends({
     role: "presentation"
   }, restProps, {
     ref: externalRef,
@@ -2315,7 +2315,7 @@ var MenuGroup = /*#__PURE__*/defineName( /*#__PURE__*/React.forwardRef(function 
   useIsomorphicLayoutEffect(function () {
     if (overflowStyles) ref.current.scrollTop = 0;
   }, [overflowStyles]);
-  return /*#__PURE__*/React__default["default"].createElement("div", _extends({}, restProps, {
+  return /*#__PURE__*/React.createElement("div", _extends({}, restProps, {
     ref: useCombinedRef(externalRef, ref),
     className: useBEM({
       block: menuClass,
@@ -2346,11 +2346,11 @@ var MenuRadioGroup = /*#__PURE__*/defineName( /*#__PURE__*/React.forwardRef(func
       onRadioChange: onRadioChange
     };
   }, [name, value, onRadioChange]);
-  return /*#__PURE__*/React__default["default"].createElement(RadioGroupContext.Provider, {
+  return /*#__PURE__*/React.createElement(RadioGroupContext.Provider, {
     value: contextValue
-  }, /*#__PURE__*/React__default["default"].createElement("li", {
+  }, /*#__PURE__*/React.createElement("li", {
     role: "presentation"
-  }, /*#__PURE__*/React__default["default"].createElement("ul", _extends({
+  }, /*#__PURE__*/React.createElement("ul", _extends({
     role: "group",
     "aria-label": ariaLabel || name || 'Radio group'
   }, restProps, {

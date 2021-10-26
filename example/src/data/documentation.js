@@ -735,11 +735,7 @@ const menuItem = {
           type: 'function',
           desc: (
             <>
-              <p>
-                Event fired when the menu item is clicked. The event will then bubble up to{' '}
-                <code>onItemClick</code> of the root menu component. To stop bubbling, return{' '}
-                <code>false</code> from the event handler.
-              </p>
+              <p>Event fired when the menu item is clicked.</p>
               {onClickEventObject}
             </>
           )
