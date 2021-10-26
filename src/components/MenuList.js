@@ -50,7 +50,7 @@ export const MenuList = ({
   overflow,
   repositionFlag,
   captureFocus = true,
-  state: menuState,
+  state,
   endTransition,
   isDisabled,
   menuItemFocus,
@@ -60,7 +60,6 @@ export const MenuList = ({
   onClose,
   ...restProps
 }) => {
-  const isOpen = isMenuOpen(menuState);
   const [menuPosition, setMenuPosition] = useState({ x: 0, y: 0 });
   const [arrowPosition, setArrowPosition] = useState({});
   const [overflowData, setOverflowData] = useState();
@@ -76,64 +75,27 @@ export const MenuList = ({
     reposition,
     viewScroll
   } = useContext(SettingsContext);
+  const reposFlag = useContext(MenuListContext).reposSubmenu || repositionFlag;
   const menuRef = useRef(null);
   const arrowRef = useRef(null);
   const menuItemsCount = useRef(0);
-  const prevOpen = useRef(isOpen);
+  const prevOpen = useRef(false);
   const latestMenuSize = useRef({ width: 0, height: 0 });
   const latestHandlePosition = useRef(() => {});
   const descendOverflowRef = useRef(false);
-  const reposFlag = useContext(MenuListContext).reposSubmenu || repositionFlag;
-  const [reposSubmenu, forceReposSubmenu] = useReducer((c) => c + 1, 1);
+  const isOpen = isMenuOpen(state);
+  const openTransition = getTransition(transition, 'open');
+  const closeTransition = getTransition(transition, 'close');
+
+  const reducer = ({ hoverIndex, openSubmenuCount }, action) => ({
+    hoverIndex: hoverIndexReducer(hoverIndex, action, menuItemsCount),
+    openSubmenuCount: submenuCountReducer(openSubmenuCount, action)
+  });
   const [{ hoverIndex, openSubmenuCount }, dispatch] = useReducer(reducer, {
     hoverIndex: initialHoverIndex,
     openSubmenuCount: 0
   });
-  const openTransition = getTransition(transition, 'open');
-  const closeTransition = getTransition(transition, 'close');
-
-  function reducer({ hoverIndex, openSubmenuCount }, action) {
-    return {
-      hoverIndex: hoverIndexReducer(hoverIndex, action),
-      openSubmenuCount: submenuCountReducer(openSubmenuCount, action)
-    };
-  }
-
-  function hoverIndexReducer(state, { type, index }) {
-    switch (type) {
-      case HoverIndexActionTypes.RESET:
-        return initialHoverIndex;
-
-      case HoverIndexActionTypes.SET:
-        return index;
-
-      case HoverIndexActionTypes.UNSET:
-        return state === index ? initialHoverIndex : state;
-
-      case HoverIndexActionTypes.DECREASE: {
-        let i = state;
-        i--;
-        if (i < 0) i = menuItemsCount.current - 1;
-        return i;
-      }
-
-      case HoverIndexActionTypes.INCREASE: {
-        let i = state;
-        i++;
-        if (i >= menuItemsCount.current) i = 0;
-        return i;
-      }
-
-      case HoverIndexActionTypes.FIRST:
-        return menuItemsCount.current > 0 ? 0 : initialHoverIndex;
-
-      case HoverIndexActionTypes.LAST:
-        return menuItemsCount.current > 0 ? menuItemsCount.current - 1 : initialHoverIndex;
-
-      default:
-        return state;
-    }
-  }
+  const [reposSubmenu, forceReposSubmenu] = useReducer((c) => c + 1, 1);
 
   const menuItems = useMemo(() => {
     const { items, index, descendOverflow } = cloneChildren(children);
@@ -184,7 +146,7 @@ export const MenuList = ({
   };
 
   const handleAnimationEnd = () => {
-    if (menuState === 'closing') {
+    if (state === 'closing') {
       setOverflowData(); // reset overflowData after closing
     }
 
@@ -395,28 +357,34 @@ export const MenuList = ({
       return;
     }
 
-    // Use a timeout here because if set focus immediately, page might scroll unexpectedly.
-    const id = setTimeout(
-      () => {
-        if (!menuRef.current) return;
-        const { position, alwaysUpdate } = menuItemFocus || {};
-        // If focus has already been set to a children element,
-        // don't set focus on the menu unless alwaysUpdate is true
-        if (!alwaysUpdate && menuRef.current.contains(document.activeElement)) return;
-        if (captureFocus) menuRef.current.focus();
+    const { position, alwaysUpdate } = menuItemFocus || {};
+    const setItemFocus = () => {
+      if (position === FocusPositions.FIRST) {
+        dispatch({ type: HoverIndexActionTypes.FIRST });
+      } else if (position === FocusPositions.LAST) {
+        dispatch({ type: HoverIndexActionTypes.LAST });
+      } else if (position >= 0 && position < menuItemsCount.current) {
+        dispatch({ type: HoverIndexActionTypes.SET, index: position });
+      }
+    };
 
-        if (position === FocusPositions.FIRST) {
-          dispatch({ type: HoverIndexActionTypes.FIRST });
-        } else if (position === FocusPositions.LAST) {
-          dispatch({ type: HoverIndexActionTypes.LAST });
-        } else if (position >= 0 && position < menuItemsCount.current) {
-          dispatch({ type: HoverIndexActionTypes.SET, index: position });
-        }
-      },
-      openTransition ? 170 : 100
-    );
+    if (alwaysUpdate) {
+      setItemFocus();
+    } else if (captureFocus) {
+      // Use a timeout here because if set focus immediately, page might scroll unexpectedly.
+      const id = setTimeout(
+        () => {
+          // If focus has already been set to a children element, don't set focus on menu or item
+          if (menuRef.current && !menuRef.current.contains(document.activeElement)) {
+            menuRef.current.focus();
+            setItemFocus();
+          }
+        },
+        openTransition ? 170 : 100
+      );
 
-    return () => clearTimeout(id);
+      return () => clearTimeout(id);
+    }
   }, [openTransition, closeTransition, captureFocus, isOpen, menuItemFocus]);
 
   const isSubmenuOpen = openSubmenuCount > 0;
@@ -452,10 +420,10 @@ export const MenuList = ({
   // freeze them to prevent client code from accidentally altering them.
   const modifiers = useMemo(
     () => ({
-      state: menuState,
+      state,
       dir: expandedDirection
     }),
-    [menuState, expandedDirection]
+    [state, expandedDirection]
   );
   const arrowModifiers = useMemo(
     () => Object.freeze({ dir: expandedDirection }),
@@ -514,6 +482,42 @@ export const MenuList = ({
     </ul>
   );
 };
+
+function hoverIndexReducer(state, { type, index }, menuItemsCount) {
+  switch (type) {
+    case HoverIndexActionTypes.RESET:
+      return initialHoverIndex;
+
+    case HoverIndexActionTypes.SET:
+      return index;
+
+    case HoverIndexActionTypes.UNSET:
+      return state === index ? initialHoverIndex : state;
+
+    case HoverIndexActionTypes.DECREASE: {
+      let i = state;
+      i--;
+      if (i < 0) i = menuItemsCount.current - 1;
+      return i;
+    }
+
+    case HoverIndexActionTypes.INCREASE: {
+      let i = state;
+      i++;
+      if (i >= menuItemsCount.current) i = 0;
+      return i;
+    }
+
+    case HoverIndexActionTypes.FIRST:
+      return menuItemsCount.current > 0 ? 0 : initialHoverIndex;
+
+    case HoverIndexActionTypes.LAST:
+      return menuItemsCount.current > 0 ? menuItemsCount.current - 1 : initialHoverIndex;
+
+    default:
+      return state;
+  }
+}
 
 function submenuCountReducer(state, { type }) {
   switch (type) {
