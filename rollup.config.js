@@ -12,7 +12,8 @@ export default [
     output: [
       {
         file: 'dist/index.js',
-        format: 'cjs'
+        format: 'cjs',
+        interop: 'default'
       },
       {
         preserveModules: true,
