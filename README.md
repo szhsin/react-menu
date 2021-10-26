@@ -1,6 +1,6 @@
 # React-Menu
 
-> An accessible React menu library.
+> An accessible and keyboard-friendly React menu library.
 
 **[Live examples and docs](https://szhsin.github.io/react-menu/)**
 
@@ -52,7 +52,7 @@ export default function App() {
 }
 ```
 
-[Edit on CodeSandbox](https://codesandbox.io/s/react-menu-basic-3ez3c)<br>  
+[Edit on CodeSandbox](https://codesandbox.io/s/react-menu-starter-3ez3c)<br>  
 **[Visit more examples and docs](https://szhsin.github.io/react-menu/)**
 
 ## License
