@@ -1,6 +1,6 @@
 {
   "name": "@szhsin/react-menu",
-  "version": "2.2.0",
+  "version": "2.3.0",
   "description": "React component for building accessible menu, dropdown, submenu, context menu and more.",
   "author": "Zheng Song",
   "license": "MIT",
@@ -8,9 +8,17 @@
   "homepage": "https://szhsin.github.io/react-menu/",
   "main": "dist/index.js",
   "module": "dist/es/index.js",
-  "types": "dist/index.d.ts",
+  "types": "types/index.d.ts",
+  "publishConfig": {
+    "access": "public"
+  },
   "sideEffects": [
     "*.css"
+  ],
+  "files": [
+    "dist",
+    "types/*.d.ts",
+    "style-utils"
   ],
   "scripts": {
     "bundle": "rollup -c",
@@ -25,8 +33,7 @@
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
     "pret": "prettier --write .",
-    "dtslint": "dtslint --localTs node_modules/typescript/lib types",
-    "types": "npm run dtslint && cp -f types/index.d.ts dist/",
+    "types": "dtslint --localTs node_modules/typescript/lib types",
     "tsc": "cd types && tsc",
     "eg": "npm start --prefix example"
   },
@@ -64,9 +71,6 @@
     "sass": "^1.43.4",
     "typescript": "^4.4.4"
   },
-  "files": [
-    "dist"
-  ],
   "keywords": [
     "react",
     "menu",
