@@ -1,0 +1,7 @@
+{
+  "private": true,
+  "sideEffects": false,
+  "main": "../dist/style-utils/index.cjs.js",
+  "module": "../dist/style-utils/index.js",
+  "types": "../types/style-utils.d.ts"
+}
