@@ -184,7 +184,8 @@ export const SubMenu = withHovering(
           open: isOpen,
           hover: isHovering,
           active: isActive,
-          disabled: isDisabled
+          disabled: isDisabled,
+          submenu: true
         }),
       [isOpen, isHovering, isActive, isDisabled]
     );

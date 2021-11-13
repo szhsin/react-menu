@@ -199,7 +199,8 @@ var SubMenu = /*#__PURE__*/withHovering( /*#__PURE__*/memo(function SubMenu(_ref
       open: isOpen,
       hover: isHovering,
       active: isActive,
-      disabled: isDisabled
+      disabled: isDisabled,
+      submenu: true
     });
   }, [isOpen, isHovering, isActive, isDisabled]);
 

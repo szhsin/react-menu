@@ -1975,7 +1975,8 @@ var SubMenu = /*#__PURE__*/withHovering( /*#__PURE__*/React.memo(function SubMen
       open: isOpen,
       hover: isHovering,
       active: isActive,
-      disabled: isDisabled
+      disabled: isDisabled,
+      submenu: true
     });
   }, [isOpen, isHovering, isActive, isDisabled]);
 
