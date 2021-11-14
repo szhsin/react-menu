@@ -65,7 +65,7 @@ export const rootMenuDefaultProps = {
   ...menuDefaultProps,
   reposition: 'auto',
   viewScroll: 'initial',
-  transitionTimeout: 200,
+  transitionTimeout: 500,
   submenuOpenDelay: 300,
   submenuCloseDelay: 150
 };

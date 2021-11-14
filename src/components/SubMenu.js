@@ -1,6 +1,6 @@
 import React, { memo, useRef, useContext, useEffect, useMemo, useImperativeHandle } from 'react';
 import { createPortal } from 'react-dom';
-import { node, func, bool, shape, oneOfType } from 'prop-types';
+import { node, func, bool, shape, oneOf, oneOfType } from 'prop-types';
 import {
   useBEM,
   useFlatStyles,
@@ -39,6 +39,7 @@ export const SubMenu = withHovering(
     disabled,
     label,
     index,
+    openTrigger,
     onMenuChange,
     isHovering,
     instanceRef,
@@ -57,7 +58,12 @@ export const SubMenu = withHovering(
       useContext(MenuListItemContext);
     const isPortal = parentOverflow !== 'visible';
 
-    const { openMenu, toggleMenu, state, ...otherStateProps } = useMenuStateAndFocus({
+    const {
+      openMenu: _openMenu,
+      toggleMenu,
+      state,
+      ...otherStateProps
+    } = useMenuStateAndFocus({
       initialMounted,
       unmountOnClose,
       transition,
@@ -74,11 +80,17 @@ export const SubMenu = withHovering(
     const itemRef = useRef(null);
     const timeoutId = useRef();
 
-    const setHover = () => !isHovering && dispatch({ type: HoverIndexActionTypes.SET, index });
+    const openMenu = (...args) => {
+      clearTimeout(timeoutId.current);
+      !isDisabled && _openMenu(...args);
+    };
+
+    const setHover = () =>
+      !isDisabled && !isHovering && dispatch({ type: HoverIndexActionTypes.SET, index });
 
     const delayOpen = (delay) => {
-      dispatch({ type: HoverIndexActionTypes.SET, index });
-      timeoutId.current = setTimeout(openMenu, Math.max(delay, 0));
+      setHover();
+      if (!openTrigger) timeoutId.current = setTimeout(openMenu, Math.max(delay, 0));
     };
 
     const handleMouseEnter = () => {
@@ -96,15 +108,7 @@ export const SubMenu = withHovering(
 
     const handleMouseLeave = () => {
       clearTimeout(timeoutId.current);
-      if (!isOpen) {
-        dispatch({ type: HoverIndexActionTypes.UNSET, index });
-      }
-    };
-
-    const handleClick = () => {
-      if (isDisabled) return;
-      clearTimeout(timeoutId.current);
-      openMenu();
+      if (!isOpen) dispatch({ type: HoverIndexActionTypes.UNSET, index });
     };
 
     const handleKeyDown = (e) => {
@@ -141,7 +145,7 @@ export const SubMenu = withHovering(
         case Keys.ENTER:
         case Keys.SPACE:
         case Keys.RIGHT:
-          openMenu(FocusPositions.FIRST);
+          openTrigger !== 'none' && openMenu(FocusPositions.FIRST);
           break;
       }
     };
@@ -203,7 +207,7 @@ export const SubMenu = withHovering(
         onMouseEnter: handleMouseEnter,
         onMouseLeave: handleMouseLeave,
         onMouseDown: setHover,
-        onClick: handleClick,
+        onClick: () => openTrigger !== 'none' && openMenu(),
         onKeyUp: handleKeyUp
       },
       restItemProps
@@ -263,6 +267,7 @@ SubMenu.propTypes = {
   ...menuPropTypes,
   ...uncontrolledMenuPropTypes,
   disabled: bool,
+  openTrigger: oneOf(['none', 'clickOnly']),
   label: oneOfType([node, func]),
   itemProps: shape({
     ...stylePropTypes()

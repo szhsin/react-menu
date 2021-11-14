@@ -213,6 +213,7 @@ export type SubMenuItemModifiers = Readonly<{
 export interface SubMenuProps extends BaseMenuProps, Hoverable, UncontrolledMenuProps {
   itemProps?: BaseProps<SubMenuItemModifiers>;
   label?: RenderProp<SubMenuItemModifiers>;
+  openTrigger?: 'none' | 'clickOnly';
 }
 
 export const SubMenu: React.NamedExoticComponent<SubMenuProps>;

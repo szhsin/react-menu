@@ -53,7 +53,7 @@ var menuDefaultProps = {
 var rootMenuDefaultProps = /*#__PURE__*/_extends({}, menuDefaultProps, {
   reposition: 'auto',
   viewScroll: 'initial',
-  transitionTimeout: 200,
+  transitionTimeout: 500,
   submenuOpenDelay: 300,
   submenuCloseDelay: 150
 });
