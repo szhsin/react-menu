@@ -206,6 +206,49 @@ test('Delay closing submenu when hovering items in parent menu list', async () =
   utils.expectMenuToBeOpen(false, submenuOptions1);
 });
 
+test('openTrigger is "clickOnly"', async () => {
+  const { container } = renderMenu(null, null, { openTrigger: 'clickOnly' });
+  utils.clickMenuButton();
+  const submenuOptions = { name: 'Submenu', container };
+  const submenuItem = utils.queryMenuItem('Submenu');
+
+  fireEvent.mouseEnter(submenuItem);
+  utils.expectMenuItemToBeHover(submenuItem, true);
+  await utils.delayFor(120);
+  utils.expectMenuToBeInTheDocument(false, submenuOptions);
+
+  fireEvent.mouseDown(submenuItem);
+  fireEvent.click(submenuItem);
+  utils.expectMenuToBeOpen(true, submenuOptions);
+
+  fireEvent.mouseEnter(utils.queryMenuItem('One'));
+  await waitFor(() => utils.expectMenuToBeOpen(false, submenuOptions));
+  fireEvent.mouseEnter(submenuItem);
+  fireEvent.keyDown(submenuItem, { key: ' ' });
+  fireEvent.keyUp(submenuItem, { key: ' ' });
+  utils.expectMenuToBeOpen(true, submenuOptions);
+});
+
+test('openTrigger is "none"', async () => {
+  const { container } = renderMenu(null, null, { openTrigger: 'none' });
+  utils.clickMenuButton();
+  const submenuOptions = { name: 'Submenu', container };
+  const submenuItem = utils.queryMenuItem('Submenu');
+
+  fireEvent.mouseEnter(submenuItem);
+  utils.expectMenuItemToBeHover(submenuItem, true);
+  await utils.delayFor(120);
+  utils.expectMenuToBeInTheDocument(false, submenuOptions);
+
+  fireEvent.mouseDown(submenuItem);
+  fireEvent.click(submenuItem);
+  utils.expectMenuToBeInTheDocument(false, submenuOptions);
+
+  fireEvent.keyDown(submenuItem, { key: ' ' });
+  fireEvent.keyUp(submenuItem, { key: ' ' });
+  utils.expectMenuToBeInTheDocument(false, submenuOptions);
+});
+
 test('Submenu is disabled', () => {
   const { container } = renderMenu(null, null, { disabled: true });
   utils.clickMenuButton();
@@ -213,7 +256,10 @@ test('Submenu is disabled', () => {
 
   expect(submenuItem).toHaveClass('szh-menu__item--disabled');
   utils.expectToBeDisabled(submenuItem, true);
+  fireEvent.mouseEnter(submenuItem);
+  fireEvent.mouseDown(submenuItem);
   fireEvent.click(submenuItem);
+  utils.expectMenuItemToBeHover(submenuItem, false);
   utils.expectMenuToBeInTheDocument(false, { name: 'Submenu', container });
 
   // Disabled item is skipped in keyboard navigation

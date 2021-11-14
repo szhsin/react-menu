@@ -259,7 +259,7 @@ var menuDefaultProps = {
 var rootMenuDefaultProps = /*#__PURE__*/_extends({}, menuDefaultProps, {
   reposition: 'auto',
   viewScroll: 'initial',
-  transitionTimeout: 200,
+  transitionTimeout: 500,
   submenuOpenDelay: 300,
   submenuCloseDelay: 150
 });
@@ -1790,7 +1790,7 @@ process.env.NODE_ENV !== "production" ? Menu.propTypes = /*#__PURE__*/_extends({
 }) : void 0;
 Menu.defaultProps = rootMenuDefaultProps;
 
-var _excluded$6 = ["aria-label", "className", "disabled", "label", "index", "onMenuChange", "isHovering", "instanceRef", "captureFocus", "repositionFlag", "itemProps"],
+var _excluded$6 = ["aria-label", "className", "disabled", "label", "index", "openTrigger", "onMenuChange", "isHovering", "instanceRef", "captureFocus", "repositionFlag", "itemProps"],
     _excluded2$1 = ["openMenu", "toggleMenu", "state"],
     _excluded3 = ["isActive", "onKeyUp"],
     _excluded4 = ["ref", "className", "styles"];
@@ -1800,6 +1800,7 @@ var SubMenu = /*#__PURE__*/withHovering( /*#__PURE__*/React.memo(function SubMen
       disabled = _ref.disabled,
       label = _ref.label,
       index = _ref.index,
+      openTrigger = _ref.openTrigger,
       onMenuChange = _ref.onMenuChange,
       isHovering = _ref.isHovering,
       instanceRef = _ref.instanceRef,
@@ -1852,19 +1853,21 @@ var SubMenu = /*#__PURE__*/withHovering( /*#__PURE__*/React.memo(function SubMen
   var itemRef = React.useRef(null);
   var timeoutId = React.useRef();
 
+  var _openMenu2 = function openMenu() {
+    clearTimeout(timeoutId.current);
+    !isDisabled && _openMenu.apply(void 0, arguments);
+  };
+
   var setHover = function setHover() {
-    return !isHovering && dispatch({
+    return !isDisabled && !isHovering && dispatch({
       type: HoverIndexActionTypes.SET,
       index: index
     });
   };
 
   var delayOpen = function delayOpen(delay) {
-    dispatch({
-      type: HoverIndexActionTypes.SET,
-      index: index
-    });
-    timeoutId.current = setTimeout(_openMenu, Math.max(delay, 0));
+    setHover();
+    if (!openTrigger) timeoutId.current = setTimeout(_openMenu2, Math.max(delay, 0));
   };
 
   var handleMouseEnter = function handleMouseEnter() {
@@ -1881,20 +1884,10 @@ var SubMenu = /*#__PURE__*/withHovering( /*#__PURE__*/React.memo(function SubMen
 
   var handleMouseLeave = function handleMouseLeave() {
     clearTimeout(timeoutId.current);
-
-    if (!isOpen) {
-      dispatch({
-        type: HoverIndexActionTypes.UNSET,
-        index: index
-      });
-    }
-  };
-
-  var handleClick = function handleClick() {
-    if (isDisabled) return;
-    clearTimeout(timeoutId.current);
-
-    _openMenu();
+    if (!isOpen) dispatch({
+      type: HoverIndexActionTypes.UNSET,
+      index: index
+    });
   };
 
   var handleKeyDown = function handleKeyDown(e) {
@@ -1929,8 +1922,7 @@ var SubMenu = /*#__PURE__*/withHovering( /*#__PURE__*/React.memo(function SubMen
       case Keys.ENTER:
       case Keys.SPACE:
       case Keys.RIGHT:
-        _openMenu(FocusPositions.FIRST);
-
+        openTrigger !== 'none' && _openMenu2(FocusPositions.FIRST);
         break;
     }
   };
@@ -1959,7 +1951,7 @@ var SubMenu = /*#__PURE__*/withHovering( /*#__PURE__*/React.memo(function SubMen
         if (isParentOpen) {
           setHover();
 
-          _openMenu.apply(void 0, arguments);
+          _openMenu2.apply(void 0, arguments);
         }
       },
       closeMenu: function closeMenu() {
@@ -1989,7 +1981,9 @@ var SubMenu = /*#__PURE__*/withHovering( /*#__PURE__*/React.memo(function SubMen
     onMouseEnter: handleMouseEnter,
     onMouseLeave: handleMouseLeave,
     onMouseDown: setHover,
-    onClick: handleClick,
+    onClick: function onClick() {
+      return openTrigger !== 'none' && _openMenu2();
+    },
     onKeyUp: handleKeyUp
   }), restItemProps);
 
@@ -2035,6 +2029,7 @@ var SubMenu = /*#__PURE__*/withHovering( /*#__PURE__*/React.memo(function SubMen
 }), 'SubMenu');
 process.env.NODE_ENV !== "production" ? SubMenu.propTypes = /*#__PURE__*/_extends({}, menuPropTypes, uncontrolledMenuPropTypes, {
   disabled: propTypes.bool,
+  openTrigger: /*#__PURE__*/propTypes.oneOf(['none', 'clickOnly']),
   label: /*#__PURE__*/propTypes.oneOfType([propTypes.node, propTypes.func]),
   itemProps: /*#__PURE__*/propTypes.shape( /*#__PURE__*/_extends({}, /*#__PURE__*/stylePropTypes()))
 }) : void 0;

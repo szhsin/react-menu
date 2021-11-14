@@ -1,7 +1,7 @@
 import { objectWithoutPropertiesLoose as _objectWithoutPropertiesLoose, extends as _extends } from '../_virtual/_rollupPluginBabelHelpers.js';
 import React, { memo, useContext, useRef, useEffect, useImperativeHandle, useMemo } from 'react';
 import { createPortal } from 'react-dom';
-import { bool, oneOfType, node, func, shape } from 'prop-types';
+import { bool, oneOf, oneOfType, node, func, shape } from 'prop-types';
 import { MenuList } from './MenuList.js';
 import { withHovering } from '../utils/withHovering.js';
 import { validateIndex, attachHandlerProps, safeCall, isMenuOpen } from '../utils/utils.js';
@@ -14,7 +14,7 @@ import { useCombinedRef } from '../hooks/useCombinedRef.js';
 import { useFlatStyles } from '../hooks/useFlatStyles.js';
 import { menuPropTypes, uncontrolledMenuPropTypes, stylePropTypes, menuDefaultProps } from '../utils/propTypes.js';
 
-var _excluded = ["aria-label", "className", "disabled", "label", "index", "onMenuChange", "isHovering", "instanceRef", "captureFocus", "repositionFlag", "itemProps"],
+var _excluded = ["aria-label", "className", "disabled", "label", "index", "openTrigger", "onMenuChange", "isHovering", "instanceRef", "captureFocus", "repositionFlag", "itemProps"],
     _excluded2 = ["openMenu", "toggleMenu", "state"],
     _excluded3 = ["isActive", "onKeyUp"],
     _excluded4 = ["ref", "className", "styles"];
@@ -24,6 +24,7 @@ var SubMenu = /*#__PURE__*/withHovering( /*#__PURE__*/memo(function SubMenu(_ref
       disabled = _ref.disabled,
       label = _ref.label,
       index = _ref.index,
+      openTrigger = _ref.openTrigger,
       onMenuChange = _ref.onMenuChange,
       isHovering = _ref.isHovering,
       instanceRef = _ref.instanceRef,
@@ -76,19 +77,21 @@ var SubMenu = /*#__PURE__*/withHovering( /*#__PURE__*/memo(function SubMenu(_ref
   var itemRef = useRef(null);
   var timeoutId = useRef();
 
+  var _openMenu2 = function openMenu() {
+    clearTimeout(timeoutId.current);
+    !isDisabled && _openMenu.apply(void 0, arguments);
+  };
+
   var setHover = function setHover() {
-    return !isHovering && dispatch({
+    return !isDisabled && !isHovering && dispatch({
       type: HoverIndexActionTypes.SET,
       index: index
     });
   };
 
   var delayOpen = function delayOpen(delay) {
-    dispatch({
-      type: HoverIndexActionTypes.SET,
-      index: index
-    });
-    timeoutId.current = setTimeout(_openMenu, Math.max(delay, 0));
+    setHover();
+    if (!openTrigger) timeoutId.current = setTimeout(_openMenu2, Math.max(delay, 0));
   };
 
   var handleMouseEnter = function handleMouseEnter() {
@@ -105,20 +108,10 @@ var SubMenu = /*#__PURE__*/withHovering( /*#__PURE__*/memo(function SubMenu(_ref
 
   var handleMouseLeave = function handleMouseLeave() {
     clearTimeout(timeoutId.current);
-
-    if (!isOpen) {
-      dispatch({
-        type: HoverIndexActionTypes.UNSET,
-        index: index
-      });
-    }
-  };
-
-  var handleClick = function handleClick() {
-    if (isDisabled) return;
-    clearTimeout(timeoutId.current);
-
-    _openMenu();
+    if (!isOpen) dispatch({
+      type: HoverIndexActionTypes.UNSET,
+      index: index
+    });
   };
 
   var handleKeyDown = function handleKeyDown(e) {
@@ -153,8 +146,7 @@ var SubMenu = /*#__PURE__*/withHovering( /*#__PURE__*/memo(function SubMenu(_ref
       case Keys.ENTER:
       case Keys.SPACE:
       case Keys.RIGHT:
-        _openMenu(FocusPositions.FIRST);
-
+        openTrigger !== 'none' && _openMenu2(FocusPositions.FIRST);
         break;
     }
   };
@@ -183,7 +175,7 @@ var SubMenu = /*#__PURE__*/withHovering( /*#__PURE__*/memo(function SubMenu(_ref
         if (isParentOpen) {
           setHover();
 
-          _openMenu.apply(void 0, arguments);
+          _openMenu2.apply(void 0, arguments);
         }
       },
       closeMenu: function closeMenu() {
@@ -213,7 +205,9 @@ var SubMenu = /*#__PURE__*/withHovering( /*#__PURE__*/memo(function SubMenu(_ref
     onMouseEnter: handleMouseEnter,
     onMouseLeave: handleMouseLeave,
     onMouseDown: setHover,
-    onClick: handleClick,
+    onClick: function onClick() {
+      return openTrigger !== 'none' && _openMenu2();
+    },
     onKeyUp: handleKeyUp
   }), restItemProps);
 
@@ -259,6 +253,7 @@ var SubMenu = /*#__PURE__*/withHovering( /*#__PURE__*/memo(function SubMenu(_ref
 }), 'SubMenu');
 process.env.NODE_ENV !== "production" ? SubMenu.propTypes = /*#__PURE__*/_extends({}, menuPropTypes, uncontrolledMenuPropTypes, {
   disabled: bool,
+  openTrigger: /*#__PURE__*/oneOf(['none', 'clickOnly']),
   label: /*#__PURE__*/oneOfType([node, func]),
   itemProps: /*#__PURE__*/shape( /*#__PURE__*/_extends({}, /*#__PURE__*/stylePropTypes()))
 }) : void 0;
