@@ -808,6 +808,26 @@ const submenu = {
           )
         },
         {
+          name: 'openTrigger',
+          type: "undefined | 'none' | 'clickOnly'",
+          desc: (
+            <ul>
+              <li>
+                <code>undefined</code> submenu opens when the label item is hovered or clicked. This
+                is the default behaviour.
+              </li>
+              <li>
+                <code>'clickOnly'</code> submenu opens when the label item is clicked.
+              </li>
+              <li>
+                <code>'none'</code> submenu doesn't open with mouse or keyboard events; you can call
+                the <code>openMenu</code> function on <code>instanceRef</code> to open submenu
+                programmatically.
+              </li>
+            </ul>
+          )
+        },
+        {
           name: 'itemProps',
           type: 'object',
           desc: <p>Properties of this object are spread to the submenu item DOM element.</p>
