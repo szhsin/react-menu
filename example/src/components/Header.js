@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { NavLink } from 'react-router-dom';
-import { bem, DomInfoContext, SettingContext, TocContext } from '../utils';
+import { bem, SettingContext, TocContext } from '../utils';
 import { Logo } from './Logo';
 import { HeaderBanner } from './HeaderBanner';
 import { ThemeSwitch } from './ThemeSwitch';
@@ -8,7 +8,6 @@ import { ThemeSwitch } from './ThemeSwitch';
 const blockName = 'navbar';
 
 export const Header = React.memo(function Header() {
-  const isFullSize = useContext(DomInfoContext).vWidth > 500;
   const { theme, isDark, showBanner, setShowBanner } = useContext(SettingContext);
   const { setTocOpen } = useContext(TocContext);
 
@@ -30,10 +29,8 @@ export const Header = React.memo(function Header() {
           <NavBarLink exact to="/">
             Home
           </NavBarLink>
-
           <NavBarLink to="/docs">Docs</NavBarLink>
-
-          <NavBarLink to="/style-guide">{isFullSize ? 'Style Guide' : 'Styling'}</NavBarLink>
+          <NavBarLink to="/style-guide">Styling</NavBarLink>
         </ul>
 
         <ThemeSwitch />

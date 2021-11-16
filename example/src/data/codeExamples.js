@@ -1,13 +1,13 @@
 /* eslint-disable react/no-unescaped-entities */
 import React from 'react';
-import { LibName } from '../components/LibName';
-import { ARIAPracticesLink } from '../components/ARIAPracticesLink';
 import { HashLink as Link } from 'react-router-hash-link';
+import { LibName } from '../components/LibName';
+import { StyleExamples } from '../components/StyleExamples';
+import { ExternalLink } from '../components/ExternalLink';
 
 const menuItemLink = <Link to={'/docs#menu-item'}>MenuItem</Link>;
 const menuButtonLink = <Link to={'/docs#menu-button'}>MenuButton</Link>;
 const menuStateHookLink = <Link to={'/docs#use-menu-state'}>useMenuState</Link>;
-const styleGuideLink = <Link to={'/style-guide'}>style guide</Link>;
 
 export const basicMenu = {
   id: 'basic-menu',
@@ -477,14 +477,10 @@ export const linkAndDisabled = {
       <p>
         <strong>Note:</strong> the <code>href</code> prop is meant to be a redirect which causes
         browser to reload the document at the URL specified. If you want to prevent the reload or
-        work with <strong>React Router</strong>, please{' '}
-        <a
-          href="https://codesandbox.io/s/react-menu-react-router-example-dw4ku"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          see this exmaple
-        </a>
+        work with <strong>React Router</strong>, please see{' '}
+        <ExternalLink href="https://codesandbox.io/s/react-menu-react-router-example-dw4ku">
+          this exmaple
+        </ExternalLink>
         .
       </p>
     </>
@@ -769,13 +765,9 @@ export const customisedButton = {
       <p>
         <code>Menu</code> also works well with third-party React libraries, such as the{' '}
         <b>Material-UI</b>. See{' '}
-        <a
-          href="https://codesandbox.io/s/react-menu-material-ui-example-wvzpc"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
+        <ExternalLink href="https://codesandbox.io/s/react-menu-material-ui-example-wvzpc">
           an example on CodeSandbox
-        </a>
+        </ExternalLink>
         .
       </p>
       <p>
@@ -818,10 +810,9 @@ export const placement = {
   desc: (
     <>
       <p>
-        Thanks to <LibName />
-        's flexible positioning algorithm, you could control the position of menu and how it behaves
-        in response to window scroll event with the <code>align</code>, <code>direction</code>,{' '}
-        <code>position</code>, and <code>viewScroll</code> props.
+        You can control the position of menu and how it behaves in response to window scroll event
+        with the <code>align</code>, <code>direction</code>, <code>position</code>, and{' '}
+        <code>viewScroll</code> props.
       </p>
       <p>
         Optionally, menu can be set to display an arrow pointing to its anchor element or add an
@@ -1088,8 +1079,7 @@ export const menuStateHook = {
     <>
       <p>
         <code>useMenuState</code> Hook works with <code>ControlledMenu</code> and help you manage
-        the state transition when menu opens and closes. It's the recommended way to use{' '}
-        <code>ControlledMenu</code>
+        the state transition/animation when menu opens and closes.
       </p>
       <p>Please see {menuStateHookLink} for more details.</p>
     </>
@@ -1149,40 +1139,42 @@ export const stylesProp = {
   desc: (
     <>
       <p>
-        You can apply your style by giving an object to the <code>styles</code> prop. Regular styles
-        are put in the object directly just like React's <code>style</code> prop, and styles which
-        are only applied to specific component states are written in nested objects under
-        corresponding keys. <LibName /> will flatten the styles object by applying the properties
-        from top to bottom, with later properties overriding earlier ones of the same name.
+        You can apply your style by giving an object to the various <code>*styles</code> props.
+        Regular styles are put in the object directly just like React's <code>style</code> prop, and
+        styles which are only applied to specific component states are written in nested objects
+        under corresponding keys. The <code>styles</code> object will be flattened by applying the
+        properties from top to bottom, with later properties overriding earlier ones of the same
+        name.
       </p>
+      <p>Optionally, you may pass a function to the prop and receive states about the component.</p>
       <p>
-        For more details about the state keys, please refer to the <code>styles</code> prop under
+        For more details about the state keys, please refer to the <code>*styles</code> props under
         each <Link to={'/docs#menu-item'}>component</Link>.
       </p>
     </>
   ),
 
-  source: `<Menu menuButton={<MenuButton>Open menu</MenuButton>}
-    menuStyles={{
-        border: '2px dashed green',
-        boxShadow: 'none'
-    }}>
+  source: `// It's advisable to put styles object outside React component scope whenever possible.
+const menuStyles = {
+  border: '2px dashed green'
+};
 
-    <MenuItem>New File</MenuItem>
-    <MenuItem>Save</MenuItem>
-    <MenuItem styles={{
-        color: 'blue',
-        backgroundColor: '#ee1',
-        hover: {
-            color: '#ee1',
-            backgroundColor: '#bf4080'
-        },
-        active: {
-            backgroundColor: '#333'
-        }
-    }}>
-        I'm special
-    </MenuItem>
+const menuItemStyles = {
+  color: 'blue',
+  backgroundColor: '#ee1',
+  hover: {
+    color: '#ee1',
+    backgroundColor: '#bf4080'
+  },
+  active: {
+    backgroundColor: '#333'
+  }
+};
+
+<Menu menuButton={<MenuButton>Open menu</MenuButton>} menuStyles={menuStyles}>
+  <MenuItem>New File</MenuItem>
+  <MenuItem>Save</MenuItem>
+  <MenuItem styles={menuItemStyles}>I'm special</MenuItem>
 </Menu>`,
 
   fullSource: `import React from 'react';
@@ -1193,31 +1185,29 @@ import {
 } from '@szhsin/react-menu';
 import '@szhsin/react-menu/dist/index.css';
 
+const menuStyles = {
+  border: '2px dashed green'
+};
+
+const menuItemStyles = {
+  color: 'blue',
+  backgroundColor: '#ee1',
+  hover: {
+    color: '#ee1',
+    backgroundColor: '#bf4080'
+  },
+  active: {
+    backgroundColor: '#333'
+  }
+};
+
 export default function Example() {
-
     return (
-        <Menu menuButton={<MenuButton>Open menu</MenuButton>}
-            menuStyles={{
-                border: '2px dashed green',
-                boxShadow: 'none'
-            }}>
-
-            <MenuItem>New File</MenuItem>
-            <MenuItem>Save</MenuItem>
-            <MenuItem styles={{
-                color: 'blue',
-                backgroundColor: '#ee1',
-                hover: {
-                    color: '#ee1',
-                    backgroundColor: '#bf4080'
-                },
-                active: {
-                    backgroundColor: '#333'
-                }
-            }}>
-                I'm special
-            </MenuItem>
-        </Menu>
+      <Menu menuButton={<MenuButton>Open menu</MenuButton>} menuStyles={menuStyles}>
+        <MenuItem>New File</MenuItem>
+        <MenuItem>Save</MenuItem>
+        <MenuItem styles={menuItemStyles}>I'm special</MenuItem>
+      </Menu>
     );
 }`
 };
@@ -1230,36 +1220,34 @@ export const classNameProp = {
   desc: (
     <>
       <p>
-        You can give components your CSS classes using the <code>className</code> prop. Optionally,
-        you may pass a function to the prop and return different CSS class names under different
-        component states.
+        You can give components CSS classes using the various <code>*className</code> props.
+        Optionally, you may pass a function to the props and return different CSS class names under
+        different component states.
       </p>
       <p>
-        For more details about available states, please refer to the <code>className</code> prop
+        For more details about available states, please refer to the <code>*className</code> props
         under each <Link to={'/docs#menu-item'}>component</Link>.
       </p>
     </>
   ),
 
-  source: `<Menu menuButton={<MenuButton>Open menu</MenuButton>}
+  source: `// If you use the functional form of className prop, 
+// it's advisable to put it outside React component scope whenever possible.
+const menuItemClassName = ({ hover, active }) =>
+    active ? 'my-menuitem-active' : hover ? 'my-menuitem-hover' : 'my-menuitem';
+
+<Menu menuButton={<MenuButton>Open menu</MenuButton>}
     menuClassName="my-menu">
     <MenuItem>New File</MenuItem>
     <MenuItem>Save</MenuItem>
-    <MenuItem className={
-        ({ hover, active }) =>
-            active ? 'my-menuitem-active'
-                : hover ? 'my-menuitem-hover'
-                    : 'my-menuitem'
-    }>
+    <MenuItem className={menuItemClassName}>
         I'm special
     </MenuItem>
 </Menu>
 
 // CSS classes
 .my-menu {
-    border: 2px solid #dc3545;
-    border-radius: 0;
-    box-shadow: none;
+    border: 2px solid green;
 }
 
 .my-menuitem {
@@ -1284,6 +1272,9 @@ import {
 } from '@szhsin/react-menu';
 import '@szhsin/react-menu/dist/index.css';
 
+const menuItemClassName = ({ hover, active }) =>
+    active ? 'my-menuitem-active' : hover ? 'my-menuitem-hover' : 'my-menuitem';
+
 export default function Example() {
 
     return (
@@ -1291,12 +1282,7 @@ export default function Example() {
             menuClassName="my-menu">
             <MenuItem>New File</MenuItem>
             <MenuItem>Save</MenuItem>
-            <MenuItem className={
-                ({ hover, active }) =>
-                    active ? 'my-menuitem-active'
-                        : hover ? 'my-menuitem-hover'
-                            : 'my-menuitem'
-            }>
+            <MenuItem className={menuItemClassName}>
                 I'm special
             </MenuItem>
         </Menu>
@@ -1305,9 +1291,7 @@ export default function Example() {
 
 // CSS classes
 .my-menu {
-    border: 2px solid #dc3545;
-    border-radius: 0;
-    box-shadow: none;
+    border: 2px solid green;
 }
 
 .my-menuitem {
@@ -1371,20 +1355,27 @@ export const controlledMenu = {
 
 export const customisedStyle = {
   id: 'customised-style',
-  title: 'Customised style',
+  title: 'Customising style',
   desc: (
     <>
       <p>
-        <LibName /> provides multiple ways for customising style. You can use css/sass stylesheets
-        or styled-components to override the default ones. Please see the {styleGuideLink} for more
-        details.
+        <LibName /> is unopinionated when it comes to customising style. It doesn't depend on any
+        particular CSS-in-JS runtime and works with all flavours of front-end stack. Please checkout
+        the respective CodeSandbox example below:
+      </p>
+      <StyleExamples />
+      <p>
+        You will usually import the <code>@szhsin/react-menu/dist/core.css</code> and target
+        different CSS selectors. There is even a <code>style-utils</code> which helps you easily
+        write the selectors. You can find a complete list of CSS selectors in the{' '}
+        <Link to={'/style-guide#selectors'}>styling guide</Link>.
       </p>
       <p>
-        In addition, you can use <code>styles</code> or <code>className</code> props.
+        In addition, you can use <code>className</code> or <code>styles</code> props.
       </p>
     </>
   ),
-  list: [stylesProp, classNameProp]
+  list: [classNameProp, stylesProp]
 };
 
 export const usageExamples = {
@@ -1412,7 +1403,11 @@ export const features = {
       <li>Customisable styling.</li>
       <li>Comprehensive keyboard interactions.</li>
       <li>
-        Adheres to <ARIAPracticesLink />.
+        Adheres to{' '}
+        <ExternalLink href="https://www.w3.org/TR/wai-aria-practices/#menu">
+          WAI-ARIA Practices
+        </ExternalLink>
+        .
       </li>
     </ul>
   )

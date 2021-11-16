@@ -1,7 +1,9 @@
 /* eslint-disable react/no-unescaped-entities */
 import React from 'react';
-import { LibName } from '../components/LibName';
 import { HashLink as Link } from 'react-router-hash-link';
+import { LibName } from '../components/LibName';
+import { ExternalLink } from '../components/ExternalLink';
+import { StyleExamples } from '../components/StyleExamples';
 
 const bem = (block) => (element) => (modifier) => {
   let className = block;
@@ -22,7 +24,7 @@ const selectorsTable = {
   head: [
     {
       key: 'name',
-      value: 'CSS selectors'
+      value: 'Selector name'
     },
     {
       key: 'desc',
@@ -35,21 +37,9 @@ const stylesheet = {
   id: 'stylesheets',
   title: 'Style Sheets',
   contents: [
-    <>
-      <p>
-        <LibName /> uses regular CSS to style components. It follows the{' '}
-        <a href="http://getbem.com/naming/" target="_blank" rel="noopener noreferrer">
-          BEM methodology
-        </a>{' '}
-        to name CSS selectors. You are able to override the default styles by placing your style
-        sheets after its own. All default styles use CSS selectors with the lowest possible
-        specificity, and you could always precede your selectors with{' '}
-        <code>.szh-menu-container</code> in case a specific style cannot be overridden.
-      </p>
-      <p>
-        <LibName /> comes with the following CSS files:
-      </p>
-    </>,
+    <p>
+      <LibName /> comes with the following CSS files in the <code>dist</code> folder:
+    </p>,
     {
       contentType: 'table',
       head: [
@@ -64,6 +54,22 @@ const stylesheet = {
       ],
       rows: [
         {
+          name: 'core.css',
+          desc: (
+            <>
+              <p>
+                Includes only necessary styles that make menu functional (positioning, arrow
+                display). This is usually a starting point for customising styles.
+              </p>
+              <p>
+                If you still think that's too much and contains things you don't need (e.g. the
+                arrows), feel free to copy the stuff you just need into your code, and don't import
+                any css file from <LibName />.
+              </p>
+            </>
+          )
+        },
+        {
           name: 'index.css',
           desc: 'Default styles.'
         },
@@ -76,25 +82,10 @@ const stylesheet = {
               </p>
               <p>
                 Please see a{' '}
-                <a
-                  href="https://codesandbox.io/s/react-menu-dark-theme-nmn2d"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Codesandbox example
-                </a>{' '}
+                <ExternalLink href="https://codesandbox.io/s/react-menu-dark-theme-nmn2d">
+                  CodeSandbox example
+                </ExternalLink>{' '}
                 for how to enable dark theme for menu.
-              </p>
-            </>
-          )
-        },
-        {
-          name: 'core.css',
-          desc: (
-            <>
-              <p>
-                Includes only essential styles that make menu functional (positioning, arrow
-                display). This is a good starting point for adding your own styles.
               </p>
             </>
           )
@@ -111,9 +102,22 @@ const stylesheet = {
           )
         }
       ]
-    }
-  ],
+    },
+    <p>The following CodeSandbox examples help you get started with customising styles:</p>,
+    <StyleExamples />
+  ]
+};
 
+const selectors = {
+  id: 'selectors',
+  title: 'CSS selectors',
+  contents: [
+    <p>
+      <LibName /> follows the{' '}
+      <ExternalLink href="http://getbem.com/naming/">BEM methodology</ExternalLink> to name CSS
+      selectors. All default styles use CSS selectors with the lowest possible specificity.
+    </p>
+  ],
   list: [
     {
       id: 'menu',
@@ -264,104 +268,45 @@ const stylesheet = {
           ]
         }
       ]
-    },
-
-    {
-      id: 'z-index',
-      title: 'z-index',
-      contents: [
-        <>
-          <p>
-            <LibName /> has a default <code>z-index</code> of 100 for positioned menu. If this value
-            is not appropriate for your app, you could adjust it by overriding the{' '}
-            <code>{menuClass()()}</code> selector.
-          </p>
-          <p>
-            E.g., set <code>z-index</code> to 1000:
-          </p>
-          <pre>
-            <code className="hljs">
-              {`${menuClass()()} {
-    z-index: 1000;
-}`}
-            </code>
-          </pre>
-        </>
-      ]
     }
   ]
 };
 
-const classNameProp = {
-  id: 'class-name',
-  title: 'className prop',
+const styleUtils = {
+  id: 'style-utils',
+  title: 'style-utils',
   contents: [
-    <>
-      <p>
-        This prop can be used to style a specific menu in the page differently. Also, projects using{' '}
-        <b>CSS Module</b> can use this prop to add locally scoped class names.
-      </p>
-      <p>
-        Every component accepts <code>className</code> props which allow you to supply a custom CSS
-        class.
-      </p>
-      <p>
-        Optionally, you may pass a function to the prop and receive additional states about the
-        component.
-      </p>
-      <p>
-        For more details, please refer to the <code>className</code> prop under each{' '}
-        <Link to={'/docs#menu'}>component</Link>, or see an{' '}
-        <Link to={'/#classname-prop'}>example</Link> for its usage.
-      </p>
-    </>
+    <p>
+      <code>style-utils</code> helps you write CSS selectors more easily with CSS-in-JS. Using it is
+      optional but highly recommended. There are{' '}
+      <Link to={'/#customised-style'}>some examples</Link> demonstrating its usage.
+    </p>
   ]
 };
 
-const stylesSample = `{
-    color: 'green',
-    hover: {
-        color: 'red'
-    },
-    type: {
-        radio: {
-            color: 'blue'
-        },
-        checkbox: {
-            color: 'black'
-        }
-    }
-}`;
-
-const stylesProp = {
-  id: 'styles',
-  title: 'styles prop',
+const zIndex = {
+  id: 'z-index',
+  title: 'z-index',
   contents: [
     <>
-      <p>This is another prop that can be used to style a specific menu in the page differently.</p>
       <p>
-        Every component accepts <code>styles</code> props as an object which allow you to add inline
-        styles. Regular styles are put in the object directly just like React's <code>style</code>{' '}
-        prop, and styles which are only applied to specific component states are written in nested
-        objects under corresponding keys.
+        <LibName /> has a default <code>z-index</code> of 100 for positioned menu. If this value is
+        not appropriate for your app, you could adjust it by overriding the{' '}
+        <code>{menuClass()()}</code> selector.
       </p>
-      <p>For example:</p>
+      <p>
+        E.g., set <code>z-index</code> to 1000:
+      </p>
       <pre>
-        <code className="hljs">{stylesSample}</code>
+        <code className="hljs">
+          {`${menuClass()()} {
+  z-index: 1000;
+}`}
+        </code>
       </pre>
-      <p>
-        <LibName /> will flatten the styles object by applying the properties from top to bottom,
-        with later properties overriding earlier ones of the same name.
-      </p>
-      <p>Optionally, you may pass a function to the prop and receive states about the component.</p>
-      <p>
-        For more details, please refer to the <code>styles</code> prop under each{' '}
-        <Link to={'/docs#menu'}>component</Link>, or see an{' '}
-        <Link to={'/#styles-prop'}>example</Link> for its usage.
-      </p>
     </>
   ]
 };
 
-const styleGuide = [stylesheet, classNameProp, stylesProp];
+const styleGuide = [stylesheet, selectors, styleUtils, zIndex];
 export default styleGuide;
