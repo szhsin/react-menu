@@ -1,23 +1,21 @@
 /* eslint-disable react/no-unescaped-entities */
 import React from 'react';
 import { HashLink as Link } from 'react-router-hash-link';
+import {
+  menuContainerSelector,
+  menuButtonSelector,
+  menuSelector,
+  menuArrowSelector,
+  menuItemSelector,
+  menuDividerSelector,
+  menuHeaderSelector,
+  menuGroupSelector,
+  radioGroupSelector,
+  submenuSelector
+} from '@szhsin/react-menu/style-utils';
 import { LibName } from '../components/LibName';
 import { ExternalLink } from '../components/ExternalLink';
 import { StyleExamples } from '../components/StyleExamples';
-
-const bem = (block) => (element) => (modifier) => {
-  let className = block;
-  if (element) className += `__${element}`;
-  if (modifier) className += `--${modifier}`;
-  return className;
-};
-
-const menuClass = bem('.szh-menu');
-const menuArrowClass = menuClass('arrow');
-const menuItemClass = menuClass('item');
-const menuButtonClass = bem('.szh-menu-button');
-const directions = ['left', 'right', 'top', 'bottom'];
-const menuStates = ['opening', 'open', 'closing', 'closed'];
 
 const selectorsTable = {
   contentType: 'table',
@@ -127,19 +125,20 @@ const selectors = {
           ...selectorsTable,
           rows: [
             {
-              name: '.szh-menu-container',
+              name: menuContainerSelector.name,
               desc: 'Root element that contains the menu.'
             },
             {
-              name: menuClass()(),
+              name: menuSelector.name,
               desc: 'Menu element.'
             },
             {
               name: (
                 <ul>
-                  {menuStates.map((state, i) => (
-                    <li key={i}>{menuClass()(`state-${state}`)}</li>
-                  ))}
+                  <li>{menuSelector.stateOpening}</li>
+                  <li>{menuSelector.stateOpen}</li>
+                  <li>{menuSelector.stateClosing}</li>
+                  <li>{menuSelector.stateClosed}</li>
                 </ul>
               ),
               desc: 'Menu state.'
@@ -147,23 +146,25 @@ const selectors = {
             {
               name: (
                 <ul>
-                  {directions.map((dir, i) => (
-                    <li key={i}>{menuClass()(`dir-${dir}`)}</li>
-                  ))}
+                  <li>{menuSelector.dirLeft}</li>
+                  <li>{menuSelector.dirRight}</li>
+                  <li>{menuSelector.dirTop}</li>
+                  <li>{menuSelector.dirBottom}</li>
                 </ul>
               ),
               desc: 'Direction in which the menu expands.'
             },
             {
-              name: menuArrowClass(),
+              name: menuArrowSelector.name,
               desc: 'Menu arrow element.'
             },
             {
               name: (
                 <ul>
-                  {directions.map((dir, i) => (
-                    <li key={i}>{menuArrowClass(`dir-${dir}`)}</li>
-                  ))}
+                  <li>{menuArrowSelector.dirLeft}</li>
+                  <li>{menuArrowSelector.dirRight}</li>
+                  <li>{menuArrowSelector.dirTop}</li>
+                  <li>{menuArrowSelector.dirBottom}</li>
                 </ul>
               ),
               desc: 'Direction in which the menu expands (arrow points to the opposite direction).'
@@ -181,45 +182,58 @@ const selectors = {
           ...selectorsTable,
           rows: [
             {
-              name: menuItemClass(),
+              name: menuItemSelector.name,
               desc: 'Menu item element.'
             },
             {
-              name: menuItemClass('hover'),
+              name: menuItemSelector.hover,
               desc: 'Menu item is hovered and focused.'
             },
             {
-              name: menuItemClass('active'),
+              name: menuItemSelector.active,
               desc: 'Menu item is active (pressed).'
             },
             {
-              name: menuItemClass('disabled'),
+              name: menuItemSelector.disabled,
               desc: 'Menu item is disabled.'
             },
             {
-              name: menuItemClass('anchor'),
+              name: menuItemSelector.anchor,
               desc: 'Menu item is a URL link.'
             },
             {
-              name: menuItemClass('checked'),
+              name: menuItemSelector.checked,
               desc: 'Menu item is checked (only for a radio or checkbox item).'
             },
             {
               name: (
                 <ul>
-                  <li>{menuItemClass('type-radio')}</li>
-                  <li>{menuItemClass('type-checkbox')}</li>
+                  <li>{menuItemSelector.typeRadio}</li>
+                  <li>{menuItemSelector.typeCheckbox}</li>
                 </ul>
               ),
               desc: 'Menu item is a radio or checkbox item.'
             },
             {
-              name: menuItemClass('focusable'),
+              name: menuItemSelector.focusable,
               desc: (
                 <p>
                   Always present on a <code>FocusableItem</code>.
                 </p>
               )
+            },
+            {
+              name: menuItemSelector.submenu,
+              desc: (
+                <p>
+                  Always present on a submenu item, which is set by the <code>label</code> prop on
+                  SubMenu component.
+                </p>
+              )
+            },
+            {
+              name: menuItemSelector.open,
+              desc: "Present on a submenu item when it's submenu is open."
             }
           ]
         }
@@ -234,35 +248,31 @@ const selectors = {
           ...selectorsTable,
           rows: [
             {
-              name: menuClass('submenu')(),
+              name: submenuSelector.name,
               desc: 'SubMenu container element.'
             },
             {
-              name: menuItemClass('open'),
-              desc: 'SubMenu (item) is open.'
-            },
-            {
-              name: menuClass('divider')(),
+              name: menuDividerSelector.name,
               desc: 'MenuDivider element.'
             },
             {
-              name: menuClass('header')(),
+              name: menuHeaderSelector.name,
               desc: 'MenuHeader element.'
             },
             {
-              name: menuClass('group')(),
+              name: menuGroupSelector.name,
               desc: 'MenuGroup element.'
             },
             {
-              name: menuClass('radio-group')(),
+              name: radioGroupSelector.name,
               desc: 'MenuRadioGroup element.'
             },
             {
-              name: menuButtonClass()(),
+              name: menuButtonSelector.name,
               desc: 'MenuButton element.'
             },
             {
-              name: menuButtonClass()('open'),
+              name: menuButtonSelector.open,
               desc: 'Menu controlled by the button is open.'
             }
           ]
@@ -292,14 +302,14 @@ const zIndex = {
       <p>
         <LibName /> has a default <code>z-index</code> of 100 for positioned menu. If this value is
         not appropriate for your app, you could adjust it by overriding the{' '}
-        <code>{menuClass()()}</code> selector.
+        <code>{menuSelector.name}</code> selector.
       </p>
       <p>
         E.g., set <code>z-index</code> to 1000:
       </p>
       <pre>
         <code className="hljs">
-          {`${menuClass()()} {
+          {`${menuSelector.name} {
   z-index: 1000;
 }`}
         </code>
