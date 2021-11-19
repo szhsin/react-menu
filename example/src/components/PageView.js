@@ -4,7 +4,7 @@ import { CascadingContents } from './CascadingContents';
 
 export const PageView = React.memo(function PageView({ id, data }) {
   return (
-    <React.Fragment>
+    <>
       <TableContents>{data}</TableContents>
 
       <main id={id}>
@@ -14,6 +14,6 @@ export const PageView = React.memo(function PageView({ id, data }) {
       </main>
 
       <div className="place-holder" role="presentation" />
-    </React.Fragment>
+    </>
   );
 });

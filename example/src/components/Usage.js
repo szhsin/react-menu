@@ -61,8 +61,8 @@ export const Usage = React.memo(function Usage() {
         <ContextMenuExample />
 
         <GroupingSection data={codeExamples.customisedStyle} />
-        <StylesPropExample />
         <ClassNamePropExample />
+        <StylesPropExample />
       </main>
 
       <div className="place-holder" role="presentation" />
@@ -697,38 +697,36 @@ function ContextMenuExample() {
   );
 }
 
+const menuStyles = {
+  border: '2px dashed green'
+};
+
+const menuItemStyles = {
+  color: 'blue',
+  backgroundColor: '#ee1',
+  hover: {
+    color: '#ee1',
+    backgroundColor: '#bf4080'
+  },
+  active: {
+    backgroundColor: '#333'
+  }
+};
+
 function StylesPropExample() {
   return (
     <Example data={codeExamples.stylesProp}>
-      <Menu
-        menuButton={<MenuButton>Open menu</MenuButton>}
-        align="center"
-        menuStyles={{
-          border: '2px dashed green',
-          boxShadow: 'none'
-        }}
-      >
+      <Menu menuButton={<MenuButton>Open menu</MenuButton>} align="center" menuStyles={menuStyles}>
         <MenuItem>New File</MenuItem>
         <MenuItem>Save</MenuItem>
-        <MenuItem
-          styles={{
-            color: 'blue',
-            backgroundColor: '#ee1',
-            hover: {
-              color: '#ee1',
-              backgroundColor: '#bf4080'
-            },
-            active: {
-              backgroundColor: '#333'
-            }
-          }}
-        >
-          I&apos;m special
-        </MenuItem>
+        <MenuItem styles={menuItemStyles}>I&apos;m special</MenuItem>
       </Menu>
     </Example>
   );
 }
+
+const menuItemClassName = ({ hover, active }) =>
+  active ? 'my-menuitem-active' : hover ? 'my-menuitem-hover' : 'my-menuitem';
 
 function ClassNamePropExample() {
   return (
@@ -736,13 +734,7 @@ function ClassNamePropExample() {
       <Menu menuButton={<MenuButton>Open menu</MenuButton>} menuClassName="my-menu" align="center">
         <MenuItem>New File</MenuItem>
         <MenuItem>Save</MenuItem>
-        <MenuItem
-          className={({ hover, active }) =>
-            active ? 'my-menuitem-active' : hover ? 'my-menuitem-hover' : 'my-menuitem'
-          }
-        >
-          I&apos;m special
-        </MenuItem>
+        <MenuItem className={menuItemClassName}>I&apos;m special</MenuItem>
       </Menu>
     </Example>
   );

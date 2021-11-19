@@ -1,8 +1,8 @@
 /* eslint-disable react/no-unescaped-entities */
 import React from 'react';
-import { LibName } from '../components/LibName';
 import { HashLink as Link } from 'react-router-hash-link';
-import { ARIAPracticesLink } from '../components/ARIAPracticesLink';
+import { LibName } from '../components/LibName';
+import { ExternalLink } from '../components/ExternalLink';
 
 const ENTER_KEY = "'Enter'";
 const SPACE_KEY = "' '(Space)";
@@ -57,13 +57,9 @@ const keepOpenEventProp = (
     <code>keepOpen: bool</code> set this property on event object to control whether to keep menu
     open after menu item is activated. Leaving it <code>undefined</code> will behave in accordance
     with WAI-ARIA Authoring Practices. See a{' '}
-    <a
-      href="https://codesandbox.io/s/react-menu-keepopen-dzscw"
-      target="_blank"
-      rel="noopener noreferrer"
-    >
-      Codesandbox example
-    </a>{' '}
+    <ExternalLink href="https://codesandbox.io/s/react-menu-keepopen-dzscw">
+      CodeSandbox example
+    </ExternalLink>{' '}
     for its usage.
   </li>
 );
@@ -383,7 +379,7 @@ const rootMenuProps = [
   {
     name: 'transitionTimeout',
     type: 'number',
-    defaultVal: '200',
+    defaultVal: '500',
     desc: (
       <p>
         A fallback timeout to stop transition if <code>onAnimationEnd</code> events are not fired.
@@ -1323,13 +1319,9 @@ const applyHOC = {
       <p>
         A helper function which copies statics if you create HOC on <LibName /> components. It
         accepts an HOC and returns a new HOC with the same signature. See a{' '}
-        <a
-          href="https://codesandbox.io/s/react-menu-hoc-0bipn"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Codesandbox example
-        </a>{' '}
+        <ExternalLink href="https://codesandbox.io/s/react-menu-hoc-0bipn">
+          CodeSandbox example
+        </ExternalLink>{' '}
         for its usage.
       </p>
       <p>
@@ -1353,13 +1345,9 @@ const applyStatics = {
       <p>
         It also can be used to create new components which wrap and return one of react-menu's
         components. See a{' '}
-        <a
-          href="https://codesandbox.io/s/react-menu-wrapping-q0b59"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Codesandbox example
-        </a>
+        <ExternalLink href="https://codesandbox.io/s/react-menu-wrapping-q0b59">
+          CodeSandbox example
+        </ExternalLink>
       </p>
     </>
   ]
@@ -1455,7 +1443,10 @@ const accessibility = {
   contents: [
     <p key={0}>
       <LibName /> supports WAI-ARIA roles, states, and properties which adhere to the{' '}
-      <ARIAPracticesLink />. For more details, please refer to the website.
+      <ExternalLink href="https://www.w3.org/TR/wai-aria-practices/#menu">
+        WAI-ARIA Authoring Practices
+      </ExternalLink>
+      . For more details, please refer to the website.
     </p>
   ],
   list: [keyboard]
