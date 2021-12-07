@@ -258,7 +258,7 @@ export const MenuList = ({
     }
     prevOpen.current = isOpen;
     latestHandlePosition.current = handlePosition;
-  }, [isOpen, handlePosition, reposFlag]);
+  }, [isOpen, handlePosition, /* effect dep */ reposFlag]);
 
   useLayoutEffect(() => {
     if (overflowData && !descendOverflowRef.current) menuRef.current.scrollTop = 0;
