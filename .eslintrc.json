@@ -15,7 +15,7 @@
       "version": "detect"
     }
   },
-  "plugins": ["jest", "react", "react-hooks"],
+  "plugins": ["jest", "react", "react-hooks", "react-hooks-addons"],
   "extends": [
     "plugin:jest/recommended",
     "plugin:jest/style",
@@ -38,6 +38,7 @@
       }
     ],
     "react/prop-types": 0,
-    "react/display-name": 0
+    "react/display-name": 0,
+    "react-hooks-addons/no-unused-deps": "warn"
   }
 }
