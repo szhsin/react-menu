@@ -67,7 +67,7 @@ const App = () => {
     return () => {
       window.removeEventListener('resize', handleResize);
     };
-  }, [showBanner]);
+  }, [/* effect dep */ showBanner]);
 
   const [toast, setToast] = useState(null);
   useEffect(() => {

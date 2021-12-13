@@ -137,7 +137,7 @@ function EventHandlingExample() {
 
   useLayoutEffect(() => {
     ref.current.scrollTop = ref.current.scrollHeight;
-  }, [output]);
+  }, [/* effect dep */ output]);
 
   return (
     <Example data={codeExamples.eventHandling}>

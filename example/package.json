@@ -22,7 +22,13 @@
   "eslintConfig": {
     "extends": [
       "react-app"
-    ]
+    ],
+    "plugins": [
+      "react-hooks-addons"
+    ],
+    "rules": {
+      "react-hooks-addons/no-unused-deps": "warn"
+    }
   },
   "browserslist": {
     "production": [
