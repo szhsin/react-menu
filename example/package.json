@@ -8,7 +8,7 @@
     "highlight.js": "^11.3.1",
     "react": "file:../node_modules/react",
     "react-dom": "file:../node_modules/react-dom",
-    "react-router-dom": "^5.3.0",
+    "react-router-dom": "^6.1.1",
     "react-router-hash-link": "^2.4.3",
     "react-scripts": "4.0.3",
     "web-vitals": "^2.1.2"
