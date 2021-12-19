@@ -1,6 +1,6 @@
 interface Base {
   /**
-   * CSS selector for the element
+   * CSS selector for the element itself
    */
   name: string;
 }
@@ -27,9 +27,21 @@ interface Directions {
 export const menuSelector: Readonly<
   Base &
     Directions & {
+      /**
+       * Menu transitions from closed to open
+       */
       stateOpening: string;
+      /**
+       * Menu is open
+       */
       stateOpen: string;
+      /**
+       * Menu transitions from open to closed
+       */
       stateClosing: string;
+      /**
+       * Menu is closed
+       */
       stateClosed: string;
     }
 >;
