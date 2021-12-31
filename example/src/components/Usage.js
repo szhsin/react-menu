@@ -18,7 +18,13 @@ import { Example } from './Example';
 import { HashHeading } from './HashHeading';
 import data, * as codeExamples from '../data/codeExamples';
 
+/**
+ * @type {React.NamedExoticComponent<import('@szhsin/react-menu').MenuProps>}
+ */
 const Menu = withPresetProps(ReactMenu);
+/**
+ * @type {React.NamedExoticComponent<import('@szhsin/react-menu').ControlledMenuProps>}
+ */
 const ControlledMenu = withPresetProps(ReactControlledMenu);
 
 export const Usage = React.memo(function Usage() {

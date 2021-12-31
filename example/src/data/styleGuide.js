@@ -60,9 +60,8 @@ const stylesheet = {
                 display). This is usually a starting point for customising styles.
               </p>
               <p>
-                If you still think that's too much and contains things you don't need (e.g. the
-                arrows), feel free to copy the stuff you just need into your code, and don't import
-                any css file from <LibName />.
+                You may import this file or copy the CSS into your own stylesheets or CSS-in-JS
+                solution, and optionally remove styles you don't use (e.g. the arrows).
               </p>
             </>
           )
@@ -288,8 +287,8 @@ const styleUtils = {
   contents: [
     <p>
       <code>style-utils</code> helps you write CSS selectors more easily with CSS-in-JS. Using it is
-      optional but highly recommended. There are{' '}
-      <Link to={'/#customised-style'}>some examples</Link> demonstrating its usage.
+      optional but highly recommended. There are <Link to={'/#styling'}>some examples</Link>{' '}
+      demonstrating its usage.
     </p>
   ]
 };

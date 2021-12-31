@@ -43,7 +43,7 @@ export const Footer = React.memo(function Footer() {
       <p>Released under the MIT License.</p>
       <p>Copyright © {new Date().getFullYear()} Zheng Song.</p>
       <p className="build">
-        build: {version}.{build}
+        {version}+{build}
       </p>
     </footer>
   );

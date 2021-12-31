@@ -41,8 +41,8 @@ const propsTable = {
 
 const dirModifier = (
   <li>
-    <code>dir: string</code> direction in which the menu expands. Can be 'left', 'right', 'top', or
-    'bottom'.
+    <code>dir: string</code> computed direction in which the menu expands. Can be 'left', 'right',
+    'top', or 'bottom'.
   </li>
 );
 
@@ -101,7 +101,7 @@ const submenuItemModifiers = (
       <code>active: bool</code> indicates if the submenu item is active (pressed).
     </li>
     <li>
-      <code>disabled: bool</code> indicates if the submenu item is disabled.
+      <code>disabled: bool</code> indicates if the submenu and item are disabled.
     </li>
   </ul>
 );
@@ -115,7 +115,7 @@ const menuItemModifiers = (
       <code>active: bool</code> indicates if the menu item is active (pressed).
     </li>
     <li>
-      <code>checked: bool</code> indicates if the menu item is checked if it's a radio or checkbox
+      <code>checked: bool</code> indicates if the menu item is checked when it's a radio or checkbox
       item.
     </li>
     <li>
@@ -624,7 +624,7 @@ const menu = {
                 </li>
               </ul>
               <p>
-                If a React component is provided, it needs to implement the following requirements:
+                If a React component is provided, it needs to implement the following contracts:
               </p>
               <ul>
                 <li>
@@ -674,12 +674,12 @@ const menuItem = {
           desc: (
             <>
               <p>
-                Any value provided to this prop will be included in the event object of the{' '}
-                <code>onClick</code> event.
+                Any value provided to this prop will be available in the event object of click
+                events.
               </p>
               <p>
-                It's useful for helping identify which menu item is clicked when you listen the
-                event on <code>Menu</code> component.
+                It's useful for helping identify which menu item is clicked when you listen the{' '}
+                <code>onItemClick</code> event on root menu component.
               </p>
             </>
           )
@@ -687,12 +687,20 @@ const menuItem = {
         {
           name: 'href',
           type: 'string',
-          desc: 'The URL that the menu item points to. If provided, an HTML <a> element will be used.'
+          desc: 'If provided, menu item renders an HTML <a> element with this href attribute.'
         },
         {
           name: 'type',
           type: 'string',
-          desc: "Set this prop to 'checkbox' to make it a checkbox menu item. Other values are ignored. Please note radio menu item doesn't use this prop."
+          desc: (
+            <>
+              <p>Set this prop to 'checkbox' to make it a checkbox menu item.</p>
+              <p>
+                Please note menu items under a <code>MenuRadioGroup</code> will have{' '}
+                <code>type</code> set to 'radio' automatically.
+              </p>
+            </>
+          )
         },
         {
           name: 'checked',
@@ -906,7 +914,7 @@ const menuGroup = {
   title: 'MenuGroup',
   contents: [
     <p key={0}>
-      <code>MenuGroup</code> is used to wrap a group of related menu items and make the items
+      <code>MenuGroup</code> is used to wrap a subset of related menu items and make them
       scrollable.
     </p>,
     {
@@ -980,7 +988,7 @@ const menuRadioGroup = {
             <>
               <p>Sets value of the radio group.</p>
               <p>
-                The children menu item which has the same value (strict equality ===) as the radio
+                The child menu item which has the same value (strict equality ===) as the radio
                 group is marked as checked.
               </p>
             </>
@@ -1000,7 +1008,7 @@ const menuRadioGroup = {
           type: 'function',
           desc: (
             <>
-              <p>Event fired when a children menu item is clicked (selected).</p>
+              <p>Event fired when a child menu item is clicked (selected).</p>
               <p>Event object properties:</p>
               <ul>
                 <li>
@@ -1064,7 +1072,8 @@ const focusableItem = {
               <p>
                 Please note this prop only removes the current item from mouse and keyboard
                 interaction sequences. You still need to disable any focusable element which you
-                have supplied in its children. This prop is passed to the children render function.
+                have supplied in its children. This prop is passed to the <code>children</code>{' '}
+                render function.
               </p>
             </>
           )
@@ -1089,7 +1098,7 @@ const focusableItem = {
                   <code>ref: object</code> A ref to be attached to the element which should receive
                   focus when this focusable item is hovered. <br />
                   If you render a React component, it needs to expose a <code>focus</code> method or
-                  supports ref forwarding.
+                  implement ref forwarding.
                 </li>
                 <li>
                   <code>closeMenu: func</code> A function that requests to close the root menu. You
@@ -1442,7 +1451,7 @@ const accessibility = {
   title: 'Accessibility',
   contents: [
     <p key={0}>
-      <LibName /> supports WAI-ARIA roles, states, and properties which adhere to the{' '}
+      <LibName /> implements WAI-ARIA roles, states, and properties which adhere to the{' '}
       <ExternalLink href="https://www.w3.org/TR/wai-aria-practices/#menu">
         WAI-ARIA Authoring Practices
       </ExternalLink>

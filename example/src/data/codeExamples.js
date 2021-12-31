@@ -219,7 +219,7 @@ export const radioGroup = {
   desc: (
     <p>
       You could make menu items behave like radio buttons by wrapping them in a{' '}
-      <code>MenuRadioGroup</code>. The children menu item which has the same value (strict equality
+      <code>MenuRadioGroup</code>. The child menu item which has the same value (strict equality
       ===) as the radio group is marked as checked.
     </p>
   ),
@@ -588,8 +588,9 @@ export const focusableItem = {
         to receive focus, such as input or button.
       </p>
       <p>
-        It receives a render prop as children and passes down a <code>ref</code> and several other
-        states. This example demonstrates how to use an input element to filter menu items.
+        It receives a render prop as <code>children</code> and passes down a <code>ref</code> and
+        several other states. This example demonstrates how to use an input element to filter menu
+        items.
       </p>
     </>
   ),
@@ -763,7 +764,7 @@ export const customisedButton = {
         <code>onKeyDown</code> event props.
       </p>
       <p>
-        <code>Menu</code> also works well with third-party React libraries, such as the{' '}
+        <code>Menu</code> also works well with popular React libraries, such as the{' '}
         <b>Material-UI</b>. See{' '}
         <ExternalLink href="https://codesandbox.io/s/react-menu-material-ui-example-wvzpc">
           an example on CodeSandbox
@@ -1354,14 +1355,14 @@ export const controlledMenu = {
 };
 
 export const customisedStyle = {
-  id: 'customised-style',
-  title: 'Customising style',
+  id: 'styling',
+  title: 'Styling',
   desc: (
     <>
       <p>
-        <LibName /> is unopinionated when it comes to customising style. It doesn't depend on any
-        particular CSS-in-JS runtime and works with all flavours of front-end stack. Please checkout
-        the respective CodeSandbox example below:
+        <LibName /> is unopinionated when it comes to styling. It doesn't depend on any particular
+        CSS-in-JS runtime and works with all flavours of front-end stack. Please checkout the
+        respective CodeSandbox example below:
       </p>
       <StyleExamples />
       <p>
@@ -1400,8 +1401,11 @@ export const features = {
       <li>Supports dropdown or context menu.</li>
       <li>Supports radio and checkbox menu items.</li>
       <li>Flexible menu positioning.</li>
-      <li>Customisable styling.</li>
       <li>Comprehensive keyboard interactions.</li>
+      <li>
+        Unstyled components and easy <Link to={'#styling'}>customisation</Link>.
+      </li>
+      <li>Works in major browsers without polyfills.</li>
       <li>
         Adheres to{' '}
         <ExternalLink href="https://www.w3.org/TR/wai-aria-practices/#menu">

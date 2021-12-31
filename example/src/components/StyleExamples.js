@@ -7,7 +7,7 @@ export const StyleExamples = React.memo(function StyleExamples() {
       <ul className="style-examples">
         <li>
           <ExternalLink href="https://codesandbox.io/s/react-menu-sass-i1wxo">
-            Vanilla CSS/SASS
+            CSS/SASS
           </ExternalLink>
         </li>
         <li>
@@ -42,9 +42,7 @@ export const StyleExamples = React.memo(function StyleExamples() {
         </li>
       </ul>
       <p>
-        <i>
-          All styles are locally scoped to the components except in the Vanilla CSS/SASS example.
-        </i>
+        <i>All styles are locally scoped to the components except in the CSS/SASS example.</i>
       </p>
     </>
   );
