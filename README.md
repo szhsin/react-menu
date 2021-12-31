@@ -15,8 +15,9 @@
 - Supports dropdown or context menu.
 - Supports radio and checkbox menu items.
 - Flexible menu positioning.
-- Customisable styling.
 - Comprehensive keyboard interactions.
+- Unstyled components and easy [customisation](https://szhsin.github.io/react-menu/#styling).
+- Works in major browsers without polyfills.
 - Adheres to [WAI-ARIA Authoring Practices](https://www.w3.org/TR/wai-aria-practices/#menu).
 
 ## Install
@@ -32,9 +33,8 @@ yarn add @szhsin/react-menu
 ## Usage
 
 ```jsx
-import React from 'react';
 import { Menu, MenuItem, MenuButton, SubMenu } from '@szhsin/react-menu';
-import '@szhsin/react-menu/dist/index.css';
+import '@szhsin/react-menu/dist/core.css';
 
 export default function App() {
   return (
@@ -52,7 +52,7 @@ export default function App() {
 }
 ```
 
-[Edit on CodeSandbox](https://codesandbox.io/s/react-menu-starter-3ez3c)<br>  
+**[Edit on CodeSandbox](https://codesandbox.io/s/react-menu-starter-3ez3c)**<br>  
 **[Visit more examples and docs](https://szhsin.github.io/react-menu/)**
 
 ## License
