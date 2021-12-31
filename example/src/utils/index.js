@@ -1,7 +1,7 @@
 import React from 'react';
 
-export const version = '2.3.0';
-export const build = '3';
+export const version = '2.3.1';
+export const build = '01';
 export const DomInfoContext = React.createContext({});
 export const SettingContext = React.createContext({ theme: 'dark' });
 export const TocContext = React.createContext({}); // Table of contents
