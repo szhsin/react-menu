@@ -13,11 +13,7 @@ export const TableContents = React.memo(function TableContents({ children }) {
   const { theme } = useContext(SettingContext);
   const { isTocOpen, setTocOpen } = useContext(TocContext);
   const [maxHeight, setMaxHeight] = useState();
-
-  let top = undefined;
-  if (domInfo.tocPosition === 'sticky') {
-    top = `${domInfo.navbarHeight}px`;
-  }
+  const [top, setTop] = useState();
 
   useEffect(() => {
     if (isTocOpen) ref.current.focus();
@@ -25,7 +21,14 @@ export const TableContents = React.memo(function TableContents({ children }) {
 
   useEffect(() => {
     const offset = isTocOpen ? headerRef.current.offsetHeight : domInfo.navbarHeight;
-    setMaxHeight(`${domInfo.vHeight - offset}px`);
+    setMaxHeight(domInfo.vHeight - offset);
+
+    setTop(
+      getComputedStyle(document.querySelector('.table-contents')).getPropertyValue('position') ===
+        'sticky'
+        ? domInfo.navbarHeight
+        : undefined
+    );
   }, [domInfo, isTocOpen]);
 
   const handleClose = (e) => {
