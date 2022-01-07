@@ -20,6 +20,7 @@ export const TableContents = React.memo(function TableContents({ children }) {
   }, [isTocOpen]);
 
   useEffect(() => {
+    if (!domInfo.navbarHeight) return;
     const offset = isTocOpen ? headerRef.current.offsetHeight : domInfo.navbarHeight;
     setMaxHeight(domInfo.vHeight - offset);
 

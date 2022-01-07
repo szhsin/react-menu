@@ -1,11 +1,10 @@
-import React, { useEffect, useContext, lazy, Suspense } from 'react';
+import React, { useEffect, useContext } from 'react';
 import { Switch, Route, useLocation } from 'react-router-dom';
 import { SettingContext, TocContext } from '../utils';
 import { NotFound } from './NotFound';
-
-const Usage = lazy(() => import('./Usage'));
-const Docs = lazy(() => import('./Docs'));
-const StyleGuide = lazy(() => import('./StyleGuide'));
+import Usage from './Usage';
+import Docs from './Docs';
+import StyleGuide from './StyleGuide';
 
 export const PageContent = React.memo(function PageContent() {
   const location = useLocation();
@@ -19,22 +18,20 @@ export const PageContent = React.memo(function PageContent() {
 
   return (
     <div id="content" style={showBanner ? { marginTop: 40 } : undefined}>
-      <Suspense fallback="Loading...">
-        <Switch>
-          <Route exact path="/">
-            <Usage />
-          </Route>
-          <Route path="/docs">
-            <Docs />
-          </Route>
-          <Route path="/style-guide">
-            <StyleGuide />
-          </Route>
-          <Route>
-            <NotFound />
-          </Route>
-        </Switch>
-      </Suspense>
+      <Switch>
+        <Route exact path="/">
+          <Usage />
+        </Route>
+        <Route path="/docs">
+          <Docs />
+        </Route>
+        <Route path="/style-guide">
+          <StyleGuide />
+        </Route>
+        <Route>
+          <NotFound />
+        </Route>
+      </Switch>
     </div>
   );
 });
