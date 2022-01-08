@@ -1,33 +1,35 @@
 body {
-    height: 2000px;
+  height: 2000px;
+  padding-top: 700px;
+}
+
+h2 {
+  text-align: center;
+  margin-top: 6rem;
 }
 
 .test-case {
-    margin: 1rem 4rem;
-    padding: 1rem;
+  margin: 1rem 4rem;
+  padding: 1rem;
+  border: 1px solid;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &__hover {
+    margin: 0 1rem;
+    padding: 0.5rem 1rem;
     border: 1px solid;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  }
 
-    &__hover {
-        margin: 0 1rem;
-        padding: 0.5rem 1rem;
-        border: 1px solid;
-    }
+  &--portal1 {
+    overflow: auto;
+    height: 300px;
+  }
 
-    &--repos1 {
-        margin-top: 700px;
-    }
-
-    &--portal1 {
-        overflow: auto;
-        height: 300px;
-    }
-
-    &__portal1 {
-        height: 1500px;
-        align-self: stretch;
-        padding-top: 750px;
-    }
+  &__portal1 {
+    height: 1500px;
+    align-self: stretch;
+    padding-top: 750px;
+  }
 }
