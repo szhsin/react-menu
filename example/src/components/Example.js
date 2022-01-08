@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, useContext } from 'react';
 import { HashHeading } from './HashHeading';
 import { bem, DomInfoContext, SettingContext } from '../utils';
 import { ControlledMenu, useMenuState } from '@szhsin/react-menu';
-import hljs from 'highlight.js';
+import hljs from '../utils/highlight';
 
 const blockName = 'example';
 

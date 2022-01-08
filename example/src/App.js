@@ -49,12 +49,7 @@ const App = () => {
         // Viewport size
         vWidth: document.documentElement.clientWidth,
         vHeight: window.innerHeight,
-
-        navbarHeight: document.querySelector('#header').offsetHeight,
-        // Table of Contents position
-        tocPosition: getComputedStyle(document.querySelector('.table-contents')).getPropertyValue(
-          'position'
-        )
+        navbarHeight: document.querySelector('#header').offsetHeight
       };
 
       if (info.vWidth > 950) setTocOpen(false);

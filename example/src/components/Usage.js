@@ -27,7 +27,7 @@ const Menu = withPresetProps(ReactMenu);
  */
 const ControlledMenu = withPresetProps(ReactControlledMenu);
 
-export const Usage = React.memo(function Usage() {
+const Usage = React.memo(function Usage() {
   return (
     <React.Fragment>
       <TableContents>{data}</TableContents>
@@ -766,3 +766,5 @@ function MenuOptions({ title, name, data, option, onOptionChange }) {
     </fieldset>
   );
 }
+
+export default Usage;
