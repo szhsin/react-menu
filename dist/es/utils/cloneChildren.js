@@ -9,7 +9,7 @@ var cloneChildren = function cloneChildren(children, startIndex, inRadioGroup) {
   var index = startIndex;
   var descendOverflow = false;
   var items = Children.map(children, function (child) {
-    if (child === undefined || child === null) return null;
+    if (child == null) return null;
     if (!child.type) return child;
     var name = getName(child.type);
 

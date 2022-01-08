@@ -12,6 +12,7 @@ import {
 import { MenuList } from './MenuList';
 import {
   attachHandlerProps,
+  batchedUpdates,
   safeCall,
   stylePropTypes,
   uncontrolledMenuPropTypes,
@@ -90,7 +91,8 @@ export const SubMenu = withHovering(
 
     const delayOpen = (delay) => {
       setHover();
-      if (!openTrigger) timeoutId.current = setTimeout(openMenu, Math.max(delay, 0));
+      if (!openTrigger)
+        timeoutId.current = setTimeout(() => batchedUpdates(openMenu), Math.max(delay, 0));
     };
 
     const handleMouseEnter = () => {

@@ -7,6 +7,7 @@ import React, {
   useCallback,
   useContext
 } from 'react';
+import { flushSync } from 'react-dom';
 import { useBEM, useFlatStyles, useCombinedRef, useLayoutEffect } from '../hooks';
 import { getPositionHelpers, positionMenu, positionContextMenu } from '../positionUtils';
 import {
@@ -78,14 +79,18 @@ export const MenuList = ({
   const reposFlag = useContext(MenuListContext).reposSubmenu || repositionFlag;
   const menuRef = useRef(null);
   const arrowRef = useRef(null);
-  const menuItemsCount = useRef(0);
   const prevOpen = useRef(false);
   const latestMenuSize = useRef({ width: 0, height: 0 });
   const latestHandlePosition = useRef(() => {});
-  const descendOverflowRef = useRef(false);
   const isOpen = isMenuOpen(state);
   const openTransition = getTransition(transition, 'open');
   const closeTransition = getTransition(transition, 'close');
+
+  const {
+    items: menuItems,
+    index: menuItemsCount,
+    descendOverflow
+  } = useMemo(() => cloneChildren(children), [children]);
 
   const reducer = ({ hoverIndex, openSubmenuCount }, action) => ({
     hoverIndex: hoverIndexReducer(hoverIndex, action, menuItemsCount),
@@ -96,15 +101,6 @@ export const MenuList = ({
     openSubmenuCount: 0
   });
   const [reposSubmenu, forceReposSubmenu] = useReducer((c) => c + 1, 1);
-
-  const menuItems = useMemo(() => {
-    const { items, index, descendOverflow } = cloneChildren(children);
-    // Store results in refs rather than local states
-    // to avoid updating state during render
-    menuItemsCount.current = index;
-    descendOverflowRef.current = descendOverflow;
-    return items;
-  }, [children]);
 
   const handleKeyDown = (e) => {
     let handled = false;
@@ -261,8 +257,8 @@ export const MenuList = ({
   }, [isOpen, handlePosition, /* effect dep */ reposFlag]);
 
   useLayoutEffect(() => {
-    if (overflowData && !descendOverflowRef.current) menuRef.current.scrollTop = 0;
-  }, [overflowData]);
+    if (overflowData && !descendOverflow) menuRef.current.scrollTop = 0;
+  }, [overflowData, descendOverflow]);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -339,7 +335,7 @@ export const MenuList = ({
         floatEqual(height, latestMenuSize.current.height, 1)
       )
         return;
-      batchedUpdates(() => {
+      flushSync(() => {
         latestHandlePosition.current();
         forceReposSubmenu();
       });
@@ -363,7 +359,7 @@ export const MenuList = ({
         dispatch({ type: HoverIndexActionTypes.FIRST });
       } else if (position === FocusPositions.LAST) {
         dispatch({ type: HoverIndexActionTypes.LAST });
-      } else if (position >= 0 && position < menuItemsCount.current) {
+      } else if (position >= 0 && position < menuItemsCount) {
         dispatch({ type: HoverIndexActionTypes.SET, index: position });
       }
     };
@@ -385,7 +381,7 @@ export const MenuList = ({
 
       return () => clearTimeout(id);
     }
-  }, [openTransition, closeTransition, captureFocus, isOpen, menuItemFocus]);
+  }, [openTransition, closeTransition, captureFocus, isOpen, menuItemFocus, menuItemsCount]);
 
   const isSubmenuOpen = openSubmenuCount > 0;
   const itemContext = useMemo(
@@ -401,9 +397,7 @@ export const MenuList = ({
 
   let maxHeight, overflowAmt;
   if (overflowData) {
-    descendOverflowRef.current
-      ? (overflowAmt = overflowData.overflowAmt)
-      : (maxHeight = overflowData.height);
+    descendOverflow ? (overflowAmt = overflowData.overflowAmt) : (maxHeight = overflowData.height);
   }
 
   const listContext = useMemo(
@@ -458,8 +452,8 @@ export const MenuList = ({
       style={{
         ...useFlatStyles(menuStyles, modifiers),
         ...overflowStyles,
-        left: `${menuPosition.x}px`,
-        top: `${menuPosition.y}px`
+        left: menuPosition.x,
+        top: menuPosition.y
       }}
     >
       {arrow && (
@@ -467,8 +461,8 @@ export const MenuList = ({
           className={_arrowClass}
           style={{
             ..._arrowStyles,
-            left: arrowPosition.x && `${arrowPosition.x}px`,
-            top: arrowPosition.y && `${arrowPosition.y}px`
+            left: arrowPosition.x,
+            top: arrowPosition.y
           }}
           ref={arrowRef}
         />
@@ -497,22 +491,22 @@ function hoverIndexReducer(state, { type, index }, menuItemsCount) {
     case HoverIndexActionTypes.DECREASE: {
       let i = state;
       i--;
-      if (i < 0) i = menuItemsCount.current - 1;
+      if (i < 0) i = menuItemsCount - 1;
       return i;
     }
 
     case HoverIndexActionTypes.INCREASE: {
       let i = state;
       i++;
-      if (i >= menuItemsCount.current) i = 0;
+      if (i >= menuItemsCount) i = 0;
       return i;
     }
 
     case HoverIndexActionTypes.FIRST:
-      return menuItemsCount.current > 0 ? 0 : initialHoverIndex;
+      return menuItemsCount > 0 ? 0 : initialHoverIndex;
 
     case HoverIndexActionTypes.LAST:
-      return menuItemsCount.current > 0 ? menuItemsCount.current - 1 : initialHoverIndex;
+      return menuItemsCount > 0 ? menuItemsCount - 1 : initialHoverIndex;
 
     default:
       return state;

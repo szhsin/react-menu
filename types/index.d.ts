@@ -210,7 +210,7 @@ interface BaseMenuProps extends Omit<BaseProps, 'styles'> {
   offsetX?: number;
   /**
    * Set the vertical distance (in pixels) between menu and its anchor element.
-   * The value can be negative
+   * The value can be negative.
    * @default 0
    */
   offsetY?: number;
