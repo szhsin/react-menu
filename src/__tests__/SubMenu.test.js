@@ -1,8 +1,10 @@
 /* eslint-disable react/no-children-prop */
 import React from 'react';
 import { Menu, MenuItem, FocusableItem, MenuButton, SubMenu } from './entry';
-import { render, fireEvent, waitFor, screen, act } from '@testing-library/react';
+import { fireEvent, waitFor, screen, act } from '@testing-library/react';
 import * as utils from './utils';
+
+const { render } = utils;
 
 const renderMenu = (props, itemProps, submenuProps) =>
   render(
@@ -37,7 +39,7 @@ test('Open and close submenu with mouse', async () => {
   // Hovering an item in the parent menu list will close submenu
   fireEvent.mouseEnter(utils.queryMenuItem('One'));
   await waitFor(() => utils.expectMenuToBeOpen(false, submenuOptions));
-  expect(onChange).toHaveBeenLastCalledWith({ open: false });
+  await waitFor(() => expect(onChange).toHaveBeenLastCalledWith({ open: false }));
   expect(utils.queryMenuItem('One')).toHaveFocus();
 
   // Mouse enter and leave submenu item in short succession will not open submenu
@@ -143,8 +145,9 @@ test('onItemClick and onClick are fired when activating item with mouse or keybo
 });
 
 test('Delay closing submenu when hovering items in parent menu list', async () => {
+  const submenuCloseDelay = 100;
   const { container } = render(
-    <Menu menuButton={<MenuButton>Menu</MenuButton>} submenuCloseDelay={100}>
+    <Menu menuButton={<MenuButton>Menu</MenuButton>} submenuCloseDelay={submenuCloseDelay}>
       <MenuItem disabled>Disabled</MenuItem>
       <SubMenu label="Submenu1">
         <MenuItem>1</MenuItem>
@@ -169,10 +172,11 @@ test('Delay closing submenu when hovering items in parent menu list', async () =
   fireEvent.click(submenuItem1);
   utils.expectMenuToBeOpen(true, submenuOptions1);
 
-  const quickEnterLeave = async (item, delay = 80, beOpen = true) => {
+  const quickEnterLeave = async (item, delay = submenuCloseDelay - 25, beOpen = true) => {
     fireEvent.mouseEnter(item);
     await utils.delayFor(delay);
     fireEvent.mouseLeave(item);
+    await utils.delayFor(submenuCloseDelay - delay + 25);
     utils.expectMenuToBeOpen(beOpen, submenuOptions1);
   };
 

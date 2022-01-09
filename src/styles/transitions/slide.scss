@@ -16,7 +16,7 @@ $directions: (
   }
 
   .#{$menu}--state-closing.#{$menu}--dir-#{$dir} {
-    animation: #{$menu}-hide-#{$name}-#{$dir} $duration ease-in;
+    animation: #{$menu}-hide-#{$name}-#{$dir} $duration ease-in forwards;
   }
 }
 

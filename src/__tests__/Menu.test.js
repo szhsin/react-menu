@@ -1,4 +1,4 @@
-import { screen, fireEvent, waitFor } from '@testing-library/react';
+import { screen, fireEvent, waitFor, act } from '@testing-library/react';
 import * as utils from './utils';
 
 const { queryByRole, queryAllByRole } = screen;
@@ -25,7 +25,7 @@ test.each([false, true])(
     menuItems.forEach((item) => utils.expectMenuItemToBeHover(item, false));
 
     // focus something outside menu, expecting menu to close but keep mounted
-    queryByRole('button').focus();
+    act(() => queryByRole('button').focus());
     utils.expectButtonToBeExpanded(false);
     utils.expectMenuToHaveState('closing', false);
     utils.expectMenuToBeOpen(false);
@@ -42,7 +42,7 @@ test.each([false, true])(
     utils.expectMenuToHaveState('opening', false);
     utils.expectMenuToHaveState('open', true);
 
-    queryByRole('button').focus();
+    act(() => queryByRole('button').focus());
     utils.expectMenuToHaveState('closing', true);
     await waitFor(() => utils.expectMenuToHaveState('closed', true));
     utils.expectMenuToHaveState('closing', false);
@@ -59,7 +59,7 @@ test.each([false, true])(
     utils.expectMenuToBeInTheDocument(true);
     await waitFor(() => expect(utils.queryMenu()).toHaveFocus());
 
-    queryByRole('button').focus();
+    act(() => queryByRole('button').focus());
     utils.expectMenuToBeInTheDocument(false);
   }
 );

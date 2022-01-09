@@ -51,7 +51,7 @@
 }
 
 .szh-menu--state-closing.szh-menu--dir-left {
-  animation: szh-menu-hide-slide-left 0.15s ease-in;
+  animation: szh-menu-hide-slide-left 0.15s ease-in forwards;
 }
 
 .szh-menu--state-opening.szh-menu--dir-right {
@@ -59,7 +59,7 @@
 }
 
 .szh-menu--state-closing.szh-menu--dir-right {
-  animation: szh-menu-hide-slide-right 0.15s ease-in;
+  animation: szh-menu-hide-slide-right 0.15s ease-in forwards;
 }
 
 .szh-menu--state-opening.szh-menu--dir-top {
@@ -67,7 +67,7 @@
 }
 
 .szh-menu--state-closing.szh-menu--dir-top {
-  animation: szh-menu-hide-slide-top 0.15s ease-in;
+  animation: szh-menu-hide-slide-top 0.15s ease-in forwards;
 }
 
 .szh-menu--state-opening.szh-menu--dir-bottom {
@@ -75,5 +75,5 @@
 }
 
 .szh-menu--state-closing.szh-menu--dir-bottom {
-  animation: szh-menu-hide-slide-bottom 0.15s ease-in;
+  animation: szh-menu-hide-slide-bottom 0.15s ease-in forwards;
 }

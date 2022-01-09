@@ -4,7 +4,7 @@ import { createPortal } from 'react-dom';
 import { bool, oneOf, oneOfType, node, func, shape } from 'prop-types';
 import { MenuList } from './MenuList.js';
 import { withHovering } from '../utils/withHovering.js';
-import { validateIndex, attachHandlerProps, safeCall, isMenuOpen } from '../utils/utils.js';
+import { validateIndex, attachHandlerProps, safeCall, isMenuOpen, batchedUpdates } from '../utils/utils.js';
 import { useMenuStateAndFocus } from '../hooks/useMenuStateAndFocus.js';
 import { useActiveState } from '../hooks/useActiveState.js';
 import { useMenuChange } from '../hooks/useMenuChange.js';
@@ -91,7 +91,9 @@ var SubMenu = /*#__PURE__*/withHovering( /*#__PURE__*/memo(function SubMenu(_ref
 
   var delayOpen = function delayOpen(delay) {
     setHover();
-    if (!openTrigger) timeoutId.current = setTimeout(_openMenu2, Math.max(delay, 0));
+    if (!openTrigger) timeoutId.current = setTimeout(function () {
+      return batchedUpdates(_openMenu2);
+    }, Math.max(delay, 0));
   };
 
   var handleMouseEnter = function handleMouseEnter() {

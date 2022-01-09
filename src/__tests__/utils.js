@@ -1,7 +1,10 @@
 /* eslint-disable react/no-children-prop */
-import React from 'react';
+import React, { StrictMode } from 'react';
 import { applyHOC, applyStatics, Menu, MenuItem, MenuButton } from './entry';
-import { screen, render, fireEvent, waitFor } from '@testing-library/react';
+import { screen, render as libRender, fireEvent, waitFor } from '@testing-library/react';
+
+const StrictModeWrapper = ({ children }) => <StrictMode>{children}</StrictMode>;
+export const render = (ui, options) => libRender(ui, { wrapper: StrictModeWrapper, ...options });
 
 const { queryByRole } = screen;
 
@@ -73,8 +76,8 @@ const enhance = (WrappedComponent, value) => {
 export const FirstItem = applyStatics(MenuItem)(enhance(MenuItem, 'First'));
 export const LastItem = applyHOC(enhance)(MenuItem, 'Last');
 
-export const renderMenu = (props, itemProps) =>
-  render(
+export const renderMenu = (props, itemProps, strictMode = true) =>
+  (strictMode ? render : libRender)(
     <Menu menuButton={<MenuButton>Open</MenuButton>} {...props}>
       <span className="some-class">Some texts</span>
       <FirstItem />

@@ -1,8 +1,9 @@
 import { objectWithoutPropertiesLoose as _objectWithoutPropertiesLoose, extends as _extends } from '../_virtual/_rollupPluginBabelHelpers.js';
-import React, { useState, useContext, useRef, useReducer, useMemo, useCallback, useEffect } from 'react';
+import React, { useState, useContext, useRef, useMemo, useReducer, useCallback, useEffect } from 'react';
+import { flushSync } from 'react-dom';
 import { SettingsContext, MenuListContext, initialHoverIndex, HoverIndexActionTypes, MenuListItemContext, HoverIndexContext, Keys, menuClass, CloseReason, FocusPositions, menuArrowClass, SubmenuActionTypes } from '../utils/constants.js';
 import { cloneChildren } from '../utils/cloneChildren.js';
-import { getScrollAncestor, floatEqual, batchedUpdates, attachHandlerProps, isMenuOpen, getTransition, safeCall } from '../utils/utils.js';
+import { getScrollAncestor, floatEqual, attachHandlerProps, isMenuOpen, getTransition, safeCall, batchedUpdates } from '../utils/utils.js';
 import { getPositionHelpers } from '../positionUtils/getPositionHelpers.js';
 import { positionContextMenu } from '../positionUtils/positionContextMenu.js';
 import { positionMenu } from '../positionUtils/positionMenu.js';
@@ -74,17 +75,22 @@ var MenuList = function MenuList(_ref) {
   var reposFlag = useContext(MenuListContext).reposSubmenu || repositionFlag;
   var menuRef = useRef(null);
   var arrowRef = useRef(null);
-  var menuItemsCount = useRef(0);
   var prevOpen = useRef(false);
   var latestMenuSize = useRef({
     width: 0,
     height: 0
   });
   var latestHandlePosition = useRef(function () {});
-  var descendOverflowRef = useRef(false);
   var isOpen = isMenuOpen(state);
   var openTransition = getTransition(transition, 'open');
   var closeTransition = getTransition(transition, 'close');
+
+  var _useMemo = useMemo(function () {
+    return cloneChildren(children);
+  }, [children]),
+      menuItems = _useMemo.items,
+      menuItemsCount = _useMemo.index,
+      descendOverflow = _useMemo.descendOverflow;
 
   var reducer = function reducer(_ref2, action) {
     var hoverIndex = _ref2.hoverIndex,
@@ -109,17 +115,6 @@ var MenuList = function MenuList(_ref) {
   }, 1),
       reposSubmenu = _useReducer2[0],
       forceReposSubmenu = _useReducer2[1];
-
-  var menuItems = useMemo(function () {
-    var _cloneChildren = cloneChildren(children),
-        items = _cloneChildren.items,
-        index = _cloneChildren.index,
-        descendOverflow = _cloneChildren.descendOverflow;
-
-    menuItemsCount.current = index;
-    descendOverflowRef.current = descendOverflow;
-    return items;
-  }, [children]);
 
   var handleKeyDown = function handleKeyDown(e) {
     var handled = false;
@@ -283,8 +278,8 @@ var MenuList = function MenuList(_ref) {
     latestHandlePosition.current = handlePosition;
   }, [isOpen, handlePosition, reposFlag]);
   useIsomorphicLayoutEffect(function () {
-    if (overflowData && !descendOverflowRef.current) menuRef.current.scrollTop = 0;
-  }, [overflowData]);
+    if (overflowData && !descendOverflow) menuRef.current.scrollTop = 0;
+  }, [overflowData, descendOverflow]);
   useEffect(function () {
     if (!isOpen) return;
 
@@ -357,7 +352,7 @@ var MenuList = function MenuList(_ref) {
 
       if (width === 0 || height === 0) return;
       if (floatEqual(width, latestMenuSize.current.width, 1) && floatEqual(height, latestMenuSize.current.height, 1)) return;
-      batchedUpdates(function () {
+      flushSync(function () {
         latestHandlePosition.current();
         forceReposSubmenu();
       });
@@ -392,7 +387,7 @@ var MenuList = function MenuList(_ref) {
         dispatch({
           type: HoverIndexActionTypes.LAST
         });
-      } else if (position >= 0 && position < menuItemsCount.current) {
+      } else if (position >= 0 && position < menuItemsCount) {
         dispatch({
           type: HoverIndexActionTypes.SET,
           index: position
@@ -413,7 +408,7 @@ var MenuList = function MenuList(_ref) {
         return clearTimeout(id);
       };
     }
-  }, [openTransition, closeTransition, captureFocus, isOpen, menuItemFocus]);
+  }, [openTransition, closeTransition, captureFocus, isOpen, menuItemFocus, menuItemsCount]);
   var isSubmenuOpen = openSubmenuCount > 0;
   var itemContext = useMemo(function () {
     return {
@@ -427,7 +422,7 @@ var MenuList = function MenuList(_ref) {
   var maxHeight, overflowAmt;
 
   if (overflowData) {
-    descendOverflowRef.current ? overflowAmt = overflowData.overflowAmt : maxHeight = overflowData.height;
+    descendOverflow ? overflowAmt = overflowData.overflowAmt : maxHeight = overflowData.height;
   }
 
   var listContext = useMemo(function () {
@@ -479,14 +474,14 @@ var MenuList = function MenuList(_ref) {
       className: menuClassName
     }),
     style: _extends({}, useFlatStyles(menuStyles, modifiers), overflowStyles, {
-      left: menuPosition.x + "px",
-      top: menuPosition.y + "px"
+      left: menuPosition.x,
+      top: menuPosition.y
     })
   }), arrow && /*#__PURE__*/React.createElement("div", {
     className: _arrowClass,
     style: _extends({}, _arrowStyles, {
-      left: arrowPosition.x && arrowPosition.x + "px",
-      top: arrowPosition.y && arrowPosition.y + "px"
+      left: arrowPosition.x,
+      top: arrowPosition.y
     }),
     ref: arrowRef
   }), /*#__PURE__*/React.createElement(MenuListContext.Provider, {
@@ -516,7 +511,7 @@ function hoverIndexReducer(state, _ref6, menuItemsCount) {
       {
         var i = state;
         i--;
-        if (i < 0) i = menuItemsCount.current - 1;
+        if (i < 0) i = menuItemsCount - 1;
         return i;
       }
 
@@ -524,15 +519,15 @@ function hoverIndexReducer(state, _ref6, menuItemsCount) {
       {
         var _i = state;
         _i++;
-        if (_i >= menuItemsCount.current) _i = 0;
+        if (_i >= menuItemsCount) _i = 0;
         return _i;
       }
 
     case HoverIndexActionTypes.FIRST:
-      return menuItemsCount.current > 0 ? 0 : initialHoverIndex;
+      return menuItemsCount > 0 ? 0 : initialHoverIndex;
 
     case HoverIndexActionTypes.LAST:
-      return menuItemsCount.current > 0 ? menuItemsCount.current - 1 : initialHoverIndex;
+      return menuItemsCount > 0 ? menuItemsCount - 1 : initialHoverIndex;
 
     default:
       return state;

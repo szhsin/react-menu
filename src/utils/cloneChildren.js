@@ -6,7 +6,7 @@ export const cloneChildren = (children, startIndex = 0, inRadioGroup) => {
   let descendOverflow = false;
 
   const items = Children.map(children, (child) => {
-    if (child === undefined || child === null) return null;
+    if (child == null) return null;
     if (!child.type) return child;
 
     const name = getName(child.type);
