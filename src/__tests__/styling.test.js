@@ -41,7 +41,7 @@ test('className and styles props', () => {
 test('className and styles props as functions', () => {
   const menuClassName = jest.fn();
   const styles = jest.fn();
-  utils.renderMenu({ menuClassName }, { styles });
+  utils.renderMenu({ menuClassName }, { styles }, false);
   utils.clickMenuButton();
   expect(menuClassName).toHaveBeenLastCalledWith(
     expect.objectContaining({

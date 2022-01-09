@@ -1,11 +1,11 @@
 import React from 'react';
 import { Menu, MenuItem, MenuGroup, MenuButton, MenuDivider } from './entry';
-import { render, fireEvent } from '@testing-library/react';
+import { fireEvent } from '@testing-library/react';
 import * as utils from './utils';
 
 test('MenuGroup should allow keyboard navigation to go thru its children', () => {
   const ref = React.createRef();
-  render(
+  utils.render(
     <Menu menuButton={<MenuButton>Menu Group</MenuButton>}>
       <MenuItem>One</MenuItem>
       <MenuGroup ref={ref} takeOverflow>

@@ -8,9 +8,10 @@ import {
   MenuButton,
   MenuRadioGroup
 } from './entry';
-import { screen, render, fireEvent } from '@testing-library/react';
+import { screen, fireEvent, act } from '@testing-library/react';
 import * as utils from './utils';
 
+const { render } = utils;
 const { queryByRole, queryAllByRole } = screen;
 const LastItem = utils.LastItem;
 
@@ -198,7 +199,7 @@ test('MenuItem keeps hover and active states after focusing something inside it'
   utils.expectMenuItemToBeHover(menuItem, true);
   utils.expectMenuItemToBeActive(menuItem, true);
 
-  queryByRole('button', { name: 'Click' }).focus();
+  act(() => queryByRole('button', { name: 'Click' }).focus());
   expect(menuItem).not.toHaveFocus();
   utils.expectMenuItemToBeHover(menuItem, true);
   utils.expectMenuItemToBeActive(menuItem, true);
@@ -226,13 +227,13 @@ test('Disabled menu item', () => {
   utils.expectMenuItemToBeHover(menuItem, true);
 
   // Menu item loses hover state when losing focus
-  utils.queryMenu().focus();
+  act(() => utils.queryMenu().focus());
   utils.expectMenuItemToBeHover(menuItem, false);
 });
 
 test('Children of MenuItem is a function', () => {
   const renderFn = jest.fn();
-  utils.renderMenu(null, { children: renderFn });
+  utils.renderMenu(null, { children: renderFn }, false);
   utils.clickMenuButton();
 
   fireEvent.keyDown(utils.queryMenu(), { key: 'ArrowDown' });
@@ -306,7 +307,7 @@ test('FocusableItem', () => {
   expect(button).toHaveFocus();
   expect(button).toHaveClass('hover');
   expect(renderFn).toHaveBeenLastCalledWith(true);
-  expect(renderFn).toHaveBeenCalledTimes(4);
+  expect(renderFn).toHaveBeenCalledTimes(8);
 
   fireEvent.click(button);
   utils.expectMenuToBeOpen(false);

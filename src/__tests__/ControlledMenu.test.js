@@ -1,8 +1,9 @@
 import React from 'react';
 import { ControlledMenu, MenuItem } from './entry';
-import { screen, render, fireEvent, waitFor } from '@testing-library/react';
+import { screen, fireEvent, waitFor } from '@testing-library/react';
 import * as utils from './utils';
 
+const { render } = utils;
 const { queryByRole } = screen;
 
 const getMenu = (props) => (
