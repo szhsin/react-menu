@@ -51,6 +51,7 @@ export const MenuList = ({
   overflow,
   repositionFlag,
   captureFocus = true,
+  captureInitialMouseFocus = true,
   state,
   endTransition,
   isDisabled,
@@ -390,9 +391,10 @@ export const MenuList = ({
       parentOverflow: overflow,
       isParentOpen: isOpen,
       isSubmenuOpen,
+      captureInitialMouseFocus,
       dispatch
     }),
-    [isOpen, isSubmenuOpen, overflow]
+    [isOpen, isSubmenuOpen, overflow, captureInitialMouseFocus]
   );
 
   let maxHeight, overflowAmt;

@@ -1,10 +1,11 @@
-import { useRef, useContext, useEffect } from 'react';
+import { useRef, useContext, useEffect, useState } from 'react';
 import { ItemSettingsContext, MenuListItemContext, HoverIndexActionTypes } from '../utils';
 
 // This hook includes some common stateful logic in MenuItem and FocusableItem
 export const useItemState = (ref, index, isHovering, isDisabled) => {
   const { submenuCloseDelay } = useContext(ItemSettingsContext);
-  const { isParentOpen, isSubmenuOpen, dispatch } = useContext(MenuListItemContext);
+  const { isParentOpen, isSubmenuOpen, dispatch, captureInitialMouseFocus } = useContext(MenuListItemContext);
+  const [shouldCaptureInitialMouseFocus, setShouldCaptureInitialMouseFocus] = useState(captureInitialMouseFocus);
   const timeoutId = useRef();
 
   const setHover = () => {
@@ -20,6 +21,9 @@ export const useItemState = (ref, index, isHovering, isDisabled) => {
   };
 
   const onMouseEnter = () => {
+    if (!shouldCaptureInitialMouseFocus) {
+        return;
+    }
     if (isSubmenuOpen) {
       timeoutId.current = setTimeout(setHover, submenuCloseDelay);
     } else {
@@ -31,6 +35,14 @@ export const useItemState = (ref, index, isHovering, isDisabled) => {
     timeoutId.current && clearTimeout(timeoutId.current);
     if (!keepHover) dispatch({ type: HoverIndexActionTypes.UNSET, index });
   };
+
+  useEffect(() => {
+    if (!shouldCaptureInitialMouseFocus) {
+        timeoutId.current = setTimeout(() => {
+            setShouldCaptureInitialMouseFocus(true);
+        }, 1000);
+    }    
+  }, []);
 
   useEffect(() => () => clearTimeout(timeoutId.current), []);
   useEffect(() => {

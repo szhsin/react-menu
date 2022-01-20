@@ -196,6 +196,7 @@ ControlledMenu.propTypes /* remove-proptypes */ = {
   anchorRef: object,
   skipOpen: object,
   captureFocus: bool,
+  captureInitialMouseFocus: bool,
   menuItemFocus: exact({
     position: oneOfType([string, number]),
     alwaysUpdate: bool
