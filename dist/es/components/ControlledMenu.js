@@ -158,6 +158,7 @@ process.env.NODE_ENV !== "production" ? ControlledMenu.propTypes = /*#__PURE__*/
   anchorRef: object,
   skipOpen: object,
   captureFocus: bool,
+  captureInitialMouseFocus: bool,
   menuItemFocus: /*#__PURE__*/exact({
     position: /*#__PURE__*/oneOfType([string, number]),
     alwaysUpdate: bool

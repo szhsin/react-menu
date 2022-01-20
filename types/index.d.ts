@@ -413,6 +413,11 @@ export interface ControlledMenuProps extends RootMenuProps {
    */
   captureFocus?: boolean;
   /**
+   * If `true`, the menu list element will capture the mouse focus and select the item where the mouse is positioned.
+   * @default true
+   */
+  captureInitialMouseFocus?: boolean;
+  /**
    * Controls the state of menu. When the prop is `undefined`, menu will be unmounted from DOM.
    */
   state?: MenuState;
