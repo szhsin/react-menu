@@ -12,7 +12,7 @@ import { useBEM } from '../hooks/useBEM.js';
 import { useFlatStyles } from '../hooks/useFlatStyles.js';
 import { useCombinedRef } from '../hooks/useCombinedRef.js';
 
-var _excluded = ["ariaLabel", "menuClassName", "menuStyles", "arrowClassName", "arrowStyles", "anchorPoint", "anchorRef", "containerRef", "externalRef", "parentScrollingRef", "arrow", "align", "direction", "position", "overflow", "repositionFlag", "captureFocus", "captureInitialMouseFocus", "state", "endTransition", "isDisabled", "menuItemFocus", "offsetX", "offsetY", "children", "onClose"];
+var _excluded = ["ariaLabel", "menuClassName", "menuStyles", "arrowClassName", "arrowStyles", "anchorPoint", "anchorRef", "containerRef", "externalRef", "parentScrollingRef", "arrow", "align", "direction", "position", "overflow", "repositionFlag", "captureFocus", "state", "endTransition", "isDisabled", "menuItemFocus", "offsetX", "offsetY", "children", "onClose"];
 var MenuList = function MenuList(_ref) {
   var ariaLabel = _ref.ariaLabel,
       menuClassName = _ref.menuClassName,
@@ -32,8 +32,6 @@ var MenuList = function MenuList(_ref) {
       repositionFlag = _ref.repositionFlag,
       _ref$captureFocus = _ref.captureFocus,
       captureFocus = _ref$captureFocus === void 0 ? true : _ref$captureFocus,
-      _ref$captureInitialMo = _ref.captureInitialMouseFocus,
-      captureInitialMouseFocus = _ref$captureInitialMo === void 0 ? true : _ref$captureInitialMo,
       state = _ref.state,
       endTransition = _ref.endTransition,
       isDisabled = _ref.isDisabled,
@@ -418,10 +416,9 @@ var MenuList = function MenuList(_ref) {
       parentOverflow: overflow,
       isParentOpen: isOpen,
       isSubmenuOpen: isSubmenuOpen,
-      captureInitialMouseFocus: captureInitialMouseFocus,
       dispatch: dispatch
     };
-  }, [isOpen, isSubmenuOpen, overflow, captureInitialMouseFocus]);
+  }, [isOpen, isSubmenuOpen, overflow]);
   var maxHeight, overflowAmt;
 
   if (overflowData) {

@@ -477,12 +477,7 @@ var useItemState = function useItemState(ref, index, isHovering, isDisabled) {
   var _useContext2 = React.useContext(MenuListItemContext),
       isParentOpen = _useContext2.isParentOpen,
       isSubmenuOpen = _useContext2.isSubmenuOpen,
-      dispatch = _useContext2.dispatch,
-      captureInitialMouseFocus = _useContext2.captureInitialMouseFocus;
-
-  var _useState = React.useState(captureInitialMouseFocus),
-      shouldCaptureInitialMouseFocus = _useState[0],
-      setShouldCaptureInitialMouseFocus = _useState[1];
+      dispatch = _useContext2.dispatch;
 
   var timeoutId = React.useRef();
 
@@ -503,10 +498,6 @@ var useItemState = function useItemState(ref, index, isHovering, isDisabled) {
   };
 
   var onMouseEnter = function onMouseEnter() {
-    if (!shouldCaptureInitialMouseFocus) {
-      return;
-    }
-
     if (isSubmenuOpen) {
       timeoutId.current = setTimeout(setHover, submenuCloseDelay);
     } else {
@@ -522,13 +513,6 @@ var useItemState = function useItemState(ref, index, isHovering, isDisabled) {
     });
   };
 
-  React.useEffect(function () {
-    if (!shouldCaptureInitialMouseFocus) {
-      timeoutId.current = setTimeout(function () {
-        setShouldCaptureInitialMouseFocus(true);
-      }, 1000);
-    }
-  }, []);
   React.useEffect(function () {
     return function () {
       return clearTimeout(timeoutId.current);
@@ -1016,7 +1000,7 @@ var positionMenu = function positionMenu(_ref) {
   }
 };
 
-var _excluded$9 = ["ariaLabel", "menuClassName", "menuStyles", "arrowClassName", "arrowStyles", "anchorPoint", "anchorRef", "containerRef", "externalRef", "parentScrollingRef", "arrow", "align", "direction", "position", "overflow", "repositionFlag", "captureFocus", "captureInitialMouseFocus", "state", "endTransition", "isDisabled", "menuItemFocus", "offsetX", "offsetY", "children", "onClose"];
+var _excluded$9 = ["ariaLabel", "menuClassName", "menuStyles", "arrowClassName", "arrowStyles", "anchorPoint", "anchorRef", "containerRef", "externalRef", "parentScrollingRef", "arrow", "align", "direction", "position", "overflow", "repositionFlag", "captureFocus", "state", "endTransition", "isDisabled", "menuItemFocus", "offsetX", "offsetY", "children", "onClose"];
 var MenuList = function MenuList(_ref) {
   var ariaLabel = _ref.ariaLabel,
       menuClassName = _ref.menuClassName,
@@ -1036,8 +1020,6 @@ var MenuList = function MenuList(_ref) {
       repositionFlag = _ref.repositionFlag,
       _ref$captureFocus = _ref.captureFocus,
       captureFocus = _ref$captureFocus === void 0 ? true : _ref$captureFocus,
-      _ref$captureInitialMo = _ref.captureInitialMouseFocus,
-      captureInitialMouseFocus = _ref$captureInitialMo === void 0 ? true : _ref$captureInitialMo,
       state = _ref.state,
       endTransition = _ref.endTransition,
       isDisabled = _ref.isDisabled,
@@ -1422,10 +1404,9 @@ var MenuList = function MenuList(_ref) {
       parentOverflow: overflow,
       isParentOpen: isOpen,
       isSubmenuOpen: isSubmenuOpen,
-      captureInitialMouseFocus: captureInitialMouseFocus,
       dispatch: dispatch
     };
-  }, [isOpen, isSubmenuOpen, overflow, captureInitialMouseFocus]);
+  }, [isOpen, isSubmenuOpen, overflow]);
   var maxHeight, overflowAmt;
 
   if (overflowData) {
@@ -1706,7 +1687,6 @@ process.env.NODE_ENV !== "production" ? ControlledMenu.propTypes = /*#__PURE__*/
   anchorRef: propTypes.object,
   skipOpen: propTypes.object,
   captureFocus: propTypes.bool,
-  captureInitialMouseFocus: propTypes.bool,
   menuItemFocus: /*#__PURE__*/propTypes.exact({
     position: /*#__PURE__*/propTypes.oneOfType([propTypes.string, propTypes.number]),
     alwaysUpdate: propTypes.bool
