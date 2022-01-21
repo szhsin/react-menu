@@ -33,7 +33,7 @@ export const MenuItem = withHovering(
     const isDisabled = !!disabled;
     validateIndex(index, isDisabled, children);
     const ref = useRef();
-    const { setHover, onBlur, onMouseEnter, onMouseLeave } = useItemState(
+    const { setHover, onBlur, onMouseMove, onMouseLeave } = useItemState(
       ref,
       index,
       isHovering,
@@ -102,7 +102,7 @@ export const MenuItem = withHovering(
     const handlers = attachHandlerProps(
       {
         ...activeStateHandlers,
-        onMouseEnter,
+        onMouseMove,
         onMouseLeave,
         onMouseDown: setHover,
         onKeyUp: handleKeyUp,

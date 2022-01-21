@@ -19,7 +19,9 @@ export const useItemState = (ref, index, isHovering, isDisabled) => {
     }
   };
 
-  const onMouseEnter = () => {
+  const onMouseMove = () => {
+    if (isHovering) return;
+    
     if (isSubmenuOpen) {
       timeoutId.current = setTimeout(setHover, submenuCloseDelay);
     } else {
@@ -44,7 +46,7 @@ export const useItemState = (ref, index, isHovering, isDisabled) => {
   return {
     setHover,
     onBlur,
-    onMouseEnter,
+    onMouseMove,
     onMouseLeave
   };
 };

@@ -28,7 +28,9 @@ var useItemState = function useItemState(ref, index, isHovering, isDisabled) {
     }
   };
 
-  var onMouseEnter = function onMouseEnter() {
+  var onMouseMove = function onMouseMove() {
+    if (isHovering) return;
+
     if (isSubmenuOpen) {
       timeoutId.current = setTimeout(setHover, submenuCloseDelay);
     } else {
@@ -57,7 +59,7 @@ var useItemState = function useItemState(ref, index, isHovering, isDisabled) {
   return {
     setHover: setHover,
     onBlur: onBlur,
-    onMouseEnter: onMouseEnter,
+    onMouseMove: onMouseMove,
     onMouseLeave: onMouseLeave
   };
 };
