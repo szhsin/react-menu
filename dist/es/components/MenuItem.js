@@ -35,7 +35,7 @@ var MenuItem = /*#__PURE__*/withHovering( /*#__PURE__*/memo(function MenuItem(_r
   var _useItemState = useItemState(ref, index, isHovering, isDisabled),
       setHover = _useItemState.setHover,
       onBlur = _useItemState.onBlur,
-      onMouseEnter = _useItemState.onMouseEnter,
+      onMouseMove = _useItemState.onMouseMove,
       onMouseLeave = _useItemState.onMouseLeave;
 
   var eventHandlers = useContext(EventHandlersContext);
@@ -99,7 +99,7 @@ var MenuItem = /*#__PURE__*/withHovering( /*#__PURE__*/memo(function MenuItem(_r
     });
   }, [type, isDisabled, isHovering, isActive, isChecked, isAnchor]);
   var handlers = attachHandlerProps(_extends({}, activeStateHandlers, {
-    onMouseEnter: onMouseEnter,
+    onMouseMove: onMouseMove,
     onMouseLeave: onMouseLeave,
     onMouseDown: setHover,
     onKeyUp: handleKeyUp,

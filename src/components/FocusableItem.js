@@ -26,7 +26,7 @@ export const FocusableItem = withHovering(
     const isDisabled = !!disabled;
     validateIndex(index, isDisabled, children);
     const ref = useRef(null);
-    const { setHover, onBlur, onMouseEnter, onMouseLeave } = useItemState(
+    const { setHover, onBlur, onMouseMove, onMouseLeave } = useItemState(
       ref,
       index,
       isHovering,
@@ -56,7 +56,7 @@ export const FocusableItem = withHovering(
 
     const handlers = attachHandlerProps(
       {
-        onMouseEnter,
+        onMouseMove,
         onMouseLeave: (e) => onMouseLeave(e, true),
         onFocus: setHover,
         onBlur

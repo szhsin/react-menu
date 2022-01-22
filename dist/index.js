@@ -479,7 +479,7 @@ var useItemState = function useItemState(ref, index, isHovering, isDisabled) {
       isSubmenuOpen = _useContext2.isSubmenuOpen,
       dispatch = _useContext2.dispatch;
 
-  var timeoutId = React.useRef();
+  var timeoutId = React.useRef(0);
 
   var setHover = function setHover() {
     if (!isDisabled) dispatch({
@@ -497,16 +497,22 @@ var useItemState = function useItemState(ref, index, isHovering, isDisabled) {
     }
   };
 
-  var onMouseEnter = function onMouseEnter() {
+  var onMouseMove = function onMouseMove() {
+    if (isHovering) return;
+
     if (isSubmenuOpen) {
-      timeoutId.current = setTimeout(setHover, submenuCloseDelay);
+      if (!timeoutId.current) timeoutId.current = setTimeout(setHover, submenuCloseDelay);
     } else {
       setHover();
     }
   };
 
   var onMouseLeave = function onMouseLeave(_, keepHover) {
-    timeoutId.current && clearTimeout(timeoutId.current);
+    if (timeoutId.current) {
+      clearTimeout(timeoutId.current);
+      timeoutId.current = 0;
+    }
+
     if (!keepHover) dispatch({
       type: HoverIndexActionTypes.UNSET,
       index: index
@@ -526,7 +532,7 @@ var useItemState = function useItemState(ref, index, isHovering, isDisabled) {
   return {
     setHover: setHover,
     onBlur: onBlur,
-    onMouseEnter: onMouseEnter,
+    onMouseMove: onMouseMove,
     onMouseLeave: onMouseLeave
   };
 };
@@ -2057,7 +2063,7 @@ var MenuItem = /*#__PURE__*/withHovering( /*#__PURE__*/React.memo(function MenuI
   var _useItemState = useItemState(ref, index, isHovering, isDisabled),
       setHover = _useItemState.setHover,
       onBlur = _useItemState.onBlur,
-      onMouseEnter = _useItemState.onMouseEnter,
+      onMouseMove = _useItemState.onMouseMove,
       onMouseLeave = _useItemState.onMouseLeave;
 
   var eventHandlers = React.useContext(EventHandlersContext);
@@ -2121,7 +2127,7 @@ var MenuItem = /*#__PURE__*/withHovering( /*#__PURE__*/React.memo(function MenuI
     });
   }, [type, isDisabled, isHovering, isActive, isChecked, isAnchor]);
   var handlers = attachHandlerProps(_extends({}, activeStateHandlers, {
-    onMouseEnter: onMouseEnter,
+    onMouseMove: onMouseMove,
     onMouseLeave: onMouseLeave,
     onMouseDown: setHover,
     onKeyUp: handleKeyUp,
@@ -2187,7 +2193,7 @@ var FocusableItem = /*#__PURE__*/withHovering( /*#__PURE__*/React.memo(function 
   var _useItemState = useItemState(ref, index, isHovering, isDisabled),
       setHover = _useItemState.setHover,
       onBlur = _useItemState.onBlur,
-      onMouseEnter = _useItemState.onMouseEnter,
+      onMouseMove = _useItemState.onMouseMove,
       _onMouseLeave = _useItemState.onMouseLeave;
 
   var _useContext = React.useContext(EventHandlersContext),
@@ -2207,7 +2213,7 @@ var FocusableItem = /*#__PURE__*/withHovering( /*#__PURE__*/React.memo(function 
     }));
   }, [children, modifiers, handleClose]);
   var handlers = attachHandlerProps({
-    onMouseEnter: onMouseEnter,
+    onMouseMove: onMouseMove,
     onMouseLeave: function onMouseLeave(e) {
       return _onMouseLeave(e, true);
     },
