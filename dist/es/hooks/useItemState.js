@@ -10,7 +10,7 @@ var useItemState = function useItemState(ref, index, isHovering, isDisabled) {
       isSubmenuOpen = _useContext2.isSubmenuOpen,
       dispatch = _useContext2.dispatch;
 
-  var timeoutId = useRef();
+  var timeoutId = useRef(0);
 
   var setHover = function setHover() {
     if (!isDisabled) dispatch({
@@ -32,14 +32,18 @@ var useItemState = function useItemState(ref, index, isHovering, isDisabled) {
     if (isHovering) return;
 
     if (isSubmenuOpen) {
-      timeoutId.current = setTimeout(setHover, submenuCloseDelay);
+      if (!timeoutId.current) timeoutId.current = setTimeout(setHover, submenuCloseDelay);
     } else {
       setHover();
     }
   };
 
   var onMouseLeave = function onMouseLeave(_, keepHover) {
-    timeoutId.current && clearTimeout(timeoutId.current);
+    if (timeoutId.current) {
+      clearTimeout(timeoutId.current);
+      timeoutId.current = 0;
+    }
+
     if (!keepHover) dispatch({
       type: HoverIndexActionTypes.UNSET,
       index: index

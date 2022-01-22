@@ -5,7 +5,7 @@ import { ItemSettingsContext, MenuListItemContext, HoverIndexActionTypes } from 
 export const useItemState = (ref, index, isHovering, isDisabled) => {
   const { submenuCloseDelay } = useContext(ItemSettingsContext);
   const { isParentOpen, isSubmenuOpen, dispatch } = useContext(MenuListItemContext);
-  const timeoutId = useRef();
+  const timeoutId = useRef(0);
 
   const setHover = () => {
     if (!isDisabled) dispatch({ type: HoverIndexActionTypes.SET, index });
@@ -21,16 +21,19 @@ export const useItemState = (ref, index, isHovering, isDisabled) => {
 
   const onMouseMove = () => {
     if (isHovering) return;
-    
     if (isSubmenuOpen) {
-      timeoutId.current = setTimeout(setHover, submenuCloseDelay);
+      if (!timeoutId.current) timeoutId.current = setTimeout(setHover, submenuCloseDelay);
     } else {
       setHover();
     }
   };
 
   const onMouseLeave = (_, keepHover) => {
-    timeoutId.current && clearTimeout(timeoutId.current);
+    if (timeoutId.current) {
+      clearTimeout(timeoutId.current);
+      timeoutId.current = 0;
+    }
+
     if (!keepHover) dispatch({ type: HoverIndexActionTypes.UNSET, index });
   };
 
