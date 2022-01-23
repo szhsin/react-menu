@@ -31,7 +31,7 @@ test('className and styles props', () => {
   const menuItem = queryByRole('menuitemcheckbox', { name: 'Middle' });
   expect(menuItem).toHaveStyle({ ...baseStyle, color: 'red' });
 
-  fireEvent.mouseEnter(menuItem);
+  fireEvent.mouseMove(menuItem);
   expect(menuItem).toHaveStyle({ ...baseStyle, color: 'green' });
 
   fireEvent.keyDown(menuItem, { key: ' ' });
@@ -57,11 +57,11 @@ test('className and styles props as functions', () => {
   );
 
   // For testing className and styles memorisation
-  fireEvent.mouseEnter(queryByRole('menuitem', { name: 'First' }));
-  fireEvent.mouseEnter(queryByRole('menuitem', { name: 'Last' }));
+  fireEvent.mouseMove(queryByRole('menuitem', { name: 'First' }));
+  fireEvent.mouseMove(queryByRole('menuitem', { name: 'Last' }));
 
   const menuItem = queryByRole('menuitem', { name: 'Middle' });
-  fireEvent.mouseEnter(menuItem);
+  fireEvent.mouseMove(menuItem);
   expect(styles).toHaveBeenLastCalledWith(
     expect.objectContaining({
       hover: true,

@@ -108,7 +108,7 @@ test('Hover and press a menu item', () => {
 
   // hover and press a menu item
   const menuItem = utils.queryMenuItem('Middle');
-  fireEvent.mouseEnter(menuItem);
+  fireEvent.mouseMove(menuItem);
   fireEvent.pointerDown(menuItem);
   utils.expectMenuItemToBeHover(menuItem, true);
   utils.expectMenuItemToBeActive(menuItem, true);
@@ -127,12 +127,12 @@ test('Hover and press a menu item', () => {
   const oneItem = utils.queryMenuItem('First');
   const anothorItem = utils.queryMenuItem('Last');
 
-  fireEvent.mouseEnter(oneItem);
+  fireEvent.mouseMove(oneItem);
   expect(oneItem).toHaveFocus();
   utils.expectMenuItemToBeHover(oneItem, true);
   utils.expectMenuItemToBeHover(anothorItem, false);
 
-  fireEvent.mouseEnter(anothorItem);
+  fireEvent.mouseMove(anothorItem);
   expect(anothorItem).toHaveFocus();
   utils.expectMenuItemToBeHover(oneItem, false);
   utils.expectMenuItemToBeHover(anothorItem, true);
@@ -143,7 +143,7 @@ test('Pointer press and leave a menu item', () => {
   utils.clickMenuButton();
 
   const menuItem = utils.queryMenuItem('Middle');
-  fireEvent.mouseEnter(menuItem);
+  fireEvent.mouseMove(menuItem);
   fireEvent.pointerDown(menuItem);
   fireEvent.mouseLeave(menuItem);
   fireEvent.pointerLeave(menuItem);
@@ -163,7 +163,7 @@ test('keyDown on one item and keyUp on another will not trigger click event', ()
   utils.clickMenuButton();
 
   const menuItem = utils.queryMenuItem('First');
-  fireEvent.mouseEnter(menuItem);
+  fireEvent.mouseMove(menuItem);
   fireEvent.keyDown(menuItem, { key: 'Enter' });
   utils.expectMenuItemToBeHover(menuItem, true);
   utils.expectMenuItemToBeActive(menuItem, true);
@@ -193,7 +193,7 @@ test('MenuItem keeps hover and active states after focusing something inside it'
   utils.clickMenuButton();
 
   const menuItem = utils.queryMenuItem('Click');
-  fireEvent.mouseEnter(menuItem);
+  fireEvent.mouseMove(menuItem);
   fireEvent.pointerDown(menuItem);
   expect(menuItem).toHaveFocus();
   utils.expectMenuItemToBeHover(menuItem, true);
@@ -212,18 +212,18 @@ test('Disabled menu item', () => {
 
   const disabledItem = utils.queryMenuItem('Middle');
   utils.expectToBeDisabled(disabledItem, true);
-  fireEvent.mouseEnter(disabledItem);
+  fireEvent.mouseMove(disabledItem);
   fireEvent.pointerDown(disabledItem);
   utils.expectMenuItemToBeHover(disabledItem, false);
   utils.expectMenuItemToBeActive(disabledItem, false);
-  fireEvent.mouseEnter(disabledItem);
+  fireEvent.mouseMove(disabledItem);
   expect(onClick).not.toHaveBeenCalled();
   utils.expectMenuToBeOpen(true);
 
   const menuItem = utils.queryMenuItem('First');
   utils.expectToBeDisabled(menuItem, false);
   utils.expectMenuItemToBeChecked(menuItem);
-  fireEvent.mouseEnter(menuItem);
+  fireEvent.mouseMove(menuItem);
   utils.expectMenuItemToBeHover(menuItem, true);
 
   // Menu item loses hover state when losing focus
@@ -244,12 +244,12 @@ test('Children of MenuItem is a function', () => {
 });
 
 test('Additional props are forwarded to MenuItem', () => {
-  const onMouseEnter = jest.fn();
+  const onMouseMove = jest.fn();
   const onKeyDown = jest.fn();
   utils.renderMenu(null, {
     ['aria-label']: 'test',
     randomattr: 'random',
-    onMouseEnter,
+    onMouseMove,
     onKeyDown
   });
   utils.clickMenuButton();
@@ -257,8 +257,8 @@ test('Additional props are forwarded to MenuItem', () => {
   const menuItem = screen.queryByText('Middle');
   expect(menuItem).toHaveAttribute('aria-label', 'test');
   expect(menuItem).toHaveAttribute('randomattr', 'random');
-  fireEvent.mouseEnter(menuItem);
-  expect(onMouseEnter).toHaveBeenCalledTimes(1);
+  fireEvent.mouseMove(menuItem);
+  expect(onMouseMove).toHaveBeenCalledTimes(1);
   fireEvent.keyDown(menuItem, { key: 'Enter' });
   expect(onKeyDown).toHaveBeenCalledTimes(1);
 });
@@ -292,7 +292,7 @@ test('FocusableItem', () => {
   expect(renderFn).toHaveBeenLastCalledWith(false);
 
   const button = queryByRole('button', { name: 'Close' });
-  fireEvent.mouseEnter(button);
+  fireEvent.mouseMove(button);
   expect(button).toHaveFocus();
   expect(button).toHaveClass('hover');
   expect(renderFn).toHaveBeenLastCalledWith(true);
