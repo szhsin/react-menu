@@ -482,7 +482,7 @@ var useItemState = function useItemState(ref, index, isHovering, isDisabled) {
   var timeoutId = React.useRef(0);
 
   var setHover = function setHover() {
-    if (!isDisabled) dispatch({
+    if (!isHovering && !isDisabled) dispatch({
       type: HoverIndexActionTypes.SET,
       index: index
     });
@@ -498,10 +498,11 @@ var useItemState = function useItemState(ref, index, isHovering, isDisabled) {
   };
 
   var onMouseMove = function onMouseMove() {
-    if (isHovering) return;
-
     if (isSubmenuOpen) {
-      if (!timeoutId.current) timeoutId.current = setTimeout(setHover, submenuCloseDelay);
+      if (!timeoutId.current) timeoutId.current = setTimeout(function () {
+        timeoutId.current = 0;
+        setHover();
+      }, submenuCloseDelay);
     } else {
       setHover();
     }
@@ -1851,15 +1852,22 @@ var SubMenu = /*#__PURE__*/withHovering( /*#__PURE__*/React.memo(function SubMen
 
   var containerRef = React.useRef(null);
   var itemRef = React.useRef(null);
-  var timeoutId = React.useRef();
+  var timeoutId = React.useRef(0);
+
+  var stopTimer = function stopTimer() {
+    if (timeoutId.current) {
+      clearTimeout(timeoutId.current);
+      timeoutId.current = 0;
+    }
+  };
 
   var _openMenu2 = function openMenu() {
-    clearTimeout(timeoutId.current);
+    stopTimer();
     !isDisabled && _openMenu.apply(void 0, arguments);
   };
 
   var setHover = function setHover() {
-    return !isDisabled && !isHovering && dispatch({
+    return !isHovering && !isDisabled && dispatch({
       type: HoverIndexActionTypes.SET,
       index: index
     });
@@ -1872,8 +1880,8 @@ var SubMenu = /*#__PURE__*/withHovering( /*#__PURE__*/React.memo(function SubMen
     }, Math.max(delay, 0));
   };
 
-  var handleMouseEnter = function handleMouseEnter() {
-    if (isDisabled || isOpen) return;
+  var handleMouseMove = function handleMouseMove() {
+    if (timeoutId.current || isOpen || isDisabled) return;
 
     if (isSubmenuOpen) {
       timeoutId.current = setTimeout(function () {
@@ -1885,7 +1893,7 @@ var SubMenu = /*#__PURE__*/withHovering( /*#__PURE__*/React.memo(function SubMen
   };
 
   var handleMouseLeave = function handleMouseLeave() {
-    clearTimeout(timeoutId.current);
+    stopTimer();
     if (!isOpen) dispatch({
       type: HoverIndexActionTypes.UNSET,
       index: index
@@ -1980,7 +1988,7 @@ var SubMenu = /*#__PURE__*/withHovering( /*#__PURE__*/React.memo(function SubMen
       restItemProps = _objectWithoutPropertiesLoose(itemProps, _excluded4);
 
   var itemHandlers = attachHandlerProps(_extends({}, activeStateHandlers, {
-    onMouseEnter: handleMouseEnter,
+    onMouseMove: handleMouseMove,
     onMouseLeave: handleMouseLeave,
     onMouseDown: setHover,
     onClick: function onClick() {

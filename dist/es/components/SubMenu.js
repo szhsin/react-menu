@@ -75,15 +75,22 @@ var SubMenu = /*#__PURE__*/withHovering( /*#__PURE__*/memo(function SubMenu(_ref
 
   var containerRef = useRef(null);
   var itemRef = useRef(null);
-  var timeoutId = useRef();
+  var timeoutId = useRef(0);
+
+  var stopTimer = function stopTimer() {
+    if (timeoutId.current) {
+      clearTimeout(timeoutId.current);
+      timeoutId.current = 0;
+    }
+  };
 
   var _openMenu2 = function openMenu() {
-    clearTimeout(timeoutId.current);
+    stopTimer();
     !isDisabled && _openMenu.apply(void 0, arguments);
   };
 
   var setHover = function setHover() {
-    return !isDisabled && !isHovering && dispatch({
+    return !isHovering && !isDisabled && dispatch({
       type: HoverIndexActionTypes.SET,
       index: index
     });
@@ -96,8 +103,8 @@ var SubMenu = /*#__PURE__*/withHovering( /*#__PURE__*/memo(function SubMenu(_ref
     }, Math.max(delay, 0));
   };
 
-  var handleMouseEnter = function handleMouseEnter() {
-    if (isDisabled || isOpen) return;
+  var handleMouseMove = function handleMouseMove() {
+    if (timeoutId.current || isOpen || isDisabled) return;
 
     if (isSubmenuOpen) {
       timeoutId.current = setTimeout(function () {
@@ -109,7 +116,7 @@ var SubMenu = /*#__PURE__*/withHovering( /*#__PURE__*/memo(function SubMenu(_ref
   };
 
   var handleMouseLeave = function handleMouseLeave() {
-    clearTimeout(timeoutId.current);
+    stopTimer();
     if (!isOpen) dispatch({
       type: HoverIndexActionTypes.UNSET,
       index: index
@@ -204,7 +211,7 @@ var SubMenu = /*#__PURE__*/withHovering( /*#__PURE__*/memo(function SubMenu(_ref
       restItemProps = _objectWithoutPropertiesLoose(itemProps, _excluded4);
 
   var itemHandlers = attachHandlerProps(_extends({}, activeStateHandlers, {
-    onMouseEnter: handleMouseEnter,
+    onMouseMove: handleMouseMove,
     onMouseLeave: handleMouseLeave,
     onMouseDown: setHover,
     onClick: function onClick() {

@@ -13,7 +13,7 @@ var useItemState = function useItemState(ref, index, isHovering, isDisabled) {
   var timeoutId = useRef(0);
 
   var setHover = function setHover() {
-    if (!isDisabled) dispatch({
+    if (!isHovering && !isDisabled) dispatch({
       type: HoverIndexActionTypes.SET,
       index: index
     });
@@ -29,10 +29,11 @@ var useItemState = function useItemState(ref, index, isHovering, isDisabled) {
   };
 
   var onMouseMove = function onMouseMove() {
-    if (isHovering) return;
-
     if (isSubmenuOpen) {
-      if (!timeoutId.current) timeoutId.current = setTimeout(setHover, submenuCloseDelay);
+      if (!timeoutId.current) timeoutId.current = setTimeout(function () {
+        timeoutId.current = 0;
+        setHover();
+      }, submenuCloseDelay);
     } else {
       setHover();
     }

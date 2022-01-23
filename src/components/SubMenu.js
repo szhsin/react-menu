@@ -79,15 +79,22 @@ export const SubMenu = withHovering(
     );
     const containerRef = useRef(null);
     const itemRef = useRef(null);
-    const timeoutId = useRef();
+    const timeoutId = useRef(0);
+
+    const stopTimer = () => {
+      if (timeoutId.current) {
+        clearTimeout(timeoutId.current);
+        timeoutId.current = 0;
+      }
+    };
 
     const openMenu = (...args) => {
-      clearTimeout(timeoutId.current);
+      stopTimer();
       !isDisabled && _openMenu(...args);
     };
 
     const setHover = () =>
-      !isDisabled && !isHovering && dispatch({ type: HoverIndexActionTypes.SET, index });
+      !isHovering && !isDisabled && dispatch({ type: HoverIndexActionTypes.SET, index });
 
     const delayOpen = (delay) => {
       setHover();
@@ -95,21 +102,21 @@ export const SubMenu = withHovering(
         timeoutId.current = setTimeout(() => batchedUpdates(openMenu), Math.max(delay, 0));
     };
 
-    const handleMouseEnter = () => {
-      if (isDisabled || isOpen) return;
-
+    const handleMouseMove = () => {
+      if (timeoutId.current || isOpen || isDisabled) return;
+      
       if (isSubmenuOpen) {
-        timeoutId.current = setTimeout(
-          () => delayOpen(submenuOpenDelay - submenuCloseDelay),
-          submenuCloseDelay
-        );
+          timeoutId.current = setTimeout(
+            () => delayOpen(submenuOpenDelay - submenuCloseDelay),
+            submenuCloseDelay
+          );
       } else {
         delayOpen(submenuOpenDelay);
       }
     };
 
     const handleMouseLeave = () => {
-      clearTimeout(timeoutId.current);
+      stopTimer();
       if (!isOpen) dispatch({ type: HoverIndexActionTypes.UNSET, index });
     };
 
@@ -206,7 +213,7 @@ export const SubMenu = withHovering(
     const itemHandlers = attachHandlerProps(
       {
         ...activeStateHandlers,
-        onMouseEnter: handleMouseEnter,
+        onMouseMove: handleMouseMove,
         onMouseLeave: handleMouseLeave,
         onMouseDown: setHover,
         onClick: () => openTrigger !== 'none' && openMenu(),
