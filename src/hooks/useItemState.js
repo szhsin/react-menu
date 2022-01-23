@@ -8,7 +8,7 @@ export const useItemState = (ref, index, isHovering, isDisabled) => {
   const timeoutId = useRef(0);
 
   const setHover = () => {
-    if (!isDisabled) dispatch({ type: HoverIndexActionTypes.SET, index });
+    if (!isHovering && !isDisabled) dispatch({ type: HoverIndexActionTypes.SET, index });
   };
 
   const onBlur = (e) => {
@@ -20,9 +20,12 @@ export const useItemState = (ref, index, isHovering, isDisabled) => {
   };
 
   const onMouseMove = () => {
-    if (isHovering) return;
     if (isSubmenuOpen) {
-      if (!timeoutId.current) timeoutId.current = setTimeout(setHover, submenuCloseDelay);
+      if (!timeoutId.current)
+        timeoutId.current = setTimeout(() => {
+          timeoutId.current = 0;
+          setHover();
+        }, submenuCloseDelay);
     } else {
       setHover();
     }
