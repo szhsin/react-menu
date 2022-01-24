@@ -12,7 +12,7 @@
     "react-router-hash-link": "^2.4.3",
     "react-scripts": "4.0.3",
     "source-map-explorer": "^2.5.2",
-    "web-vitals": "^2.1.2"
+    "web-vitals": "^2.1.4"
   },
   "scripts": {
     "analyze": "source-map-explorer 'build/static/js/*.js'",
