@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { HashLink as Link } from 'react-router-hash-link';
+import Link from 'next/link';
 
 export const TableContentsList = React.memo(function TableContentsList({ list, level, maxHeight }) {
   const listElt = list.map((item) => {
@@ -11,7 +11,7 @@ export const TableContentsList = React.memo(function TableContentsList({ list, l
 
     return (
       <li key={item.id}>
-        <Link to={`#${item.id}`}>{item.title}</Link>
+        <Link href={`#${item.id}`}>{item.title}</Link>
         {nested}
       </li>
     );

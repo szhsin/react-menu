@@ -1,5 +1,7 @@
 import React, { useContext } from 'react';
-import { NavLink } from 'react-router-dom';
+import { useRouter } from 'next/router';
+import Link from 'next/link';
+import { basePath } from '../../next.config';
 import { bem, SettingContext, TocContext } from '../utils';
 import { Logo } from './Logo';
 import { HeaderBanner } from './HeaderBanner';
@@ -26,11 +28,9 @@ export const Header = React.memo(function Header() {
         <Logo />
 
         <ul className={bem(blockName, 'link-list')}>
-          <NavBarLink exact to="/">
-            Home
-          </NavBarLink>
-          <NavBarLink to="/docs">Docs</NavBarLink>
-          <NavBarLink to="/style-guide">Styling</NavBarLink>
+          <NavBarLink href="/">Home</NavBarLink>
+          <NavBarLink href="/docs">Docs</NavBarLink>
+          <NavBarLink href="/style-guide">Styling</NavBarLink>
         </ul>
 
         <ThemeSwitch />
@@ -42,17 +42,27 @@ export const Header = React.memo(function Header() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          <img src={`GitHub-Mark-${isDark ? 'Light-' : ''}64px.png`} alt="GitHub" />
+          <img src={`${basePath}/GitHub-Mark-${isDark ? 'Light-' : ''}64px.png`} alt="GitHub" />
         </a>
       </nav>
     </header>
   );
 });
 
-function NavBarLink(props) {
+function NavBarLink({ href, children }) {
+  const { pathname } = useRouter();
+  const linkProps =
+    href === pathname
+      ? {
+          'aria-current': 'page',
+          className: 'active'
+        }
+      : undefined;
   return (
     <li className={bem(blockName, 'link')}>
-      <NavLink {...props} />
+      <Link href={href}>
+        <a {...linkProps}>{children}</a>
+      </Link>
     </li>
   );
 }

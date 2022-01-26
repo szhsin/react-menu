@@ -12,7 +12,12 @@ export const Logo = React.memo(function Logo() {
   );
 
   return (
-    <Menu menuButton={menuButton} offsetY={10} theming={React.useContext(SettingContext).theme}>
+    <Menu
+      initialMounted
+      menuButton={menuButton}
+      offsetY={10}
+      theming={React.useContext(SettingContext).theme}
+    >
       <MenuItem href="https://szhsin.github.io/react-menu-v1">v1.11.x</MenuItem>
     </Menu>
   );

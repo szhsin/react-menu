@@ -1,5 +1,5 @@
 {
-  "short_name": "@szhsin/react-menu",
+  "short_name": "react-menu",
   "name": "@szhsin/react-menu",
   "icons": [
     {
@@ -10,6 +10,6 @@
   ],
   "start_url": ".",
   "display": "standalone",
-  "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "theme_color": "#ffffff",
+  "background_color": "#000000"
 }

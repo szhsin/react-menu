@@ -34,7 +34,7 @@
   transition-timing-function: $timing-function;
 }
 
-@mixin border($border: 'border', $width: 1px, $transition: true) {
+@mixin border($border: 'border', $width: 1px, $transition: false) {
   #{$border}: $width solid var.$border-light;
   @if $transition {
     @include transition(border-color);

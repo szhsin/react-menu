@@ -1,13 +1,13 @@
 /* eslint-disable react/no-unescaped-entities */
 import React from 'react';
-import { HashLink as Link } from 'react-router-hash-link';
+import Link from 'next/link';
 import { LibName } from '../components/LibName';
 import { StyleExamples } from '../components/StyleExamples';
 import { ExternalLink } from '../components/ExternalLink';
 
-const menuItemLink = <Link to={'/docs#menu-item'}>MenuItem</Link>;
-const menuButtonLink = <Link to={'/docs#menu-button'}>MenuButton</Link>;
-const menuStateHookLink = <Link to={'/docs#use-menu-state'}>useMenuState</Link>;
+const menuItemLink = <Link href={'/docs#menu-item'}>MenuItem</Link>;
+const menuButtonLink = <Link href={'/docs#menu-button'}>MenuButton</Link>;
+const menuStateHookLink = <Link href={'/docs#use-menu-state'}>useMenuState</Link>;
 
 export const basicMenu = {
   id: 'basic-menu',
@@ -1150,7 +1150,7 @@ export const stylesProp = {
       <p>Optionally, you may pass a function to the prop and receive states about the component.</p>
       <p>
         For more details about the state keys, please refer to the <code>*styles</code> props under
-        each <Link to={'/docs#menu-item'}>component</Link>.
+        each <Link href={'/docs#menu-item'}>component</Link>.
       </p>
     </>
   ),
@@ -1227,7 +1227,7 @@ export const classNameProp = {
       </p>
       <p>
         For more details about available states, please refer to the <code>*className</code> props
-        under each <Link to={'/docs#menu-item'}>component</Link>.
+        under each <Link href={'/docs#menu-item'}>component</Link>.
       </p>
     </>
   ),
@@ -1369,7 +1369,7 @@ export const customisedStyle = {
         You will usually import the <code>@szhsin/react-menu/dist/core.css</code> and target
         different CSS selectors. There is even a <code>style-utils</code> which helps you easily
         write the selectors. You can find a complete list of CSS selectors in the{' '}
-        <Link to={'/style-guide#selectors'}>styling guide</Link>.
+        <Link href={'/style-guide#selectors'}>styling guide</Link>.
       </p>
       <p>
         In addition, you can use <code>className</code> or <code>styles</code> props.
@@ -1403,7 +1403,7 @@ export const features = {
       <li>Flexible menu positioning.</li>
       <li>Comprehensive keyboard interactions.</li>
       <li>
-        Unstyled components and easy <Link to={'#styling'}>customisation</Link>.
+        Unstyled components and easy <Link href={'#styling'}>customisation</Link>.
       </li>
       <li>Works in major browsers without polyfills.</li>
       <li>

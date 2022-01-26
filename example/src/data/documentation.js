@@ -1,6 +1,6 @@
 /* eslint-disable react/no-unescaped-entities */
 import React from 'react';
-import { HashLink as Link } from 'react-router-hash-link';
+import Link from 'next/link';
 import { LibName } from '../components/LibName';
 import { ExternalLink } from '../components/ExternalLink';
 
@@ -8,10 +8,10 @@ const ENTER_KEY = "'Enter'";
 const SPACE_KEY = "' '(Space)";
 const ESC_KEY = "'Escape'";
 
-const menuLink = <Link to={'#menu'}>Menu</Link>;
-const menuButtonLink = <Link to={'#menu-button'}>MenuButton</Link>;
-const controlledMenuLink = <Link to={'#controlled-menu'}>ControlledMenu</Link>;
-const radioGroupLink = <Link to={'#radio-group'}>MenuRadioGroup</Link>;
+const menuLink = <Link href={'#menu'}>Menu</Link>;
+const menuButtonLink = <Link href={'#menu-button'}>MenuButton</Link>;
+const controlledMenuLink = <Link href={'#controlled-menu'}>ControlledMenu</Link>;
+const radioGroupLink = <Link href={'#radio-group'}>MenuRadioGroup</Link>;
 
 const propsTable = {
   heading: <h3>Props</h3>,
@@ -1131,7 +1131,7 @@ const controlledMenu = {
         For example, you might need to open a menu when something on the page is hovered by a mouse,
         or you need to position the menu to something other than the menu button.{' '}
         <code>ControlledMenu</code> can be also use to implement a{' '}
-        <Link to={'/#context-menu'}>context menu</Link>.
+        <Link href={'/#context-menu'}>context menu</Link>.
       </p>
       <p>
         When using <code>ControlledMenu</code>, it's your job to set focus to the desirable item
@@ -1163,7 +1163,7 @@ const controlledMenu = {
             <>
               <p>
                 <em>Use this prop only for context menu.</em> See an{' '}
-                <Link to={'/#context-menu'}>example</Link>.
+                <Link href={'/#context-menu'}>example</Link>.
               </p>
               <p>
                 An object describes viewport coordinates to which context menu will be positioned.
@@ -1284,7 +1284,7 @@ const menuStateHook = {
       </p>
       <p>
         The Hook returns several states which are used by <code>ControlledMenu</code> and can be
-        spread to its props. See an <Link to={'/#use-menu-state'}>example</Link>.
+        spread to its props. See an <Link href={'/#use-menu-state'}>example</Link>.
       </p>
       <pre>
         <code className="hljs">{`function useMenuState(options?: {

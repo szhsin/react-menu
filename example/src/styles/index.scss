@@ -28,7 +28,6 @@
   line-height: 1.5;
   color: #212121;
   background-color: #fafbfc;
-  @include mixins.transition((background-color, color));
   @include mixins.scrollbar;
 
   &__toast {
@@ -73,8 +72,7 @@
   padding: 2rem 1.5rem;
   text-align: center;
   background-color: #f6f6f6;
-  @include mixins.border(border-top, $transition: false);
-  @include mixins.transition((background-color, border-color));
+  @include mixins.border(border-top);
   p {
     margin: 0;
   }
@@ -280,7 +278,6 @@ $toc-animation: 0.22s ease-out;
         background-color: var.$navbar-light;
         box-shadow: 4px 0 20px 4px var.$mask-color;
         min-width: 15rem;
-        @include mixins.transition;
       }
 
       &__header {
@@ -347,8 +344,7 @@ $toc-animation: 0.22s ease-out;
     padding: 0.75rem 1rem;
     background-color: white;
     border-radius: var.$border-radius-medium;
-    @include mixins.border($transition: false);
-    @include mixins.transition((background-color, border-color));
+    @include mixins.border;
     margin: 1rem 0;
     p {
       margin-bottom: 0;
@@ -411,7 +407,6 @@ $toc-animation: 0.22s ease-out;
       box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5);
       padding: 0 0.5rem;
       margin: 0.25rem 0.5rem 0.25rem 0;
-      @include mixins.transition;
       .szh-app--theme-dark & {
         background-color: var.$btn-dark;
         border-color: var.$border-dark;

@@ -1,3 +1,1 @@
-React-Menu examples and documentation project
-
-It was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+React-Menu examples and documentation website, built with [Next.js](https://nextjs.org/).

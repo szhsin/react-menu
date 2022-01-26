@@ -104,12 +104,12 @@ export const SubMenu = withHovering(
 
     const handleMouseMove = () => {
       if (timeoutId.current || isOpen || isDisabled) return;
-      
+
       if (isSubmenuOpen) {
-          timeoutId.current = setTimeout(
-            () => delayOpen(submenuOpenDelay - submenuCloseDelay),
-            submenuCloseDelay
-          );
+        timeoutId.current = setTimeout(
+          () => delayOpen(submenuOpenDelay - submenuCloseDelay),
+          submenuCloseDelay
+        );
       } else {
         delayOpen(submenuOpenDelay);
       }

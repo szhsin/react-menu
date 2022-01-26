@@ -1,11 +1,14 @@
 # dependencies
-node_modules
+node_modules/
 
 # builds
-build
+build/
+.next/
+_next/
+example/out/
 
 # tests
-coverage
+coverage/
 
 # logs
 logs

@@ -20,7 +20,6 @@ code {
   border-radius: var.$border-radius-medium;
   padding: 0.2rem 0.4rem;
   font-size: 0.875rem;
-  @include mixins.transition;
   .szh-app--theme-dark & {
     background-color: var.$code-dark;
   }
@@ -36,7 +35,6 @@ pre {
 a {
   color: var.$primary-light;
   text-decoration: none;
-  @include mixins.transition(color, 0.15s);
   &:hover {
     text-decoration: underline;
     color: var.$primary-light-lv2;
@@ -61,7 +59,7 @@ input[type='text'] {
   border-radius: var.$border-radius-medium;
   @include mixins.remove-focus;
   @include mixins.focus(2px);
-  @include mixins.border($transition: false);
+  @include mixins.border;
   @include mixins.transition((border-color, box-shadow));
   .szh-app--theme-dark & {
     color: inherit;
@@ -73,7 +71,6 @@ input[type='text'] {
 
 label {
   cursor: pointer;
-  @include mixins.transition(color);
   &.checked {
     color: var.$primary-light;
     .szh-app--theme-dark & {
@@ -110,8 +107,7 @@ label {
   color: inherit;
   background-color: var.$btn-light;
   border-radius: var.$border-radius-medium;
-  @include mixins.border($transition: false);
-  @include mixins.transition((background-color, border-color, color, box-shadow));
+  @include mixins.border;
   @include mixins.remove-focus;
   @include mixins.focus;
 

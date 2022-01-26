@@ -13,7 +13,7 @@ npm run build
 tmpdir="$HOME/gh-pages"
 rm -Rf "$tmpdir"
 mkdir "$tmpdir"
-mv build "$tmpdir"
+mv out "$tmpdir"
 cd ..
 
 git checkout gh-pages
@@ -23,8 +23,8 @@ if [ -z "$check_str" ]; then
     exit 1
 fi
 
-rm -Rf static
-cp -Rf "$tmpdir/build/" .
+rm -Rf _next
+cp -Rf "$tmpdir/out/" .
 git add .
 git commit -m "Updates"
 git push

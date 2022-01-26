@@ -1,10 +1,10 @@
-import React, { useState, useRef, useLayoutEffect } from 'react';
-import { HashLink as Link } from 'react-router-hash-link';
-import { bem } from '../utils';
+import React, { useState, useRef } from 'react';
+import Link from 'next/link';
+import { bem, useLayoutEffect } from '../utils';
 
 const blockName = 'hash-heading';
 
-export const HashHeading = React.memo(function HashHeading({ id, title, heading, smooth }) {
+export const HashHeading = React.memo(function HashHeading({ id, title, heading }) {
   const ref = useRef(null);
   const [hover, setHover] = useState(false);
   const [fontSize, setFontSize] = useState();
@@ -29,19 +29,15 @@ export const HashHeading = React.memo(function HashHeading({ id, title, heading,
         title
       )}
 
-      <Link
-        className={bem(blockName, 'link', { hover })}
-        to={`#${id}`}
-        smooth={smooth}
-        style={{ fontSize }}
-      >
-        #
+      <Link href={`#${id}`}>
+        <a className={bem(blockName, 'link', { hover })} style={{ fontSize }}>
+          #
+        </a>
       </Link>
     </div>
   );
 });
 
 HashHeading.defaultProps = {
-  heading: 'h1',
-  smooth: true
+  heading: 'h1'
 };
