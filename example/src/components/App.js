@@ -1,24 +1,22 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
-import { BrowserRouter as Router } from 'react-router-dom';
-import { bem, DomInfoContext, SettingContext, TocContext, ToastContext } from './utils';
-import { Header } from './components/Header';
-import { PageContent } from './components/PageContent';
-import { Footer } from './components/Footer';
+import { useRouter } from 'next/router';
+import {
+  bem,
+  DomInfoContext,
+  SettingContext,
+  TocContext,
+  ToastContext,
+  useLayoutEffect
+} from '../utils';
+import { Header } from './Header';
+import { Footer } from './Footer';
 
-const App = () => {
+const App = ({ children }) => {
   const [showBanner, setShowBanner] = useState(false);
-  const [theme, setTheme] = useState(() => {
-    let theme;
-    try {
-      theme = localStorage.getItem('theme');
-    } catch (err) {
-      console.log(err);
-    }
-
-    return theme === 'light' ? theme : 'dark';
-  });
+  const [theme, setTheme] = useState('dark');
   const setAndSaveTheme = useCallback((theme) => {
     setTheme(theme);
+    document.body.className = bem('szh-app', null, { theme });
     try {
       localStorage.setItem('theme', theme);
     } catch (err) {
@@ -35,9 +33,17 @@ const App = () => {
     }),
     [theme, setAndSaveTheme, showBanner]
   );
-  useEffect(() => {
-    document.body.className = bem('szh-app', null, { theme });
-  }, [theme]);
+  useLayoutEffect(() => {
+    try {
+      const theme = localStorage.getItem('theme');
+      if (theme === 'light') {
+        setTheme(theme);
+        document.body.className = bem('szh-app', null, { theme });
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }, []);
 
   const [isTocOpen, setTocOpen] = useState(false);
   const tocContext = useMemo(() => ({ isTocOpen, setTocOpen }), [isTocOpen]);
@@ -71,21 +77,26 @@ const App = () => {
     return () => clearTimeout(id);
   }, [toast]);
 
+  const router = useRouter();
+  useEffect(() => {
+    setTocOpen(false);
+  }, [/* effect dep */ router]);
+
   return (
     <DomInfoContext.Provider value={domInfo}>
       <SettingContext.Provider value={setting}>
         <TocContext.Provider value={tocContext}>
           <ToastContext.Provider value={setToast}>
-            <Router basename="/react-menu">
-              <Header />
-              <PageContent />
-              <Footer />
-              {toast && (
-                <div className={bem('szh-app', 'toast')} role="alert">
-                  {toast}
-                </div>
-              )}
-            </Router>
+            <Header />
+            <div id="content" style={showBanner ? { marginTop: 40 } : undefined}>
+              {children}
+            </div>
+            <Footer />
+            {toast && (
+              <div className={bem('szh-app', 'toast')} role="alert">
+                {toast}
+              </div>
+            )}
           </ToastContext.Provider>
         </TocContext.Provider>
       </SettingContext.Provider>

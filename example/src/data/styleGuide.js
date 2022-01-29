@@ -1,6 +1,6 @@
-/* eslint-disable react/no-unescaped-entities */
+/* eslint-disable react/no-unescaped-entities, react/jsx-key */
 import React from 'react';
-import { HashLink as Link } from 'react-router-hash-link';
+import Link from 'next/link';
 import {
   menuContainerSelector,
   menuButtonSelector,
@@ -287,7 +287,7 @@ const styleUtils = {
   contents: [
     <p>
       <code>style-utils</code> helps you write CSS selectors more easily with CSS-in-JS. Using it is
-      optional but highly recommended. There are <Link to={'/#styling'}>some examples</Link>{' '}
+      optional but highly recommended. There are <Link href={'/#styling'}>some examples</Link>{' '}
       demonstrating its usage.
     </p>
   ]

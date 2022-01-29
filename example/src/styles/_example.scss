@@ -31,8 +31,7 @@
     background-color: white;
     padding: 1rem;
     border-radius: var.$border-radius-medium;
-    @include mixins.border($transition: false);
-    @include mixins.transition((background-color, border-color));
+    @include mixins.border;
   }
 }
 
@@ -71,7 +70,6 @@
       padding: 0.25rem 1rem;
       font-size: 1rem;
       white-space: nowrap;
-      @include mixins.transition;
     }
 
     label {
@@ -214,7 +212,6 @@
     border-radius: var.$border-radius-medium;
     background-color: var.$btn-light;
     @include mixins.border('border', 2px, false);
-    @include mixins.transition((border-color, background-color));
     .szh-app--theme-dark & {
       border-color: var.$border-dark;
       background-color: var.$background-dark;

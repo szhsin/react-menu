@@ -1,5 +1,3 @@
-import React from 'react';
-
 export function ExternalLink({ href, children }) {
   return (
     <a className="external-link" target="_blank" rel="noopener noreferrer" href={href}>

@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import { useContext } from 'react';
 import { version, DomInfoContext } from '../utils';
 
 export function HeaderBanner({ onClose }) {

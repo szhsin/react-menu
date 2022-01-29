@@ -40,7 +40,7 @@
 
 .szh-menu__group {
   margin: 0.5rem 0;
-  @include mixins.border(border-top, $transition: false);
+  @include mixins.border(border-top);
   @include mixins.border(border-bottom);
   .szh-app--theme-dark & {
     border-color: var.$border-dark;

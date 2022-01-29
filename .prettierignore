@@ -1,3 +1,6 @@
-build
-coverage
-dist
+build/
+coverage/
+dist/
+example/out/
+.next/
+_next/

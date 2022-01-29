@@ -1,4 +1,4 @@
-import React, { useRef, useState, useLayoutEffect, useContext, useEffect } from 'react';
+import React, { useRef, useState, useContext, useEffect } from 'react';
 import {
   Menu as ReactMenu,
   ControlledMenu as ReactControlledMenu,
@@ -12,7 +12,14 @@ import {
   MenuDivider,
   useMenuState
 } from '@szhsin/react-menu';
-import { SettingContext, DomInfoContext, ToastContext, withPresetProps } from '../utils';
+import {
+  SettingContext,
+  DomInfoContext,
+  ToastContext,
+  withPresetProps,
+  useLayoutEffect
+} from '../utils';
+import { basePath } from '../../next.config';
 import { TableContents } from './TableContents';
 import { Example } from './Example';
 import { HashHeading } from './HashHeading';
@@ -333,7 +340,7 @@ function IconAndImageExample() {
         </MenuItem>
         <MenuDivider />
         <MenuItem href="https://github.com/szhsin/react-menu/">
-          <img src="octocat.png" alt="" role="presentation" />
+          <img src={`${basePath}/octocat.png`} alt="" role="presentation" />
           GitHub
         </MenuItem>
       </Menu>

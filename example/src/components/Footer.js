@@ -1,4 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
+import { basePath } from '../../next.config';
 import { version, build, SettingContext } from '../utils';
 
 export const Footer = React.memo(function Footer() {
@@ -24,7 +25,7 @@ export const Footer = React.memo(function Footer() {
         >
           <img
             className="github-img"
-            src={`GitHub-Mark-${isDark ? 'Light-' : ''}32px.png`}
+            src={`${basePath}/GitHub-Mark-${isDark ? 'Light-' : ''}32px.png`}
             alt="GitHub"
           />
           Star
