@@ -1,8 +1,9 @@
 node_modules
 build
-dist
-coverage
+dist/
+coverage/
 example/
+src/
 
 .DS_Store
 .env
