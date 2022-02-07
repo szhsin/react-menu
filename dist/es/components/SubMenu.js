@@ -4,7 +4,7 @@ import { createPortal } from 'react-dom';
 import { bool, oneOf, oneOfType, node, func, shape } from 'prop-types';
 import { MenuList } from './MenuList.js';
 import { withHovering } from '../utils/withHovering.js';
-import { validateIndex, attachHandlerProps, safeCall, isMenuOpen, batchedUpdates } from '../utils/utils.js';
+import { validateIndex, attachHandlerProps, commonProps, safeCall, isMenuOpen, batchedUpdates } from '../utils/utils.js';
 import { useMenuStateAndFocus } from '../hooks/useMenuStateAndFocus.js';
 import { useActiveState } from '../hooks/useActiveState.js';
 import { useMenuChange } from '../hooks/useMenuChange.js';
@@ -244,10 +244,8 @@ var SubMenu = /*#__PURE__*/withHovering( /*#__PURE__*/memo(function SubMenu(_ref
   }, /*#__PURE__*/React.createElement("div", _extends({
     role: "menuitem",
     "aria-haspopup": true,
-    "aria-expanded": isOpen,
-    "aria-disabled": isDisabled || undefined,
-    tabIndex: isHovering && !isOpen ? 0 : -1
-  }, restItemProps, itemHandlers, {
+    "aria-expanded": isOpen
+  }, commonProps(isDisabled, isHovering), restItemProps, itemHandlers, {
     ref: useCombinedRef(externaItemlRef, itemRef),
     className: useBEM({
       block: menuClass,

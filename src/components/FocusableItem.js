@@ -3,6 +3,7 @@ import { bool, func } from 'prop-types';
 import { useBEM, useFlatStyles, useItemState } from '../hooks';
 import {
   attachHandlerProps,
+  commonProps,
   safeCall,
   menuClass,
   menuItemClass,
@@ -66,9 +67,8 @@ export const FocusableItem = withHovering(
 
     return (
       <li
-        aria-disabled={isDisabled || undefined}
         role="menuitem"
-        tabIndex="-1"
+        {...commonProps(isDisabled)}
         {...restProps}
         {...handlers}
         ref={externalRef}

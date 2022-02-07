@@ -32,13 +32,17 @@ export const expectButtonToBeExpanded = (truthy) =>
 export const expectToBeDisabled = (element, truthy) => {
   if (truthy) {
     expect(element).toHaveAttribute('aria-disabled', 'true');
+    expect(element).not.toHaveAttribute('tabindex');
   } else {
     expect(element).not.toHaveAttribute('aria-disabled');
+    expect(element).toHaveAttribute('tabindex');
   }
 };
 
-export const expectMenuItemToBeHover = (menuItem, truthy) =>
+export const expectMenuItemToBeHover = (menuItem, truthy, disabled) => {
   expectToBe(menuItem, truthy).toHaveClass('szh-menu__item--hover');
+  !disabled && expect(menuItem).toHaveAttribute('tabindex', truthy ? '0' : '-1');
+};
 
 export const expectMenuItemToBeActive = (menuItem, truthy) =>
   expectToBe(menuItem, truthy).toHaveClass('szh-menu__item--active');

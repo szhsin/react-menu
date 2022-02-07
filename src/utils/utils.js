@@ -74,3 +74,10 @@ To create HOCs, see: https://codesandbox.io/s/react-menu-hoc-0bipn`;
     throw new Error(error);
   }
 };
+
+export function commonProps(isDisabled, isHovering) {
+  return {
+    'aria-disabled': isDisabled || undefined,
+    tabIndex: isDisabled ? undefined : isHovering ? 0 : -1
+  };
+}

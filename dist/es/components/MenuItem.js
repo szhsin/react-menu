@@ -8,7 +8,7 @@ import { useActiveState } from '../hooks/useActiveState.js';
 import { useCombinedRef } from '../hooks/useCombinedRef.js';
 import { useBEM } from '../hooks/useBEM.js';
 import { useFlatStyles } from '../hooks/useFlatStyles.js';
-import { validateIndex, attachHandlerProps, safeCall } from '../utils/utils.js';
+import { validateIndex, attachHandlerProps, commonProps, safeCall } from '../utils/utils.js';
 import { stylePropTypes } from '../utils/propTypes.js';
 
 var _excluded = ["className", "styles", "value", "href", "type", "checked", "disabled", "index", "children", "onClick", "isHovering", "externalRef"],
@@ -53,7 +53,12 @@ var MenuItem = /*#__PURE__*/withHovering( /*#__PURE__*/memo(function MenuItem(_r
   var isChecked = isRadio ? radioGroup.value === value : isCheckBox ? !!checked : false;
 
   var handleClick = function handleClick(e) {
-    if (isDisabled) return;
+    if (isDisabled) {
+      e.stopPropagation();
+      e.preventDefault();
+      return;
+    }
+
     var event = {
       value: value,
       syntheticEvent: e
@@ -109,10 +114,8 @@ var MenuItem = /*#__PURE__*/withHovering( /*#__PURE__*/memo(function MenuItem(_r
 
   var menuItemProps = _extends({
     role: isRadio ? 'menuitemradio' : isCheckBox ? 'menuitemcheckbox' : 'menuitem',
-    'aria-checked': isRadio || isCheckBox ? isChecked : undefined,
-    'aria-disabled': isDisabled || undefined,
-    tabIndex: isHovering ? 0 : -1
-  }, restProps, handlers, {
+    'aria-checked': isRadio || isCheckBox ? isChecked : undefined
+  }, commonProps(isDisabled, isHovering), restProps, handlers, {
     ref: useCombinedRef(externalRef, ref),
     className: useBEM({
       block: menuClass,

@@ -106,5 +106,11 @@ var validateIndex = function validateIndex(index, isDisabled, node) {
     throw new Error(error);
   }
 };
+function commonProps(isDisabled, isHovering) {
+  return {
+    'aria-disabled': isDisabled || undefined,
+    tabIndex: isDisabled ? undefined : isHovering ? 0 : -1
+  };
+}
 
-export { applyHOC, applyStatics, attachHandlerProps, batchedUpdates, defineName, floatEqual, getName, getScrollAncestor, getTransition, isMenuOpen, parsePadding, safeCall, validateIndex, values };
+export { applyHOC, applyStatics, attachHandlerProps, batchedUpdates, commonProps, defineName, floatEqual, getName, getScrollAncestor, getTransition, isMenuOpen, parsePadding, safeCall, validateIndex, values };

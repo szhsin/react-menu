@@ -173,6 +173,12 @@ var validateIndex = function validateIndex(index, isDisabled, node) {
     throw new Error(error);
   }
 };
+function commonProps(isDisabled, isHovering) {
+  return {
+    'aria-disabled': isDisabled || undefined,
+    tabIndex: isDisabled ? undefined : isHovering ? 0 : -1
+  };
+}
 
 function _extends() {
   _extends = Object.assign || function (target) {
@@ -1458,10 +1464,8 @@ var MenuList = function MenuList(_ref) {
   }, restProps);
   return /*#__PURE__*/React.createElement("ul", _extends({
     role: "menu",
-    tabIndex: "-1",
-    "aria-disabled": isDisabled || undefined,
     "aria-label": ariaLabel
-  }, restProps, handlers, {
+  }, commonProps(isDisabled), restProps, handlers, {
     ref: useCombinedRef(externalRef, menuRef),
     className: useBEM({
       block: menuClass,
@@ -2021,10 +2025,8 @@ var SubMenu = /*#__PURE__*/withHovering( /*#__PURE__*/React.memo(function SubMen
   }, /*#__PURE__*/React.createElement("div", _extends({
     role: "menuitem",
     "aria-haspopup": true,
-    "aria-expanded": isOpen,
-    "aria-disabled": isDisabled || undefined,
-    tabIndex: isHovering && !isOpen ? 0 : -1
-  }, restItemProps, itemHandlers, {
+    "aria-expanded": isOpen
+  }, commonProps(isDisabled, isHovering), restItemProps, itemHandlers, {
     ref: useCombinedRef(externaItemlRef, itemRef),
     className: useBEM({
       block: menuClass,
@@ -2089,7 +2091,12 @@ var MenuItem = /*#__PURE__*/withHovering( /*#__PURE__*/React.memo(function MenuI
   var isChecked = isRadio ? radioGroup.value === value : isCheckBox ? !!checked : false;
 
   var handleClick = function handleClick(e) {
-    if (isDisabled) return;
+    if (isDisabled) {
+      e.stopPropagation();
+      e.preventDefault();
+      return;
+    }
+
     var event = {
       value: value,
       syntheticEvent: e
@@ -2145,10 +2152,8 @@ var MenuItem = /*#__PURE__*/withHovering( /*#__PURE__*/React.memo(function MenuI
 
   var menuItemProps = _extends({
     role: isRadio ? 'menuitemradio' : isCheckBox ? 'menuitemcheckbox' : 'menuitem',
-    'aria-checked': isRadio || isCheckBox ? isChecked : undefined,
-    'aria-disabled': isDisabled || undefined,
-    tabIndex: isHovering ? 0 : -1
-  }, restProps, handlers, {
+    'aria-checked': isRadio || isCheckBox ? isChecked : undefined
+  }, commonProps(isDisabled, isHovering), restProps, handlers, {
     ref: useCombinedRef(externalRef, ref),
     className: useBEM({
       block: menuClass,
@@ -2229,10 +2234,8 @@ var FocusableItem = /*#__PURE__*/withHovering( /*#__PURE__*/React.memo(function 
     onBlur: onBlur
   }, restProps);
   return /*#__PURE__*/React.createElement("li", _extends({
-    "aria-disabled": isDisabled || undefined,
-    role: "menuitem",
-    tabIndex: "-1"
-  }, restProps, handlers, {
+    role: "menuitem"
+  }, commonProps(isDisabled), restProps, handlers, {
     ref: externalRef,
     className: useBEM({
       block: menuClass,
