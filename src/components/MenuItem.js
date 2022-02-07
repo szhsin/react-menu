@@ -3,6 +3,7 @@ import { any, string, bool, func, node, oneOf, oneOfType } from 'prop-types';
 import { useBEM, useFlatStyles, useActiveState, useItemState, useCombinedRef } from '../hooks';
 import {
   attachHandlerProps,
+  commonProps,
   safeCall,
   stylePropTypes,
   menuClass,
@@ -53,7 +54,11 @@ export const MenuItem = withHovering(
     const isChecked = isRadio ? radioGroup.value === value : isCheckBox ? !!checked : false;
 
     const handleClick = (e) => {
-      if (isDisabled) return;
+      if (isDisabled) {
+        e.stopPropagation();
+        e.preventDefault();
+        return;
+      }
 
       const event = { value, syntheticEvent: e };
       if (e.key !== undefined) event.key = e.key;
@@ -121,8 +126,7 @@ export const MenuItem = withHovering(
     const menuItemProps = {
       role: isRadio ? 'menuitemradio' : isCheckBox ? 'menuitemcheckbox' : 'menuitem',
       'aria-checked': isRadio || isCheckBox ? isChecked : undefined,
-      'aria-disabled': isDisabled || undefined,
-      tabIndex: isHovering ? 0 : -1,
+      ...commonProps(isDisabled, isHovering),
       ...restProps,
       ...handlers,
       ref: useCombinedRef(externalRef, ref),

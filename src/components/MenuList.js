@@ -13,6 +13,7 @@ import { getPositionHelpers, positionMenu, positionContextMenu } from '../positi
 import {
   attachHandlerProps,
   batchedUpdates,
+  commonProps,
   cloneChildren,
   floatEqual,
   getScrollAncestor,
@@ -442,9 +443,8 @@ export const MenuList = ({
   return (
     <ul
       role="menu"
-      tabIndex="-1"
-      aria-disabled={isDisabled || undefined}
       aria-label={ariaLabel}
+      {...commonProps(isDisabled)}
       {...restProps}
       {...handlers}
       ref={useCombinedRef(externalRef, menuRef)}

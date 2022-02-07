@@ -112,7 +112,6 @@ test('Hover and press a menu item', () => {
   fireEvent.pointerDown(menuItem);
   utils.expectMenuItemToBeHover(menuItem, true);
   utils.expectMenuItemToBeActive(menuItem, true);
-  expect(menuItem).toHaveAttribute('tabindex', '0');
   expect(menuItem).toHaveFocus();
 
   // unhover and release pressing a menu item
@@ -120,7 +119,6 @@ test('Hover and press a menu item', () => {
   fireEvent.pointerUp(menuItem);
   utils.expectMenuItemToBeHover(menuItem, false);
   utils.expectMenuItemToBeActive(menuItem, false);
-  expect(menuItem).toHaveAttribute('tabindex', '-1');
   expect(menuItem).toHaveFocus(); // still keep focus
 
   // hover menu items one after the other
@@ -214,9 +212,9 @@ test('Disabled menu item', () => {
   utils.expectToBeDisabled(disabledItem, true);
   fireEvent.mouseMove(disabledItem);
   fireEvent.pointerDown(disabledItem);
-  utils.expectMenuItemToBeHover(disabledItem, false);
+  utils.expectMenuItemToBeHover(disabledItem, false, true);
   utils.expectMenuItemToBeActive(disabledItem, false);
-  fireEvent.mouseMove(disabledItem);
+  fireEvent.click(disabledItem);
   expect(onClick).not.toHaveBeenCalled();
   utils.expectMenuToBeOpen(true);
 

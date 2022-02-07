@@ -13,6 +13,7 @@ import { MenuList } from './MenuList';
 import {
   attachHandlerProps,
   batchedUpdates,
+  commonProps,
   safeCall,
   stylePropTypes,
   uncontrolledMenuPropTypes,
@@ -249,8 +250,7 @@ export const SubMenu = withHovering(
           role="menuitem"
           aria-haspopup={true}
           aria-expanded={isOpen}
-          aria-disabled={isDisabled || undefined}
-          tabIndex={isHovering && !isOpen ? 0 : -1}
+          {...commonProps(isDisabled, isHovering)}
           {...restItemProps}
           {...itemHandlers}
           ref={useCombinedRef(externaItemlRef, itemRef)}

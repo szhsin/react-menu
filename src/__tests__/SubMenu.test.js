@@ -265,7 +265,7 @@ test('Submenu is disabled', () => {
   fireEvent.mouseMove(submenuItem);
   fireEvent.mouseDown(submenuItem);
   fireEvent.click(submenuItem);
-  utils.expectMenuItemToBeHover(submenuItem, false);
+  utils.expectMenuItemToBeHover(submenuItem, false, true);
   utils.expectMenuToBeInTheDocument(false, { name: 'Submenu', container });
 
   // Disabled item is skipped in keyboard navigation
@@ -273,7 +273,7 @@ test('Submenu is disabled', () => {
   utils.expectMenuItemToBeHover(utils.queryMenuItem('One'), true);
   fireEvent.keyDown(utils.queryMenu(), { key: 'ArrowDown' });
   utils.expectMenuItemToBeHover(utils.queryMenuItem('Two'), true);
-  utils.expectMenuItemToBeHover(submenuItem, false);
+  utils.expectMenuItemToBeHover(submenuItem, false, true);
 });
 
 test('ref is forwarded to <Menu>, <MenuItem> and <SubMenu>', () => {

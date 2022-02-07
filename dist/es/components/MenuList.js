@@ -3,7 +3,7 @@ import React, { useState, useContext, useRef, useMemo, useReducer, useCallback, 
 import { flushSync } from 'react-dom';
 import { SettingsContext, MenuListContext, initialHoverIndex, HoverIndexActionTypes, MenuListItemContext, HoverIndexContext, Keys, menuClass, CloseReason, FocusPositions, menuArrowClass, SubmenuActionTypes } from '../utils/constants.js';
 import { cloneChildren } from '../utils/cloneChildren.js';
-import { getScrollAncestor, floatEqual, attachHandlerProps, isMenuOpen, getTransition, safeCall, batchedUpdates } from '../utils/utils.js';
+import { getScrollAncestor, floatEqual, attachHandlerProps, commonProps, isMenuOpen, getTransition, safeCall, batchedUpdates } from '../utils/utils.js';
 import { getPositionHelpers } from '../positionUtils/getPositionHelpers.js';
 import { positionContextMenu } from '../positionUtils/positionContextMenu.js';
 import { positionMenu } from '../positionUtils/positionMenu.js';
@@ -463,10 +463,8 @@ var MenuList = function MenuList(_ref) {
   }, restProps);
   return /*#__PURE__*/React.createElement("ul", _extends({
     role: "menu",
-    tabIndex: "-1",
-    "aria-disabled": isDisabled || undefined,
     "aria-label": ariaLabel
-  }, restProps, handlers, {
+  }, commonProps(isDisabled), restProps, handlers, {
     ref: useCombinedRef(externalRef, menuRef),
     className: useBEM({
       block: menuClass,

@@ -5,7 +5,7 @@ import { withHovering } from '../utils/withHovering.js';
 import { useItemState } from '../hooks/useItemState.js';
 import { useBEM } from '../hooks/useBEM.js';
 import { useFlatStyles } from '../hooks/useFlatStyles.js';
-import { validateIndex, safeCall, attachHandlerProps } from '../utils/utils.js';
+import { validateIndex, safeCall, attachHandlerProps, commonProps } from '../utils/utils.js';
 import { EventHandlersContext, menuClass, menuItemClass } from '../utils/constants.js';
 import { stylePropTypes } from '../utils/propTypes.js';
 
@@ -55,10 +55,8 @@ var FocusableItem = /*#__PURE__*/withHovering( /*#__PURE__*/memo(function Focusa
     onBlur: onBlur
   }, restProps);
   return /*#__PURE__*/React.createElement("li", _extends({
-    "aria-disabled": isDisabled || undefined,
-    role: "menuitem",
-    tabIndex: "-1"
-  }, restProps, handlers, {
+    role: "menuitem"
+  }, commonProps(isDisabled), restProps, handlers, {
     ref: externalRef,
     className: useBEM({
       block: menuClass,
