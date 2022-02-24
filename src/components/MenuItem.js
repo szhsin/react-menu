@@ -1,4 +1,4 @@
-import React, { memo, useContext, useMemo, useRef } from 'react';
+import React, { useContext, useMemo } from 'react';
 import { any, string, bool, func, node, oneOf, oneOfType } from 'prop-types';
 import { useBEM, useFlatStyles, useActiveState, useItemState, useCombinedRef } from '../hooks';
 import {
@@ -8,7 +8,6 @@ import {
   stylePropTypes,
   menuClass,
   menuItemClass,
-  validateIndex,
   withHovering,
   EventHandlersContext,
   RadioGroupContext,
@@ -16,7 +15,8 @@ import {
 } from '../utils';
 
 export const MenuItem = withHovering(
-  memo(function MenuItem({
+  'MenuItem',
+  function MenuItem({
     className,
     styles,
     value,
@@ -24,19 +24,17 @@ export const MenuItem = withHovering(
     type,
     checked,
     disabled,
-    index,
     children,
     onClick,
     isHovering,
+    itemRef,
     externalRef,
     ...restProps
   }) {
     const isDisabled = !!disabled;
-    validateIndex(index, isDisabled, children);
-    const ref = useRef();
     const { setHover, onBlur, onMouseMove, onMouseLeave } = useItemState(
-      ref,
-      index,
+      itemRef,
+      itemRef,
       isHovering,
       isDisabled
     );
@@ -78,7 +76,7 @@ export const MenuItem = withHovering(
         case Keys.ENTER:
         case Keys.SPACE:
           if (isAnchor) {
-            ref.current.click();
+            itemRef.current.click();
           } else {
             handleClick(e);
           }
@@ -129,7 +127,7 @@ export const MenuItem = withHovering(
       ...commonProps(isDisabled, isHovering),
       ...restProps,
       ...handlers,
-      ref: useCombinedRef(externalRef, ref),
+      ref: useCombinedRef(externalRef, itemRef),
       className: useBEM({ block: menuClass, element: menuItemClass, modifiers, className }),
       style: useFlatStyles(styles, modifiers)
     };
@@ -147,8 +145,7 @@ export const MenuItem = withHovering(
     } else {
       return <li {...menuItemProps}>{renderChildren}</li>;
     }
-  }),
-  'MenuItem'
+  }
 );
 
 MenuItem.propTypes = {

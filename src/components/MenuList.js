@@ -8,30 +8,27 @@ import React, {
   useContext
 } from 'react';
 import { flushSync } from 'react-dom';
-import { useBEM, useFlatStyles, useCombinedRef, useLayoutEffect } from '../hooks';
+import { useBEM, useFlatStyles, useCombinedRef, useLayoutEffect, useItems } from '../hooks';
 import { getPositionHelpers, positionMenu, positionContextMenu } from '../positionUtils';
 import {
   attachHandlerProps,
   batchedUpdates,
   commonProps,
-  cloneChildren,
   floatEqual,
   getScrollAncestor,
   getTransition,
   safeCall,
   isMenuOpen,
-  initialHoverIndex,
   menuClass,
   menuArrowClass,
   CloseReason,
   Keys,
   FocusPositions,
-  HoverIndexActionTypes,
-  SubmenuActionTypes,
+  HoverActionTypes,
   SettingsContext,
   MenuListContext,
   MenuListItemContext,
-  HoverIndexContext
+  HoverItemContext
 } from '../utils';
 
 export const MenuList = ({
@@ -50,6 +47,7 @@ export const MenuList = ({
   direction,
   position,
   overflow,
+  setDownOverflow,
   repositionFlag,
   captureFocus = true,
   state,
@@ -66,6 +64,8 @@ export const MenuList = ({
   const [arrowPosition, setArrowPosition] = useState({});
   const [overflowData, setOverflowData] = useState();
   const [expandedDirection, setExpandedDirection] = useState(direction);
+  const [openSubmenuCount, setOpenSubmenuCount] = useState(0);
+  const [reposSubmenu, forceReposSubmenu] = useReducer((c) => c + 1, 1);
   const {
     transition,
     boundingBoxRef,
@@ -83,47 +83,33 @@ export const MenuList = ({
   const prevOpen = useRef(false);
   const latestMenuSize = useRef({ width: 0, height: 0 });
   const latestHandlePosition = useRef(() => {});
+  const { hoverItem, dispatch, updateItems } = useItems(menuRef);
+
   const isOpen = isMenuOpen(state);
   const openTransition = getTransition(transition, 'open');
   const closeTransition = getTransition(transition, 'close');
-
-  const {
-    items: menuItems,
-    index: menuItemsCount,
-    descendOverflow
-  } = useMemo(() => cloneChildren(children), [children]);
-
-  const reducer = ({ hoverIndex, openSubmenuCount }, action) => ({
-    hoverIndex: hoverIndexReducer(hoverIndex, action, menuItemsCount),
-    openSubmenuCount: submenuCountReducer(openSubmenuCount, action)
-  });
-  const [{ hoverIndex, openSubmenuCount }, dispatch] = useReducer(reducer, {
-    hoverIndex: initialHoverIndex,
-    openSubmenuCount: 0
-  });
-  const [reposSubmenu, forceReposSubmenu] = useReducer((c) => c + 1, 1);
 
   const handleKeyDown = (e) => {
     let handled = false;
 
     switch (e.key) {
       case Keys.HOME:
-        dispatch({ type: HoverIndexActionTypes.FIRST });
+        dispatch(HoverActionTypes.FIRST);
         handled = true;
         break;
 
       case Keys.END:
-        dispatch({ type: HoverIndexActionTypes.LAST });
+        dispatch(HoverActionTypes.LAST);
         handled = true;
         break;
 
       case Keys.UP:
-        dispatch({ type: HoverIndexActionTypes.DECREASE });
+        dispatch(HoverActionTypes.DECREASE, hoverItem);
         handled = true;
         break;
 
       case Keys.DOWN:
-        dispatch({ type: HoverIndexActionTypes.INCREASE });
+        dispatch(HoverActionTypes.INCREASE, hoverItem);
         handled = true;
         break;
 
@@ -258,8 +244,10 @@ export const MenuList = ({
   }, [isOpen, handlePosition, /* effect dep */ reposFlag]);
 
   useLayoutEffect(() => {
-    if (overflowData && !descendOverflow) menuRef.current.scrollTop = 0;
-  }, [overflowData, descendOverflow]);
+    if (overflowData && !setDownOverflow) menuRef.current.scrollTop = 0;
+  }, [overflowData, setDownOverflow]);
+
+  useEffect(() => updateItems, [updateItems]);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -349,7 +337,7 @@ export const MenuList = ({
 
   useEffect(() => {
     if (!isOpen) {
-      dispatch({ type: HoverIndexActionTypes.RESET });
+      dispatch(HoverActionTypes.RESET);
       if (!closeTransition) setOverflowData();
       return;
     }
@@ -357,11 +345,11 @@ export const MenuList = ({
     const { position, alwaysUpdate } = menuItemFocus || {};
     const setItemFocus = () => {
       if (position === FocusPositions.FIRST) {
-        dispatch({ type: HoverIndexActionTypes.FIRST });
+        dispatch(HoverActionTypes.FIRST);
       } else if (position === FocusPositions.LAST) {
-        dispatch({ type: HoverIndexActionTypes.LAST });
-      } else if (position >= 0 && position < menuItemsCount) {
-        dispatch({ type: HoverIndexActionTypes.SET, index: position });
+        dispatch(HoverActionTypes.LAST);
+      } else if (position >= -1) {
+        dispatch(HoverActionTypes.SET_INDEX, undefined, position);
       }
     };
 
@@ -382,7 +370,7 @@ export const MenuList = ({
 
       return () => clearTimeout(id);
     }
-  }, [openTransition, closeTransition, captureFocus, isOpen, menuItemFocus, menuItemsCount]);
+  }, [isOpen, openTransition, closeTransition, captureFocus, menuItemFocus, dispatch]);
 
   const isSubmenuOpen = openSubmenuCount > 0;
   const itemContext = useMemo(
@@ -391,14 +379,16 @@ export const MenuList = ({
       parentOverflow: overflow,
       isParentOpen: isOpen,
       isSubmenuOpen,
-      dispatch
+      setOpenSubmenuCount,
+      dispatch,
+      updateItems
     }),
-    [isOpen, isSubmenuOpen, overflow]
+    [isOpen, isSubmenuOpen, overflow, dispatch, updateItems]
   );
 
   let maxHeight, overflowAmt;
   if (overflowData) {
-    descendOverflow ? (overflowAmt = overflowData.overflowAmt) : (maxHeight = overflowData.height);
+    setDownOverflow ? (overflowAmt = overflowData.overflowAmt) : (maxHeight = overflowData.height);
   }
 
   const listContext = useMemo(
@@ -470,56 +460,9 @@ export const MenuList = ({
 
       <MenuListContext.Provider value={listContext}>
         <MenuListItemContext.Provider value={itemContext}>
-          <HoverIndexContext.Provider value={hoverIndex}>{menuItems}</HoverIndexContext.Provider>
+          <HoverItemContext.Provider value={hoverItem}>{children}</HoverItemContext.Provider>
         </MenuListItemContext.Provider>
       </MenuListContext.Provider>
     </ul>
   );
 };
-
-function hoverIndexReducer(state, { type, index }, menuItemsCount) {
-  switch (type) {
-    case HoverIndexActionTypes.RESET:
-      return initialHoverIndex;
-
-    case HoverIndexActionTypes.SET:
-      return index;
-
-    case HoverIndexActionTypes.UNSET:
-      return state === index ? initialHoverIndex : state;
-
-    case HoverIndexActionTypes.DECREASE: {
-      let i = state;
-      i--;
-      if (i < 0) i = menuItemsCount - 1;
-      return i;
-    }
-
-    case HoverIndexActionTypes.INCREASE: {
-      let i = state;
-      i++;
-      if (i >= menuItemsCount) i = 0;
-      return i;
-    }
-
-    case HoverIndexActionTypes.FIRST:
-      return menuItemsCount > 0 ? 0 : initialHoverIndex;
-
-    case HoverIndexActionTypes.LAST:
-      return menuItemsCount > 0 ? menuItemsCount - 1 : initialHoverIndex;
-
-    default:
-      return state;
-  }
-}
-
-function submenuCountReducer(state, { type }) {
-  switch (type) {
-    case SubmenuActionTypes.OPEN:
-      return state + 1;
-    case SubmenuActionTypes.CLOSE:
-      return Math.max(state - 1, 0);
-    default:
-      return state;
-  }
-}

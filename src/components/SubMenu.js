@@ -1,13 +1,14 @@
-import React, { memo, useRef, useContext, useEffect, useMemo, useImperativeHandle } from 'react';
+import React, { useRef, useContext, useEffect, useMemo, useImperativeHandle } from 'react';
 import { createPortal } from 'react-dom';
 import { node, func, bool, shape, oneOf, oneOfType } from 'prop-types';
 import {
   useBEM,
+  useCombinedRef,
   useFlatStyles,
   useActiveState,
   useMenuChange,
   useMenuStateAndFocus,
-  useCombinedRef
+  useItemEffect
 } from '../hooks';
 import { MenuList } from './MenuList';
 import {
@@ -23,41 +24,44 @@ import {
   subMenuClass,
   menuItemClass,
   isMenuOpen,
-  validateIndex,
   withHovering,
   SettingsContext,
   ItemSettingsContext,
   MenuListItemContext,
   Keys,
-  HoverIndexActionTypes,
-  SubmenuActionTypes,
+  HoverActionTypes,
   FocusPositions
 } from '../utils';
 
 export const SubMenu = withHovering(
-  memo(function SubMenu({
+  'SubMenu',
+  function SubMenu({
     'aria-label': ariaLabel,
     className,
     disabled,
     label,
-    index,
     openTrigger,
     onMenuChange,
     isHovering,
     instanceRef,
+    itemRef,
     captureFocus: _1,
     repositionFlag: _2,
     itemProps = {},
     ...restProps
   }) {
-    const isDisabled = !!disabled;
-    validateIndex(index, isDisabled, label);
-
     const { initialMounted, unmountOnClose, transition, transitionTimeout, rootMenuRef } =
       useContext(SettingsContext);
     const { submenuOpenDelay, submenuCloseDelay } = useContext(ItemSettingsContext);
-    const { parentMenuRef, parentOverflow, isParentOpen, isSubmenuOpen, dispatch } =
-      useContext(MenuListItemContext);
+    const {
+      parentMenuRef,
+      parentOverflow,
+      isParentOpen,
+      isSubmenuOpen,
+      setOpenSubmenuCount,
+      dispatch,
+      updateItems
+    } = useContext(MenuListItemContext);
     const isPortal = parentOverflow !== 'visible';
 
     const {
@@ -72,6 +76,7 @@ export const SubMenu = withHovering(
       transitionTimeout
     });
 
+    const isDisabled = !!disabled;
     const isOpen = isMenuOpen(state);
     const { isActive, onKeyUp, ...activeStateHandlers } = useActiveState(
       isHovering,
@@ -79,7 +84,6 @@ export const SubMenu = withHovering(
       Keys.RIGHT
     );
     const containerRef = useRef(null);
-    const itemRef = useRef(null);
     const timeoutId = useRef(0);
 
     const stopTimer = () => {
@@ -95,7 +99,7 @@ export const SubMenu = withHovering(
     };
 
     const setHover = () =>
-      !isHovering && !isDisabled && dispatch({ type: HoverIndexActionTypes.SET, index });
+      !isHovering && !isDisabled && dispatch(HoverActionTypes.SET, itemRef.current);
 
     const delayOpen = (delay) => {
       setHover();
@@ -118,7 +122,7 @@ export const SubMenu = withHovering(
 
     const handleMouseLeave = () => {
       stopTimer();
-      if (!isOpen) dispatch({ type: HoverIndexActionTypes.UNSET, index });
+      if (!isOpen) dispatch(HoverActionTypes.UNSET, itemRef.current);
     };
 
     const handleKeyDown = (e) => {
@@ -160,6 +164,9 @@ export const SubMenu = withHovering(
       }
     };
 
+    useItemEffect(isDisabled, itemRef, updateItems);
+    useMenuChange(onMenuChange, isOpen);
+
     useEffect(() => () => clearTimeout(timeoutId.current), []);
     useEffect(() => {
       // Don't set focus when parent menu is closed, otherwise focus will be lost
@@ -169,13 +176,11 @@ export const SubMenu = withHovering(
       } else {
         toggleMenu(false);
       }
-    }, [isHovering, isParentOpen, toggleMenu]);
+    }, [isHovering, isParentOpen, toggleMenu, itemRef]);
 
     useEffect(() => {
-      dispatch({ type: isOpen ? SubmenuActionTypes.OPEN : SubmenuActionTypes.CLOSE });
-    }, [dispatch, isOpen]);
-
-    useMenuChange(onMenuChange, isOpen);
+      setOpenSubmenuCount((count) => (isOpen ? count + 1 : Math.max(count - 1, 0)));
+    }, [setOpenSubmenuCount, isOpen]);
 
     useImperativeHandle(instanceRef, () => ({
       openMenu: (...args) => {
@@ -205,7 +210,7 @@ export const SubMenu = withHovering(
     );
 
     const {
-      ref: externaItemlRef,
+      ref: externaItemRef,
       className: itemClassName,
       styles: itemStyles,
       ...restItemProps
@@ -253,7 +258,7 @@ export const SubMenu = withHovering(
           {...commonProps(isDisabled, isHovering)}
           {...restItemProps}
           {...itemHandlers}
-          ref={useCombinedRef(externaItemlRef, itemRef)}
+          ref={useCombinedRef(externaItemRef, itemRef)}
           className={useBEM({
             block: menuClass,
             element: menuItemClass,
@@ -268,8 +273,7 @@ export const SubMenu = withHovering(
         {state && getMenuList()}
       </li>
     );
-  }),
-  'SubMenu'
+  }
 );
 
 SubMenu.propTypes = {

@@ -65,19 +65,16 @@ export const getScrollAncestor = (node) => {
   return window;
 };
 
-export const validateIndex = (index, isDisabled, node) => {
-  if (process.env.NODE_ENV !== 'production' && index === undefined && !isDisabled) {
-    const error = `[React-Menu] Validate item '${node && node.toString()}' failed.
-You're probably creating wrapping components or HOC over MenuItem, SubMenu or FocusableItem.
-To create wrapping components, see: https://codesandbox.io/s/react-menu-wrapping-q0b59
-To create HOCs, see: https://codesandbox.io/s/react-menu-hoc-0bipn`;
-    throw new Error(error);
-  }
-};
-
 export function commonProps(isDisabled, isHovering) {
   return {
     'aria-disabled': isDisabled || undefined,
     tabIndex: isDisabled ? undefined : isHovering ? 0 : -1
   };
+}
+
+export function indexOfNode(nodeList, node) {
+  for (let i = 0; i < nodeList.length; i++) {
+    if (nodeList[i] === node) return i;
+  }
+  return -1;
 }

@@ -1,22 +1,25 @@
 import { useRef, useContext, useEffect } from 'react';
-import { ItemSettingsContext, MenuListItemContext, HoverIndexActionTypes } from '../utils';
+import { ItemSettingsContext, MenuListItemContext, HoverActionTypes } from '../utils';
+import { useItemEffect } from './useItemEffect';
 
 // This hook includes some common stateful logic in MenuItem and FocusableItem
-export const useItemState = (ref, index, isHovering, isDisabled) => {
+export const useItemState = (itemRef, focusRef, isHovering, isDisabled) => {
   const { submenuCloseDelay } = useContext(ItemSettingsContext);
-  const { isParentOpen, isSubmenuOpen, dispatch } = useContext(MenuListItemContext);
+  const { isParentOpen, isSubmenuOpen, dispatch, updateItems } = useContext(MenuListItemContext);
   const timeoutId = useRef(0);
 
   const setHover = () => {
-    if (!isHovering && !isDisabled) dispatch({ type: HoverIndexActionTypes.SET, index });
+    if (!isHovering && !isDisabled) dispatch(HoverActionTypes.SET, itemRef.current);
+  };
+
+  const unsetHover = () => {
+    !isDisabled && dispatch(HoverActionTypes.UNSET, itemRef.current);
   };
 
   const onBlur = (e) => {
     // Focus has moved out of the entire item
     // It handles situation such as clicking on a sibling disabled menu item
-    if (isHovering && !e.currentTarget.contains(e.relatedTarget)) {
-      dispatch({ type: HoverIndexActionTypes.UNSET, index });
-    }
+    if (isHovering && !e.currentTarget.contains(e.relatedTarget)) unsetHover();
   };
 
   const onMouseMove = () => {
@@ -37,17 +40,18 @@ export const useItemState = (ref, index, isHovering, isDisabled) => {
       timeoutId.current = 0;
     }
 
-    if (!keepHover) dispatch({ type: HoverIndexActionTypes.UNSET, index });
+    !keepHover && unsetHover();
   };
 
+  useItemEffect(isDisabled, itemRef, updateItems);
   useEffect(() => () => clearTimeout(timeoutId.current), []);
   useEffect(() => {
     // Don't set focus when parent menu is closed, otherwise focus will be lost
     // and onBlur event will be fired with relatedTarget setting as null.
     if (isHovering && isParentOpen) {
-      ref.current && ref.current.focus();
+      focusRef.current && focusRef.current.focus();
     }
-  }, [ref, isHovering, isParentOpen]);
+  }, [focusRef, isHovering, isParentOpen]);
 
   return {
     setHover,
