@@ -4,6 +4,7 @@ import { useBEM, useFlatStyles } from '../hooks';
 import { defineName, menuButtonClass, stylePropTypes } from '../utils';
 
 export const MenuButton = defineName(
+  'MenuButton',
   forwardRef(function MenuButton(
     { className, styles, isOpen, disabled, children, ...restProps },
     ref
@@ -25,8 +26,7 @@ export const MenuButton = defineName(
         {children}
       </button>
     );
-  }),
-  'MenuButton'
+  })
 );
 
 MenuButton.propTypes = {

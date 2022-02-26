@@ -8,16 +8,10 @@ export const getTransition = (transition, name) =>
   !!(transition && transition[name]) || transition === true;
 export const safeCall = (fn, arg) => (typeof fn === 'function' ? fn(arg) : fn);
 
-export const getName = (component) => component && component['_szhsinMenu'];
-export const defineName = (component, name) =>
-  name ? Object.defineProperty(component, '_szhsinMenu', { value: name }) : component;
-
-export const applyHOC =
-  (HOC) =>
-  (...args) =>
-    defineName(HOC(...args), getName(args[0]));
-export const applyStatics = (sourceComponent) => (wrappedComponent) =>
-  defineName(wrappedComponent, getName(sourceComponent));
+const internalKey = '_szhsinMenu';
+export const getName = (component) => component[internalKey];
+export const defineName = (name, component) =>
+  Object.defineProperty(component, internalKey, { value: name });
 
 export const attachHandlerProps = (handlers, props) => {
   if (!props) return handlers;

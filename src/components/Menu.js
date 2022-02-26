@@ -63,7 +63,7 @@ export const Menu = forwardRef(function Menu(
   };
 
   const button = safeCall(menuButton, { open: isOpen });
-  if (!button) throw new Error('Menu requires a menuButton prop.');
+  if (!button || !button.type) throw new Error('Menu requires a menuButton prop.');
 
   const buttonProps = {
     ref: useCombinedRef(button.ref, buttonRef),
