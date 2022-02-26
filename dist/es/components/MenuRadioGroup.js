@@ -4,11 +4,10 @@ import { string, any, func } from 'prop-types';
 import { useBEM } from '../hooks/useBEM.js';
 import { RadioGroupContext, menuClass, radioGroupClass } from '../utils/constants.js';
 import { useFlatStyles } from '../hooks/useFlatStyles.js';
-import { defineName } from '../utils/utils.js';
 import { stylePropTypes } from '../utils/propTypes.js';
 
 var _excluded = ["aria-label", "className", "styles", "name", "value", "onRadioChange"];
-var MenuRadioGroup = /*#__PURE__*/defineName( /*#__PURE__*/forwardRef(function MenuRadioGroup(_ref, externalRef) {
+var MenuRadioGroup = /*#__PURE__*/forwardRef(function MenuRadioGroup(_ref, externalRef) {
   var ariaLabel = _ref['aria-label'],
       className = _ref.className,
       styles = _ref.styles,
@@ -40,7 +39,7 @@ var MenuRadioGroup = /*#__PURE__*/defineName( /*#__PURE__*/forwardRef(function M
     }),
     style: useFlatStyles(styles)
   }))));
-}), 'MenuRadioGroup');
+});
 process.env.NODE_ENV !== "production" ? MenuRadioGroup.propTypes = /*#__PURE__*/_extends({}, /*#__PURE__*/stylePropTypes(), {
   name: string,
   value: any,

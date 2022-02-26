@@ -1,15 +1,17 @@
 import { extends as _extends } from '../_virtual/_rollupPluginBabelHelpers.js';
-import React, { forwardRef, useContext } from 'react';
-import { HoverIndexContext } from './constants.js';
-import { defineName } from './utils.js';
+import React, { forwardRef, useRef, useContext, memo } from 'react';
+import { HoverItemContext } from './constants.js';
 
-var withHovering = function withHovering(WrapppedComponent, name) {
-  var WithHovering = defineName( /*#__PURE__*/forwardRef(function (props, ref) {
-    return /*#__PURE__*/React.createElement(WrapppedComponent, _extends({}, props, {
+var withHovering = function withHovering(name, WrapppedComponent) {
+  var Component = /*#__PURE__*/memo(WrapppedComponent);
+  var WithHovering = /*#__PURE__*/forwardRef(function (props, ref) {
+    var itemRef = useRef(null);
+    return /*#__PURE__*/React.createElement(Component, _extends({}, props, {
+      itemRef: itemRef,
       externalRef: ref,
-      isHovering: useContext(HoverIndexContext) === props.index
+      isHovering: useContext(HoverItemContext) === itemRef.current
     }));
-  }), name);
+  });
   WithHovering.displayName = "WithHovering(" + name + ")";
   return WithHovering;
 };

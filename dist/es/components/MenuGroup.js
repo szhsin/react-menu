@@ -6,11 +6,10 @@ import { useCombinedRef } from '../hooks/useCombinedRef.js';
 import { useBEM } from '../hooks/useBEM.js';
 import { MenuListContext, menuClass, menuGroupClass } from '../utils/constants.js';
 import { useFlatStyles } from '../hooks/useFlatStyles.js';
-import { defineName } from '../utils/utils.js';
 import { stylePropTypes } from '../utils/propTypes.js';
 
 var _excluded = ["className", "styles", "takeOverflow"];
-var MenuGroup = /*#__PURE__*/defineName( /*#__PURE__*/forwardRef(function MenuGroup(_ref, externalRef) {
+var MenuGroup = /*#__PURE__*/forwardRef(function MenuGroup(_ref, externalRef) {
   var className = _ref.className,
       styles = _ref.styles,
       takeOverflow = _ref.takeOverflow,
@@ -51,7 +50,7 @@ var MenuGroup = /*#__PURE__*/defineName( /*#__PURE__*/forwardRef(function MenuGr
     }),
     style: _extends({}, useFlatStyles(styles), overflowStyles)
   }));
-}), 'MenuGroup');
+});
 process.env.NODE_ENV !== "production" ? MenuGroup.propTypes = /*#__PURE__*/_extends({}, /*#__PURE__*/stylePropTypes(), {
   takeOverflow: bool
 }) : void 0;

@@ -24,23 +24,14 @@ var getTransition = function getTransition(transition, name) {
 var safeCall = function safeCall(fn, arg) {
   return typeof fn === 'function' ? fn(arg) : fn;
 };
+var internalKey = '_szhsinMenu';
 var getName = function getName(component) {
-  return component && component['_szhsinMenu'];
+  return component[internalKey];
 };
-var defineName = function defineName(component, name) {
-  return name ? Object.defineProperty(component, '_szhsinMenu', {
+var defineName = function defineName(name, component) {
+  return Object.defineProperty(component, internalKey, {
     value: name
-  }) : component;
-};
-var applyHOC = function applyHOC(HOC) {
-  return function () {
-    return defineName(HOC.apply(void 0, arguments), getName(arguments.length <= 0 ? undefined : arguments[0]));
-  };
-};
-var applyStatics = function applyStatics(sourceComponent) {
-  return function (wrappedComponent) {
-    return defineName(wrappedComponent, getName(sourceComponent));
-  };
+  });
 };
 var attachHandlerProps = function attachHandlerProps(handlers, props) {
   if (!props) return handlers;
@@ -100,17 +91,18 @@ var getScrollAncestor = function getScrollAncestor(node) {
 
   return window;
 };
-var validateIndex = function validateIndex(index, isDisabled, node) {
-  if (process.env.NODE_ENV !== 'production' && index === undefined && !isDisabled) {
-    var error = "[React-Menu] Validate item '" + (node && node.toString()) + "' failed.\nYou're probably creating wrapping components or HOC over MenuItem, SubMenu or FocusableItem.\nTo create wrapping components, see: https://codesandbox.io/s/react-menu-wrapping-q0b59\nTo create HOCs, see: https://codesandbox.io/s/react-menu-hoc-0bipn";
-    throw new Error(error);
-  }
-};
 function commonProps(isDisabled, isHovering) {
   return {
     'aria-disabled': isDisabled || undefined,
     tabIndex: isDisabled ? undefined : isHovering ? 0 : -1
   };
 }
+function indexOfNode(nodeList, node) {
+  for (var i = 0; i < nodeList.length; i++) {
+    if (nodeList[i] === node) return i;
+  }
 
-export { applyHOC, applyStatics, attachHandlerProps, batchedUpdates, commonProps, defineName, floatEqual, getName, getScrollAncestor, getTransition, isMenuOpen, parsePadding, safeCall, validateIndex, values };
+  return -1;
+}
+
+export { attachHandlerProps, batchedUpdates, commonProps, defineName, floatEqual, getName, getScrollAncestor, getTransition, indexOfNode, isMenuOpen, parsePadding, safeCall, values };

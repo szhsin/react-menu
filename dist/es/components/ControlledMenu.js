@@ -6,7 +6,7 @@ import { MenuList } from './MenuList.js';
 import { useBEM } from '../hooks/useBEM.js';
 import { CloseReason, menuContainerClass, SettingsContext, ItemSettingsContext, EventHandlersContext, MenuStateMap, Keys } from '../utils/constants.js';
 import { rootMenuPropTypes, rootMenuDefaultProps } from '../utils/propTypes.js';
-import { safeCall, attachHandlerProps, values, getTransition, isMenuOpen } from '../utils/utils.js';
+import { safeCall, getTransition, attachHandlerProps, values, isMenuOpen } from '../utils/utils.js';
 
 var _excluded = ["aria-label", "className", "containerProps", "initialMounted", "unmountOnClose", "transition", "transitionTimeout", "boundingBoxRef", "boundingBoxPadding", "reposition", "submenuOpenDelay", "submenuCloseDelay", "skipOpen", "viewScroll", "portal", "theming", "onItemClick", "onClose"];
 var ControlledMenu = /*#__PURE__*/forwardRef(function ControlledMenu(_ref, externalRef) {
