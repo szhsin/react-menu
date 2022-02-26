@@ -187,9 +187,15 @@ function RadioGroupExample() {
     <Example data={codeExamples.radioGroup}>
       <Menu menuButton={<MenuButton>Text color</MenuButton>}>
         <MenuRadioGroup value={textColor} onRadioChange={(e) => setTextColor(e.value)}>
-          <MenuItem value="red">Red</MenuItem>
-          <MenuItem value="green">Green</MenuItem>
-          <MenuItem value={isDark ? '#69a6f8' : 'blue'}>Blue</MenuItem>
+          <MenuItem type="radio" value="red">
+            Red
+          </MenuItem>
+          <MenuItem type="radio" value="green">
+            Green
+          </MenuItem>
+          <MenuItem type="radio" value={isDark ? '#69a6f8' : 'blue'}>
+            Blue
+          </MenuItem>
         </MenuRadioGroup>
       </Menu>
 
@@ -272,9 +278,15 @@ function CombinedExample() {
 
         <SubMenu label="Text color">
           <MenuRadioGroup value={textColor} onRadioChange={(e) => setTextColor(e.value)}>
-            <MenuItem value={'red'}>Red</MenuItem>
-            <MenuItem value={'green'}>Green</MenuItem>
-            <MenuItem value={isDark ? '#69a6f8' : 'blue'}>Blue</MenuItem>
+            <MenuItem type="radio" value={'red'}>
+              Red
+            </MenuItem>
+            <MenuItem type="radio" value={'green'}>
+              Green
+            </MenuItem>
+            <MenuItem type="radio" value={isDark ? '#69a6f8' : 'blue'}>
+              Blue
+            </MenuItem>
           </MenuRadioGroup>
         </SubMenu>
 
@@ -559,6 +571,7 @@ function MenuOverflowExample() {
         </Menu>
         <Menu
           menuButton={<MenuButton styles={{ marginTop: '2rem' }}>Grouping</MenuButton>}
+          setDownOverflow
           overflow={overflow}
           position={position}
           boundingBoxPadding="10"
