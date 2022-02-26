@@ -21,10 +21,20 @@ test('Radio menu items', () => {
   const getMenu = (value) => (
     <Menu onItemClick={onItemClick} menuButton={<MenuButton>Color</MenuButton>}>
       <MenuRadioGroup value={value} name="color" onRadioChange={onChange}>
-        <MenuItem value="red">Red</MenuItem>
-        <MenuItem value="green">Green</MenuItem>
-        <MenuItem value="blue">Blue</MenuItem>
-        {'falsy'.length === 0 && <MenuItem value="black">Black</MenuItem>}
+        <MenuItem type="radio" value="red">
+          Red
+        </MenuItem>
+        <MenuItem type="radio" value="green">
+          Green
+        </MenuItem>
+        <MenuItem type="radio" value="blue">
+          Blue
+        </MenuItem>
+        {'falsy'.length === 0 && (
+          <MenuItem type="radio" value="black">
+            Black
+          </MenuItem>
+        )}
         <LastItem />
       </MenuRadioGroup>
     </Menu>
@@ -33,7 +43,7 @@ test('Radio menu items', () => {
   const { rerender } = render(getMenu('green'));
   utils.clickMenuButton();
   const menuItems = queryAllByRole('menuitemradio');
-  expect(menuItems).toHaveLength(4);
+  expect(menuItems).toHaveLength(3);
   menuItems.forEach((item) => expect(item).toHaveClass('szh-menu__item--type-radio'));
   utils.expectMenuItemToBeChecked(queryByRole('menuitemradio', { name: 'Green' }), true);
 
@@ -50,8 +60,12 @@ test('Use keepOpen of onChange to customise when menu is closed', () => {
   render(
     <Menu menuButton={<MenuButton>Color</MenuButton>}>
       <MenuRadioGroup value="green" onRadioChange={(e) => (e.keepOpen = true)}>
-        <MenuItem value="red">Red</MenuItem>
-        <MenuItem value="green">Green</MenuItem>
+        <MenuItem type="radio" value="red">
+          Red
+        </MenuItem>
+        <MenuItem type="radio" value="green">
+          Green
+        </MenuItem>
       </MenuRadioGroup>
     </Menu>
   );

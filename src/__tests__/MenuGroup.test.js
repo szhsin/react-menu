@@ -6,7 +6,7 @@ import * as utils from './utils';
 test('MenuGroup should allow keyboard navigation to go thru its children', () => {
   const ref = React.createRef();
   utils.render(
-    <Menu menuButton={<MenuButton>Menu Group</MenuButton>}>
+    <Menu menuButton={<MenuButton>Menu Group</MenuButton>} setDownOverflow>
       <MenuItem>One</MenuItem>
       <MenuGroup ref={ref} takeOverflow>
         <MenuItem>Two</MenuItem>
