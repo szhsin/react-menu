@@ -18,7 +18,7 @@ var menuGroupClass = 'group';
 var subMenuClass = 'submenu';
 var radioGroupClass = 'radio-group';
 var initialHoverIndex = -1;
-var HoverIndexContext = /*#__PURE__*/React.createContext(initialHoverIndex);
+var HoverItemContext = /*#__PURE__*/React.createContext(initialHoverIndex);
 var MenuListItemContext = /*#__PURE__*/React.createContext({});
 var MenuListContext = /*#__PURE__*/React.createContext({});
 var EventHandlersContext = /*#__PURE__*/React.createContext({});
@@ -36,18 +36,15 @@ var Keys = /*#__PURE__*/Object.freeze({
   UP: 'ArrowUp',
   DOWN: 'ArrowDown'
 });
-var HoverIndexActionTypes = /*#__PURE__*/Object.freeze({
-  RESET: 'HOVER_RESET',
-  SET: 'HOVER_SET',
-  UNSET: 'HOVER_UNSET',
-  INCREASE: 'HOVER_INCREASE',
-  DECREASE: 'HOVER_DECREASE',
-  FIRST: 'HOVER_FIRST',
-  LAST: 'HOVER_LAST'
-});
-var SubmenuActionTypes = /*#__PURE__*/Object.freeze({
-  OPEN: 'SUBMENU_OPEN',
-  CLOSE: 'SUBMENU_CLOSE'
+var HoverActionTypes = /*#__PURE__*/Object.freeze({
+  RESET: 'RESET',
+  SET: 'SET',
+  UNSET: 'UNSET',
+  INCREASE: 'INCREASE',
+  DECREASE: 'DECREASE',
+  FIRST: 'FIRST',
+  LAST: 'LAST',
+  SET_INDEX: 'SET_INDEX'
 });
 var CloseReason = /*#__PURE__*/Object.freeze({
   CLICK: 'click',
@@ -91,23 +88,14 @@ var getTransition = function getTransition(transition, name) {
 var safeCall = function safeCall(fn, arg) {
   return typeof fn === 'function' ? fn(arg) : fn;
 };
+var internalKey = '_szhsinMenu';
 var getName = function getName(component) {
-  return component && component['_szhsinMenu'];
+  return component[internalKey];
 };
-var defineName = function defineName(component, name) {
-  return name ? Object.defineProperty(component, '_szhsinMenu', {
+var defineName = function defineName(name, component) {
+  return Object.defineProperty(component, internalKey, {
     value: name
-  }) : component;
-};
-var applyHOC = function applyHOC(HOC) {
-  return function () {
-    return defineName(HOC.apply(void 0, arguments), getName(arguments.length <= 0 ? undefined : arguments[0]));
-  };
-};
-var applyStatics = function applyStatics(sourceComponent) {
-  return function (wrappedComponent) {
-    return defineName(wrappedComponent, getName(sourceComponent));
-  };
+  });
 };
 var attachHandlerProps = function attachHandlerProps(handlers, props) {
   if (!props) return handlers;
@@ -167,17 +155,18 @@ var getScrollAncestor = function getScrollAncestor(node) {
 
   return window;
 };
-var validateIndex = function validateIndex(index, isDisabled, node) {
-  if (process.env.NODE_ENV !== 'production' && index === undefined && !isDisabled) {
-    var error = "[React-Menu] Validate item '" + (node && node.toString()) + "' failed.\nYou're probably creating wrapping components or HOC over MenuItem, SubMenu or FocusableItem.\nTo create wrapping components, see: https://codesandbox.io/s/react-menu-wrapping-q0b59\nTo create HOCs, see: https://codesandbox.io/s/react-menu-hoc-0bipn";
-    throw new Error(error);
-  }
-};
 function commonProps(isDisabled, isHovering) {
   return {
     'aria-disabled': isDisabled || undefined,
     tabIndex: isDisabled ? undefined : isHovering ? 0 : -1
   };
+}
+function indexOfNode(nodeList, node) {
+  for (var i = 0; i < nodeList.length; i++) {
+    if (nodeList[i] === node) return i;
+  }
+
+  return -1;
 }
 
 function _extends() {
@@ -270,74 +259,16 @@ var rootMenuDefaultProps = /*#__PURE__*/_extends({}, menuDefaultProps, {
   submenuCloseDelay: 150
 });
 
-var cloneChildren = function cloneChildren(children, startIndex, inRadioGroup) {
-  if (startIndex === void 0) {
-    startIndex = 0;
-  }
-
-  var index = startIndex;
-  var descendOverflow = false;
-  var items = React.Children.map(children, function (child) {
-    if (child == null) return null;
-    if (!child.type) return child;
-    var name = getName(child.type);
-
-    switch (name) {
-      case 'MenuItem':
-        {
-          if (inRadioGroup) {
-            var props = {
-              type: 'radio'
-            };
-            if (!child.props.disabled) props.index = index++;
-            return /*#__PURE__*/React.cloneElement(child, props);
-          }
-        }
-
-      case 'SubMenu':
-      case 'FocusableItem':
-        return child.props.disabled ? child : /*#__PURE__*/React.cloneElement(child, {
-          index: index++
-        });
-
-      default:
-        {
-          var innerChildren = child.props.children;
-          if (innerChildren === null || typeof innerChildren !== 'object') return child;
-          var desc = cloneChildren(innerChildren, index, inRadioGroup || name === 'MenuRadioGroup');
-          index = desc.index;
-
-          if (name === 'MenuGroup') {
-            var takeOverflow = !!child.props.takeOverflow;
-            var descOverflow = desc.descendOverflow;
-
-            if (process.env.NODE_ENV !== 'production' && (descendOverflow === descOverflow ? descOverflow : takeOverflow)) {
-              throw new Error('[React-Menu] Only one MenuGroup in a menu is allowed to have takeOverflow prop.');
-            }
-
-            descendOverflow = descendOverflow || descOverflow || takeOverflow;
-          }
-
-          return /*#__PURE__*/React.cloneElement(child, {
-            children: desc.items
-          });
-        }
-    }
-  });
-  return {
-    items: items,
-    index: index,
-    descendOverflow: descendOverflow
-  };
-};
-
-var withHovering = function withHovering(WrapppedComponent, name) {
-  var WithHovering = defineName( /*#__PURE__*/React.forwardRef(function (props, ref) {
-    return /*#__PURE__*/React.createElement(WrapppedComponent, _extends({}, props, {
+var withHovering = function withHovering(name, WrapppedComponent) {
+  var Component = /*#__PURE__*/React.memo(WrapppedComponent);
+  var WithHovering = /*#__PURE__*/React.forwardRef(function (props, ref) {
+    var itemRef = React.useRef(null);
+    return /*#__PURE__*/React.createElement(Component, _extends({}, props, {
+      itemRef: itemRef,
       externalRef: ref,
-      isHovering: React.useContext(HoverIndexContext) === props.index
+      isHovering: React.useContext(HoverItemContext) === itemRef.current
     }));
-  }), name);
+  });
   WithHovering.displayName = "WithHovering(" + name + ")";
   return WithHovering;
 };
@@ -476,31 +407,147 @@ var useFlatStyles = function useFlatStyles(styles, modifiers) {
 
 var useIsomorphicLayoutEffect = typeof window !== 'undefined' && typeof window.document !== 'undefined' && typeof window.document.createElement !== 'undefined' ? React.useLayoutEffect : React.useEffect;
 
-var useItemState = function useItemState(ref, index, isHovering, isDisabled) {
+var useItems = function useItems(menuRef) {
+  var _useState = React.useState(),
+      hoverItem = _useState[0],
+      setHoverItem = _useState[1];
+
+  var stateRef = React.useRef({
+    items: [],
+    hoverIndex: -1,
+    sorted: false
+  });
+  var mutableState = stateRef.current;
+  var updateItems = React.useCallback(function (item, isMounted) {
+    var items = mutableState.items;
+
+    if (!item) {
+      mutableState.items = [];
+    } else if (isMounted) {
+      items.push(item);
+    } else {
+      var index = items.indexOf(item);
+      if (index > -1) items.splice(index, 1);
+    }
+
+    mutableState.hoverIndex = -1;
+    mutableState.sorted = false;
+  }, [mutableState]);
+  var dispatch = React.useCallback(function (actionType, item, nextIndex) {
+    var items = mutableState.items,
+        hoverIndex = mutableState.hoverIndex;
+
+    var sortItems = function sortItems() {
+      if (mutableState.sorted) return;
+      var orderedNodes = menuRef.current.querySelectorAll('.szh-menu__item');
+      items.sort(function (a, b) {
+        return indexOfNode(orderedNodes, a) - indexOfNode(orderedNodes, b);
+      });
+      mutableState.sorted = true;
+    };
+
+    var index = -1,
+        newItem = undefined;
+
+    switch (actionType) {
+      case HoverActionTypes.RESET:
+        break;
+
+      case HoverActionTypes.SET:
+        newItem = item;
+        break;
+
+      case HoverActionTypes.UNSET:
+        newItem = function newItem(prevItem) {
+          return prevItem === item ? undefined : prevItem;
+        };
+
+        break;
+
+      case HoverActionTypes.FIRST:
+        sortItems();
+        index = 0;
+        newItem = items[index];
+        break;
+
+      case HoverActionTypes.LAST:
+        sortItems();
+        index = items.length - 1;
+        newItem = items[index];
+        break;
+
+      case HoverActionTypes.SET_INDEX:
+        sortItems();
+        index = nextIndex;
+        newItem = items[index];
+        break;
+
+      case HoverActionTypes.INCREASE:
+        sortItems();
+        index = hoverIndex;
+        if (index < 0) index = items.indexOf(item);
+        index++;
+        if (index >= items.length) index = 0;
+        newItem = items[index];
+        break;
+
+      case HoverActionTypes.DECREASE:
+        sortItems();
+        index = hoverIndex;
+        if (index < 0) index = items.indexOf(item);
+        index--;
+        if (index < 0) index = items.length - 1;
+        newItem = items[index];
+        break;
+
+      default:
+        if (process.env.NODE_ENV !== 'production') throw new Error("Unknown hover action type: " + actionType);
+    }
+
+    if (!newItem) index = -1;
+    setHoverItem(newItem);
+    mutableState.hoverIndex = index;
+  }, [menuRef, mutableState]);
+  return {
+    hoverItem: hoverItem,
+    dispatch: dispatch,
+    updateItems: updateItems
+  };
+};
+
+var useItemEffect = function useItemEffect(isDisabled, itemRef, updateItems) {
+  React.useEffect(function () {
+    if (isDisabled) return;
+    var item = itemRef.current;
+    updateItems(item, true);
+    return function () {
+      updateItems(item);
+    };
+  }, [isDisabled, itemRef, updateItems]);
+};
+
+var useItemState = function useItemState(itemRef, focusRef, isHovering, isDisabled) {
   var _useContext = React.useContext(ItemSettingsContext),
       submenuCloseDelay = _useContext.submenuCloseDelay;
 
   var _useContext2 = React.useContext(MenuListItemContext),
       isParentOpen = _useContext2.isParentOpen,
       isSubmenuOpen = _useContext2.isSubmenuOpen,
-      dispatch = _useContext2.dispatch;
+      dispatch = _useContext2.dispatch,
+      updateItems = _useContext2.updateItems;
 
   var timeoutId = React.useRef(0);
 
   var setHover = function setHover() {
-    if (!isHovering && !isDisabled) dispatch({
-      type: HoverIndexActionTypes.SET,
-      index: index
-    });
+    if (!isHovering && !isDisabled) dispatch(HoverActionTypes.SET, itemRef.current);
+  };
+
+  var unsetHover = function unsetHover() {
+    !isDisabled && dispatch(HoverActionTypes.UNSET, itemRef.current);
   };
 
   var onBlur = function onBlur(e) {
-    if (isHovering && !e.currentTarget.contains(e.relatedTarget)) {
-      dispatch({
-        type: HoverIndexActionTypes.UNSET,
-        index: index
-      });
-    }
+    if (isHovering && !e.currentTarget.contains(e.relatedTarget)) unsetHover();
   };
 
   var onMouseMove = function onMouseMove() {
@@ -520,12 +567,10 @@ var useItemState = function useItemState(ref, index, isHovering, isDisabled) {
       timeoutId.current = 0;
     }
 
-    if (!keepHover) dispatch({
-      type: HoverIndexActionTypes.UNSET,
-      index: index
-    });
+    !keepHover && unsetHover();
   };
 
+  useItemEffect(isDisabled, itemRef, updateItems);
   React.useEffect(function () {
     return function () {
       return clearTimeout(timeoutId.current);
@@ -533,9 +578,9 @@ var useItemState = function useItemState(ref, index, isHovering, isDisabled) {
   }, []);
   React.useEffect(function () {
     if (isHovering && isParentOpen) {
-      ref.current && ref.current.focus();
+      focusRef.current && focusRef.current.focus();
     }
-  }, [ref, isHovering, isParentOpen]);
+  }, [focusRef, isHovering, isParentOpen]);
   return {
     setHover: setHover,
     onBlur: onBlur,
@@ -601,7 +646,7 @@ var useMenuStateAndFocus = function useMenuStateAndFocus(options) {
 };
 
 var _excluded$a = ["className", "styles", "isOpen", "disabled", "children"];
-var MenuButton = /*#__PURE__*/defineName( /*#__PURE__*/React.forwardRef(function MenuButton(_ref, ref) {
+var MenuButton = /*#__PURE__*/defineName('MenuButton', /*#__PURE__*/React.forwardRef(function MenuButton(_ref, ref) {
   var className = _ref.className,
       styles = _ref.styles,
       isOpen = _ref.isOpen,
@@ -629,7 +674,7 @@ var MenuButton = /*#__PURE__*/defineName( /*#__PURE__*/React.forwardRef(function
     }),
     style: useFlatStyles(styles, modifiers)
   }), children);
-}), 'MenuButton');
+}));
 process.env.NODE_ENV !== "production" ? MenuButton.propTypes = /*#__PURE__*/_extends({}, /*#__PURE__*/stylePropTypes(), {
   isOpen: propTypes.bool,
   disabled: propTypes.bool
@@ -1013,7 +1058,7 @@ var positionMenu = function positionMenu(_ref) {
   }
 };
 
-var _excluded$9 = ["ariaLabel", "menuClassName", "menuStyles", "arrowClassName", "arrowStyles", "anchorPoint", "anchorRef", "containerRef", "externalRef", "parentScrollingRef", "arrow", "align", "direction", "position", "overflow", "repositionFlag", "captureFocus", "state", "endTransition", "isDisabled", "menuItemFocus", "offsetX", "offsetY", "children", "onClose"];
+var _excluded$9 = ["ariaLabel", "menuClassName", "menuStyles", "arrowClassName", "arrowStyles", "anchorPoint", "anchorRef", "containerRef", "externalRef", "parentScrollingRef", "arrow", "align", "direction", "position", "overflow", "setDownOverflow", "repositionFlag", "captureFocus", "state", "endTransition", "isDisabled", "menuItemFocus", "offsetX", "offsetY", "children", "onClose"];
 var MenuList = function MenuList(_ref) {
   var ariaLabel = _ref.ariaLabel,
       menuClassName = _ref.menuClassName,
@@ -1030,6 +1075,7 @@ var MenuList = function MenuList(_ref) {
       direction = _ref.direction,
       position = _ref.position,
       overflow = _ref.overflow,
+      setDownOverflow = _ref.setDownOverflow,
       repositionFlag = _ref.repositionFlag,
       _ref$captureFocus = _ref.captureFocus,
       captureFocus = _ref$captureFocus === void 0 ? true : _ref$captureFocus,
@@ -1062,6 +1108,16 @@ var MenuList = function MenuList(_ref) {
       expandedDirection = _useState4[0],
       setExpandedDirection = _useState4[1];
 
+  var _useState5 = React.useState(0),
+      openSubmenuCount = _useState5[0],
+      setOpenSubmenuCount = _useState5[1];
+
+  var _useReducer = React.useReducer(function (c) {
+    return c + 1;
+  }, 1),
+      reposSubmenu = _useReducer[0],
+      forceReposSubmenu = _useReducer[1];
+
   var _useContext = React.useContext(SettingsContext),
       transition = _useContext.transition,
       boundingBoxRef = _useContext.boundingBoxRef,
@@ -1082,70 +1138,37 @@ var MenuList = function MenuList(_ref) {
     height: 0
   });
   var latestHandlePosition = React.useRef(function () {});
+
+  var _useItems = useItems(menuRef),
+      hoverItem = _useItems.hoverItem,
+      dispatch = _useItems.dispatch,
+      updateItems = _useItems.updateItems;
+
   var isOpen = isMenuOpen(state);
   var openTransition = getTransition(transition, 'open');
   var closeTransition = getTransition(transition, 'close');
-
-  var _useMemo = React.useMemo(function () {
-    return cloneChildren(children);
-  }, [children]),
-      menuItems = _useMemo.items,
-      menuItemsCount = _useMemo.index,
-      descendOverflow = _useMemo.descendOverflow;
-
-  var reducer = function reducer(_ref2, action) {
-    var hoverIndex = _ref2.hoverIndex,
-        openSubmenuCount = _ref2.openSubmenuCount;
-    return {
-      hoverIndex: hoverIndexReducer(hoverIndex, action, menuItemsCount),
-      openSubmenuCount: submenuCountReducer(openSubmenuCount, action)
-    };
-  };
-
-  var _useReducer = React.useReducer(reducer, {
-    hoverIndex: initialHoverIndex,
-    openSubmenuCount: 0
-  }),
-      _useReducer$ = _useReducer[0],
-      hoverIndex = _useReducer$.hoverIndex,
-      openSubmenuCount = _useReducer$.openSubmenuCount,
-      dispatch = _useReducer[1];
-
-  var _useReducer2 = React.useReducer(function (c) {
-    return c + 1;
-  }, 1),
-      reposSubmenu = _useReducer2[0],
-      forceReposSubmenu = _useReducer2[1];
 
   var handleKeyDown = function handleKeyDown(e) {
     var handled = false;
 
     switch (e.key) {
       case Keys.HOME:
-        dispatch({
-          type: HoverIndexActionTypes.FIRST
-        });
+        dispatch(HoverActionTypes.FIRST);
         handled = true;
         break;
 
       case Keys.END:
-        dispatch({
-          type: HoverIndexActionTypes.LAST
-        });
+        dispatch(HoverActionTypes.LAST);
         handled = true;
         break;
 
       case Keys.UP:
-        dispatch({
-          type: HoverIndexActionTypes.DECREASE
-        });
+        dispatch(HoverActionTypes.DECREASE, hoverItem);
         handled = true;
         break;
 
       case Keys.DOWN:
-        dispatch({
-          type: HoverIndexActionTypes.INCREASE
-        });
+        dispatch(HoverActionTypes.INCREASE, hoverItem);
         handled = true;
         break;
 
@@ -1279,8 +1302,11 @@ var MenuList = function MenuList(_ref) {
     latestHandlePosition.current = handlePosition;
   }, [isOpen, handlePosition, reposFlag]);
   useIsomorphicLayoutEffect(function () {
-    if (overflowData && !descendOverflow) menuRef.current.scrollTop = 0;
-  }, [overflowData, descendOverflow]);
+    if (overflowData && !setDownOverflow) menuRef.current.scrollTop = 0;
+  }, [overflowData, setDownOverflow]);
+  React.useEffect(function () {
+    return updateItems;
+  }, [updateItems]);
   React.useEffect(function () {
     if (!isOpen) return;
 
@@ -1332,16 +1358,16 @@ var MenuList = function MenuList(_ref) {
   }, [isOpen, hasOverflow, parentScrollingRef, handlePosition]);
   React.useEffect(function () {
     if (typeof ResizeObserver !== 'function' || reposition === 'initial') return;
-    var resizeObserver = new ResizeObserver(function (_ref3) {
-      var entry = _ref3[0];
+    var resizeObserver = new ResizeObserver(function (_ref2) {
+      var entry = _ref2[0];
       var borderBoxSize = entry.borderBoxSize,
           target = entry.target;
       var width, height;
 
       if (borderBoxSize) {
-        var _ref4 = borderBoxSize[0] || borderBoxSize,
-            inlineSize = _ref4.inlineSize,
-            blockSize = _ref4.blockSize;
+        var _ref3 = borderBoxSize[0] || borderBoxSize,
+            inlineSize = _ref3.inlineSize,
+            blockSize = _ref3.blockSize;
 
         width = inlineSize;
         height = blockSize;
@@ -1368,31 +1394,22 @@ var MenuList = function MenuList(_ref) {
   }, [reposition]);
   React.useEffect(function () {
     if (!isOpen) {
-      dispatch({
-        type: HoverIndexActionTypes.RESET
-      });
+      dispatch(HoverActionTypes.RESET);
       if (!closeTransition) setOverflowData();
       return;
     }
 
-    var _ref5 = menuItemFocus || {},
-        position = _ref5.position,
-        alwaysUpdate = _ref5.alwaysUpdate;
+    var _ref4 = menuItemFocus || {},
+        position = _ref4.position,
+        alwaysUpdate = _ref4.alwaysUpdate;
 
     var setItemFocus = function setItemFocus() {
       if (position === FocusPositions.FIRST) {
-        dispatch({
-          type: HoverIndexActionTypes.FIRST
-        });
+        dispatch(HoverActionTypes.FIRST);
       } else if (position === FocusPositions.LAST) {
-        dispatch({
-          type: HoverIndexActionTypes.LAST
-        });
-      } else if (position >= 0 && position < menuItemsCount) {
-        dispatch({
-          type: HoverIndexActionTypes.SET,
-          index: position
-        });
+        dispatch(HoverActionTypes.LAST);
+      } else if (position >= -1) {
+        dispatch(HoverActionTypes.SET_INDEX, undefined, position);
       }
     };
 
@@ -1409,7 +1426,7 @@ var MenuList = function MenuList(_ref) {
         return clearTimeout(id);
       };
     }
-  }, [openTransition, closeTransition, captureFocus, isOpen, menuItemFocus, menuItemsCount]);
+  }, [isOpen, openTransition, closeTransition, captureFocus, menuItemFocus, dispatch]);
   var isSubmenuOpen = openSubmenuCount > 0;
   var itemContext = React.useMemo(function () {
     return {
@@ -1417,13 +1434,15 @@ var MenuList = function MenuList(_ref) {
       parentOverflow: overflow,
       isParentOpen: isOpen,
       isSubmenuOpen: isSubmenuOpen,
-      dispatch: dispatch
+      setOpenSubmenuCount: setOpenSubmenuCount,
+      dispatch: dispatch,
+      updateItems: updateItems
     };
-  }, [isOpen, isSubmenuOpen, overflow]);
+  }, [isOpen, isSubmenuOpen, overflow, dispatch, updateItems]);
   var maxHeight, overflowAmt;
 
   if (overflowData) {
-    descendOverflow ? overflowAmt = overflowData.overflowAmt : maxHeight = overflowData.height;
+    setDownOverflow ? overflowAmt = overflowData.overflowAmt : maxHeight = overflowData.height;
   }
 
   var listContext = React.useMemo(function () {
@@ -1487,66 +1506,10 @@ var MenuList = function MenuList(_ref) {
     value: listContext
   }, /*#__PURE__*/React.createElement(MenuListItemContext.Provider, {
     value: itemContext
-  }, /*#__PURE__*/React.createElement(HoverIndexContext.Provider, {
-    value: hoverIndex
-  }, menuItems))));
+  }, /*#__PURE__*/React.createElement(HoverItemContext.Provider, {
+    value: hoverItem
+  }, children))));
 };
-
-function hoverIndexReducer(state, _ref6, menuItemsCount) {
-  var type = _ref6.type,
-      index = _ref6.index;
-
-  switch (type) {
-    case HoverIndexActionTypes.RESET:
-      return initialHoverIndex;
-
-    case HoverIndexActionTypes.SET:
-      return index;
-
-    case HoverIndexActionTypes.UNSET:
-      return state === index ? initialHoverIndex : state;
-
-    case HoverIndexActionTypes.DECREASE:
-      {
-        var i = state;
-        i--;
-        if (i < 0) i = menuItemsCount - 1;
-        return i;
-      }
-
-    case HoverIndexActionTypes.INCREASE:
-      {
-        var _i = state;
-        _i++;
-        if (_i >= menuItemsCount) _i = 0;
-        return _i;
-      }
-
-    case HoverIndexActionTypes.FIRST:
-      return menuItemsCount > 0 ? 0 : initialHoverIndex;
-
-    case HoverIndexActionTypes.LAST:
-      return menuItemsCount > 0 ? menuItemsCount - 1 : initialHoverIndex;
-
-    default:
-      return state;
-  }
-}
-
-function submenuCountReducer(state, _ref7) {
-  var type = _ref7.type;
-
-  switch (type) {
-    case SubmenuActionTypes.OPEN:
-      return state + 1;
-
-    case SubmenuActionTypes.CLOSE:
-      return Math.max(state - 1, 0);
-
-    default:
-      return state;
-  }
-}
 
 var _excluded$8 = ["aria-label", "className", "containerProps", "initialMounted", "unmountOnClose", "transition", "transitionTimeout", "boundingBoxRef", "boundingBoxPadding", "reposition", "submenuOpenDelay", "submenuCloseDelay", "skipOpen", "viewScroll", "portal", "theming", "onItemClick", "onClose"];
 var ControlledMenu = /*#__PURE__*/React.forwardRef(function ControlledMenu(_ref, externalRef) {
@@ -1756,7 +1719,7 @@ var Menu = /*#__PURE__*/React.forwardRef(function Menu(_ref, externalRef) {
   var button = safeCall(menuButton, {
     open: isOpen
   });
-  if (!button) throw new Error('Menu requires a menuButton prop.');
+  if (!button || !button.type) throw new Error('Menu requires a menuButton prop.');
 
   var buttonProps = _extends({
     ref: useCombinedRef(button.ref, buttonRef)
@@ -1795,26 +1758,23 @@ process.env.NODE_ENV !== "production" ? Menu.propTypes = /*#__PURE__*/_extends({
 }) : void 0;
 Menu.defaultProps = rootMenuDefaultProps;
 
-var _excluded$6 = ["aria-label", "className", "disabled", "label", "index", "openTrigger", "onMenuChange", "isHovering", "instanceRef", "captureFocus", "repositionFlag", "itemProps"],
+var _excluded$6 = ["aria-label", "className", "disabled", "label", "openTrigger", "onMenuChange", "isHovering", "instanceRef", "itemRef", "captureFocus", "repositionFlag", "itemProps"],
     _excluded2$1 = ["openMenu", "toggleMenu", "state"],
     _excluded3 = ["isActive", "onKeyUp"],
     _excluded4 = ["ref", "className", "styles"];
-var SubMenu = /*#__PURE__*/withHovering( /*#__PURE__*/React.memo(function SubMenu(_ref) {
+var SubMenu = /*#__PURE__*/withHovering('SubMenu', function SubMenu(_ref) {
   var ariaLabel = _ref['aria-label'],
       className = _ref.className,
       disabled = _ref.disabled,
       label = _ref.label,
-      index = _ref.index,
       openTrigger = _ref.openTrigger,
       onMenuChange = _ref.onMenuChange,
       isHovering = _ref.isHovering,
       instanceRef = _ref.instanceRef,
+      itemRef = _ref.itemRef,
       _ref$itemProps = _ref.itemProps,
       itemProps = _ref$itemProps === void 0 ? {} : _ref$itemProps,
       restProps = _objectWithoutPropertiesLoose(_ref, _excluded$6);
-
-  var isDisabled = !!disabled;
-  validateIndex(index, isDisabled, label);
 
   var _useContext = React.useContext(SettingsContext),
       initialMounted = _useContext.initialMounted,
@@ -1832,7 +1792,9 @@ var SubMenu = /*#__PURE__*/withHovering( /*#__PURE__*/React.memo(function SubMen
       parentOverflow = _useContext3.parentOverflow,
       isParentOpen = _useContext3.isParentOpen,
       isSubmenuOpen = _useContext3.isSubmenuOpen,
-      dispatch = _useContext3.dispatch;
+      setOpenSubmenuCount = _useContext3.setOpenSubmenuCount,
+      dispatch = _useContext3.dispatch,
+      updateItems = _useContext3.updateItems;
 
   var isPortal = parentOverflow !== 'visible';
 
@@ -1847,6 +1809,7 @@ var SubMenu = /*#__PURE__*/withHovering( /*#__PURE__*/React.memo(function SubMen
       state = _useMenuStateAndFocus.state,
       otherStateProps = _objectWithoutPropertiesLoose(_useMenuStateAndFocus, _excluded2$1);
 
+  var isDisabled = !!disabled;
   var isOpen = isMenuOpen(state);
 
   var _useActiveState = useActiveState(isHovering, isDisabled, Keys.RIGHT),
@@ -1855,7 +1818,6 @@ var SubMenu = /*#__PURE__*/withHovering( /*#__PURE__*/React.memo(function SubMen
       activeStateHandlers = _objectWithoutPropertiesLoose(_useActiveState, _excluded3);
 
   var containerRef = React.useRef(null);
-  var itemRef = React.useRef(null);
   var timeoutId = React.useRef(0);
 
   var stopTimer = function stopTimer() {
@@ -1871,10 +1833,7 @@ var SubMenu = /*#__PURE__*/withHovering( /*#__PURE__*/React.memo(function SubMen
   };
 
   var setHover = function setHover() {
-    return !isHovering && !isDisabled && dispatch({
-      type: HoverIndexActionTypes.SET,
-      index: index
-    });
+    return !isHovering && !isDisabled && dispatch(HoverActionTypes.SET, itemRef.current);
   };
 
   var delayOpen = function delayOpen(delay) {
@@ -1898,10 +1857,7 @@ var SubMenu = /*#__PURE__*/withHovering( /*#__PURE__*/React.memo(function SubMen
 
   var handleMouseLeave = function handleMouseLeave() {
     stopTimer();
-    if (!isOpen) dispatch({
-      type: HoverIndexActionTypes.UNSET,
-      index: index
-    });
+    if (!isOpen) dispatch(HoverActionTypes.UNSET, itemRef.current);
   };
 
   var handleKeyDown = function handleKeyDown(e) {
@@ -1941,6 +1897,8 @@ var SubMenu = /*#__PURE__*/withHovering( /*#__PURE__*/React.memo(function SubMen
     }
   };
 
+  useItemEffect(isDisabled, itemRef, updateItems);
+  useMenuChange(onMenuChange, isOpen);
   React.useEffect(function () {
     return function () {
       return clearTimeout(timeoutId.current);
@@ -1952,13 +1910,12 @@ var SubMenu = /*#__PURE__*/withHovering( /*#__PURE__*/React.memo(function SubMen
     } else {
       toggleMenu(false);
     }
-  }, [isHovering, isParentOpen, toggleMenu]);
+  }, [isHovering, isParentOpen, toggleMenu, itemRef]);
   React.useEffect(function () {
-    dispatch({
-      type: isOpen ? SubmenuActionTypes.OPEN : SubmenuActionTypes.CLOSE
+    setOpenSubmenuCount(function (count) {
+      return isOpen ? count + 1 : Math.max(count - 1, 0);
     });
-  }, [dispatch, isOpen]);
-  useMenuChange(onMenuChange, isOpen);
+  }, [setOpenSubmenuCount, isOpen]);
   React.useImperativeHandle(instanceRef, function () {
     return {
       openMenu: function openMenu() {
@@ -1986,7 +1943,7 @@ var SubMenu = /*#__PURE__*/withHovering( /*#__PURE__*/React.memo(function SubMen
     });
   }, [isOpen, isHovering, isActive, isDisabled]);
 
-  var externaItemlRef = itemProps.ref,
+  var externaItemRef = itemProps.ref,
       itemClassName = itemProps.className,
       itemStyles = itemProps.styles,
       restItemProps = _objectWithoutPropertiesLoose(itemProps, _excluded4);
@@ -2027,7 +1984,7 @@ var SubMenu = /*#__PURE__*/withHovering( /*#__PURE__*/React.memo(function SubMen
     "aria-haspopup": true,
     "aria-expanded": isOpen
   }, commonProps(isDisabled, isHovering), restItemProps, itemHandlers, {
-    ref: useCombinedRef(externaItemlRef, itemRef),
+    ref: useCombinedRef(externaItemRef, itemRef),
     className: useBEM({
       block: menuClass,
       element: menuItemClass,
@@ -2038,7 +1995,7 @@ var SubMenu = /*#__PURE__*/withHovering( /*#__PURE__*/React.memo(function SubMen
   }), React.useMemo(function () {
     return safeCall(label, modifiers);
   }, [label, modifiers])), state && getMenuList());
-}), 'SubMenu');
+});
 process.env.NODE_ENV !== "production" ? SubMenu.propTypes = /*#__PURE__*/_extends({}, menuPropTypes, uncontrolledMenuPropTypes, {
   disabled: propTypes.bool,
   openTrigger: /*#__PURE__*/propTypes.oneOf(['none', 'clickOnly']),
@@ -2049,9 +2006,9 @@ SubMenu.defaultProps = /*#__PURE__*/_extends({}, menuDefaultProps, {
   direction: 'right'
 });
 
-var _excluded$5 = ["className", "styles", "value", "href", "type", "checked", "disabled", "index", "children", "onClick", "isHovering", "externalRef"],
+var _excluded$5 = ["className", "styles", "value", "href", "type", "checked", "disabled", "children", "onClick", "isHovering", "itemRef", "externalRef"],
     _excluded2 = ["isActive", "onKeyUp", "onBlur"];
-var MenuItem = /*#__PURE__*/withHovering( /*#__PURE__*/React.memo(function MenuItem(_ref) {
+var MenuItem = /*#__PURE__*/withHovering('MenuItem', function MenuItem(_ref) {
   var className = _ref.className,
       styles = _ref.styles,
       value = _ref.value,
@@ -2059,18 +2016,16 @@ var MenuItem = /*#__PURE__*/withHovering( /*#__PURE__*/React.memo(function MenuI
       type = _ref.type,
       checked = _ref.checked,
       disabled = _ref.disabled,
-      index = _ref.index,
       children = _ref.children,
       onClick = _ref.onClick,
       isHovering = _ref.isHovering,
+      itemRef = _ref.itemRef,
       externalRef = _ref.externalRef,
       restProps = _objectWithoutPropertiesLoose(_ref, _excluded$5);
 
   var isDisabled = !!disabled;
-  validateIndex(index, isDisabled, children);
-  var ref = React.useRef();
 
-  var _useItemState = useItemState(ref, index, isHovering, isDisabled),
+  var _useItemState = useItemState(itemRef, itemRef, isHovering, isDisabled),
       setHover = _useItemState.setHover,
       onBlur = _useItemState.onBlur,
       onMouseMove = _useItemState.onMouseMove,
@@ -2117,7 +2072,7 @@ var MenuItem = /*#__PURE__*/withHovering( /*#__PURE__*/React.memo(function MenuI
       case Keys.ENTER:
       case Keys.SPACE:
         if (isAnchor) {
-          ref.current.click();
+          itemRef.current.click();
         } else {
           handleClick(e);
         }
@@ -2154,7 +2109,7 @@ var MenuItem = /*#__PURE__*/withHovering( /*#__PURE__*/React.memo(function MenuI
     role: isRadio ? 'menuitemradio' : isCheckBox ? 'menuitemcheckbox' : 'menuitem',
     'aria-checked': isRadio || isCheckBox ? isChecked : undefined
   }, commonProps(isDisabled, isHovering), restProps, handlers, {
-    ref: useCombinedRef(externalRef, ref),
+    ref: useCombinedRef(externalRef, itemRef),
     className: useBEM({
       block: menuClass,
       element: menuItemClass,
@@ -2177,7 +2132,7 @@ var MenuItem = /*#__PURE__*/withHovering( /*#__PURE__*/React.memo(function MenuI
   } else {
     return /*#__PURE__*/React.createElement("li", menuItemProps, renderChildren);
   }
-}), 'MenuItem');
+});
 process.env.NODE_ENV !== "production" ? MenuItem.propTypes = /*#__PURE__*/_extends({}, /*#__PURE__*/stylePropTypes(), {
   value: propTypes.any,
   href: propTypes.string,
@@ -2188,22 +2143,21 @@ process.env.NODE_ENV !== "production" ? MenuItem.propTypes = /*#__PURE__*/_exten
   onClick: propTypes.func
 }) : void 0;
 
-var _excluded$4 = ["className", "styles", "disabled", "index", "children", "isHovering", "externalRef"];
-var FocusableItem = /*#__PURE__*/withHovering( /*#__PURE__*/React.memo(function FocusableItem(_ref) {
+var _excluded$4 = ["className", "styles", "disabled", "children", "isHovering", "itemRef", "externalRef"];
+var FocusableItem = /*#__PURE__*/withHovering('FocusableItem', function FocusableItem(_ref) {
   var className = _ref.className,
       styles = _ref.styles,
       disabled = _ref.disabled,
-      index = _ref.index,
       children = _ref.children,
       isHovering = _ref.isHovering,
+      itemRef = _ref.itemRef,
       externalRef = _ref.externalRef,
       restProps = _objectWithoutPropertiesLoose(_ref, _excluded$4);
 
   var isDisabled = !!disabled;
-  validateIndex(index, isDisabled, children);
   var ref = React.useRef(null);
 
-  var _useItemState = useItemState(ref, index, isHovering, isDisabled),
+  var _useItemState = useItemState(itemRef, ref, isHovering, isDisabled),
       setHover = _useItemState.setHover,
       onBlur = _useItemState.onBlur,
       onMouseMove = _useItemState.onMouseMove,
@@ -2236,7 +2190,7 @@ var FocusableItem = /*#__PURE__*/withHovering( /*#__PURE__*/React.memo(function 
   return /*#__PURE__*/React.createElement("li", _extends({
     role: "menuitem"
   }, commonProps(isDisabled), restProps, handlers, {
-    ref: externalRef,
+    ref: useCombinedRef(externalRef, itemRef),
     className: useBEM({
       block: menuClass,
       element: menuItemClass,
@@ -2245,7 +2199,7 @@ var FocusableItem = /*#__PURE__*/withHovering( /*#__PURE__*/React.memo(function 
     }),
     style: useFlatStyles(styles, modifiers)
   }), renderChildren);
-}), 'FocusableItem');
+});
 process.env.NODE_ENV !== "production" ? FocusableItem.propTypes = /*#__PURE__*/_extends({}, /*#__PURE__*/stylePropTypes(), {
   disabled: propTypes.bool,
   children: propTypes.func
@@ -2292,7 +2246,7 @@ var MenuHeader = /*#__PURE__*/React.memo( /*#__PURE__*/React.forwardRef(function
 process.env.NODE_ENV !== "production" ? MenuHeader.propTypes = /*#__PURE__*/_extends({}, /*#__PURE__*/stylePropTypes()) : void 0;
 
 var _excluded$1 = ["className", "styles", "takeOverflow"];
-var MenuGroup = /*#__PURE__*/defineName( /*#__PURE__*/React.forwardRef(function MenuGroup(_ref, externalRef) {
+var MenuGroup = /*#__PURE__*/React.forwardRef(function MenuGroup(_ref, externalRef) {
   var className = _ref.className,
       styles = _ref.styles,
       takeOverflow = _ref.takeOverflow,
@@ -2333,13 +2287,13 @@ var MenuGroup = /*#__PURE__*/defineName( /*#__PURE__*/React.forwardRef(function 
     }),
     style: _extends({}, useFlatStyles(styles), overflowStyles)
   }));
-}), 'MenuGroup');
+});
 process.env.NODE_ENV !== "production" ? MenuGroup.propTypes = /*#__PURE__*/_extends({}, /*#__PURE__*/stylePropTypes(), {
   takeOverflow: propTypes.bool
 }) : void 0;
 
 var _excluded = ["aria-label", "className", "styles", "name", "value", "onRadioChange"];
-var MenuRadioGroup = /*#__PURE__*/defineName( /*#__PURE__*/React.forwardRef(function MenuRadioGroup(_ref, externalRef) {
+var MenuRadioGroup = /*#__PURE__*/React.forwardRef(function MenuRadioGroup(_ref, externalRef) {
   var ariaLabel = _ref['aria-label'],
       className = _ref.className,
       styles = _ref.styles,
@@ -2371,7 +2325,7 @@ var MenuRadioGroup = /*#__PURE__*/defineName( /*#__PURE__*/React.forwardRef(func
     }),
     style: useFlatStyles(styles)
   }))));
-}), 'MenuRadioGroup');
+});
 process.env.NODE_ENV !== "production" ? MenuRadioGroup.propTypes = /*#__PURE__*/_extends({}, /*#__PURE__*/stylePropTypes(), {
   name: propTypes.string,
   value: propTypes.any,
@@ -2388,6 +2342,4 @@ exports.MenuHeader = MenuHeader;
 exports.MenuItem = MenuItem;
 exports.MenuRadioGroup = MenuRadioGroup;
 exports.SubMenu = SubMenu;
-exports.applyHOC = applyHOC;
-exports.applyStatics = applyStatics;
 exports.useMenuState = useMenuState;

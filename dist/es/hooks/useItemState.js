@@ -1,31 +1,29 @@
 import { useContext, useRef, useEffect } from 'react';
-import { ItemSettingsContext, MenuListItemContext, HoverIndexActionTypes } from '../utils/constants.js';
+import { useItemEffect } from './useItemEffect.js';
+import { ItemSettingsContext, MenuListItemContext, HoverActionTypes } from '../utils/constants.js';
 
-var useItemState = function useItemState(ref, index, isHovering, isDisabled) {
+var useItemState = function useItemState(itemRef, focusRef, isHovering, isDisabled) {
   var _useContext = useContext(ItemSettingsContext),
       submenuCloseDelay = _useContext.submenuCloseDelay;
 
   var _useContext2 = useContext(MenuListItemContext),
       isParentOpen = _useContext2.isParentOpen,
       isSubmenuOpen = _useContext2.isSubmenuOpen,
-      dispatch = _useContext2.dispatch;
+      dispatch = _useContext2.dispatch,
+      updateItems = _useContext2.updateItems;
 
   var timeoutId = useRef(0);
 
   var setHover = function setHover() {
-    if (!isHovering && !isDisabled) dispatch({
-      type: HoverIndexActionTypes.SET,
-      index: index
-    });
+    if (!isHovering && !isDisabled) dispatch(HoverActionTypes.SET, itemRef.current);
+  };
+
+  var unsetHover = function unsetHover() {
+    !isDisabled && dispatch(HoverActionTypes.UNSET, itemRef.current);
   };
 
   var onBlur = function onBlur(e) {
-    if (isHovering && !e.currentTarget.contains(e.relatedTarget)) {
-      dispatch({
-        type: HoverIndexActionTypes.UNSET,
-        index: index
-      });
-    }
+    if (isHovering && !e.currentTarget.contains(e.relatedTarget)) unsetHover();
   };
 
   var onMouseMove = function onMouseMove() {
@@ -45,12 +43,10 @@ var useItemState = function useItemState(ref, index, isHovering, isDisabled) {
       timeoutId.current = 0;
     }
 
-    if (!keepHover) dispatch({
-      type: HoverIndexActionTypes.UNSET,
-      index: index
-    });
+    !keepHover && unsetHover();
   };
 
+  useItemEffect(isDisabled, itemRef, updateItems);
   useEffect(function () {
     return function () {
       return clearTimeout(timeoutId.current);
@@ -58,9 +54,9 @@ var useItemState = function useItemState(ref, index, isHovering, isDisabled) {
   }, []);
   useEffect(function () {
     if (isHovering && isParentOpen) {
-      ref.current && ref.current.focus();
+      focusRef.current && focusRef.current.focus();
     }
-  }, [ref, isHovering, isParentOpen]);
+  }, [focusRef, isHovering, isParentOpen]);
   return {
     setHover: setHover,
     onBlur: onBlur,

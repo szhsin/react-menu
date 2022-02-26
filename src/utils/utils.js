@@ -8,16 +8,10 @@ export const getTransition = (transition, name) =>
   !!(transition && transition[name]) || transition === true;
 export const safeCall = (fn, arg) => (typeof fn === 'function' ? fn(arg) : fn);
 
-export const getName = (component) => component && component['_szhsinMenu'];
-export const defineName = (component, name) =>
-  name ? Object.defineProperty(component, '_szhsinMenu', { value: name }) : component;
-
-export const applyHOC =
-  (HOC) =>
-  (...args) =>
-    defineName(HOC(...args), getName(args[0]));
-export const applyStatics = (sourceComponent) => (wrappedComponent) =>
-  defineName(wrappedComponent, getName(sourceComponent));
+const internalKey = '_szhsinMenu';
+export const getName = (component) => component[internalKey];
+export const defineName = (name, component) =>
+  Object.defineProperty(component, internalKey, { value: name });
 
 export const attachHandlerProps = (handlers, props) => {
   if (!props) return handlers;
@@ -65,19 +59,16 @@ export const getScrollAncestor = (node) => {
   return window;
 };
 
-export const validateIndex = (index, isDisabled, node) => {
-  if (process.env.NODE_ENV !== 'production' && index === undefined && !isDisabled) {
-    const error = `[React-Menu] Validate item '${node && node.toString()}' failed.
-You're probably creating wrapping components or HOC over MenuItem, SubMenu or FocusableItem.
-To create wrapping components, see: https://codesandbox.io/s/react-menu-wrapping-q0b59
-To create HOCs, see: https://codesandbox.io/s/react-menu-hoc-0bipn`;
-    throw new Error(error);
-  }
-};
-
 export function commonProps(isDisabled, isHovering) {
   return {
     'aria-disabled': isDisabled || undefined,
     tabIndex: isDisabled ? undefined : isHovering ? 0 : -1
   };
+}
+
+export function indexOfNode(nodeList, node) {
+  for (let i = 0; i < nodeList.length; i++) {
+    if (nodeList[i] === node) return i;
+  }
+  return -1;
 }

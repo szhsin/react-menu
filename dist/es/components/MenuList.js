@@ -1,8 +1,8 @@
 import { objectWithoutPropertiesLoose as _objectWithoutPropertiesLoose, extends as _extends } from '../_virtual/_rollupPluginBabelHelpers.js';
-import React, { useState, useContext, useRef, useMemo, useReducer, useCallback, useEffect } from 'react';
+import React, { useState, useReducer, useContext, useRef, useCallback, useEffect, useMemo } from 'react';
 import { flushSync } from 'react-dom';
-import { SettingsContext, MenuListContext, initialHoverIndex, HoverIndexActionTypes, MenuListItemContext, HoverIndexContext, Keys, menuClass, CloseReason, FocusPositions, menuArrowClass, SubmenuActionTypes } from '../utils/constants.js';
-import { cloneChildren } from '../utils/cloneChildren.js';
+import { SettingsContext, MenuListContext, HoverActionTypes, MenuListItemContext, HoverItemContext, Keys, menuClass, CloseReason, FocusPositions, menuArrowClass } from '../utils/constants.js';
+import { useItems } from '../hooks/useItems.js';
 import { getScrollAncestor, floatEqual, attachHandlerProps, commonProps, isMenuOpen, getTransition, safeCall, batchedUpdates } from '../utils/utils.js';
 import { getPositionHelpers } from '../positionUtils/getPositionHelpers.js';
 import { positionContextMenu } from '../positionUtils/positionContextMenu.js';
@@ -12,7 +12,7 @@ import { useBEM } from '../hooks/useBEM.js';
 import { useFlatStyles } from '../hooks/useFlatStyles.js';
 import { useCombinedRef } from '../hooks/useCombinedRef.js';
 
-var _excluded = ["ariaLabel", "menuClassName", "menuStyles", "arrowClassName", "arrowStyles", "anchorPoint", "anchorRef", "containerRef", "externalRef", "parentScrollingRef", "arrow", "align", "direction", "position", "overflow", "repositionFlag", "captureFocus", "state", "endTransition", "isDisabled", "menuItemFocus", "offsetX", "offsetY", "children", "onClose"];
+var _excluded = ["ariaLabel", "menuClassName", "menuStyles", "arrowClassName", "arrowStyles", "anchorPoint", "anchorRef", "containerRef", "externalRef", "parentScrollingRef", "arrow", "align", "direction", "position", "overflow", "setDownOverflow", "repositionFlag", "captureFocus", "state", "endTransition", "isDisabled", "menuItemFocus", "offsetX", "offsetY", "children", "onClose"];
 var MenuList = function MenuList(_ref) {
   var ariaLabel = _ref.ariaLabel,
       menuClassName = _ref.menuClassName,
@@ -29,6 +29,7 @@ var MenuList = function MenuList(_ref) {
       direction = _ref.direction,
       position = _ref.position,
       overflow = _ref.overflow,
+      setDownOverflow = _ref.setDownOverflow,
       repositionFlag = _ref.repositionFlag,
       _ref$captureFocus = _ref.captureFocus,
       captureFocus = _ref$captureFocus === void 0 ? true : _ref$captureFocus,
@@ -61,6 +62,16 @@ var MenuList = function MenuList(_ref) {
       expandedDirection = _useState4[0],
       setExpandedDirection = _useState4[1];
 
+  var _useState5 = useState(0),
+      openSubmenuCount = _useState5[0],
+      setOpenSubmenuCount = _useState5[1];
+
+  var _useReducer = useReducer(function (c) {
+    return c + 1;
+  }, 1),
+      reposSubmenu = _useReducer[0],
+      forceReposSubmenu = _useReducer[1];
+
   var _useContext = useContext(SettingsContext),
       transition = _useContext.transition,
       boundingBoxRef = _useContext.boundingBoxRef,
@@ -81,70 +92,37 @@ var MenuList = function MenuList(_ref) {
     height: 0
   });
   var latestHandlePosition = useRef(function () {});
+
+  var _useItems = useItems(menuRef),
+      hoverItem = _useItems.hoverItem,
+      dispatch = _useItems.dispatch,
+      updateItems = _useItems.updateItems;
+
   var isOpen = isMenuOpen(state);
   var openTransition = getTransition(transition, 'open');
   var closeTransition = getTransition(transition, 'close');
-
-  var _useMemo = useMemo(function () {
-    return cloneChildren(children);
-  }, [children]),
-      menuItems = _useMemo.items,
-      menuItemsCount = _useMemo.index,
-      descendOverflow = _useMemo.descendOverflow;
-
-  var reducer = function reducer(_ref2, action) {
-    var hoverIndex = _ref2.hoverIndex,
-        openSubmenuCount = _ref2.openSubmenuCount;
-    return {
-      hoverIndex: hoverIndexReducer(hoverIndex, action, menuItemsCount),
-      openSubmenuCount: submenuCountReducer(openSubmenuCount, action)
-    };
-  };
-
-  var _useReducer = useReducer(reducer, {
-    hoverIndex: initialHoverIndex,
-    openSubmenuCount: 0
-  }),
-      _useReducer$ = _useReducer[0],
-      hoverIndex = _useReducer$.hoverIndex,
-      openSubmenuCount = _useReducer$.openSubmenuCount,
-      dispatch = _useReducer[1];
-
-  var _useReducer2 = useReducer(function (c) {
-    return c + 1;
-  }, 1),
-      reposSubmenu = _useReducer2[0],
-      forceReposSubmenu = _useReducer2[1];
 
   var handleKeyDown = function handleKeyDown(e) {
     var handled = false;
 
     switch (e.key) {
       case Keys.HOME:
-        dispatch({
-          type: HoverIndexActionTypes.FIRST
-        });
+        dispatch(HoverActionTypes.FIRST);
         handled = true;
         break;
 
       case Keys.END:
-        dispatch({
-          type: HoverIndexActionTypes.LAST
-        });
+        dispatch(HoverActionTypes.LAST);
         handled = true;
         break;
 
       case Keys.UP:
-        dispatch({
-          type: HoverIndexActionTypes.DECREASE
-        });
+        dispatch(HoverActionTypes.DECREASE, hoverItem);
         handled = true;
         break;
 
       case Keys.DOWN:
-        dispatch({
-          type: HoverIndexActionTypes.INCREASE
-        });
+        dispatch(HoverActionTypes.INCREASE, hoverItem);
         handled = true;
         break;
 
@@ -278,8 +256,11 @@ var MenuList = function MenuList(_ref) {
     latestHandlePosition.current = handlePosition;
   }, [isOpen, handlePosition, reposFlag]);
   useIsomorphicLayoutEffect(function () {
-    if (overflowData && !descendOverflow) menuRef.current.scrollTop = 0;
-  }, [overflowData, descendOverflow]);
+    if (overflowData && !setDownOverflow) menuRef.current.scrollTop = 0;
+  }, [overflowData, setDownOverflow]);
+  useEffect(function () {
+    return updateItems;
+  }, [updateItems]);
   useEffect(function () {
     if (!isOpen) return;
 
@@ -331,16 +312,16 @@ var MenuList = function MenuList(_ref) {
   }, [isOpen, hasOverflow, parentScrollingRef, handlePosition]);
   useEffect(function () {
     if (typeof ResizeObserver !== 'function' || reposition === 'initial') return;
-    var resizeObserver = new ResizeObserver(function (_ref3) {
-      var entry = _ref3[0];
+    var resizeObserver = new ResizeObserver(function (_ref2) {
+      var entry = _ref2[0];
       var borderBoxSize = entry.borderBoxSize,
           target = entry.target;
       var width, height;
 
       if (borderBoxSize) {
-        var _ref4 = borderBoxSize[0] || borderBoxSize,
-            inlineSize = _ref4.inlineSize,
-            blockSize = _ref4.blockSize;
+        var _ref3 = borderBoxSize[0] || borderBoxSize,
+            inlineSize = _ref3.inlineSize,
+            blockSize = _ref3.blockSize;
 
         width = inlineSize;
         height = blockSize;
@@ -367,31 +348,22 @@ var MenuList = function MenuList(_ref) {
   }, [reposition]);
   useEffect(function () {
     if (!isOpen) {
-      dispatch({
-        type: HoverIndexActionTypes.RESET
-      });
+      dispatch(HoverActionTypes.RESET);
       if (!closeTransition) setOverflowData();
       return;
     }
 
-    var _ref5 = menuItemFocus || {},
-        position = _ref5.position,
-        alwaysUpdate = _ref5.alwaysUpdate;
+    var _ref4 = menuItemFocus || {},
+        position = _ref4.position,
+        alwaysUpdate = _ref4.alwaysUpdate;
 
     var setItemFocus = function setItemFocus() {
       if (position === FocusPositions.FIRST) {
-        dispatch({
-          type: HoverIndexActionTypes.FIRST
-        });
+        dispatch(HoverActionTypes.FIRST);
       } else if (position === FocusPositions.LAST) {
-        dispatch({
-          type: HoverIndexActionTypes.LAST
-        });
-      } else if (position >= 0 && position < menuItemsCount) {
-        dispatch({
-          type: HoverIndexActionTypes.SET,
-          index: position
-        });
+        dispatch(HoverActionTypes.LAST);
+      } else if (position >= -1) {
+        dispatch(HoverActionTypes.SET_INDEX, undefined, position);
       }
     };
 
@@ -408,7 +380,7 @@ var MenuList = function MenuList(_ref) {
         return clearTimeout(id);
       };
     }
-  }, [openTransition, closeTransition, captureFocus, isOpen, menuItemFocus, menuItemsCount]);
+  }, [isOpen, openTransition, closeTransition, captureFocus, menuItemFocus, dispatch]);
   var isSubmenuOpen = openSubmenuCount > 0;
   var itemContext = useMemo(function () {
     return {
@@ -416,13 +388,15 @@ var MenuList = function MenuList(_ref) {
       parentOverflow: overflow,
       isParentOpen: isOpen,
       isSubmenuOpen: isSubmenuOpen,
-      dispatch: dispatch
+      setOpenSubmenuCount: setOpenSubmenuCount,
+      dispatch: dispatch,
+      updateItems: updateItems
     };
-  }, [isOpen, isSubmenuOpen, overflow]);
+  }, [isOpen, isSubmenuOpen, overflow, dispatch, updateItems]);
   var maxHeight, overflowAmt;
 
   if (overflowData) {
-    descendOverflow ? overflowAmt = overflowData.overflowAmt : maxHeight = overflowData.height;
+    setDownOverflow ? overflowAmt = overflowData.overflowAmt : maxHeight = overflowData.height;
   }
 
   var listContext = useMemo(function () {
@@ -486,65 +460,9 @@ var MenuList = function MenuList(_ref) {
     value: listContext
   }, /*#__PURE__*/React.createElement(MenuListItemContext.Provider, {
     value: itemContext
-  }, /*#__PURE__*/React.createElement(HoverIndexContext.Provider, {
-    value: hoverIndex
-  }, menuItems))));
+  }, /*#__PURE__*/React.createElement(HoverItemContext.Provider, {
+    value: hoverItem
+  }, children))));
 };
-
-function hoverIndexReducer(state, _ref6, menuItemsCount) {
-  var type = _ref6.type,
-      index = _ref6.index;
-
-  switch (type) {
-    case HoverIndexActionTypes.RESET:
-      return initialHoverIndex;
-
-    case HoverIndexActionTypes.SET:
-      return index;
-
-    case HoverIndexActionTypes.UNSET:
-      return state === index ? initialHoverIndex : state;
-
-    case HoverIndexActionTypes.DECREASE:
-      {
-        var i = state;
-        i--;
-        if (i < 0) i = menuItemsCount - 1;
-        return i;
-      }
-
-    case HoverIndexActionTypes.INCREASE:
-      {
-        var _i = state;
-        _i++;
-        if (_i >= menuItemsCount) _i = 0;
-        return _i;
-      }
-
-    case HoverIndexActionTypes.FIRST:
-      return menuItemsCount > 0 ? 0 : initialHoverIndex;
-
-    case HoverIndexActionTypes.LAST:
-      return menuItemsCount > 0 ? menuItemsCount - 1 : initialHoverIndex;
-
-    default:
-      return state;
-  }
-}
-
-function submenuCountReducer(state, _ref7) {
-  var type = _ref7.type;
-
-  switch (type) {
-    case SubmenuActionTypes.OPEN:
-      return state + 1;
-
-    case SubmenuActionTypes.CLOSE:
-      return Math.max(state - 1, 0);
-
-    default:
-      return state;
-  }
-}
 
 export { MenuList };

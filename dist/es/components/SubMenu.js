@@ -1,39 +1,37 @@
 import { objectWithoutPropertiesLoose as _objectWithoutPropertiesLoose, extends as _extends } from '../_virtual/_rollupPluginBabelHelpers.js';
-import React, { memo, useContext, useRef, useEffect, useImperativeHandle, useMemo } from 'react';
+import React, { useContext, useRef, useEffect, useImperativeHandle, useMemo } from 'react';
 import { createPortal } from 'react-dom';
 import { bool, oneOf, oneOfType, node, func, shape } from 'prop-types';
 import { MenuList } from './MenuList.js';
 import { withHovering } from '../utils/withHovering.js';
-import { validateIndex, attachHandlerProps, commonProps, safeCall, isMenuOpen, batchedUpdates } from '../utils/utils.js';
 import { useMenuStateAndFocus } from '../hooks/useMenuStateAndFocus.js';
 import { useActiveState } from '../hooks/useActiveState.js';
+import { useItemEffect } from '../hooks/useItemEffect.js';
 import { useMenuChange } from '../hooks/useMenuChange.js';
 import { useBEM } from '../hooks/useBEM.js';
-import { SettingsContext, ItemSettingsContext, MenuListItemContext, Keys, SubmenuActionTypes, HoverIndexActionTypes, menuClass, subMenuClass, menuItemClass, FocusPositions } from '../utils/constants.js';
+import { SettingsContext, ItemSettingsContext, MenuListItemContext, Keys, HoverActionTypes, menuClass, subMenuClass, menuItemClass, FocusPositions } from '../utils/constants.js';
 import { useCombinedRef } from '../hooks/useCombinedRef.js';
 import { useFlatStyles } from '../hooks/useFlatStyles.js';
 import { menuPropTypes, uncontrolledMenuPropTypes, stylePropTypes, menuDefaultProps } from '../utils/propTypes.js';
+import { isMenuOpen, attachHandlerProps, commonProps, safeCall, batchedUpdates } from '../utils/utils.js';
 
-var _excluded = ["aria-label", "className", "disabled", "label", "index", "openTrigger", "onMenuChange", "isHovering", "instanceRef", "captureFocus", "repositionFlag", "itemProps"],
+var _excluded = ["aria-label", "className", "disabled", "label", "openTrigger", "onMenuChange", "isHovering", "instanceRef", "itemRef", "captureFocus", "repositionFlag", "itemProps"],
     _excluded2 = ["openMenu", "toggleMenu", "state"],
     _excluded3 = ["isActive", "onKeyUp"],
     _excluded4 = ["ref", "className", "styles"];
-var SubMenu = /*#__PURE__*/withHovering( /*#__PURE__*/memo(function SubMenu(_ref) {
+var SubMenu = /*#__PURE__*/withHovering('SubMenu', function SubMenu(_ref) {
   var ariaLabel = _ref['aria-label'],
       className = _ref.className,
       disabled = _ref.disabled,
       label = _ref.label,
-      index = _ref.index,
       openTrigger = _ref.openTrigger,
       onMenuChange = _ref.onMenuChange,
       isHovering = _ref.isHovering,
       instanceRef = _ref.instanceRef,
+      itemRef = _ref.itemRef,
       _ref$itemProps = _ref.itemProps,
       itemProps = _ref$itemProps === void 0 ? {} : _ref$itemProps,
       restProps = _objectWithoutPropertiesLoose(_ref, _excluded);
-
-  var isDisabled = !!disabled;
-  validateIndex(index, isDisabled, label);
 
   var _useContext = useContext(SettingsContext),
       initialMounted = _useContext.initialMounted,
@@ -51,7 +49,9 @@ var SubMenu = /*#__PURE__*/withHovering( /*#__PURE__*/memo(function SubMenu(_ref
       parentOverflow = _useContext3.parentOverflow,
       isParentOpen = _useContext3.isParentOpen,
       isSubmenuOpen = _useContext3.isSubmenuOpen,
-      dispatch = _useContext3.dispatch;
+      setOpenSubmenuCount = _useContext3.setOpenSubmenuCount,
+      dispatch = _useContext3.dispatch,
+      updateItems = _useContext3.updateItems;
 
   var isPortal = parentOverflow !== 'visible';
 
@@ -66,6 +66,7 @@ var SubMenu = /*#__PURE__*/withHovering( /*#__PURE__*/memo(function SubMenu(_ref
       state = _useMenuStateAndFocus.state,
       otherStateProps = _objectWithoutPropertiesLoose(_useMenuStateAndFocus, _excluded2);
 
+  var isDisabled = !!disabled;
   var isOpen = isMenuOpen(state);
 
   var _useActiveState = useActiveState(isHovering, isDisabled, Keys.RIGHT),
@@ -74,7 +75,6 @@ var SubMenu = /*#__PURE__*/withHovering( /*#__PURE__*/memo(function SubMenu(_ref
       activeStateHandlers = _objectWithoutPropertiesLoose(_useActiveState, _excluded3);
 
   var containerRef = useRef(null);
-  var itemRef = useRef(null);
   var timeoutId = useRef(0);
 
   var stopTimer = function stopTimer() {
@@ -90,10 +90,7 @@ var SubMenu = /*#__PURE__*/withHovering( /*#__PURE__*/memo(function SubMenu(_ref
   };
 
   var setHover = function setHover() {
-    return !isHovering && !isDisabled && dispatch({
-      type: HoverIndexActionTypes.SET,
-      index: index
-    });
+    return !isHovering && !isDisabled && dispatch(HoverActionTypes.SET, itemRef.current);
   };
 
   var delayOpen = function delayOpen(delay) {
@@ -117,10 +114,7 @@ var SubMenu = /*#__PURE__*/withHovering( /*#__PURE__*/memo(function SubMenu(_ref
 
   var handleMouseLeave = function handleMouseLeave() {
     stopTimer();
-    if (!isOpen) dispatch({
-      type: HoverIndexActionTypes.UNSET,
-      index: index
-    });
+    if (!isOpen) dispatch(HoverActionTypes.UNSET, itemRef.current);
   };
 
   var handleKeyDown = function handleKeyDown(e) {
@@ -160,6 +154,8 @@ var SubMenu = /*#__PURE__*/withHovering( /*#__PURE__*/memo(function SubMenu(_ref
     }
   };
 
+  useItemEffect(isDisabled, itemRef, updateItems);
+  useMenuChange(onMenuChange, isOpen);
   useEffect(function () {
     return function () {
       return clearTimeout(timeoutId.current);
@@ -171,13 +167,12 @@ var SubMenu = /*#__PURE__*/withHovering( /*#__PURE__*/memo(function SubMenu(_ref
     } else {
       toggleMenu(false);
     }
-  }, [isHovering, isParentOpen, toggleMenu]);
+  }, [isHovering, isParentOpen, toggleMenu, itemRef]);
   useEffect(function () {
-    dispatch({
-      type: isOpen ? SubmenuActionTypes.OPEN : SubmenuActionTypes.CLOSE
+    setOpenSubmenuCount(function (count) {
+      return isOpen ? count + 1 : Math.max(count - 1, 0);
     });
-  }, [dispatch, isOpen]);
-  useMenuChange(onMenuChange, isOpen);
+  }, [setOpenSubmenuCount, isOpen]);
   useImperativeHandle(instanceRef, function () {
     return {
       openMenu: function openMenu() {
@@ -205,7 +200,7 @@ var SubMenu = /*#__PURE__*/withHovering( /*#__PURE__*/memo(function SubMenu(_ref
     });
   }, [isOpen, isHovering, isActive, isDisabled]);
 
-  var externaItemlRef = itemProps.ref,
+  var externaItemRef = itemProps.ref,
       itemClassName = itemProps.className,
       itemStyles = itemProps.styles,
       restItemProps = _objectWithoutPropertiesLoose(itemProps, _excluded4);
@@ -246,7 +241,7 @@ var SubMenu = /*#__PURE__*/withHovering( /*#__PURE__*/memo(function SubMenu(_ref
     "aria-haspopup": true,
     "aria-expanded": isOpen
   }, commonProps(isDisabled, isHovering), restItemProps, itemHandlers, {
-    ref: useCombinedRef(externaItemlRef, itemRef),
+    ref: useCombinedRef(externaItemRef, itemRef),
     className: useBEM({
       block: menuClass,
       element: menuItemClass,
@@ -257,7 +252,7 @@ var SubMenu = /*#__PURE__*/withHovering( /*#__PURE__*/memo(function SubMenu(_ref
   }), useMemo(function () {
     return safeCall(label, modifiers);
   }, [label, modifiers])), state && getMenuList());
-}), 'SubMenu');
+});
 process.env.NODE_ENV !== "production" ? SubMenu.propTypes = /*#__PURE__*/_extends({}, menuPropTypes, uncontrolledMenuPropTypes, {
   disabled: bool,
   openTrigger: /*#__PURE__*/oneOf(['none', 'clickOnly']),

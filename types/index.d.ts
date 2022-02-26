@@ -244,6 +244,11 @@ interface BaseMenuProps extends Omit<BaseProps, 'styles'> {
    * @default 'visible'
    */
   overflow?: MenuOverflow;
+  /**
+   * Set computed overflow amount down to a child `MenuGroup`.
+   * The `MenuGroup` should have `takeOverflow` prop set as `true` accordingly.
+   */
+  setDownOverflow?: boolean;
   children?: React.ReactNode;
 }
 
@@ -526,9 +531,7 @@ export interface MenuItemProps extends Omit<BaseProps<MenuItemModifiers>, 'onCli
   rel?: string;
   target?: string;
   /**
-   * Set this prop to 'checkbox' to make it a checkbox menu item.
-   *
-   * *Please note menu items under a `MenuRadioGroup` will have `type` set to 'radio' automatically.*
+   * Set this prop to make the item a checkbox or radio menu item.
    */
   type?: MenuItemTypeProp;
   /**
@@ -623,7 +626,7 @@ export interface MenuGroupProps extends BaseProps {
   children?: React.ReactNode;
   /**
    * Set `true` to apply overflow of the parent menu to the group.
-   * Only one `MenuGroup` in a menu is allowed to have this prop.
+   * Only one `MenuGroup` in a menu should set this prop as `true`.
    */
   takeOverflow?: boolean;
 }
@@ -682,23 +685,5 @@ export function useMenuState(options?: MenuStateOptions): {
    */
   endTransition: () => void;
 };
-
-//
-// utils
-// ----------------------------------------------------------------------
-
-/**
- * A helper function which copies statics if you create HOC on React-Menu components.
- *
- * @example https://codesandbox.io/s/react-menu-hoc-0bipn
- */
-export function applyHOC<H>(hoc: H): H;
-
-/**
- * A helper function for creating new components which wrap and return one of react-menu's components.
- *
- * @example https://codesandbox.io/s/react-menu-wrapping-q0b59
- */
-export function applyStatics<W>(sourceComponent: React.NamedExoticComponent): (w: W) => W;
 
 export {};

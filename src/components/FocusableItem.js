@@ -1,6 +1,6 @@
-import React, { memo, useContext, useMemo, useRef } from 'react';
+import React, { useContext, useMemo, useRef } from 'react';
 import { bool, func } from 'prop-types';
-import { useBEM, useFlatStyles, useItemState } from '../hooks';
+import { useBEM, useCombinedRef, useFlatStyles, useItemState } from '../hooks';
 import {
   attachHandlerProps,
   commonProps,
@@ -8,28 +8,27 @@ import {
   menuClass,
   menuItemClass,
   stylePropTypes,
-  validateIndex,
   withHovering,
   EventHandlersContext
 } from '../utils';
 
 export const FocusableItem = withHovering(
-  memo(function FocusableItem({
+  'FocusableItem',
+  function FocusableItem({
     className,
     styles,
     disabled,
-    index,
     children,
     isHovering,
+    itemRef,
     externalRef,
     ...restProps
   }) {
     const isDisabled = !!disabled;
-    validateIndex(index, isDisabled, children);
     const ref = useRef(null);
     const { setHover, onBlur, onMouseMove, onMouseLeave } = useItemState(
+      itemRef,
       ref,
-      index,
       isHovering,
       isDisabled
     );
@@ -71,15 +70,14 @@ export const FocusableItem = withHovering(
         {...commonProps(isDisabled)}
         {...restProps}
         {...handlers}
-        ref={externalRef}
+        ref={useCombinedRef(externalRef, itemRef)}
         className={useBEM({ block: menuClass, element: menuItemClass, modifiers, className })}
         style={useFlatStyles(styles, modifiers)}
       >
         {renderChildren}
       </li>
     );
-  }),
-  'FocusableItem'
+  }
 );
 
 FocusableItem.propTypes = {

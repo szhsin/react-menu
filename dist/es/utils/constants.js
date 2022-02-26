@@ -11,7 +11,7 @@ var menuGroupClass = 'group';
 var subMenuClass = 'submenu';
 var radioGroupClass = 'radio-group';
 var initialHoverIndex = -1;
-var HoverIndexContext = /*#__PURE__*/createContext(initialHoverIndex);
+var HoverItemContext = /*#__PURE__*/createContext(initialHoverIndex);
 var MenuListItemContext = /*#__PURE__*/createContext({});
 var MenuListContext = /*#__PURE__*/createContext({});
 var EventHandlersContext = /*#__PURE__*/createContext({});
@@ -29,18 +29,15 @@ var Keys = /*#__PURE__*/Object.freeze({
   UP: 'ArrowUp',
   DOWN: 'ArrowDown'
 });
-var HoverIndexActionTypes = /*#__PURE__*/Object.freeze({
-  RESET: 'HOVER_RESET',
-  SET: 'HOVER_SET',
-  UNSET: 'HOVER_UNSET',
-  INCREASE: 'HOVER_INCREASE',
-  DECREASE: 'HOVER_DECREASE',
-  FIRST: 'HOVER_FIRST',
-  LAST: 'HOVER_LAST'
-});
-var SubmenuActionTypes = /*#__PURE__*/Object.freeze({
-  OPEN: 'SUBMENU_OPEN',
-  CLOSE: 'SUBMENU_CLOSE'
+var HoverActionTypes = /*#__PURE__*/Object.freeze({
+  RESET: 'RESET',
+  SET: 'SET',
+  UNSET: 'UNSET',
+  INCREASE: 'INCREASE',
+  DECREASE: 'DECREASE',
+  FIRST: 'FIRST',
+  LAST: 'LAST',
+  SET_INDEX: 'SET_INDEX'
 });
 var CloseReason = /*#__PURE__*/Object.freeze({
   CLICK: 'click',
@@ -60,4 +57,4 @@ var MenuStateMap = /*#__PURE__*/Object.freeze({
   exited: 'closed'
 });
 
-export { CloseReason, EventHandlersContext, FocusPositions, HoverIndexActionTypes, HoverIndexContext, ItemSettingsContext, Keys, MenuListContext, MenuListItemContext, MenuStateMap, RadioGroupContext, SettingsContext, SubmenuActionTypes, initialHoverIndex, menuArrowClass, menuButtonClass, menuClass, menuContainerClass, menuDividerClass, menuGroupClass, menuHeaderClass, menuItemClass, radioGroupClass, subMenuClass };
+export { CloseReason, EventHandlersContext, FocusPositions, HoverActionTypes, HoverItemContext, ItemSettingsContext, Keys, MenuListContext, MenuListItemContext, MenuStateMap, RadioGroupContext, SettingsContext, initialHoverIndex, menuArrowClass, menuButtonClass, menuClass, menuContainerClass, menuDividerClass, menuGroupClass, menuHeaderClass, menuItemClass, radioGroupClass, subMenuClass };

@@ -12,7 +12,7 @@ export const subMenuClass = 'submenu';
 export const radioGroupClass = 'radio-group';
 
 export const initialHoverIndex = -1;
-export const HoverIndexContext = createContext(initialHoverIndex);
+export const HoverItemContext = createContext(initialHoverIndex);
 export const MenuListItemContext = createContext({});
 export const MenuListContext = createContext({});
 export const EventHandlersContext = createContext({});
@@ -32,19 +32,15 @@ export const Keys = Object.freeze({
   DOWN: 'ArrowDown'
 });
 
-export const HoverIndexActionTypes = Object.freeze({
-  RESET: 'HOVER_RESET',
-  SET: 'HOVER_SET',
-  UNSET: 'HOVER_UNSET',
-  INCREASE: 'HOVER_INCREASE',
-  DECREASE: 'HOVER_DECREASE',
-  FIRST: 'HOVER_FIRST',
-  LAST: 'HOVER_LAST'
-});
-
-export const SubmenuActionTypes = Object.freeze({
-  OPEN: 'SUBMENU_OPEN',
-  CLOSE: 'SUBMENU_CLOSE'
+export const HoverActionTypes = Object.freeze({
+  RESET: 'RESET',
+  SET: 'SET',
+  UNSET: 'UNSET',
+  INCREASE: 'INCREASE',
+  DECREASE: 'DECREASE',
+  FIRST: 'FIRST',
+  LAST: 'LAST',
+  SET_INDEX: 'SET_INDEX'
 });
 
 export const CloseReason = Object.freeze({

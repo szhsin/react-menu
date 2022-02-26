@@ -8,7 +8,7 @@ import { useFlatStyles } from '../hooks/useFlatStyles.js';
 import { stylePropTypes } from '../utils/propTypes.js';
 
 var _excluded = ["className", "styles", "isOpen", "disabled", "children"];
-var MenuButton = /*#__PURE__*/defineName( /*#__PURE__*/forwardRef(function MenuButton(_ref, ref) {
+var MenuButton = /*#__PURE__*/defineName('MenuButton', /*#__PURE__*/forwardRef(function MenuButton(_ref, ref) {
   var className = _ref.className,
       styles = _ref.styles,
       isOpen = _ref.isOpen,
@@ -36,7 +36,7 @@ var MenuButton = /*#__PURE__*/defineName( /*#__PURE__*/forwardRef(function MenuB
     }),
     style: useFlatStyles(styles, modifiers)
   }), children);
-}), 'MenuButton');
+}));
 process.env.NODE_ENV !== "production" ? MenuButton.propTypes = /*#__PURE__*/_extends({}, /*#__PURE__*/stylePropTypes(), {
   isOpen: bool,
   disabled: bool

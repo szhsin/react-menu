@@ -1,5 +1,5 @@
 /* eslint-disable react/no-children-prop */
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Menu, MenuItem, FocusableItem, MenuButton, SubMenu } from './entry';
 import { fireEvent, waitFor, screen, act } from '@testing-library/react';
 import * as utils from './utils';
@@ -432,3 +432,84 @@ test.each([false, true])(
     /* eslint-enable jest/no-conditional-expect */
   }
 );
+
+const TestKeyboard = () => {
+  const [state, setState] = useState(false);
+
+  useEffect(() => {
+    const id = setTimeout(() => setState(true), 500);
+    return () => clearTimeout(id);
+  }, []);
+
+  return (
+    <Menu menuButton={<MenuButton>Menu</MenuButton>}>
+      <MenuItem>One</MenuItem>
+      <MenuItem disabled={state}>Two</MenuItem>
+      <span>
+        <MenuItem>Three</MenuItem>
+      </span>
+      <div>
+        <SubMenu label="Submenu">
+          <MenuItem>Sub 1</MenuItem>
+          <div>Fake item</div>
+          <MenuItem disabled={!state}>Sub 2</MenuItem>
+          <MenuItem>Sub 3</MenuItem>
+        </SubMenu>
+      </div>
+      {state && <MenuItem>Four</MenuItem>}
+      <MenuItem>Five</MenuItem>
+    </Menu>
+  );
+};
+
+test('keyboard navigation when items are mounted/unmounted and disabled/enabled', async () => {
+  const { container } = render(<TestKeyboard />);
+
+  utils.clickMenuButton();
+  const submenuItem = utils.queryMenuItem('Submenu');
+  fireEvent.mouseDown(submenuItem);
+  fireEvent.click(submenuItem);
+  const menu = utils.queryMenu({ name: 'Menu', container });
+  const submenu = utils.queryMenu({ name: 'Submenu', container });
+
+  fireEvent.keyDown(submenu, { key: 'ArrowUp' });
+  utils.expectMenuItemToBeHover(utils.queryMenuItem('Sub 3'), true);
+  fireEvent.keyDown(submenu, { key: 'ArrowUp' });
+  utils.expectMenuItemToBeHover(utils.queryMenuItem('Sub 1'), true);
+  fireEvent.keyDown(submenu, { key: 'ArrowUp' });
+  utils.expectMenuItemToBeHover(utils.queryMenuItem('Sub 3'), true);
+
+  fireEvent.mouseMove(utils.queryMenuItem('One'));
+  await waitFor(() => utils.expectMenuItemToBeHover(utils.queryMenuItem('One'), true));
+  fireEvent.keyDown(menu, { key: 'ArrowDown' });
+  utils.expectMenuItemToBeHover(utils.queryMenuItem('Two'), true);
+  fireEvent.keyDown(menu, { key: 'ArrowDown' });
+  utils.expectMenuItemToBeHover(utils.queryMenuItem('Three'), true);
+  fireEvent.keyDown(menu, { key: 'ArrowDown' });
+  utils.expectMenuItemToBeHover(utils.queryMenuItem('Submenu'), true);
+  fireEvent.keyDown(menu, { key: 'ArrowDown' });
+  utils.expectMenuItemToBeHover(utils.queryMenuItem('Five'), true);
+
+  await utils.delayFor(700);
+  fireEvent.keyDown(menu, { key: 'ArrowDown' });
+  utils.expectMenuItemToBeHover(utils.queryMenuItem('One'), true);
+  fireEvent.keyDown(menu, { key: 'ArrowDown' });
+  utils.expectMenuItemToBeHover(utils.queryMenuItem('Three'), true);
+  fireEvent.keyDown(menu, { key: 'ArrowDown' });
+  utils.expectMenuItemToBeHover(utils.queryMenuItem('Submenu'), true);
+  fireEvent.keyDown(menu, { key: 'ArrowDown' });
+  utils.expectMenuItemToBeHover(utils.queryMenuItem('Four'), true);
+  fireEvent.keyDown(menu, { key: 'ArrowDown' });
+  utils.expectMenuItemToBeHover(utils.queryMenuItem('Five'), true);
+
+  fireEvent.mouseDown(submenuItem);
+  fireEvent.click(submenuItem);
+  fireEvent.keyDown(submenu, { key: 'ArrowDown' });
+  utils.expectMenuItemToBeHover(utils.queryMenuItem('Sub 1'), true);
+  fireEvent.keyDown(submenu, { key: 'ArrowDown' });
+  utils.expectMenuItemToBeHover(utils.queryMenuItem('Sub 2'), true);
+  fireEvent.keyDown(submenu, { key: 'ArrowDown' });
+  utils.expectMenuItemToBeHover(utils.queryMenuItem('Sub 3'), true);
+  fireEvent.keyDown(submenu, { key: 'ArrowDown' });
+  utils.expectMenuItemToBeHover(utils.queryMenuItem('Sub 1'), true);
+});

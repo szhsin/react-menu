@@ -4,7 +4,7 @@ import { oneOfType, element, func } from 'prop-types';
 import { ControlledMenu } from './ControlledMenu.js';
 import { useMenuStateAndFocus } from '../hooks/useMenuStateAndFocus.js';
 import { useCombinedRef } from '../hooks/useCombinedRef.js';
-import { safeCall, attachHandlerProps, getName, isMenuOpen } from '../utils/utils.js';
+import { isMenuOpen, safeCall, attachHandlerProps, getName } from '../utils/utils.js';
 import { useMenuChange } from '../hooks/useMenuChange.js';
 import { rootMenuPropTypes, uncontrolledMenuPropTypes, rootMenuDefaultProps } from '../utils/propTypes.js';
 import { FocusPositions, Keys } from '../utils/constants.js';
@@ -57,7 +57,7 @@ var Menu = /*#__PURE__*/forwardRef(function Menu(_ref, externalRef) {
   var button = safeCall(menuButton, {
     open: isOpen
   });
-  if (!button) throw new Error('Menu requires a menuButton prop.');
+  if (!button || !button.type) throw new Error('Menu requires a menuButton prop.');
 
   var buttonProps = _extends({
     ref: useCombinedRef(button.ref, buttonRef)

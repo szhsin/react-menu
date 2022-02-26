@@ -1,30 +1,30 @@
 import { objectWithoutPropertiesLoose as _objectWithoutPropertiesLoose, extends as _extends } from '../_virtual/_rollupPluginBabelHelpers.js';
-import React, { memo, useRef, useContext, useMemo } from 'react';
+import React, { useRef, useContext, useMemo } from 'react';
 import { bool, func } from 'prop-types';
 import { withHovering } from '../utils/withHovering.js';
 import { useItemState } from '../hooks/useItemState.js';
+import { useCombinedRef } from '../hooks/useCombinedRef.js';
 import { useBEM } from '../hooks/useBEM.js';
 import { useFlatStyles } from '../hooks/useFlatStyles.js';
-import { validateIndex, safeCall, attachHandlerProps, commonProps } from '../utils/utils.js';
 import { EventHandlersContext, menuClass, menuItemClass } from '../utils/constants.js';
+import { safeCall, attachHandlerProps, commonProps } from '../utils/utils.js';
 import { stylePropTypes } from '../utils/propTypes.js';
 
-var _excluded = ["className", "styles", "disabled", "index", "children", "isHovering", "externalRef"];
-var FocusableItem = /*#__PURE__*/withHovering( /*#__PURE__*/memo(function FocusableItem(_ref) {
+var _excluded = ["className", "styles", "disabled", "children", "isHovering", "itemRef", "externalRef"];
+var FocusableItem = /*#__PURE__*/withHovering('FocusableItem', function FocusableItem(_ref) {
   var className = _ref.className,
       styles = _ref.styles,
       disabled = _ref.disabled,
-      index = _ref.index,
       children = _ref.children,
       isHovering = _ref.isHovering,
+      itemRef = _ref.itemRef,
       externalRef = _ref.externalRef,
       restProps = _objectWithoutPropertiesLoose(_ref, _excluded);
 
   var isDisabled = !!disabled;
-  validateIndex(index, isDisabled, children);
   var ref = useRef(null);
 
-  var _useItemState = useItemState(ref, index, isHovering, isDisabled),
+  var _useItemState = useItemState(itemRef, ref, isHovering, isDisabled),
       setHover = _useItemState.setHover,
       onBlur = _useItemState.onBlur,
       onMouseMove = _useItemState.onMouseMove,
@@ -57,7 +57,7 @@ var FocusableItem = /*#__PURE__*/withHovering( /*#__PURE__*/memo(function Focusa
   return /*#__PURE__*/React.createElement("li", _extends({
     role: "menuitem"
   }, commonProps(isDisabled), restProps, handlers, {
-    ref: externalRef,
+    ref: useCombinedRef(externalRef, itemRef),
     className: useBEM({
       block: menuClass,
       element: menuItemClass,
@@ -66,7 +66,7 @@ var FocusableItem = /*#__PURE__*/withHovering( /*#__PURE__*/memo(function Focusa
     }),
     style: useFlatStyles(styles, modifiers)
   }), renderChildren);
-}), 'FocusableItem');
+});
 process.env.NODE_ENV !== "production" ? FocusableItem.propTypes = /*#__PURE__*/_extends({}, /*#__PURE__*/stylePropTypes(), {
   disabled: bool,
   children: func

@@ -1,6 +1,6 @@
 /* eslint-disable react/no-children-prop */
 import React, { StrictMode } from 'react';
-import { applyHOC, applyStatics, Menu, MenuItem, MenuButton } from './entry';
+import { Menu, MenuItem, MenuButton } from './entry';
 import { screen, render as libRender, fireEvent, waitFor } from '@testing-library/react';
 
 const StrictModeWrapper = ({ children }) => <StrictMode>{children}</StrictMode>;
@@ -77,8 +77,8 @@ const enhance = (WrappedComponent, value) => {
   return Enhance;
 };
 
-export const FirstItem = applyStatics(MenuItem)(enhance(MenuItem, 'First'));
-export const LastItem = applyHOC(enhance)(MenuItem, 'Last');
+export const FirstItem = enhance(MenuItem, 'First');
+export const LastItem = enhance(MenuItem, 'Last');
 
 export const renderMenu = (props, itemProps, strictMode = true) =>
   (strictMode ? render : libRender)(
