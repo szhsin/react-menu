@@ -15,33 +15,20 @@ export type CloseReason = 'click' | 'cancel' | 'blur' | 'scroll';
 /**
  * - `'first'` focus the first item in the menu.
  * - `'last'` focus the last item in the menu.
- * - `number` focus item at the specific position.
+ * - `number` focus item at the specific position (zero-based).
  */
-export type FocusPosition = 'initial' | 'first' | 'last' | number;
-type DirStyleKey = '$left' | '$right' | '$top' | '$bottom';
-
-type StringStyles<T extends string> = React.CSSProperties & {
-  [K in T]?: React.CSSProperties;
-};
-
-type Styles<S> = React.CSSProperties & {
-  [K in keyof S]?: S[K] extends string ? StringStyles<S[K]> : React.CSSProperties;
-};
+export type FocusPosition = 'first' | 'last' | number;
 
 type ClassNameProp<M = undefined> = string | ((modifiers: M) => string);
 
-type StylesProp<M, S = M> = Styles<S> | ((modifiers: M) => React.CSSProperties);
-
 type RenderProp<M, R = React.ReactNode> = R | ((modifiers: M) => R);
 
-interface BaseProps<M = undefined, S = M>
-  extends Omit<React.HTMLAttributes<HTMLElement>, 'className'> {
+interface BaseProps<M = undefined> extends Omit<React.HTMLAttributes<HTMLElement>, 'className'> {
   ref?: React.Ref<any>;
   /**
    * Can be a string or a function which receives a modifier object and returns a CSS `class` string.
    */
   className?: ClassNameProp<M>;
-  styles?: StylesProp<M, S>;
 }
 
 interface Event {
@@ -115,11 +102,6 @@ interface RectElement {
 //
 // Menu common types
 // ----------------------------------------------------------------------
-interface MenuStyleKeys {
-  state: MenuState;
-  dir: DirStyleKey;
-}
-
 export type MenuModifiers = Readonly<{
   /**
    * Indicates the state of menu.
@@ -130,10 +112,6 @@ export type MenuModifiers = Readonly<{
    */
   dir: MenuDirection;
 }>;
-
-interface MenuArrowStyleKeys {
-  dir: DirStyleKey;
-}
 
 export type MenuArrowModifiers = Readonly<{
   /**
@@ -187,17 +165,17 @@ interface Hoverable {
 /**
  * Common props for `Menu`, `SubMenu` and `ControlledMenu`
  */
-interface BaseMenuProps extends Omit<BaseProps, 'styles'> {
+interface BaseMenuProps extends Omit<BaseProps, 'style'> {
   /**
    * Can be a string or a function which receives a modifier object and returns a CSS `class` string.
    */
   menuClassName?: ClassNameProp<MenuModifiers>;
-  menuStyles?: StylesProp<MenuModifiers, MenuStyleKeys>;
+  menuStyle?: React.CSSProperties;
   /**
    * Can be a string or a function which receives a modifier object and returns a CSS `class` string.
    */
   arrowClassName?: ClassNameProp<MenuArrowModifiers>;
-  arrowStyles?: StylesProp<MenuArrowModifiers, MenuArrowStyleKeys>;
+  arrowStyle?: React.CSSProperties;
   /**
    * Set `true` to display an arrow pointing to its anchor element.
    */

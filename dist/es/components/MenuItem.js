@@ -7,15 +7,13 @@ import { EventHandlersContext, RadioGroupContext, menuClass, menuItemClass, Keys
 import { useActiveState } from '../hooks/useActiveState.js';
 import { useCombinedRef } from '../hooks/useCombinedRef.js';
 import { useBEM } from '../hooks/useBEM.js';
-import { useFlatStyles } from '../hooks/useFlatStyles.js';
 import { attachHandlerProps, commonProps, safeCall } from '../utils/utils.js';
 import { stylePropTypes } from '../utils/propTypes.js';
 
-var _excluded = ["className", "styles", "value", "href", "type", "checked", "disabled", "children", "onClick", "isHovering", "itemRef", "externalRef"],
+var _excluded = ["className", "value", "href", "type", "checked", "disabled", "children", "onClick", "isHovering", "itemRef", "externalRef"],
     _excluded2 = ["isActive", "onKeyUp", "onBlur"];
 var MenuItem = /*#__PURE__*/withHovering('MenuItem', function MenuItem(_ref) {
   var className = _ref.className,
-      styles = _ref.styles,
       value = _ref.value,
       href = _ref.href,
       type = _ref.type,
@@ -120,8 +118,7 @@ var MenuItem = /*#__PURE__*/withHovering('MenuItem', function MenuItem(_ref) {
       element: menuItemClass,
       modifiers: modifiers,
       className: className
-    }),
-    style: useFlatStyles(styles, modifiers)
+    })
   });
 
   var renderChildren = useMemo(function () {

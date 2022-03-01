@@ -4,12 +4,15 @@ import { oneOfType, string, func, object, bool, number, oneOf, exact } from 'pro
 var stylePropTypes = function stylePropTypes(name) {
   var _ref;
 
-  return _ref = {}, _ref[name ? name + "ClassName" : 'className'] = oneOfType([string, func]), _ref[name ? name + "Styles" : 'styles'] = oneOfType([object, func]), _ref;
+  return _ref = {}, _ref[name ? name + "ClassName" : 'className'] = oneOfType([string, func]), _ref;
 };
 var menuPropTypes = /*#__PURE__*/_extends({
   className: string
 }, /*#__PURE__*/stylePropTypes('menu'), /*#__PURE__*/stylePropTypes('arrow'), {
+  menuStyle: object,
+  arrowStyle: object,
   arrow: bool,
+  setDownOverflow: bool,
   offsetX: number,
   offsetY: number,
   align: /*#__PURE__*/oneOf(['start', 'center', 'end']),

@@ -3,45 +3,36 @@ import * as utils from './utils';
 
 const { queryByRole } = screen;
 
-test('className and styles props', () => {
+test('className and style props', () => {
   const menuClassName = 'my-class1 my-class2';
-  const baseStyle = {
+  const itemClassName = 'my-class3 my-class4';
+  const menuStyle = {
+    color: 'green',
+    fontSize: '1.1rem'
+  };
+  const itemStyle = {
     backgroundColor: 'yellow',
     fontSize: '1.2rem'
   };
-  const styles = {
-    ...baseStyle,
-    type: {
-      $checkbox: {
-        color: 'red'
-      }
-    },
-    $hover: {
-      color: 'green'
-    },
-    active: {
-      color: 'blue'
-    }
-  };
 
-  utils.renderMenu({ menuClassName }, { styles, type: 'checkbox' });
+  utils.renderMenu(
+    { menuClassName, menuStyle },
+    { className: itemClassName, style: itemStyle, type: 'checkbox' }
+  );
   utils.clickMenuButton();
-  expect(utils.queryMenu()).toHaveClass(menuClassName);
+  const menu = utils.queryMenu();
+  expect(menu).toHaveClass(menuClassName);
+  expect(menu).toHaveStyle(menuStyle);
 
   const menuItem = queryByRole('menuitemcheckbox', { name: 'Middle' });
-  expect(menuItem).toHaveStyle({ ...baseStyle, color: 'red' });
-
-  fireEvent.mouseMove(menuItem);
-  expect(menuItem).toHaveStyle({ ...baseStyle, color: 'green' });
-
-  fireEvent.keyDown(menuItem, { key: ' ' });
-  expect(menuItem).toHaveStyle({ ...baseStyle, color: 'blue' });
+  expect(menuItem).toHaveClass(itemClassName);
+  expect(menuItem).toHaveStyle(itemStyle);
 });
 
-test('className and styles props as functions', () => {
+test('className as functions', () => {
   const menuClassName = jest.fn();
-  const styles = jest.fn();
-  utils.renderMenu({ menuClassName }, { styles }, false);
+  const itemClassName = jest.fn();
+  utils.renderMenu({ menuClassName }, { className: itemClassName }, false);
   utils.clickMenuButton();
   expect(menuClassName).toHaveBeenLastCalledWith(
     expect.objectContaining({
@@ -49,7 +40,7 @@ test('className and styles props as functions', () => {
       dir: 'bottom'
     })
   );
-  expect(styles).toHaveBeenLastCalledWith(
+  expect(itemClassName).toHaveBeenLastCalledWith(
     expect.objectContaining({
       hover: false,
       active: false
@@ -62,7 +53,7 @@ test('className and styles props as functions', () => {
 
   const menuItem = queryByRole('menuitem', { name: 'Middle' });
   fireEvent.mouseMove(menuItem);
-  expect(styles).toHaveBeenLastCalledWith(
+  expect(itemClassName).toHaveBeenLastCalledWith(
     expect.objectContaining({
       hover: true,
       active: false
@@ -70,7 +61,7 @@ test('className and styles props as functions', () => {
   );
 
   fireEvent.keyDown(menuItem, { key: 'Enter' });
-  expect(styles).toHaveBeenLastCalledWith(
+  expect(itemClassName).toHaveBeenLastCalledWith(
     expect.objectContaining({
       hover: true,
       active: true
@@ -78,5 +69,5 @@ test('className and styles props as functions', () => {
   );
 
   expect(menuClassName).toHaveBeenCalledTimes(1);
-  expect(styles).toHaveBeenCalledTimes(3);
+  expect(itemClassName).toHaveBeenCalledTimes(3);
 });

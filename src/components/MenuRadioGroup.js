@@ -1,10 +1,10 @@
 import React, { forwardRef, useMemo } from 'react';
 import { any, string, func } from 'prop-types';
-import { useBEM, useFlatStyles } from '../hooks';
+import { useBEM } from '../hooks';
 import { stylePropTypes, menuClass, radioGroupClass, RadioGroupContext } from '../utils';
 
 export const MenuRadioGroup = forwardRef(function MenuRadioGroup(
-  { 'aria-label': ariaLabel, className, styles, name, value, onRadioChange, ...restProps },
+  { 'aria-label': ariaLabel, className, name, value, onRadioChange, ...restProps },
   externalRef
 ) {
   const contextValue = useMemo(
@@ -21,7 +21,6 @@ export const MenuRadioGroup = forwardRef(function MenuRadioGroup(
           {...restProps}
           ref={externalRef}
           className={useBEM({ block: menuClass, element: radioGroupClass, className })}
-          style={useFlatStyles(styles)}
         />
       </li>
     </RadioGroupContext.Provider>

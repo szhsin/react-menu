@@ -1,7 +1,6 @@
 export { useActiveState } from './useActiveState';
 export { useBEM } from './useBEM';
 export { useCombinedRef } from './useCombinedRef';
-export { useFlatStyles } from './useFlatStyles';
 export { useLayoutEffect } from './useIsomorphicLayoutEffect';
 export { useItems } from './useItems';
 export { useItemEffect } from './useItemEffect';

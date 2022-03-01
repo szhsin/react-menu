@@ -1,6 +1,6 @@
 import React, { useContext, useMemo } from 'react';
 import { any, string, bool, func, node, oneOf, oneOfType } from 'prop-types';
-import { useBEM, useFlatStyles, useActiveState, useItemState, useCombinedRef } from '../hooks';
+import { useBEM, useActiveState, useItemState, useCombinedRef } from '../hooks';
 import {
   attachHandlerProps,
   commonProps,
@@ -18,7 +18,6 @@ export const MenuItem = withHovering(
   'MenuItem',
   function MenuItem({
     className,
-    styles,
     value,
     href,
     type,
@@ -119,8 +118,7 @@ export const MenuItem = withHovering(
     // 1. Preset props adhering to WAI-ARIA Authoring Practices.
     // 2. restProps(consuming code overriding)
     // 3. handlers (with consuming code handlers hooked)
-    // 4. ref, className, and styles (style prop is overriden, consuming code should
-    //    use the styles prop instead)
+    // 4. ref, className
     const menuItemProps = {
       role: isRadio ? 'menuitemradio' : isCheckBox ? 'menuitemcheckbox' : 'menuitem',
       'aria-checked': isRadio || isCheckBox ? isChecked : undefined,
@@ -128,8 +126,7 @@ export const MenuItem = withHovering(
       ...restProps,
       ...handlers,
       ref: useCombinedRef(externalRef, itemRef),
-      className: useBEM({ block: menuClass, element: menuItemClass, modifiers, className }),
-      style: useFlatStyles(styles, modifiers)
+      className: useBEM({ block: menuClass, element: menuItemClass, modifiers, className })
     };
 
     const renderChildren = useMemo(() => safeCall(children, modifiers), [children, modifiers]);

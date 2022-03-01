@@ -53,7 +53,6 @@ var CloseReason = /*#__PURE__*/Object.freeze({
   SCROLL: 'scroll'
 });
 var FocusPositions = /*#__PURE__*/Object.freeze({
-  INITIAL: 'initial',
   FIRST: 'first',
   LAST: 'last'
 });
@@ -205,12 +204,15 @@ function _objectWithoutPropertiesLoose(source, excluded) {
 var stylePropTypes = function stylePropTypes(name) {
   var _ref;
 
-  return _ref = {}, _ref[name ? name + "ClassName" : 'className'] = propTypes.oneOfType([propTypes.string, propTypes.func]), _ref[name ? name + "Styles" : 'styles'] = propTypes.oneOfType([propTypes.object, propTypes.func]), _ref;
+  return _ref = {}, _ref[name ? name + "ClassName" : 'className'] = propTypes.oneOfType([propTypes.string, propTypes.func]), _ref;
 };
 var menuPropTypes = /*#__PURE__*/_extends({
   className: propTypes.string
 }, /*#__PURE__*/stylePropTypes('menu'), /*#__PURE__*/stylePropTypes('arrow'), {
+  menuStyle: propTypes.object,
+  arrowStyle: propTypes.object,
   arrow: propTypes.bool,
+  setDownOverflow: propTypes.bool,
   offsetX: propTypes.number,
   offsetY: propTypes.number,
   align: /*#__PURE__*/propTypes.oneOf(['start', 'center', 'end']),
@@ -356,53 +358,6 @@ var useCombinedRef = function useCombinedRef(refA, refB) {
       setRef(refB, element);
     };
   }, [refA, refB]);
-};
-
-var isObject = function isObject(obj) {
-  return obj && typeof obj === 'object';
-};
-
-var sanitiseKey = function sanitiseKey(key) {
-  return key[0] === '$' ? key.slice(1) : key;
-};
-
-var useFlatStyles = function useFlatStyles(styles, modifiers) {
-  return React.useMemo(function () {
-    if (typeof styles === 'function') return styles(modifiers);
-    if (!isObject(styles)) return undefined;
-    if (!modifiers) return styles;
-    var style = {};
-
-    for (var _i2 = 0, _Object$keys2 = Object.keys(styles); _i2 < _Object$keys2.length; _i2++) {
-      var prop = _Object$keys2[_i2];
-      var value = styles[prop];
-
-      if (isObject(value)) {
-        var modifierValue = modifiers[sanitiseKey(prop)];
-
-        if (typeof modifierValue === 'string') {
-          for (var _i4 = 0, _Object$keys4 = Object.keys(value); _i4 < _Object$keys4.length; _i4++) {
-            var nestedProp = _Object$keys4[_i4];
-            var nestedValue = value[nestedProp];
-
-            if (isObject(nestedValue)) {
-              if (sanitiseKey(nestedProp) === modifierValue) {
-                style = _extends({}, style, nestedValue);
-              }
-            } else {
-              style[nestedProp] = nestedValue;
-            }
-          }
-        } else if (modifierValue) {
-          style = _extends({}, style, value);
-        }
-      } else {
-        style[prop] = value;
-      }
-    }
-
-    return style;
-  }, [styles, modifiers]);
 };
 
 var useIsomorphicLayoutEffect = typeof window !== 'undefined' && typeof window.document !== 'undefined' && typeof window.document.createElement !== 'undefined' ? React.useLayoutEffect : React.useEffect;
@@ -645,10 +600,9 @@ var useMenuStateAndFocus = function useMenuStateAndFocus(options) {
   });
 };
 
-var _excluded$a = ["className", "styles", "isOpen", "disabled", "children"];
+var _excluded$a = ["className", "isOpen", "disabled", "children"];
 var MenuButton = /*#__PURE__*/defineName('MenuButton', /*#__PURE__*/React.forwardRef(function MenuButton(_ref, ref) {
   var className = _ref.className,
-      styles = _ref.styles,
       isOpen = _ref.isOpen,
       disabled = _ref.disabled,
       children = _ref.children,
@@ -671,8 +625,7 @@ var MenuButton = /*#__PURE__*/defineName('MenuButton', /*#__PURE__*/React.forwar
       block: menuButtonClass,
       modifiers: modifiers,
       className: className
-    }),
-    style: useFlatStyles(styles, modifiers)
+    })
   }), children);
 }));
 process.env.NODE_ENV !== "production" ? MenuButton.propTypes = /*#__PURE__*/_extends({}, /*#__PURE__*/stylePropTypes(), {
@@ -1058,13 +1011,13 @@ var positionMenu = function positionMenu(_ref) {
   }
 };
 
-var _excluded$9 = ["ariaLabel", "menuClassName", "menuStyles", "arrowClassName", "arrowStyles", "anchorPoint", "anchorRef", "containerRef", "externalRef", "parentScrollingRef", "arrow", "align", "direction", "position", "overflow", "setDownOverflow", "repositionFlag", "captureFocus", "state", "endTransition", "isDisabled", "menuItemFocus", "offsetX", "offsetY", "children", "onClose"];
+var _excluded$9 = ["ariaLabel", "menuClassName", "menuStyle", "arrowClassName", "arrowStyle", "anchorPoint", "anchorRef", "containerRef", "externalRef", "parentScrollingRef", "arrow", "align", "direction", "position", "overflow", "setDownOverflow", "repositionFlag", "captureFocus", "state", "endTransition", "isDisabled", "menuItemFocus", "offsetX", "offsetY", "children", "onClose"];
 var MenuList = function MenuList(_ref) {
   var ariaLabel = _ref.ariaLabel,
       menuClassName = _ref.menuClassName,
-      menuStyles = _ref.menuStyles,
+      menuStyle = _ref.menuStyle,
       arrowClassName = _ref.arrowClassName,
-      arrowStyles = _ref.arrowStyles,
+      arrowStyle = _ref.arrowStyle,
       anchorPoint = _ref.anchorPoint,
       anchorRef = _ref.anchorRef,
       containerRef = _ref.containerRef,
@@ -1452,7 +1405,7 @@ var MenuList = function MenuList(_ref) {
       overflowAmt: overflowAmt
     };
   }, [reposSubmenu, overflow, overflowAmt]);
-  var overflowStyles = maxHeight >= 0 ? {
+  var overflowStyle = maxHeight >= 0 ? {
     maxHeight: maxHeight,
     overflow: overflow
   } : undefined;
@@ -1475,8 +1428,6 @@ var MenuList = function MenuList(_ref) {
     className: arrowClassName
   });
 
-  var _arrowStyles = useFlatStyles(arrowStyles, arrowModifiers);
-
   var handlers = attachHandlerProps({
     onKeyDown: handleKeyDown,
     onAnimationEnd: handleAnimationEnd
@@ -1491,13 +1442,13 @@ var MenuList = function MenuList(_ref) {
       modifiers: modifiers,
       className: menuClassName
     }),
-    style: _extends({}, useFlatStyles(menuStyles, modifiers), overflowStyles, {
+    style: _extends({}, menuStyle, overflowStyle, {
       left: menuPosition.x,
       top: menuPosition.y
     })
   }), arrow && /*#__PURE__*/React.createElement("div", {
     className: _arrowClass,
-    style: _extends({}, _arrowStyles, {
+    style: _extends({}, arrowStyle, {
       left: arrowPosition.x,
       top: arrowPosition.y
     }),
@@ -1761,7 +1712,7 @@ Menu.defaultProps = rootMenuDefaultProps;
 var _excluded$6 = ["aria-label", "className", "disabled", "label", "openTrigger", "onMenuChange", "isHovering", "instanceRef", "itemRef", "captureFocus", "repositionFlag", "itemProps"],
     _excluded2$1 = ["openMenu", "toggleMenu", "state"],
     _excluded3 = ["isActive", "onKeyUp"],
-    _excluded4 = ["ref", "className", "styles"];
+    _excluded4 = ["ref", "className"];
 var SubMenu = /*#__PURE__*/withHovering('SubMenu', function SubMenu(_ref) {
   var ariaLabel = _ref['aria-label'],
       className = _ref.className,
@@ -1943,9 +1894,8 @@ var SubMenu = /*#__PURE__*/withHovering('SubMenu', function SubMenu(_ref) {
     });
   }, [isOpen, isHovering, isActive, isDisabled]);
 
-  var externaItemRef = itemProps.ref,
+  var externalItemRef = itemProps.ref,
       itemClassName = itemProps.className,
-      itemStyles = itemProps.styles,
       restItemProps = _objectWithoutPropertiesLoose(itemProps, _excluded4);
 
   var itemHandlers = attachHandlerProps(_extends({}, activeStateHandlers, {
@@ -1984,14 +1934,13 @@ var SubMenu = /*#__PURE__*/withHovering('SubMenu', function SubMenu(_ref) {
     "aria-haspopup": true,
     "aria-expanded": isOpen
   }, commonProps(isDisabled, isHovering), restItemProps, itemHandlers, {
-    ref: useCombinedRef(externaItemRef, itemRef),
+    ref: useCombinedRef(externalItemRef, itemRef),
     className: useBEM({
       block: menuClass,
       element: menuItemClass,
       modifiers: modifiers,
       className: itemClassName
-    }),
-    style: useFlatStyles(itemStyles, modifiers)
+    })
   }), React.useMemo(function () {
     return safeCall(label, modifiers);
   }, [label, modifiers])), state && getMenuList());
@@ -2006,11 +1955,10 @@ SubMenu.defaultProps = /*#__PURE__*/_extends({}, menuDefaultProps, {
   direction: 'right'
 });
 
-var _excluded$5 = ["className", "styles", "value", "href", "type", "checked", "disabled", "children", "onClick", "isHovering", "itemRef", "externalRef"],
+var _excluded$5 = ["className", "value", "href", "type", "checked", "disabled", "children", "onClick", "isHovering", "itemRef", "externalRef"],
     _excluded2 = ["isActive", "onKeyUp", "onBlur"];
 var MenuItem = /*#__PURE__*/withHovering('MenuItem', function MenuItem(_ref) {
   var className = _ref.className,
-      styles = _ref.styles,
       value = _ref.value,
       href = _ref.href,
       type = _ref.type,
@@ -2115,8 +2063,7 @@ var MenuItem = /*#__PURE__*/withHovering('MenuItem', function MenuItem(_ref) {
       element: menuItemClass,
       modifiers: modifiers,
       className: className
-    }),
-    style: useFlatStyles(styles, modifiers)
+    })
   });
 
   var renderChildren = React.useMemo(function () {
@@ -2143,10 +2090,9 @@ process.env.NODE_ENV !== "production" ? MenuItem.propTypes = /*#__PURE__*/_exten
   onClick: propTypes.func
 }) : void 0;
 
-var _excluded$4 = ["className", "styles", "disabled", "children", "isHovering", "itemRef", "externalRef"];
+var _excluded$4 = ["className", "disabled", "children", "isHovering", "itemRef", "externalRef"];
 var FocusableItem = /*#__PURE__*/withHovering('FocusableItem', function FocusableItem(_ref) {
   var className = _ref.className,
-      styles = _ref.styles,
       disabled = _ref.disabled,
       children = _ref.children,
       isHovering = _ref.isHovering,
@@ -2196,8 +2142,7 @@ var FocusableItem = /*#__PURE__*/withHovering('FocusableItem', function Focusabl
       element: menuItemClass,
       modifiers: modifiers,
       className: className
-    }),
-    style: useFlatStyles(styles, modifiers)
+    })
   }), renderChildren);
 });
 process.env.NODE_ENV !== "production" ? FocusableItem.propTypes = /*#__PURE__*/_extends({}, /*#__PURE__*/stylePropTypes(), {
@@ -2205,10 +2150,9 @@ process.env.NODE_ENV !== "production" ? FocusableItem.propTypes = /*#__PURE__*/_
   children: propTypes.func
 }) : void 0;
 
-var _excluded$3 = ["className", "styles"];
+var _excluded$3 = ["className"];
 var MenuDivider = /*#__PURE__*/React.memo( /*#__PURE__*/React.forwardRef(function MenuDivider(_ref, externalRef) {
   var className = _ref.className,
-      styles = _ref.styles,
       restProps = _objectWithoutPropertiesLoose(_ref, _excluded$3);
 
   return /*#__PURE__*/React.createElement("li", _extends({
@@ -2219,16 +2163,14 @@ var MenuDivider = /*#__PURE__*/React.memo( /*#__PURE__*/React.forwardRef(functio
       block: menuClass,
       element: menuDividerClass,
       className: className
-    }),
-    style: useFlatStyles(styles)
+    })
   }));
 }));
 process.env.NODE_ENV !== "production" ? MenuDivider.propTypes = /*#__PURE__*/_extends({}, /*#__PURE__*/stylePropTypes()) : void 0;
 
-var _excluded$2 = ["className", "styles"];
+var _excluded$2 = ["className"];
 var MenuHeader = /*#__PURE__*/React.memo( /*#__PURE__*/React.forwardRef(function MenuHeader(_ref, externalRef) {
   var className = _ref.className,
-      styles = _ref.styles,
       restProps = _objectWithoutPropertiesLoose(_ref, _excluded$2);
 
   return /*#__PURE__*/React.createElement("li", _extends({
@@ -2239,24 +2181,23 @@ var MenuHeader = /*#__PURE__*/React.memo( /*#__PURE__*/React.forwardRef(function
       block: menuClass,
       element: menuHeaderClass,
       className: className
-    }),
-    style: useFlatStyles(styles)
+    })
   }));
 }));
 process.env.NODE_ENV !== "production" ? MenuHeader.propTypes = /*#__PURE__*/_extends({}, /*#__PURE__*/stylePropTypes()) : void 0;
 
-var _excluded$1 = ["className", "styles", "takeOverflow"];
+var _excluded$1 = ["className", "style", "takeOverflow"];
 var MenuGroup = /*#__PURE__*/React.forwardRef(function MenuGroup(_ref, externalRef) {
   var className = _ref.className,
-      styles = _ref.styles,
+      style = _ref.style,
       takeOverflow = _ref.takeOverflow,
       restProps = _objectWithoutPropertiesLoose(_ref, _excluded$1);
 
   var ref = React.useRef(null);
 
   var _useState = React.useState(),
-      overflowStyles = _useState[0],
-      setOverflowStyles = _useState[1];
+      overflowStyle = _useState[0],
+      setOverflowStyle = _useState[1];
 
   var _useContext = React.useContext(MenuListContext),
       overflow = _useContext.overflow,
@@ -2270,14 +2211,14 @@ var MenuGroup = /*#__PURE__*/React.forwardRef(function MenuGroup(_ref, externalR
       if (maxHeight < 0) maxHeight = 0;
     }
 
-    setOverflowStyles(maxHeight >= 0 ? {
+    setOverflowStyle(maxHeight >= 0 ? {
       maxHeight: maxHeight,
       overflow: overflow
     } : undefined);
   }, [takeOverflow, overflow, overflowAmt]);
   useIsomorphicLayoutEffect(function () {
-    if (overflowStyles) ref.current.scrollTop = 0;
-  }, [overflowStyles]);
+    if (overflowStyle) ref.current.scrollTop = 0;
+  }, [overflowStyle]);
   return /*#__PURE__*/React.createElement("div", _extends({}, restProps, {
     ref: useCombinedRef(externalRef, ref),
     className: useBEM({
@@ -2285,18 +2226,17 @@ var MenuGroup = /*#__PURE__*/React.forwardRef(function MenuGroup(_ref, externalR
       element: menuGroupClass,
       className: className
     }),
-    style: _extends({}, useFlatStyles(styles), overflowStyles)
+    style: _extends({}, style, overflowStyle)
   }));
 });
 process.env.NODE_ENV !== "production" ? MenuGroup.propTypes = /*#__PURE__*/_extends({}, /*#__PURE__*/stylePropTypes(), {
   takeOverflow: propTypes.bool
 }) : void 0;
 
-var _excluded = ["aria-label", "className", "styles", "name", "value", "onRadioChange"];
+var _excluded = ["aria-label", "className", "name", "value", "onRadioChange"];
 var MenuRadioGroup = /*#__PURE__*/React.forwardRef(function MenuRadioGroup(_ref, externalRef) {
   var ariaLabel = _ref['aria-label'],
       className = _ref.className,
-      styles = _ref.styles,
       name = _ref.name,
       value = _ref.value,
       onRadioChange = _ref.onRadioChange,
@@ -2322,8 +2262,7 @@ var MenuRadioGroup = /*#__PURE__*/React.forwardRef(function MenuRadioGroup(_ref,
       block: menuClass,
       element: radioGroupClass,
       className: className
-    }),
-    style: useFlatStyles(styles)
+    })
   }))));
 });
 process.env.NODE_ENV !== "production" ? MenuRadioGroup.propTypes = /*#__PURE__*/_extends({}, /*#__PURE__*/stylePropTypes(), {
