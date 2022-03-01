@@ -1,14 +1,11 @@
 import React, { forwardRef, useMemo } from 'react';
 import { bool } from 'prop-types';
-import { useBEM, useFlatStyles } from '../hooks';
+import { useBEM } from '../hooks';
 import { defineName, menuButtonClass, stylePropTypes } from '../utils';
 
 export const MenuButton = defineName(
   'MenuButton',
-  forwardRef(function MenuButton(
-    { className, styles, isOpen, disabled, children, ...restProps },
-    ref
-  ) {
+  forwardRef(function MenuButton({ className, isOpen, disabled, children, ...restProps }, ref) {
     const modifiers = useMemo(() => Object.freeze({ open: isOpen }), [isOpen]);
 
     return (
@@ -21,7 +18,6 @@ export const MenuButton = defineName(
         {...restProps}
         ref={ref}
         className={useBEM({ block: menuButtonClass, modifiers, className })}
-        style={useFlatStyles(styles, modifiers)}
       >
         {children}
       </button>

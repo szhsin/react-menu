@@ -1,6 +1,6 @@
 import React, { useContext, useMemo, useRef } from 'react';
 import { bool, func } from 'prop-types';
-import { useBEM, useCombinedRef, useFlatStyles, useItemState } from '../hooks';
+import { useBEM, useCombinedRef, useItemState } from '../hooks';
 import {
   attachHandlerProps,
   commonProps,
@@ -16,7 +16,6 @@ export const FocusableItem = withHovering(
   'FocusableItem',
   function FocusableItem({
     className,
-    styles,
     disabled,
     children,
     isHovering,
@@ -72,7 +71,6 @@ export const FocusableItem = withHovering(
         {...handlers}
         ref={useCombinedRef(externalRef, itemRef)}
         className={useBEM({ block: menuClass, element: menuItemClass, modifiers, className })}
-        style={useFlatStyles(styles, modifiers)}
       >
         {renderChildren}
       </li>

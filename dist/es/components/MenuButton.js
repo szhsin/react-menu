@@ -4,13 +4,11 @@ import { bool } from 'prop-types';
 import { defineName } from '../utils/utils.js';
 import { useBEM } from '../hooks/useBEM.js';
 import { menuButtonClass } from '../utils/constants.js';
-import { useFlatStyles } from '../hooks/useFlatStyles.js';
 import { stylePropTypes } from '../utils/propTypes.js';
 
-var _excluded = ["className", "styles", "isOpen", "disabled", "children"];
+var _excluded = ["className", "isOpen", "disabled", "children"];
 var MenuButton = /*#__PURE__*/defineName('MenuButton', /*#__PURE__*/forwardRef(function MenuButton(_ref, ref) {
   var className = _ref.className,
-      styles = _ref.styles,
       isOpen = _ref.isOpen,
       disabled = _ref.disabled,
       children = _ref.children,
@@ -33,8 +31,7 @@ var MenuButton = /*#__PURE__*/defineName('MenuButton', /*#__PURE__*/forwardRef(f
       block: menuButtonClass,
       modifiers: modifiers,
       className: className
-    }),
-    style: useFlatStyles(styles, modifiers)
+    })
   }), children);
 }));
 process.env.NODE_ENV !== "production" ? MenuButton.propTypes = /*#__PURE__*/_extends({}, /*#__PURE__*/stylePropTypes(), {

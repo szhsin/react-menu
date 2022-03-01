@@ -4,7 +4,6 @@ import { node, func, bool, shape, oneOf, oneOfType } from 'prop-types';
 import {
   useBEM,
   useCombinedRef,
-  useFlatStyles,
   useActiveState,
   useMenuChange,
   useMenuStateAndFocus,
@@ -209,12 +208,7 @@ export const SubMenu = withHovering(
       [isOpen, isHovering, isActive, isDisabled]
     );
 
-    const {
-      ref: externaItemRef,
-      className: itemClassName,
-      styles: itemStyles,
-      ...restItemProps
-    } = itemProps;
+    const { ref: externalItemRef, className: itemClassName, ...restItemProps } = itemProps;
 
     const itemHandlers = attachHandlerProps(
       {
@@ -258,14 +252,13 @@ export const SubMenu = withHovering(
           {...commonProps(isDisabled, isHovering)}
           {...restItemProps}
           {...itemHandlers}
-          ref={useCombinedRef(externaItemRef, itemRef)}
+          ref={useCombinedRef(externalItemRef, itemRef)}
           className={useBEM({
             block: menuClass,
             element: menuItemClass,
             modifiers,
             className: itemClassName
           })}
-          style={useFlatStyles(itemStyles, modifiers)}
         >
           {useMemo(() => safeCall(label, modifiers), [label, modifiers])}
         </div>

@@ -2,13 +2,11 @@ import { objectWithoutPropertiesLoose as _objectWithoutPropertiesLoose, extends 
 import React, { memo, forwardRef } from 'react';
 import { useBEM } from '../hooks/useBEM.js';
 import { menuClass, menuHeaderClass } from '../utils/constants.js';
-import { useFlatStyles } from '../hooks/useFlatStyles.js';
 import { stylePropTypes } from '../utils/propTypes.js';
 
-var _excluded = ["className", "styles"];
+var _excluded = ["className"];
 var MenuHeader = /*#__PURE__*/memo( /*#__PURE__*/forwardRef(function MenuHeader(_ref, externalRef) {
   var className = _ref.className,
-      styles = _ref.styles,
       restProps = _objectWithoutPropertiesLoose(_ref, _excluded);
 
   return /*#__PURE__*/React.createElement("li", _extends({
@@ -19,8 +17,7 @@ var MenuHeader = /*#__PURE__*/memo( /*#__PURE__*/forwardRef(function MenuHeader(
       block: menuClass,
       element: menuHeaderClass,
       className: className
-    }),
-    style: useFlatStyles(styles)
+    })
   }));
 }));
 process.env.NODE_ENV !== "production" ? MenuHeader.propTypes = /*#__PURE__*/_extends({}, /*#__PURE__*/stylePropTypes()) : void 0;

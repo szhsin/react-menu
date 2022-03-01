@@ -9,16 +9,15 @@ import { positionContextMenu } from '../positionUtils/positionContextMenu.js';
 import { positionMenu } from '../positionUtils/positionMenu.js';
 import { useLayoutEffect as useIsomorphicLayoutEffect } from '../hooks/useIsomorphicLayoutEffect.js';
 import { useBEM } from '../hooks/useBEM.js';
-import { useFlatStyles } from '../hooks/useFlatStyles.js';
 import { useCombinedRef } from '../hooks/useCombinedRef.js';
 
-var _excluded = ["ariaLabel", "menuClassName", "menuStyles", "arrowClassName", "arrowStyles", "anchorPoint", "anchorRef", "containerRef", "externalRef", "parentScrollingRef", "arrow", "align", "direction", "position", "overflow", "setDownOverflow", "repositionFlag", "captureFocus", "state", "endTransition", "isDisabled", "menuItemFocus", "offsetX", "offsetY", "children", "onClose"];
+var _excluded = ["ariaLabel", "menuClassName", "menuStyle", "arrowClassName", "arrowStyle", "anchorPoint", "anchorRef", "containerRef", "externalRef", "parentScrollingRef", "arrow", "align", "direction", "position", "overflow", "setDownOverflow", "repositionFlag", "captureFocus", "state", "endTransition", "isDisabled", "menuItemFocus", "offsetX", "offsetY", "children", "onClose"];
 var MenuList = function MenuList(_ref) {
   var ariaLabel = _ref.ariaLabel,
       menuClassName = _ref.menuClassName,
-      menuStyles = _ref.menuStyles,
+      menuStyle = _ref.menuStyle,
       arrowClassName = _ref.arrowClassName,
-      arrowStyles = _ref.arrowStyles,
+      arrowStyle = _ref.arrowStyle,
       anchorPoint = _ref.anchorPoint,
       anchorRef = _ref.anchorRef,
       containerRef = _ref.containerRef,
@@ -406,7 +405,7 @@ var MenuList = function MenuList(_ref) {
       overflowAmt: overflowAmt
     };
   }, [reposSubmenu, overflow, overflowAmt]);
-  var overflowStyles = maxHeight >= 0 ? {
+  var overflowStyle = maxHeight >= 0 ? {
     maxHeight: maxHeight,
     overflow: overflow
   } : undefined;
@@ -429,8 +428,6 @@ var MenuList = function MenuList(_ref) {
     className: arrowClassName
   });
 
-  var _arrowStyles = useFlatStyles(arrowStyles, arrowModifiers);
-
   var handlers = attachHandlerProps({
     onKeyDown: handleKeyDown,
     onAnimationEnd: handleAnimationEnd
@@ -445,13 +442,13 @@ var MenuList = function MenuList(_ref) {
       modifiers: modifiers,
       className: menuClassName
     }),
-    style: _extends({}, useFlatStyles(menuStyles, modifiers), overflowStyles, {
+    style: _extends({}, menuStyle, overflowStyle, {
       left: menuPosition.x,
       top: menuPosition.y
     })
   }), arrow && /*#__PURE__*/React.createElement("div", {
     className: _arrowClass,
-    style: _extends({}, _arrowStyles, {
+    style: _extends({}, arrowStyle, {
       left: arrowPosition.x,
       top: arrowPosition.y
     }),

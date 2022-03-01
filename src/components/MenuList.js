@@ -8,7 +8,7 @@ import React, {
   useContext
 } from 'react';
 import { flushSync } from 'react-dom';
-import { useBEM, useFlatStyles, useCombinedRef, useLayoutEffect, useItems } from '../hooks';
+import { useBEM, useCombinedRef, useLayoutEffect, useItems } from '../hooks';
 import { getPositionHelpers, positionMenu, positionContextMenu } from '../positionUtils';
 import {
   attachHandlerProps,
@@ -34,9 +34,9 @@ import {
 export const MenuList = ({
   ariaLabel,
   menuClassName,
-  menuStyles,
+  menuStyle,
   arrowClassName,
-  arrowStyles,
+  arrowStyle,
   anchorPoint,
   anchorRef,
   containerRef,
@@ -399,7 +399,7 @@ export const MenuList = ({
     }),
     [reposSubmenu, overflow, overflowAmt]
   );
-  const overflowStyles = maxHeight >= 0 ? { maxHeight, overflow } : undefined;
+  const overflowStyle = maxHeight >= 0 ? { maxHeight, overflow } : undefined;
 
   // Modifier object are shared between this project and client code,
   // freeze them to prevent client code from accidentally altering them.
@@ -420,7 +420,6 @@ export const MenuList = ({
     modifiers: arrowModifiers,
     className: arrowClassName
   });
-  const _arrowStyles = useFlatStyles(arrowStyles, arrowModifiers);
 
   const handlers = attachHandlerProps(
     {
@@ -440,8 +439,8 @@ export const MenuList = ({
       ref={useCombinedRef(externalRef, menuRef)}
       className={useBEM({ block: menuClass, modifiers, className: menuClassName })}
       style={{
-        ...useFlatStyles(menuStyles, modifiers),
-        ...overflowStyles,
+        ...menuStyle,
+        ...overflowStyle,
         left: menuPosition.x,
         top: menuPosition.y
       }}
@@ -450,7 +449,7 @@ export const MenuList = ({
         <div
           className={_arrowClass}
           style={{
-            ..._arrowStyles,
+            ...arrowStyle,
             left: arrowPosition.x,
             top: arrowPosition.y
           }}

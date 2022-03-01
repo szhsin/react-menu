@@ -1,14 +1,14 @@
 import React, { forwardRef, useContext, useRef, useState } from 'react';
 import { bool } from 'prop-types';
-import { useBEM, useFlatStyles, useLayoutEffect, useCombinedRef } from '../hooks';
+import { useBEM, useLayoutEffect, useCombinedRef } from '../hooks';
 import { menuClass, menuGroupClass, stylePropTypes, MenuListContext } from '../utils';
 
 export const MenuGroup = forwardRef(function MenuGroup(
-  { className, styles, takeOverflow, ...restProps },
+  { className, style, takeOverflow, ...restProps },
   externalRef
 ) {
   const ref = useRef(null);
-  const [overflowStyles, setOverflowStyles] = useState();
+  const [overflowStyle, setOverflowStyle] = useState();
   const { overflow, overflowAmt } = useContext(MenuListContext);
 
   useLayoutEffect(() => {
@@ -17,19 +17,19 @@ export const MenuGroup = forwardRef(function MenuGroup(
       maxHeight = ref.current.getBoundingClientRect().height - overflowAmt;
       if (maxHeight < 0) maxHeight = 0;
     }
-    setOverflowStyles(maxHeight >= 0 ? { maxHeight, overflow } : undefined);
+    setOverflowStyle(maxHeight >= 0 ? { maxHeight, overflow } : undefined);
   }, [takeOverflow, overflow, overflowAmt]);
 
   useLayoutEffect(() => {
-    if (overflowStyles) ref.current.scrollTop = 0;
-  }, [overflowStyles]);
+    if (overflowStyle) ref.current.scrollTop = 0;
+  }, [overflowStyle]);
 
   return (
     <div
       {...restProps}
       ref={useCombinedRef(externalRef, ref)}
       className={useBEM({ block: menuClass, element: menuGroupClass, className })}
-      style={{ ...useFlatStyles(styles), ...overflowStyles }}
+      style={{ ...style, ...overflowStyle }}
     />
   );
 });

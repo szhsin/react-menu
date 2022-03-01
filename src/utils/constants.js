@@ -51,7 +51,6 @@ export const CloseReason = Object.freeze({
 });
 
 export const FocusPositions = Object.freeze({
-  INITIAL: 'initial',
   FIRST: 'first',
   LAST: 'last'
 });

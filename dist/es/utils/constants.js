@@ -46,7 +46,6 @@ var CloseReason = /*#__PURE__*/Object.freeze({
   SCROLL: 'scroll'
 });
 var FocusPositions = /*#__PURE__*/Object.freeze({
-  INITIAL: 'initial',
   FIRST: 'first',
   LAST: 'last'
 });

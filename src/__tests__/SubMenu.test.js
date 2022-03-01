@@ -327,17 +327,18 @@ test('className props are added to related elements in menu and submenu', () => 
       'data-testid': 'menu',
       className: 'menu-root',
       menuClassName: 'my-menu',
-      menuStyles: { color: 'green' }
+      menuStyle: { color: 'green' }
     },
     null,
     {
       'data-testid': 'submenu',
       className: 'submenu-root',
       menuClassName: 'my-submenu',
-      menuStyles: { color: 'red' },
+      menuStyle: { color: 'red' },
       itemProps: {
         'data-testid': 'item',
-        className: 'my-item'
+        className: 'my-item',
+        style: { color: 'blue' }
       }
     }
   );
@@ -352,6 +353,7 @@ test('className props are added to related elements in menu and submenu', () => 
 
   const submenuItem = screen.getByTestId('item');
   expect(submenuItem).toHaveClass('my-item');
+  expect(submenuItem).toHaveStyle('color: blue');
 
   fireEvent.mouseDown(submenuItem);
   fireEvent.click(submenuItem);

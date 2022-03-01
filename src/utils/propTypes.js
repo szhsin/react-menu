@@ -1,8 +1,7 @@
 import { string, number, bool, func, object, oneOf, oneOfType, exact } from 'prop-types';
 
 export const stylePropTypes = (name) => ({
-  [name ? `${name}ClassName` : 'className']: oneOfType([string, func]),
-  [name ? `${name}Styles` : 'styles']: oneOfType([object, func])
+  [name ? `${name}ClassName` : 'className']: oneOfType([string, func])
 });
 
 // Menu, SubMenu and ControlledMenu
@@ -10,7 +9,10 @@ export const menuPropTypes = {
   className: string,
   ...stylePropTypes('menu'),
   ...stylePropTypes('arrow'),
+  menuStyle: object,
+  arrowStyle: object,
   arrow: bool,
+  setDownOverflow: bool,
   offsetX: number,
   offsetY: number,
   align: oneOf(['start', 'center', 'end']),

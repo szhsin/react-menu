@@ -5,15 +5,13 @@ import { withHovering } from '../utils/withHovering.js';
 import { useItemState } from '../hooks/useItemState.js';
 import { useCombinedRef } from '../hooks/useCombinedRef.js';
 import { useBEM } from '../hooks/useBEM.js';
-import { useFlatStyles } from '../hooks/useFlatStyles.js';
 import { EventHandlersContext, menuClass, menuItemClass } from '../utils/constants.js';
 import { safeCall, attachHandlerProps, commonProps } from '../utils/utils.js';
 import { stylePropTypes } from '../utils/propTypes.js';
 
-var _excluded = ["className", "styles", "disabled", "children", "isHovering", "itemRef", "externalRef"];
+var _excluded = ["className", "disabled", "children", "isHovering", "itemRef", "externalRef"];
 var FocusableItem = /*#__PURE__*/withHovering('FocusableItem', function FocusableItem(_ref) {
   var className = _ref.className,
-      styles = _ref.styles,
       disabled = _ref.disabled,
       children = _ref.children,
       isHovering = _ref.isHovering,
@@ -63,8 +61,7 @@ var FocusableItem = /*#__PURE__*/withHovering('FocusableItem', function Focusabl
       element: menuItemClass,
       modifiers: modifiers,
       className: className
-    }),
-    style: useFlatStyles(styles, modifiers)
+    })
   }), renderChildren);
 });
 process.env.NODE_ENV !== "production" ? FocusableItem.propTypes = /*#__PURE__*/_extends({}, /*#__PURE__*/stylePropTypes(), {

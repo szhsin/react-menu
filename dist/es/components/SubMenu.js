@@ -11,14 +11,13 @@ import { useMenuChange } from '../hooks/useMenuChange.js';
 import { useBEM } from '../hooks/useBEM.js';
 import { SettingsContext, ItemSettingsContext, MenuListItemContext, Keys, HoverActionTypes, menuClass, subMenuClass, menuItemClass, FocusPositions } from '../utils/constants.js';
 import { useCombinedRef } from '../hooks/useCombinedRef.js';
-import { useFlatStyles } from '../hooks/useFlatStyles.js';
 import { menuPropTypes, uncontrolledMenuPropTypes, stylePropTypes, menuDefaultProps } from '../utils/propTypes.js';
 import { isMenuOpen, attachHandlerProps, commonProps, safeCall, batchedUpdates } from '../utils/utils.js';
 
 var _excluded = ["aria-label", "className", "disabled", "label", "openTrigger", "onMenuChange", "isHovering", "instanceRef", "itemRef", "captureFocus", "repositionFlag", "itemProps"],
     _excluded2 = ["openMenu", "toggleMenu", "state"],
     _excluded3 = ["isActive", "onKeyUp"],
-    _excluded4 = ["ref", "className", "styles"];
+    _excluded4 = ["ref", "className"];
 var SubMenu = /*#__PURE__*/withHovering('SubMenu', function SubMenu(_ref) {
   var ariaLabel = _ref['aria-label'],
       className = _ref.className,
@@ -200,9 +199,8 @@ var SubMenu = /*#__PURE__*/withHovering('SubMenu', function SubMenu(_ref) {
     });
   }, [isOpen, isHovering, isActive, isDisabled]);
 
-  var externaItemRef = itemProps.ref,
+  var externalItemRef = itemProps.ref,
       itemClassName = itemProps.className,
-      itemStyles = itemProps.styles,
       restItemProps = _objectWithoutPropertiesLoose(itemProps, _excluded4);
 
   var itemHandlers = attachHandlerProps(_extends({}, activeStateHandlers, {
@@ -241,14 +239,13 @@ var SubMenu = /*#__PURE__*/withHovering('SubMenu', function SubMenu(_ref) {
     "aria-haspopup": true,
     "aria-expanded": isOpen
   }, commonProps(isDisabled, isHovering), restItemProps, itemHandlers, {
-    ref: useCombinedRef(externaItemRef, itemRef),
+    ref: useCombinedRef(externalItemRef, itemRef),
     className: useBEM({
       block: menuClass,
       element: menuItemClass,
       modifiers: modifiers,
       className: itemClassName
-    }),
-    style: useFlatStyles(itemStyles, modifiers)
+    })
   }), useMemo(function () {
     return safeCall(label, modifiers);
   }, [label, modifiers])), state && getMenuList());

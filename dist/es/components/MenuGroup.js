@@ -5,21 +5,20 @@ import { useLayoutEffect as useIsomorphicLayoutEffect } from '../hooks/useIsomor
 import { useCombinedRef } from '../hooks/useCombinedRef.js';
 import { useBEM } from '../hooks/useBEM.js';
 import { MenuListContext, menuClass, menuGroupClass } from '../utils/constants.js';
-import { useFlatStyles } from '../hooks/useFlatStyles.js';
 import { stylePropTypes } from '../utils/propTypes.js';
 
-var _excluded = ["className", "styles", "takeOverflow"];
+var _excluded = ["className", "style", "takeOverflow"];
 var MenuGroup = /*#__PURE__*/forwardRef(function MenuGroup(_ref, externalRef) {
   var className = _ref.className,
-      styles = _ref.styles,
+      style = _ref.style,
       takeOverflow = _ref.takeOverflow,
       restProps = _objectWithoutPropertiesLoose(_ref, _excluded);
 
   var ref = useRef(null);
 
   var _useState = useState(),
-      overflowStyles = _useState[0],
-      setOverflowStyles = _useState[1];
+      overflowStyle = _useState[0],
+      setOverflowStyle = _useState[1];
 
   var _useContext = useContext(MenuListContext),
       overflow = _useContext.overflow,
@@ -33,14 +32,14 @@ var MenuGroup = /*#__PURE__*/forwardRef(function MenuGroup(_ref, externalRef) {
       if (maxHeight < 0) maxHeight = 0;
     }
 
-    setOverflowStyles(maxHeight >= 0 ? {
+    setOverflowStyle(maxHeight >= 0 ? {
       maxHeight: maxHeight,
       overflow: overflow
     } : undefined);
   }, [takeOverflow, overflow, overflowAmt]);
   useIsomorphicLayoutEffect(function () {
-    if (overflowStyles) ref.current.scrollTop = 0;
-  }, [overflowStyles]);
+    if (overflowStyle) ref.current.scrollTop = 0;
+  }, [overflowStyle]);
   return /*#__PURE__*/React.createElement("div", _extends({}, restProps, {
     ref: useCombinedRef(externalRef, ref),
     className: useBEM({
@@ -48,7 +47,7 @@ var MenuGroup = /*#__PURE__*/forwardRef(function MenuGroup(_ref, externalRef) {
       element: menuGroupClass,
       className: className
     }),
-    style: _extends({}, useFlatStyles(styles), overflowStyles)
+    style: _extends({}, style, overflowStyle)
   }));
 });
 process.env.NODE_ENV !== "production" ? MenuGroup.propTypes = /*#__PURE__*/_extends({}, /*#__PURE__*/stylePropTypes(), {
