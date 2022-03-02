@@ -1,4 +1,3 @@
-export { useActiveState } from './useActiveState';
 export { useBEM } from './useBEM';
 export { useCombinedRef } from './useCombinedRef';
 export { useLayoutEffect } from './useIsomorphicLayoutEffect';

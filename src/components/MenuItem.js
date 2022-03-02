@@ -1,6 +1,6 @@
 import React, { useContext, useMemo } from 'react';
 import { any, string, bool, func, node, oneOf, oneOfType } from 'prop-types';
-import { useBEM, useActiveState, useItemState, useCombinedRef } from '../hooks';
+import { useBEM, useItemState, useCombinedRef } from '../hooks';
 import {
   attachHandlerProps,
   commonProps,
@@ -31,20 +31,9 @@ export const MenuItem = withHovering(
     ...restProps
   }) {
     const isDisabled = !!disabled;
-    const { setHover, onBlur, onMouseMove, onMouseLeave } = useItemState(
-      itemRef,
-      itemRef,
-      isHovering,
-      isDisabled
-    );
+    const { setHover, ...stateHandlers } = useItemState(itemRef, itemRef, isHovering, isDisabled);
     const eventHandlers = useContext(EventHandlersContext);
     const radioGroup = useContext(RadioGroupContext);
-    const {
-      isActive,
-      onKeyUp,
-      onBlur: activeStateBlur,
-      ...activeStateHandlers
-    } = useActiveState(isHovering, isDisabled);
     const isRadio = type === 'radio';
     const isCheckBox = type === 'checkbox';
     const isAnchor = !!href && !isDisabled && !isRadio && !isCheckBox;
@@ -66,11 +55,9 @@ export const MenuItem = withHovering(
       eventHandlers.handleClick(event, isCheckBox || isRadio);
     };
 
-    const handleKeyUp = (e) => {
-      // Check 'isActive' to skip KeyUp when corresponding KeyDown was initiated in another menu item
-      if (!isActive) return;
+    const handleKeyDown = (e) => {
+      if (!isHovering) return;
 
-      onKeyUp(e);
       switch (e.key) {
         case Keys.ENTER:
         case Keys.SPACE:
@@ -83,32 +70,23 @@ export const MenuItem = withHovering(
       }
     };
 
-    const handleBlur = (e) => {
-      activeStateBlur(e);
-      onBlur(e);
-    };
-
     const modifiers = useMemo(
       () =>
         Object.freeze({
           type,
           disabled: isDisabled,
           hover: isHovering,
-          active: isActive,
           checked: isChecked,
           anchor: isAnchor
         }),
-      [type, isDisabled, isHovering, isActive, isChecked, isAnchor]
+      [type, isDisabled, isHovering, isChecked, isAnchor]
     );
 
     const handlers = attachHandlerProps(
       {
-        ...activeStateHandlers,
-        onMouseMove,
-        onMouseLeave,
+        ...stateHandlers,
         onMouseDown: setHover,
-        onKeyUp: handleKeyUp,
-        onBlur: handleBlur,
+        onKeyDown: handleKeyDown,
         onClick: handleClick
       },
       restProps

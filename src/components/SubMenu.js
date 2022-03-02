@@ -4,7 +4,6 @@ import { node, func, bool, shape, oneOf, oneOfType } from 'prop-types';
 import {
   useBEM,
   useCombinedRef,
-  useActiveState,
   useMenuChange,
   useMenuStateAndFocus,
   useItemEffect
@@ -77,11 +76,6 @@ export const SubMenu = withHovering(
 
     const isDisabled = !!disabled;
     const isOpen = isMenuOpen(state);
-    const { isActive, onKeyUp, ...activeStateHandlers } = useActiveState(
-      isHovering,
-      isDisabled,
-      Keys.RIGHT
-    );
     const containerRef = useRef(null);
     const timeoutId = useRef(0);
 
@@ -149,11 +143,9 @@ export const SubMenu = withHovering(
       }
     };
 
-    const handleKeyUp = (e) => {
-      // Check 'isActive' to skip KeyUp when corresponding KeyDown was initiated in another menu item
-      if (!isActive) return;
+    const handleItemKeyDown = (e) => {
+      if (!isHovering) return;
 
-      onKeyUp(e);
       switch (e.key) {
         case Keys.ENTER:
         case Keys.SPACE:
@@ -201,23 +193,21 @@ export const SubMenu = withHovering(
         Object.freeze({
           open: isOpen,
           hover: isHovering,
-          active: isActive,
           disabled: isDisabled,
           submenu: true
         }),
-      [isOpen, isHovering, isActive, isDisabled]
+      [isOpen, isHovering, isDisabled]
     );
 
     const { ref: externalItemRef, className: itemClassName, ...restItemProps } = itemProps;
 
     const itemHandlers = attachHandlerProps(
       {
-        ...activeStateHandlers,
         onMouseMove: handleMouseMove,
         onMouseLeave: handleMouseLeave,
         onMouseDown: setHover,
-        onClick: () => openTrigger !== 'none' && openMenu(),
-        onKeyUp: handleKeyUp
+        onKeyDown: handleItemKeyDown,
+        onClick: () => openTrigger !== 'none' && openMenu()
       },
       restItemProps
     );
