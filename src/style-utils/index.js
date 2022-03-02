@@ -50,7 +50,6 @@ const menuSelector = createSelector(menuBlock(), [
 const menuArrowSelector = createSelector(menuBlock(menuArrowClass), directions);
 const menuItemSelector = createSelector(menuBlock(menuItemClass), [
   'hover',
-  'active',
   'disabled',
   'anchor',
   'checked',

@@ -42,8 +42,7 @@ test('className as functions', () => {
   );
   expect(itemClassName).toHaveBeenLastCalledWith(
     expect.objectContaining({
-      hover: false,
-      active: false
+      hover: false
     })
   );
 
@@ -55,19 +54,10 @@ test('className as functions', () => {
   fireEvent.mouseMove(menuItem);
   expect(itemClassName).toHaveBeenLastCalledWith(
     expect.objectContaining({
-      hover: true,
-      active: false
-    })
-  );
-
-  fireEvent.keyDown(menuItem, { key: 'Enter' });
-  expect(itemClassName).toHaveBeenLastCalledWith(
-    expect.objectContaining({
-      hover: true,
-      active: true
+      hover: true
     })
   );
 
   expect(menuClassName).toHaveBeenCalledTimes(1);
-  expect(itemClassName).toHaveBeenCalledTimes(3);
+  expect(itemClassName).toHaveBeenCalledTimes(2);
 });

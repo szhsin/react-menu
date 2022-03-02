@@ -34,7 +34,6 @@ test('style-utils menuArrowSelector', () => {
 test('style-utils menuItemSelector', () => {
   expect(menuItemSelector.name).toBe('.szh-menu__item');
   expect(menuItemSelector.hover).toBe('.szh-menu__item--hover');
-  expect(menuItemSelector.active).toBe('.szh-menu__item--active');
   expect(menuItemSelector.disabled).toBe('.szh-menu__item--disabled');
   expect(menuItemSelector.anchor).toBe('.szh-menu__item--anchor');
   expect(menuItemSelector.checked).toBe('.szh-menu__item--checked');

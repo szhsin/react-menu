@@ -24,11 +24,6 @@
       }
     }
 
-    &--active {
-      color: var.$color-active;
-      background-color: var.$background-color-active;
-    }
-
     &--type-radio {
       padding-left: 2.2rem;
       &::before {

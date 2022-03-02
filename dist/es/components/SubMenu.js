@@ -5,19 +5,17 @@ import { bool, oneOf, oneOfType, node, func, shape } from 'prop-types';
 import { MenuList } from './MenuList.js';
 import { withHovering } from '../utils/withHovering.js';
 import { useMenuStateAndFocus } from '../hooks/useMenuStateAndFocus.js';
-import { useActiveState } from '../hooks/useActiveState.js';
 import { useItemEffect } from '../hooks/useItemEffect.js';
 import { useMenuChange } from '../hooks/useMenuChange.js';
 import { useBEM } from '../hooks/useBEM.js';
-import { SettingsContext, ItemSettingsContext, MenuListItemContext, Keys, HoverActionTypes, menuClass, subMenuClass, menuItemClass, FocusPositions } from '../utils/constants.js';
+import { SettingsContext, ItemSettingsContext, MenuListItemContext, HoverActionTypes, menuClass, subMenuClass, menuItemClass, Keys, FocusPositions } from '../utils/constants.js';
 import { useCombinedRef } from '../hooks/useCombinedRef.js';
 import { menuPropTypes, uncontrolledMenuPropTypes, stylePropTypes, menuDefaultProps } from '../utils/propTypes.js';
 import { isMenuOpen, attachHandlerProps, commonProps, safeCall, batchedUpdates } from '../utils/utils.js';
 
 var _excluded = ["aria-label", "className", "disabled", "label", "openTrigger", "onMenuChange", "isHovering", "instanceRef", "itemRef", "captureFocus", "repositionFlag", "itemProps"],
     _excluded2 = ["openMenu", "toggleMenu", "state"],
-    _excluded3 = ["isActive", "onKeyUp"],
-    _excluded4 = ["ref", "className"];
+    _excluded3 = ["ref", "className"];
 var SubMenu = /*#__PURE__*/withHovering('SubMenu', function SubMenu(_ref) {
   var ariaLabel = _ref['aria-label'],
       className = _ref.className,
@@ -67,12 +65,6 @@ var SubMenu = /*#__PURE__*/withHovering('SubMenu', function SubMenu(_ref) {
 
   var isDisabled = !!disabled;
   var isOpen = isMenuOpen(state);
-
-  var _useActiveState = useActiveState(isHovering, isDisabled, Keys.RIGHT),
-      isActive = _useActiveState.isActive,
-      onKeyUp = _useActiveState.onKeyUp,
-      activeStateHandlers = _objectWithoutPropertiesLoose(_useActiveState, _excluded3);
-
   var containerRef = useRef(null);
   var timeoutId = useRef(0);
 
@@ -140,9 +132,8 @@ var SubMenu = /*#__PURE__*/withHovering('SubMenu', function SubMenu(_ref) {
     }
   };
 
-  var handleKeyUp = function handleKeyUp(e) {
-    if (!isActive) return;
-    onKeyUp(e);
+  var handleItemKeyDown = function handleItemKeyDown(e) {
+    if (!isHovering) return;
 
     switch (e.key) {
       case Keys.ENTER:
@@ -193,25 +184,24 @@ var SubMenu = /*#__PURE__*/withHovering('SubMenu', function SubMenu(_ref) {
     return Object.freeze({
       open: isOpen,
       hover: isHovering,
-      active: isActive,
       disabled: isDisabled,
       submenu: true
     });
-  }, [isOpen, isHovering, isActive, isDisabled]);
+  }, [isOpen, isHovering, isDisabled]);
 
   var externalItemRef = itemProps.ref,
       itemClassName = itemProps.className,
-      restItemProps = _objectWithoutPropertiesLoose(itemProps, _excluded4);
+      restItemProps = _objectWithoutPropertiesLoose(itemProps, _excluded3);
 
-  var itemHandlers = attachHandlerProps(_extends({}, activeStateHandlers, {
+  var itemHandlers = attachHandlerProps({
     onMouseMove: handleMouseMove,
     onMouseLeave: handleMouseLeave,
     onMouseDown: setHover,
+    onKeyDown: handleItemKeyDown,
     onClick: function onClick() {
       return openTrigger !== 'none' && _openMenu2();
-    },
-    onKeyUp: handleKeyUp
-  }), restItemProps);
+    }
+  }, restItemProps);
 
   var getMenuList = function getMenuList() {
     var menuList = /*#__PURE__*/React.createElement(MenuList, _extends({}, restProps, otherStateProps, {

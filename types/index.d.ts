@@ -435,10 +435,6 @@ export type SubMenuItemModifiers = Readonly<{
    */
   hover: boolean;
   /**
-   * Indicates if the submenu item is active (pressed).
-   */
-  active: boolean;
-  /**
    * Indicates if the submenu and item are disabled.
    */
   disabled: boolean;
@@ -480,10 +476,6 @@ export type MenuItemModifiers = Readonly<{
    * Indicates if the menu item is being hovered and has focus.
    */
   hover: boolean;
-  /**
-   * Indicates if the menu item is active (pressed).
-   */
-  active: boolean;
   /**
    * Indicates if the menu item is checked when it's a radio or checkbox item.
    */
