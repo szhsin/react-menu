@@ -107,10 +107,6 @@
   transition-duration: 0.15s;
   transition-timing-function: ease-in-out;
 }
-.szh-menu__item--active {
-  color: #fff;
-  background-color: #007bff;
-}
 .szh-menu__item--type-radio {
   padding-left: 2.2rem;
 }

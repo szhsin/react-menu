@@ -4,14 +4,13 @@ import { any, string, oneOf, bool, oneOfType, node, func } from 'prop-types';
 import { withHovering } from '../utils/withHovering.js';
 import { useItemState } from '../hooks/useItemState.js';
 import { EventHandlersContext, RadioGroupContext, menuClass, menuItemClass, Keys } from '../utils/constants.js';
-import { useActiveState } from '../hooks/useActiveState.js';
 import { useCombinedRef } from '../hooks/useCombinedRef.js';
 import { useBEM } from '../hooks/useBEM.js';
 import { attachHandlerProps, commonProps, safeCall } from '../utils/utils.js';
 import { stylePropTypes } from '../utils/propTypes.js';
 
 var _excluded = ["className", "value", "href", "type", "checked", "disabled", "children", "onClick", "isHovering", "itemRef", "externalRef"],
-    _excluded2 = ["isActive", "onKeyUp", "onBlur"];
+    _excluded2 = ["setHover"];
 var MenuItem = /*#__PURE__*/withHovering('MenuItem', function MenuItem(_ref) {
   var className = _ref.className,
       value = _ref.value,
@@ -30,19 +29,10 @@ var MenuItem = /*#__PURE__*/withHovering('MenuItem', function MenuItem(_ref) {
 
   var _useItemState = useItemState(itemRef, itemRef, isHovering, isDisabled),
       setHover = _useItemState.setHover,
-      onBlur = _useItemState.onBlur,
-      onMouseMove = _useItemState.onMouseMove,
-      onMouseLeave = _useItemState.onMouseLeave;
+      stateHandlers = _objectWithoutPropertiesLoose(_useItemState, _excluded2);
 
   var eventHandlers = useContext(EventHandlersContext);
   var radioGroup = useContext(RadioGroupContext);
-
-  var _useActiveState = useActiveState(isHovering, isDisabled),
-      isActive = _useActiveState.isActive,
-      onKeyUp = _useActiveState.onKeyUp,
-      activeStateBlur = _useActiveState.onBlur,
-      activeStateHandlers = _objectWithoutPropertiesLoose(_useActiveState, _excluded2);
-
   var isRadio = type === 'radio';
   var isCheckBox = type === 'checkbox';
   var isAnchor = !!href && !isDisabled && !isRadio && !isCheckBox;
@@ -67,9 +57,8 @@ var MenuItem = /*#__PURE__*/withHovering('MenuItem', function MenuItem(_ref) {
     eventHandlers.handleClick(event, isCheckBox || isRadio);
   };
 
-  var handleKeyUp = function handleKeyUp(e) {
-    if (!isActive) return;
-    onKeyUp(e);
+  var handleKeyDown = function handleKeyDown(e) {
+    if (!isHovering) return;
 
     switch (e.key) {
       case Keys.ENTER:
@@ -84,27 +73,18 @@ var MenuItem = /*#__PURE__*/withHovering('MenuItem', function MenuItem(_ref) {
     }
   };
 
-  var handleBlur = function handleBlur(e) {
-    activeStateBlur(e);
-    onBlur(e);
-  };
-
   var modifiers = useMemo(function () {
     return Object.freeze({
       type: type,
       disabled: isDisabled,
       hover: isHovering,
-      active: isActive,
       checked: isChecked,
       anchor: isAnchor
     });
-  }, [type, isDisabled, isHovering, isActive, isChecked, isAnchor]);
-  var handlers = attachHandlerProps(_extends({}, activeStateHandlers, {
-    onMouseMove: onMouseMove,
-    onMouseLeave: onMouseLeave,
+  }, [type, isDisabled, isHovering, isChecked, isAnchor]);
+  var handlers = attachHandlerProps(_extends({}, stateHandlers, {
     onMouseDown: setHover,
-    onKeyUp: handleKeyUp,
-    onBlur: handleBlur,
+    onKeyDown: handleKeyDown,
     onClick: handleClick
   }), restProps);
 

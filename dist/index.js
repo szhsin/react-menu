@@ -7,6 +7,57 @@ var propTypes = require('prop-types');
 var reactDom = require('react-dom');
 var reactTransitionState = require('react-transition-state');
 
+var useBEM = function useBEM(_ref) {
+  var block = _ref.block,
+      element = _ref.element,
+      modifiers = _ref.modifiers,
+      className = _ref.className;
+  return React.useMemo(function () {
+    var blockElement = element ? block + "__" + element : block;
+    var classString = blockElement;
+
+    for (var _i2 = 0, _Object$keys2 = Object.keys(modifiers || {}); _i2 < _Object$keys2.length; _i2++) {
+      var name = _Object$keys2[_i2];
+      var value = modifiers[name];
+
+      if (value) {
+        classString += " " + blockElement + "--";
+        classString += value === true ? name : name + "-" + value;
+      }
+    }
+
+    var expandedClassName = typeof className === 'function' ? className(modifiers) : className;
+
+    if (typeof expandedClassName === 'string') {
+      expandedClassName = expandedClassName.trim();
+      if (expandedClassName) classString += " " + expandedClassName;
+    }
+
+    return classString;
+  }, [block, element, modifiers, className]);
+};
+
+var setRef = function setRef(ref, element) {
+  if (typeof ref === 'function') {
+    ref(element);
+  } else if (ref) {
+    ref.current = element;
+  }
+};
+
+var useCombinedRef = function useCombinedRef(refA, refB) {
+  return React.useMemo(function () {
+    if (!refA) return refB;
+    if (!refB) return refA;
+    return function (element) {
+      setRef(refA, element);
+      setRef(refB, element);
+    };
+  }, [refA, refB]);
+};
+
+var useIsomorphicLayoutEffect = typeof window !== 'undefined' && typeof window.document !== 'undefined' && typeof window.document.createElement !== 'undefined' ? React.useLayoutEffect : React.useEffect;
+
 var menuContainerClass = 'szh-menu-container';
 var menuClass = 'szh-menu';
 var menuButtonClass = 'szh-menu-button';
@@ -274,93 +325,6 @@ var withHovering = function withHovering(name, WrapppedComponent) {
   WithHovering.displayName = "WithHovering(" + name + ")";
   return WithHovering;
 };
-
-var useActiveState = function useActiveState(isHovering, isDisabled, moreKeys) {
-  var _useState = React.useState(false),
-      active = _useState[0],
-      setActive = _useState[1];
-
-  var activeKeys = [Keys.ENTER, Keys.SPACE].concat(moreKeys);
-
-  var cancelActive = function cancelActive() {
-    return active && setActive(false);
-  };
-
-  return {
-    isActive: active,
-    onPointerDown: function onPointerDown() {
-      if (!isDisabled) setActive(true);
-    },
-    onPointerUp: cancelActive,
-    onPointerLeave: cancelActive,
-    onKeyDown: function onKeyDown(e) {
-      if (!active && isHovering && !isDisabled && activeKeys.indexOf(e.key) !== -1) {
-        setActive(true);
-      }
-    },
-    onKeyUp: function onKeyUp(e) {
-      if (activeKeys.indexOf(e.key) !== -1) {
-        setActive(false);
-      }
-    },
-    onBlur: function onBlur(e) {
-      if (active && !e.currentTarget.contains(e.relatedTarget)) {
-        setActive(false);
-      }
-    }
-  };
-};
-
-var useBEM = function useBEM(_ref) {
-  var block = _ref.block,
-      element = _ref.element,
-      modifiers = _ref.modifiers,
-      className = _ref.className;
-  return React.useMemo(function () {
-    var blockElement = element ? block + "__" + element : block;
-    var classString = blockElement;
-
-    for (var _i2 = 0, _Object$keys2 = Object.keys(modifiers || {}); _i2 < _Object$keys2.length; _i2++) {
-      var name = _Object$keys2[_i2];
-      var value = modifiers[name];
-
-      if (value) {
-        classString += " " + blockElement + "--";
-        classString += value === true ? name : name + "-" + value;
-      }
-    }
-
-    var expandedClassName = typeof className === 'function' ? className(modifiers) : className;
-
-    if (typeof expandedClassName === 'string') {
-      expandedClassName = expandedClassName.trim();
-      if (expandedClassName) classString += " " + expandedClassName;
-    }
-
-    return classString;
-  }, [block, element, modifiers, className]);
-};
-
-var setRef = function setRef(ref, element) {
-  if (typeof ref === 'function') {
-    ref(element);
-  } else if (ref) {
-    ref.current = element;
-  }
-};
-
-var useCombinedRef = function useCombinedRef(refA, refB) {
-  return React.useMemo(function () {
-    if (!refA) return refB;
-    if (!refB) return refA;
-    return function (element) {
-      setRef(refA, element);
-      setRef(refB, element);
-    };
-  }, [refA, refB]);
-};
-
-var useIsomorphicLayoutEffect = typeof window !== 'undefined' && typeof window.document !== 'undefined' && typeof window.document.createElement !== 'undefined' ? React.useLayoutEffect : React.useEffect;
 
 var useItems = function useItems(menuRef) {
   var _useState = React.useState(),
@@ -1711,8 +1675,7 @@ Menu.defaultProps = rootMenuDefaultProps;
 
 var _excluded$6 = ["aria-label", "className", "disabled", "label", "openTrigger", "onMenuChange", "isHovering", "instanceRef", "itemRef", "captureFocus", "repositionFlag", "itemProps"],
     _excluded2$1 = ["openMenu", "toggleMenu", "state"],
-    _excluded3 = ["isActive", "onKeyUp"],
-    _excluded4 = ["ref", "className"];
+    _excluded3 = ["ref", "className"];
 var SubMenu = /*#__PURE__*/withHovering('SubMenu', function SubMenu(_ref) {
   var ariaLabel = _ref['aria-label'],
       className = _ref.className,
@@ -1762,12 +1725,6 @@ var SubMenu = /*#__PURE__*/withHovering('SubMenu', function SubMenu(_ref) {
 
   var isDisabled = !!disabled;
   var isOpen = isMenuOpen(state);
-
-  var _useActiveState = useActiveState(isHovering, isDisabled, Keys.RIGHT),
-      isActive = _useActiveState.isActive,
-      onKeyUp = _useActiveState.onKeyUp,
-      activeStateHandlers = _objectWithoutPropertiesLoose(_useActiveState, _excluded3);
-
   var containerRef = React.useRef(null);
   var timeoutId = React.useRef(0);
 
@@ -1835,9 +1792,8 @@ var SubMenu = /*#__PURE__*/withHovering('SubMenu', function SubMenu(_ref) {
     }
   };
 
-  var handleKeyUp = function handleKeyUp(e) {
-    if (!isActive) return;
-    onKeyUp(e);
+  var handleItemKeyDown = function handleItemKeyDown(e) {
+    if (!isHovering) return;
 
     switch (e.key) {
       case Keys.ENTER:
@@ -1888,25 +1844,24 @@ var SubMenu = /*#__PURE__*/withHovering('SubMenu', function SubMenu(_ref) {
     return Object.freeze({
       open: isOpen,
       hover: isHovering,
-      active: isActive,
       disabled: isDisabled,
       submenu: true
     });
-  }, [isOpen, isHovering, isActive, isDisabled]);
+  }, [isOpen, isHovering, isDisabled]);
 
   var externalItemRef = itemProps.ref,
       itemClassName = itemProps.className,
-      restItemProps = _objectWithoutPropertiesLoose(itemProps, _excluded4);
+      restItemProps = _objectWithoutPropertiesLoose(itemProps, _excluded3);
 
-  var itemHandlers = attachHandlerProps(_extends({}, activeStateHandlers, {
+  var itemHandlers = attachHandlerProps({
     onMouseMove: handleMouseMove,
     onMouseLeave: handleMouseLeave,
     onMouseDown: setHover,
+    onKeyDown: handleItemKeyDown,
     onClick: function onClick() {
       return openTrigger !== 'none' && _openMenu2();
-    },
-    onKeyUp: handleKeyUp
-  }), restItemProps);
+    }
+  }, restItemProps);
 
   var getMenuList = function getMenuList() {
     var menuList = /*#__PURE__*/React.createElement(MenuList, _extends({}, restProps, otherStateProps, {
@@ -1956,7 +1911,7 @@ SubMenu.defaultProps = /*#__PURE__*/_extends({}, menuDefaultProps, {
 });
 
 var _excluded$5 = ["className", "value", "href", "type", "checked", "disabled", "children", "onClick", "isHovering", "itemRef", "externalRef"],
-    _excluded2 = ["isActive", "onKeyUp", "onBlur"];
+    _excluded2 = ["setHover"];
 var MenuItem = /*#__PURE__*/withHovering('MenuItem', function MenuItem(_ref) {
   var className = _ref.className,
       value = _ref.value,
@@ -1975,19 +1930,10 @@ var MenuItem = /*#__PURE__*/withHovering('MenuItem', function MenuItem(_ref) {
 
   var _useItemState = useItemState(itemRef, itemRef, isHovering, isDisabled),
       setHover = _useItemState.setHover,
-      onBlur = _useItemState.onBlur,
-      onMouseMove = _useItemState.onMouseMove,
-      onMouseLeave = _useItemState.onMouseLeave;
+      stateHandlers = _objectWithoutPropertiesLoose(_useItemState, _excluded2);
 
   var eventHandlers = React.useContext(EventHandlersContext);
   var radioGroup = React.useContext(RadioGroupContext);
-
-  var _useActiveState = useActiveState(isHovering, isDisabled),
-      isActive = _useActiveState.isActive,
-      onKeyUp = _useActiveState.onKeyUp,
-      activeStateBlur = _useActiveState.onBlur,
-      activeStateHandlers = _objectWithoutPropertiesLoose(_useActiveState, _excluded2);
-
   var isRadio = type === 'radio';
   var isCheckBox = type === 'checkbox';
   var isAnchor = !!href && !isDisabled && !isRadio && !isCheckBox;
@@ -2012,9 +1958,8 @@ var MenuItem = /*#__PURE__*/withHovering('MenuItem', function MenuItem(_ref) {
     eventHandlers.handleClick(event, isCheckBox || isRadio);
   };
 
-  var handleKeyUp = function handleKeyUp(e) {
-    if (!isActive) return;
-    onKeyUp(e);
+  var handleKeyDown = function handleKeyDown(e) {
+    if (!isHovering) return;
 
     switch (e.key) {
       case Keys.ENTER:
@@ -2029,27 +1974,18 @@ var MenuItem = /*#__PURE__*/withHovering('MenuItem', function MenuItem(_ref) {
     }
   };
 
-  var handleBlur = function handleBlur(e) {
-    activeStateBlur(e);
-    onBlur(e);
-  };
-
   var modifiers = React.useMemo(function () {
     return Object.freeze({
       type: type,
       disabled: isDisabled,
       hover: isHovering,
-      active: isActive,
       checked: isChecked,
       anchor: isAnchor
     });
-  }, [type, isDisabled, isHovering, isActive, isChecked, isAnchor]);
-  var handlers = attachHandlerProps(_extends({}, activeStateHandlers, {
-    onMouseMove: onMouseMove,
-    onMouseLeave: onMouseLeave,
+  }, [type, isDisabled, isHovering, isChecked, isAnchor]);
+  var handlers = attachHandlerProps(_extends({}, stateHandlers, {
     onMouseDown: setHover,
-    onKeyUp: handleKeyUp,
-    onBlur: handleBlur,
+    onKeyDown: handleKeyDown,
     onClick: handleClick
   }), restProps);
 

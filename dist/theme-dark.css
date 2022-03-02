@@ -12,9 +12,6 @@
 .szh-menu-container--theme-dark .szh-menu__item--hover {
   background-color: #31363c;
 }
-.szh-menu-container--theme-dark .szh-menu__item--active {
-  background-color: #007bff;
-}
 .szh-menu-container--theme-dark .szh-menu__item--focusable {
   background-color: inherit;
 }

@@ -55,10 +55,6 @@ export const menuItemSelector: Readonly<
      */
     hover: string;
     /**
-     * Menu item is active (pressed)
-     */
-    active: string;
-    /**
      * Menu item is disabled
      */
     disabled: string;
