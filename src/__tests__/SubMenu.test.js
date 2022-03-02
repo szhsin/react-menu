@@ -78,9 +78,6 @@ test('Open and close submenu with keyboard', async () => {
   fireEvent.mouseDown(submenuItem);
   utils.expectMenuItemToBeHover(submenuItem, true);
   fireEvent.keyDown(submenuItem, { key: 'ArrowRight' });
-  utils.expectMenuItemToBeActive(submenuItem, true);
-  fireEvent.keyUp(submenuItem, { key: 'ArrowRight' });
-  utils.expectMenuItemToBeActive(submenuItem, false);
   utils.expectMenuToBeOpen(true, submenuOptions);
   await waitFor(() => utils.expectMenuItemToBeHover(utils.queryMenuItem('First'), true));
   utils.expectMenuItemToBeHover(submenuItem, true);
@@ -92,7 +89,6 @@ test('Open and close submenu with keyboard', async () => {
   // Open submenu with enter key
   expect(submenuItem).toHaveFocus();
   fireEvent.keyDown(submenuItem, { key: 'Enter' });
-  fireEvent.keyUp(submenuItem, { key: 'Enter' });
   utils.expectMenuToBeOpen(true, submenuOptions);
   await waitFor(() => expect(utils.queryMenuItem('First')).toHaveFocus());
 
@@ -138,7 +134,6 @@ test('onItemClick and onClick are fired when activating item with mouse or keybo
   fireEvent.keyDown(utils.queryMenu(submenuOptions), { key: 'ArrowDown' });
   fireEvent.keyDown(utils.queryMenu(submenuOptions), { key: 'ArrowDown' });
   fireEvent.keyDown(utils.queryMenuItem(menuItemText), { key: ' ' });
-  fireEvent.keyUp(utils.queryMenuItem(menuItemText), { key: ' ' });
   expect(onClick).toHaveBeenLastCalledWith(utils.clickEvent({ value: menuItemText, key: ' ' }));
   expect(onItemClick).toHaveBeenLastCalledWith(utils.clickEvent({ value: menuItemText, key: ' ' }));
   utils.expectMenuToBeOpen(false, menuOptions);
@@ -231,7 +226,6 @@ test('openTrigger is "clickOnly"', async () => {
   await waitFor(() => utils.expectMenuToBeOpen(false, submenuOptions));
   fireEvent.mouseMove(submenuItem);
   fireEvent.keyDown(submenuItem, { key: ' ' });
-  fireEvent.keyUp(submenuItem, { key: ' ' });
   utils.expectMenuToBeOpen(true, submenuOptions);
 });
 
@@ -251,7 +245,6 @@ test('openTrigger is "none"', async () => {
   utils.expectMenuToBeInTheDocument(false, submenuOptions);
 
   fireEvent.keyDown(submenuItem, { key: ' ' });
-  fireEvent.keyUp(submenuItem, { key: ' ' });
   utils.expectMenuToBeInTheDocument(false, submenuOptions);
 });
 

@@ -44,9 +44,6 @@ export const expectMenuItemToBeHover = (menuItem, truthy, disabled) => {
   !disabled && expect(menuItem).toHaveAttribute('tabindex', truthy ? '0' : '-1');
 };
 
-export const expectMenuItemToBeActive = (menuItem, truthy) =>
-  expectToBe(menuItem, truthy).toHaveClass('szh-menu__item--active');
-
 export const expectMenuItemToBeChecked = (menuItem, truthy) => {
   expectToBe(menuItem, truthy).toHaveClass('szh-menu__item--checked');
   if (truthy !== undefined) {
@@ -67,7 +64,7 @@ export const queryMenuItem = (name) => queryByRole('menuitem', { name });
 export const clickEvent = (event) => ({
   ...event,
   syntheticEvent: expect.objectContaining(
-    event.key ? { type: 'keyup', key: event.key } : { type: 'click' }
+    event.key ? { type: 'keydown', key: event.key } : { type: 'click' }
   )
 });
 

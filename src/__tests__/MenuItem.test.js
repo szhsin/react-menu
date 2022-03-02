@@ -116,105 +116,58 @@ test('Checkbox menu items', () => {
   expect(onItemClick).toHaveBeenCalledTimes(2);
 });
 
-test('Hover and press a menu item', () => {
-  utils.renderMenu();
+test('Hover and keyboard click menu items', () => {
+  const onItemClick = jest.fn();
+  const onClick = jest.fn();
+  utils.renderMenu({ onItemClick }, { value: 'Middle', onClick });
   utils.clickMenuButton();
 
-  // hover and press a menu item
-  const menuItem = utils.queryMenuItem('Middle');
-  fireEvent.mouseMove(menuItem);
-  fireEvent.pointerDown(menuItem);
-  utils.expectMenuItemToBeHover(menuItem, true);
-  utils.expectMenuItemToBeActive(menuItem, true);
-  expect(menuItem).toHaveFocus();
+  // hover a menu item
+  const middleItem = utils.queryMenuItem('Middle');
+  fireEvent.mouseMove(middleItem);
+  utils.expectMenuItemToBeHover(middleItem, true);
+  expect(middleItem).toHaveFocus();
 
-  // unhover and release pressing a menu item
-  fireEvent.mouseLeave(menuItem);
-  fireEvent.pointerUp(menuItem);
-  utils.expectMenuItemToBeHover(menuItem, false);
-  utils.expectMenuItemToBeActive(menuItem, false);
-  expect(menuItem).toHaveFocus(); // still keep focus
+  // unhover a menu item
+  fireEvent.mouseLeave(middleItem);
+  utils.expectMenuItemToBeHover(middleItem, false);
+  expect(middleItem).toHaveFocus(); // still keep focus
+  fireEvent.keyDown(middleItem, { key: 'Enter' });
+  expect(onItemClick).not.toHaveBeenCalled();
+  expect(onClick).not.toHaveBeenCalled();
+  utils.expectMenuToBeOpen(true);
 
   // hover menu items one after the other
-  const oneItem = utils.queryMenuItem('First');
-  const anothorItem = utils.queryMenuItem('Last');
+  const firstItem = utils.queryMenuItem('First');
+  fireEvent.mouseMove(firstItem);
+  expect(firstItem).toHaveFocus();
+  utils.expectMenuItemToBeHover(firstItem, true);
+  utils.expectMenuItemToBeHover(middleItem, false);
 
-  fireEvent.mouseMove(oneItem);
-  expect(oneItem).toHaveFocus();
-  utils.expectMenuItemToBeHover(oneItem, true);
-  utils.expectMenuItemToBeHover(anothorItem, false);
+  fireEvent.mouseMove(middleItem);
+  expect(middleItem).toHaveFocus();
+  utils.expectMenuItemToBeHover(firstItem, false);
+  utils.expectMenuItemToBeHover(middleItem, true);
 
-  fireEvent.mouseMove(anothorItem);
-  expect(anothorItem).toHaveFocus();
-  utils.expectMenuItemToBeHover(oneItem, false);
-  utils.expectMenuItemToBeHover(anothorItem, true);
-});
-
-test('Pointer press and leave a menu item', () => {
-  utils.renderMenu();
-  utils.clickMenuButton();
-
-  const menuItem = utils.queryMenuItem('Middle');
-  fireEvent.mouseMove(menuItem);
-  fireEvent.pointerDown(menuItem);
-  fireEvent.mouseLeave(menuItem);
-  fireEvent.pointerLeave(menuItem);
-  utils.expectMenuItemToBeHover(menuItem, false);
-  utils.expectMenuItemToBeActive(menuItem, false);
-  expect(menuItem).toHaveFocus();
-
-  // Subsequent key pressing is ignored
-  fireEvent.keyDown(menuItem, { key: 'Enter' });
-  utils.expectMenuItemToBeHover(menuItem, false);
-  utils.expectMenuItemToBeActive(menuItem, false);
-});
-
-test('keyDown on one item and keyUp on another will not trigger click event', () => {
-  const onItemClick = jest.fn();
-  utils.renderMenu({ onItemClick }, { value: 'Middle' });
-  utils.clickMenuButton();
-
-  const menuItem = utils.queryMenuItem('First');
-  fireEvent.mouseMove(menuItem);
-  fireEvent.keyDown(menuItem, { key: 'Enter' });
-  utils.expectMenuItemToBeHover(menuItem, true);
-  utils.expectMenuItemToBeActive(menuItem, true);
-
-  // Move to next item without releasing 'Enter' key
-  fireEvent.keyDown(menuItem, { key: 'ArrowDown' });
-  utils.expectMenuItemToBeHover(menuItem, false);
-  utils.expectMenuItemToBeActive(menuItem, false);
-
-  const anothorItem = utils.queryMenuItem('Middle');
-  utils.expectMenuItemToBeHover(anothorItem, true);
-  utils.expectMenuItemToBeActive(anothorItem, false);
-  expect(anothorItem).toHaveFocus();
-
-  // Releasing 'Enter' key on this item will not trigger click event
-  fireEvent.keyUp(anothorItem, { key: 'Enter' });
-  utils.expectMenuItemToBeHover(anothorItem, true);
-  expect(onItemClick).not.toHaveBeenCalled();
-
-  fireEvent.keyDown(anothorItem, { key: 'Enter' });
-  fireEvent.keyUp(anothorItem, { key: 'Enter' });
+  fireEvent.keyDown(middleItem, { key: 'Enter' });
   expect(onItemClick).toHaveBeenLastCalledWith(utils.clickEvent({ key: 'Enter', value: 'Middle' }));
+  expect(onClick).toHaveBeenLastCalledWith(utils.clickEvent({ key: 'Enter', value: 'Middle' }));
+  expect(onItemClick).toHaveBeenCalledTimes(1);
+  expect(onClick).toHaveBeenCalledTimes(1);
 });
 
-test('MenuItem keeps hover and active states after focusing something inside it', () => {
+test('MenuItem keeps hover after focusing something inside it', () => {
   utils.renderMenu(undefined, { children: <button>Click</button> });
   utils.clickMenuButton();
 
   const menuItem = utils.queryMenuItem('Click');
   fireEvent.mouseMove(menuItem);
-  fireEvent.pointerDown(menuItem);
   expect(menuItem).toHaveFocus();
   utils.expectMenuItemToBeHover(menuItem, true);
-  utils.expectMenuItemToBeActive(menuItem, true);
 
   act(() => queryByRole('button', { name: 'Click' }).focus());
   expect(menuItem).not.toHaveFocus();
   utils.expectMenuItemToBeHover(menuItem, true);
-  utils.expectMenuItemToBeActive(menuItem, true);
 });
 
 test('Disabled menu item', () => {
@@ -225,9 +178,7 @@ test('Disabled menu item', () => {
   const disabledItem = utils.queryMenuItem('Middle');
   utils.expectToBeDisabled(disabledItem, true);
   fireEvent.mouseMove(disabledItem);
-  fireEvent.pointerDown(disabledItem);
   utils.expectMenuItemToBeHover(disabledItem, false, true);
-  utils.expectMenuItemToBeActive(disabledItem, false);
   fireEvent.click(disabledItem);
   expect(onClick).not.toHaveBeenCalled();
   utils.expectMenuToBeOpen(true);
