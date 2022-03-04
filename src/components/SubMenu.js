@@ -62,18 +62,14 @@ export const SubMenu = withHovering(
     } = useContext(MenuListItemContext);
     const isPortal = parentOverflow !== 'visible';
 
-    const {
-      openMenu: _openMenu,
-      toggleMenu,
-      state,
-      ...otherStateProps
-    } = useMenuStateAndFocus({
+    const [stateProps, toggleMenu, _openMenu] = useMenuStateAndFocus({
       initialMounted,
       unmountOnClose,
       transition,
       transitionTimeout
     });
 
+    const { state } = stateProps;
     const isDisabled = !!disabled;
     const isOpen = isMenuOpen(state);
     const containerRef = useRef(null);
@@ -216,8 +212,7 @@ export const SubMenu = withHovering(
       const menuList = (
         <MenuList
           {...restProps}
-          {...otherStateProps}
-          state={state}
+          {...stateProps}
           ariaLabel={ariaLabel || (typeof label === 'string' ? label : 'Submenu')}
           anchorRef={itemRef}
           containerRef={isPortal ? rootMenuRef : containerRef}
@@ -237,7 +232,7 @@ export const SubMenu = withHovering(
       >
         <div
           role="menuitem"
-          aria-haspopup={true}
+          aria-haspopup
           aria-expanded={isOpen}
           {...commonProps(isDisabled, isHovering)}
           {...restItemProps}

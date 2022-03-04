@@ -68,8 +68,7 @@ var menuHeaderClass = 'header';
 var menuGroupClass = 'group';
 var subMenuClass = 'submenu';
 var radioGroupClass = 'radio-group';
-var initialHoverIndex = -1;
-var HoverItemContext = /*#__PURE__*/React.createContext(initialHoverIndex);
+var HoverItemContext = /*#__PURE__*/React.createContext();
 var MenuListItemContext = /*#__PURE__*/React.createContext({});
 var MenuListContext = /*#__PURE__*/React.createContext({});
 var EventHandlersContext = /*#__PURE__*/React.createContext({});
@@ -420,7 +419,7 @@ var useItems = function useItems(menuRef) {
         break;
 
       default:
-        if (process.env.NODE_ENV !== 'production') throw new Error("Unknown hover action type: " + actionType);
+        if (process.env.NODE_ENV !== 'production') throw new Error("[React-Menu] Unknown hover action type: " + actionType);
     }
 
     if (!newItem) index = -1;
@@ -436,6 +435,10 @@ var useItems = function useItems(menuRef) {
 
 var useItemEffect = function useItemEffect(isDisabled, itemRef, updateItems) {
   React.useEffect(function () {
+    if (process.env.NODE_ENV !== 'production' && !updateItems) {
+      throw new Error("[React-Menu] This menu item or submenu should be rendered under a menu: " + itemRef.current.outerHTML);
+    }
+
     if (isDisabled) return;
     var item = itemRef.current;
     updateItems(item, true);
@@ -536,15 +539,16 @@ var useMenuState = function useMenuState(_temp) {
       toggleMenu = _useTransition[1],
       endTransition = _useTransition[2];
 
-  return {
+  return [{
     state: MenuStateMap[state],
-    toggleMenu: toggleMenu,
     endTransition: endTransition
-  };
+  }, toggleMenu];
 };
 
 var useMenuStateAndFocus = function useMenuStateAndFocus(options) {
-  var menuState = useMenuState(options);
+  var _useMenuState = useMenuState(options),
+      menuProps = _useMenuState[0],
+      toggleMenu = _useMenuState[1];
 
   var _useState = React.useState(),
       menuItemFocus = _useState[0],
@@ -555,13 +559,12 @@ var useMenuStateAndFocus = function useMenuStateAndFocus(options) {
       position: position,
       alwaysUpdate: alwaysUpdate
     });
-    menuState.toggleMenu(true);
+    toggleMenu(true);
   };
 
-  return _extends({}, menuState, {
-    openMenu: openMenu,
+  return [_extends({}, menuProps, {
     menuItemFocus: menuItemFocus
-  });
+  }), toggleMenu, openMenu];
 };
 
 var _excluded$a = ["className", "isOpen", "disabled", "children"];
@@ -1237,7 +1240,7 @@ var MenuList = function MenuList(_ref) {
     var scroll = viewScroll;
     if (anchorScroll !== menuScroll && scroll === 'initial') scroll = 'auto';
     if (scroll === 'initial') return;
-    if (scroll === 'auto' && overflow !== 'visible') scroll = 'close';
+    if (scroll === 'auto' && overflow !== 'visible') return;
 
     var handleScroll = function handleScroll() {
       if (scroll === 'auto') {
@@ -1586,8 +1589,7 @@ ControlledMenu.defaultProps = /*#__PURE__*/_extends({}, rootMenuDefaultProps, {
   menuItemFocus: {}
 });
 
-var _excluded$7 = ["aria-label", "captureFocus", "menuButton", "instanceRef", "onMenuChange"],
-    _excluded2$2 = ["openMenu", "toggleMenu"];
+var _excluded$7 = ["aria-label", "captureFocus", "menuButton", "instanceRef", "onMenuChange"];
 var Menu = /*#__PURE__*/React.forwardRef(function Menu(_ref, externalRef) {
   var ariaLabel = _ref['aria-label'],
       menuButton = _ref.menuButton,
@@ -1596,9 +1598,9 @@ var Menu = /*#__PURE__*/React.forwardRef(function Menu(_ref, externalRef) {
       restProps = _objectWithoutPropertiesLoose(_ref, _excluded$7);
 
   var _useMenuStateAndFocus = useMenuStateAndFocus(restProps),
-      openMenu = _useMenuStateAndFocus.openMenu,
-      toggleMenu = _useMenuStateAndFocus.toggleMenu,
-      stateProps = _objectWithoutPropertiesLoose(_useMenuStateAndFocus, _excluded2$2);
+      stateProps = _useMenuStateAndFocus[0],
+      toggleMenu = _useMenuStateAndFocus[1],
+      openMenu = _useMenuStateAndFocus[2];
 
   var isOpen = isMenuOpen(stateProps.state);
   var skipOpen = React.useRef(false);
@@ -1674,8 +1676,7 @@ process.env.NODE_ENV !== "production" ? Menu.propTypes = /*#__PURE__*/_extends({
 Menu.defaultProps = rootMenuDefaultProps;
 
 var _excluded$6 = ["aria-label", "className", "disabled", "label", "openTrigger", "onMenuChange", "isHovering", "instanceRef", "itemRef", "captureFocus", "repositionFlag", "itemProps"],
-    _excluded2$1 = ["openMenu", "toggleMenu", "state"],
-    _excluded3 = ["ref", "className"];
+    _excluded2$1 = ["ref", "className"];
 var SubMenu = /*#__PURE__*/withHovering('SubMenu', function SubMenu(_ref) {
   var ariaLabel = _ref['aria-label'],
       className = _ref.className,
@@ -1718,11 +1719,11 @@ var SubMenu = /*#__PURE__*/withHovering('SubMenu', function SubMenu(_ref) {
     transition: transition,
     transitionTimeout: transitionTimeout
   }),
-      _openMenu = _useMenuStateAndFocus.openMenu,
-      toggleMenu = _useMenuStateAndFocus.toggleMenu,
-      state = _useMenuStateAndFocus.state,
-      otherStateProps = _objectWithoutPropertiesLoose(_useMenuStateAndFocus, _excluded2$1);
+      stateProps = _useMenuStateAndFocus[0],
+      toggleMenu = _useMenuStateAndFocus[1],
+      _openMenu = _useMenuStateAndFocus[2];
 
+  var state = stateProps.state;
   var isDisabled = !!disabled;
   var isOpen = isMenuOpen(state);
   var containerRef = React.useRef(null);
@@ -1851,7 +1852,7 @@ var SubMenu = /*#__PURE__*/withHovering('SubMenu', function SubMenu(_ref) {
 
   var externalItemRef = itemProps.ref,
       itemClassName = itemProps.className,
-      restItemProps = _objectWithoutPropertiesLoose(itemProps, _excluded3);
+      restItemProps = _objectWithoutPropertiesLoose(itemProps, _excluded2$1);
 
   var itemHandlers = attachHandlerProps({
     onMouseMove: handleMouseMove,
@@ -1864,8 +1865,7 @@ var SubMenu = /*#__PURE__*/withHovering('SubMenu', function SubMenu(_ref) {
   }, restItemProps);
 
   var getMenuList = function getMenuList() {
-    var menuList = /*#__PURE__*/React.createElement(MenuList, _extends({}, restProps, otherStateProps, {
-      state: state,
+    var menuList = /*#__PURE__*/React.createElement(MenuList, _extends({}, restProps, stateProps, {
       ariaLabel: ariaLabel || (typeof label === 'string' ? label : 'Submenu'),
       anchorRef: itemRef,
       containerRef: isPortal ? rootMenuRef : containerRef,

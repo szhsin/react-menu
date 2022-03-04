@@ -11,8 +11,7 @@ export const menuGroupClass = 'group';
 export const subMenuClass = 'submenu';
 export const radioGroupClass = 'radio-group';
 
-export const initialHoverIndex = -1;
-export const HoverItemContext = createContext(initialHoverIndex);
+export const HoverItemContext = createContext();
 export const MenuListItemContext = createContext({});
 export const MenuListContext = createContext({});
 export const EventHandlersContext = createContext({});

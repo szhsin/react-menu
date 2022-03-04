@@ -14,8 +14,7 @@ import { menuPropTypes, uncontrolledMenuPropTypes, stylePropTypes, menuDefaultPr
 import { isMenuOpen, attachHandlerProps, commonProps, safeCall, batchedUpdates } from '../utils/utils.js';
 
 var _excluded = ["aria-label", "className", "disabled", "label", "openTrigger", "onMenuChange", "isHovering", "instanceRef", "itemRef", "captureFocus", "repositionFlag", "itemProps"],
-    _excluded2 = ["openMenu", "toggleMenu", "state"],
-    _excluded3 = ["ref", "className"];
+    _excluded2 = ["ref", "className"];
 var SubMenu = /*#__PURE__*/withHovering('SubMenu', function SubMenu(_ref) {
   var ariaLabel = _ref['aria-label'],
       className = _ref.className,
@@ -58,11 +57,11 @@ var SubMenu = /*#__PURE__*/withHovering('SubMenu', function SubMenu(_ref) {
     transition: transition,
     transitionTimeout: transitionTimeout
   }),
-      _openMenu = _useMenuStateAndFocus.openMenu,
-      toggleMenu = _useMenuStateAndFocus.toggleMenu,
-      state = _useMenuStateAndFocus.state,
-      otherStateProps = _objectWithoutPropertiesLoose(_useMenuStateAndFocus, _excluded2);
+      stateProps = _useMenuStateAndFocus[0],
+      toggleMenu = _useMenuStateAndFocus[1],
+      _openMenu = _useMenuStateAndFocus[2];
 
+  var state = stateProps.state;
   var isDisabled = !!disabled;
   var isOpen = isMenuOpen(state);
   var containerRef = useRef(null);
@@ -191,7 +190,7 @@ var SubMenu = /*#__PURE__*/withHovering('SubMenu', function SubMenu(_ref) {
 
   var externalItemRef = itemProps.ref,
       itemClassName = itemProps.className,
-      restItemProps = _objectWithoutPropertiesLoose(itemProps, _excluded3);
+      restItemProps = _objectWithoutPropertiesLoose(itemProps, _excluded2);
 
   var itemHandlers = attachHandlerProps({
     onMouseMove: handleMouseMove,
@@ -204,8 +203,7 @@ var SubMenu = /*#__PURE__*/withHovering('SubMenu', function SubMenu(_ref) {
   }, restItemProps);
 
   var getMenuList = function getMenuList() {
-    var menuList = /*#__PURE__*/React.createElement(MenuList, _extends({}, restProps, otherStateProps, {
-      state: state,
+    var menuList = /*#__PURE__*/React.createElement(MenuList, _extends({}, restProps, stateProps, {
       ariaLabel: ariaLabel || (typeof label === 'string' ? label : 'Submenu'),
       anchorRef: itemRef,
       containerRef: isPortal ? rootMenuRef : containerRef,

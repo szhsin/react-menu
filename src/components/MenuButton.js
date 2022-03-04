@@ -10,7 +10,7 @@ export const MenuButton = defineName(
 
     return (
       <button
-        aria-haspopup={true}
+        aria-haspopup
         aria-expanded={isOpen}
         aria-disabled={disabled || undefined}
         type="button"

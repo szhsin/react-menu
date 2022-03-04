@@ -10,8 +10,7 @@ var menuHeaderClass = 'header';
 var menuGroupClass = 'group';
 var subMenuClass = 'submenu';
 var radioGroupClass = 'radio-group';
-var initialHoverIndex = -1;
-var HoverItemContext = /*#__PURE__*/createContext(initialHoverIndex);
+var HoverItemContext = /*#__PURE__*/createContext();
 var MenuListItemContext = /*#__PURE__*/createContext({});
 var MenuListContext = /*#__PURE__*/createContext({});
 var EventHandlersContext = /*#__PURE__*/createContext({});
@@ -56,4 +55,4 @@ var MenuStateMap = /*#__PURE__*/Object.freeze({
   exited: 'closed'
 });
 
-export { CloseReason, EventHandlersContext, FocusPositions, HoverActionTypes, HoverItemContext, ItemSettingsContext, Keys, MenuListContext, MenuListItemContext, MenuStateMap, RadioGroupContext, SettingsContext, initialHoverIndex, menuArrowClass, menuButtonClass, menuClass, menuContainerClass, menuDividerClass, menuGroupClass, menuHeaderClass, menuItemClass, radioGroupClass, subMenuClass };
+export { CloseReason, EventHandlersContext, FocusPositions, HoverActionTypes, HoverItemContext, ItemSettingsContext, Keys, MenuListContext, MenuListItemContext, MenuStateMap, RadioGroupContext, SettingsContext, menuArrowClass, menuButtonClass, menuClass, menuContainerClass, menuDividerClass, menuGroupClass, menuHeaderClass, menuItemClass, radioGroupClass, subMenuClass };

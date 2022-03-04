@@ -3,7 +3,9 @@ import { useState } from 'react';
 import { useMenuState } from './useMenuState.js';
 
 var useMenuStateAndFocus = function useMenuStateAndFocus(options) {
-  var menuState = useMenuState(options);
+  var _useMenuState = useMenuState(options),
+      menuProps = _useMenuState[0],
+      toggleMenu = _useMenuState[1];
 
   var _useState = useState(),
       menuItemFocus = _useState[0],
@@ -14,13 +16,12 @@ var useMenuStateAndFocus = function useMenuStateAndFocus(options) {
       position: position,
       alwaysUpdate: alwaysUpdate
     });
-    menuState.toggleMenu(true);
+    toggleMenu(true);
   };
 
-  return _extends({}, menuState, {
-    openMenu: openMenu,
+  return [_extends({}, menuProps, {
     menuItemFocus: menuItemFocus
-  });
+  }), toggleMenu, openMenu];
 };
 
 export { useMenuStateAndFocus };

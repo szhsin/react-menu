@@ -9,8 +9,7 @@ import { useMenuChange } from '../hooks/useMenuChange.js';
 import { rootMenuPropTypes, uncontrolledMenuPropTypes, rootMenuDefaultProps } from '../utils/propTypes.js';
 import { FocusPositions, Keys } from '../utils/constants.js';
 
-var _excluded = ["aria-label", "captureFocus", "menuButton", "instanceRef", "onMenuChange"],
-    _excluded2 = ["openMenu", "toggleMenu"];
+var _excluded = ["aria-label", "captureFocus", "menuButton", "instanceRef", "onMenuChange"];
 var Menu = /*#__PURE__*/forwardRef(function Menu(_ref, externalRef) {
   var ariaLabel = _ref['aria-label'],
       menuButton = _ref.menuButton,
@@ -19,9 +18,9 @@ var Menu = /*#__PURE__*/forwardRef(function Menu(_ref, externalRef) {
       restProps = _objectWithoutPropertiesLoose(_ref, _excluded);
 
   var _useMenuStateAndFocus = useMenuStateAndFocus(restProps),
-      openMenu = _useMenuStateAndFocus.openMenu,
-      toggleMenu = _useMenuStateAndFocus.toggleMenu,
-      stateProps = _objectWithoutPropertiesLoose(_useMenuStateAndFocus, _excluded2);
+      stateProps = _useMenuStateAndFocus[0],
+      toggleMenu = _useMenuStateAndFocus[1],
+      openMenu = _useMenuStateAndFocus[2];
 
   var isOpen = isMenuOpen(stateProps.state);
   var skipOpen = useRef(false);

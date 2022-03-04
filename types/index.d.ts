@@ -638,22 +638,25 @@ export const MenuRadioGroup: React.NamedExoticComponent<MenuRadioGroupProps>;
 /**
  * A custom Hook which helps manage the states of `ControlledMenu`.
  */
-export function useMenuState(options?: MenuStateOptions): {
-  /**
-   * Menu state which should be forwarded to `ControlledMenu`.
-   */
-  state?: MenuState;
+export function useMenuState(options?: MenuStateOptions): [
+  {
+    /**
+     * Menu state which should be forwarded to `ControlledMenu`.
+     */
+    state?: MenuState;
+    /**
+     * This value should be forwarded to `ControlledMenu`.
+     */
+    endTransition: () => void;
+  },
+
   /**
    * Open or close menu.
    *
    * - If no parameter is supplied, this function will toggle state between open and close phases.
    * - You can set a boolean parameter to explicitly switch into one of the two phases.
    */
-  toggleMenu: (open?: boolean) => void;
-  /**
-   * This value should be forwarded to `ControlledMenu`.
-   */
-  endTransition: () => void;
-};
+  (open?: boolean) => void
+];
 
 export {};
