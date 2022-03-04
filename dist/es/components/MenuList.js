@@ -273,7 +273,7 @@ var MenuList = function MenuList(_ref) {
     var scroll = viewScroll;
     if (anchorScroll !== menuScroll && scroll === 'initial') scroll = 'auto';
     if (scroll === 'initial') return;
-    if (scroll === 'auto' && overflow !== 'visible') scroll = 'close';
+    if (scroll === 'auto' && overflow !== 'visible') return;
 
     var handleScroll = function handleScroll() {
       if (scroll === 'auto') {

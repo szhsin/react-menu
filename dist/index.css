@@ -20,7 +20,7 @@
   outline: none;
 }
 .szh-menu--state-closed {
-  display: none;
+  display: none !important;
 }
 .szh-menu__arrow {
   box-sizing: border-box;

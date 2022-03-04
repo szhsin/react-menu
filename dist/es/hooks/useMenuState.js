@@ -20,11 +20,10 @@ var useMenuState = function useMenuState(_temp) {
       toggleMenu = _useTransition[1],
       endTransition = _useTransition[2];
 
-  return {
+  return [{
     state: MenuStateMap[state],
-    toggleMenu: toggleMenu,
     endTransition: endTransition
-  };
+  }, toggleMenu];
 };
 
 export { useMenuState };

@@ -18,7 +18,7 @@
   background-color: var.$background-color;
 
   &--state-closed {
-    display: none;
+    display: none !important;
   }
 
   &__arrow {

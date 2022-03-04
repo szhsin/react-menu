@@ -263,9 +263,8 @@ export const MenuList = ({
     if (anchorScroll !== menuScroll && scroll === 'initial') scroll = 'auto';
     if (scroll === 'initial') return;
 
-    // For best user experience,
-    // force to close menu in the following setting combination
-    if (scroll === 'auto' && overflow !== 'visible') scroll = 'close';
+    // For best user experience, behave as 'initial' in the following condition:
+    if (scroll === 'auto' && overflow !== 'visible') return;
 
     const handleScroll = () => {
       if (scroll === 'auto') {

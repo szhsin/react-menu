@@ -96,7 +96,7 @@ var useItems = function useItems(menuRef) {
         break;
 
       default:
-        if (process.env.NODE_ENV !== 'production') throw new Error("Unknown hover action type: " + actionType);
+        if (process.env.NODE_ENV !== 'production') throw new Error("[React-Menu] Unknown hover action type: " + actionType);
     }
 
     if (!newItem) index = -1;

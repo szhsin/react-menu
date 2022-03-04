@@ -25,7 +25,7 @@ export const Menu = forwardRef(function Menu(
   { 'aria-label': ariaLabel, captureFocus: _, menuButton, instanceRef, onMenuChange, ...restProps },
   externalRef
 ) {
-  const { openMenu, toggleMenu, ...stateProps } = useMenuStateAndFocus(restProps);
+  const [stateProps, toggleMenu, openMenu] = useMenuStateAndFocus(restProps);
   const isOpen = isMenuOpen(stateProps.state);
   const skipOpen = useRef(false);
   const buttonRef = useRef(null);

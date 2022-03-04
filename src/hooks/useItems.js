@@ -89,7 +89,7 @@ export const useItems = (menuRef) => {
 
         default:
           if (process.env.NODE_ENV !== 'production')
-            throw new Error(`Unknown hover action type: ${actionType}`);
+            throw new Error(`[React-Menu] Unknown hover action type: ${actionType}`);
       }
 
       if (!newItem) index = -1;
