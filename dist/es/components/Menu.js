@@ -6,7 +6,7 @@ import { useMenuStateAndFocus } from '../hooks/useMenuStateAndFocus.js';
 import { useCombinedRef } from '../hooks/useCombinedRef.js';
 import { isMenuOpen, safeCall, attachHandlerProps, getName } from '../utils/utils.js';
 import { useMenuChange } from '../hooks/useMenuChange.js';
-import { rootMenuPropTypes, uncontrolledMenuPropTypes, rootMenuDefaultProps } from '../utils/propTypes.js';
+import { rootMenuPropTypes, uncontrolledMenuPropTypes } from '../utils/propTypes.js';
 import { FocusPositions, Keys } from '../utils/constants.js';
 
 var _excluded = ["aria-label", "captureFocus", "menuButton", "instanceRef", "onMenuChange"];
@@ -93,6 +93,5 @@ var Menu = /*#__PURE__*/forwardRef(function Menu(_ref, externalRef) {
 process.env.NODE_ENV !== "production" ? Menu.propTypes = /*#__PURE__*/_extends({}, rootMenuPropTypes, uncontrolledMenuPropTypes, {
   menuButton: oneOfType([element, func]).isRequired
 }) : void 0;
-Menu.defaultProps = rootMenuDefaultProps;
 
 export { Menu };

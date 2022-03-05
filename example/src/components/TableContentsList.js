@@ -2,7 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Link from 'next/link';
 
-export const TableContentsList = React.memo(function TableContentsList({ list, level, maxHeight }) {
+export const TableContentsList = React.memo(function TableContentsList({
+  list,
+  level = 1,
+  maxHeight
+}) {
   const listElt = list.map((item) => {
     let nested = null;
     if (item.list) {
@@ -27,8 +31,4 @@ export const TableContentsList = React.memo(function TableContentsList({ list, l
 TableContentsList.propTypes = {
   list: PropTypes.array.isRequired,
   level: PropTypes.number
-};
-
-TableContentsList.defaultProps = {
-  level: 1
 };

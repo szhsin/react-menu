@@ -152,7 +152,12 @@ export interface MenuStateOptions {
         item?: boolean;
       };
   /**
-   * A fallback timeout to stop transition if `onAnimationEnd` events are not fired.
+   * A fallback timeout in `ms` to stop transition if `onAnimationEnd` events are not fired.
+   *
+   * *Note: this value should be greater than or equal to the duration of
+   * transition animation applied on menu.*
+   *
+   * @default 500
    */
   transitionTimeout?: number;
 }

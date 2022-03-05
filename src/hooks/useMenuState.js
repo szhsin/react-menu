@@ -5,7 +5,7 @@ export const useMenuState = ({
   initialMounted,
   unmountOnClose,
   transition,
-  transitionTimeout
+  transitionTimeout = 500
 } = {}) => {
   const [state, toggleMenu, endTransition] = useTransition({
     mountOnEnter: !initialMounted,

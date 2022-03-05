@@ -7,7 +7,8 @@ var useMenuState = function useMenuState(_temp) {
       initialMounted = _ref.initialMounted,
       unmountOnClose = _ref.unmountOnClose,
       transition = _ref.transition,
-      transitionTimeout = _ref.transitionTimeout;
+      _ref$transitionTimeou = _ref.transitionTimeout,
+      transitionTimeout = _ref$transitionTimeou === void 0 ? 500 : _ref$transitionTimeou;
 
   var _useTransition = useTransition({
     mountOnEnter: !initialMounted,

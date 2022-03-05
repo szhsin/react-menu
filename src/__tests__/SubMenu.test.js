@@ -33,6 +33,7 @@ test('Open and close submenu with mouse', async () => {
   fireEvent.click(submenuItem);
   utils.expectMenuItemToBeHover(submenuItem, true);
   utils.expectMenuToBeOpen(true, submenuOptions);
+  expect(utils.queryMenu(submenuOptions)).toHaveClass('szh-menu--dir-right');
   expect(onChange).toHaveBeenLastCalledWith({ open: true });
   await waitFor(() => expect(utils.queryMenu(submenuOptions)).toHaveFocus());
 
