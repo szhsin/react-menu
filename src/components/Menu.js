@@ -16,7 +16,6 @@ import {
   isMenuOpen,
   uncontrolledMenuPropTypes,
   rootMenuPropTypes,
-  rootMenuDefaultProps,
   Keys,
   FocusPositions
 } from '../utils';
@@ -111,5 +110,3 @@ Menu.propTypes = {
   ...uncontrolledMenuPropTypes,
   menuButton: oneOfType([element, func]).isRequired
 };
-
-Menu.defaultProps = rootMenuDefaultProps;

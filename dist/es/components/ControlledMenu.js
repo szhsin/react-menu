@@ -5,7 +5,7 @@ import { oneOf, exact, number, object, bool, oneOfType, string, func } from 'pro
 import { MenuList } from './MenuList.js';
 import { useBEM } from '../hooks/useBEM.js';
 import { CloseReason, menuContainerClass, SettingsContext, ItemSettingsContext, EventHandlersContext, MenuStateMap, Keys } from '../utils/constants.js';
-import { rootMenuPropTypes, rootMenuDefaultProps } from '../utils/propTypes.js';
+import { rootMenuPropTypes } from '../utils/propTypes.js';
 import { safeCall, getTransition, attachHandlerProps, values, isMenuOpen } from '../utils/utils.js';
 
 var _excluded = ["aria-label", "className", "containerProps", "initialMounted", "unmountOnClose", "transition", "transitionTimeout", "boundingBoxRef", "boundingBoxPadding", "reposition", "submenuOpenDelay", "submenuCloseDelay", "skipOpen", "viewScroll", "portal", "theming", "onItemClick", "onClose"];
@@ -19,11 +19,15 @@ var ControlledMenu = /*#__PURE__*/forwardRef(function ControlledMenu(_ref, exter
       transitionTimeout = _ref.transitionTimeout,
       boundingBoxRef = _ref.boundingBoxRef,
       boundingBoxPadding = _ref.boundingBoxPadding,
-      reposition = _ref.reposition,
-      submenuOpenDelay = _ref.submenuOpenDelay,
-      submenuCloseDelay = _ref.submenuCloseDelay,
+      _ref$reposition = _ref.reposition,
+      reposition = _ref$reposition === void 0 ? 'auto' : _ref$reposition,
+      _ref$submenuOpenDelay = _ref.submenuOpenDelay,
+      submenuOpenDelay = _ref$submenuOpenDelay === void 0 ? 300 : _ref$submenuOpenDelay,
+      _ref$submenuCloseDela = _ref.submenuCloseDelay,
+      submenuCloseDelay = _ref$submenuCloseDela === void 0 ? 150 : _ref$submenuCloseDela,
       skipOpen = _ref.skipOpen,
-      viewScroll = _ref.viewScroll,
+      _ref$viewScroll = _ref.viewScroll,
+      viewScroll = _ref$viewScroll === void 0 ? 'initial' : _ref$viewScroll,
       portal = _ref.portal,
       theming = _ref.theming,
       onItemClick = _ref.onItemClick,
@@ -164,8 +168,5 @@ process.env.NODE_ENV !== "production" ? ControlledMenu.propTypes = /*#__PURE__*/
   }),
   onClose: func
 }) : void 0;
-ControlledMenu.defaultProps = /*#__PURE__*/_extends({}, rootMenuDefaultProps, {
-  menuItemFocus: {}
-});
 
 export { ControlledMenu };

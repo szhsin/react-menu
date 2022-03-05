@@ -53,21 +53,3 @@ export const uncontrolledMenuPropTypes = {
   instanceRef: oneOfType([object, func]),
   onMenuChange: func
 };
-
-export const menuDefaultProps = {
-  offsetX: 0,
-  offsetY: 0,
-  align: 'start',
-  direction: 'bottom',
-  position: 'auto',
-  overflow: 'visible'
-};
-
-export const rootMenuDefaultProps = {
-  ...menuDefaultProps,
-  reposition: 'auto',
-  viewScroll: 'initial',
-  transitionTimeout: 500,
-  submenuOpenDelay: 300,
-  submenuCloseDelay: 150
-};

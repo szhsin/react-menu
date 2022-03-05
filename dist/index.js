@@ -295,21 +295,6 @@ var uncontrolledMenuPropTypes = {
   instanceRef: /*#__PURE__*/propTypes.oneOfType([propTypes.object, propTypes.func]),
   onMenuChange: propTypes.func
 };
-var menuDefaultProps = {
-  offsetX: 0,
-  offsetY: 0,
-  align: 'start',
-  direction: 'bottom',
-  position: 'auto',
-  overflow: 'visible'
-};
-var rootMenuDefaultProps = /*#__PURE__*/_extends({}, menuDefaultProps, {
-  reposition: 'auto',
-  viewScroll: 'initial',
-  transitionTimeout: 500,
-  submenuOpenDelay: 300,
-  submenuCloseDelay: 150
-});
 
 var withHovering = function withHovering(name, WrapppedComponent) {
   var Component = /*#__PURE__*/React.memo(WrapppedComponent);
@@ -526,7 +511,8 @@ var useMenuState = function useMenuState(_temp) {
       initialMounted = _ref.initialMounted,
       unmountOnClose = _ref.unmountOnClose,
       transition = _ref.transition,
-      transitionTimeout = _ref.transitionTimeout;
+      _ref$transitionTimeou = _ref.transitionTimeout,
+      transitionTimeout = _ref$transitionTimeou === void 0 ? 500 : _ref$transitionTimeou;
 
   var _useTransition = reactTransitionState.useTransition({
     mountOnEnter: !initialMounted,
@@ -991,10 +977,14 @@ var MenuList = function MenuList(_ref) {
       externalRef = _ref.externalRef,
       parentScrollingRef = _ref.parentScrollingRef,
       arrow = _ref.arrow,
-      align = _ref.align,
-      direction = _ref.direction,
-      position = _ref.position,
-      overflow = _ref.overflow,
+      _ref$align = _ref.align,
+      align = _ref$align === void 0 ? 'start' : _ref$align,
+      _ref$direction = _ref.direction,
+      direction = _ref$direction === void 0 ? 'bottom' : _ref$direction,
+      _ref$position = _ref.position,
+      position = _ref$position === void 0 ? 'auto' : _ref$position,
+      _ref$overflow = _ref.overflow,
+      overflow = _ref$overflow === void 0 ? 'visible' : _ref$overflow,
       setDownOverflow = _ref.setDownOverflow,
       repositionFlag = _ref.repositionFlag,
       _ref$captureFocus = _ref.captureFocus,
@@ -1003,8 +993,10 @@ var MenuList = function MenuList(_ref) {
       endTransition = _ref.endTransition,
       isDisabled = _ref.isDisabled,
       menuItemFocus = _ref.menuItemFocus,
-      offsetX = _ref.offsetX,
-      offsetY = _ref.offsetY,
+      _ref$offsetX = _ref.offsetX,
+      offsetX = _ref$offsetX === void 0 ? 0 : _ref$offsetX,
+      _ref$offsetY = _ref.offsetY,
+      offsetY = _ref$offsetY === void 0 ? 0 : _ref$offsetY,
       children = _ref.children,
       onClose = _ref.onClose,
       restProps = _objectWithoutPropertiesLoose(_ref, _excluded$9);
@@ -1440,11 +1432,15 @@ var ControlledMenu = /*#__PURE__*/React.forwardRef(function ControlledMenu(_ref,
       transitionTimeout = _ref.transitionTimeout,
       boundingBoxRef = _ref.boundingBoxRef,
       boundingBoxPadding = _ref.boundingBoxPadding,
-      reposition = _ref.reposition,
-      submenuOpenDelay = _ref.submenuOpenDelay,
-      submenuCloseDelay = _ref.submenuCloseDelay,
+      _ref$reposition = _ref.reposition,
+      reposition = _ref$reposition === void 0 ? 'auto' : _ref$reposition,
+      _ref$submenuOpenDelay = _ref.submenuOpenDelay,
+      submenuOpenDelay = _ref$submenuOpenDelay === void 0 ? 300 : _ref$submenuOpenDelay,
+      _ref$submenuCloseDela = _ref.submenuCloseDelay,
+      submenuCloseDelay = _ref$submenuCloseDela === void 0 ? 150 : _ref$submenuCloseDela,
       skipOpen = _ref.skipOpen,
-      viewScroll = _ref.viewScroll,
+      _ref$viewScroll = _ref.viewScroll,
+      viewScroll = _ref$viewScroll === void 0 ? 'initial' : _ref$viewScroll,
       portal = _ref.portal,
       theming = _ref.theming,
       onItemClick = _ref.onItemClick,
@@ -1585,9 +1581,6 @@ process.env.NODE_ENV !== "production" ? ControlledMenu.propTypes = /*#__PURE__*/
   }),
   onClose: propTypes.func
 }) : void 0;
-ControlledMenu.defaultProps = /*#__PURE__*/_extends({}, rootMenuDefaultProps, {
-  menuItemFocus: {}
-});
 
 var _excluded$7 = ["aria-label", "captureFocus", "menuButton", "instanceRef", "onMenuChange"];
 var Menu = /*#__PURE__*/React.forwardRef(function Menu(_ref, externalRef) {
@@ -1673,14 +1666,15 @@ var Menu = /*#__PURE__*/React.forwardRef(function Menu(_ref, externalRef) {
 process.env.NODE_ENV !== "production" ? Menu.propTypes = /*#__PURE__*/_extends({}, rootMenuPropTypes, uncontrolledMenuPropTypes, {
   menuButton: propTypes.oneOfType([propTypes.element, propTypes.func]).isRequired
 }) : void 0;
-Menu.defaultProps = rootMenuDefaultProps;
 
-var _excluded$6 = ["aria-label", "className", "disabled", "label", "openTrigger", "onMenuChange", "isHovering", "instanceRef", "itemRef", "captureFocus", "repositionFlag", "itemProps"],
+var _excluded$6 = ["aria-label", "className", "disabled", "direction", "label", "openTrigger", "onMenuChange", "isHovering", "instanceRef", "itemRef", "captureFocus", "repositionFlag", "itemProps"],
     _excluded2$1 = ["ref", "className"];
 var SubMenu = /*#__PURE__*/withHovering('SubMenu', function SubMenu(_ref) {
   var ariaLabel = _ref['aria-label'],
       className = _ref.className,
       disabled = _ref.disabled,
+      _ref$direction = _ref.direction,
+      direction = _ref$direction === void 0 ? 'right' : _ref$direction,
       label = _ref.label,
       openTrigger = _ref.openTrigger,
       onMenuChange = _ref.onMenuChange,
@@ -1691,34 +1685,25 @@ var SubMenu = /*#__PURE__*/withHovering('SubMenu', function SubMenu(_ref) {
       itemProps = _ref$itemProps === void 0 ? {} : _ref$itemProps,
       restProps = _objectWithoutPropertiesLoose(_ref, _excluded$6);
 
-  var _useContext = React.useContext(SettingsContext),
-      initialMounted = _useContext.initialMounted,
-      unmountOnClose = _useContext.unmountOnClose,
-      transition = _useContext.transition,
-      transitionTimeout = _useContext.transitionTimeout,
-      rootMenuRef = _useContext.rootMenuRef;
+  var settings = React.useContext(SettingsContext);
+  var rootMenuRef = settings.rootMenuRef;
 
-  var _useContext2 = React.useContext(ItemSettingsContext),
-      submenuOpenDelay = _useContext2.submenuOpenDelay,
-      submenuCloseDelay = _useContext2.submenuCloseDelay;
+  var _useContext = React.useContext(ItemSettingsContext),
+      submenuOpenDelay = _useContext.submenuOpenDelay,
+      submenuCloseDelay = _useContext.submenuCloseDelay;
 
-  var _useContext3 = React.useContext(MenuListItemContext),
-      parentMenuRef = _useContext3.parentMenuRef,
-      parentOverflow = _useContext3.parentOverflow,
-      isParentOpen = _useContext3.isParentOpen,
-      isSubmenuOpen = _useContext3.isSubmenuOpen,
-      setOpenSubmenuCount = _useContext3.setOpenSubmenuCount,
-      dispatch = _useContext3.dispatch,
-      updateItems = _useContext3.updateItems;
+  var _useContext2 = React.useContext(MenuListItemContext),
+      parentMenuRef = _useContext2.parentMenuRef,
+      parentOverflow = _useContext2.parentOverflow,
+      isParentOpen = _useContext2.isParentOpen,
+      isSubmenuOpen = _useContext2.isSubmenuOpen,
+      setOpenSubmenuCount = _useContext2.setOpenSubmenuCount,
+      dispatch = _useContext2.dispatch,
+      updateItems = _useContext2.updateItems;
 
   var isPortal = parentOverflow !== 'visible';
 
-  var _useMenuStateAndFocus = useMenuStateAndFocus({
-    initialMounted: initialMounted,
-    unmountOnClose: unmountOnClose,
-    transition: transition,
-    transitionTimeout: transitionTimeout
-  }),
+  var _useMenuStateAndFocus = useMenuStateAndFocus(settings),
       stateProps = _useMenuStateAndFocus[0],
       toggleMenu = _useMenuStateAndFocus[1],
       _openMenu = _useMenuStateAndFocus[2];
@@ -1869,6 +1854,7 @@ var SubMenu = /*#__PURE__*/withHovering('SubMenu', function SubMenu(_ref) {
       ariaLabel: ariaLabel || (typeof label === 'string' ? label : 'Submenu'),
       anchorRef: itemRef,
       containerRef: isPortal ? rootMenuRef : containerRef,
+      direction: direction,
       parentScrollingRef: isPortal && parentMenuRef,
       isDisabled: isDisabled
     }));
@@ -1906,9 +1892,6 @@ process.env.NODE_ENV !== "production" ? SubMenu.propTypes = /*#__PURE__*/_extend
   label: /*#__PURE__*/propTypes.oneOfType([propTypes.node, propTypes.func]),
   itemProps: /*#__PURE__*/propTypes.shape( /*#__PURE__*/_extends({}, /*#__PURE__*/stylePropTypes()))
 }) : void 0;
-SubMenu.defaultProps = /*#__PURE__*/_extends({}, menuDefaultProps, {
-  direction: 'right'
-});
 
 var _excluded$5 = ["className", "value", "href", "type", "checked", "disabled", "children", "onClick", "isHovering", "itemRef", "externalRef"],
     _excluded2 = ["setHover"];

@@ -45,20 +45,5 @@ var uncontrolledMenuPropTypes = {
   instanceRef: /*#__PURE__*/oneOfType([object, func]),
   onMenuChange: func
 };
-var menuDefaultProps = {
-  offsetX: 0,
-  offsetY: 0,
-  align: 'start',
-  direction: 'bottom',
-  position: 'auto',
-  overflow: 'visible'
-};
-var rootMenuDefaultProps = /*#__PURE__*/_extends({}, menuDefaultProps, {
-  reposition: 'auto',
-  viewScroll: 'initial',
-  transitionTimeout: 500,
-  submenuOpenDelay: 300,
-  submenuCloseDelay: 150
-});
 
-export { menuDefaultProps, menuPropTypes, rootMenuDefaultProps, rootMenuPropTypes, stylePropTypes, uncontrolledMenuPropTypes };
+export { menuPropTypes, rootMenuPropTypes, stylePropTypes, uncontrolledMenuPropTypes };

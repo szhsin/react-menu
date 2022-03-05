@@ -17,7 +17,6 @@ import {
   stylePropTypes,
   uncontrolledMenuPropTypes,
   menuPropTypes,
-  menuDefaultProps,
   menuClass,
   subMenuClass,
   menuItemClass,
@@ -37,6 +36,7 @@ export const SubMenu = withHovering(
     'aria-label': ariaLabel,
     className,
     disabled,
+    direction = 'right',
     label,
     openTrigger,
     onMenuChange,
@@ -48,8 +48,8 @@ export const SubMenu = withHovering(
     itemProps = {},
     ...restProps
   }) {
-    const { initialMounted, unmountOnClose, transition, transitionTimeout, rootMenuRef } =
-      useContext(SettingsContext);
+    const settings = useContext(SettingsContext);
+    const { rootMenuRef } = settings;
     const { submenuOpenDelay, submenuCloseDelay } = useContext(ItemSettingsContext);
     const {
       parentMenuRef,
@@ -62,12 +62,7 @@ export const SubMenu = withHovering(
     } = useContext(MenuListItemContext);
     const isPortal = parentOverflow !== 'visible';
 
-    const [stateProps, toggleMenu, _openMenu] = useMenuStateAndFocus({
-      initialMounted,
-      unmountOnClose,
-      transition,
-      transitionTimeout
-    });
+    const [stateProps, toggleMenu, _openMenu] = useMenuStateAndFocus(settings);
 
     const { state } = stateProps;
     const isDisabled = !!disabled;
@@ -216,6 +211,7 @@ export const SubMenu = withHovering(
           ariaLabel={ariaLabel || (typeof label === 'string' ? label : 'Submenu')}
           anchorRef={itemRef}
           containerRef={isPortal ? rootMenuRef : containerRef}
+          direction={direction}
           parentScrollingRef={isPortal && parentMenuRef}
           isDisabled={isDisabled}
         />
@@ -263,9 +259,4 @@ SubMenu.propTypes = {
   itemProps: shape({
     ...stylePropTypes()
   })
-};
-
-SubMenu.defaultProps = {
-  ...menuDefaultProps,
-  direction: 'right'
 };

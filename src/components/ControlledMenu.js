@@ -5,7 +5,6 @@ import { MenuList } from './MenuList';
 import { useBEM } from '../hooks';
 import {
   rootMenuPropTypes,
-  rootMenuDefaultProps,
   menuContainerClass,
   attachHandlerProps,
   safeCall,
@@ -31,11 +30,11 @@ export const ControlledMenu = forwardRef(function ControlledMenu(
     transitionTimeout,
     boundingBoxRef,
     boundingBoxPadding,
-    reposition,
-    submenuOpenDelay,
-    submenuCloseDelay,
+    reposition = 'auto',
+    submenuOpenDelay = 300,
+    submenuCloseDelay = 150,
     skipOpen,
-    viewScroll,
+    viewScroll = 'initial',
     portal,
     theming,
     onItemClick,
@@ -201,9 +200,4 @@ ControlledMenu.propTypes /* remove-proptypes */ = {
     alwaysUpdate: bool
   }),
   onClose: func
-};
-
-ControlledMenu.defaultProps = {
-  ...rootMenuDefaultProps,
-  menuItemFocus: {}
 };

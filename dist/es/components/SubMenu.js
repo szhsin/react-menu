@@ -10,15 +10,17 @@ import { useMenuChange } from '../hooks/useMenuChange.js';
 import { useBEM } from '../hooks/useBEM.js';
 import { SettingsContext, ItemSettingsContext, MenuListItemContext, HoverActionTypes, menuClass, subMenuClass, menuItemClass, Keys, FocusPositions } from '../utils/constants.js';
 import { useCombinedRef } from '../hooks/useCombinedRef.js';
-import { menuPropTypes, uncontrolledMenuPropTypes, stylePropTypes, menuDefaultProps } from '../utils/propTypes.js';
+import { menuPropTypes, uncontrolledMenuPropTypes, stylePropTypes } from '../utils/propTypes.js';
 import { isMenuOpen, attachHandlerProps, commonProps, safeCall, batchedUpdates } from '../utils/utils.js';
 
-var _excluded = ["aria-label", "className", "disabled", "label", "openTrigger", "onMenuChange", "isHovering", "instanceRef", "itemRef", "captureFocus", "repositionFlag", "itemProps"],
+var _excluded = ["aria-label", "className", "disabled", "direction", "label", "openTrigger", "onMenuChange", "isHovering", "instanceRef", "itemRef", "captureFocus", "repositionFlag", "itemProps"],
     _excluded2 = ["ref", "className"];
 var SubMenu = /*#__PURE__*/withHovering('SubMenu', function SubMenu(_ref) {
   var ariaLabel = _ref['aria-label'],
       className = _ref.className,
       disabled = _ref.disabled,
+      _ref$direction = _ref.direction,
+      direction = _ref$direction === void 0 ? 'right' : _ref$direction,
       label = _ref.label,
       openTrigger = _ref.openTrigger,
       onMenuChange = _ref.onMenuChange,
@@ -29,34 +31,25 @@ var SubMenu = /*#__PURE__*/withHovering('SubMenu', function SubMenu(_ref) {
       itemProps = _ref$itemProps === void 0 ? {} : _ref$itemProps,
       restProps = _objectWithoutPropertiesLoose(_ref, _excluded);
 
-  var _useContext = useContext(SettingsContext),
-      initialMounted = _useContext.initialMounted,
-      unmountOnClose = _useContext.unmountOnClose,
-      transition = _useContext.transition,
-      transitionTimeout = _useContext.transitionTimeout,
-      rootMenuRef = _useContext.rootMenuRef;
+  var settings = useContext(SettingsContext);
+  var rootMenuRef = settings.rootMenuRef;
 
-  var _useContext2 = useContext(ItemSettingsContext),
-      submenuOpenDelay = _useContext2.submenuOpenDelay,
-      submenuCloseDelay = _useContext2.submenuCloseDelay;
+  var _useContext = useContext(ItemSettingsContext),
+      submenuOpenDelay = _useContext.submenuOpenDelay,
+      submenuCloseDelay = _useContext.submenuCloseDelay;
 
-  var _useContext3 = useContext(MenuListItemContext),
-      parentMenuRef = _useContext3.parentMenuRef,
-      parentOverflow = _useContext3.parentOverflow,
-      isParentOpen = _useContext3.isParentOpen,
-      isSubmenuOpen = _useContext3.isSubmenuOpen,
-      setOpenSubmenuCount = _useContext3.setOpenSubmenuCount,
-      dispatch = _useContext3.dispatch,
-      updateItems = _useContext3.updateItems;
+  var _useContext2 = useContext(MenuListItemContext),
+      parentMenuRef = _useContext2.parentMenuRef,
+      parentOverflow = _useContext2.parentOverflow,
+      isParentOpen = _useContext2.isParentOpen,
+      isSubmenuOpen = _useContext2.isSubmenuOpen,
+      setOpenSubmenuCount = _useContext2.setOpenSubmenuCount,
+      dispatch = _useContext2.dispatch,
+      updateItems = _useContext2.updateItems;
 
   var isPortal = parentOverflow !== 'visible';
 
-  var _useMenuStateAndFocus = useMenuStateAndFocus({
-    initialMounted: initialMounted,
-    unmountOnClose: unmountOnClose,
-    transition: transition,
-    transitionTimeout: transitionTimeout
-  }),
+  var _useMenuStateAndFocus = useMenuStateAndFocus(settings),
       stateProps = _useMenuStateAndFocus[0],
       toggleMenu = _useMenuStateAndFocus[1],
       _openMenu = _useMenuStateAndFocus[2];
@@ -207,6 +200,7 @@ var SubMenu = /*#__PURE__*/withHovering('SubMenu', function SubMenu(_ref) {
       ariaLabel: ariaLabel || (typeof label === 'string' ? label : 'Submenu'),
       anchorRef: itemRef,
       containerRef: isPortal ? rootMenuRef : containerRef,
+      direction: direction,
       parentScrollingRef: isPortal && parentMenuRef,
       isDisabled: isDisabled
     }));
@@ -244,8 +238,5 @@ process.env.NODE_ENV !== "production" ? SubMenu.propTypes = /*#__PURE__*/_extend
   label: /*#__PURE__*/oneOfType([node, func]),
   itemProps: /*#__PURE__*/shape( /*#__PURE__*/_extends({}, /*#__PURE__*/stylePropTypes()))
 }) : void 0;
-SubMenu.defaultProps = /*#__PURE__*/_extends({}, menuDefaultProps, {
-  direction: 'right'
-});
 
 export { SubMenu };

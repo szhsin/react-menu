@@ -1,10 +1,10 @@
-import React, { useState, useRef } from 'react';
+import { createElement, memo, useState, useRef } from 'react';
 import Link from 'next/link';
 import { bem, useLayoutEffect } from '../utils';
 
 const blockName = 'hash-heading';
 
-export const HashHeading = React.memo(function HashHeading({ id, title, heading }) {
+export const HashHeading = memo(function HashHeading({ id, title, heading = 'h1' }) {
   const ref = useRef(null);
   const [hover, setHover] = useState(false);
   const [fontSize, setFontSize] = useState();
@@ -19,7 +19,7 @@ export const HashHeading = React.memo(function HashHeading({ id, title, heading 
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
     >
-      {React.createElement(
+      {createElement(
         heading,
         {
           id,
@@ -37,7 +37,3 @@ export const HashHeading = React.memo(function HashHeading({ id, title, heading 
     </div>
   );
 });
-
-HashHeading.defaultProps = {
-  heading: 'h1'
-};
