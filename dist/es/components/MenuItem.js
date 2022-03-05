@@ -1,6 +1,7 @@
 import { objectWithoutPropertiesLoose as _objectWithoutPropertiesLoose, extends as _extends } from '../_virtual/_rollupPluginBabelHelpers.js';
-import React, { useContext, useMemo } from 'react';
+import { useContext, useMemo } from 'react';
 import { any, string, oneOf, bool, oneOfType, node, func } from 'prop-types';
+import { jsx } from 'react/jsx-runtime';
 import { withHovering } from '../utils/withHovering.js';
 import { useItemState } from '../hooks/useItemState.js';
 import { EventHandlersContext, RadioGroupContext, menuClass, menuItemClass, Keys } from '../utils/constants.js';
@@ -91,28 +92,28 @@ var MenuItem = /*#__PURE__*/withHovering('MenuItem', function MenuItem(_ref) {
   var menuItemProps = _extends({
     role: isRadio ? 'menuitemradio' : isCheckBox ? 'menuitemcheckbox' : 'menuitem',
     'aria-checked': isRadio || isCheckBox ? isChecked : undefined
-  }, commonProps(isDisabled, isHovering), restProps, handlers, {
+  }, restProps, handlers, commonProps(isDisabled, isHovering), {
     ref: useCombinedRef(externalRef, itemRef),
     className: useBEM({
       block: menuClass,
       element: menuItemClass,
       modifiers: modifiers,
       className: className
-    })
+    }),
+    children: useMemo(function () {
+      return safeCall(children, modifiers);
+    }, [children, modifiers])
   });
 
-  var renderChildren = useMemo(function () {
-    return safeCall(children, modifiers);
-  }, [children, modifiers]);
-
   if (isAnchor) {
-    return /*#__PURE__*/React.createElement("li", {
-      role: "presentation"
-    }, /*#__PURE__*/React.createElement("a", _extends({}, menuItemProps, {
-      href: href
-    }), renderChildren));
+    return /*#__PURE__*/jsx("li", {
+      role: "presentation",
+      children: /*#__PURE__*/jsx("a", _extends({
+        href: href
+      }, menuItemProps))
+    });
   } else {
-    return /*#__PURE__*/React.createElement("li", menuItemProps, renderChildren);
+    return /*#__PURE__*/jsx("li", _extends({}, menuItemProps));
   }
 });
 process.env.NODE_ENV !== "production" ? MenuItem.propTypes = /*#__PURE__*/_extends({}, /*#__PURE__*/stylePropTypes(), {

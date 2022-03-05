@@ -1,4 +1,4 @@
-import React, { forwardRef, useRef, useMemo } from 'react';
+import { forwardRef, useRef, useMemo } from 'react';
 import { createPortal } from 'react-dom';
 import { string, number, bool, func, object, oneOf, oneOfType, exact } from 'prop-types';
 import { MenuList } from './MenuList';

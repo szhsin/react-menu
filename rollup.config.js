@@ -2,7 +2,7 @@ import { nodeResolve } from '@rollup/plugin-node-resolve';
 import { babel } from '@rollup/plugin-babel';
 
 const sharedConfig = {
-  external: ['react', 'react-dom', 'prop-types', 'react-transition-state'],
+  external: ['react', 'react-dom', 'react/jsx-runtime', 'prop-types', 'react-transition-state'],
   plugins: [nodeResolve(), babel({ babelHelpers: 'bundled' })],
   treeshake: {
     moduleSideEffects: false,

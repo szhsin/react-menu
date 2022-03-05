@@ -1,4 +1,4 @@
-import React, { forwardRef, useContext, useRef, useState } from 'react';
+import { forwardRef, useContext, useRef, useState } from 'react';
 import { bool } from 'prop-types';
 import { useBEM, useLayoutEffect, useCombinedRef } from '../hooks';
 import { menuClass, menuGroupClass, stylePropTypes, MenuListContext } from '../utils';

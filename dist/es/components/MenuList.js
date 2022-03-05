@@ -1,6 +1,7 @@
 import { objectWithoutPropertiesLoose as _objectWithoutPropertiesLoose, extends as _extends } from '../_virtual/_rollupPluginBabelHelpers.js';
-import React, { useState, useReducer, useContext, useRef, useCallback, useEffect, useMemo } from 'react';
+import { useState, useReducer, useContext, useRef, useCallback, useEffect, useMemo } from 'react';
 import { flushSync } from 'react-dom';
+import { jsxs, jsx } from 'react/jsx-runtime';
 import { SettingsContext, MenuListContext, HoverActionTypes, MenuListItemContext, HoverItemContext, Keys, menuClass, CloseReason, FocusPositions, menuArrowClass } from '../utils/constants.js';
 import { useItems } from '../hooks/useItems.js';
 import { getScrollAncestor, floatEqual, attachHandlerProps, commonProps, isMenuOpen, getTransition, safeCall, batchedUpdates } from '../utils/utils.js';
@@ -438,10 +439,10 @@ var MenuList = function MenuList(_ref) {
     onKeyDown: handleKeyDown,
     onAnimationEnd: handleAnimationEnd
   }, restProps);
-  return /*#__PURE__*/React.createElement("ul", _extends({
+  return /*#__PURE__*/jsxs("ul", _extends({
     role: "menu",
     "aria-label": ariaLabel
-  }, commonProps(isDisabled), restProps, handlers, {
+  }, restProps, handlers, commonProps(isDisabled), {
     ref: useCombinedRef(externalRef, menuRef),
     className: useBEM({
       block: menuClass,
@@ -451,21 +452,25 @@ var MenuList = function MenuList(_ref) {
     style: _extends({}, menuStyle, overflowStyle, {
       left: menuPosition.x,
       top: menuPosition.y
-    })
-  }), arrow && /*#__PURE__*/React.createElement("div", {
-    className: _arrowClass,
-    style: _extends({}, arrowStyle, {
-      left: arrowPosition.x,
-      top: arrowPosition.y
     }),
-    ref: arrowRef
-  }), /*#__PURE__*/React.createElement(MenuListContext.Provider, {
-    value: listContext
-  }, /*#__PURE__*/React.createElement(MenuListItemContext.Provider, {
-    value: itemContext
-  }, /*#__PURE__*/React.createElement(HoverItemContext.Provider, {
-    value: hoverItem
-  }, children))));
+    children: [arrow && /*#__PURE__*/jsx("div", {
+      className: _arrowClass,
+      style: _extends({}, arrowStyle, {
+        left: arrowPosition.x,
+        top: arrowPosition.y
+      }),
+      ref: arrowRef
+    }), /*#__PURE__*/jsx(MenuListContext.Provider, {
+      value: listContext,
+      children: /*#__PURE__*/jsx(MenuListItemContext.Provider, {
+        value: itemContext,
+        children: /*#__PURE__*/jsx(HoverItemContext.Provider, {
+          value: hoverItem,
+          children: children
+        })
+      })
+    })]
+  }));
 };
 
 export { MenuList };

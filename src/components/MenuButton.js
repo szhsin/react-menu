@@ -1,4 +1,4 @@
-import React, { forwardRef, useMemo } from 'react';
+import { forwardRef, useMemo } from 'react';
 import { bool } from 'prop-types';
 import { useBEM } from '../hooks';
 import { defineName, menuButtonClass, stylePropTypes } from '../utils';

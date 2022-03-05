@@ -1,12 +1,13 @@
 import { objectWithoutPropertiesLoose as _objectWithoutPropertiesLoose, extends as _extends } from '../_virtual/_rollupPluginBabelHelpers.js';
-import React, { forwardRef, useRef, useCallback, useImperativeHandle, Fragment, cloneElement } from 'react';
+import { forwardRef, useRef, useCallback, useImperativeHandle, Fragment, cloneElement } from 'react';
 import { oneOfType, element, func } from 'prop-types';
 import { ControlledMenu } from './ControlledMenu.js';
+import { jsxs, jsx } from 'react/jsx-runtime';
 import { useMenuStateAndFocus } from '../hooks/useMenuStateAndFocus.js';
 import { useCombinedRef } from '../hooks/useCombinedRef.js';
 import { isMenuOpen, safeCall, attachHandlerProps, getName } from '../utils/utils.js';
 import { useMenuChange } from '../hooks/useMenuChange.js';
-import { rootMenuPropTypes, uncontrolledMenuPropTypes } from '../utils/propTypes.js';
+import { uncontrolledMenuPropTypes, rootMenuPropTypes } from '../utils/propTypes.js';
 import { FocusPositions, Keys } from '../utils/constants.js';
 
 var _excluded = ["aria-label", "captureFocus", "menuButton", "instanceRef", "onMenuChange"];
@@ -79,16 +80,15 @@ var Menu = /*#__PURE__*/forwardRef(function Menu(_ref, externalRef) {
       }
     };
   });
-
-  var menuProps = _extends({}, restProps, stateProps, {
-    'aria-label': ariaLabel || (typeof button.props.children === 'string' ? button.props.children : 'Menu'),
-    anchorRef: buttonRef,
-    ref: externalRef,
-    onClose: handleClose,
-    skipOpen: skipOpen
+  return /*#__PURE__*/jsxs(Fragment, {
+    children: [renderButton, /*#__PURE__*/jsx(ControlledMenu, _extends({}, restProps, stateProps, {
+      "aria-label": ariaLabel || (typeof button.props.children === 'string' ? button.props.children : 'Menu'),
+      anchorRef: buttonRef,
+      ref: externalRef,
+      onClose: handleClose,
+      skipOpen: skipOpen
+    }))]
   });
-
-  return /*#__PURE__*/React.createElement(Fragment, null, renderButton, /*#__PURE__*/React.createElement(ControlledMenu, menuProps));
 });
 process.env.NODE_ENV !== "production" ? Menu.propTypes = /*#__PURE__*/_extends({}, rootMenuPropTypes, uncontrolledMenuPropTypes, {
   menuButton: oneOfType([element, func]).isRequired

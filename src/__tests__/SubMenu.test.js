@@ -1,5 +1,5 @@
 /* eslint-disable react/no-children-prop */
-import React, { useState, useEffect } from 'react';
+import { createRef, useState, useEffect } from 'react';
 import { Menu, MenuItem, FocusableItem, MenuButton, SubMenu } from './entry';
 import { fireEvent, waitFor, screen, act } from '@testing-library/react';
 import * as utils from './utils';
@@ -358,8 +358,8 @@ test('className props are added to related elements in menu and submenu', () => 
 });
 
 test('Open and close menu with instanceRef', async () => {
-  const menuRef = React.createRef();
-  const submenuRef = React.createRef();
+  const menuRef = createRef();
+  const submenuRef = createRef();
   const { container } = renderMenu({ instanceRef: menuRef }, null, { instanceRef: submenuRef });
   const menuOptions = { name: 'Menu', container };
   const submenuOptions = { name: 'Submenu', container };

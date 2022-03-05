@@ -1,4 +1,4 @@
-import React, { useRef, useContext, useEffect, useMemo, useImperativeHandle } from 'react';
+import { useRef, useContext, useEffect, useMemo, useImperativeHandle } from 'react';
 import { createPortal } from 'react-dom';
 import { node, func, bool, shape, oneOf, oneOfType } from 'prop-types';
 import {
@@ -230,9 +230,9 @@ export const SubMenu = withHovering(
           role="menuitem"
           aria-haspopup
           aria-expanded={isOpen}
-          {...commonProps(isDisabled, isHovering)}
           {...restItemProps}
           {...itemHandlers}
+          {...commonProps(isDisabled, isHovering)}
           ref={useCombinedRef(externalItemRef, itemRef)}
           className={useBEM({
             block: menuClass,

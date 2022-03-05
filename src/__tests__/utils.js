@@ -1,5 +1,5 @@
 /* eslint-disable react/no-children-prop */
-import React, { StrictMode } from 'react';
+import { StrictMode } from 'react';
 import { Menu, MenuItem, MenuButton } from './entry';
 import { screen, render as libRender, fireEvent, waitFor } from '@testing-library/react';
 

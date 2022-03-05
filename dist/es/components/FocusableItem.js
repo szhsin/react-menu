@@ -1,6 +1,7 @@
 import { objectWithoutPropertiesLoose as _objectWithoutPropertiesLoose, extends as _extends } from '../_virtual/_rollupPluginBabelHelpers.js';
-import React, { useRef, useContext, useMemo } from 'react';
+import { useRef, useContext, useMemo } from 'react';
 import { bool, func } from 'prop-types';
+import { jsx } from 'react/jsx-runtime';
 import { withHovering } from '../utils/withHovering.js';
 import { useItemState } from '../hooks/useItemState.js';
 import { useCombinedRef } from '../hooks/useCombinedRef.js';
@@ -52,17 +53,18 @@ var FocusableItem = /*#__PURE__*/withHovering('FocusableItem', function Focusabl
     onFocus: setHover,
     onBlur: onBlur
   }, restProps);
-  return /*#__PURE__*/React.createElement("li", _extends({
+  return /*#__PURE__*/jsx("li", _extends({
     role: "menuitem"
-  }, commonProps(isDisabled), restProps, handlers, {
+  }, restProps, handlers, commonProps(isDisabled), {
     ref: useCombinedRef(externalRef, itemRef),
     className: useBEM({
       block: menuClass,
       element: menuItemClass,
       modifiers: modifiers,
       className: className
-    })
-  }), renderChildren);
+    }),
+    children: renderChildren
+  }));
 });
 process.env.NODE_ENV !== "production" ? FocusableItem.propTypes = /*#__PURE__*/_extends({}, /*#__PURE__*/stylePropTypes(), {
   disabled: bool,

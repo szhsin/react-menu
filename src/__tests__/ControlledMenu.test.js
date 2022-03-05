@@ -1,4 +1,4 @@
-import React from 'react';
+import { createRef } from 'react';
 import { ControlledMenu, MenuItem } from './entry';
 import { screen, fireEvent, waitFor } from '@testing-library/react';
 import * as utils from './utils';
@@ -33,7 +33,7 @@ test('ControlledMenu with an anchor element; ref is forwarded', async () => {
     }
   };
 
-  const ref = React.createRef();
+  const ref = createRef();
   const props = {
     ref,
     anchorRef: mockRef,

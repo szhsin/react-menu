@@ -1,4 +1,4 @@
-import React, { forwardRef, useMemo } from 'react';
+import { forwardRef, useMemo } from 'react';
 import { any, string, func } from 'prop-types';
 import { useBEM } from '../hooks';
 import { stylePropTypes, menuClass, radioGroupClass, RadioGroupContext } from '../utils';

@@ -1,6 +1,7 @@
 import { objectWithoutPropertiesLoose as _objectWithoutPropertiesLoose, extends as _extends } from '../_virtual/_rollupPluginBabelHelpers.js';
-import React, { forwardRef, useRef, useState, useContext } from 'react';
+import { forwardRef, useRef, useState, useContext } from 'react';
 import { bool } from 'prop-types';
+import { jsx } from 'react/jsx-runtime';
 import { useLayoutEffect as useIsomorphicLayoutEffect } from '../hooks/useIsomorphicLayoutEffect.js';
 import { useCombinedRef } from '../hooks/useCombinedRef.js';
 import { useBEM } from '../hooks/useBEM.js';
@@ -40,7 +41,7 @@ var MenuGroup = /*#__PURE__*/forwardRef(function MenuGroup(_ref, externalRef) {
   useIsomorphicLayoutEffect(function () {
     if (overflowStyle) ref.current.scrollTop = 0;
   }, [overflowStyle]);
-  return /*#__PURE__*/React.createElement("div", _extends({}, restProps, {
+  return /*#__PURE__*/jsx("div", _extends({}, restProps, {
     ref: useCombinedRef(externalRef, ref),
     className: useBEM({
       block: menuClass,
