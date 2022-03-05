@@ -1,4 +1,4 @@
-import React, { memo, forwardRef } from 'react';
+import { memo, forwardRef } from 'react';
 import { useBEM } from '../hooks';
 import { menuClass, menuHeaderClass, stylePropTypes } from '../utils';
 

@@ -17,6 +17,6 @@ module.exports = {
   plugins: ['pure-annotations', ['transform-react-remove-prop-types', { mode: 'unsafe-wrap' }]],
   presets: [
     ['@babel/preset-env', { bugfixes: true, exclude: ['@babel/plugin-transform-typeof-symbol'] }],
-    '@babel/preset-react'
+    ['@babel/preset-react', { runtime: 'automatic' }]
   ]
 };

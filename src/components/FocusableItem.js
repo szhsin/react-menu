@@ -1,4 +1,4 @@
-import React, { useContext, useMemo, useRef } from 'react';
+import { useContext, useMemo, useRef } from 'react';
 import { bool, func } from 'prop-types';
 import { useBEM, useCombinedRef, useItemState } from '../hooks';
 import {
@@ -66,9 +66,9 @@ export const FocusableItem = withHovering(
     return (
       <li
         role="menuitem"
-        {...commonProps(isDisabled)}
         {...restProps}
         {...handlers}
+        {...commonProps(isDisabled)}
         ref={useCombinedRef(externalRef, itemRef)}
         className={useBEM({ block: menuClass, element: menuItemClass, modifiers, className })}
       >

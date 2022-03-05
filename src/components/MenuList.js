@@ -1,12 +1,4 @@
-import React, {
-  useState,
-  useReducer,
-  useEffect,
-  useRef,
-  useMemo,
-  useCallback,
-  useContext
-} from 'react';
+import { useState, useReducer, useEffect, useRef, useMemo, useCallback, useContext } from 'react';
 import { flushSync } from 'react-dom';
 import { useBEM, useCombinedRef, useLayoutEffect, useItems } from '../hooks';
 import { getPositionHelpers, positionMenu, positionContextMenu } from '../positionUtils';
@@ -432,9 +424,9 @@ export const MenuList = ({
     <ul
       role="menu"
       aria-label={ariaLabel}
-      {...commonProps(isDisabled)}
       {...restProps}
       {...handlers}
+      {...commonProps(isDisabled)}
       ref={useCombinedRef(externalRef, menuRef)}
       className={useBEM({ block: menuClass, modifiers, className: menuClassName })}
       style={{

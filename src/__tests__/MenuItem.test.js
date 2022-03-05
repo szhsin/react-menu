@@ -1,4 +1,4 @@
-import React from 'react';
+import { createRef } from 'react';
 import {
   Menu,
   MenuItem,
@@ -228,7 +228,7 @@ test('Additional props are forwarded to MenuItem', () => {
 
 test('FocusableItem', () => {
   const renderFn = jest.fn();
-  const itemRef = React.createRef();
+  const itemRef = createRef();
   render(
     <Menu menuButton={<MenuButton>Menu</MenuButton>}>
       <MenuItem>First</MenuItem>

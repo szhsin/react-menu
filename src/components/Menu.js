@@ -1,4 +1,4 @@
-import React, {
+import {
   cloneElement,
   Fragment,
   forwardRef,
@@ -86,21 +86,20 @@ export const Menu = forwardRef(function Menu(
     closeMenu: () => toggleMenu(false)
   }));
 
-  const menuProps = {
-    ...restProps,
-    ...stateProps,
-    'aria-label':
-      ariaLabel || (typeof button.props.children === 'string' ? button.props.children : 'Menu'),
-    anchorRef: buttonRef,
-    ref: externalRef,
-    onClose: handleClose,
-    skipOpen
-  };
-
   return (
     <Fragment>
       {renderButton}
-      <ControlledMenu {...menuProps} />
+      <ControlledMenu
+        {...restProps}
+        {...stateProps}
+        aria-label={
+          ariaLabel || (typeof button.props.children === 'string' ? button.props.children : 'Menu')
+        }
+        anchorRef={buttonRef}
+        ref={externalRef}
+        onClose={handleClose}
+        skipOpen={skipOpen}
+      />
     </Fragment>
   );
 });

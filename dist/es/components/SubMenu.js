@@ -1,8 +1,9 @@
 import { objectWithoutPropertiesLoose as _objectWithoutPropertiesLoose, extends as _extends } from '../_virtual/_rollupPluginBabelHelpers.js';
-import React, { useContext, useRef, useEffect, useImperativeHandle, useMemo } from 'react';
+import { useContext, useRef, useEffect, useImperativeHandle, useMemo } from 'react';
 import { createPortal } from 'react-dom';
 import { bool, oneOf, oneOfType, node, func, shape } from 'prop-types';
 import { MenuList } from './MenuList.js';
+import { jsxs, jsx } from 'react/jsx-runtime';
 import { withHovering } from '../utils/withHovering.js';
 import { useMenuStateAndFocus } from '../hooks/useMenuStateAndFocus.js';
 import { useItemEffect } from '../hooks/useItemEffect.js';
@@ -11,7 +12,7 @@ import { useBEM } from '../hooks/useBEM.js';
 import { SettingsContext, ItemSettingsContext, MenuListItemContext, HoverActionTypes, menuClass, subMenuClass, menuItemClass, Keys, FocusPositions } from '../utils/constants.js';
 import { useCombinedRef } from '../hooks/useCombinedRef.js';
 import { menuPropTypes, uncontrolledMenuPropTypes, stylePropTypes } from '../utils/propTypes.js';
-import { isMenuOpen, attachHandlerProps, commonProps, safeCall, batchedUpdates } from '../utils/utils.js';
+import { isMenuOpen, attachHandlerProps, safeCall, commonProps, batchedUpdates } from '../utils/utils.js';
 
 var _excluded = ["aria-label", "className", "disabled", "direction", "label", "openTrigger", "onMenuChange", "isHovering", "instanceRef", "itemRef", "captureFocus", "repositionFlag", "itemProps"],
     _excluded2 = ["ref", "className"];
@@ -196,7 +197,7 @@ var SubMenu = /*#__PURE__*/withHovering('SubMenu', function SubMenu(_ref) {
   }, restItemProps);
 
   var getMenuList = function getMenuList() {
-    var menuList = /*#__PURE__*/React.createElement(MenuList, _extends({}, restProps, stateProps, {
+    var menuList = /*#__PURE__*/jsx(MenuList, _extends({}, restProps, stateProps, {
       ariaLabel: ariaLabel || (typeof label === 'string' ? label : 'Submenu'),
       anchorRef: itemRef,
       containerRef: isPortal ? rootMenuRef : containerRef,
@@ -204,10 +205,11 @@ var SubMenu = /*#__PURE__*/withHovering('SubMenu', function SubMenu(_ref) {
       parentScrollingRef: isPortal && parentMenuRef,
       isDisabled: isDisabled
     }));
+
     return isPortal ? /*#__PURE__*/createPortal(menuList, rootMenuRef.current) : menuList;
   };
 
-  return /*#__PURE__*/React.createElement("li", {
+  return /*#__PURE__*/jsxs("li", {
     className: useBEM({
       block: menuClass,
       element: subMenuClass,
@@ -215,22 +217,24 @@ var SubMenu = /*#__PURE__*/withHovering('SubMenu', function SubMenu(_ref) {
     }),
     role: "presentation",
     ref: containerRef,
-    onKeyDown: handleKeyDown
-  }, /*#__PURE__*/React.createElement("div", _extends({
-    role: "menuitem",
-    "aria-haspopup": true,
-    "aria-expanded": isOpen
-  }, commonProps(isDisabled, isHovering), restItemProps, itemHandlers, {
-    ref: useCombinedRef(externalItemRef, itemRef),
-    className: useBEM({
-      block: menuClass,
-      element: menuItemClass,
-      modifiers: modifiers,
-      className: itemClassName
-    })
-  }), useMemo(function () {
-    return safeCall(label, modifiers);
-  }, [label, modifiers])), state && getMenuList());
+    onKeyDown: handleKeyDown,
+    children: [/*#__PURE__*/jsx("div", _extends({
+      role: "menuitem",
+      "aria-haspopup": true,
+      "aria-expanded": isOpen
+    }, restItemProps, itemHandlers, commonProps(isDisabled, isHovering), {
+      ref: useCombinedRef(externalItemRef, itemRef),
+      className: useBEM({
+        block: menuClass,
+        element: menuItemClass,
+        modifiers: modifiers,
+        className: itemClassName
+      }),
+      children: useMemo(function () {
+        return safeCall(label, modifiers);
+      }, [label, modifiers])
+    })), state && getMenuList()]
+  });
 });
 process.env.NODE_ENV !== "production" ? SubMenu.propTypes = /*#__PURE__*/_extends({}, menuPropTypes, uncontrolledMenuPropTypes, {
   disabled: bool,

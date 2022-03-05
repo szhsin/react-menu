@@ -1,5 +1,6 @@
 import { objectWithoutPropertiesLoose as _objectWithoutPropertiesLoose, extends as _extends } from '../_virtual/_rollupPluginBabelHelpers.js';
-import React, { memo, forwardRef } from 'react';
+import { memo, forwardRef } from 'react';
+import { jsx } from 'react/jsx-runtime';
 import { useBEM } from '../hooks/useBEM.js';
 import { menuClass, menuDividerClass } from '../utils/constants.js';
 import { stylePropTypes } from '../utils/propTypes.js';
@@ -9,7 +10,7 @@ var MenuDivider = /*#__PURE__*/memo( /*#__PURE__*/forwardRef(function MenuDivide
   var className = _ref.className,
       restProps = _objectWithoutPropertiesLoose(_ref, _excluded);
 
-  return /*#__PURE__*/React.createElement("li", _extends({
+  return /*#__PURE__*/jsx("li", _extends({
     role: "separator"
   }, restProps, {
     ref: externalRef,

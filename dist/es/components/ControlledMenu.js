@@ -1,8 +1,9 @@
 import { objectWithoutPropertiesLoose as _objectWithoutPropertiesLoose, extends as _extends } from '../_virtual/_rollupPluginBabelHelpers.js';
-import React, { forwardRef, useRef, useMemo } from 'react';
+import { forwardRef, useRef, useMemo } from 'react';
 import { createPortal } from 'react-dom';
 import { oneOf, exact, number, object, bool, oneOfType, string, func } from 'prop-types';
 import { MenuList } from './MenuList.js';
+import { jsx } from 'react/jsx-runtime';
 import { useBEM } from '../hooks/useBEM.js';
 import { CloseReason, menuContainerClass, SettingsContext, ItemSettingsContext, EventHandlersContext, MenuStateMap, Keys } from '../utils/constants.js';
 import { rootMenuPropTypes } from '../utils/propTypes.js';
@@ -127,25 +128,30 @@ var ControlledMenu = /*#__PURE__*/forwardRef(function ControlledMenu(_ref, exter
     onKeyDown: handleKeyDown,
     onBlur: handleBlur
   }, containerProps);
-  var menuList = /*#__PURE__*/React.createElement("div", _extends({}, containerProps, handlers, {
+
+  var menuList = /*#__PURE__*/jsx("div", _extends({}, containerProps, handlers, {
     className: useBEM({
       block: menuContainerClass,
       modifiers: modifiers,
       className: className
     }),
-    ref: containerRef
-  }), state && /*#__PURE__*/React.createElement(SettingsContext.Provider, {
-    value: settings
-  }, /*#__PURE__*/React.createElement(ItemSettingsContext.Provider, {
-    value: itemSettings
-  }, /*#__PURE__*/React.createElement(EventHandlersContext.Provider, {
-    value: eventHandlers
-  }, /*#__PURE__*/React.createElement(MenuList, _extends({}, restProps, {
-    ariaLabel: ariaLabel || 'Menu',
-    externalRef: externalRef,
-    containerRef: containerRef,
-    onClose: onClose
-  }))))));
+    ref: containerRef,
+    children: state && /*#__PURE__*/jsx(SettingsContext.Provider, {
+      value: settings,
+      children: /*#__PURE__*/jsx(ItemSettingsContext.Provider, {
+        value: itemSettings,
+        children: /*#__PURE__*/jsx(EventHandlersContext.Provider, {
+          value: eventHandlers,
+          children: /*#__PURE__*/jsx(MenuList, _extends({}, restProps, {
+            ariaLabel: ariaLabel || 'Menu',
+            externalRef: externalRef,
+            containerRef: containerRef,
+            onClose: onClose
+          }))
+        })
+      })
+    })
+  }));
 
   if (portal) {
     return /*#__PURE__*/createPortal(menuList, document.body);

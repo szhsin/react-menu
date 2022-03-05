@@ -1,4 +1,4 @@
-import React, { useContext, useMemo } from 'react';
+import { useContext, useMemo } from 'react';
 import { any, string, bool, func, node, oneOf, oneOfType } from 'prop-types';
 import { useBEM, useItemState, useCombinedRef } from '../hooks';
 import {
@@ -100,25 +100,22 @@ export const MenuItem = withHovering(
     const menuItemProps = {
       role: isRadio ? 'menuitemradio' : isCheckBox ? 'menuitemcheckbox' : 'menuitem',
       'aria-checked': isRadio || isCheckBox ? isChecked : undefined,
-      ...commonProps(isDisabled, isHovering),
       ...restProps,
       ...handlers,
+      ...commonProps(isDisabled, isHovering),
       ref: useCombinedRef(externalRef, itemRef),
-      className: useBEM({ block: menuClass, element: menuItemClass, modifiers, className })
+      className: useBEM({ block: menuClass, element: menuItemClass, modifiers, className }),
+      children: useMemo(() => safeCall(children, modifiers), [children, modifiers])
     };
-
-    const renderChildren = useMemo(() => safeCall(children, modifiers), [children, modifiers]);
 
     if (isAnchor) {
       return (
         <li role="presentation">
-          <a {...menuItemProps} href={href}>
-            {renderChildren}
-          </a>
+          <a href={href} {...menuItemProps} />
         </li>
       );
     } else {
-      return <li {...menuItemProps}>{renderChildren}</li>;
+      return <li {...menuItemProps} />;
     }
   }
 );

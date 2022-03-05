@@ -1,6 +1,7 @@
 import { objectWithoutPropertiesLoose as _objectWithoutPropertiesLoose, extends as _extends } from '../_virtual/_rollupPluginBabelHelpers.js';
-import React, { forwardRef, useMemo } from 'react';
+import { forwardRef, useMemo } from 'react';
 import { bool } from 'prop-types';
+import { jsx } from 'react/jsx-runtime';
 import { defineName } from '../utils/utils.js';
 import { useBEM } from '../hooks/useBEM.js';
 import { menuButtonClass } from '../utils/constants.js';
@@ -19,7 +20,7 @@ var MenuButton = /*#__PURE__*/defineName('MenuButton', /*#__PURE__*/forwardRef(f
       open: isOpen
     });
   }, [isOpen]);
-  return /*#__PURE__*/React.createElement("button", _extends({
+  return /*#__PURE__*/jsx("button", _extends({
     "aria-haspopup": true,
     "aria-expanded": isOpen,
     "aria-disabled": disabled || undefined,
@@ -31,8 +32,9 @@ var MenuButton = /*#__PURE__*/defineName('MenuButton', /*#__PURE__*/forwardRef(f
       block: menuButtonClass,
       modifiers: modifiers,
       className: className
-    })
-  }), children);
+    }),
+    children: children
+  }));
 }));
 process.env.NODE_ENV !== "production" ? MenuButton.propTypes = /*#__PURE__*/_extends({}, /*#__PURE__*/stylePropTypes(), {
   isOpen: bool,
