@@ -125,7 +125,8 @@ export type MenuArrowModifiers = Readonly<{
 export interface MenuStateOptions {
   /**
    * By default menu isn't mounted into DOM until it's opened for the first time.
-   * Setting the prop to `true` will change this behaviour.
+   * Setting the prop to `true` will change this behaviour,
+   * which also enables menu and its items to be server rendered.
    */
   initialMounted?: boolean;
   /**
@@ -650,7 +651,7 @@ export function useMenuState(options?: MenuStateOptions): [
      */
     state?: MenuState;
     /**
-     * This value should be forwarded to `ControlledMenu`.
+     * Stop transition animation. This function value should be forwarded to `ControlledMenu`.
      */
     endTransition: () => void;
   },

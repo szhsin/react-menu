@@ -46,7 +46,7 @@ test('className as functions', () => {
     })
   );
 
-  // For testing className and styles memorisation
+  // For testing className memorisation
   fireEvent.mouseMove(queryByRole('menuitem', { name: 'First' }));
   fireEvent.mouseMove(queryByRole('menuitem', { name: 'Last' }));
 
