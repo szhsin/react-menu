@@ -12,7 +12,7 @@ import { Header } from './Header';
 import { Footer } from './Footer';
 
 const App = ({ children }) => {
-  const [showBanner, setShowBanner] = useState(false);
+  const [showBanner, setShowBanner] = useState(true);
   const [theme, setTheme] = useState('dark');
   const setAndSaveTheme = useCallback((theme) => {
     setTheme(theme);
