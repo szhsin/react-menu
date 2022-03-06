@@ -1,5 +1,4 @@
 /* eslint-disable react/no-unescaped-entities */
-import React from 'react';
 import Link from 'next/link';
 import { LibName } from '../components/LibName';
 import { StyleExamples } from '../components/StyleExamples';
@@ -27,8 +26,7 @@ export const basicMenu = {
     <MenuItem>Close Window</MenuItem>
 </Menu>`,
 
-  fullSource: `import React from 'react';
-import {
+  fullSource: `import {
     Menu,
     MenuItem,
     MenuButton
@@ -73,8 +71,7 @@ export const subMenu = {
     <MenuItem>Save</MenuItem>
 </Menu>`,
 
-  fullSource: `import React from 'react';
-import {
+  fullSource: `import {
     Menu,
     MenuItem,
     MenuButton,
@@ -152,9 +149,9 @@ const handleSaveClick = e => {
     </button>
 </div>
 
-<textarea readOnly ref={ref} value={text} />`,
+<textarea readOnly value={text} />`,
 
-  fullSource: `import React, { useRef, useState, useLayoutEffect } from 'react';
+  fullSource: `import { useState } from 'react';
 import {
     Menu,
     MenuItem,
@@ -163,7 +160,6 @@ import {
 import '@szhsin/react-menu/dist/index.css';
 
 export default function Example() {
-    const ref = useRef(null);
     const [text, setText] = useState('');
 
     const handleMenuClick = e => {
@@ -178,10 +174,6 @@ export default function Example() {
         setText(t => t + \`[MenuItem] \${e.value} clicked\\n\\n\`);
         e.stopPropagation = true;
     };
-
-    useLayoutEffect(() => {
-        ref.current.scrollTop = ref.current.scrollHeight;
-    }, [text]);
 
     return (
         <>
@@ -205,7 +197,7 @@ export default function Example() {
                 </button>
             </div>
 
-            <textarea readOnly ref={ref} value={text} />
+            <textarea readOnly value={text} />
         </>
     );
 }`
@@ -218,9 +210,9 @@ export const radioGroup = {
 
   desc: (
     <p>
-      You could make menu items behave like radio buttons by wrapping them in a{' '}
-      <code>MenuRadioGroup</code>. The child menu item which has the same value (strict equality
-      ===) as the radio group is marked as checked.
+      You could make menu items behave like radio buttons by setting <code>type="radio"</code> and
+      wrapping them in a <code>MenuRadioGroup</code>. The child menu item which has the same value
+      (strict equality ===) as the radio group is marked as checked.
     </p>
   ),
 
@@ -229,13 +221,13 @@ export const radioGroup = {
 <Menu menuButton={<MenuButton>Text color</MenuButton>}>
     <MenuRadioGroup value={textColor}
         onRadioChange={e => setTextColor(e.value)}>
-        <MenuItem value="red">Red</MenuItem>
-        <MenuItem value="green">Green</MenuItem>
-        <MenuItem value="blue">Blue</MenuItem>
+        <MenuItem type="radio" value="red">Red</MenuItem>
+        <MenuItem type="radio" value="green">Green</MenuItem>
+        <MenuItem type="radio" value="blue">Blue</MenuItem>
     </MenuRadioGroup>
 </Menu>`,
 
-  fullSource: `import React, { useState } from 'react';
+  fullSource: `import { useState } from 'react';
 import {
     Menu,
     MenuItem,
@@ -252,9 +244,9 @@ export default function Example() {
             <Menu menuButton={<MenuButton>Text color</MenuButton>}>
                 <MenuRadioGroup value={textColor}
                     onRadioChange={e => setTextColor(e.value)}>
-                    <MenuItem value="red">Red</MenuItem>
-                    <MenuItem value="green">Green</MenuItem>
-                    <MenuItem value="blue">Blue</MenuItem>
+                    <MenuItem type="radio" value="red">Red</MenuItem>
+                    <MenuItem type="radio" value="green">Green</MenuItem>
+                    <MenuItem type="radio" value="blue">Blue</MenuItem>
                 </MenuRadioGroup>
             </Menu>
 
@@ -297,7 +289,7 @@ const [isUnderline, setUnderline] = useState(false);
     </MenuItem>
 </Menu>`,
 
-  fullSource: `import React, { useState } from 'react';
+  fullSource: `import { useState } from 'react';
 import {
     Menu,
     MenuItem,
@@ -362,8 +354,7 @@ export const headerAndDivider = {
     <MenuItem>Print</MenuItem>
 </Menu>`,
 
-  fullSource: `import React from 'react';
-import {
+  fullSource: `import {
     Menu,
     MenuItem,
     MenuButton,
@@ -398,7 +389,7 @@ export const combined = {
 
   desc: <p>An example combines the usage of several components.</p>,
 
-  fullSource: `import React, { useState } from 'react';
+  fullSource: `import { useState } from 'react';
 import {
     Menu,
     MenuItem,
@@ -429,9 +420,9 @@ export default function Example() {
                     <MenuRadioGroup
                         value={textColor}
                         onRadioChange={e => setTextColor(e.value)}>
-                        <MenuItem value={'red'}>Red</MenuItem>
-                        <MenuItem value={'green'}>Green</MenuItem>
-                        <MenuItem value={'blue'}>Blue</MenuItem>
+                        <MenuItem type="radio" value={'red'}>Red</MenuItem>
+                        <MenuItem type="radio" value={'green'}>Green</MenuItem>
+                        <MenuItem type="radio" value={'blue'}>Blue</MenuItem>
                     </MenuRadioGroup>
                 </SubMenu>
 
@@ -496,8 +487,7 @@ export const linkAndDisabled = {
     <MenuItem disabled>Disabled item</MenuItem>
 </Menu>`,
 
-  fullSource: `import React from 'react';
-import {
+  fullSource: `import {
     Menu,
     MenuItem,
     MenuButton
@@ -548,8 +538,7 @@ export const iconAndImage = {
     </MenuItem>
 </Menu>`,
 
-  fullSource: `import React from 'react';
-import {
+  fullSource: `import {
     Menu,
     MenuItem,
     MenuButton,
@@ -613,7 +602,7 @@ export const focusableItem = {
     }
 </Menu>`,
 
-  fullSource: `import React, { useState } from 'react';
+  fullSource: `import { useState } from 'react';
 import {
     Menu,
     MenuItem,
@@ -646,41 +635,35 @@ export default function Example() {
 }`
 };
 
-export const hoverAndActive = {
-  id: 'hover-active',
+export const hoverItem = {
+  id: 'hover-item',
 
-  title: 'Hover and active',
+  title: 'Hovering items',
 
   desc: (
     <>
       <p>
-        <code>MenuItem</code> manages a number of internal states such as 'hover' and 'active'. If
-        you need to display different contents under different states, you are able to use{' '}
-        <code>children</code> as a render prop and pass it a callback function.
+        <code>MenuItem</code> manages some internal states one of which indicates whether the item
+        is hovered. If you need to render dynamic contents in response to state updates, you are
+        able to use <code>children</code> as a render prop and pass it a callback function.
       </p>
       <p>For more menu item states, please refer to {menuItemLink}.</p>
     </>
   ),
 
   source: `<Menu menuButton={<MenuButton>Open menu</MenuButton>}>
-    <MenuItem>
-        {({ hover, active }) =>
-            active ? 'Pressed' : hover ? 'Press me' : 'Hover me'}
-    </MenuItem>
-    <MenuDivider />
-    <MenuItem styles={{ justifyContent: 'center' }}>
-        {({ hover, active }) =>
-            <i className="material-icons md-48">
-                {active ? 'sentiment_very_satisfied'
-                    : hover ? 'sentiment_satisfied_alt'
-                        : 'sentiment_very_dissatisfied'}
-            </i>
-        }
-    </MenuItem>
+  <MenuItem>{({ hover }) => (hover ? 'Hovered!' : 'Hover me')}</MenuItem>
+  <MenuDivider />
+  <MenuItem style={{ justifyContent: 'center' }}>
+    {({ hover }) => (
+      <i className="material-icons md-48">
+        {hover ? 'sentiment_very_satisfied' : 'sentiment_very_dissatisfied'}
+      </i>
+    )}
+  </MenuItem>
 </Menu>`,
 
-  fullSource: `import React from 'react';
-import {
+  fullSource: `import {
     Menu,
     MenuItem,
     MenuButton,
@@ -689,24 +672,19 @@ import {
 import '@szhsin/react-menu/dist/index.css';
 
 export default function Example() {
-    return (
-        <Menu menuButton={<MenuButton>Open menu</MenuButton>}>
-            <MenuItem>
-                {({ hover, active }) =>
-                    active ? 'Pressed' : hover ? 'Press me' : 'Hover me'}
-            </MenuItem>
-            <MenuDivider />
-            <MenuItem styles={{ justifyContent: 'center' }}>
-                {({ hover, active }) =>
-                    <i className="material-icons md-48">
-                        {active ? 'sentiment_very_satisfied'
-                            : hover ? 'sentiment_satisfied_alt'
-                                : 'sentiment_very_dissatisfied'}
-                    </i>
-                }
-            </MenuItem>
-        </Menu>
-    );
+  return (
+    <Menu menuButton={<MenuButton>Open menu</MenuButton>}>
+      <MenuItem>{({ hover }) => (hover ? 'Hovered!' : 'Hover me')}</MenuItem>
+      <MenuDivider />
+      <MenuItem style={{ justifyContent: 'center' }}>
+        {({ hover }) => (
+          <i className="material-icons md-48">
+            {hover ? 'sentiment_very_satisfied' : 'sentiment_very_dissatisfied'}
+          </i>
+        )}
+      </MenuItem>
+    </Menu>
+  );
 }`
 };
 
@@ -730,8 +708,7 @@ export const openStateButton = {
     <MenuItem>Close Window</MenuItem>
 </Menu>`,
 
-  fullSource: `import React from 'react';
-import {
+  fullSource: `import {
     Menu,
     MenuItem,
     MenuButton
@@ -784,8 +761,7 @@ export const customisedButton = {
     <MenuItem>Close Window</MenuItem>
 </Menu>`,
 
-  fullSource: `import React from 'react';
-import {
+  fullSource: `import {
     Menu,
     MenuItem
 } from '@szhsin/react-menu';
@@ -858,8 +834,9 @@ export const overflow = {
         property.
       </p>
       <p>
-        If you want to fix some items at the top or bottom, use a <code>MenuGroup</code> and add{' '}
-        <code>takeOverflow</code> prop to make the group scrollable.
+        If you want to fix some items at the top or bottom, set <code>setDownOverflow</code> prop on{' '}
+        <code>Menu</code> and <code>takeOverflow</code> prop on a <code>MenuGroup</code> which makes
+        the group scrollable.
       </p>
     </>
   ),
@@ -875,7 +852,8 @@ const [filter, setFilter] = useState('');
 </Menu>
 
 <Menu menuButton={<MenuButton>Grouping</MenuButton>}
-    overflow={overflow} position={position} boundingBoxPadding="10"
+    overflow={overflow} setDownOverflow
+    position={position} boundingBoxPadding="10"
     onMenuChange={e => e.open && setFilter('')}>
     <FocusableItem>
         {({ ref }) => (
@@ -910,7 +888,7 @@ export const boundingBox = {
   source: `const ref = useRef(null);
 const leftAnchor = useRef(null);
 const rightAnchor = useRef(null);
-const { state, toggleMenu } = useMenuState();
+const [{ state }, toggleMenu] = useMenuState();
 useEffect(() => {
     toggleMenu(true);
 }, [toggleMenu]);
@@ -962,21 +940,24 @@ export const managingState = {
   ),
 
   source: `const ref = useRef(null);
-const [state, setState] = useState();
+const [isOpen, setOpen] = useState();
 
-<div ref={ref} onMouseEnter={() => setState('open')}>
-    Hover to Open
+<div ref={ref} className="btn" onMouseEnter={() => setOpen(true)}>
+  Hover to Open
 </div>
 
-<ControlledMenu state={state} anchorRef={ref}
-    onMouseLeave={() => setState('closed')}
-    onClose={() => setState('closed')}>
-    <MenuItem>New File</MenuItem>
-    <MenuItem>Save</MenuItem>
-    <MenuItem>Close Window</MenuItem>
+<ControlledMenu
+  state={isOpen ? 'open' : 'closed'}
+  anchorRef={ref}
+  onMouseLeave={() => setOpen(false)}
+  onClose={() => setOpen(false)}
+>
+  <MenuItem>New File</MenuItem>
+  <MenuItem>Save</MenuItem>
+  <MenuItem>Close Window</MenuItem>
 </ControlledMenu>`,
 
-  fullSource: `import React, { useState, useRef } from 'react';
+  fullSource: `import { useState, useRef } from 'react';
 import {
     ControlledMenu,
     MenuItem
@@ -985,21 +966,24 @@ import '@szhsin/react-menu/dist/index.css';
 
 export default function Example() {
     const ref = useRef(null);
-    const [state, setState] = useState();
+    const [isOpen, setOpen] = useState();
 
     return (
         <>
-            <div ref={ref} onMouseEnter={() => setState('open')}>
-                Hover to Open
-            </div>
-            
-            <ControlledMenu state={state} anchorRef={ref}
-                onMouseLeave={() => setState('closed')}
-                onClose={() => setState('closed')}>
-                <MenuItem>New File</MenuItem>
-                <MenuItem>Save</MenuItem>
-                <MenuItem>Close Window</MenuItem>
-            </ControlledMenu>
+          <div ref={ref} className="btn" onMouseEnter={() => setOpen(true)}>
+            Hover to Open
+          </div>
+
+          <ControlledMenu
+            state={isOpen ? 'open' : 'closed'}
+            anchorRef={ref}
+            onMouseLeave={() => setOpen(false)}
+            onClose={() => setOpen(false)}
+          >
+            <MenuItem>New File</MenuItem>
+            <MenuItem>Save</MenuItem>
+            <MenuItem>Close Window</MenuItem>
+          </ControlledMenu>
         </>
     );
 }`
@@ -1022,7 +1006,7 @@ export const contextMenu = {
     </>
   ),
 
-  source: `const { toggleMenu, ...menuProps } = useMenuState();
+  source: `const [menuProps, toggleMenu] = useMenuState();
 const [anchorPoint, setAnchorPoint] = useState({ x: 0, y: 0 });
 
 <div onContextMenu={e => {
@@ -1040,7 +1024,7 @@ const [anchorPoint, setAnchorPoint] = useState({ x: 0, y: 0 });
     </ControlledMenu>
 </div >`,
 
-  fullSource: `import React, { useState } from 'react';
+  fullSource: `import { useState } from 'react';
 import {
     ControlledMenu,
     MenuItem,
@@ -1049,7 +1033,7 @@ import {
 import '@szhsin/react-menu/dist/index.css';
 
 export default function Example() {
-    const { toggleMenu, ...menuProps } = useMenuState();
+    const [menuProps, toggleMenu] = useMenuState();
     const [anchorPoint, setAnchorPoint] = useState({ x: 0, y: 0 });
 
     return (
@@ -1087,7 +1071,7 @@ export const menuStateHook = {
   ),
 
   source: `const ref = useRef(null);
-const { toggleMenu, ...menuProps } = useMenuState({ transition: true });
+const [menuProps, toggleMenu] = useMenuState({ transition: true });
 
 <div ref={ref} onMouseEnter={() => toggleMenu(true)}>
     Hover to Open
@@ -1101,7 +1085,7 @@ const { toggleMenu, ...menuProps } = useMenuState({ transition: true });
     <MenuItem>Close Window</MenuItem>
 </ControlledMenu>`,
 
-  fullSource: `import React, { useRef } from 'react';
+  fullSource: `import { useRef } from 'react';
 import {
     ControlledMenu,
     MenuItem,
@@ -1112,7 +1096,7 @@ import '@szhsin/react-menu/dist/transitions/slide.css';
 
 export default function Example() {
     const ref = useRef(null);
-    const { toggleMenu, ...menuProps } = useMenuState({ transition: true });
+    const [menuProps, toggleMenu] = useMenuState({ transition: true });
 
     return (
         <>
@@ -1132,87 +1116,6 @@ export default function Example() {
 }`
 };
 
-export const stylesProp = {
-  id: 'styles-prop',
-
-  title: 'styles prop',
-
-  desc: (
-    <>
-      <p>
-        You can apply your style by giving an object to the various <code>*styles</code> props.
-        Regular styles are put in the object directly just like React's <code>style</code> prop, and
-        styles which are only applied to specific component states are written in nested objects
-        under corresponding keys. The <code>styles</code> object will be flattened by applying the
-        properties from top to bottom, with later properties overriding earlier ones of the same
-        name.
-      </p>
-      <p>Optionally, you may pass a function to the prop and receive states about the component.</p>
-      <p>
-        For more details about the state keys, please refer to the <code>*styles</code> props under
-        each <Link href={'/docs#menu-item'}>component</Link>.
-      </p>
-    </>
-  ),
-
-  source: `// It's advisable to put styles object outside React component scope whenever possible.
-const menuStyles = {
-  border: '2px dashed green'
-};
-
-const menuItemStyles = {
-  color: 'blue',
-  backgroundColor: '#ee1',
-  hover: {
-    color: '#ee1',
-    backgroundColor: '#bf4080'
-  },
-  active: {
-    backgroundColor: '#333'
-  }
-};
-
-<Menu menuButton={<MenuButton>Open menu</MenuButton>} menuStyles={menuStyles}>
-  <MenuItem>New File</MenuItem>
-  <MenuItem>Save</MenuItem>
-  <MenuItem styles={menuItemStyles}>I'm special</MenuItem>
-</Menu>`,
-
-  fullSource: `import React from 'react';
-import {
-    Menu,
-    MenuItem,
-    MenuButton
-} from '@szhsin/react-menu';
-import '@szhsin/react-menu/dist/index.css';
-
-const menuStyles = {
-  border: '2px dashed green'
-};
-
-const menuItemStyles = {
-  color: 'blue',
-  backgroundColor: '#ee1',
-  hover: {
-    color: '#ee1',
-    backgroundColor: '#bf4080'
-  },
-  active: {
-    backgroundColor: '#333'
-  }
-};
-
-export default function Example() {
-    return (
-      <Menu menuButton={<MenuButton>Open menu</MenuButton>} menuStyles={menuStyles}>
-        <MenuItem>New File</MenuItem>
-        <MenuItem>Save</MenuItem>
-        <MenuItem styles={menuItemStyles}>I'm special</MenuItem>
-      </Menu>
-    );
-}`
-};
-
 export const classNameProp = {
   id: 'classname-prop',
 
@@ -1221,7 +1124,7 @@ export const classNameProp = {
   desc: (
     <>
       <p>
-        You can give components CSS classes using the various <code>*className</code> props.
+        You can provide components with CSS classes using the various <code>*className</code> props.
         Optionally, you may pass a function to the props and return different CSS class names under
         different component states.
       </p>
@@ -1234,8 +1137,7 @@ export const classNameProp = {
 
   source: `// If you use the functional form of className prop, 
 // it's advisable to put it outside React component scope whenever possible.
-const menuItemClassName = ({ hover, active }) =>
-    active ? 'my-menuitem-active' : hover ? 'my-menuitem-hover' : 'my-menuitem';
+const menuItemClassName = ({ hover }) => (hover ? 'my-menuitem-hover' : 'my-menuitem');
 
 <Menu menuButton={<MenuButton>Open menu</MenuButton>}
     menuClassName="my-menu">
@@ -1253,28 +1155,22 @@ const menuItemClassName = ({ hover, active }) =>
 
 .my-menuitem {
     color: blue;
-    background-color: #ee1;
+    background-color: yellow;
 }
 
 .my-menuitem-hover {
-    color: #ee1;
-    background-color: #bf4080;
-}
-
-.my-menuitem-active {
-    background-color: #333;
+    color: yellow;
+    background-color: black;
 }`,
 
-  fullSource: `import React from 'react';
-import {
+  fullSource: `import {
     Menu,
     MenuItem,
     MenuButton
 } from '@szhsin/react-menu';
 import '@szhsin/react-menu/dist/index.css';
 
-const menuItemClassName = ({ hover, active }) =>
-    active ? 'my-menuitem-active' : hover ? 'my-menuitem-hover' : 'my-menuitem';
+const menuItemClassName = ({ hover }) => (hover ? 'my-menuitem-hover' : 'my-menuitem');
 
 export default function Example() {
 
@@ -1297,16 +1193,12 @@ export default function Example() {
 
 .my-menuitem {
     color: blue;
-    background-color: #ee1;
+    background-color: yellow;
 }
 
 .my-menuitem-hover {
-    color: #ee1;
-    background-color: #bf4080;
-}
-
-.my-menuitem-active {
-    background-color: #333;
+    color: yellow;
+    background-color: black;
 }`
 };
 
@@ -1326,7 +1218,7 @@ export const menuItem = {
   id: 'menu-item',
   title: 'Menu item',
   desc: <p>Advanced usage examples with menu items.</p>,
-  list: [linkAndDisabled, iconAndImage, hoverAndActive, focusableItem]
+  list: [linkAndDisabled, iconAndImage, hoverItem, focusableItem]
 };
 
 export const menuButton = {
@@ -1372,11 +1264,11 @@ export const customisedStyle = {
         <Link href={'/style-guide#selectors'}>styling guide</Link>.
       </p>
       <p>
-        In addition, you can use <code>className</code> or <code>styles</code> props.
+        In addition, you can use <code>*className</code> props.
       </p>
     </>
   ),
-  list: [classNameProp, stylesProp]
+  list: [classNameProp]
 };
 
 export const usageExamples = {
@@ -1404,6 +1296,13 @@ export const features = {
       <li>Comprehensive keyboard interactions.</li>
       <li>
         Unstyled components and easy <Link href={'#styling'}>customisation</Link>.
+      </li>
+      <li>
+        Supports{' '}
+        <a href="https://github.com/szhsin/react-menu/releases/tag/v2.3.2">
+          React 18 concurrent rendering
+        </a>
+        .
       </li>
       <li>Works in major browsers without polyfills.</li>
       <li>

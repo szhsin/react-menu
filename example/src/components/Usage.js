@@ -56,7 +56,7 @@ const Usage = React.memo(function Usage() {
         <GroupingSection data={codeExamples.menuItem} />
         <LinkAndDisabledExample />
         <IconAndImageExample />
-        <HoverAndActiveExample />
+        <HoverItemExample />
         <FocusableItemExample />
 
         <GroupingSection data={codeExamples.menuOptions} />
@@ -75,7 +75,6 @@ const Usage = React.memo(function Usage() {
 
         <GroupingSection data={codeExamples.customisedStyle} />
         <ClassNamePropExample />
-        <StylesPropExample />
       </main>
 
       <div className="place-holder" role="presentation" />
@@ -360,22 +359,16 @@ function IconAndImageExample() {
   );
 }
 
-function HoverAndActiveExample() {
+function HoverItemExample() {
   return (
-    <Example data={codeExamples.hoverAndActive}>
+    <Example data={codeExamples.hoverItem}>
       <Menu menuButton={<MenuButton>Open menu</MenuButton>}>
-        <MenuItem>
-          {({ hover, active }) => (active ? 'Pressed' : hover ? 'Press me' : 'Hover me')}
-        </MenuItem>
+        <MenuItem>{({ hover }) => (hover ? 'Hovered!' : 'Hover me')}</MenuItem>
         <MenuDivider />
-        <MenuItem styles={{ justifyContent: 'center' }}>
-          {({ hover, active }) => (
+        <MenuItem style={{ justifyContent: 'center' }}>
+          {({ hover }) => (
             <i className="material-icons md-48">
-              {active
-                ? 'sentiment_very_satisfied'
-                : hover
-                ? 'sentiment_satisfied_alt'
-                : 'sentiment_very_dissatisfied'}
+              {hover ? 'sentiment_very_satisfied' : 'sentiment_very_dissatisfied'}
             </i>
           )}
         </MenuItem>
@@ -423,7 +416,7 @@ function OpenStateExample() {
     <Example data={codeExamples.openStateButton}>
       <Menu
         menuButton={({ open }) => (
-          <MenuButton styles={{ minWidth: '5rem' }}>{open ? 'Close' : 'Open'}</MenuButton>
+          <MenuButton style={{ minWidth: '5rem' }}>{open ? 'Close' : 'Open'}</MenuButton>
         )}
       >
         <MenuItem>New File</MenuItem>
@@ -570,7 +563,7 @@ function MenuOverflowExample() {
           })}
         </Menu>
         <Menu
-          menuButton={<MenuButton styles={{ marginTop: '2rem' }}>Grouping</MenuButton>}
+          menuButton={<MenuButton style={{ marginTop: '2rem' }}>Grouping</MenuButton>}
           setDownOverflow
           overflow={overflow}
           position={position}
@@ -578,7 +571,7 @@ function MenuOverflowExample() {
           onMenuChange={(e) => e.open && setFilter('')}
           align="end"
         >
-          <FocusableItem styles={{ padding: '0.375rem 1rem' }}>
+          <FocusableItem style={{ padding: '0.375rem 1rem' }}>
             {({ ref }) => (
               <input
                 ref={ref}
@@ -611,7 +604,7 @@ function BoundingBoxExample() {
   const ref = useRef(null);
   const leftAnchor = useRef(null);
   const rightAnchor = useRef(null);
-  const { state, toggleMenu } = useMenuState();
+  const [{ state }, toggleMenu] = useMenuState();
   useEffect(() => {
     toggleMenu(true);
   }, [toggleMenu]);
@@ -652,19 +645,19 @@ function BoundingBoxExample() {
 
 function ManagingStateExample() {
   const ref = useRef(null);
-  const [state, setState] = useState();
+  const [isOpen, setOpen] = useState();
 
   return (
     <Example data={codeExamples.managingState} style={{ flexWrap: 'wrap' }}>
-      <div ref={ref} className="btn" onMouseEnter={() => setState('open')}>
+      <div ref={ref} className="btn" onMouseEnter={() => setOpen(true)}>
         Hover to Open
       </div>
 
       <ControlledMenu
-        state={state}
+        state={isOpen ? 'open' : 'closed'}
         anchorRef={ref}
-        onMouseLeave={() => setState('closed')}
-        onClose={() => setState('closed')}
+        onMouseLeave={() => setOpen(false)}
+        onClose={() => setOpen(false)}
       >
         <MenuItem>New File</MenuItem>
         <MenuItem>Save</MenuItem>
@@ -678,7 +671,7 @@ function ManagingStateExample() {
 
 function MenuStateHookExample() {
   const ref = useRef(null);
-  const { toggleMenu, ...menuProps } = useMenuState({ transition: true });
+  const [menuProps, toggleMenu] = useMenuState({ transition: true });
 
   return (
     <Example data={codeExamples.menuStateHook}>
@@ -701,7 +694,7 @@ function MenuStateHookExample() {
 }
 
 function ContextMenuExample() {
-  const { toggleMenu, ...menuProps } = useMenuState();
+  const [menuProps, toggleMenu] = useMenuState();
   const [anchorPoint, setAnchorPoint] = useState({ x: 0, y: 0 });
 
   return (
@@ -723,36 +716,7 @@ function ContextMenuExample() {
   );
 }
 
-const menuStyles = {
-  border: '2px dashed green'
-};
-
-const menuItemStyles = {
-  color: 'blue',
-  backgroundColor: '#ee1',
-  hover: {
-    color: '#ee1',
-    backgroundColor: '#bf4080'
-  },
-  active: {
-    backgroundColor: '#333'
-  }
-};
-
-function StylesPropExample() {
-  return (
-    <Example data={codeExamples.stylesProp}>
-      <Menu menuButton={<MenuButton>Open menu</MenuButton>} align="center" menuStyles={menuStyles}>
-        <MenuItem>New File</MenuItem>
-        <MenuItem>Save</MenuItem>
-        <MenuItem styles={menuItemStyles}>I&apos;m special</MenuItem>
-      </Menu>
-    </Example>
-  );
-}
-
-const menuItemClassName = ({ hover, active }) =>
-  active ? 'my-menuitem-active' : hover ? 'my-menuitem-hover' : 'my-menuitem';
+const menuItemClassName = ({ hover }) => (hover ? 'my-menuitem-hover' : 'my-menuitem');
 
 function ClassNamePropExample() {
   return (
