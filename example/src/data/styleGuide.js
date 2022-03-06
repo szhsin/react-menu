@@ -1,5 +1,4 @@
 /* eslint-disable react/no-unescaped-entities, react/jsx-key */
-import React from 'react';
 import Link from 'next/link';
 import {
   menuContainerSelector,
@@ -187,10 +186,6 @@ const selectors = {
             {
               name: menuItemSelector.hover,
               desc: 'Menu item is hovered and focused.'
-            },
-            {
-              name: menuItemSelector.active,
-              desc: 'Menu item is active (pressed).'
             },
             {
               name: menuItemSelector.disabled,

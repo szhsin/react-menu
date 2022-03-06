@@ -16,13 +16,15 @@
   .md-48 {
     font-size: 3rem;
   }
+
+  &:active {
+    color: #fff !important;
+    background-color: var.$primary-light;
+  }
 }
 
 .szh-menu {
   white-space: nowrap;
-  &__item--active {
-    color: #fff !important;
-  }
 }
 
 .szh-menu,

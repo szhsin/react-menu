@@ -1,5 +1,4 @@
 /* eslint-disable react/no-unescaped-entities */
-import React from 'react';
 import Link from 'next/link';
 import { LibName } from '../components/LibName';
 import { ExternalLink } from '../components/ExternalLink';
@@ -11,7 +10,6 @@ const ESC_KEY = "'Escape'";
 const menuLink = <Link href={'#menu'}>Menu</Link>;
 const menuButtonLink = <Link href={'#menu-button'}>MenuButton</Link>;
 const controlledMenuLink = <Link href={'#controlled-menu'}>ControlledMenu</Link>;
-const radioGroupLink = <Link href={'#radio-group'}>MenuRadioGroup</Link>;
 
 const propsTable = {
   heading: <h3>Props</h3>,
@@ -98,9 +96,6 @@ const submenuItemModifiers = (
       <code>hover: bool</code> indicates if the submenu item is being hovered and has focus.
     </li>
     <li>
-      <code>active: bool</code> indicates if the submenu item is active (pressed).
-    </li>
-    <li>
       <code>disabled: bool</code> indicates if the submenu and item are disabled.
     </li>
   </ul>
@@ -110,9 +105,6 @@ const menuItemModifiers = (
   <ul>
     <li>
       <code>hover: bool</code> indicates if the menu item is being hovered and has focus.
-    </li>
-    <li>
-      <code>active: bool</code> indicates if the menu item is active (pressed).
     </li>
     <li>
       <code>checked: bool</code> indicates if the menu item is checked when it's a radio or checkbox
@@ -158,7 +150,7 @@ const onClickEventObject = (
   </>
 );
 
-const styleProps = (target, modifiers, className, styles) => [
+const styleProps = (target, modifiers, className) => [
   {
     name: className || 'className',
     type: `string${modifiers ? ' | function' : ''}`,
@@ -179,38 +171,32 @@ const styleProps = (target, modifiers, className, styles) => [
         )}
       </>
     )
-  },
-  {
-    name: styles || 'styles',
-    type: `object${modifiers ? ' | function' : ''}`,
-    desc: (
-      <>
-        <p>
-          A style object that will be applied to the inline style of <strong>{target}</strong> DOM
-          element.
-        </p>
-        {modifiers && (
-          <>
-            <p>
-              Styles targeting specific component state should be supplied as nested objects under
-              each state key.
-            </p>
-            {modifiers}
-            <p>
-              When a function is provided, it will be called by passing an object with the above
-              properties and should return a <strong>flattened</strong> style object.
-            </p>
-          </>
-        )}
-      </>
-    )
   }
 ];
 
 // Menu, SubMenu and ControlledMenu
 const sharedMenuProps = [
-  ...styleProps('menu', menuModifiers, 'menuClassName', 'menuStyles'),
-  ...styleProps('menu arrow', <ul>{dirModifier}</ul>, 'arrowClassName', 'arrowStyles'),
+  ...styleProps('menu', menuModifiers, 'menuClassName'),
+  ...styleProps('menu arrow', <ul>{dirModifier}</ul>, 'arrowClassName'),
+  {
+    name: 'menuStyle',
+    type: 'CSSProperties',
+    desc: (
+      <p>
+        This value is forwarded to the <code>style</code> prop of <strong>menu</strong> DOM element.
+      </p>
+    )
+  },
+  {
+    name: 'arrowStyle',
+    type: 'CSSProperties',
+    desc: (
+      <p>
+        This value is forwarded to the <code>style</code> prop of <strong>menu arrow</strong> DOM
+        element.
+      </p>
+    )
+  },
   {
     name: 'arrow',
     type: 'boolean',
@@ -301,6 +287,17 @@ const sharedMenuProps = [
         </p>
       </>
     )
+  },
+  {
+    name: 'setDownOverflow',
+    type: 'boolean',
+    desc: (
+      <p>
+        Set computed overflow amount down to a child <code>MenuGroup</code>. The{' '}
+        <code>MenuGroup</code> should have <code>takeOverflow</code> prop set as <code>true</code>{' '}
+        accordingly.
+      </p>
+    )
   }
 ];
 
@@ -370,7 +367,7 @@ const rootMenuProps = [
           <em className="block">
             If you enable transition on menu, make sure to add{' '}
             <code>import '@szhsin/react-menu/dist/transitions/slide.css'</code>, or add your own
-            animation styles, otherwise menu cannot be closed or have delay to close.
+            animation styles, otherwise menu cannot be closed or have visible delay when closed.
           </em>
         </p>
       </>
@@ -392,7 +389,8 @@ const rootMenuProps = [
     desc: (
       <p>
         By default menu isn't mounted into DOM until it's opened for the first time. Setting the
-        prop to <code>true</code> will change this behaviour.
+        prop to <code>true</code> will change this behaviour, which also enables menu and its items
+        to be server rendered.
       </p>
     )
   },
@@ -660,8 +658,8 @@ const menuItem = {
         <code>MenuItem</code> represents an item under a menu which can be activated.
       </p>
       <p>
-        It can be a regular menu item, a checkbox item (<code>type="checkbox"</code>), or a radio
-        item (direct child of {radioGroupLink}).
+        It can be a regular menu item, a checkbox item (<code>type="checkbox"</code>), a radio item
+        (<code>type="radio"</code>).
       </p>
     </>,
     {
@@ -693,13 +691,7 @@ const menuItem = {
           name: 'type',
           type: 'string',
           desc: (
-            <>
-              <p>Set this prop to 'checkbox' to make it a checkbox menu item.</p>
-              <p>
-                Please note menu items under a <code>MenuRadioGroup</code> will have{' '}
-                <code>type</code> set to 'radio' automatically.
-              </p>
-            </>
+            <p>Set this prop to 'checkbox' or 'radio' to make it a checkbox or radio menu item.</p>
           )
         },
         {
@@ -766,12 +758,7 @@ const submenu = {
     {
       ...propsTable,
       rows: [
-        ...styleProps(
-          'submenu item',
-          submenuItemModifiers,
-          'itemProps.className',
-          'itemProps.styles'
-        ),
+        ...styleProps('submenu item', submenuItemModifiers, 'itemProps.className'),
         ...sharedMenuProps,
         ...uncontrolledMenuProps,
         {
@@ -927,7 +914,7 @@ const menuGroup = {
           desc: (
             <p>
               Set <code>true</code> to apply overflow of the parent menu to the group. Only one{' '}
-              <code>MenuGroup</code> in a menu is allowed to have this prop.
+              <code>MenuGroup</code> in a menu should set this prop as <code>true</code>.
             </p>
           )
         }
@@ -940,15 +927,9 @@ const menuRadioGroup = {
   id: 'radio-group',
   title: 'MenuRadioGroup',
   contents: [
-    <>
-      <p>
-        <code>MenuRadioGroup</code> is a container of menu items which are similar to radio buttons.
-      </p>
-      <p>
-        All menu items under a <code>MenuRadioGroup</code> are in the same radio group and have{' '}
-        <code>type="radio"</code>. It's <strong>unnecessary</strong> to manually set the property.{' '}
-      </p>
-    </>,
+    <p key={0}>
+      <code>MenuRadioGroup</code> is a container of menu items which are similar to radio buttons.
+    </p>,
     {
       ...propsTable,
       rows: [
@@ -1296,11 +1277,15 @@ const menuStateHook = {
         item?: boolean;
     };
     transitionTimeout?: number;
-}): {
+}): [
+  // Menu props object which can be spread to <ControlledMenu/>
+  {
     state?: 'opening' | 'open' | 'closing' | 'closed';
-    toggleMenu: (open?: boolean) => void;
     endTransition: () => void;
-};`}</code>
+  },
+  // toggleMenu function
+  (open?: boolean) => void
+];`}</code>
       </pre>
       <p>
         The hook function options are the same as props on <code>Menu</code> component.
@@ -1316,48 +1301,6 @@ const menuStateHook = {
         <li>You can set a boolean parameter to explicitly switch into one of the two phases.</li>
       </ul>
       <p>The {menuLink} component uses this hook internally to manage its states.</p>
-    </>
-  ]
-};
-
-const applyHOC = {
-  id: 'utils-apply-hoc',
-  title: 'applyHOC',
-  contents: [
-    <>
-      <p>
-        A helper function which copies statics if you create HOC on <LibName /> components. It
-        accepts an HOC and returns a new HOC with the same signature. See a{' '}
-        <ExternalLink href="https://codesandbox.io/s/react-menu-hoc-0bipn">
-          CodeSandbox example
-        </ExternalLink>{' '}
-        for its usage.
-      </p>
-      <p>
-        Note: some third-party HOC utilities (such as the <code>connect</code> of react-redux) have
-        already copied statics so you don't need to call this helper.
-      </p>
-    </>
-  ]
-};
-
-const applyStatics = {
-  id: 'utils-apply-statics',
-  title: 'applyStatics',
-  contents: [
-    <>
-      <p>
-        It's similar to <code>applyHOC</code>, but accepts a source component with statics to be
-        copied and returns an HOC which accepts a wrapped component.
-      </p>
-      <p>It creates a composable HOC that can be placed at the leftmost of a compose utility.</p>
-      <p>
-        It also can be used to create new components which wrap and return one of react-menu's
-        components. See a{' '}
-        <ExternalLink href="https://codesandbox.io/s/react-menu-wrapping-q0b59">
-          CodeSandbox example
-        </ExternalLink>
-      </p>
     </>
   ]
 };
@@ -1440,12 +1383,6 @@ const hooks = {
   list: [menuStateHook]
 };
 
-const utilities = {
-  id: 'utils',
-  title: 'Utilities',
-  list: [applyHOC, applyStatics]
-};
-
 const accessibility = {
   id: 'accessibility',
   title: 'Accessibility',
@@ -1461,5 +1398,5 @@ const accessibility = {
   list: [keyboard]
 };
 
-const documentation = [components, hooks, utilities, accessibility];
+const documentation = [components, hooks, accessibility];
 export default documentation;
