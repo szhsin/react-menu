@@ -17,7 +17,7 @@
     font-size: 3rem;
   }
 
-  &:active {
+  &:active:not(.szh-menu__item--focusable) {
     color: #fff !important;
     background-color: var.$primary-light;
   }
