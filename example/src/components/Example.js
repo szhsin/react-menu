@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, useContext } from 'react';
 import { HashHeading } from './HashHeading';
 import { bem, DomInfoContext, SettingContext } from '../utils';
 import { ControlledMenu, useMenuState } from '@szhsin/react-menu';
-import hljs from '../utils/highlight';
+// import hljs from '../utils/highlight';
 
 const blockName = 'example';
 
@@ -31,7 +31,7 @@ export const Example = React.memo(
 
     useEffect(() => {
       setToolTip(sourceBtnTitle);
-      refSection.current.querySelectorAll('pre code').forEach((elt) => hljs.highlightElement(elt));
+      // refSection.current.querySelectorAll('pre code').forEach((elt) => hljs.highlightElement(elt));
     }, [sourceBtnTitle]);
 
     return (
@@ -92,11 +92,11 @@ export const Example = React.memo(
           </ControlledMenu>
         </div>
 
-        {sourceCode && (
+        {/* {sourceCode && (
           <pre className={bem(blockName, 'source')}>
             <code className="lang-jsx">{sourceCode}</code>
           </pre>
-        )}
+        )} */}
       </section>
     );
   })

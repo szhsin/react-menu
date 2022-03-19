@@ -24,12 +24,15 @@ export const MenuItem = withHovering(
     checked,
     disabled,
     children,
+    // hotKeys,
     onClick,
     isHovering,
     itemRef,
     externalRef,
     ...restProps
   }) {
+    console.log('render', children)
+    
     const isDisabled = !!disabled;
     const { setHover, ...stateHandlers } = useItemState(itemRef, itemRef, isHovering, isDisabled);
     const eventHandlers = useContext(EventHandlersContext);
@@ -69,6 +72,9 @@ export const MenuItem = withHovering(
           break;
       }
     };
+    
+    // hotKeys?.(handleClick);
+    // safeCall(hotKeys, handleClick)
 
     const modifiers = useMemo(
       () =>

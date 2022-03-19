@@ -57,6 +57,23 @@ var useCombinedRef = function useCombinedRef(refA, refB) {
   }, [refA, refB]);
 };
 
+var useHotkeys = function useHotkeys(onClick) {
+  var hotKeys = function hotKeys() {};
+
+  react.useEffect(function () {
+    function logKey(e) {
+      console.log('keydown', e.key);
+      e.key === 'k' && onClick(e);
+    }
+
+    document.addEventListener('keydown', logKey);
+    return function () {
+      document.removeEventListener('keydown', logKey);
+    };
+  }, [onClick]);
+  return hotKeys;
+};
+
 var useIsomorphicLayoutEffect = typeof window !== 'undefined' && typeof window.document !== 'undefined' && typeof window.document.createElement !== 'undefined' ? react.useLayoutEffect : react.useEffect;
 
 var menuContainerClass = 'szh-menu-container';
@@ -1922,6 +1939,7 @@ var MenuItem = /*#__PURE__*/withHovering('MenuItem', function MenuItem(_ref) {
       externalRef = _ref.externalRef,
       restProps = _objectWithoutPropertiesLoose(_ref, _excluded$5);
 
+  console.log('render', children);
   var isDisabled = !!disabled;
 
   var _useItemState = useItemState(itemRef, itemRef, isHovering, isDisabled),
@@ -2216,4 +2234,5 @@ exports.MenuHeader = MenuHeader;
 exports.MenuItem = MenuItem;
 exports.MenuRadioGroup = MenuRadioGroup;
 exports.SubMenu = SubMenu;
+exports.useHotkeys = useHotkeys;
 exports.useMenuState = useMenuState;

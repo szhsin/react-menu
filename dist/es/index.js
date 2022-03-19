@@ -9,3 +9,4 @@ export { MenuHeader } from './components/MenuHeader.js';
 export { MenuGroup } from './components/MenuGroup.js';
 export { MenuRadioGroup } from './components/MenuRadioGroup.js';
 export { useMenuState } from './hooks/useMenuState.js';
+export { useHotkeys } from './hooks/useHotkeys.js';

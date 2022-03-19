@@ -26,6 +26,7 @@ var MenuItem = /*#__PURE__*/withHovering('MenuItem', function MenuItem(_ref) {
       externalRef = _ref.externalRef,
       restProps = _objectWithoutPropertiesLoose(_ref, _excluded);
 
+  console.log('render', children);
   var isDisabled = !!disabled;
 
   var _useItemState = useItemState(itemRef, itemRef, isHovering, isDisabled),

@@ -10,7 +10,8 @@ import {
   MenuRadioGroup,
   MenuHeader,
   MenuDivider,
-  useMenuState
+  useMenuState,
+  useHotkeys
 } from '@szhsin/react-menu';
 import {
   SettingContext,
@@ -92,12 +93,20 @@ function GroupingSection({ heading, data: { id, title, desc } }) {
 }
 
 function BasicMenuExample() {
+  const [flag, setFlag] = useState(false);
+
+  const hotkeys = useHotkeys();
+  hotkeys();
   return (
     <Example initialFullSource={true} data={codeExamples.basicMenu}>
-      <Menu menuButton={<MenuButton>Open menu</MenuButton>}>
-        <MenuItem>New File</MenuItem>
-        <MenuItem>Save</MenuItem>
-        <MenuItem>Close Window</MenuItem>
+      <button onClick={() => setFlag((f) => !f)}>flag {flag.toString()}</button>
+      <Menu
+        menuButton={<MenuButton>Open menu</MenuButton>}
+        onItemClick={(e) => console.log('menu click', e.key)}
+      >
+        <MenuItem onClick={(e) => console.log('item click', e.key)}>item 1</MenuItem>
+        <MenuItem>item 2</MenuItem>
+        <MenuItem>item 3</MenuItem>
       </Menu>
     </Example>
   );
