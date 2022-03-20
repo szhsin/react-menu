@@ -9,3 +9,4 @@ export { MenuDivider } from './components/MenuDivider';
 export { MenuHeader } from './components/MenuHeader';
 export { MenuGroup } from './components/MenuGroup';
 export { MenuRadioGroup } from './components/MenuRadioGroup';
+export { registerHotkeys } from './utils/registerHotkeys';

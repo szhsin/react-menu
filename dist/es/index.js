@@ -8,5 +8,6 @@ export { MenuDivider } from './components/MenuDivider.js';
 export { MenuHeader } from './components/MenuHeader.js';
 export { MenuGroup } from './components/MenuGroup.js';
 export { MenuRadioGroup } from './components/MenuRadioGroup.js';
+export { registerHotkeys } from './utils/registerHotkeys.js';
 export { useMenuState } from './hooks/useMenuState.js';
 export { useHotkeys } from './hooks/useHotkeys.js';

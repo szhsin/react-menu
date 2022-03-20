@@ -11,7 +11,8 @@ import {
   MenuHeader,
   MenuDivider,
   useMenuState,
-  useHotkeys
+  // useHotkeys,
+  registerHotkeys
 } from '@szhsin/react-menu';
 import {
   SettingContext,
@@ -93,19 +94,27 @@ function GroupingSection({ heading, data: { id, title, desc } }) {
 }
 
 function BasicMenuExample() {
-  const [flag, setFlag] = useState(false);
+  const [flag, setFlag] = useState(true);
 
-  const hotkeys = useHotkeys();
-  hotkeys();
+  // const hotkeys = useHotkeys();
+  // hotkeys();
+
   return (
     <Example initialFullSource={true} data={codeExamples.basicMenu}>
       <button onClick={() => setFlag((f) => !f)}>flag {flag.toString()}</button>
       <Menu
         menuButton={<MenuButton>Open menu</MenuButton>}
-        onItemClick={(e) => console.log('menu click', e.key)}
+        onItemClick={(e) => console.log('menu click', e.key, e.value)}
       >
-        <MenuItem onClick={(e) => console.log('item click', e.key)}>item 1</MenuItem>
-        <MenuItem>item 2</MenuItem>
+        <MenuItem
+          registerHotkeys={flag ? registerHotkeys('1') : undefined}
+          onClick={(e) => console.log('item click', e.key)}
+        >
+          item 1
+        </MenuItem>
+        <MenuItem value="2" registerHotkeys={registerHotkeys('2', true)}>
+          item 2
+        </MenuItem>
         <MenuItem>item 3</MenuItem>
       </Menu>
     </Example>
@@ -332,6 +341,7 @@ function LinkAndDisabledExample() {
       <Menu menuButton={<MenuButton>Open menu</MenuButton>}>
         <MenuItem href="https://www.google.com/">Google</MenuItem>
         <MenuItem
+          disabled
           href="https://github.com/szhsin/react-menu/"
           target="_blank"
           rel="noopener noreferrer"

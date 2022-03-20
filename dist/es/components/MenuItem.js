@@ -1,5 +1,5 @@
 import { objectWithoutPropertiesLoose as _objectWithoutPropertiesLoose, extends as _extends } from '../_virtual/_rollupPluginBabelHelpers.js';
-import { useContext, useMemo } from 'react';
+import { useContext, useEffect, useMemo } from 'react';
 import { any, string, oneOf, bool, oneOfType, node, func } from 'prop-types';
 import { jsx } from 'react/jsx-runtime';
 import { withHovering } from '../utils/withHovering.js';
@@ -10,8 +10,8 @@ import { useBEM } from '../hooks/useBEM.js';
 import { attachHandlerProps, commonProps, safeCall } from '../utils/utils.js';
 import { stylePropTypes } from '../utils/propTypes.js';
 
-var _excluded = ["className", "value", "href", "type", "checked", "disabled", "children", "onClick", "isHovering", "itemRef", "externalRef"],
-    _excluded2 = ["setHover"];
+var _excluded = ["className", "value", "href", "type", "checked", "disabled", "children", "registerHotkeys", "onClick", "isHovering", "itemRef", "externalRef"],
+    _excluded2 = ["setHover", "isParentOpen"];
 var MenuItem = /*#__PURE__*/withHovering('MenuItem', function MenuItem(_ref) {
   var className = _ref.className,
       value = _ref.value,
@@ -20,17 +20,21 @@ var MenuItem = /*#__PURE__*/withHovering('MenuItem', function MenuItem(_ref) {
       checked = _ref.checked,
       disabled = _ref.disabled,
       children = _ref.children,
+      _ref$registerHotkeys = _ref.registerHotkeys,
+      registerHotkeys = _ref$registerHotkeys === void 0 ? function () {
+    return function () {};
+  } : _ref$registerHotkeys,
       onClick = _ref.onClick,
       isHovering = _ref.isHovering,
       itemRef = _ref.itemRef,
       externalRef = _ref.externalRef,
       restProps = _objectWithoutPropertiesLoose(_ref, _excluded);
 
-  console.log('render', children);
   var isDisabled = !!disabled;
 
   var _useItemState = useItemState(itemRef, itemRef, isHovering, isDisabled),
       setHover = _useItemState.setHover,
+      isParentOpen = _useItemState.isParentOpen,
       stateHandlers = _objectWithoutPropertiesLoose(_useItemState, _excluded2);
 
   var eventHandlers = useContext(EventHandlersContext);
@@ -75,6 +79,7 @@ var MenuItem = /*#__PURE__*/withHovering('MenuItem', function MenuItem(_ref) {
     }
   };
 
+  useEffect(registerHotkeys(handleClick, setHover, isParentOpen));
   var modifiers = useMemo(function () {
     return Object.freeze({
       type: type,

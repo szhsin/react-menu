@@ -61,7 +61,8 @@ var useItemState = function useItemState(itemRef, focusRef, isHovering, isDisabl
     setHover: setHover,
     onBlur: onBlur,
     onMouseMove: onMouseMove,
-    onMouseLeave: onMouseLeave
+    onMouseLeave: onMouseLeave,
+    isParentOpen: isParentOpen
   };
 };
 

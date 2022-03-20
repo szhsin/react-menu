@@ -1,4 +1,4 @@
-import { useContext, useMemo } from 'react';
+import { useContext, useEffect, useMemo } from 'react';
 import { any, string, bool, func, node, oneOf, oneOfType } from 'prop-types';
 import { useBEM, useItemState, useCombinedRef } from '../hooks';
 import {
@@ -25,16 +25,17 @@ export const MenuItem = withHovering(
     disabled,
     children,
     // hotKeys,
+    registerHotkeys = () => () => {},
     onClick,
     isHovering,
     itemRef,
     externalRef,
     ...restProps
   }) {
-    console.log('render', children)
-    
+    // console.log('render', children);
+
     const isDisabled = !!disabled;
-    const { setHover, ...stateHandlers } = useItemState(itemRef, itemRef, isHovering, isDisabled);
+    const { setHover, isParentOpen,...stateHandlers } = useItemState(itemRef, itemRef, isHovering, isDisabled);
     const eventHandlers = useContext(EventHandlersContext);
     const radioGroup = useContext(RadioGroupContext);
     const isRadio = type === 'radio';
@@ -72,9 +73,10 @@ export const MenuItem = withHovering(
           break;
       }
     };
-    
+
     // hotKeys?.(handleClick);
     // safeCall(hotKeys, handleClick)
+    useEffect(registerHotkeys(handleClick, setHover, isParentOpen));
 
     const modifiers = useMemo(
       () =>

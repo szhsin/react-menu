@@ -510,7 +510,8 @@ var useItemState = function useItemState(itemRef, focusRef, isHovering, isDisabl
     setHover: setHover,
     onBlur: onBlur,
     onMouseMove: onMouseMove,
-    onMouseLeave: onMouseLeave
+    onMouseLeave: onMouseLeave,
+    isParentOpen: isParentOpen
   };
 };
 
@@ -1923,8 +1924,8 @@ process.env.NODE_ENV !== "production" ? SubMenu.propTypes = /*#__PURE__*/_extend
   itemProps: /*#__PURE__*/propTypes.shape( /*#__PURE__*/_extends({}, /*#__PURE__*/stylePropTypes()))
 }) : void 0;
 
-var _excluded$5 = ["className", "value", "href", "type", "checked", "disabled", "children", "onClick", "isHovering", "itemRef", "externalRef"],
-    _excluded2 = ["setHover"];
+var _excluded$5 = ["className", "value", "href", "type", "checked", "disabled", "children", "registerHotkeys", "onClick", "isHovering", "itemRef", "externalRef"],
+    _excluded2 = ["setHover", "isParentOpen"];
 var MenuItem = /*#__PURE__*/withHovering('MenuItem', function MenuItem(_ref) {
   var className = _ref.className,
       value = _ref.value,
@@ -1933,17 +1934,21 @@ var MenuItem = /*#__PURE__*/withHovering('MenuItem', function MenuItem(_ref) {
       checked = _ref.checked,
       disabled = _ref.disabled,
       children = _ref.children,
+      _ref$registerHotkeys = _ref.registerHotkeys,
+      registerHotkeys = _ref$registerHotkeys === void 0 ? function () {
+    return function () {};
+  } : _ref$registerHotkeys,
       onClick = _ref.onClick,
       isHovering = _ref.isHovering,
       itemRef = _ref.itemRef,
       externalRef = _ref.externalRef,
       restProps = _objectWithoutPropertiesLoose(_ref, _excluded$5);
 
-  console.log('render', children);
   var isDisabled = !!disabled;
 
   var _useItemState = useItemState(itemRef, itemRef, isHovering, isDisabled),
       setHover = _useItemState.setHover,
+      isParentOpen = _useItemState.isParentOpen,
       stateHandlers = _objectWithoutPropertiesLoose(_useItemState, _excluded2);
 
   var eventHandlers = react.useContext(EventHandlersContext);
@@ -1988,6 +1993,7 @@ var MenuItem = /*#__PURE__*/withHovering('MenuItem', function MenuItem(_ref) {
     }
   };
 
+  react.useEffect(registerHotkeys(handleClick, setHover, isParentOpen));
   var modifiers = react.useMemo(function () {
     return Object.freeze({
       type: type,
@@ -2224,6 +2230,31 @@ process.env.NODE_ENV !== "production" ? MenuRadioGroup.propTypes = /*#__PURE__*/
   onRadioChange: propTypes.func
 }) : void 0;
 
+var registerHotkeys = function registerHotkeys(keys, isLetterhead) {
+  return function (onClick, setHover, isParentOpen) {
+    return function () {
+      function logKey(e) {
+        console.log('keydown', e.key);
+
+        if (e.key === keys) {
+          setHover();
+          !isLetterhead && setTimeout(function () {
+            return onClick(e);
+          }, 100);
+        }
+      }
+
+      if (!isParentOpen) return;
+      console.log('add', keys);
+      document.addEventListener('keydown', logKey);
+      return function () {
+        console.log('cleanup', keys);
+        document.removeEventListener('keydown', logKey);
+      };
+    };
+  };
+};
+
 exports.ControlledMenu = ControlledMenu;
 exports.FocusableItem = FocusableItem;
 exports.Menu = Menu;
@@ -2234,5 +2265,6 @@ exports.MenuHeader = MenuHeader;
 exports.MenuItem = MenuItem;
 exports.MenuRadioGroup = MenuRadioGroup;
 exports.SubMenu = SubMenu;
+exports.registerHotkeys = registerHotkeys;
 exports.useHotkeys = useHotkeys;
 exports.useMenuState = useMenuState;

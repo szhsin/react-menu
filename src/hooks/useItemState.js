@@ -57,6 +57,7 @@ export const useItemState = (itemRef, focusRef, isHovering, isDisabled) => {
     setHover,
     onBlur,
     onMouseMove,
-    onMouseLeave
+    onMouseLeave,
+    isParentOpen
   };
 };
