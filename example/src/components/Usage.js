@@ -12,7 +12,9 @@ import {
   MenuDivider,
   useMenuState,
   // useHotkeys,
-  registerHotkeys
+  registerHotkeys,
+  typeahead,
+  configure
 } from '@szhsin/react-menu';
 import {
   SettingContext,
@@ -26,6 +28,8 @@ import { TableContents } from './TableContents';
 import { Example } from './Example';
 import { HashHeading } from './HashHeading';
 import data, * as codeExamples from '../data/codeExamples';
+
+configure({ typeahead });
 
 /**
  * @type {React.NamedExoticComponent<import('@szhsin/react-menu').MenuProps>}

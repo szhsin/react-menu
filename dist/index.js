@@ -112,7 +112,8 @@ var HoverActionTypes = /*#__PURE__*/Object.freeze({
   DECREASE: 'DECREASE',
   FIRST: 'FIRST',
   LAST: 'LAST',
-  SET_INDEX: 'SET_INDEX'
+  SET_INDEX: 'SET_INDEX',
+  TYPEAHEAD: 'TYPEAHEAD'
 });
 var CloseReason = /*#__PURE__*/Object.freeze({
   CLICK: 'click',
@@ -328,6 +329,13 @@ var withHovering = function withHovering(name, WrapppedComponent) {
   return WithHovering;
 };
 
+var config = {};
+
+var configure = function configure(_ref) {
+  var typeahead = _ref.typeahead;
+  config.typeahead = typeahead;
+};
+
 var useItems = function useItems(menuRef) {
   var _useState = react.useState(),
       hoverItem = _useState[0],
@@ -354,7 +362,7 @@ var useItems = function useItems(menuRef) {
     mutableState.hoverIndex = -1;
     mutableState.sorted = false;
   }, [mutableState]);
-  var dispatch = react.useCallback(function (actionType, item, nextIndex) {
+  var dispatch = react.useCallback(function (actionType, item, nextIndex, key) {
     var items = mutableState.items,
         hoverIndex = mutableState.hoverIndex;
 
@@ -420,6 +428,9 @@ var useItems = function useItems(menuRef) {
         if (index < 0) index = items.length - 1;
         newItem = items[index];
         break;
+
+      case HoverActionTypes.TYPEAHEAD:
+        return config.typeahead == null ? void 0 : config.typeahead(item, key, mutableState, sortItems, setHoverItem);
 
       default:
         if (process.env.NODE_ENV !== 'production') throw new Error("[React-Menu] Unknown hover action type: " + actionType);
@@ -1110,6 +1121,9 @@ var MenuList = function MenuList(_ref) {
         }
 
         break;
+
+      default:
+        handled = dispatch(HoverActionTypes.TYPEAHEAD, hoverItem, 0, e.key);
     }
 
     if (handled) {
@@ -2255,6 +2269,34 @@ var registerHotkeys = function registerHotkeys(keys, isLetterhead) {
   };
 };
 
+var typeahead = function typeahead(item, key, mutableState, sortItems, setHoverItem) {
+  if (key < 'a' || key > 'z') return false;
+  console.log('typeahead', key);
+  sortItems();
+  var items = mutableState.items,
+      hoverIndex = mutableState.hoverIndex;
+  var index = hoverIndex < 0 ? items.indexOf(item) : hoverIndex;
+  console.log('index', index);
+  var count = 0;
+
+  for (var i = index + 1; i !== index; i++, count++) {
+    var _text$;
+
+    if (count >= items.length) break;
+    i = i % items.length;
+    console.log('i:', i);
+    var text = items[i].textContent;
+
+    if (((_text$ = text[0]) == null ? void 0 : _text$.toLowerCase()) === key) {
+      mutableState.hoverIndex = i;
+      setHoverItem(items[i]);
+      break;
+    }
+  }
+
+  return true;
+};
+
 exports.ControlledMenu = ControlledMenu;
 exports.FocusableItem = FocusableItem;
 exports.Menu = Menu;
@@ -2265,6 +2307,8 @@ exports.MenuHeader = MenuHeader;
 exports.MenuItem = MenuItem;
 exports.MenuRadioGroup = MenuRadioGroup;
 exports.SubMenu = SubMenu;
+exports.configure = configure;
 exports.registerHotkeys = registerHotkeys;
+exports.typeahead = typeahead;
 exports.useHotkeys = useHotkeys;
 exports.useMenuState = useMenuState;

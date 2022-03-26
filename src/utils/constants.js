@@ -39,7 +39,8 @@ export const HoverActionTypes = Object.freeze({
   DECREASE: 'DECREASE',
   FIRST: 'FIRST',
   LAST: 'LAST',
-  SET_INDEX: 'SET_INDEX'
+  SET_INDEX: 'SET_INDEX',
+  TYPEAHEAD: 'TYPEAHEAD'
 });
 
 export const CloseReason = Object.freeze({

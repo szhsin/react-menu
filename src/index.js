@@ -10,3 +10,5 @@ export { MenuHeader } from './components/MenuHeader';
 export { MenuGroup } from './components/MenuGroup';
 export { MenuRadioGroup } from './components/MenuRadioGroup';
 export { registerHotkeys } from './utils/registerHotkeys';
+export { typeahead } from './utils/typeahead';
+export { configure } from './utils/configure';

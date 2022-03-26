@@ -1,5 +1,6 @@
 import { useState, useCallback, useRef } from 'react';
 import { HoverActionTypes, indexOfNode } from '../utils';
+import { config } from '../utils/configure';
 
 export const useItems = (menuRef) => {
   const [hoverItem, setHoverItem] = useState();
@@ -28,7 +29,7 @@ export const useItems = (menuRef) => {
   );
 
   const dispatch = useCallback(
-    (actionType, item, nextIndex) => {
+    (actionType, item, nextIndex, key) => {
       const { items, hoverIndex } = mutableState;
       const sortItems = () => {
         if (mutableState.sorted) return;
@@ -86,6 +87,9 @@ export const useItems = (menuRef) => {
           if (index < 0) index = items.length - 1;
           newItem = items[index];
           break;
+
+        case HoverActionTypes.TYPEAHEAD:
+          return config.typeahead?.(item, key, mutableState, sortItems, setHoverItem);
 
         default:
           if (process.env.NODE_ENV !== 'production')

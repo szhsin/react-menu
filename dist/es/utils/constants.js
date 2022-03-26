@@ -36,7 +36,8 @@ var HoverActionTypes = /*#__PURE__*/Object.freeze({
   DECREASE: 'DECREASE',
   FIRST: 'FIRST',
   LAST: 'LAST',
-  SET_INDEX: 'SET_INDEX'
+  SET_INDEX: 'SET_INDEX',
+  TYPEAHEAD: 'TYPEAHEAD'
 });
 var CloseReason = /*#__PURE__*/Object.freeze({
   CLICK: 'click',

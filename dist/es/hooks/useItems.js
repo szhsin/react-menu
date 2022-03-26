@@ -1,4 +1,5 @@
 import { useState, useRef, useCallback } from 'react';
+import { config } from '../utils/configure.js';
 import { HoverActionTypes } from '../utils/constants.js';
 import { indexOfNode } from '../utils/utils.js';
 
@@ -28,7 +29,7 @@ var useItems = function useItems(menuRef) {
     mutableState.hoverIndex = -1;
     mutableState.sorted = false;
   }, [mutableState]);
-  var dispatch = useCallback(function (actionType, item, nextIndex) {
+  var dispatch = useCallback(function (actionType, item, nextIndex, key) {
     var items = mutableState.items,
         hoverIndex = mutableState.hoverIndex;
 
@@ -94,6 +95,9 @@ var useItems = function useItems(menuRef) {
         if (index < 0) index = items.length - 1;
         newItem = items[index];
         break;
+
+      case HoverActionTypes.TYPEAHEAD:
+        return config.typeahead == null ? void 0 : config.typeahead(item, key, mutableState, sortItems, setHoverItem);
 
       default:
         if (process.env.NODE_ENV !== 'production') throw new Error("[React-Menu] Unknown hover action type: " + actionType);

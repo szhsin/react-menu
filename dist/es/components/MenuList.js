@@ -138,6 +138,9 @@ var MenuList = function MenuList(_ref) {
         }
 
         break;
+
+      default:
+        handled = dispatch(HoverActionTypes.TYPEAHEAD, hoverItem, 0, e.key);
     }
 
     if (handled) {
