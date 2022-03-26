@@ -335,10 +335,15 @@ export const headerAndDivider = {
   title: 'Header and divider',
 
   desc: (
-    <p>
-      You could use <code>MenuHeader</code> and <code>MenuDivider</code> to group related menu
-      items.
-    </p>
+    <>
+      <p>
+        You could use <code>MenuHeader</code> and <code>MenuDivider</code> to group related menu
+        items.
+      </p>
+      <p>
+        <strong>NOTE:</strong> you can render any valid JSX into menu children.
+      </p>
+    </>
   ),
 
   source: `<Menu menuButton={<MenuButton>Open menu</MenuButton>}>

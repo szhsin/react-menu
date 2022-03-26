@@ -17,7 +17,7 @@
     font-size: 3rem;
   }
 
-  &:active:not(.szh-menu__item--focusable) {
+  &:active:not(.szh-menu__item--focusable):not(.szh-menu__item--disabled) {
     color: #fff !important;
     background-color: var.$primary-light;
   }

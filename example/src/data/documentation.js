@@ -153,22 +153,18 @@ const onClickEventObject = (
 const styleProps = (target, modifiers, className) => [
   {
     name: className || 'className',
-    type: `string${modifiers ? ' | function' : ''}`,
+    type: 'string | function',
     desc: (
       <>
         <p>
           A string that will be appended to the <code>class</code> of <strong>{target}</strong> DOM
           element.
         </p>
-        {modifiers && (
-          <>
-            <p>
-              When a function is provided, it will be called by passing an object with the following
-              properties and should return a CSS class name.
-            </p>
-            {modifiers}
-          </>
-        )}
+        <p>
+          When a function is provided, it will be called by passing an object with the following
+          properties and should return a CSS class name.
+        </p>
+        {modifiers}
       </>
     )
   }
@@ -508,7 +504,8 @@ const rootMenuProps = [
             <code>position</code> prop when window is scrolling.{' '}
             <p>
               Note: for the best user experience, if the <code>overflow</code> prop is set to a
-              value other than 'visible', <code>viewScroll</code> will behave as 'close'.
+              value other than 'visible', an 'auto' <code>viewScroll</code> will behave as
+              'initial'.
             </p>
           </li>
           <li>
@@ -709,7 +706,7 @@ const menuItem = {
           type: 'boolean',
           desc: (
             <p>
-              Set <code>true</code> to disabled the menu item.
+              Set <code>true</code> to disable the menu item.
             </p>
           )
         },
@@ -781,7 +778,7 @@ const submenu = {
           type: 'boolean',
           desc: (
             <p>
-              Set <code>true</code> to disabled the submenu item (and the submenu).
+              Set <code>true</code> to disable the submenu item (and the submenu).
             </p>
           )
         },
@@ -851,7 +848,7 @@ const menuButton = {
           type: 'boolean',
           desc: (
             <p>
-              Set <code>true</code> to disabled the menu button.
+              Set <code>true</code> to disable the menu button.
             </p>
           )
         },
@@ -872,11 +869,7 @@ const menuHeader = {
     <p key={0}>
       <code>MenuHeader</code> can be used to provide presentational information for a group of
       related menu items.
-    </p>,
-    {
-      ...propsTable,
-      rows: [...styleProps('menu header')]
-    }
+    </p>
   ]
 };
 
@@ -888,11 +881,7 @@ const menuDivider = {
       <code>MenuDivider</code> can be used to make a group of related menu items visually separated
       from other items. It has <code>aria</code> roles that can be recognised by assistive
       technologies.
-    </p>,
-    {
-      ...propsTable,
-      rows: [...styleProps('menu divider')]
-    }
+    </p>
   ]
 };
 
@@ -907,7 +896,6 @@ const menuGroup = {
     {
       ...propsTable,
       rows: [
-        ...styleProps('menu group'),
         {
           name: 'takeOverflow',
           type: 'boolean',
@@ -933,7 +921,6 @@ const menuRadioGroup = {
     {
       ...propsTable,
       rows: [
-        ...styleProps('radio group'),
         {
           name: 'aria-label',
           type: 'string',
@@ -1048,7 +1035,7 @@ const focusableItem = {
           desc: (
             <>
               <p>
-                Set <code>true</code> to disabled the item.
+                Set <code>true</code> to disable the item.
               </p>
               <p>
                 Please note this prop only removes the current item from mouse and keyboard

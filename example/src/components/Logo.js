@@ -17,6 +17,7 @@ export const Logo = React.memo(function Logo() {
       menuButton={menuButton}
       offsetY={10}
       theming={React.useContext(SettingContext).theme}
+      className="version-menu"
     >
       <MenuHeader>Version history</MenuHeader>
       <MenuItem href="https://szhsin.github.io/react-menu-v2">v2.3.x</MenuItem>
