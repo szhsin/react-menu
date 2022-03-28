@@ -106,101 +106,47 @@ export const eventHandling = {
   desc: (
     <>
       <p>
-        When a menu item is activated, the <code>onClick</code> event fires on menu item. Unless you
-        set <code>stopPropagation</code> of event object to true, the <code>onItemClick</code> of
-        root menu component will then fires.
+        When a menu item is activated, the <code>onClick</code> event fires on menu item. Unless the{' '}
+        <code>stopPropagation</code> of event object is set <code>true</code>, the{' '}
+        <code>onItemClick</code> of root menu component will fire afterwards. If the{' '}
+        <code>keepOpen</code> of event object is set <code>true</code>, menu will be kept open after
+        the menu item is clicked.
       </p>
-      <p>For details of the event object, please refer to {menuItemLink}.</p>
+      <p>For details of the event object, please see {menuItemLink}.</p>
     </>
   ),
 
   source: `const [text, setText] = useState('');
 
-const handleMenuClick = e => {
-    setText(t => t + \`[Menu] \${e.value} clicked\\n\\n\`);
-};
-
-const handleFileClick = e => {
-    setText(t => t + \`[MenuItem] \${e.value} clicked\\n\`);
-};
-
-const handleSaveClick = e => {
-    setText(t => t + \`[MenuItem] \${e.value} clicked\\n\\n\`);
-    e.stopPropagation = true;
-};
-
 <div>
-    <Menu menuButton={<MenuButton>Open menu</MenuButton>}
-        onItemClick={handleMenuClick}>
+  <Menu
+    menuButton={<MenuButton>Open menu</MenuButton>}
+    onItemClick={(e) => setText(\`[Menu] \${e.value} clicked\`)}
+  >
+    <MenuItem value="Cut" onClick={(e) => setText(\`[MenuItem] \${e.value} clicked\`)}>
+      Cut
+    </MenuItem>
 
-        <MenuItem value="File" onClick={handleFileClick}>
-            File
-        </MenuItem>
+    <MenuItem
+      value="Copy"
+      onClick={(e) => {
+        setText(\`[MenuItem] \${e.value} clicked\`);
+        // Stop the \`onItemClick\` of root menu component from firing
+        e.stopPropagation = true;
+        // Keep the menu open after this menu item is clicked
+        e.keepOpen = true;
+      }}
+    >
+      Copy
+    </MenuItem>
 
-        <MenuItem value="Save" onClick={handleSaveClick}>
-            Save
-        </MenuItem>
+    <MenuItem value="Paste">Paste</MenuItem>
+  </Menu>
 
-        <MenuItem value="Close">Close</MenuItem>
-    </Menu>
-
-    <button onClick={() => setText('')}>
-        Clear
-    </button>
+  <button onClick={() => setText("")}>Clear</button>
 </div>
 
-<textarea readOnly value={text} />`,
-
-  fullSource: `import { useState } from 'react';
-import {
-    Menu,
-    MenuItem,
-    MenuButton
-} from '@szhsin/react-menu';
-import '@szhsin/react-menu/dist/index.css';
-
-export default function Example() {
-    const [text, setText] = useState('');
-
-    const handleMenuClick = e => {
-        setText(t => t + \`[Menu] \${e.value} clicked\\n\\n\`);
-    };
-
-    const handleFileClick = e => {
-        setText(t => t + \`[MenuItem] \${e.value} clicked\\n\`);
-    };
-
-    const handleSaveClick = e => {
-        setText(t => t + \`[MenuItem] \${e.value} clicked\\n\\n\`);
-        e.stopPropagation = true;
-    };
-
-    return (
-        <>
-            <div>
-                <Menu menuButton={<MenuButton>Open menu</MenuButton>}
-                    onItemClick={handleMenuClick}>
-
-                    <MenuItem value="File" onClick={handleFileClick}>
-                        File
-                    </MenuItem>
-
-                    <MenuItem value="Save" onClick={handleSaveClick}>
-                        Save
-                    </MenuItem>
-
-                    <MenuItem value="Close">Close</MenuItem>
-                </Menu>
-
-                <button onClick={() => setText('')}>
-                    Clear
-                </button>
-            </div>
-
-            <textarea readOnly value={text} />
-        </>
-    );
-}`
+<textarea readOnly value={text} />`
 };
 
 export const radioGroup = {
@@ -335,15 +281,16 @@ export const headerAndDivider = {
   title: 'Header and divider',
 
   desc: (
-    <>
-      <p>
-        You could use <code>MenuHeader</code> and <code>MenuDivider</code> to group related menu
-        items.
-      </p>
-      <p>
-        <strong>NOTE:</strong> you can render any valid JSX into menu children.
-      </p>
-    </>
+    <p>
+      You could use <code>MenuHeader</code> and <code>MenuDivider</code> to group related menu
+      items.
+    </p>
+  ),
+
+  note: (
+    <p>
+      <strong>NOTE:</strong> you can render any valid JSX into menu children.
+    </p>
   ),
 
   source: `<Menu menuButton={<MenuButton>Open menu</MenuButton>}>
@@ -464,22 +411,23 @@ export const linkAndDisabled = {
   title: 'Link and disabled',
 
   desc: (
-    <>
-      <p>
-        <code>MenuItem</code> can be made a hyperlink by giving it a <code>href</code> prop. Even if
-        it's a link, the <code>onClick</code> event still fires as normal. You could also disable a
-        menu item using the <code>disabled</code> prop.
-      </p>
-      <p>
-        <strong>Note:</strong> the <code>href</code> prop is meant to be a redirect which causes
-        browser to reload the document at the URL specified. If you want to prevent the reload or
-        work with <strong>React Router</strong>, please see{' '}
-        <ExternalLink href="https://codesandbox.io/s/react-menu-react-router-example-dw4ku">
-          this exmaple
-        </ExternalLink>
-        .
-      </p>
-    </>
+    <p>
+      <code>MenuItem</code> can be made a hyperlink by giving it a <code>href</code> prop. Even if
+      it's a link, the <code>onClick</code> event still fires as normal. You could also disable a
+      menu item using the <code>disabled</code> prop.
+    </p>
+  ),
+
+  note: (
+    <p>
+      <strong>NOTE:</strong> the <code>href</code> prop is meant to be a redirect which causes
+      browser to reload the document at the URL specified. If you want to prevent the reload or work
+      with <strong>React Router</strong>, please see{' '}
+      <ExternalLink href="https://codesandbox.io/s/react-menu-react-router-example-dw4ku">
+        this exmaple
+      </ExternalLink>
+      .
+    </p>
   ),
 
   source: `<Menu menuButton={<MenuButton>Open menu</MenuButton>}>
@@ -749,7 +697,7 @@ export const customisedButton = {
         <code>Menu</code> also works well with popular React libraries, such as the{' '}
         <b>Material-UI</b>. See{' '}
         <ExternalLink href="https://codesandbox.io/s/react-menu-material-ui-example-wvzpc">
-          an example on CodeSandbox
+          a CodeSandbox example
         </ExternalLink>
         .
       </p>
@@ -844,6 +792,17 @@ export const overflow = {
         the group scrollable.
       </p>
     </>
+  ),
+
+  note: (
+    <p>
+      A menu with overflowing items prevents arrow from displaying properly. To get around it, you
+      can use a <code>MenuGroup</code>, please see{' '}
+      <ExternalLink href="https://codesandbox.io/s/react-menu-arrow-overflow-qkvjz">
+        a CodeSandbox example
+      </ExternalLink>
+      .
+    </p>
   ),
 
   source: `const [overflow, setOverflow] = useState('auto');
@@ -1264,8 +1223,9 @@ export const customisedStyle = {
       <StyleExamples />
       <p>
         You will usually import the <code>@szhsin/react-menu/dist/core.css</code> and target
-        different CSS selectors. There is even a <code>style-utils</code> which helps you easily
-        write the selectors. You can find a complete list of CSS selectors in the{' '}
+        different CSS selectors, or you might define all the styles from scratch without importing
+        any css files. There is a <code>style-utils</code> which helps write selectors for
+        CSS-in-JS. You can find a complete list of CSS selectors in the{' '}
         <Link href={'/style-guide#selectors'}>styling guide</Link>.
       </p>
       <p>

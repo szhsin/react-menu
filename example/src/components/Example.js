@@ -8,7 +8,12 @@ const blockName = 'example';
 
 export const Example = React.memo(
   React.forwardRef(function Example(
-    { initialFullSource, data: { id, title, desc, source, fullSource }, children, ...restProps },
+    {
+      initialFullSource,
+      data: { id, title, desc, note, source, fullSource },
+      children,
+      ...restProps
+    },
     ref
   ) {
     const refSection = useRef(null);
@@ -97,6 +102,7 @@ export const Example = React.memo(
             <code className="lang-jsx">{sourceCode}</code>
           </pre>
         )}
+        {note}
       </section>
     );
   })
