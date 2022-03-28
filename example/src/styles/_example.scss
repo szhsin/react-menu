@@ -14,6 +14,7 @@
     border-radius: 50%;
     width: 2.25rem;
     height: 2.25rem;
+    padding: 0;
     margin-left: 1.5rem;
     .material-icons {
       font-size: 1.2rem;
@@ -23,6 +24,9 @@
       .szh-app--theme-dark & {
         background-color: var.$border-dark;
       }
+    }
+    &--link {
+      color: #007bff;
     }
   }
 

@@ -176,11 +176,17 @@ interface BaseMenuProps extends Omit<BaseProps, 'style'> {
    * Can be a string or a function which receives a modifier object and returns a CSS `class` string.
    */
   menuClassName?: ClassNameProp<MenuModifiers>;
+  /**
+   * This prop is forwarded to the `style` prop of menu DOM element.
+   */
   menuStyle?: React.CSSProperties;
   /**
    * Can be a string or a function which receives a modifier object and returns a CSS `class` string.
    */
   arrowClassName?: ClassNameProp<MenuArrowModifiers>;
+  /**
+   * This prop is forwarded to the `style` prop of menu arrow DOM element.
+   */
   arrowStyle?: React.CSSProperties;
   /**
    * Set `true` to display an arrow pointing to its anchor element.
@@ -263,7 +269,7 @@ interface RootMenuProps extends BaseMenuProps, MenuStateOptions {
    * - 'close' menu will be closed when window is scrolled.
    *
    * *Note: for the best user experience, if the `overflow` prop is set to a value
-   * other than 'visible', an 'auto' `viewScroll` will behave as 'close'*.
+   * other than 'visible', an 'auto' `viewScroll` will behave as 'initial'*.
    *
    * @default 'initial'
    */

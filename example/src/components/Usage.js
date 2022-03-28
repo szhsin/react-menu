@@ -137,14 +137,15 @@ function EventHandlingExample() {
     addLine('------');
   };
 
-  const handleFileClick = (e) => {
+  const handleCutClick = (e) => {
     addLine(`[MenuItem] ${e.value} clicked`);
   };
 
-  const handleSaveClick = (e) => {
+  const handleCopyClick = (e) => {
     addLine(`[MenuItem] ${e.value} clicked`);
     addLine('------');
     e.stopPropagation = true;
+    e.keepOpen = true;
   };
 
   useLayoutEffect(() => {
@@ -155,15 +156,15 @@ function EventHandlingExample() {
     <Example data={codeExamples.eventHandling}>
       <div className="buttons">
         <Menu menuButton={<MenuButton>Open menu</MenuButton>} onItemClick={handleMenuClick}>
-          <MenuItem value="File" onClick={handleFileClick}>
-            File
+          <MenuItem value="Cut" onClick={handleCutClick}>
+            Cut
           </MenuItem>
 
-          <MenuItem value="Save" onClick={handleSaveClick}>
-            Save
+          <MenuItem value="Copy" onClick={handleCopyClick}>
+            Copy (Keep open when clicked)
           </MenuItem>
 
-          <MenuItem value="Close">Close</MenuItem>
+          <MenuItem value="Paste">Paste</MenuItem>
         </Menu>
 
         <button className="btn" onClick={() => setOutput([])}>
