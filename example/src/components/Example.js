@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef, useContext } from 'react';
-import { HashHeading } from './HashHeading';
-import { bem, DomInfoContext, SettingContext } from '../utils';
 import { ControlledMenu, useMenuState } from '@szhsin/react-menu';
+import { bem, DomInfoContext, SettingContext } from '../utils';
 import hljs from '../utils/highlight';
+import { CodeSandboxIcon } from './Icons';
+import { HashHeading } from './HashHeading';
 
 const blockName = 'example';
 
@@ -10,7 +11,7 @@ export const Example = React.memo(
   React.forwardRef(function Example(
     {
       initialFullSource,
-      data: { id, title, desc, note, source, fullSource },
+      data: { id, title, desc, note, source, fullSource, codeSandbox },
       children,
       ...restProps
     },
@@ -23,6 +24,7 @@ export const Example = React.memo(
     const [{ state }, toggleMenu] = useMenuState({ unmountOnClose: true });
     const refCopy = useRef(null);
     const refSource = useRef(null);
+    const refSandbox = useRef(null);
     const [anchorRef, setAnchorRef] = useState();
     const [toolTip, setToolTip] = useState();
     const { navbarHeight } = useContext(DomInfoContext);
@@ -33,6 +35,17 @@ export const Example = React.memo(
         .then(() => setToolTip('Copied!'))
         .catch(() => setToolTip('Something went wrong.'));
     };
+
+    const getBtnMouseEvents = (anchorRef, tooltip) => ({
+      onMouseEnter() {
+        setAnchorRef(anchorRef);
+        setToolTip(tooltip);
+        toggleMenu(true);
+      },
+      onMouseLeave() {
+        toggleMenu(false);
+      }
+    });
 
     useEffect(() => {
       setToolTip(sourceBtnTitle);
@@ -55,12 +68,7 @@ export const Example = React.memo(
               className={bem(blockName, 'action-btn') + ' btn'}
               aria-label="Copy code"
               onClick={handleCopy}
-              onMouseEnter={() => {
-                setAnchorRef(refCopy);
-                setToolTip('Copy code');
-                toggleMenu(true);
-              }}
-              onMouseLeave={() => toggleMenu(false)}
+              {...getBtnMouseEvents(refCopy, 'Copy code')}
             >
               <i className="material-icons">content_copy</i>
             </button>
@@ -71,15 +79,23 @@ export const Example = React.memo(
               className={bem(blockName, 'action-btn', { on: isFullSource }) + ' btn'}
               aria-label={sourceBtnTitle}
               onClick={() => setIsFullSource((s) => !s)}
-              onMouseEnter={() => {
-                setAnchorRef(refSource);
-                setToolTip(sourceBtnTitle);
-                toggleMenu(true);
-              }}
-              onMouseLeave={() => toggleMenu(false)}
+              {...getBtnMouseEvents(refSource, sourceBtnTitle)}
             >
               <i className="material-icons">code</i>
             </button>
+          )}
+
+          {codeSandbox && (
+            <a
+              ref={refSandbox}
+              href={codeSandbox}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={bem(blockName, 'action-btn', { link: true }) + ' btn'}
+              {...getBtnMouseEvents(refSandbox, 'Edit on CodeSandbox')}
+            >
+              <CodeSandboxIcon />
+            </a>
           )}
 
           <ControlledMenu

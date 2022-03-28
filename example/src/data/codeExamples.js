@@ -116,37 +116,31 @@ export const eventHandling = {
     </>
   ),
 
-  source: `const [text, setText] = useState('');
+  codeSandbox: 'https://codesandbox.io/s/react-menu-click-event-1p4604',
 
-<div>
-  <Menu
-    menuButton={<MenuButton>Open menu</MenuButton>}
-    onItemClick={(e) => setText(\`[Menu] \${e.value} clicked\`)}
+  source: `<Menu
+  menuButton={<MenuButton>Open menu</MenuButton>}
+  onItemClick={(e) => console.log(\`[Menu] \${e.value} clicked\`)}
+>
+  <MenuItem value="Cut" onClick={(e) => console.log(\`[MenuItem] \${e.value} clicked\`)}>
+    Cut
+  </MenuItem>
+
+  <MenuItem
+    value="Copy"
+    onClick={(e) => {
+      console.log(\`[MenuItem] \${e.value} clicked\`);
+      // Stop the \`onItemClick\` of root menu component from firing
+      e.stopPropagation = true;
+      // Keep the menu open after this menu item is clicked
+      e.keepOpen = true;
+    }}
   >
-    <MenuItem value="Cut" onClick={(e) => setText(\`[MenuItem] \${e.value} clicked\`)}>
-      Cut
-    </MenuItem>
+    Copy
+  </MenuItem>
 
-    <MenuItem
-      value="Copy"
-      onClick={(e) => {
-        setText(\`[MenuItem] \${e.value} clicked\`);
-        // Stop the \`onItemClick\` of root menu component from firing
-        e.stopPropagation = true;
-        // Keep the menu open after this menu item is clicked
-        e.keepOpen = true;
-      }}
-    >
-      Copy
-    </MenuItem>
-
-    <MenuItem value="Paste">Paste</MenuItem>
-  </Menu>
-
-  <button onClick={() => setText("")}>Clear</button>
-</div>
-
-<textarea readOnly value={text} />`
+  <MenuItem value="Paste">Paste</MenuItem>
+</Menu>`
 };
 
 export const radioGroup = {
@@ -340,6 +334,8 @@ export const combined = {
   title: 'Combined example',
 
   desc: <p>An example combines the usage of several components.</p>,
+
+  codeSandbox: 'https://codesandbox.io/s/react-menu-combined-93yfr1',
 
   fullSource: `import { useState } from 'react';
 import {
