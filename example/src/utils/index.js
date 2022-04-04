@@ -1,7 +1,7 @@
 import React, { useEffect, useLayoutEffect } from 'react';
 
 export const version = '3.0.0';
-export const build = '102';
+export const build = '103';
 export const DomInfoContext = React.createContext({});
 export const SettingContext = React.createContext({ theme: 'dark' });
 export const TocContext = React.createContext({}); // Table of contents

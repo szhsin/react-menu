@@ -1,4 +1,4 @@
-import React, { useRef, useState, useContext, useEffect } from 'react';
+import React, { useRef, useState, useContext, useEffect, startTransition } from 'react';
 import {
   Menu as ReactMenu,
   ControlledMenu as ReactControlledMenu,
@@ -525,6 +525,7 @@ const overflowOptions = [['visible'], ['auto'], ['hidden']];
 function MenuOverflowExample() {
   const [overflow, setOverflow] = useState('auto');
   const [position, setPosition] = useState('auto');
+  const [input, setInput] = useState('');
   const [filter, setFilter] = useState('');
   const setToast = useContext(ToastContext);
 
@@ -554,7 +555,7 @@ function MenuOverflowExample() {
           position={position}
           align="end"
         >
-          {new Array(40).fill(0).map((_, i) => {
+          {new Array(50).fill(0).map((_, i) => {
             const item = `Item ${i + 1}`;
             return (
               <MenuItem key={i} onClick={() => setToast(item + ' clicked')}>
@@ -578,16 +579,22 @@ function MenuOverflowExample() {
                 ref={ref}
                 type="text"
                 placeholder="Type a number"
-                value={filter}
-                onChange={(e) => setFilter(e.target.value)}
+                value={input}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  setInput(value);
+                  startTransition(() => {
+                    setFilter(value.trim());
+                  });
+                }}
               />
             )}
           </FocusableItem>
           <MenuGroup takeOverflow>
-            {new Array(40)
+            {new Array(50)
               .fill(0)
               .map((_, i) => `Item ${i + 1}`)
-              .filter((item) => item.includes(filter.trim()))
+              .filter((item) => item.includes(filter))
               .map((item, i) => (
                 <MenuItem key={i} onClick={() => setToast(item + ' clicked')}>
                   {item}

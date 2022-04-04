@@ -807,7 +807,7 @@ const [filter, setFilter] = useState('');
 
 <Menu menuButton={<MenuButton>Overflow</MenuButton>}
     overflow={overflow} position={position}>
-    {new Array(40).fill(0).map(
+    {new Array(50).fill(0).map(
         (_, i) => <MenuItem key={i}>Item {i + 1}</MenuItem>)}
 </Menu>
 
@@ -822,7 +822,7 @@ const [filter, setFilter] = useState('');
         )}
     </FocusableItem>
     <MenuGroup takeOverflow>
-        {new Array(40).fill(0)
+        {new Array(50).fill(0)
             .map((_, i) => \`Item \${i + 1}\`)
             .filter(item => item.includes(filter.trim()))
             .map((item, i) => <MenuItem key={i}>{item}</MenuItem>)}
