@@ -23,7 +23,8 @@ type ClassNameProp<M = undefined> = string | ((modifiers: M) => string);
 
 type RenderProp<M, R = React.ReactNode> = R | ((modifiers: M) => R);
 
-interface BaseProps<M = undefined> extends Omit<React.HTMLAttributes<HTMLElement>, 'className'> {
+interface BaseProps<M = undefined>
+  extends Omit<React.HTMLAttributes<HTMLElement>, 'className' | 'children'> {
   ref?: React.Ref<any>;
   /**
    * Can be a string or a function which receives a modifier object and returns a CSS `class` string.
