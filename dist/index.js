@@ -1111,7 +1111,7 @@ var MenuList = function MenuList(_ref) {
   var handlePosition = react.useCallback(function () {
     if (!containerRef.current) {
       if (process.env.NODE_ENV !== 'production') {
-        throw new Error('[React-Menu] Menu cannot be positioned properly as container ref is null. If you initialise isOpen prop to true for ControlledMenu, please see this link for a solution: https://github.com/szhsin/react-menu/issues/2#issuecomment-719166062');
+        console.error('[React-Menu] Menu cannot be positioned properly as container ref is null. If you need to initialise `state` prop to "open" for ControlledMenu, please see this solution: https://codesandbox.io/s/initial-open-sp10wn');
       }
 
       return;
