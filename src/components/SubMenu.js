@@ -216,7 +216,8 @@ export const SubMenu = withHovering(
           isDisabled={isDisabled}
         />
       );
-      return isPortal ? createPortal(menuList, rootMenuRef.current) : menuList;
+      const container = rootMenuRef.current;
+      return isPortal && container ? createPortal(menuList, container) : menuList;
     };
 
     return (
