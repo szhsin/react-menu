@@ -153,7 +153,7 @@ var ControlledMenu = /*#__PURE__*/forwardRef(function ControlledMenu(_ref, exter
     })
   }));
 
-  if (portal) {
+  if (portal && typeof document !== 'undefined') {
     return /*#__PURE__*/createPortal(menuList, document.body);
   } else {
     return menuList;

@@ -206,7 +206,8 @@ var SubMenu = /*#__PURE__*/withHovering('SubMenu', function SubMenu(_ref) {
       isDisabled: isDisabled
     }));
 
-    return isPortal ? /*#__PURE__*/createPortal(menuList, rootMenuRef.current) : menuList;
+    var container = rootMenuRef.current;
+    return isPortal && container ? /*#__PURE__*/createPortal(menuList, container) : menuList;
   };
 
   return /*#__PURE__*/jsxs("li", {

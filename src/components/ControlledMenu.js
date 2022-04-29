@@ -178,7 +178,7 @@ export const ControlledMenu = forwardRef(function ControlledMenu(
     </div>
   );
 
-  if (portal) {
+  if (portal && typeof document !== 'undefined') {
     return createPortal(menuList, document.body);
   } else {
     return menuList;
