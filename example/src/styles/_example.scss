@@ -39,10 +39,9 @@
   }
 }
 
-.example__actions,
-[aria-labelledby='bounding-box'] {
+.example__actions {
   .szh-menu {
-    min-width: initial;
+    min-width: auto;
     padding: 0.625rem 1rem;
   }
 }
@@ -184,35 +183,34 @@
 [aria-labelledby='bounding-box'] {
   .example__demo {
     display: block;
-    height: 18rem;
+  }
+
+  .scrollview {
+    height: 20rem;
     overflow: auto;
+    margin-top: 0.75rem;
+    border-radius: var.$border-radius-medium;
+    @include mixins.border;
     @include mixins.scrollbar;
     .szh-app--theme-dark & {
       @include mixins.scrollbar-dark;
-    }
-
-    .szh-menu {
-      max-width: 7.125rem;
-      white-space: initial;
-      text-align: center;
-      padding: 0.625rem 0.5rem;
+      border-color: var.$border-dark;
     }
   }
 
   .bounding-box {
-    padding-bottom: 24rem;
+    padding-bottom: 26rem;
     display: flex;
     justify-content: space-around;
     @media (max-width: var.$bp-sm) {
-      flex-direction: column;
-      align-items: center;
+      display: block;
     }
   }
 
   .anchor {
     width: 4rem;
     height: 3.5rem;
-    margin-top: 12.75rem;
+    margin-top: 14rem;
     border-radius: var.$border-radius-medium;
     background-color: var.$btn-light;
     @include mixins.border('border', 2px, false);
@@ -220,6 +218,36 @@
       border-color: var.$border-dark;
       background-color: var.$background-dark;
     }
+    @media (max-width: var.$bp-sm) {
+      &.left {
+        margin-left: auto;
+        margin-right: auto;
+      }
+      &.right {
+        margin-left: 2rem;
+      }
+    }
+  }
+
+  label {
+    user-select: none;
+  }
+
+  input[type='checkbox'] {
+    appearance: checkbox;
+    transform: scale(1.25);
+    margin-right: 0.75rem;
+  }
+}
+
+.bounding-box-menu {
+  max-width: 7.5rem;
+  min-width: auto;
+  white-space: normal;
+  text-align: center;
+  padding: 0.625rem 0.5rem;
+  &.portal {
+    z-index: 201;
   }
 }
 
