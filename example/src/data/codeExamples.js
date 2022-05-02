@@ -838,10 +838,12 @@ export const boundingBox = {
 
   desc: (
     <p>
-      Normally menu positions itself within its nearest ancestor which has CSS <code>overflow</code>{' '}
-      set to a value other than 'visible', or the browser viewport. Also, you can specify a
-      container in the page as the bounding box for a menu using the <code>boundingBoxRef</code>{' '}
-      prop. Menu will try to position itself within that container.
+      Normally menu positions itself within its nearest ancestor element which has CSS{' '}
+      <code>overflow</code> set to a value other than 'visible', or the browser viewport when such
+      an element is not present. You can use the <code>portal</code> prop to make menu visually
+      “break out” of its scrollable container. Also, you can specify a container in the page as the
+      bounding box for a menu using the <code>boundingBoxRef</code> prop. Menu will try to position
+      itself within that container.
     </p>
   ),
 
@@ -849,6 +851,8 @@ export const boundingBox = {
 const leftAnchor = useRef(null);
 const rightAnchor = useRef(null);
 const [{ state }, toggleMenu] = useMenuState();
+const [portal, setPortal] = useState(false);
+
 useEffect(() => {
     toggleMenu(true);
 }, [toggleMenu]);
@@ -864,11 +868,17 @@ const tooltipProps = {
     boundingBoxPadding: '1 8 1 1'
 };
 
+<label>
+  <input type="checkbox" checked={portal} 
+    onChange={(e) => setPortal(e.target.checked)} />
+  Render via portal
+</label>
+
 <div ref={ref}>
     <div ref={leftAnchor} />
-    <ControlledMenu {...tooltipProps}
+    <ControlledMenu {...tooltipProps} portal={portal}
         anchorRef={leftAnchor} direction="top">
-        I can flip if you scroll this block
+        I can flip over if you scroll this block
     </ControlledMenu>
 
     <div ref={rightAnchor} />

@@ -570,7 +570,12 @@ function MenuOverflowExample() {
           overflow={overflow}
           position={position}
           boundingBoxPadding="10"
-          onMenuChange={(e) => e.open && setFilter('')}
+          onMenuChange={(e) => {
+            if (e.open) {
+              setInput('');
+              setFilter('');
+            }
+          }}
           align="end"
         >
           <FocusableItem style={{ padding: '0.375rem 1rem' }}>
@@ -613,6 +618,8 @@ function BoundingBoxExample() {
   const leftAnchor = useRef(null);
   const rightAnchor = useRef(null);
   const [{ state }, toggleMenu] = useMenuState();
+  const [portal, setPortal] = useState(false);
+
   useEffect(() => {
     toggleMenu(true);
   }, [toggleMenu]);
@@ -629,23 +636,41 @@ function BoundingBoxExample() {
   };
 
   return (
-    <Example data={codeExamples.boundingBox} ref={ref}>
-      <div className="bounding-box">
-        <div className="anchor" ref={leftAnchor} />
-        <ControlledMenu {...tooltipProps} anchorRef={leftAnchor} direction="top">
-          I can flip if you scroll this block
-        </ControlledMenu>
+    <Example data={codeExamples.boundingBox}>
+      <label>
+        <input type="checkbox" checked={portal} onChange={(e) => setPortal(e.target.checked)} />
+        Render via portal
+      </label>
 
-        <div className="anchor" ref={rightAnchor} />
-        {/* explicitly set bounding box with the boundingBoxRef prop */}
-        <ControlledMenu
-          {...tooltipProps}
-          boundingBoxRef={ref}
-          anchorRef={rightAnchor}
-          direction="right"
-        >
-          I&apos;m a tooltip built with React-Menu
-        </ControlledMenu>
+      <div className="scrollview" ref={ref}>
+        <div className="bounding-box">
+          <div className="anchor left" ref={leftAnchor} />
+          <ControlledMenu
+            {...tooltipProps}
+            menuClassName={`bounding-box-menu ${portal && 'portal'}`}
+            anchorRef={leftAnchor}
+            direction="top"
+            portal={portal}
+            key={portal}
+          >
+            {portal
+              ? "I'm rendered above the parent scrollable container via portal"
+              : 'I can flip over if you scroll this block'}
+          </ControlledMenu>
+
+          <div className="anchor right" ref={rightAnchor} />
+          {/* explicitly set bounding box with the boundingBoxRef prop */}
+          <ControlledMenu
+            {...tooltipProps}
+            menuClassName="bounding-box-menu"
+            boundingBoxRef={ref}
+            anchorRef={rightAnchor}
+            direction="right"
+            repositionFlag={portal.toString()}
+          >
+            I&apos;m a tooltip built with React-Menu
+          </ControlledMenu>
+        </div>
       </div>
     </Example>
   );
