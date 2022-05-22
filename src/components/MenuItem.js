@@ -1,167 +1,132 @@
-import React, { memo, useContext, useMemo, useRef } from 'react';
-import PropTypes from 'prop-types';
+import { useContext, useMemo } from 'react';
+import { any, string, bool, func, node, oneOf, oneOfType } from 'prop-types';
+import { useBEM, useItemState, useCombinedRef } from '../hooks';
 import {
-    useBEM,
-    useFlatStyles,
-    useActiveState,
-    useItemState,
-    useCombinedRef
-} from '../hooks';
-import {
-    attachHandlerProps,
-    safeCall,
-    stylePropTypes,
-    menuClass,
-    menuItemClass,
-    validateIndex,
-    withHovering,
-    EventHandlersContext,
-    RadioGroupContext,
-    Keys
+  attachHandlerProps,
+  commonProps,
+  safeCall,
+  stylePropTypes,
+  menuClass,
+  menuItemClass,
+  withHovering,
+  EventHandlersContext,
+  RadioGroupContext,
+  Keys
 } from '../utils';
 
-
-export const MenuItem = withHovering(memo(function MenuItem({
+export const MenuItem = withHovering(
+  'MenuItem',
+  function MenuItem({
     className,
-    styles,
     value,
     href,
     type,
     checked,
     disabled,
-    index,
     children,
     onClick,
     isHovering,
+    itemRef,
     externalRef,
     ...restProps
-}) {
-    const isDisabled = Boolean(disabled);
-    validateIndex(index, isDisabled, children);
-    const ref = useRef();
-    const {
-        setHover,
-        onBlur,
-        onMouseEnter,
-        onMouseLeave
-    } = useItemState(ref, index, isHovering, isDisabled);
+  }) {
+    const isDisabled = !!disabled;
+    const { setHover, ...stateHandlers } = useItemState(itemRef, itemRef, isHovering, isDisabled);
     const eventHandlers = useContext(EventHandlersContext);
     const radioGroup = useContext(RadioGroupContext);
-    const {
-        isActive, onKeyUp, onBlur: activeStateBlur,
-        ...activeStateHandlers
-    } = useActiveState(isHovering, isDisabled);
     const isRadio = type === 'radio';
     const isCheckBox = type === 'checkbox';
-    const isAnchor = Boolean(href) && !isDisabled && !isRadio && !isCheckBox;
-    const isChecked = isRadio
-        ? radioGroup.value === value
-        : (isCheckBox ? Boolean(checked) : false);
+    const isAnchor = !!href && !isDisabled && !isRadio && !isCheckBox;
+    const isChecked = isRadio ? radioGroup.value === value : isCheckBox ? !!checked : false;
 
-    const handleClick = e => {
-        if (isDisabled) return;
+    const handleClick = (e) => {
+      if (isDisabled) {
+        e.stopPropagation();
+        e.preventDefault();
+        return;
+      }
 
-        const event = { value, syntheticEvent: e };
-        if (e.key !== undefined) event.key = e.key;
-        if (isCheckBox) event.checked = !isChecked;
+      const event = { value, syntheticEvent: e };
+      if (e.key !== undefined) event.key = e.key;
+      if (isCheckBox) event.checked = !isChecked;
+      if (isRadio) event.name = radioGroup.name;
+      safeCall(onClick, event);
+      if (isRadio) safeCall(radioGroup.onRadioChange, event);
+      eventHandlers.handleClick(event, isCheckBox || isRadio);
+    };
 
-        if (isRadio) {
-            event.name = radioGroup.name;
-            safeCall(radioGroup.onRadioChange, event);
-        }
+    const handleKeyDown = (e) => {
+      if (!isHovering) return;
 
-        if (!event.stopPropagation) safeCall(onClick, event);
-        eventHandlers.handleClick(event, isCheckBox || isRadio);
-    }
+      switch (e.key) {
+        case Keys.ENTER:
+        case Keys.SPACE:
+          if (isAnchor) {
+            itemRef.current.click();
+          } else {
+            handleClick(e);
+          }
+          break;
+      }
+    };
 
-    const handleKeyUp = e => {
-        // Check 'isActive' to skip KeyUp when corresponding KeyDown was initiated in another menu item
-        if (!isActive) return;
+    const modifiers = useMemo(
+      () =>
+        Object.freeze({
+          type,
+          disabled: isDisabled,
+          hover: isHovering,
+          checked: isChecked,
+          anchor: isAnchor
+        }),
+      [type, isDisabled, isHovering, isChecked, isAnchor]
+    );
 
-        onKeyUp(e);
-        switch (e.key) {
-            case Keys.SPACE:
-            case Keys.ENTER:
-                if (isAnchor) {
-                    ref.current.click();
-                } else {
-                    handleClick(e);
-                }
-                break;
-        }
-    }
-
-    const handleBlur = e => {
-        activeStateBlur(e);
-        onBlur(e);
-    }
-
-    const modifiers = useMemo(() => Object.freeze({
-        type,
-        disabled: isDisabled,
-        hover: isHovering,
-        active: isActive,
-        checked: isChecked,
-        anchor: isAnchor
-    }), [type, isDisabled, isHovering, isActive, isChecked, isAnchor]);
-
-    const handlers = attachHandlerProps({
-        ...activeStateHandlers,
-        onMouseEnter,
-        onMouseLeave,
+    const handlers = attachHandlerProps(
+      {
+        ...stateHandlers,
         onMouseDown: setHover,
-        onKeyUp: handleKeyUp,
-        onBlur: handleBlur,
+        onKeyDown: handleKeyDown,
         onClick: handleClick
-    }, restProps);
+      },
+      restProps
+    );
 
     // Order of props overriding (same in all components):
     // 1. Preset props adhering to WAI-ARIA Authoring Practices.
     // 2. restProps(consuming code overriding)
     // 3. handlers (with consuming code handlers hooked)
-    // 4. ref, className, and styles (style prop is overriden, consuming code should 
-    //    use the styles prop instead)
+    // 4. ref, className
     const menuItemProps = {
-        role: isRadio ? 'menuitemradio' : (isCheckBox ? 'menuitemcheckbox' : 'menuitem'),
-        'aria-checked': (isRadio || isCheckBox) ? isChecked : undefined,
-        'aria-disabled': isDisabled || undefined,
-        tabIndex: isHovering ? 0 : -1,
-        ...restProps,
-        ...handlers,
-        ref: useCombinedRef(externalRef, ref),
-        className: useBEM({ block: menuClass, element: menuItemClass, modifiers, className }),
-        style: useFlatStyles(styles, modifiers),
+      role: isRadio ? 'menuitemradio' : isCheckBox ? 'menuitemcheckbox' : 'menuitem',
+      'aria-checked': isRadio || isCheckBox ? isChecked : undefined,
+      ...restProps,
+      ...handlers,
+      ...commonProps(isDisabled, isHovering),
+      ref: useCombinedRef(externalRef, itemRef),
+      className: useBEM({ block: menuClass, element: menuItemClass, modifiers, className }),
+      children: useMemo(() => safeCall(children, modifiers), [children, modifiers])
     };
 
-    const renderChildren = useMemo(() => safeCall(children, modifiers), [children, modifiers]);
-
     if (isAnchor) {
-        return (
-            <li role="presentation">
-                <a {...menuItemProps} href={href}>
-                    {renderChildren}
-                </a>
-            </li>
-        );
+      return (
+        <li role="presentation">
+          <a href={href} {...menuItemProps} />
+        </li>
+      );
     } else {
-        return (
-            <li {...menuItemProps}>
-                {renderChildren}
-            </li>
-        );
+      return <li {...menuItemProps} />;
     }
-}), 'MenuItem');
+  }
+);
 
 MenuItem.propTypes = {
-    ...stylePropTypes(),
-    value: PropTypes.any,
-    href: PropTypes.string,
-    type: PropTypes.oneOf(['checkbox', 'radio']),
-    checked: PropTypes.bool,
-    disabled: PropTypes.bool,
-    children: PropTypes.oneOfType([
-        PropTypes.node,
-        PropTypes.func
-    ]),
-    onClick: PropTypes.func
+  ...stylePropTypes(),
+  value: any,
+  href: string,
+  type: oneOf(['checkbox', 'radio']),
+  checked: bool,
+  disabled: bool,
+  children: oneOfType([node, func]),
+  onClick: func
 };

@@ -1,19 +1,21 @@
-import React, { forwardRef, useContext } from 'react';
-import { HoverIndexContext } from './constants';
-import { defineName } from './utils';
+import { memo, forwardRef, useContext, useRef } from 'react';
+import { HoverItemContext } from './constants';
 
-export const withHovering = (WrapppedComponent, name) => {
-    const WithHovering = defineName(forwardRef((props, ref) => {
-        return (
-            <WrapppedComponent
-                {...props}
-                externalRef={ref}
-                isHovering={useContext(HoverIndexContext) === props.index}
-            />
-        );
-    }), name);
+export const withHovering = (name, WrapppedComponent) => {
+  const Component = memo(WrapppedComponent);
+  const WithHovering = forwardRef((props, ref) => {
+    const itemRef = useRef(null);
+    return (
+      <Component
+        {...props}
+        itemRef={itemRef}
+        externalRef={ref}
+        isHovering={useContext(HoverItemContext) === itemRef.current}
+      />
+    );
+  });
 
-    WithHovering.displayName = `WithHovering(${name})`;
+  WithHovering.displayName = `WithHovering(${name})`;
 
-    return WithHovering;
+  return WithHovering;
 };

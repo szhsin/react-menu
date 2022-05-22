@@ -1,253 +1,260 @@
-import React, {
-    memo,
-    useRef,
-    useContext,
-    useEffect,
-    useMemo
-} from 'react';
+import { useRef, useContext, useEffect, useMemo, useImperativeHandle } from 'react';
 import { createPortal } from 'react-dom';
-import PropTypes from 'prop-types';
+import { node, func, bool, shape, oneOf, oneOfType } from 'prop-types';
 import {
-    useBEM,
-    useFlatStyles,
-    useActiveState,
-    useMenuChange,
-    useMenuStateAndFocus,
-    useCombinedRef
+  useBEM,
+  useCombinedRef,
+  useMenuChange,
+  useMenuStateAndFocus,
+  useItemEffect
 } from '../hooks';
 import { MenuList } from './MenuList';
 import {
-    attachHandlerProps,
-    safeCall,
-    stylePropTypes,
-    sharedMenuPropTypes,
-    sharedMenuDefaultProp,
-    menuClass,
-    subMenuClass,
-    menuItemClass,
-    isMenuOpen,
-    validateIndex,
-    withHovering,
-    SettingsContext,
-    ItemSettingsContext,
-    MenuListItemContext,
-    Keys,
-    HoverIndexActionTypes,
-    SubmenuActionTypes,
-    FocusPositions
+  attachHandlerProps,
+  batchedUpdates,
+  commonProps,
+  safeCall,
+  stylePropTypes,
+  uncontrolledMenuPropTypes,
+  menuPropTypes,
+  menuClass,
+  subMenuClass,
+  menuItemClass,
+  isMenuOpen,
+  withHovering,
+  SettingsContext,
+  ItemSettingsContext,
+  MenuListContext,
+  MenuListItemContext,
+  Keys,
+  HoverActionTypes,
+  FocusPositions
 } from '../utils';
 
-
-export const SubMenu = withHovering(memo(function SubMenu({
+export const SubMenu = withHovering(
+  'SubMenu',
+  function SubMenu({
     'aria-label': ariaLabel,
     className,
     disabled,
+    direction,
     label,
-    index,
+    openTrigger,
     onMenuChange,
     isHovering,
+    instanceRef,
+    itemRef,
     captureFocus: _1,
     repositionFlag: _2,
     itemProps = {},
     ...restProps
-}) {
-    const isDisabled = Boolean(disabled);
-    validateIndex(index, isDisabled, label);
-
-    const {
-        initialMounted, unmountOnClose, transition, transitionTimeout, rootMenuRef
-    } = useContext(SettingsContext);
+  }) {
+    const settings = useContext(SettingsContext);
+    const { rootMenuRef } = settings;
     const { submenuOpenDelay, submenuCloseDelay } = useContext(ItemSettingsContext);
-    const {
-        parentMenuRef, parentOverflow,
-        isParentOpen, isSubmenuOpen, dispatch
-    } = useContext(MenuListItemContext);
+    const { parentMenuRef, parentDir, overflow: parentOverflow } = useContext(MenuListContext);
+    const { isParentOpen, isSubmenuOpen, setOpenSubmenuCount, dispatch, updateItems } =
+      useContext(MenuListItemContext);
     const isPortal = parentOverflow !== 'visible';
 
-    const {
-        openMenu,
-        toggleMenu,
-        state,
-        ...otherStateProps
-    } = useMenuStateAndFocus({ initialMounted, unmountOnClose, transition, transitionTimeout });
+    const [stateProps, toggleMenu, _openMenu] = useMenuStateAndFocus(settings);
 
+    const { state } = stateProps;
+    const isDisabled = !!disabled;
     const isOpen = isMenuOpen(state);
-    const {
-        isActive, onKeyUp,
-        ...activeStateHandlers
-    } = useActiveState(isHovering, isDisabled, Keys.RIGHT);
     const containerRef = useRef(null);
-    const itemRef = useRef(null);
-    const timeoutId = useRef();
+    const timeoutId = useRef(0);
 
-    const delayOpen = delay => {
-        dispatch({ type: HoverIndexActionTypes.SET, index });
-        timeoutId.current = setTimeout(openMenu, Math.max(delay, 0));
-    }
+    const stopTimer = () => {
+      if (timeoutId.current) {
+        clearTimeout(timeoutId.current);
+        timeoutId.current = 0;
+      }
+    };
 
-    const handleMouseEnter = () => {
-        if (isDisabled || isOpen) return;
+    const openMenu = (...args) => {
+      stopTimer();
+      !isDisabled && _openMenu(...args);
+    };
 
-        if (isSubmenuOpen) {
-            timeoutId.current = setTimeout(
-                () => delayOpen(submenuOpenDelay - submenuCloseDelay),
-                submenuCloseDelay
-            );
-        } else {
-            delayOpen(submenuOpenDelay);
-        }
-    }
+    const setHover = () =>
+      !isHovering && !isDisabled && dispatch(HoverActionTypes.SET, itemRef.current);
+
+    const delayOpen = (delay) => {
+      setHover();
+      if (!openTrigger)
+        timeoutId.current = setTimeout(() => batchedUpdates(openMenu), Math.max(delay, 0));
+    };
+
+    const handleMouseMove = () => {
+      if (timeoutId.current || isOpen || isDisabled) return;
+
+      if (isSubmenuOpen) {
+        timeoutId.current = setTimeout(
+          () => delayOpen(submenuOpenDelay - submenuCloseDelay),
+          submenuCloseDelay
+        );
+      } else {
+        delayOpen(submenuOpenDelay);
+      }
+    };
 
     const handleMouseLeave = () => {
-        clearTimeout(timeoutId.current);
-        if (!isOpen) {
-            dispatch({ type: HoverIndexActionTypes.UNSET, index });
-        }
-    }
+      stopTimer();
+      if (!isOpen) dispatch(HoverActionTypes.UNSET, itemRef.current);
+    };
 
-    const handleClick = () => {
-        if (isDisabled) return;
-        clearTimeout(timeoutId.current);
-        openMenu();
-    }
+    const handleKeyDown = (e) => {
+      let handled = false;
 
-    const handleKeyDown = e => {
-        let handled = false;
+      switch (e.key) {
+        // LEFT key is bubbled up from submenu items
+        case Keys.LEFT:
+          if (isOpen) {
+            itemRef.current.focus();
+            toggleMenu(false);
+            handled = true;
+          }
+          break;
 
-        switch (e.key) {
-            // LEFT key is bubbled up from submenu items
-            case Keys.LEFT:
-                if (isOpen) {
-                    toggleMenu(false);
-                    itemRef.current.focus();
-                    handled = true;
-                }
-                break;
+        // prevent browser from scrolling page to the right
+        case Keys.RIGHT:
+          if (!isOpen) handled = true;
+          break;
+      }
 
-            // prevent browser from scrolling page to the right
-            case Keys.RIGHT:
-                if (!isOpen) handled = true;
-                break;
-        }
+      if (handled) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+    };
 
-        if (handled) {
-            e.preventDefault();
-            e.stopPropagation();
-        }
-    }
+    const handleItemKeyDown = (e) => {
+      if (!isHovering) return;
 
-    const handleKeyUp = e => {
-        // Check 'isActive' to skip KeyUp when corresponding KeyDown was initiated in another menu item
-        if (!isActive) return;
+      switch (e.key) {
+        case Keys.ENTER:
+        case Keys.SPACE:
+        case Keys.RIGHT:
+          openTrigger !== 'none' && openMenu(FocusPositions.FIRST);
+          break;
+      }
+    };
 
-        onKeyUp(e);
-        switch (e.key) {
-            case Keys.SPACE:
-            case Keys.ENTER:
-            case Keys.RIGHT:
-                openMenu(FocusPositions.FIRST);
-                break;
-        }
-    }
+    useItemEffect(isDisabled, itemRef, updateItems);
+    useMenuChange(onMenuChange, isOpen);
 
     useEffect(() => () => clearTimeout(timeoutId.current), []);
     useEffect(() => {
-        // Don't set focus when parent menu is closed, otherwise focus will be lost
-        // and onBlur event will be fired with relatedTarget setting as null.
-        if (isHovering && isParentOpen) {
-            itemRef.current.focus();
-        } else {
-            toggleMenu(false);
-        }
-    }, [isHovering, isParentOpen, toggleMenu]);
+      // Don't set focus when parent menu is closed, otherwise focus will be lost
+      // and onBlur event will be fired with relatedTarget setting as null.
+      if (isHovering && isParentOpen) {
+        itemRef.current.focus();
+      } else {
+        toggleMenu(false);
+      }
+    }, [isHovering, isParentOpen, toggleMenu, itemRef]);
 
     useEffect(() => {
-        dispatch({ type: isOpen ? SubmenuActionTypes.OPEN : SubmenuActionTypes.CLOSE });
-    }, [dispatch, isOpen]);
+      setOpenSubmenuCount((count) => (isOpen ? count + 1 : Math.max(count - 1, 0)));
+    }, [setOpenSubmenuCount, isOpen]);
 
-    useMenuChange(onMenuChange, isOpen);
+    useImperativeHandle(instanceRef, () => ({
+      openMenu: (...args) => {
+        if (isParentOpen) {
+          setHover();
+          openMenu(...args);
+        }
+      },
+      closeMenu: () => {
+        if (isOpen) {
+          itemRef.current.focus();
+          toggleMenu(false);
+        }
+      }
+    }));
 
-    const modifiers = useMemo(() => Object.freeze({
-        open: isOpen,
-        hover: isHovering,
-        active: isActive,
-        disabled: isDisabled
-    }), [isOpen, isHovering, isActive, isDisabled]);
+    const modifiers = useMemo(
+      () =>
+        Object.freeze({
+          open: isOpen,
+          hover: isHovering,
+          disabled: isDisabled,
+          submenu: true
+        }),
+      [isOpen, isHovering, isDisabled]
+    );
 
-    const {
-        ref: externaItemlRef,
-        className: itemClassName,
-        styles: itemStyles,
-        ...restItemProps
-    } = itemProps;
+    const { ref: externalItemRef, className: itemClassName, ...restItemProps } = itemProps;
 
-    const itemHandlers = attachHandlerProps({
-        ...activeStateHandlers,
-        onMouseEnter: handleMouseEnter,
+    const itemHandlers = attachHandlerProps(
+      {
+        onMouseMove: handleMouseMove,
         onMouseLeave: handleMouseLeave,
-        onMouseDown: () => !isHovering && dispatch({ type: HoverIndexActionTypes.SET, index }),
-        onClick: handleClick,
-        onKeyUp: handleKeyUp
-    }, restItemProps);
+        onMouseDown: setHover,
+        onKeyDown: handleItemKeyDown,
+        onClick: () => openTrigger !== 'none' && openMenu()
+      },
+      restItemProps
+    );
 
     const getMenuList = () => {
-        const menuList = (
-            <MenuList
-                {...restProps}
-                {...otherStateProps}
-                state={state}
-                ariaLabel={ariaLabel || (typeof label === 'string' ? label : 'Submenu')}
-                anchorRef={itemRef}
-                containerRef={isPortal ? rootMenuRef : containerRef}
-                parentScrollingRef={isPortal && parentMenuRef}
-                isDisabled={isDisabled} />
-        );
-        return isPortal ? createPortal(menuList, rootMenuRef.current) : menuList;
-    }
+      const menuList = (
+        <MenuList
+          {...restProps}
+          {...stateProps}
+          ariaLabel={ariaLabel || (typeof label === 'string' ? label : 'Submenu')}
+          anchorRef={itemRef}
+          containerRef={isPortal ? rootMenuRef : containerRef}
+          direction={
+            direction || (parentDir === 'right' || parentDir === 'left' ? parentDir : 'right')
+          }
+          parentScrollingRef={isPortal && parentMenuRef}
+          isDisabled={isDisabled}
+        />
+      );
+      const container = rootMenuRef.current;
+      return isPortal && container ? createPortal(menuList, container) : menuList;
+    };
 
     return (
-        <li className={useBEM({ block: menuClass, element: subMenuClass, className })}
-            role="presentation" ref={containerRef}
-            onKeyDown={handleKeyDown}>
+      <li
+        className={useBEM({ block: menuClass, element: subMenuClass, className })}
+        role="presentation"
+        ref={containerRef}
+        onKeyDown={handleKeyDown}
+      >
+        <div
+          role="menuitem"
+          aria-haspopup
+          aria-expanded={isOpen}
+          {...restItemProps}
+          {...itemHandlers}
+          {...commonProps(isDisabled, isHovering)}
+          ref={useCombinedRef(externalItemRef, itemRef)}
+          className={useBEM({
+            block: menuClass,
+            element: menuItemClass,
+            modifiers,
+            className: itemClassName
+          })}
+        >
+          {useMemo(() => safeCall(label, modifiers), [label, modifiers])}
+        </div>
 
-            <div role="menuitem"
-                aria-haspopup={true}
-                aria-expanded={isOpen}
-                aria-disabled={isDisabled || undefined}
-                tabIndex={isHovering && !isOpen ? 0 : -1}
-                {...restItemProps}
-                {...itemHandlers}
-                ref={useCombinedRef(externaItemlRef, itemRef)}
-                className={useBEM({
-                    block: menuClass,
-                    element: menuItemClass,
-                    modifiers,
-                    className: itemClassName
-                })}
-                style={useFlatStyles(itemStyles, modifiers)}
-            >
-                {useMemo(() => safeCall(label, modifiers), [label, modifiers])}
-            </div>
-
-            {state && getMenuList()}
-        </li>
+        {state && getMenuList()}
+      </li>
     );
-}), 'SubMenu');
+  }
+);
 
 SubMenu.propTypes = {
-    ...sharedMenuPropTypes,
-    disabled: PropTypes.bool,
-    label: PropTypes.oneOfType([
-        PropTypes.node,
-        PropTypes.func
-    ]),
-    itemProps: PropTypes.shape({
-        ...stylePropTypes()
-    }),
-    onMenuChange: PropTypes.func
-};
-
-SubMenu.defaultProps = {
-    ...sharedMenuDefaultProp,
-    direction: 'right'
+  ...menuPropTypes,
+  ...uncontrolledMenuPropTypes,
+  disabled: bool,
+  openTrigger: oneOf(['none', 'clickOnly']),
+  label: oneOfType([node, func]),
+  itemProps: shape({
+    ...stylePropTypes()
+  })
 };

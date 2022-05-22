@@ -1,5 +1,4 @@
 export * from './constants';
-export * from './cloneChildren';
-export * from './propTypes';
 export * from './utils';
-export * from './withHovering';
+export * from './propTypes';
+export { withHovering } from './withHovering';

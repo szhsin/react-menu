@@ -1,48 +1,39 @@
-import React, { useState, useRef, useLayoutEffect } from 'react';
-import { HashLink as Link } from 'react-router-hash-link';
-import { bem } from '../utils';
+import { createElement, memo, useState, useRef } from 'react';
+import Link from 'next/link';
+import { bem, useLayoutEffect } from '../utils';
 
 const blockName = 'hash-heading';
 
-export const HashHeading = React.memo(function HashHeading({
-    id,
-    title,
-    heading,
-    smooth
-}) {
+export const HashHeading = memo(function HashHeading({ id, title, heading = 'h1' }) {
+  const ref = useRef(null);
+  const [hover, setHover] = useState(false);
+  const [fontSize, setFontSize] = useState();
 
-    const ref = useRef(null);
-    const [hover, setHover] = useState(false);
-    const [fontSize, setFontSize] = useState();
+  useLayoutEffect(() => {
+    setFontSize(getComputedStyle(ref.current).getPropertyValue('font-size'));
+  }, []);
 
-    useLayoutEffect(() => {
-        setFontSize(getComputedStyle(ref.current).getPropertyValue('font-size'));
-    }, []);
+  return (
+    <div
+      className={bem(blockName)}
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
+    >
+      {createElement(
+        heading,
+        {
+          id,
+          ref,
+          className: bem(blockName, 'heading')
+        },
+        title
+      )}
 
-    return (
-        <div className={bem(blockName)}
-            onMouseEnter={() => setHover(true)}
-            onMouseLeave={() => setHover(false)}>
-            {React.createElement(
-                heading,
-                {
-                    id,
-                    ref,
-                    className: bem(blockName, 'heading')
-                },
-                title)}
-
-            <Link className={bem(blockName, 'link', { hover })}
-                to={`#${id}`}
-                smooth={smooth}
-                style={{ fontSize }}>
-                #
-            </Link>
-        </div>
-    );
+      <Link href={`#${id}`}>
+        <a className={bem(blockName, 'link', { hover })} style={{ fontSize }}>
+          #
+        </a>
+      </Link>
+    </div>
+  );
 });
-
-HashHeading.defaultProps = {
-    heading: 'h1',
-    smooth: true
-};

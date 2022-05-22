@@ -1,47 +1,47 @@
 @use 'sass:list';
 @use 'sass:map';
 
-$menu: "szh-menu";
+$menu: 'szh-menu';
 $duration: 0.15s;
 $directions: (
-    "left": "X" 1,
-    "right": "X" -1,
-    "top": "Y" 1,
-    "bottom": "Y" -1,
+  'left': 'X' 1,
+  'right': 'X' -1,
+  'top': 'Y' 1,
+  'bottom': 'Y' -1
 );
 
 @mixin animation($name, $dir) {
-    .#{$menu}--state-opening.#{$menu}--dir-#{$dir} {
-        animation: #{$menu}-show-#{$name}-#{$dir} $duration ease-out;
-    }
+  .#{$menu}--state-opening.#{$menu}--dir-#{$dir} {
+    animation: #{$menu}-show-#{$name}-#{$dir} $duration ease-out;
+  }
 
-    .#{$menu}--state-closing.#{$menu}--dir-#{$dir} {
-        animation: #{$menu}-hide-#{$name}-#{$dir} $duration ease-in;
-    }
+  .#{$menu}--state-closing.#{$menu}--dir-#{$dir} {
+    animation: #{$menu}-hide-#{$name}-#{$dir} $duration ease-in forwards;
+  }
 }
 
 @mixin slide-start($axis, $sign) {
-    opacity: 0;
-    transform: translate#{$axis }($sign * 0.75rem);
+  opacity: 0;
+  transform: translate#{$axis }($sign * 0.75rem);
 }
 
 @each $dir, $value in $directions {
-    $axis: list.nth($value, 1);
-    $sign: list.nth($value, 2);
+  $axis: list.nth($value, 1);
+  $sign: list.nth($value, 2);
 
-    @keyframes #{$menu}-show-slide-#{$dir} {
-        from {
-            @include slide-start($axis, $sign);
-        }
+  @keyframes #{$menu}-show-slide-#{$dir} {
+    from {
+      @include slide-start($axis, $sign);
     }
+  }
 
-    @keyframes #{$menu}-hide-slide-#{$dir} {
-        to {
-            @include slide-start($axis, $sign);
-        }
+  @keyframes #{$menu}-hide-slide-#{$dir} {
+    to {
+      @include slide-start($axis, $sign);
     }
+  }
 }
 
 @each $dir in map.keys($directions) {
-    @include animation("slide", $dir);
+  @include animation('slide', $dir);
 }

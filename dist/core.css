@@ -1,0 +1,87 @@
+.szh-menu-container {
+  position: relative;
+  width: 0px;
+  height: 0px;
+}
+
+.szh-menu {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  box-sizing: border-box;
+  width: max-content;
+  position: absolute;
+  z-index: 100;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+}
+.szh-menu:focus {
+  outline: none;
+}
+.szh-menu--state-closed {
+  display: none !important;
+}
+.szh-menu__arrow {
+  box-sizing: border-box;
+  width: 0.75rem;
+  height: 0.75rem;
+  background-color: #fff;
+  border: 1px solid transparent;
+  border-left-color: rgba(0, 0, 0, 0.1);
+  border-top-color: rgba(0, 0, 0, 0.1);
+  position: absolute;
+  z-index: -1;
+}
+.szh-menu__arrow--dir-left {
+  right: -0.375rem;
+  transform: translateY(-50%) rotate(135deg);
+}
+.szh-menu__arrow--dir-right {
+  left: -0.375rem;
+  transform: translateY(-50%) rotate(-45deg);
+}
+.szh-menu__arrow--dir-top {
+  bottom: -0.375rem;
+  transform: translateX(-50%) rotate(-135deg);
+}
+.szh-menu__arrow--dir-bottom {
+  top: -0.375rem;
+  transform: translateX(-50%) rotate(45deg);
+}
+.szh-menu__item {
+  cursor: pointer;
+}
+.szh-menu__item:focus {
+  outline: none;
+}
+.szh-menu__item--hover {
+  background-color: #ebebeb;
+}
+.szh-menu__item--focusable {
+  cursor: default;
+  background-color: inherit;
+}
+.szh-menu__item--disabled {
+  cursor: default;
+  color: #aaa;
+}
+.szh-menu__submenu {
+  position: relative;
+}
+.szh-menu__group {
+  box-sizing: border-box;
+}
+.szh-menu__radio-group {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.szh-menu__divider {
+  height: 1px;
+  margin: 0.5rem 0;
+  background-color: rgba(0, 0, 0, 0.12);
+}
+
+.szh-menu-button {
+  box-sizing: border-box;
+}

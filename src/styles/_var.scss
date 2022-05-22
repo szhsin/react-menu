@@ -1,8 +1,7 @@
-@use "sass:math";
+@use 'sass:math';
 
 $color: #212529;
 $color-dark: #cad1d8;
-$color-active: #fff;
 $color-disabled: #aaa;
 $color-disabled-dark: #666;
 
@@ -16,7 +15,6 @@ $background-color: #fff;
 $background-color-dark: #22262c;
 $background-color-hover: #ebebeb;
 $background-color-hover-dark: #31363c;
-$background-color-active: #007bff;
 
 $arrow-size: 0.75rem;
 $arrow-pos: -(math.div($arrow-size, 2));

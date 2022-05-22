@@ -2,47 +2,49 @@
 @use 'mixins';
 
 .szh-menu__item {
-    i {
-        font-size: 1.25rem;
-        margin-right: 0.5rem;
-    }
+  i {
+    font-size: 1.25rem;
+    margin-right: 0.5rem;
+  }
 
-    img {
-        height: 3rem;
-        margin-left: -0.5rem;
-        margin-right: 0.8rem;
-    }
+  img {
+    height: 3rem;
+    margin-left: -0.5rem;
+    margin-right: 0.8rem;
+  }
 
-    .md-48 {
-        font-size: 3rem;
-    }
+  .md-48 {
+    font-size: 3rem;
+  }
+
+  &:active:not(.szh-menu__item--focusable):not(.szh-menu__item--disabled) {
+    color: #fff !important;
+    background-color: var.$primary-light;
+  }
 }
 
 .szh-menu {
-    white-space: nowrap;
-    &__item--active {
-        color: #fff !important;
-    }
+  white-space: nowrap;
 }
 
 .szh-menu,
 .szh-menu__group {
-    @include mixins.scrollbar;
-    @media (max-width: var.$bp-sm) {
-        &::-webkit-scrollbar {
-            width: 3px;
-        }
+  @include mixins.scrollbar;
+  @media (max-width: var.$bp-sm) {
+    &::-webkit-scrollbar {
+      width: 3px;
     }
-    .szh-app--theme-dark & {
-        @include mixins.scrollbar-dark;
-    }
+  }
+  .szh-app--theme-dark & {
+    @include mixins.scrollbar-dark;
+  }
 }
 
 .szh-menu__group {
-    margin: 0.5rem 0;
-    @include mixins.border(border-top, $transition: false);
-    @include mixins.border(border-bottom);
-    .szh-app--theme-dark & {
-        border-color: var.$border-dark;
-    }
+  margin: 0.5rem 0;
+  @include mixins.border(border-top);
+  @include mixins.border(border-bottom);
+  .szh-app--theme-dark & {
+    border-color: var.$border-dark;
+  }
 }

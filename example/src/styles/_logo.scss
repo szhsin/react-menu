@@ -1,15 +1,19 @@
 .app-logo {
-    display: flex;
-    align-items: center;
-    font-weight: 700;
-    cursor: pointer;
-    .version {
-        margin-left: 0.5rem;
-        font-size: 0.85rem;
-        font-weight: normal;
-        color: #888;
-    }
-    .drop-down {
-        font-size: 1.75rem;
-    }
+  display: flex;
+  align-items: center;
+  font-weight: 700;
+  cursor: pointer;
+  .version {
+    margin-left: 0.5rem;
+    font-size: 0.85rem;
+    font-weight: normal;
+    color: #888;
+  }
+  .drop-down {
+    font-size: 1.75rem;
+  }
+}
+
+.version-menu {
+  font-weight: normal;
 }

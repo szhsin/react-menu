@@ -3,158 +3,157 @@
 @use 'sass:color';
 
 #header {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 200;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 200;
 
+  a {
+    display: block;
+    @include mixins.transition(border-bottom-color, 0.15s);
+    color: var.$navbar-dark;
+  }
+
+  a:hover {
+    text-decoration: none;
+    &:not(.active) {
+      color: color.scale(var.$navbar-dark, $lightness: 20%);
+      border-bottom-color: #888;
+    }
+  }
+
+  .header-banner {
+    background-color: var.$alert-light;
+    padding: 0.5rem 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .banner-text {
+      margin-right: 2rem;
+    }
     a {
-        display: block;
-        @include mixins.transition((color, border-bottom-color), 0.15s);
-        color: var.$navbar-dark;
+      color: inherit;
+      margin-right: 1.5rem;
+      text-decoration: underline;
+      &:hover {
+        color: inherit;
+      }
     }
 
-    a:hover {
-        text-decoration: none;
-        &:not(.active) {
-            color: color.scale(var.$navbar-dark, $lightness: 20%);
-            border-bottom-color: #888;
-        }
+    .close-btn {
+      cursor: pointer;
     }
 
-    .header-banner {
-        background-color: var.$alert-light;
-        padding: 0.5rem 1rem;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        .banner-text {
-            margin-right: 2rem;
-        }
-        a {
-            color: inherit;
-            margin-right: 1.5rem;
-            text-decoration: underline;
-            &:hover {
-                color: inherit;
-            }
-        }
+    .szh-app--theme-dark & {
+      background-color: var.$alert-dark;
+    }
+  }
 
-        .close-btn {
-            cursor: pointer;
-        }
+  .navbar {
+    display: flex;
+    align-items: center;
+    font-weight: 700;
+    padding: 0 1rem;
+    white-space: nowrap;
+    background-color: #fff;
+    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.25);
 
-        .szh-app--theme-dark & {
-            background-color: var.$alert-dark;
-        }
+    &__toggle {
+      display: none;
+      border: 0;
+      background: none;
+      line-height: 1;
+      margin-right: 1rem;
+      padding: 0.25rem 0.5rem;
+      color: var.$navbar-dark;
+
+      &:hover {
+        opacity: 0.75;
+      }
+      &:focus {
+        outline: 1px dashed;
+        outline-color: var.$navbar-dark;
+      }
     }
 
-    .navbar {
-        display: flex;
-        align-items: center;
-        font-weight: 700;
-        padding: 0 1rem;
-        white-space: nowrap;
-        background-color: #fff;
-        @include mixins.transition;
-        box-shadow: 0 1px 6px rgba(0, 0, 0, 0.25);
-
-        &__toggle {
-            display: none;
-            border: 0;
-            background: none;
-            line-height: 1;
-            margin-right: 1rem;
-            padding: 0.25rem 0.5rem;
-            color: var.$navbar-dark;
-
-            &:hover {
-                opacity: 0.75;
-            }
-            &:focus {
-                outline: 1px dashed;
-                outline-color: var.$navbar-dark;
-            }
-        }
-
-        .app-logo {
-            margin-left: 1rem;
-            margin-right: 5rem;
-            @media (max-width: var.$bp-lg) {
-                margin-left: 0;
-                margin-right: 2rem;
-            }
-        }
-
-        &__link-list {
-            @include mixins.reset-list;
-            display: flex;
-        }
-
-        &__link {
-            margin: 0 1.75rem;
-            a {
-                padding: 1rem 0;
-                border-bottom: 3px solid transparent;
-            }
-
-            .active {
-                border-bottom-color: var.$navbar-dark;
-            }
-        }
-
-        .theme-switch {
-            font-size: 2rem;
-            margin-left: auto;
-            margin-right: 2.5rem;
-        }
-
-        &__github {
-            display: flex;
-            margin-right: 1.25rem;
-
-            img {
-                height: 2rem;
-                object-fit: contain;
-                &:hover {
-                    opacity: 0.75;
-                }
-            }
-        }
-
-        @media (max-width: 650px) {
-            &__link {
-                margin: 0 0.75rem;
-            }
-            &__github {
-                margin-right: 0.25rem;
-            }
-        }
-
-        &--theme-dark {
-            background-color: var.$navbar-dark;
-            box-shadow: 0 2px 8px 2px rgba(0, 0, 0, 0.25);
-
-            a {
-                color: var.$navbar-light;
-            }
-
-            a:hover:not(.active) {
-                color: color.scale(var.$navbar-light, $lightness: -15%);
-                border-bottom-color: #999;
-            }
-
-            .navbar__toggle {
-                color: var.$navbar-light;
-                &:focus {
-                    outline-color: var.$navbar-light;
-                }
-            }
-
-            .navbar__link .active {
-                border-bottom-color: var.$navbar-light;
-            }
-        }
+    .app-logo {
+      margin-left: 1rem;
+      margin-right: 5rem;
+      @media (max-width: var.$bp-lg) {
+        margin-left: 0;
+        margin-right: 2rem;
+      }
     }
+
+    &__link-list {
+      @include mixins.reset-list;
+      display: flex;
+    }
+
+    &__link {
+      margin: 0 1.75rem;
+      a {
+        padding: 1rem 0;
+        border-bottom: 3px solid transparent;
+      }
+
+      .active {
+        border-bottom-color: var.$navbar-dark;
+      }
+    }
+
+    .theme-switch {
+      font-size: 2rem;
+      margin-left: auto;
+      margin-right: 2.5rem;
+    }
+
+    &__github {
+      display: flex;
+      margin-right: 1.25rem;
+
+      img {
+        height: 2rem;
+        object-fit: contain;
+        &:hover {
+          opacity: 0.75;
+        }
+      }
+    }
+
+    @media (max-width: 650px) {
+      &__link {
+        margin: 0 0.75rem;
+      }
+      &__github {
+        margin-right: 0.25rem;
+      }
+    }
+
+    &--theme-dark {
+      background-color: var.$navbar-dark;
+      box-shadow: 0 2px 8px 2px rgba(0, 0, 0, 0.25);
+
+      a {
+        color: var.$navbar-light;
+      }
+
+      a:hover:not(.active) {
+        color: color.scale(var.$navbar-light, $lightness: -15%);
+        border-bottom-color: #999;
+      }
+
+      .navbar__toggle {
+        color: var.$navbar-light;
+        &:focus {
+          outline-color: var.$navbar-light;
+        }
+      }
+
+      .navbar__link .active {
+        border-bottom-color: var.$navbar-light;
+      }
+    }
+  }
 }
