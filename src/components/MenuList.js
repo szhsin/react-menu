@@ -366,15 +366,13 @@ export const MenuList = ({
   const isSubmenuOpen = openSubmenuCount > 0;
   const itemContext = useMemo(
     () => ({
-      parentMenuRef: menuRef,
-      parentOverflow: overflow,
       isParentOpen: isOpen,
       isSubmenuOpen,
       setOpenSubmenuCount,
       dispatch,
       updateItems
     }),
-    [isOpen, isSubmenuOpen, overflow, dispatch, updateItems]
+    [isOpen, isSubmenuOpen, dispatch, updateItems]
   );
 
   let maxHeight, overflowAmt;
@@ -386,9 +384,11 @@ export const MenuList = ({
     () => ({
       reposSubmenu,
       overflow,
-      overflowAmt
+      overflowAmt,
+      parentMenuRef: menuRef,
+      parentDir: expandedDirection
     }),
-    [reposSubmenu, overflow, overflowAmt]
+    [reposSubmenu, overflow, overflowAmt, expandedDirection]
   );
   const overflowStyle = maxHeight >= 0 ? { maxHeight, overflow } : undefined;
 
