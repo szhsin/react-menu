@@ -41,10 +41,11 @@ const Test1 = () => {
         overflow="auto"
         position="anchor"
         transition={false}
+        setDownOverflow={take1 || take2}
       >
         <MenuItem disabled>Disabled 1</MenuItem>
         <MenuItem>Two</MenuItem>
-        <MenuGroup styles={{ border: '3px solid' }} takeOverflow={take1}>
+        <MenuGroup style={{ border: '3px solid' }} takeOverflow={take1}>
           <MenuHeader>Group</MenuHeader>
           {new Array(2).fill(0).map((_, i) => (
             <MenuItem key={i}>Item {i + 1}</MenuItem>
@@ -52,15 +53,19 @@ const Test1 = () => {
           <MenuDivider />
 
           <MenuRadioGroup value="green">
-            <MenuItem value="red">Red</MenuItem>
-            <MenuItem value="green">Green</MenuItem>
-            <MenuItem value="blue" disabled>
+            <MenuItem type="radio" value="red">
+              Red
+            </MenuItem>
+            <MenuItem type="radio" value="green">
+              Green
+            </MenuItem>
+            <MenuItem type="radio" value="blue" disabled>
               Blue
             </MenuItem>
           </MenuRadioGroup>
           <MenuDivider />
 
-          <MenuGroup styles={{ border: '4px solid green' }} takeOverflow={take2}>
+          <MenuGroup style={{ border: '4px solid green' }} takeOverflow={take2}>
             <MenuHeader>Group</MenuHeader>
             <MenuItem disabled>disabled</MenuItem>
             <MenuItem checked type="checkbox">
@@ -77,6 +82,7 @@ const Test1 = () => {
             overflow="auto"
             position="initial"
             align="end"
+            setDownOverflow
           >
             <MenuHeader>Submenu</MenuHeader>
             <MenuItem>First</MenuItem>
@@ -106,7 +112,7 @@ const Test1 = () => {
 };
 
 const Test2 = () => {
-  const { toggleMenu, ...states } = useMenuState({ transition: true });
+  const [menuProps, toggleMenu] = useMenuState({ transition: true });
   const [anchorPoint, setAnchorPoint] = useState({ x: 0, y: 0 });
   const [isLeft, setLeft] = useState(false);
 
@@ -125,9 +131,10 @@ const Test2 = () => {
       context menu
       <ControlledMenu
         anchorPoint={anchorPoint}
-        {...states}
+        {...menuProps}
         onClose={() => toggleMenu(false)}
         overflow="auto"
+        setDownOverflow
       >
         <MenuItem>TOP</MenuItem>
         <MenuGroup takeOverflow className="a1">

@@ -19,7 +19,7 @@ const Test1 = () => {
         repositionFlag={repos}
         onChange={({ open }) => open && setHeight(0)}
       >
-        <MenuItem styles={{ minHeight: height }}>New File</MenuItem>
+        <MenuItem style={{ minHeight: height }}>New File</MenuItem>
         <SubMenu label="Menu2">
           <MenuItem>index.html</MenuItem>
           <MenuItem>example.js</MenuItem>

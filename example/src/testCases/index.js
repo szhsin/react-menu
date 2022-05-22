@@ -4,7 +4,7 @@ import Overflow from './Overflow';
 import Portal from './Portal';
 import RenderProps from './RenderProps';
 import DynamicChildren from './DynamicChildren';
-import './index.scss';
+import SubmenuDirection from './SubmenuDirection';
 
 const TestCases = () => {
   return (
@@ -14,6 +14,7 @@ const TestCases = () => {
       <Portal />
       <RenderProps />
       <DynamicChildren />
+      <SubmenuDirection />
     </>
   );
 };

@@ -12,14 +12,14 @@ export const expensiveCompute = (count = 900000000) => {
   return result;
 };
 
-const ItemContent = ({ hover, active }) => {
+const ItemContent = ({ hover }) => {
   expensiveCompute();
-  console.log('ItemContent[render] hover, active', hover, active);
+  console.log('ItemContent[render] hover', hover);
 
   return (
     <div>
       <p>ItemContent:</p>
-      {active ? 'Pressed' : hover ? 'Press me' : 'Hover me'}
+      {hover ? 'Hovered' : 'Hover me'}
     </div>
   );
 };
