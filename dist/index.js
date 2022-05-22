@@ -1344,15 +1344,13 @@ var MenuList = function MenuList(_ref) {
   var isSubmenuOpen = openSubmenuCount > 0;
   var itemContext = react.useMemo(function () {
     return {
-      parentMenuRef: menuRef,
-      parentOverflow: overflow,
       isParentOpen: isOpen,
       isSubmenuOpen: isSubmenuOpen,
       setOpenSubmenuCount: setOpenSubmenuCount,
       dispatch: dispatch,
       updateItems: updateItems
     };
-  }, [isOpen, isSubmenuOpen, overflow, dispatch, updateItems]);
+  }, [isOpen, isSubmenuOpen, dispatch, updateItems]);
   var maxHeight, overflowAmt;
 
   if (overflowData) {
@@ -1363,9 +1361,11 @@ var MenuList = function MenuList(_ref) {
     return {
       reposSubmenu: reposSubmenu,
       overflow: overflow,
-      overflowAmt: overflowAmt
+      overflowAmt: overflowAmt,
+      parentMenuRef: menuRef,
+      parentDir: expandedDirection
     };
-  }, [reposSubmenu, overflow, overflowAmt]);
+  }, [reposSubmenu, overflow, overflowAmt, expandedDirection]);
   var overflowStyle = maxHeight >= 0 ? {
     maxHeight: maxHeight,
     overflow: overflow
@@ -1683,8 +1683,7 @@ var SubMenu = /*#__PURE__*/withHovering('SubMenu', function SubMenu(_ref) {
   var ariaLabel = _ref['aria-label'],
       className = _ref.className,
       disabled = _ref.disabled,
-      _ref$direction = _ref.direction,
-      direction = _ref$direction === void 0 ? 'right' : _ref$direction,
+      direction = _ref.direction,
       label = _ref.label,
       openTrigger = _ref.openTrigger,
       onMenuChange = _ref.onMenuChange,
@@ -1702,14 +1701,17 @@ var SubMenu = /*#__PURE__*/withHovering('SubMenu', function SubMenu(_ref) {
       submenuOpenDelay = _useContext.submenuOpenDelay,
       submenuCloseDelay = _useContext.submenuCloseDelay;
 
-  var _useContext2 = react.useContext(MenuListItemContext),
+  var _useContext2 = react.useContext(MenuListContext),
       parentMenuRef = _useContext2.parentMenuRef,
-      parentOverflow = _useContext2.parentOverflow,
-      isParentOpen = _useContext2.isParentOpen,
-      isSubmenuOpen = _useContext2.isSubmenuOpen,
-      setOpenSubmenuCount = _useContext2.setOpenSubmenuCount,
-      dispatch = _useContext2.dispatch,
-      updateItems = _useContext2.updateItems;
+      parentDir = _useContext2.parentDir,
+      parentOverflow = _useContext2.overflow;
+
+  var _useContext3 = react.useContext(MenuListItemContext),
+      isParentOpen = _useContext3.isParentOpen,
+      isSubmenuOpen = _useContext3.isSubmenuOpen,
+      setOpenSubmenuCount = _useContext3.setOpenSubmenuCount,
+      dispatch = _useContext3.dispatch,
+      updateItems = _useContext3.updateItems;
 
   var isPortal = parentOverflow !== 'visible';
 
@@ -1864,7 +1866,7 @@ var SubMenu = /*#__PURE__*/withHovering('SubMenu', function SubMenu(_ref) {
       ariaLabel: ariaLabel || (typeof label === 'string' ? label : 'Submenu'),
       anchorRef: itemRef,
       containerRef: isPortal ? rootMenuRef : containerRef,
-      direction: direction,
+      direction: direction || (parentDir === 'right' || parentDir === 'left' ? parentDir : 'right'),
       parentScrollingRef: isPortal && parentMenuRef,
       isDisabled: isDisabled
     }));

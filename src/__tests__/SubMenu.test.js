@@ -509,3 +509,31 @@ test('keyboard navigation when items are mounted/unmounted and disabled/enabled'
   fireEvent.keyDown(submenu, { key: 'ArrowDown' });
   utils.expectMenuItemToBeHover(utils.queryMenuItem('Sub 1'), true);
 });
+
+test.each([
+  ['top', 'szh-menu--dir-right'],
+  ['left', 'szh-menu--dir-left'],
+  ['right', 'szh-menu--dir-right']
+])('Submenu opens on the same direction as parent submenu', (direction, directionClass) => {
+  const { container } = render(
+    <Menu menuButton={<MenuButton>Menu</MenuButton>} direction={direction}>
+      <SubMenu label="Lv1">
+        <SubMenu label="Lv2">
+          <SubMenu label="Lv3">
+            <MenuItem>item</MenuItem>
+          </SubMenu>
+        </SubMenu>
+      </SubMenu>
+    </Menu>
+  );
+
+  utils.clickMenuButton();
+  fireEvent.click(utils.queryMenuItem('Lv1'));
+  expect(utils.queryMenu({ name: 'Lv1', container })).toHaveClass(directionClass);
+
+  fireEvent.click(utils.queryMenuItem('Lv2'));
+  expect(utils.queryMenu({ name: 'Lv2', container })).toHaveClass(directionClass);
+
+  fireEvent.click(utils.queryMenuItem('Lv3'));
+  expect(utils.queryMenu({ name: 'Lv3', container })).toHaveClass(directionClass);
+});

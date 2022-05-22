@@ -390,15 +390,13 @@ var MenuList = function MenuList(_ref) {
   var isSubmenuOpen = openSubmenuCount > 0;
   var itemContext = useMemo(function () {
     return {
-      parentMenuRef: menuRef,
-      parentOverflow: overflow,
       isParentOpen: isOpen,
       isSubmenuOpen: isSubmenuOpen,
       setOpenSubmenuCount: setOpenSubmenuCount,
       dispatch: dispatch,
       updateItems: updateItems
     };
-  }, [isOpen, isSubmenuOpen, overflow, dispatch, updateItems]);
+  }, [isOpen, isSubmenuOpen, dispatch, updateItems]);
   var maxHeight, overflowAmt;
 
   if (overflowData) {
@@ -409,9 +407,11 @@ var MenuList = function MenuList(_ref) {
     return {
       reposSubmenu: reposSubmenu,
       overflow: overflow,
-      overflowAmt: overflowAmt
+      overflowAmt: overflowAmt,
+      parentMenuRef: menuRef,
+      parentDir: expandedDirection
     };
-  }, [reposSubmenu, overflow, overflowAmt]);
+  }, [reposSubmenu, overflow, overflowAmt, expandedDirection]);
   var overflowStyle = maxHeight >= 0 ? {
     maxHeight: maxHeight,
     overflow: overflow

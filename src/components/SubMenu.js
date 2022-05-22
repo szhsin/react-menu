@@ -24,6 +24,7 @@ import {
   withHovering,
   SettingsContext,
   ItemSettingsContext,
+  MenuListContext,
   MenuListItemContext,
   Keys,
   HoverActionTypes,
@@ -36,7 +37,7 @@ export const SubMenu = withHovering(
     'aria-label': ariaLabel,
     className,
     disabled,
-    direction = 'right',
+    direction,
     label,
     openTrigger,
     onMenuChange,
@@ -51,15 +52,9 @@ export const SubMenu = withHovering(
     const settings = useContext(SettingsContext);
     const { rootMenuRef } = settings;
     const { submenuOpenDelay, submenuCloseDelay } = useContext(ItemSettingsContext);
-    const {
-      parentMenuRef,
-      parentOverflow,
-      isParentOpen,
-      isSubmenuOpen,
-      setOpenSubmenuCount,
-      dispatch,
-      updateItems
-    } = useContext(MenuListItemContext);
+    const { parentMenuRef, parentDir, overflow: parentOverflow } = useContext(MenuListContext);
+    const { isParentOpen, isSubmenuOpen, setOpenSubmenuCount, dispatch, updateItems } =
+      useContext(MenuListItemContext);
     const isPortal = parentOverflow !== 'visible';
 
     const [stateProps, toggleMenu, _openMenu] = useMenuStateAndFocus(settings);
@@ -211,7 +206,9 @@ export const SubMenu = withHovering(
           ariaLabel={ariaLabel || (typeof label === 'string' ? label : 'Submenu')}
           anchorRef={itemRef}
           containerRef={isPortal ? rootMenuRef : containerRef}
-          direction={direction}
+          direction={
+            direction || (parentDir === 'right' || parentDir === 'left' ? parentDir : 'right')
+          }
           parentScrollingRef={isPortal && parentMenuRef}
           isDisabled={isDisabled}
         />
