@@ -517,12 +517,29 @@ const rootMenuProps = [
   },
   {
     name: 'portal',
-    type: 'boolean',
+    type: (
+      <pre>{`boolean |
+{
+  target?: Element;
+  stablePosition?: boolean;
+}`}</pre>
+    ),
     desc: (
       <>
         <p>
-          If <code>true</code>, menu is rendered as a direct child of <code>document.body</code>.
+          If <code>true</code>, menu is rendered as a direct child of <code>document.body</code>, or
+          you can specify a target element in the DOM as menu container.
         </p>
+        <ul>
+          <li>
+            <code>target</code> specify a DOM node under which menu will be rendered.
+          </li>
+          <li>
+            <code>stablePosition</code> when <code>target</code> is null, setting this value{' '}
+            <code>true</code> prevents menu from rendering into the DOM hierarchy of its parent
+            component.
+          </li>
+        </ul>
         <p>
           Portal allows menu to visually “break out” of its container. Typical use cases may
           include:
