@@ -178,11 +178,16 @@ export const ControlledMenu = forwardRef(function ControlledMenu(
     </div>
   );
 
-  if (portal && typeof document !== 'undefined') {
+  if (portal === true && typeof document !== 'undefined') {
     return createPortal(menuList, document.body);
-  } else {
-    return menuList;
+  } else if (portal) {
+    return portal.target
+      ? createPortal(menuList, portal.target)
+      : portal.stablePosition
+      ? null
+      : menuList;
   }
+  return menuList;
 });
 
 ControlledMenu.propTypes /* remove-proptypes */ = {

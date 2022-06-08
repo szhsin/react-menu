@@ -220,7 +220,7 @@ function indexOfNode(nodeList, node) {
 }
 
 function _extends() {
-  _extends = Object.assign || function (target) {
+  _extends = Object.assign ? Object.assign.bind() : function (target) {
     for (var i = 1; i < arguments.length; i++) {
       var source = arguments[i];
 
@@ -233,7 +233,6 @@ function _extends() {
 
     return target;
   };
-
   return _extends.apply(this, arguments);
 }
 
@@ -288,7 +287,10 @@ var rootMenuPropTypes = /*#__PURE__*/_extends({}, menuPropTypes, {
   viewScroll: /*#__PURE__*/propTypes.oneOf(['auto', 'close', 'initial']),
   submenuOpenDelay: propTypes.number,
   submenuCloseDelay: propTypes.number,
-  portal: propTypes.bool,
+  portal: /*#__PURE__*/propTypes.oneOfType([propTypes.bool, /*#__PURE__*/propTypes.exact({
+    target: propTypes.object,
+    stablePosition: propTypes.bool
+  })]),
   theming: propTypes.string,
   onItemClick: propTypes.func
 });
@@ -1571,11 +1573,13 @@ var ControlledMenu = /*#__PURE__*/react.forwardRef(function ControlledMenu(_ref,
     })
   }));
 
-  if (portal && typeof document !== 'undefined') {
+  if (portal === true && typeof document !== 'undefined') {
     return /*#__PURE__*/reactDom.createPortal(menuList, document.body);
-  } else {
-    return menuList;
+  } else if (portal) {
+    return portal.target ? /*#__PURE__*/reactDom.createPortal(menuList, portal.target) : portal.stablePosition ? null : menuList;
   }
+
+  return menuList;
 });
 process.env.NODE_ENV !== "production" ? ControlledMenu.propTypes = /*#__PURE__*/_extends({}, rootMenuPropTypes, {
   state: /*#__PURE__*/propTypes.oneOf( /*#__PURE__*/values(MenuStateMap)),

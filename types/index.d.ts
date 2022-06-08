@@ -276,14 +276,26 @@ interface RootMenuProps extends BaseMenuProps, MenuStateOptions {
    */
   viewScroll?: MenuViewScroll;
   /**
-   * If `true`, menu is rendered as a direct child of `document.body`.
+   * - If `true`, menu is rendered as a direct child of `document.body`,
+   * - or you can specify a target element in the DOM as menu container.
    *
    * Portal allows menu to visually “break out” of its container. Typical use cases may include:
    * - An ancestor container is positioned and CSS `overflow` is set to a value other than `visible`.
    * - You have a DOM structure that creates a complex hierarchy of stacking contexts,
    * and menu is overlapped regardless of `z-index` value.
    */
-  portal?: boolean;
+  portal?:
+    | boolean
+    | {
+        /**
+         * A DOM node under which menu will be rendered.
+         */
+        target?: Element | null;
+        /**
+         * When `target` is null, setting this value `true` prevents menu from rendering into the DOM hierarchy of its parent component.
+         */
+        stablePosition?: boolean;
+      };
   /**
    * Specify when menu is repositioned:
    * - 'initial' Don't automatically reposition menu. Set to this value when you want
