@@ -847,6 +847,17 @@ export const boundingBox = {
     </p>
   ),
 
+  note: (
+    <p>
+      You could render menu into a specified DOM node instead of <code>document.body</code> using
+      the <code>portal</code> prop, please see{' '}
+      <ExternalLink href="https://codesandbox.io/s/react-menu-portal-target-boyxv9">
+        a CodeSandbox example
+      </ExternalLink>
+      .
+    </p>
+  ),
+
   source: `const ref = useRef(null);
 const leftAnchor = useRef(null);
 const rightAnchor = useRef(null);
