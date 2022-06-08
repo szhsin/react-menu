@@ -43,7 +43,13 @@ export const rootMenuPropTypes = {
   viewScroll: oneOf(['auto', 'close', 'initial']),
   submenuOpenDelay: number,
   submenuCloseDelay: number,
-  portal: bool,
+  portal: oneOfType([
+    bool,
+    exact({
+      target: object,
+      stablePosition: bool
+    })
+  ]),
   theming: string,
   onItemClick: func
 };

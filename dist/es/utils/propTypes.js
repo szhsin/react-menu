@@ -37,7 +37,10 @@ var rootMenuPropTypes = /*#__PURE__*/_extends({}, menuPropTypes, {
   viewScroll: /*#__PURE__*/oneOf(['auto', 'close', 'initial']),
   submenuOpenDelay: number,
   submenuCloseDelay: number,
-  portal: bool,
+  portal: /*#__PURE__*/oneOfType([bool, /*#__PURE__*/exact({
+    target: object,
+    stablePosition: bool
+  })]),
   theming: string,
   onItemClick: func
 });
