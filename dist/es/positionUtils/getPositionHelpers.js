@@ -1,18 +1,14 @@
 import { parsePadding } from '../utils/utils.js';
 
-var getPositionHelpers = function getPositionHelpers(_ref) {
-  var menuRef = _ref.menuRef,
-      containerRef = _ref.containerRef,
-      scrollingRef = _ref.scrollingRef,
-      boundingBoxPadding = _ref.boundingBoxPadding;
+var getPositionHelpers = function getPositionHelpers(containerRef, menuRef, menuScroll, boundingBoxPadding) {
   var menuRect = menuRef.current.getBoundingClientRect();
   var containerRect = containerRef.current.getBoundingClientRect();
-  var boundingRect = scrollingRef.current === window ? {
+  var boundingRect = menuScroll === window ? {
     left: 0,
     top: 0,
     right: document.documentElement.clientWidth,
     bottom: window.innerHeight
-  } : scrollingRef.current.getBoundingClientRect();
+  } : menuScroll.getBoundingClientRect();
   var padding = parsePadding(boundingBoxPadding);
 
   var getLeftOverflow = function getLeftOverflow(x) {

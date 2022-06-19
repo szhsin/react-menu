@@ -25,16 +25,17 @@
     "plugin:react-hooks/recommended"
   ],
   "rules": {
-    "jest/expect-expect": [
-      "error",
-      {
-        "assertFunctionNames": ["expect", "utils.expect*"]
-      }
-    ],
+    "no-console": ["error", { "allow": ["warn", "error"] }],
     "no-unused-vars": [
       "error",
       {
         "argsIgnorePattern": "^_\\d?$"
+      }
+    ],
+    "jest/expect-expect": [
+      "error",
+      {
+        "assertFunctionNames": ["expect", "utils.expect*"]
       }
     ],
     "react/prop-types": 0,

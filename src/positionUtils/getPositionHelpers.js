@@ -1,17 +1,17 @@
 import { parsePadding } from '../utils';
 
-export const getPositionHelpers = ({ menuRef, containerRef, scrollingRef, boundingBoxPadding }) => {
+export const getPositionHelpers = (containerRef, menuRef, menuScroll, boundingBoxPadding) => {
   const menuRect = menuRef.current.getBoundingClientRect();
   const containerRect = containerRef.current.getBoundingClientRect();
   const boundingRect =
-    scrollingRef.current === window
+    menuScroll === window
       ? {
           left: 0,
           top: 0,
           right: document.documentElement.clientWidth,
           bottom: window.innerHeight
         }
-      : scrollingRef.current.getBoundingClientRect();
+      : menuScroll.getBoundingClientRect();
   const padding = parsePadding(boundingBoxPadding);
 
   // For left and top, overflows are negative value.

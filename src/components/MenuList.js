@@ -64,8 +64,7 @@ export const MenuList = ({
     boundingBoxPadding,
     rootMenuRef,
     rootAnchorRef,
-    scrollingRef,
-    anchorScrollingRef,
+    scrollNodesRef,
     reposition,
     viewScroll
   } = useContext(SettingsContext);
@@ -80,6 +79,7 @@ export const MenuList = ({
   const isOpen = isMenuOpen(state);
   const openTransition = getTransition(transition, 'open');
   const closeTransition = getTransition(transition, 'close');
+  const scrollNodes = scrollNodesRef.current;
 
   const handleKeyDown = (e) => {
     let handled = false;
@@ -128,102 +128,109 @@ export const MenuList = ({
     safeCall(endTransition);
   };
 
-  const handlePosition = useCallback(() => {
-    if (!containerRef.current) {
-      if (process.env.NODE_ENV !== 'production') {
-        console.error(
-          '[React-Menu] Menu cannot be positioned properly as container ref is null. If you need to initialise `state` prop to "open" for ControlledMenu, please see this solution: https://codesandbox.io/s/initial-open-sp10wn'
-        );
+  const handlePosition = useCallback(
+    (noOverflowCheck) => {
+      if (!containerRef.current) {
+        if (process.env.NODE_ENV !== 'production') {
+          console.error(
+            '[React-Menu] Menu cannot be positioned properly as container ref is null. If you need to initialise `state` prop to "open" for ControlledMenu, please see this solution: https://codesandbox.io/s/initial-open-sp10wn'
+          );
+        }
+        return;
       }
-      return;
-    }
 
-    if (!scrollingRef.current) {
-      scrollingRef.current = boundingBoxRef
-        ? boundingBoxRef.current // user explicitly sets boundingBoxRef
-        : getScrollAncestor(rootMenuRef.current); // try to discover bounding box automatically
-    }
+      if (!scrollNodes.menu) {
+        scrollNodes.menu =
+          (boundingBoxRef
+            ? boundingBoxRef.current // user explicitly sets boundingBoxRef
+            : getScrollAncestor(rootMenuRef.current)) || window; // try to discover bounding box automatically
+      }
 
-    const positionHelpers = getPositionHelpers({
-      menuRef,
-      containerRef,
-      scrollingRef,
-      boundingBoxPadding
-    });
-    const { menuRect } = positionHelpers;
-    let results = { computedDirection: 'bottom' };
-    if (anchorPoint) {
-      results = positionContextMenu({ positionHelpers, anchorPoint });
-    } else if (anchorRef) {
-      results = positionMenu({
-        arrow,
-        align,
-        direction,
-        offsetX,
-        offsetY,
-        position,
-        anchorRef,
-        arrowRef,
-        positionHelpers
-      });
-    }
-    let { arrowX, arrowY, x, y, computedDirection } = results;
-    let menuHeight = menuRect.height;
+      const positionHelpers = getPositionHelpers(
+        containerRef,
+        menuRef,
+        scrollNodes.menu,
+        boundingBoxPadding
+      );
+      const { menuRect } = positionHelpers;
+      let results = { computedDirection: 'bottom' };
+      if (anchorPoint) {
+        results = positionContextMenu({ positionHelpers, anchorPoint });
+      } else if (anchorRef) {
+        results = positionMenu({
+          arrow,
+          align,
+          direction,
+          offsetX,
+          offsetY,
+          position,
+          anchorRef,
+          arrowRef,
+          positionHelpers
+        });
+      }
+      let { arrowX, arrowY, x, y, computedDirection } = results;
+      let menuHeight = menuRect.height;
 
-    if (overflow !== 'visible') {
-      const { getTopOverflow, getBottomOverflow } = positionHelpers;
+      if (!noOverflowCheck && overflow !== 'visible') {
+        const { getTopOverflow, getBottomOverflow } = positionHelpers;
 
-      let height, overflowAmt;
-      const prevHeight = latestMenuSize.current.height;
-      const bottomOverflow = getBottomOverflow(y);
-      // When bottomOverflow is 0, menu is on the bottom edge of viewport
-      // This might be the result of a previous maxHeight set on the menu.
-      // In this situation, we need to still apply a new maxHeight.
-      // Same reason for the top side
-      if (
-        bottomOverflow > 0 ||
-        (floatEqual(bottomOverflow, 0) && floatEqual(menuHeight, prevHeight))
-      ) {
-        height = menuHeight - bottomOverflow;
-        overflowAmt = bottomOverflow;
-      } else {
-        const topOverflow = getTopOverflow(y);
-        if (topOverflow < 0 || (floatEqual(topOverflow, 0) && floatEqual(menuHeight, prevHeight))) {
-          height = menuHeight + topOverflow;
-          overflowAmt = 0 - topOverflow; // avoid getting -0
-          if (height >= 0) y -= topOverflow;
+        let height, overflowAmt;
+        const prevHeight = latestMenuSize.current.height;
+        const bottomOverflow = getBottomOverflow(y);
+        // When bottomOverflow is 0, menu is on the bottom edge of viewport
+        // This might be the result of a previous maxHeight set on the menu.
+        // In this situation, we need to still apply a new maxHeight.
+        // Same reason for the top side
+        if (
+          bottomOverflow > 0 ||
+          (floatEqual(bottomOverflow, 0) && floatEqual(menuHeight, prevHeight))
+        ) {
+          height = menuHeight - bottomOverflow;
+          overflowAmt = bottomOverflow;
+        } else {
+          const topOverflow = getTopOverflow(y);
+          if (
+            topOverflow < 0 ||
+            (floatEqual(topOverflow, 0) && floatEqual(menuHeight, prevHeight))
+          ) {
+            height = menuHeight + topOverflow;
+            overflowAmt = 0 - topOverflow; // avoid getting -0
+            if (height >= 0) y -= topOverflow;
+          }
+        }
+
+        if (height >= 0) {
+          // To avoid triggering reposition in the next ResizeObserver callback
+          menuHeight = height;
+          setOverflowData({ height, overflowAmt });
+        } else {
+          setOverflowData();
         }
       }
 
-      if (height >= 0) {
-        // To avoid triggering reposition in the next ResizeObserver callback
-        menuHeight = height;
-        setOverflowData({ height, overflowAmt });
-      } else {
-        setOverflowData();
-      }
-    }
-
-    if (arrow) setArrowPosition({ x: arrowX, y: arrowY });
-    setMenuPosition({ x, y });
-    setExpandedDirection(computedDirection);
-    latestMenuSize.current = { width: menuRect.width, height: menuHeight };
-  }, [
-    arrow,
-    align,
-    boundingBoxPadding,
-    direction,
-    offsetX,
-    offsetY,
-    position,
-    overflow,
-    anchorPoint,
-    anchorRef,
-    containerRef,
-    boundingBoxRef,
-    rootMenuRef,
-    scrollingRef
-  ]);
+      if (arrow) setArrowPosition({ x: arrowX, y: arrowY });
+      setMenuPosition({ x, y });
+      setExpandedDirection(computedDirection);
+      latestMenuSize.current = { width: menuRect.width, height: menuHeight };
+    },
+    [
+      arrow,
+      align,
+      boundingBoxPadding,
+      direction,
+      offsetX,
+      offsetY,
+      position,
+      overflow,
+      anchorPoint,
+      anchorRef,
+      containerRef,
+      boundingBoxRef,
+      rootMenuRef,
+      scrollNodes
+    ]
+  );
 
   useLayoutEffect(() => {
     if (isOpen) {
@@ -242,46 +249,35 @@ export const MenuList = ({
   useEffect(() => updateItems, [updateItems]);
 
   useEffect(() => {
-    if (!isOpen) return;
+    let { menu: menuScroll } = scrollNodes;
+    if (!isOpen || !menuScroll) return;
 
-    if (!anchorScrollingRef.current && rootAnchorRef && rootAnchorRef.current.tagName) {
-      anchorScrollingRef.current = getScrollAncestor(rootAnchorRef.current);
+    menuScroll = menuScroll.addEventListener ? menuScroll : window;
+    if (!scrollNodes.anchors) {
+      scrollNodes.anchors = [];
+      let anchorScroll = getScrollAncestor(rootAnchorRef && rootAnchorRef.current);
+      while (anchorScroll && anchorScroll !== menuScroll) {
+        scrollNodes.anchors.push(anchorScroll);
+        anchorScroll = getScrollAncestor(anchorScroll);
+      }
     }
-    const scrollCurrent = scrollingRef.current;
-    const menuScroll = scrollCurrent && scrollCurrent.addEventListener ? scrollCurrent : window;
-    const anchorScroll = anchorScrollingRef.current || menuScroll;
 
     let scroll = viewScroll;
-    if (anchorScroll !== menuScroll && scroll === 'initial') scroll = 'auto';
+    if (scrollNodes.anchors.length && scroll === 'initial') scroll = 'auto';
     if (scroll === 'initial') return;
-
-    // For best user experience, behave as 'initial' in the following condition:
-    if (scroll === 'auto' && overflow !== 'visible') return;
 
     const handleScroll = () => {
       if (scroll === 'auto') {
-        batchedUpdates(handlePosition);
+        batchedUpdates(() => handlePosition(true));
       } else {
         safeCall(onClose, { reason: CloseReason.SCROLL });
       }
     };
 
-    const scrollObservers =
-      anchorScroll !== menuScroll && viewScroll !== 'initial'
-        ? [anchorScroll, menuScroll]
-        : [anchorScroll];
+    const scrollObservers = scrollNodes.anchors.concat(viewScroll !== 'initial' ? menuScroll : []);
     scrollObservers.forEach((o) => o.addEventListener('scroll', handleScroll));
     return () => scrollObservers.forEach((o) => o.removeEventListener('scroll', handleScroll));
-  }, [
-    rootAnchorRef,
-    anchorScrollingRef,
-    scrollingRef,
-    isOpen,
-    overflow,
-    onClose,
-    viewScroll,
-    handlePosition
-  ]);
+  }, [rootAnchorRef, scrollNodes, isOpen, onClose, viewScroll, handlePosition]);
 
   const hasOverflow = !!overflowData && overflowData.overflowAmt > 0;
   useEffect(() => {

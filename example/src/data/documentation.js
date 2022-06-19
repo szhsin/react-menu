@@ -501,12 +501,7 @@ const rootMenuProps = [
           </li>
           <li>
             <code>'auto'</code> Menu will reposition itself based on the value of{' '}
-            <code>position</code> prop when window is scrolling.{' '}
-            <p>
-              Note: for the best user experience, if the <code>overflow</code> prop is set to a
-              value other than 'visible', an 'auto' <code>viewScroll</code> will behave as
-              'initial'.
-            </p>
+            <code>position</code> prop when window is scrolling.
           </li>
           <li>
             <code>'close'</code> menu will be closed when window is scrolled.

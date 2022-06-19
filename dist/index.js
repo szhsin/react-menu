@@ -193,17 +193,17 @@ var parsePadding = function parsePadding(paddingStr) {
   };
 };
 var getScrollAncestor = function getScrollAncestor(node) {
-  while (node && node !== document.body) {
+  while (node) {
+    node = node.parentNode;
+    if (!node || node === document.body) return;
+
     var _getComputedStyle = getComputedStyle(node),
         overflow = _getComputedStyle.overflow,
         overflowX = _getComputedStyle.overflowX,
         overflowY = _getComputedStyle.overflowY;
 
     if (/auto|scroll|overlay|hidden/.test(overflow + overflowY + overflowX)) return node;
-    node = node.parentNode;
   }
-
-  return window;
 };
 function commonProps(isDisabled, isHovering) {
   return {
@@ -590,19 +590,15 @@ process.env.NODE_ENV !== "production" ? MenuButton.propTypes = /*#__PURE__*/_ext
   disabled: propTypes.bool
 }) : void 0;
 
-var getPositionHelpers = function getPositionHelpers(_ref) {
-  var menuRef = _ref.menuRef,
-      containerRef = _ref.containerRef,
-      scrollingRef = _ref.scrollingRef,
-      boundingBoxPadding = _ref.boundingBoxPadding;
+var getPositionHelpers = function getPositionHelpers(containerRef, menuRef, menuScroll, boundingBoxPadding) {
   var menuRect = menuRef.current.getBoundingClientRect();
   var containerRect = containerRef.current.getBoundingClientRect();
-  var boundingRect = scrollingRef.current === window ? {
+  var boundingRect = menuScroll === window ? {
     left: 0,
     top: 0,
     right: document.documentElement.clientWidth,
     bottom: window.innerHeight
-  } : scrollingRef.current.getBoundingClientRect();
+  } : menuScroll.getBoundingClientRect();
   var padding = parsePadding(boundingBoxPadding);
 
   var getLeftOverflow = function getLeftOverflow(x) {
@@ -1040,8 +1036,7 @@ var MenuList = function MenuList(_ref) {
       boundingBoxPadding = _useContext.boundingBoxPadding,
       rootMenuRef = _useContext.rootMenuRef,
       rootAnchorRef = _useContext.rootAnchorRef,
-      scrollingRef = _useContext.scrollingRef,
-      anchorScrollingRef = _useContext.anchorScrollingRef,
+      scrollNodesRef = _useContext.scrollNodesRef,
       reposition = _useContext.reposition,
       viewScroll = _useContext.viewScroll;
 
@@ -1063,6 +1058,7 @@ var MenuList = function MenuList(_ref) {
   var isOpen = isMenuOpen(state);
   var openTransition = getTransition(transition, 'open');
   var closeTransition = getTransition(transition, 'close');
+  var scrollNodes = scrollNodesRef.current;
 
   var handleKeyDown = function handleKeyDown(e) {
     var handled = false;
@@ -1110,7 +1106,7 @@ var MenuList = function MenuList(_ref) {
     safeCall(endTransition);
   };
 
-  var handlePosition = react.useCallback(function () {
+  var handlePosition = react.useCallback(function (noOverflowCheck) {
     if (!containerRef.current) {
       if (process.env.NODE_ENV !== 'production') {
         console.error('[React-Menu] Menu cannot be positioned properly as container ref is null. If you need to initialise `state` prop to "open" for ControlledMenu, please see this solution: https://codesandbox.io/s/initial-open-sp10wn');
@@ -1119,16 +1115,11 @@ var MenuList = function MenuList(_ref) {
       return;
     }
 
-    if (!scrollingRef.current) {
-      scrollingRef.current = boundingBoxRef ? boundingBoxRef.current : getScrollAncestor(rootMenuRef.current);
+    if (!scrollNodes.menu) {
+      scrollNodes.menu = (boundingBoxRef ? boundingBoxRef.current : getScrollAncestor(rootMenuRef.current)) || window;
     }
 
-    var positionHelpers = getPositionHelpers({
-      menuRef: menuRef,
-      containerRef: containerRef,
-      scrollingRef: scrollingRef,
-      boundingBoxPadding: boundingBoxPadding
-    });
+    var positionHelpers = getPositionHelpers(containerRef, menuRef, scrollNodes.menu, boundingBoxPadding);
     var menuRect = positionHelpers.menuRect;
     var results = {
       computedDirection: 'bottom'
@@ -1161,7 +1152,7 @@ var MenuList = function MenuList(_ref) {
         computedDirection = _results.computedDirection;
     var menuHeight = menuRect.height;
 
-    if (overflow !== 'visible') {
+    if (!noOverflowCheck && overflow !== 'visible') {
       var getTopOverflow = positionHelpers.getTopOverflow,
           getBottomOverflow = positionHelpers.getBottomOverflow;
 
@@ -1207,7 +1198,7 @@ var MenuList = function MenuList(_ref) {
       width: menuRect.width,
       height: menuHeight
     };
-  }, [arrow, align, boundingBoxPadding, direction, offsetX, offsetY, position, overflow, anchorPoint, anchorRef, containerRef, boundingBoxRef, rootMenuRef, scrollingRef]);
+  }, [arrow, align, boundingBoxPadding, direction, offsetX, offsetY, position, overflow, anchorPoint, anchorRef, containerRef, boundingBoxRef, rootMenuRef, scrollNodes]);
   useIsomorphicLayoutEffect(function () {
     if (isOpen) {
       handlePosition();
@@ -1224,23 +1215,29 @@ var MenuList = function MenuList(_ref) {
     return updateItems;
   }, [updateItems]);
   react.useEffect(function () {
-    if (!isOpen) return;
+    var menuScroll = scrollNodes.menu;
+    if (!isOpen || !menuScroll) return;
+    menuScroll = menuScroll.addEventListener ? menuScroll : window;
 
-    if (!anchorScrollingRef.current && rootAnchorRef && rootAnchorRef.current.tagName) {
-      anchorScrollingRef.current = getScrollAncestor(rootAnchorRef.current);
+    if (!scrollNodes.anchors) {
+      scrollNodes.anchors = [];
+      var anchorScroll = getScrollAncestor(rootAnchorRef && rootAnchorRef.current);
+
+      while (anchorScroll && anchorScroll !== menuScroll) {
+        scrollNodes.anchors.push(anchorScroll);
+        anchorScroll = getScrollAncestor(anchorScroll);
+      }
     }
 
-    var scrollCurrent = scrollingRef.current;
-    var menuScroll = scrollCurrent && scrollCurrent.addEventListener ? scrollCurrent : window;
-    var anchorScroll = anchorScrollingRef.current || menuScroll;
     var scroll = viewScroll;
-    if (anchorScroll !== menuScroll && scroll === 'initial') scroll = 'auto';
+    if (scrollNodes.anchors.length && scroll === 'initial') scroll = 'auto';
     if (scroll === 'initial') return;
-    if (scroll === 'auto' && overflow !== 'visible') return;
 
     var handleScroll = function handleScroll() {
       if (scroll === 'auto') {
-        batchedUpdates(handlePosition);
+        batchedUpdates(function () {
+          return handlePosition(true);
+        });
       } else {
         safeCall(onClose, {
           reason: CloseReason.SCROLL
@@ -1248,7 +1245,7 @@ var MenuList = function MenuList(_ref) {
       }
     };
 
-    var scrollObservers = anchorScroll !== menuScroll && viewScroll !== 'initial' ? [anchorScroll, menuScroll] : [anchorScroll];
+    var scrollObservers = scrollNodes.anchors.concat(viewScroll !== 'initial' ? menuScroll : []);
     scrollObservers.forEach(function (o) {
       return o.addEventListener('scroll', handleScroll);
     });
@@ -1257,7 +1254,7 @@ var MenuList = function MenuList(_ref) {
         return o.removeEventListener('scroll', handleScroll);
       });
     };
-  }, [rootAnchorRef, anchorScrollingRef, scrollingRef, isOpen, overflow, onClose, viewScroll, handlePosition]);
+  }, [rootAnchorRef, scrollNodes, isOpen, onClose, viewScroll, handlePosition]);
   var hasOverflow = !!overflowData && overflowData.overflowAmt > 0;
   react.useEffect(function () {
     if (hasOverflow || !isOpen || !parentScrollingRef) return;
@@ -1456,8 +1453,7 @@ var ControlledMenu = /*#__PURE__*/react.forwardRef(function ControlledMenu(_ref,
       restProps = _objectWithoutPropertiesLoose(_ref, _excluded$8);
 
   var containerRef = react.useRef(null);
-  var scrollingRef = react.useRef(null);
-  var anchorScrollingRef = react.useRef(null);
+  var scrollNodesRef = react.useRef({});
   var anchorRef = restProps.anchorRef,
       state = restProps.state;
   var settings = react.useMemo(function () {
@@ -1470,8 +1466,7 @@ var ControlledMenu = /*#__PURE__*/react.forwardRef(function ControlledMenu(_ref,
       boundingBoxPadding: boundingBoxPadding,
       rootMenuRef: containerRef,
       rootAnchorRef: anchorRef,
-      scrollingRef: scrollingRef,
-      anchorScrollingRef: anchorScrollingRef,
+      scrollNodesRef: scrollNodesRef,
       reposition: reposition,
       viewScroll: viewScroll
     };

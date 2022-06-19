@@ -5,7 +5,7 @@ import { oneOf, exact, number, object, bool, oneOfType, string, func } from 'pro
 import { MenuList } from './MenuList.js';
 import { jsx } from 'react/jsx-runtime';
 import { useBEM } from '../hooks/useBEM.js';
-import { CloseReason, menuContainerClass, SettingsContext, ItemSettingsContext, EventHandlersContext, MenuStateMap, Keys } from '../utils/constants.js';
+import { SettingsContext, ItemSettingsContext, EventHandlersContext, MenuStateMap, Keys, CloseReason, menuContainerClass } from '../utils/constants.js';
 import { rootMenuPropTypes } from '../utils/propTypes.js';
 import { safeCall, getTransition, attachHandlerProps, values, isMenuOpen } from '../utils/utils.js';
 
@@ -36,8 +36,7 @@ var ControlledMenu = /*#__PURE__*/forwardRef(function ControlledMenu(_ref, exter
       restProps = _objectWithoutPropertiesLoose(_ref, _excluded);
 
   var containerRef = useRef(null);
-  var scrollingRef = useRef(null);
-  var anchorScrollingRef = useRef(null);
+  var scrollNodesRef = useRef({});
   var anchorRef = restProps.anchorRef,
       state = restProps.state;
   var settings = useMemo(function () {
@@ -50,8 +49,7 @@ var ControlledMenu = /*#__PURE__*/forwardRef(function ControlledMenu(_ref, exter
       boundingBoxPadding: boundingBoxPadding,
       rootMenuRef: containerRef,
       rootAnchorRef: anchorRef,
-      scrollingRef: scrollingRef,
-      anchorScrollingRef: anchorScrollingRef,
+      scrollNodesRef: scrollNodesRef,
       reposition: reposition,
       viewScroll: viewScroll
     };

@@ -44,8 +44,7 @@ export const ControlledMenu = forwardRef(function ControlledMenu(
   externalRef
 ) {
   const containerRef = useRef(null);
-  const scrollingRef = useRef(null);
-  const anchorScrollingRef = useRef(null);
+  const scrollNodesRef = useRef({});
   const { anchorRef, state } = restProps;
 
   const settings = useMemo(
@@ -58,8 +57,7 @@ export const ControlledMenu = forwardRef(function ControlledMenu(
       boundingBoxPadding,
       rootMenuRef: containerRef,
       rootAnchorRef: anchorRef,
-      scrollingRef,
-      anchorScrollingRef,
+      scrollNodesRef,
       reposition,
       viewScroll
     }),
