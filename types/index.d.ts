@@ -268,10 +268,6 @@ interface RootMenuProps extends BaseMenuProps, MenuStateOptions {
    * - 'initial' The window scroll event is ignored and has no effect on menu.
    * - 'auto' Menu will reposition itself based on the value of `position` prop when window is scrolling.
    * - 'close' menu will be closed when window is scrolled.
-   *
-   * *Note: for the best user experience, if the `overflow` prop is set to a value
-   * other than 'visible', an 'auto' `viewScroll` will behave as 'initial'*.
-   *
    * @default 'initial'
    */
   viewScroll?: MenuViewScroll;

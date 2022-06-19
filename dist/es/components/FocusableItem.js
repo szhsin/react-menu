@@ -1,4 +1,4 @@
-import { objectWithoutPropertiesLoose as _objectWithoutPropertiesLoose, extends as _extends } from '../_virtual/_rollupPluginBabelHelpers.js';
+import { extends as _extends, objectWithoutPropertiesLoose as _objectWithoutPropertiesLoose } from '../_virtual/_rollupPluginBabelHelpers.js';
 import { useRef, useContext, useMemo } from 'react';
 import { bool, func } from 'prop-types';
 import { jsx } from 'react/jsx-runtime';
@@ -6,9 +6,9 @@ import { withHovering } from '../utils/withHovering.js';
 import { useItemState } from '../hooks/useItemState.js';
 import { useCombinedRef } from '../hooks/useCombinedRef.js';
 import { useBEM } from '../hooks/useBEM.js';
+import { stylePropTypes } from '../utils/propTypes.js';
 import { EventHandlersContext, menuClass, menuItemClass } from '../utils/constants.js';
 import { safeCall, attachHandlerProps, commonProps } from '../utils/utils.js';
-import { stylePropTypes } from '../utils/propTypes.js';
 
 var _excluded = ["className", "disabled", "children", "isHovering", "itemRef", "externalRef"];
 var FocusableItem = /*#__PURE__*/withHovering('FocusableItem', function FocusableItem(_ref) {
