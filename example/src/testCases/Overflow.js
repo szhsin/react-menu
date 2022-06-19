@@ -196,6 +196,58 @@ const Test3 = () => {
   );
 };
 
+const items = new Array(50).fill(0).map((_, i) => `Item ${i + 1}`);
+
+const Test4 = () => {
+  const [portal, setPortal] = useState(true);
+  return (
+    <div className={bem('test-case')} style={{ flexDirection: 'column' }}>
+      <label>
+        Portal
+        <input
+          type="checkbox"
+          checked={portal}
+          onChange={({ target }) => setPortal(target.checked)}
+        />
+      </label>
+      <div
+        style={{
+          border: '2px solid #007bff',
+          padding: 10,
+          height: 600,
+          overflow: 'auto'
+        }}
+      >
+        <div
+          style={{
+            border: '2px solid green',
+            width: 600,
+            height: 400,
+            marginTop: 400,
+            marginBottom: 500,
+            overflow: 'auto'
+          }}
+        >
+          <div style={{ width: 1000, paddingTop: 100 }}>
+            <Menu
+              menuButton={<MenuButton style={{ marginLeft: 150 }}>Open menu</MenuButton>}
+              overflow="auto"
+              position="anchor"
+              boundingBoxPadding="20"
+              portal={portal}
+              key={portal.toString()}
+            >
+              {items.map((item) => (
+                <MenuItem key={item}>{item}</MenuItem>
+              ))}
+            </Menu>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const Overflow = () => {
   return (
     <>
@@ -203,6 +255,7 @@ const Overflow = () => {
       <Test1 />
       <Test2 />
       <Test3 />
+      <Test4 />
     </>
   );
 };
