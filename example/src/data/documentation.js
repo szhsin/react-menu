@@ -501,12 +501,7 @@ const rootMenuProps = [
           </li>
           <li>
             <code>'auto'</code> Menu will reposition itself based on the value of{' '}
-            <code>position</code> prop when window is scrolling.{' '}
-            <p>
-              Note: for the best user experience, if the <code>overflow</code> prop is set to a
-              value other than 'visible', an 'auto' <code>viewScroll</code> will behave as
-              'initial'.
-            </p>
+            <code>position</code> prop when window is scrolling.
           </li>
           <li>
             <code>'close'</code> menu will be closed when window is scrolled.
@@ -517,12 +512,29 @@ const rootMenuProps = [
   },
   {
     name: 'portal',
-    type: 'boolean',
+    type: (
+      <pre>{`boolean |
+{
+  target?: Element;
+  stablePosition?: boolean;
+}`}</pre>
+    ),
     desc: (
       <>
         <p>
-          If <code>true</code>, menu is rendered as a direct child of <code>document.body</code>.
+          If <code>true</code>, menu is rendered as a direct child of <code>document.body</code>, or
+          you can specify a target element in the DOM as menu container.
         </p>
+        <ul>
+          <li>
+            <code>target</code> specify a DOM node under which menu will be rendered.
+          </li>
+          <li>
+            <code>stablePosition</code> when <code>target</code> is null, setting this value{' '}
+            <code>true</code> prevents menu from rendering into the DOM hierarchy of its parent
+            component.
+          </li>
+        </ul>
         <p>
           Portal allows menu to visually “break out” of its container. Typical use cases may
           include:

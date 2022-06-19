@@ -79,17 +79,17 @@ var parsePadding = function parsePadding(paddingStr) {
   };
 };
 var getScrollAncestor = function getScrollAncestor(node) {
-  while (node && node !== document.body) {
+  while (node) {
+    node = node.parentNode;
+    if (!node || node === document.body) return;
+
     var _getComputedStyle = getComputedStyle(node),
         overflow = _getComputedStyle.overflow,
         overflowX = _getComputedStyle.overflowX,
         overflowY = _getComputedStyle.overflowY;
 
     if (/auto|scroll|overlay|hidden/.test(overflow + overflowY + overflowX)) return node;
-    node = node.parentNode;
   }
-
-  return window;
 };
 function commonProps(isDisabled, isHovering) {
   return {

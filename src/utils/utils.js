@@ -51,12 +51,12 @@ export const parsePadding = (paddingStr) => {
 
 // Adapted from https://github.com/popperjs/popper-core/tree/v2.9.1/src/dom-utils
 export const getScrollAncestor = (node) => {
-  while (node && node !== document.body) {
+  while (node) {
+    node = node.parentNode;
+    if (!node || node === document.body) return;
     const { overflow, overflowX, overflowY } = getComputedStyle(node);
     if (/auto|scroll|overlay|hidden/.test(overflow + overflowY + overflowX)) return node;
-    node = node.parentNode;
   }
-  return window;
 };
 
 export function commonProps(isDisabled, isHovering) {

@@ -1,4 +1,4 @@
-import { createRef } from 'react';
+import { createRef, useState } from 'react';
 import { ControlledMenu, MenuItem } from './entry';
 import { screen, fireEvent, waitFor } from '@testing-library/react';
 import * as utils from './utils';
@@ -75,6 +75,13 @@ test('ControlledMenu with an anchor element; ref is forwarded', async () => {
   utils.expectMenuToBeInTheDocument(false);
 });
 
+test('ControlledMenu warns when open by default', () => {
+  const spy = jest.spyOn(console, 'error').mockImplementation();
+  render(getMenu({ state: 'open' }));
+  expect(spy).toHaveBeenCalledWith(expect.stringContaining('container ref is null'));
+  spy.mockRestore();
+});
+
 test('ControlledMenu as context menu', () => {
   const anchorPoint = { x: 0, y: 0 };
   const props = { anchorPoint };
@@ -96,4 +103,20 @@ test('Portal will render ControlledMenu into document.body', () => {
   expect(container.querySelector('.szh-menu')).toBeNull();
   expect(document.querySelector('.szh-menu-container')).toBeInTheDocument();
   utils.expectMenuToBeInTheDocument(true);
+});
+
+const TestPortal = () => {
+  const [target, setTarget] = useState();
+  return (
+    <div>
+      <div data-testid="menu-container">{getMenu({ portal: { target } })}</div>
+      <div data-testid="portal-container" ref={setTarget} />
+    </div>
+  );
+};
+
+test('Portal will render ControlledMenu into target element', () => {
+  render(<TestPortal />);
+  expect(screen.getByTestId('menu-container')).not.toContainElement(utils.queryMenu());
+  expect(screen.getByTestId('portal-container')).toContainElement(utils.queryMenu());
 });

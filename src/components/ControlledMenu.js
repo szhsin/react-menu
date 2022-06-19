@@ -44,8 +44,7 @@ export const ControlledMenu = forwardRef(function ControlledMenu(
   externalRef
 ) {
   const containerRef = useRef(null);
-  const scrollingRef = useRef(null);
-  const anchorScrollingRef = useRef(null);
+  const scrollNodesRef = useRef({});
   const { anchorRef, state } = restProps;
 
   const settings = useMemo(
@@ -58,8 +57,7 @@ export const ControlledMenu = forwardRef(function ControlledMenu(
       boundingBoxPadding,
       rootMenuRef: containerRef,
       rootAnchorRef: anchorRef,
-      scrollingRef,
-      anchorScrollingRef,
+      scrollNodesRef,
       reposition,
       viewScroll
     }),
@@ -178,11 +176,16 @@ export const ControlledMenu = forwardRef(function ControlledMenu(
     </div>
   );
 
-  if (portal && typeof document !== 'undefined') {
+  if (portal === true && typeof document !== 'undefined') {
     return createPortal(menuList, document.body);
-  } else {
-    return menuList;
+  } else if (portal) {
+    return portal.target
+      ? createPortal(menuList, portal.target)
+      : portal.stablePosition
+      ? null
+      : menuList;
   }
+  return menuList;
 });
 
 ControlledMenu.propTypes /* remove-proptypes */ = {
