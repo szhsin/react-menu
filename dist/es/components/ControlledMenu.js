@@ -133,6 +133,9 @@ var ControlledMenu = /*#__PURE__*/forwardRef(function ControlledMenu(_ref, exter
       modifiers: modifiers,
       className: className
     }),
+    style: _extends({}, containerProps == null ? void 0 : containerProps.style, {
+      position: 'relative'
+    }),
     ref: containerRef,
     children: state && /*#__PURE__*/jsx(SettingsContext.Provider, {
       value: settings,

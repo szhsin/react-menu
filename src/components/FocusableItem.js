@@ -34,12 +34,11 @@ export const FocusableItem = withHovering(
     const { handleClose } = useContext(EventHandlersContext);
 
     const modifiers = useMemo(
-      () =>
-        Object.freeze({
-          disabled: isDisabled,
-          hover: isHovering,
-          focusable: true
-        }),
+      () => ({
+        disabled: isDisabled,
+        hover: isHovering,
+        focusable: true
+      }),
       [isDisabled, isHovering]
     );
 

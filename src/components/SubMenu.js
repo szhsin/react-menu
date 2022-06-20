@@ -175,13 +175,12 @@ export const SubMenu = withHovering(
     }));
 
     const modifiers = useMemo(
-      () =>
-        Object.freeze({
-          open: isOpen,
-          hover: isHovering,
-          disabled: isDisabled,
-          submenu: true
-        }),
+      () => ({
+        open: isOpen,
+        hover: isHovering,
+        disabled: isDisabled,
+        submenu: true
+      }),
       [isOpen, isHovering, isDisabled]
     );
 
@@ -220,6 +219,7 @@ export const SubMenu = withHovering(
     return (
       <li
         className={useBEM({ block: menuClass, element: subMenuClass, className })}
+        style={{ position: 'relative' }}
         role="presentation"
         ref={containerRef}
         onKeyDown={handleKeyDown}

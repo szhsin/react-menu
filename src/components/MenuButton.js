@@ -6,7 +6,7 @@ import { defineName, menuButtonClass, stylePropTypes } from '../utils';
 export const MenuButton = defineName(
   'MenuButton',
   forwardRef(function MenuButton({ className, isOpen, disabled, children, ...restProps }, ref) {
-    const modifiers = useMemo(() => Object.freeze({ open: isOpen }), [isOpen]);
+    const modifiers = useMemo(() => ({ open: isOpen }), [isOpen]);
 
     return (
       <button

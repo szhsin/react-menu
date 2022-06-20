@@ -33,11 +33,11 @@ var FocusableItem = /*#__PURE__*/withHovering('FocusableItem', function Focusabl
       handleClose = _useContext.handleClose;
 
   var modifiers = useMemo(function () {
-    return Object.freeze({
+    return {
       disabled: isDisabled,
       hover: isHovering,
       focusable: true
-    });
+    };
   }, [isDisabled, isHovering]);
   var renderChildren = useMemo(function () {
     return safeCall(children, _extends({}, modifiers, {
