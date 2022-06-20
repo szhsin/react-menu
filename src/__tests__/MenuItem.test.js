@@ -51,8 +51,14 @@ test('Radio menu items', () => {
   expect(onChange).toHaveBeenCalledWith(utils.clickEvent({ name: 'color', value: 'blue' }));
   expect(onItemClick).toHaveBeenCalledWith(utils.clickEvent({ name: 'color', value: 'blue' }));
   rerender(getMenu('blue'));
-  utils.expectMenuItemToBeChecked(queryByRole('menuitemradio', { name: 'Blue' }), true);
-  utils.expectMenuItemToBeChecked(queryByRole('menuitemradio', { name: 'Green' }), false);
+  utils.expectMenuItemToBeChecked(
+    queryByRole('menuitemradio', { name: 'Blue', hidden: true }),
+    true
+  );
+  utils.expectMenuItemToBeChecked(
+    queryByRole('menuitemradio', { name: 'Green', hidden: true }),
+    false
+  );
   utils.expectMenuToBeOpen(false);
 });
 

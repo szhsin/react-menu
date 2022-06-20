@@ -14,14 +14,20 @@ const expectToBe = (value, truthy) => (truthy ? expect(value) : expect(value).no
 export const delayFor = (delay) =>
   waitFor(() => new Promise((resolve) => setTimeout(resolve, delay)));
 
-export const queryMenu = ({ name, container } = {}) =>
-  name ? container.querySelector(`ul[aria-label="${name}"]`) : queryByRole('menu');
+export const queryMenu = ({ name } = {}) =>
+  document.querySelector(`[role="menu"]${name ? `[aria-label="${name}"]` : ''}`);
+
+export const expectMenuToHaveFocus = (options) =>
+  expect(queryMenu(options).firstChild).toHaveFocus();
 
 export const expectMenuToBeInTheDocument = (truthy, options) =>
   expectToBe(queryMenu(options), truthy).toBeInTheDocument();
 
-export const expectMenuToBeOpen = (truthy, options) =>
-  expectToBe(queryMenu(options), truthy).toHaveClass('szh-menu--state-open');
+export const expectMenuToBeOpen = (truthy, options) => {
+  const menu = queryMenu(options);
+  expect(menu).toHaveClass(`szh-menu--state-${truthy ? 'open' : 'closed'}`);
+  !truthy && expect(menu).toHaveStyle({ display: 'none' });
+};
 
 export const expectMenuToHaveState = (state, truthy, options) =>
   expectToBe(queryMenu(options), truthy).toHaveClass(`szh-menu--state-${state}`);
