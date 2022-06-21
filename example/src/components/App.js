@@ -20,7 +20,7 @@ const App = ({ children }) => {
     try {
       localStorage.setItem('theme', theme);
     } catch (err) {
-      console.log(err);
+      console.warn(err);
     }
   }, []);
   const setting = useMemo(
@@ -41,7 +41,7 @@ const App = ({ children }) => {
         document.body.className = bem('szh-app', null, { theme });
       }
     } catch (err) {
-      console.log(err);
+      console.warn(err);
     }
   }, []);
 

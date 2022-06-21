@@ -10,7 +10,7 @@ export const Footer = React.memo(function Footer() {
     fetch('https://api.github.com/repos/szhsin/react-menu')
       .then((response) => response.json())
       .then(({ stargazers_count }) => setStarCount(stargazers_count.toLocaleString('en-US')))
-      .catch((err) => console.log(err));
+      .catch((err) => console.error(err));
   }, []);
 
   return (
