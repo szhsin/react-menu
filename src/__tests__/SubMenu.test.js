@@ -21,7 +21,7 @@ const renderMenu = (props, itemProps, submenuProps) =>
 
 test('Open and close submenu with mouse', async () => {
   const onChange = jest.fn();
-  const { container } = renderMenu(null, null, { onMenuChange: onChange });
+  renderMenu(null, null, { onMenuChange: onChange });
   utils.clickMenuButton();
   const submenuOptions = { name: 'Submenu' };
   const submenuItem = utils.queryMenuItem('Submenu');
@@ -69,7 +69,7 @@ test('Open and close submenu with mouse', async () => {
 
 test('Open and close submenu with keyboard', async () => {
   const onChange = jest.fn();
-  const { container } = renderMenu(null, null, { onMenuChange: onChange });
+  renderMenu(null, null, { onMenuChange: onChange });
   utils.clickMenuButton();
   const menuOptions = { name: 'Menu' };
   const submenuOptions = { name: 'Submenu' };
@@ -105,7 +105,7 @@ test('onItemClick and onClick are fired when activating item with mouse or keybo
   const menuItemText = 'Save';
   const onClick = jest.fn();
   const onItemClick = jest.fn();
-  const { container } = renderMenu(
+  renderMenu(
     { onItemClick },
     {
       children: menuItemText,
@@ -209,7 +209,7 @@ test('Delay closing submenu when hovering items in parent menu list', async () =
 });
 
 test('openTrigger is "clickOnly"', async () => {
-  const { container } = renderMenu(null, null, { openTrigger: 'clickOnly' });
+  renderMenu(null, null, { openTrigger: 'clickOnly' });
   utils.clickMenuButton();
   const submenuOptions = { name: 'Submenu' };
   const submenuItem = utils.queryMenuItem('Submenu');
@@ -231,7 +231,7 @@ test('openTrigger is "clickOnly"', async () => {
 });
 
 test('openTrigger is "none"', async () => {
-  const { container } = renderMenu(null, null, { openTrigger: 'none' });
+  renderMenu(null, null, { openTrigger: 'none' });
   utils.clickMenuButton();
   const submenuOptions = { name: 'Submenu' };
   const submenuItem = utils.queryMenuItem('Submenu');
@@ -360,7 +360,7 @@ test('className props are added to related elements in menu and submenu', () => 
 test('Open and close menu with instanceRef', async () => {
   const menuRef = createRef();
   const submenuRef = createRef();
-  const { container } = renderMenu({ instanceRef: menuRef }, null, { instanceRef: submenuRef });
+  renderMenu({ instanceRef: menuRef }, null, { instanceRef: submenuRef });
   const menuOptions = { name: 'Menu' };
   const submenuOptions = { name: 'Submenu' };
   utils.expectMenuToBeInTheDocument(false, menuOptions);
