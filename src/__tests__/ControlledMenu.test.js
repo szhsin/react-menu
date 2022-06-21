@@ -49,7 +49,7 @@ test('ControlledMenu with an anchor element; ref is forwarded', async () => {
   // Open menu
   rerender(getMenu({ ...props, state: 'open' }));
   utils.expectMenuToBeOpen(true);
-  await waitFor(() => expect(utils.queryMenu()).toHaveFocus());
+  await waitFor(() => utils.expectMenuToHaveFocus());
 
   // Cause menu to lose focus
   queryByRole('button').focus();
@@ -58,7 +58,7 @@ test('ControlledMenu with an anchor element; ref is forwarded', async () => {
   // Close and re-open menu
   rerender(getMenu({ ...props, state: 'closed' }));
   rerender(getMenu({ ...props, state: 'open' }));
-  await waitFor(() => expect(utils.queryMenu()).toHaveFocus());
+  await waitFor(() => utils.expectMenuToHaveFocus());
 
   // Try to close menu with ESC key
   fireEvent.keyDown(utils.queryMenu(), { key: 'Escape' });

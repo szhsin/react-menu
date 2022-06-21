@@ -176,12 +176,12 @@ var SubMenu = /*#__PURE__*/withHovering('SubMenu', function SubMenu(_ref) {
     };
   });
   var modifiers = useMemo(function () {
-    return Object.freeze({
+    return {
       open: isOpen,
       hover: isHovering,
       disabled: isDisabled,
       submenu: true
-    });
+    };
   }, [isOpen, isHovering, isDisabled]);
 
   var externalItemRef = itemProps.ref,
@@ -218,6 +218,9 @@ var SubMenu = /*#__PURE__*/withHovering('SubMenu', function SubMenu(_ref) {
       element: subMenuClass,
       className: className
     }),
+    style: {
+      position: 'relative'
+    },
     role: "presentation",
     ref: containerRef,
     onKeyDown: handleKeyDown,

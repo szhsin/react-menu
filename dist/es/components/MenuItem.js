@@ -75,13 +75,13 @@ var MenuItem = /*#__PURE__*/withHovering('MenuItem', function MenuItem(_ref) {
   };
 
   var modifiers = useMemo(function () {
-    return Object.freeze({
+    return {
       type: type,
       disabled: isDisabled,
       hover: isHovering,
       checked: isChecked,
       anchor: isAnchor
-    });
+    };
   }, [type, isDisabled, isHovering, isChecked, isAnchor]);
   var handlers = attachHandlerProps(_extends({}, stateHandlers, {
     onMouseDown: setHover,

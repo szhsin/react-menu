@@ -16,19 +16,19 @@ const getMenu = (props) => (
 describe('Server rendering', () => {
   test('portal is not provided', () => {
     expect(renderToString(getMenu())).toContain(
-      '</button><div class="szh-menu-container"><ul role="menu"'
+      '</button><div class="szh-menu-container" style="position:relative"><ul role="menu"'
     );
   });
 
   test('portal is true', () => {
     expect(renderToString(getMenu({ portal: true }))).toContain(
-      '</button><div class="szh-menu-container"><ul role="menu"'
+      '</button><div class="szh-menu-container" style="position:relative"><ul role="menu"'
     );
   });
 
   test('portal.target is null', () => {
     expect(renderToString(getMenu({ portal: { target: null } }))).toContain(
-      '</button><div class="szh-menu-container"><ul role="menu"'
+      '</button><div class="szh-menu-container" style="position:relative"><ul role="menu"'
     );
   });
 

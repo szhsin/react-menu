@@ -565,9 +565,9 @@ var MenuButton = /*#__PURE__*/defineName('MenuButton', /*#__PURE__*/react.forwar
       restProps = _objectWithoutPropertiesLoose(_ref, _excluded$a);
 
   var modifiers = react.useMemo(function () {
-    return Object.freeze({
+    return {
       open: isOpen
-    });
+    };
   }, [isOpen]);
   return /*#__PURE__*/jsxRuntime.jsx("button", _extends({
     "aria-haspopup": true,
@@ -1042,7 +1042,8 @@ var MenuList = function MenuList(_ref) {
 
   var reposFlag = react.useContext(MenuListContext).reposSubmenu || repositionFlag;
   var menuRef = react.useRef(null);
-  var arrowRef = react.useRef(null);
+  var focusRef = react.useRef();
+  var arrowRef = react.useRef();
   var prevOpen = react.useRef(false);
   var latestMenuSize = react.useRef({
     width: 0,
@@ -1330,8 +1331,8 @@ var MenuList = function MenuList(_ref) {
       setItemFocus();
     } else if (captureFocus) {
       var id = setTimeout(function () {
-        if (menuRef.current && !menuRef.current.contains(document.activeElement)) {
-          menuRef.current.focus();
+        if (!menuRef.current.contains(document.activeElement)) {
+          focusRef.current.focus();
           setItemFocus();
         }
       }, openTransition ? 170 : 100);
@@ -1376,9 +1377,9 @@ var MenuList = function MenuList(_ref) {
     };
   }, [state, expandedDirection]);
   var arrowModifiers = react.useMemo(function () {
-    return Object.freeze({
+    return {
       dir: expandedDirection
-    });
+    };
   }, [expandedDirection]);
 
   var _arrowClass = useBEM({
@@ -1403,12 +1404,24 @@ var MenuList = function MenuList(_ref) {
       className: menuClassName
     }),
     style: _extends({}, menuStyle, overflowStyle, {
+      margin: 0,
+      display: state === 'closed' ? 'none' : undefined,
+      position: 'absolute',
       left: menuPosition.x,
       top: menuPosition.y
     }),
-    children: [arrow && /*#__PURE__*/jsxRuntime.jsx("div", {
+    children: [/*#__PURE__*/jsxRuntime.jsx("div", {
+      ref: focusRef,
+      tabIndex: -1,
+      style: {
+        position: 'absolute',
+        left: 0,
+        top: 0
+      }
+    }), arrow && /*#__PURE__*/jsxRuntime.jsx("div", {
       className: _arrowClass,
       style: _extends({}, arrowStyle, {
+        position: 'absolute',
         left: arrowPosition.x,
         top: arrowPosition.y
       }),
@@ -1549,6 +1562,9 @@ var ControlledMenu = /*#__PURE__*/react.forwardRef(function ControlledMenu(_ref,
       block: menuContainerClass,
       modifiers: modifiers,
       className: className
+    }),
+    style: _extends({}, containerProps == null ? void 0 : containerProps.style, {
+      position: 'relative'
     }),
     ref: containerRef,
     children: state && /*#__PURE__*/jsxRuntime.jsx(SettingsContext.Provider, {
@@ -1838,12 +1854,12 @@ var SubMenu = /*#__PURE__*/withHovering('SubMenu', function SubMenu(_ref) {
     };
   });
   var modifiers = react.useMemo(function () {
-    return Object.freeze({
+    return {
       open: isOpen,
       hover: isHovering,
       disabled: isDisabled,
       submenu: true
-    });
+    };
   }, [isOpen, isHovering, isDisabled]);
 
   var externalItemRef = itemProps.ref,
@@ -1880,6 +1896,9 @@ var SubMenu = /*#__PURE__*/withHovering('SubMenu', function SubMenu(_ref) {
       element: subMenuClass,
       className: className
     }),
+    style: {
+      position: 'relative'
+    },
     role: "presentation",
     ref: containerRef,
     onKeyDown: handleKeyDown,
@@ -1973,13 +1992,13 @@ var MenuItem = /*#__PURE__*/withHovering('MenuItem', function MenuItem(_ref) {
   };
 
   var modifiers = react.useMemo(function () {
-    return Object.freeze({
+    return {
       type: type,
       disabled: isDisabled,
       hover: isHovering,
       checked: isChecked,
       anchor: isAnchor
-    });
+    };
   }, [type, isDisabled, isHovering, isChecked, isAnchor]);
   var handlers = attachHandlerProps(_extends({}, stateHandlers, {
     onMouseDown: setHover,
@@ -2047,11 +2066,11 @@ var FocusableItem = /*#__PURE__*/withHovering('FocusableItem', function Focusabl
       handleClose = _useContext.handleClose;
 
   var modifiers = react.useMemo(function () {
-    return Object.freeze({
+    return {
       disabled: isDisabled,
       hover: isHovering,
       focusable: true
-    });
+    };
   }, [isDisabled, isHovering]);
   var renderChildren = react.useMemo(function () {
     return safeCall(children, _extends({}, modifiers, {

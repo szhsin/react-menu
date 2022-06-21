@@ -19,7 +19,7 @@ test.each([false, true])(
     utils.expectMenuToHaveState('opening', false);
     utils.expectMenuToBeOpen(true);
     expect(utils.queryMenu()).toHaveAttribute('aria-label', 'Open');
-    await waitFor(() => expect(utils.queryMenu()).toHaveFocus());
+    await waitFor(() => utils.expectMenuToHaveFocus());
     const menuItems = queryAllByRole('menuitem');
     expect(menuItems).toHaveLength(3);
     menuItems.forEach((item) => utils.expectMenuItemToBeHover(item, false));
@@ -38,7 +38,7 @@ test.each([false, true])(
     utils.renderMenu({ portal, transition: true, transitionTimeout: 20 });
     utils.clickMenuButton();
     utils.expectMenuToHaveState('opening', true);
-    await waitFor(() => expect(utils.queryMenu()).toHaveFocus());
+    await waitFor(() => utils.expectMenuToHaveFocus());
     utils.expectMenuToHaveState('opening', false);
     utils.expectMenuToHaveState('open', true);
 
@@ -57,7 +57,7 @@ test.each([false, true])(
 
     utils.clickMenuButton();
     utils.expectMenuToBeInTheDocument(true);
-    await waitFor(() => expect(utils.queryMenu()).toHaveFocus());
+    await waitFor(() => utils.expectMenuToHaveFocus());
 
     act(() => queryByRole('button').focus());
     utils.expectMenuToBeInTheDocument(false);
@@ -134,9 +134,9 @@ test.each([false, true])('Open and close menu with keyboard (portal = %s)', asyn
 test('Navigate with arrow keys', async () => {
   utils.renderMenu();
   utils.clickMenuButton();
-  const menu = utils.queryMenu();
-  await waitFor(() => expect(menu).toHaveFocus());
+  await waitFor(() => utils.expectMenuToHaveFocus());
 
+  const menu = utils.queryMenu();
   fireEvent.keyDown(menu, { key: 'ArrowUp' });
   utils.expectMenuItemToBeHover(utils.queryMenuItem('Last'), true);
   fireEvent.keyDown(menu, { key: 'ArrowUp' });
@@ -161,6 +161,7 @@ test('Additional props are forwarded to Menu', () => {
     containerProps: {
       'data-testid': 'container',
       id: 'menu-container',
+      style: { color: 'blue' },
       onMouseEnter,
       onKeyDown
     }
@@ -168,7 +169,11 @@ test('Additional props are forwarded to Menu', () => {
   utils.clickMenuButton();
 
   expect(screen.getByText('Some texts')).toHaveClass('some-class');
-  expect(screen.getByTestId('container')).toHaveAttribute('id', 'menu-container');
+
+  const container = screen.getByTestId('container');
+  expect(container).toHaveAttribute('id', 'menu-container');
+  expect(container).toHaveStyle({ color: 'blue', position: 'relative' });
+
   const menu = utils.queryMenu();
   expect(menu).toHaveAttribute('aria-label', 'test');
   expect(menu).toHaveAttribute('aria-haspopup', 'true');

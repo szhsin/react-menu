@@ -70,7 +70,8 @@ export const MenuList = ({
   } = useContext(SettingsContext);
   const reposFlag = useContext(MenuListContext).reposSubmenu || repositionFlag;
   const menuRef = useRef(null);
-  const arrowRef = useRef(null);
+  const focusRef = useRef();
+  const arrowRef = useRef();
   const prevOpen = useRef(false);
   const latestMenuSize = useRef({ width: 0, height: 0 });
   const latestHandlePosition = useRef(() => {});
@@ -347,8 +348,8 @@ export const MenuList = ({
       const id = setTimeout(
         () => {
           // If focus has already been set to a children element, don't set focus on menu or item
-          if (menuRef.current && !menuRef.current.contains(document.activeElement)) {
-            menuRef.current.focus();
+          if (!menuRef.current.contains(document.activeElement)) {
+            focusRef.current.focus();
             setItemFocus();
           }
         },
@@ -388,8 +389,6 @@ export const MenuList = ({
   );
   const overflowStyle = maxHeight >= 0 ? { maxHeight, overflow } : undefined;
 
-  // Modifier object are shared between this project and client code,
-  // freeze them to prevent client code from accidentally altering them.
   const modifiers = useMemo(
     () => ({
       state,
@@ -397,10 +396,7 @@ export const MenuList = ({
     }),
     [state, expandedDirection]
   );
-  const arrowModifiers = useMemo(
-    () => Object.freeze({ dir: expandedDirection }),
-    [expandedDirection]
-  );
+  const arrowModifiers = useMemo(() => ({ dir: expandedDirection }), [expandedDirection]);
   const _arrowClass = useBEM({
     block: menuClass,
     element: menuArrowClass,
@@ -428,15 +424,20 @@ export const MenuList = ({
       style={{
         ...menuStyle,
         ...overflowStyle,
+        margin: 0,
+        display: state === 'closed' ? 'none' : undefined,
+        position: 'absolute',
         left: menuPosition.x,
         top: menuPosition.y
       }}
     >
+      <div ref={focusRef} tabIndex={-1} style={{ position: 'absolute', left: 0, top: 0 }} />
       {arrow && (
         <div
           className={_arrowClass}
           style={{
             ...arrowStyle,
+            position: 'absolute',
             left: arrowPosition.x,
             top: arrowPosition.y
           }}

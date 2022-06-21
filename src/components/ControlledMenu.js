@@ -156,6 +156,7 @@ export const ControlledMenu = forwardRef(function ControlledMenu(
         modifiers,
         className
       })}
+      style={{ ...containerProps?.style, position: 'relative' }}
       ref={containerRef}
     >
       {state && (

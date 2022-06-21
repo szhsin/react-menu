@@ -90,7 +90,8 @@ var MenuList = function MenuList(_ref) {
 
   var reposFlag = useContext(MenuListContext).reposSubmenu || repositionFlag;
   var menuRef = useRef(null);
-  var arrowRef = useRef(null);
+  var focusRef = useRef();
+  var arrowRef = useRef();
   var prevOpen = useRef(false);
   var latestMenuSize = useRef({
     width: 0,
@@ -378,8 +379,8 @@ var MenuList = function MenuList(_ref) {
       setItemFocus();
     } else if (captureFocus) {
       var id = setTimeout(function () {
-        if (menuRef.current && !menuRef.current.contains(document.activeElement)) {
-          menuRef.current.focus();
+        if (!menuRef.current.contains(document.activeElement)) {
+          focusRef.current.focus();
           setItemFocus();
         }
       }, openTransition ? 170 : 100);
@@ -424,9 +425,9 @@ var MenuList = function MenuList(_ref) {
     };
   }, [state, expandedDirection]);
   var arrowModifiers = useMemo(function () {
-    return Object.freeze({
+    return {
       dir: expandedDirection
-    });
+    };
   }, [expandedDirection]);
 
   var _arrowClass = useBEM({
@@ -451,12 +452,24 @@ var MenuList = function MenuList(_ref) {
       className: menuClassName
     }),
     style: _extends({}, menuStyle, overflowStyle, {
+      margin: 0,
+      display: state === 'closed' ? 'none' : undefined,
+      position: 'absolute',
       left: menuPosition.x,
       top: menuPosition.y
     }),
-    children: [arrow && /*#__PURE__*/jsx("div", {
+    children: [/*#__PURE__*/jsx("div", {
+      ref: focusRef,
+      tabIndex: -1,
+      style: {
+        position: 'absolute',
+        left: 0,
+        top: 0
+      }
+    }), arrow && /*#__PURE__*/jsx("div", {
       className: _arrowClass,
       style: _extends({}, arrowStyle, {
+        position: 'absolute',
         left: arrowPosition.x,
         top: arrowPosition.y
       }),

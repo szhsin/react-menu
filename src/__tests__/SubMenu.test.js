@@ -23,7 +23,7 @@ test('Open and close submenu with mouse', async () => {
   const onChange = jest.fn();
   const { container } = renderMenu(null, null, { onMenuChange: onChange });
   utils.clickMenuButton();
-  const submenuOptions = { name: 'Submenu', container };
+  const submenuOptions = { name: 'Submenu' };
   const submenuItem = utils.queryMenuItem('Submenu');
 
   // Open submenu with click event
@@ -35,7 +35,7 @@ test('Open and close submenu with mouse', async () => {
   utils.expectMenuToBeOpen(true, submenuOptions);
   expect(utils.queryMenu(submenuOptions)).toHaveClass('szh-menu--dir-right');
   expect(onChange).toHaveBeenLastCalledWith({ open: true });
-  await waitFor(() => expect(utils.queryMenu(submenuOptions)).toHaveFocus());
+  await waitFor(() => utils.expectMenuToHaveFocus(submenuOptions));
 
   // Hovering an item in the parent menu list will close submenu
   fireEvent.mouseMove(utils.queryMenuItem('One'));
@@ -54,13 +54,13 @@ test('Open and close submenu with mouse', async () => {
   fireEvent.mouseMove(submenuItem);
   utils.expectMenuItemToBeHover(submenuItem, true);
   await waitFor(() => utils.expectMenuToBeOpen(true, submenuOptions));
-  await waitFor(() => expect(utils.queryMenu(submenuOptions)).toHaveFocus());
+  await waitFor(() => utils.expectMenuToHaveFocus(submenuOptions));
 
   // Click submenu item, submenu keeps open and hovered
   fireEvent.mouseDown(submenuItem);
   fireEvent.click(submenuItem);
   submenuItem.focus();
-  await waitFor(() => expect(utils.queryMenu(submenuOptions)).toHaveFocus());
+  await waitFor(() => utils.expectMenuToHaveFocus(submenuOptions));
   utils.expectMenuItemToBeHover(submenuItem, true);
   utils.expectMenuToBeOpen(true, submenuOptions);
 
@@ -71,8 +71,8 @@ test('Open and close submenu with keyboard', async () => {
   const onChange = jest.fn();
   const { container } = renderMenu(null, null, { onMenuChange: onChange });
   utils.clickMenuButton();
-  const menuOptions = { name: 'Menu', container };
-  const submenuOptions = { name: 'Submenu', container };
+  const menuOptions = { name: 'Menu' };
+  const submenuOptions = { name: 'Submenu' };
   const submenuItem = utils.queryMenuItem('Submenu');
 
   // Open submenu with right arrow key
@@ -115,8 +115,8 @@ test('onItemClick and onClick are fired when activating item with mouse or keybo
   );
 
   utils.clickMenuButton();
-  const menuOptions = { name: 'Menu', container };
-  const submenuOptions = { name: 'Submenu', container };
+  const menuOptions = { name: 'Menu' };
+  const submenuOptions = { name: 'Submenu' };
   const submenuItem = utils.queryMenuItem('Submenu');
 
   // Open submenu and click a menu item, expecting onClick to fire on the menu item and root menu
@@ -131,7 +131,7 @@ test('onItemClick and onClick are fired when activating item with mouse or keybo
   utils.clickMenuButton();
   fireEvent.mouseDown(submenuItem);
   fireEvent.click(submenuItem);
-  await waitFor(() => expect(utils.queryMenu(submenuOptions)).toHaveFocus());
+  await waitFor(() => utils.expectMenuToHaveFocus(submenuOptions));
   fireEvent.keyDown(utils.queryMenu(submenuOptions), { key: 'ArrowDown' });
   fireEvent.keyDown(utils.queryMenu(submenuOptions), { key: 'ArrowDown' });
   fireEvent.keyDown(utils.queryMenuItem(menuItemText), { key: ' ' });
@@ -160,8 +160,8 @@ test('Delay closing submenu when hovering items in parent menu list', async () =
   );
 
   utils.clickMenuButton();
-  const submenuOptions1 = { name: 'Submenu1', container };
-  const submenuOptions2 = { name: 'Submenu2', container };
+  const submenuOptions1 = { name: 'Submenu1' };
+  const submenuOptions2 = { name: 'Submenu2' };
   const submenuItem1 = utils.queryMenuItem('Submenu1');
 
   fireEvent.mouseDown(submenuItem1);
@@ -211,7 +211,7 @@ test('Delay closing submenu when hovering items in parent menu list', async () =
 test('openTrigger is "clickOnly"', async () => {
   const { container } = renderMenu(null, null, { openTrigger: 'clickOnly' });
   utils.clickMenuButton();
-  const submenuOptions = { name: 'Submenu', container };
+  const submenuOptions = { name: 'Submenu' };
   const submenuItem = utils.queryMenuItem('Submenu');
 
   fireEvent.mouseMove(submenuItem);
@@ -233,7 +233,7 @@ test('openTrigger is "clickOnly"', async () => {
 test('openTrigger is "none"', async () => {
   const { container } = renderMenu(null, null, { openTrigger: 'none' });
   utils.clickMenuButton();
-  const submenuOptions = { name: 'Submenu', container };
+  const submenuOptions = { name: 'Submenu' };
   const submenuItem = utils.queryMenuItem('Submenu');
 
   fireEvent.mouseMove(submenuItem);
@@ -361,8 +361,8 @@ test('Open and close menu with instanceRef', async () => {
   const menuRef = createRef();
   const submenuRef = createRef();
   const { container } = renderMenu({ instanceRef: menuRef }, null, { instanceRef: submenuRef });
-  const menuOptions = { name: 'Menu', container };
-  const submenuOptions = { name: 'Submenu', container };
+  const menuOptions = { name: 'Menu' };
+  const submenuOptions = { name: 'Submenu' };
   utils.expectMenuToBeInTheDocument(false, menuOptions);
 
   act(() => {

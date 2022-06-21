@@ -270,7 +270,7 @@ function CombinedExample() {
 
   return (
     <Example data={codeExamples.combined}>
-      <Menu menuButton={<MenuButton>Open menu</MenuButton>}>
+      <Menu menuButton={<MenuButton>Open menu</MenuButton>} unmountOnClose>
         <MenuItem>New File</MenuItem>
         <MenuItem>Save</MenuItem>
         <MenuDivider />

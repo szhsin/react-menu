@@ -16,9 +16,9 @@ var MenuButton = /*#__PURE__*/defineName('MenuButton', /*#__PURE__*/forwardRef(f
       restProps = _objectWithoutPropertiesLoose(_ref, _excluded);
 
   var modifiers = useMemo(function () {
-    return Object.freeze({
+    return {
       open: isOpen
-    });
+    };
   }, [isOpen]);
   return /*#__PURE__*/jsx("button", _extends({
     "aria-haspopup": true,

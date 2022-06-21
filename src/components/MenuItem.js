@@ -71,14 +71,13 @@ export const MenuItem = withHovering(
     };
 
     const modifiers = useMemo(
-      () =>
-        Object.freeze({
-          type,
-          disabled: isDisabled,
-          hover: isHovering,
-          checked: isChecked,
-          anchor: isAnchor
-        }),
+      () => ({
+        type,
+        disabled: isDisabled,
+        hover: isHovering,
+        checked: isChecked,
+        anchor: isAnchor
+      }),
       [type, isDisabled, isHovering, isChecked, isAnchor]
     );
 
