@@ -622,7 +622,7 @@ function BoundingBoxExample() {
 
   useEffect(() => {
     toggleMenu(true);
-  }, [toggleMenu]);
+  }, [toggleMenu, /* effect dep */ portal]);
 
   const tooltipProps = {
     state,
@@ -638,7 +638,14 @@ function BoundingBoxExample() {
   return (
     <Example data={codeExamples.boundingBox}>
       <label>
-        <input type="checkbox" checked={portal} onChange={(e) => setPortal(e.target.checked)} />
+        <input
+          type="checkbox"
+          checked={portal}
+          onChange={(e) => {
+            toggleMenu(false);
+            setPortal(e.target.checked);
+          }}
+        />
         Render via portal
       </label>
 
