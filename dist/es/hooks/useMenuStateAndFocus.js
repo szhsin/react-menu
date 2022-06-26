@@ -19,9 +19,9 @@ var useMenuStateAndFocus = function useMenuStateAndFocus(options) {
     toggleMenu(true);
   };
 
-  return [_extends({}, menuProps, {
+  return [_extends({
     menuItemFocus: menuItemFocus
-  }), toggleMenu, openMenu];
+  }, menuProps), toggleMenu, openMenu];
 };
 
 export { useMenuStateAndFocus };

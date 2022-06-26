@@ -10,5 +10,5 @@ export const useMenuStateAndFocus = (options) => {
     toggleMenu(true);
   };
 
-  return [{ ...menuProps, menuItemFocus }, toggleMenu, openMenu];
+  return [{ menuItemFocus, ...menuProps }, toggleMenu, openMenu];
 };
