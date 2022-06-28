@@ -133,7 +133,7 @@ var floatEqual = function floatEqual(a, b, diff) {
   return Math.abs(a - b) < diff;
 };
 var getTransition = function getTransition(transition, name) {
-  return !!(transition && transition[name]) || transition === true;
+  return transition === true || !!(transition && transition[name]);
 };
 var safeCall = function safeCall(fn, arg) {
   return typeof fn === 'function' ? fn(arg) : fn;
@@ -551,9 +551,9 @@ var useMenuStateAndFocus = function useMenuStateAndFocus(options) {
     toggleMenu(true);
   };
 
-  return [_extends({}, menuProps, {
+  return [_extends({
     menuItemFocus: menuItemFocus
-  }), toggleMenu, openMenu];
+  }, menuProps), toggleMenu, openMenu];
 };
 
 var _excluded$a = ["className", "isOpen", "disabled", "children"];

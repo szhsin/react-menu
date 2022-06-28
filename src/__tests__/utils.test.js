@@ -1,4 +1,4 @@
-import { parsePadding } from '../utils';
+import { parsePadding, getTransition } from '../utils';
 
 test('parsePadding', () => {
   const defaultPadding = { top: 0, right: 0, bottom: 0, left: 0 };
@@ -15,4 +15,12 @@ test('parsePadding', () => {
     bottom: 30,
     left: 40
   });
+});
+
+test('getTransition', () => {
+  expect(getTransition(true, 'open')).toBe(true);
+  expect(getTransition(undefined, 'open')).toBe(false);
+  expect(getTransition({}, 'open')).toBe(false);
+  expect(getTransition({ open: true }, 'open')).toBe(true);
+  expect(getTransition({ open: false }, 'open')).toBe(false);
 });
