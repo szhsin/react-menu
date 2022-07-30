@@ -1,5 +1,5 @@
 import { extends as _extends } from '../_virtual/_rollupPluginBabelHelpers.js';
-import { oneOfType, string, func, object, bool, number, oneOf, exact } from 'prop-types';
+import { object, bool, oneOfType, exact, number, string, oneOf, func } from 'prop-types';
 
 var stylePropTypes = function stylePropTypes(name) {
   var _ref;

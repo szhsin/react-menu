@@ -208,7 +208,7 @@ var getScrollAncestor = function getScrollAncestor(node) {
 function commonProps(isDisabled, isHovering) {
   return {
     'aria-disabled': isDisabled || undefined,
-    tabIndex: isDisabled ? undefined : isHovering ? 0 : -1
+    tabIndex: isHovering ? 0 : -1
   };
 }
 function indexOfNode(nodeList, node) {
@@ -313,7 +313,7 @@ var withHovering = function withHovering(name, WrapppedComponent) {
   return WithHovering;
 };
 
-var useItems = function useItems(menuRef) {
+var useItems = function useItems(menuRef, focusRef) {
   var _useState = react.useState(),
       hoverItem = _useState[0],
       setHoverItem = _useState[1];
@@ -333,12 +333,20 @@ var useItems = function useItems(menuRef) {
       items.push(item);
     } else {
       var index = items.indexOf(item);
-      if (index > -1) items.splice(index, 1);
+
+      if (index > -1) {
+        items.splice(index, 1);
+
+        if (item.contains(document.activeElement)) {
+          focusRef.current.focus();
+          setHoverItem();
+        }
+      }
     }
 
     mutableState.hoverIndex = -1;
     mutableState.sorted = false;
-  }, [mutableState]);
+  }, [mutableState, focusRef]);
   var dispatch = react.useCallback(function (actionType, item, nextIndex) {
     var items = mutableState.items,
         hoverIndex = mutableState.hoverIndex;
@@ -422,7 +430,7 @@ var useItems = function useItems(menuRef) {
 };
 
 var useItemEffect = function useItemEffect(isDisabled, itemRef, updateItems) {
-  react.useEffect(function () {
+  useIsomorphicLayoutEffect(function () {
     if (process.env.NODE_ENV !== 'production' && !updateItems) {
       throw new Error("[React-Menu] This menu item or submenu should be rendered under a menu: " + itemRef.current.outerHTML);
     }
@@ -1051,7 +1059,7 @@ var MenuList = function MenuList(_ref) {
   });
   var latestHandlePosition = react.useRef(function () {});
 
-  var _useItems = useItems(menuRef),
+  var _useItems = useItems(menuRef, focusRef),
       hoverItem = _useItems.hoverItem,
       dispatch = _useItems.dispatch,
       updateItems = _useItems.updateItems;
@@ -1212,7 +1220,7 @@ var MenuList = function MenuList(_ref) {
   useIsomorphicLayoutEffect(function () {
     if (overflowData && !setDownOverflow) menuRef.current.scrollTop = 0;
   }, [overflowData, setDownOverflow]);
-  react.useEffect(function () {
+  useIsomorphicLayoutEffect(function () {
     return updateItems;
   }, [updateItems]);
   react.useEffect(function () {

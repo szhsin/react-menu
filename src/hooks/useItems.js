@@ -1,7 +1,7 @@
 import { useState, useCallback, useRef } from 'react';
 import { HoverActionTypes, indexOfNode } from '../utils';
 
-export const useItems = (menuRef) => {
+export const useItems = (menuRef, focusRef) => {
   const [hoverItem, setHoverItem] = useState();
   const stateRef = useRef({
     items: [],
@@ -19,12 +19,18 @@ export const useItems = (menuRef) => {
         items.push(item);
       } else {
         const index = items.indexOf(item);
-        if (index > -1) items.splice(index, 1);
+        if (index > -1) {
+          items.splice(index, 1);
+          if (item.contains(document.activeElement)) {
+            focusRef.current.focus();
+            setHoverItem();
+          }
+        }
       }
       mutableState.hoverIndex = -1;
       mutableState.sorted = false;
     },
-    [mutableState]
+    [mutableState, focusRef]
   );
 
   const dispatch = useCallback(

@@ -99,7 +99,7 @@ var MenuList = function MenuList(_ref) {
   });
   var latestHandlePosition = useRef(function () {});
 
-  var _useItems = useItems(menuRef),
+  var _useItems = useItems(menuRef, focusRef),
       hoverItem = _useItems.hoverItem,
       dispatch = _useItems.dispatch,
       updateItems = _useItems.updateItems;
@@ -260,7 +260,7 @@ var MenuList = function MenuList(_ref) {
   useIsomorphicLayoutEffect(function () {
     if (overflowData && !setDownOverflow) menuRef.current.scrollTop = 0;
   }, [overflowData, setDownOverflow]);
-  useEffect(function () {
+  useIsomorphicLayoutEffect(function () {
     return updateItems;
   }, [updateItems]);
   useEffect(function () {

@@ -5,7 +5,7 @@ import { oneOf, exact, number, object, bool, oneOfType, string, func } from 'pro
 import { MenuList } from './MenuList.js';
 import { jsx } from 'react/jsx-runtime';
 import { useBEM } from '../hooks/useBEM.js';
-import { SettingsContext, ItemSettingsContext, EventHandlersContext, MenuStateMap, Keys, CloseReason, menuContainerClass } from '../utils/constants.js';
+import { SettingsContext, ItemSettingsContext, EventHandlersContext, Keys, CloseReason, MenuStateMap, menuContainerClass } from '../utils/constants.js';
 import { rootMenuPropTypes } from '../utils/propTypes.js';
 import { safeCall, getTransition, attachHandlerProps, values, isMenuOpen } from '../utils/utils.js';
 
