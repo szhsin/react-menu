@@ -1,7 +1,7 @@
-import { useEffect } from 'react';
+import { useLayoutEffect } from './useIsomorphicLayoutEffect';
 
 export const useItemEffect = (isDisabled, itemRef, updateItems) => {
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (process.env.NODE_ENV !== 'production' && !updateItems) {
       throw new Error(
         `[React-Menu] This menu item or submenu should be rendered under a menu: ${itemRef.current.outerHTML}`

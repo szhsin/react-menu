@@ -2,7 +2,7 @@ import { useState, useRef, useCallback } from 'react';
 import { HoverActionTypes } from '../utils/constants.js';
 import { indexOfNode } from '../utils/utils.js';
 
-var useItems = function useItems(menuRef) {
+var useItems = function useItems(menuRef, focusRef) {
   var _useState = useState(),
       hoverItem = _useState[0],
       setHoverItem = _useState[1];
@@ -22,12 +22,20 @@ var useItems = function useItems(menuRef) {
       items.push(item);
     } else {
       var index = items.indexOf(item);
-      if (index > -1) items.splice(index, 1);
+
+      if (index > -1) {
+        items.splice(index, 1);
+
+        if (item.contains(document.activeElement)) {
+          focusRef.current.focus();
+          setHoverItem();
+        }
+      }
     }
 
     mutableState.hoverIndex = -1;
     mutableState.sorted = false;
-  }, [mutableState]);
+  }, [mutableState, focusRef]);
   var dispatch = useCallback(function (actionType, item, nextIndex) {
     var items = mutableState.items,
         hoverIndex = mutableState.hoverIndex;

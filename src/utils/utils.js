@@ -62,7 +62,7 @@ export const getScrollAncestor = (node) => {
 export function commonProps(isDisabled, isHovering) {
   return {
     'aria-disabled': isDisabled || undefined,
-    tabIndex: isDisabled ? undefined : isHovering ? 0 : -1
+    tabIndex: isHovering ? 0 : -1
   };
 }
 

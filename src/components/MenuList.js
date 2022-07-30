@@ -75,7 +75,7 @@ export const MenuList = ({
   const prevOpen = useRef(false);
   const latestMenuSize = useRef({ width: 0, height: 0 });
   const latestHandlePosition = useRef(() => {});
-  const { hoverItem, dispatch, updateItems } = useItems(menuRef);
+  const { hoverItem, dispatch, updateItems } = useItems(menuRef, focusRef);
 
   const isOpen = isMenuOpen(state);
   const openTransition = getTransition(transition, 'open');
@@ -247,7 +247,7 @@ export const MenuList = ({
     if (overflowData && !setDownOverflow) menuRef.current.scrollTop = 0;
   }, [overflowData, setDownOverflow]);
 
-  useEffect(() => updateItems, [updateItems]);
+  useLayoutEffect(() => updateItems, [updateItems]);
 
   useEffect(() => {
     let { menu: menuScroll } = scrollNodes;

@@ -94,7 +94,7 @@ var getScrollAncestor = function getScrollAncestor(node) {
 function commonProps(isDisabled, isHovering) {
   return {
     'aria-disabled': isDisabled || undefined,
-    tabIndex: isDisabled ? undefined : isHovering ? 0 : -1
+    tabIndex: isHovering ? 0 : -1
   };
 }
 function indexOfNode(nodeList, node) {

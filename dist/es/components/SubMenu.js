@@ -10,7 +10,7 @@ import { useMenuStateAndFocus } from '../hooks/useMenuStateAndFocus.js';
 import { useItemEffect } from '../hooks/useItemEffect.js';
 import { useMenuChange } from '../hooks/useMenuChange.js';
 import { useBEM } from '../hooks/useBEM.js';
-import { SettingsContext, ItemSettingsContext, MenuListContext, MenuListItemContext, HoverActionTypes, menuClass, subMenuClass, menuItemClass, Keys, FocusPositions } from '../utils/constants.js';
+import { SettingsContext, ItemSettingsContext, MenuListContext, MenuListItemContext, menuClass, subMenuClass, menuItemClass, HoverActionTypes, Keys, FocusPositions } from '../utils/constants.js';
 import { useCombinedRef } from '../hooks/useCombinedRef.js';
 import { attachHandlerProps, commonProps, safeCall, isMenuOpen, batchedUpdates } from '../utils/utils.js';
 
