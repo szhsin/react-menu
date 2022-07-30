@@ -259,7 +259,7 @@ test('Submenu is disabled', () => {
   fireEvent.mouseMove(submenuItem);
   fireEvent.mouseDown(submenuItem);
   fireEvent.click(submenuItem);
-  utils.expectMenuItemToBeHover(submenuItem, false, true);
+  utils.expectMenuItemToBeHover(submenuItem, false);
   utils.expectMenuToBeInTheDocument(false, { name: 'Submenu', container });
 
   // Disabled item is skipped in keyboard navigation
@@ -267,7 +267,7 @@ test('Submenu is disabled', () => {
   utils.expectMenuItemToBeHover(utils.queryMenuItem('One'), true);
   fireEvent.keyDown(utils.queryMenu(), { key: 'ArrowDown' });
   utils.expectMenuItemToBeHover(utils.queryMenuItem('Two'), true);
-  utils.expectMenuItemToBeHover(submenuItem, false, true);
+  utils.expectMenuItemToBeHover(submenuItem, false);
 });
 
 test('ref is forwarded to <Menu>, <MenuItem> and <SubMenu>', () => {
@@ -459,14 +459,14 @@ const TestKeyboard = () => {
 };
 
 test('keyboard navigation when items are mounted/unmounted and disabled/enabled', async () => {
-  const { container } = render(<TestKeyboard />);
+  render(<TestKeyboard />);
 
   utils.clickMenuButton();
   const submenuItem = utils.queryMenuItem('Submenu');
   fireEvent.mouseDown(submenuItem);
   fireEvent.click(submenuItem);
-  const menu = utils.queryMenu({ name: 'Menu', container });
-  const submenu = utils.queryMenu({ name: 'Submenu', container });
+  const menu = utils.queryMenu({ name: 'Menu' });
+  const submenu = utils.queryMenu({ name: 'Submenu' });
 
   fireEvent.keyDown(submenu, { key: 'ArrowUp' });
   utils.expectMenuItemToBeHover(utils.queryMenuItem('Sub 3'), true);
@@ -510,12 +510,48 @@ test('keyboard navigation when items are mounted/unmounted and disabled/enabled'
   utils.expectMenuItemToBeHover(utils.queryMenuItem('Sub 1'), true);
 });
 
+describe('Menu retains focus aftering losing focused menu items', () => {
+  const getMenu = (renderItem, disableItem) => (
+    <Menu menuButton={<MenuButton>Menu</MenuButton>}>
+      {renderItem && <MenuItem key="1">1</MenuItem>}
+      <MenuItem key="2">2</MenuItem>
+      <SubMenu key="3" disabled={disableItem} label="Submenu">
+        <MenuItem>Sub 1</MenuItem>
+      </SubMenu>
+    </Menu>
+  );
+
+  test('focused menu items are removed', () => {
+    const { rerender } = utils.render(getMenu(true));
+    utils.clickMenuButton();
+    fireEvent.keyDown(utils.queryMenu({ name: 'Menu' }), { key: 'ArrowDown' });
+    expect(utils.queryMenuItem('1')).toHaveFocus();
+    rerender(getMenu());
+    utils.expectMenuToHaveFocus();
+    utils.expectMenuToBeOpen(true, { name: 'Menu' });
+    act(() => screen.getByRole('button').focus());
+    utils.expectMenuToBeOpen(false, { name: 'Menu' });
+  });
+
+  test('focused menu items are disabled', () => {
+    const { rerender } = utils.render(getMenu(true));
+    utils.clickMenuButton();
+    fireEvent.keyDown(utils.queryMenu({ name: 'Menu' }), { key: 'ArrowUp' });
+    utils.expectMenuItemToBeHover(utils.queryMenuItem('Submenu'), true);
+    rerender(getMenu(true, true));
+    utils.expectMenuItemToBeHover(utils.queryMenuItem('Submenu'), false);
+    utils.expectMenuToBeOpen(true, { name: 'Menu' });
+    act(() => screen.getByRole('button').focus());
+    utils.expectMenuToBeOpen(false, { name: 'Menu' });
+  });
+});
+
 test.each([
   ['top', 'szh-menu--dir-right'],
   ['left', 'szh-menu--dir-left'],
   ['right', 'szh-menu--dir-right']
 ])('Submenu opens on the same direction as parent submenu', (direction, directionClass) => {
-  const { container } = render(
+  render(
     <Menu menuButton={<MenuButton>Menu</MenuButton>} direction={direction}>
       <SubMenu label="Lv1">
         <SubMenu label="Lv2">
@@ -529,11 +565,11 @@ test.each([
 
   utils.clickMenuButton();
   fireEvent.click(utils.queryMenuItem('Lv1'));
-  expect(utils.queryMenu({ name: 'Lv1', container })).toHaveClass(directionClass);
+  expect(utils.queryMenu({ name: 'Lv1' })).toHaveClass(directionClass);
 
   fireEvent.click(utils.queryMenuItem('Lv2'));
-  expect(utils.queryMenu({ name: 'Lv2', container })).toHaveClass(directionClass);
+  expect(utils.queryMenu({ name: 'Lv2' })).toHaveClass(directionClass);
 
   fireEvent.click(utils.queryMenuItem('Lv3'));
-  expect(utils.queryMenu({ name: 'Lv3', container })).toHaveClass(directionClass);
+  expect(utils.queryMenu({ name: 'Lv3' })).toHaveClass(directionClass);
 });

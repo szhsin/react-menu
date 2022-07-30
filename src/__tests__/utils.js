@@ -35,19 +35,14 @@ export const expectMenuToHaveState = (state, truthy, options) =>
 export const expectButtonToBeExpanded = (truthy) =>
   expect(queryByRole('button')).toHaveAttribute('aria-expanded', String(truthy));
 
-export const expectToBeDisabled = (element, truthy) => {
-  if (truthy) {
-    expect(element).toHaveAttribute('aria-disabled', 'true');
-    expect(element).not.toHaveAttribute('tabindex');
-  } else {
-    expect(element).not.toHaveAttribute('aria-disabled');
-    expect(element).toHaveAttribute('tabindex');
-  }
-};
+export const expectToBeDisabled = (element, truthy) =>
+  truthy
+    ? expect(element).toHaveAttribute('aria-disabled', 'true')
+    : expect(element).not.toHaveAttribute('aria-disabled');
 
-export const expectMenuItemToBeHover = (menuItem, truthy, disabled) => {
+export const expectMenuItemToBeHover = (menuItem, truthy) => {
   expectToBe(menuItem, truthy).toHaveClass('szh-menu__item--hover');
-  !disabled && expect(menuItem).toHaveAttribute('tabindex', truthy ? '0' : '-1');
+  expect(menuItem).toHaveAttribute('tabindex', truthy ? '0' : '-1');
 };
 
 export const expectMenuItemToBeChecked = (menuItem, truthy) => {
