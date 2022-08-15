@@ -6,12 +6,12 @@
   "dependencies": {
     "@szhsin/react-menu": "file:..",
     "highlight.js": "^11.6.0",
-    "next": "^12.2.2",
+    "next": "^12.2.5",
     "react": "file:../node_modules/react",
     "react-dom": "file:../node_modules/react-dom"
   },
   "devDependencies": {
-    "eslint-config-next": "^12.2.2"
+    "eslint-config-next": "^12.2.5"
   },
   "scripts": {
     "dev": "next dev",
