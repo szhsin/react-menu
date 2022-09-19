@@ -1388,7 +1388,7 @@ const accessibility = {
   contents: [
     <p key={0}>
       <LibName /> implements WAI-ARIA roles, states, and properties which adhere to the{' '}
-      <ExternalLink href="https://www.w3.org/TR/wai-aria-practices/#menu">
+      <ExternalLink href="https://www.w3.org/WAI/ARIA/apg/patterns/menu/">
         WAI-ARIA Authoring Practices
       </ExternalLink>
       . For more details, please refer to the website.

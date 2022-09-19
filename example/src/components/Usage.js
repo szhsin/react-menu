@@ -23,6 +23,7 @@ import { basePath } from '../../next.config';
 import { TableContents } from './TableContents';
 import { Example } from './Example';
 import { HashHeading } from './HashHeading';
+import { RightSection } from './RightSection';
 import data, * as codeExamples from '../data/codeExamples';
 
 /**
@@ -38,46 +39,46 @@ const Usage = React.memo(function Usage() {
   return (
     <React.Fragment>
       <TableContents>{data}</TableContents>
+      <div className="main-wrap">
+        <main id="usage">
+          <GroupingSection heading="h1" data={codeExamples.features} />
+          <GroupingSection heading="h1" data={codeExamples.install} />
+          <GroupingSection heading="h1" data={codeExamples.usageExamples} />
 
-      <main id="usage">
-        <GroupingSection heading="h1" data={codeExamples.features} />
-        <GroupingSection heading="h1" data={codeExamples.install} />
-        <GroupingSection heading="h1" data={codeExamples.usageExamples} />
+          <GroupingSection data={codeExamples.menu} />
+          <BasicMenuExample />
+          <SubmenuExample />
+          <EventHandlingExample />
+          <RadioGroupExample />
+          <CheckBoxExample />
+          <HeaderAndDividerExample />
+          <CombinedExample />
 
-        <GroupingSection data={codeExamples.menu} />
-        <BasicMenuExample />
-        <SubmenuExample />
-        <EventHandlingExample />
-        <RadioGroupExample />
-        <CheckBoxExample />
-        <HeaderAndDividerExample />
-        <CombinedExample />
+          <GroupingSection data={codeExamples.menuItem} />
+          <LinkAndDisabledExample />
+          <IconAndImageExample />
+          <HoverItemExample />
+          <FocusableItemExample />
 
-        <GroupingSection data={codeExamples.menuItem} />
-        <LinkAndDisabledExample />
-        <IconAndImageExample />
-        <HoverItemExample />
-        <FocusableItemExample />
+          <GroupingSection data={codeExamples.menuOptions} />
+          <MenuPlacementExample />
+          <MenuOverflowExample />
+          <BoundingBoxExample />
 
-        <GroupingSection data={codeExamples.menuOptions} />
-        <MenuPlacementExample />
-        <MenuOverflowExample />
-        <BoundingBoxExample />
+          <GroupingSection data={codeExamples.menuButton} />
+          <OpenStateExample />
+          <CustomisedButtonExample />
 
-        <GroupingSection data={codeExamples.menuButton} />
-        <OpenStateExample />
-        <CustomisedButtonExample />
+          <GroupingSection data={codeExamples.controlledMenu} />
+          <ManagingStateExample />
+          <MenuStateHookExample />
+          <ContextMenuExample />
 
-        <GroupingSection data={codeExamples.controlledMenu} />
-        <ManagingStateExample />
-        <MenuStateHookExample />
-        <ContextMenuExample />
-
-        <GroupingSection data={codeExamples.customisedStyle} />
-        <ClassNamePropExample />
-      </main>
-
-      <div className="place-holder" role="presentation" />
+          <GroupingSection data={codeExamples.customisedStyle} />
+          <ClassNamePropExample />
+        </main>
+      </div>
+      <RightSection />
     </React.Fragment>
   );
 });

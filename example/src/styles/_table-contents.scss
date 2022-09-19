@@ -14,10 +14,6 @@
       text-decoration: none;
       background-color: var.$border-light;
     }
-
-    @media (max-width: var.$bp-lg) {
-      padding: 0.5rem 1rem;
-    }
   }
 
   nav {
@@ -57,9 +53,6 @@
 
   .contents-list-lv3 a {
     padding-left: 2.75rem;
-    @media (max-width: var.$bp-lg) {
-      padding-left: 1.75rem;
-    }
     font-size: 0.95rem;
     &:not(:hover) {
       color: color.scale(var.$navbar-dark, $lightness: 10%);

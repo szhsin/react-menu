@@ -32,6 +32,12 @@ pre {
   margin-bottom: 1rem;
 }
 
+@media (min-width: var.$bp-md) {
+  pre {
+    white-space: pre-wrap;
+  }
+}
+
 a {
   color: var.$primary-light;
   text-decoration: none;
@@ -166,9 +172,12 @@ label {
   text-align: left;
   border-collapse: collapse;
 
-  th:last-of-type {
-    min-width: 20rem;
+  @media (max-width: var.$bp-md) {
+    th:last-of-type {
+      min-width: 20rem;
+    }
   }
+
   tr {
     @include mixins.border(border-bottom);
     .szh-app--theme-dark & {

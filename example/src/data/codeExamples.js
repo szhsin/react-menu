@@ -26,22 +26,18 @@ export const basicMenu = {
     <MenuItem>Close Window</MenuItem>
 </Menu>`,
 
-  fullSource: `import {
-    Menu,
-    MenuItem,
-    MenuButton
-} from '@szhsin/react-menu';
+  fullSource: `import { Menu, MenuItem, MenuButton } from '@szhsin/react-menu';
 import '@szhsin/react-menu/dist/index.css';
 import '@szhsin/react-menu/dist/transitions/slide.css';
 
 export default function Example() {
-    return (
-        <Menu menuButton={<MenuButton>Open menu</MenuButton>} transition>
-            <MenuItem>New File</MenuItem>
-            <MenuItem>Save</MenuItem>
-            <MenuItem>Close Window</MenuItem>
-        </Menu>
-    );
+  return (
+    <Menu menuButton={<MenuButton>Open menu</MenuButton>} transition>
+      <MenuItem>New File</MenuItem>
+      <MenuItem>Save</MenuItem>
+      <MenuItem>Close Window</MenuItem>
+    </Menu>
+  );
 }`
 };
 
@@ -1289,7 +1285,7 @@ export const features = {
       <li>Works in major browsers without polyfills.</li>
       <li>
         Adheres to{' '}
-        <ExternalLink href="https://www.w3.org/TR/wai-aria-practices/#menu">
+        <ExternalLink href="https://www.w3.org/WAI/ARIA/apg/patterns/menu/">
           WAI-ARIA Practices
         </ExternalLink>
         .
