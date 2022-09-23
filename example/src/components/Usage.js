@@ -107,7 +107,7 @@ function BasicMenuExample() {
 function SubmenuExample() {
   return (
     <Example data={codeExamples.subMenu}>
-      <Menu menuButton={<MenuButton>Open menu</MenuButton>}>
+      <Menu menuButton={<MenuButton>Open menu</MenuButton>} transitionTimeout={200}>
         <MenuItem>New File</MenuItem>
         <SubMenu label="Open">
           <MenuItem>index.html</MenuItem>
@@ -690,14 +690,14 @@ function ManagingStateExample() {
 
   return (
     <Example data={codeExamples.managingState} style={{ flexWrap: 'wrap' }}>
-      <div ref={ref} className="btn" onMouseEnter={() => setOpen(true)}>
+      <div ref={ref} className="btn" onPointerEnter={() => setOpen(true)}>
         Hover to Open
       </div>
 
       <ControlledMenu
         state={isOpen ? 'open' : 'closed'}
         anchorRef={ref}
-        onMouseLeave={() => setOpen(false)}
+        onPointerLeave={() => setOpen(false)}
         onClose={() => setOpen(false)}
       >
         <MenuItem>New File</MenuItem>
@@ -716,14 +716,14 @@ function MenuStateHookExample() {
 
   return (
     <Example data={codeExamples.menuStateHook}>
-      <div ref={ref} className="btn" onMouseEnter={() => toggleMenu(true)}>
+      <div ref={ref} className="btn" onPointerEnter={() => toggleMenu(true)}>
         Hover to Open
       </div>
 
       <ControlledMenu
         {...menuProps}
         anchorRef={ref}
-        onMouseLeave={() => toggleMenu(false)}
+        onPointerLeave={() => toggleMenu(false)}
         onClose={() => toggleMenu(false)}
       >
         <MenuItem>New File</MenuItem>
