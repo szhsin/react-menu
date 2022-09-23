@@ -15,7 +15,7 @@ var useItemState = function useItemState(itemRef, focusRef, isHovering, isDisabl
   var timeoutId = useRef(0);
 
   var setHover = function setHover() {
-    if (!isHovering && !isDisabled) dispatch(HoverActionTypes.SET, itemRef.current);
+    !isHovering && !isDisabled && dispatch(HoverActionTypes.SET, itemRef.current);
   };
 
   var unsetHover = function unsetHover() {
@@ -26,7 +26,7 @@ var useItemState = function useItemState(itemRef, focusRef, isHovering, isDisabl
     if (isHovering && !e.currentTarget.contains(e.relatedTarget)) unsetHover();
   };
 
-  var onMouseMove = function onMouseMove() {
+  var onPointerMove = function onPointerMove() {
     if (isSubmenuOpen) {
       if (!timeoutId.current) timeoutId.current = setTimeout(function () {
         timeoutId.current = 0;
@@ -37,7 +37,7 @@ var useItemState = function useItemState(itemRef, focusRef, isHovering, isDisabl
     }
   };
 
-  var onMouseLeave = function onMouseLeave(_, keepHover) {
+  var onPointerLeave = function onPointerLeave(_, keepHover) {
     if (timeoutId.current) {
       clearTimeout(timeoutId.current);
       timeoutId.current = 0;
@@ -60,8 +60,8 @@ var useItemState = function useItemState(itemRef, focusRef, isHovering, isDisabl
   return {
     setHover: setHover,
     onBlur: onBlur,
-    onMouseMove: onMouseMove,
-    onMouseLeave: onMouseLeave
+    onPointerMove: onPointerMove,
+    onPointerLeave: onPointerLeave
   };
 };
 

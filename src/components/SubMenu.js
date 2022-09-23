@@ -74,6 +74,7 @@ export const SubMenu = withHovering(
 
     const openMenu = (...args) => {
       stopTimer();
+      setHover();
       !isDisabled && _openMenu(...args);
     };
 
@@ -86,7 +87,7 @@ export const SubMenu = withHovering(
         timeoutId.current = setTimeout(() => batchedUpdates(openMenu), Math.max(delay, 0));
     };
 
-    const handleMouseMove = () => {
+    const handlePointerMove = () => {
       if (timeoutId.current || isOpen || isDisabled) return;
 
       if (isSubmenuOpen) {
@@ -99,7 +100,7 @@ export const SubMenu = withHovering(
       }
     };
 
-    const handleMouseLeave = () => {
+    const handlePointerLeave = () => {
       stopTimer();
       if (!isOpen) dispatch(HoverActionTypes.UNSET, itemRef.current);
     };
@@ -161,10 +162,7 @@ export const SubMenu = withHovering(
 
     useImperativeHandle(instanceRef, () => ({
       openMenu: (...args) => {
-        if (isParentOpen) {
-          setHover();
-          openMenu(...args);
-        }
+        isParentOpen && openMenu(...args);
       },
       closeMenu: () => {
         if (isOpen) {
@@ -188,9 +186,8 @@ export const SubMenu = withHovering(
 
     const itemHandlers = attachHandlerProps(
       {
-        onMouseMove: handleMouseMove,
-        onMouseLeave: handleMouseLeave,
-        onMouseDown: setHover,
+        onPointerMove: handlePointerMove,
+        onPointerLeave: handlePointerLeave,
         onKeyDown: handleItemKeyDown,
         onClick: () => openTrigger !== 'none' && openMenu()
       },

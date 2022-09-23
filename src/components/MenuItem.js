@@ -84,7 +84,7 @@ export const MenuItem = withHovering(
     const handlers = attachHandlerProps(
       {
         ...stateHandlers,
-        onMouseDown: setHover,
+        onPointerDown: setHover,
         onKeyDown: handleKeyDown,
         onClick: handleClick
       },

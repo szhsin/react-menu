@@ -26,8 +26,8 @@ var FocusableItem = /*#__PURE__*/withHovering('FocusableItem', function Focusabl
   var _useItemState = useItemState(itemRef, ref, isHovering, isDisabled),
       setHover = _useItemState.setHover,
       onBlur = _useItemState.onBlur,
-      onMouseMove = _useItemState.onMouseMove,
-      _onMouseLeave = _useItemState.onMouseLeave;
+      onPointerMove = _useItemState.onPointerMove,
+      _onPointerLeave = _useItemState.onPointerLeave;
 
   var _useContext = useContext(EventHandlersContext),
       handleClose = _useContext.handleClose;
@@ -46,9 +46,9 @@ var FocusableItem = /*#__PURE__*/withHovering('FocusableItem', function Focusabl
     }));
   }, [children, modifiers, handleClose]);
   var handlers = attachHandlerProps({
-    onMouseMove: onMouseMove,
-    onMouseLeave: function onMouseLeave(e) {
-      return _onMouseLeave(e, true);
+    onPointerMove: onPointerMove,
+    onPointerLeave: function onPointerLeave(e) {
+      return _onPointerLeave(e, true);
     },
     onFocus: setHover,
     onBlur: onBlur

@@ -72,6 +72,7 @@ var SubMenu = /*#__PURE__*/withHovering('SubMenu', function SubMenu(_ref) {
 
   var _openMenu2 = function openMenu() {
     stopTimer();
+    setHover();
     !isDisabled && _openMenu.apply(void 0, arguments);
   };
 
@@ -86,7 +87,7 @@ var SubMenu = /*#__PURE__*/withHovering('SubMenu', function SubMenu(_ref) {
     }, Math.max(delay, 0));
   };
 
-  var handleMouseMove = function handleMouseMove() {
+  var handlePointerMove = function handlePointerMove() {
     if (timeoutId.current || isOpen || isDisabled) return;
 
     if (isSubmenuOpen) {
@@ -98,7 +99,7 @@ var SubMenu = /*#__PURE__*/withHovering('SubMenu', function SubMenu(_ref) {
     }
   };
 
-  var handleMouseLeave = function handleMouseLeave() {
+  var handlePointerLeave = function handlePointerLeave() {
     stopTimer();
     if (!isOpen) dispatch(HoverActionTypes.UNSET, itemRef.current);
   };
@@ -161,11 +162,7 @@ var SubMenu = /*#__PURE__*/withHovering('SubMenu', function SubMenu(_ref) {
   useImperativeHandle(instanceRef, function () {
     return {
       openMenu: function openMenu() {
-        if (isParentOpen) {
-          setHover();
-
-          _openMenu2.apply(void 0, arguments);
-        }
+        isParentOpen && _openMenu2.apply(void 0, arguments);
       },
       closeMenu: function closeMenu() {
         if (isOpen) {
@@ -189,9 +186,8 @@ var SubMenu = /*#__PURE__*/withHovering('SubMenu', function SubMenu(_ref) {
       restItemProps = _objectWithoutPropertiesLoose(itemProps, _excluded2);
 
   var itemHandlers = attachHandlerProps({
-    onMouseMove: handleMouseMove,
-    onMouseLeave: handleMouseLeave,
-    onMouseDown: setHover,
+    onPointerMove: handlePointerMove,
+    onPointerLeave: handlePointerLeave,
     onKeyDown: handleItemKeyDown,
     onClick: function onClick() {
       return openTrigger !== 'none' && _openMenu2();
