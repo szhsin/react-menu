@@ -919,14 +919,14 @@ export const managingState = {
   source: `const ref = useRef(null);
 const [isOpen, setOpen] = useState();
 
-<div ref={ref} className="btn" onMouseEnter={() => setOpen(true)}>
+<div ref={ref} className="btn" onPointerEnter={() => setOpen(true)}>
   Hover to Open
 </div>
 
 <ControlledMenu
   state={isOpen ? 'open' : 'closed'}
   anchorRef={ref}
-  onMouseLeave={() => setOpen(false)}
+  onPointerLeave={() => setOpen(false)}
   onClose={() => setOpen(false)}
 >
   <MenuItem>New File</MenuItem>
@@ -947,14 +947,14 @@ export default function Example() {
 
     return (
         <>
-          <div ref={ref} className="btn" onMouseEnter={() => setOpen(true)}>
+          <div ref={ref} className="btn" onPointerEnter={() => setOpen(true)}>
             Hover to Open
           </div>
 
           <ControlledMenu
             state={isOpen ? 'open' : 'closed'}
             anchorRef={ref}
-            onMouseLeave={() => setOpen(false)}
+            onPointerLeave={() => setOpen(false)}
             onClose={() => setOpen(false)}
           >
             <MenuItem>New File</MenuItem>
@@ -1050,12 +1050,12 @@ export const menuStateHook = {
   source: `const ref = useRef(null);
 const [menuProps, toggleMenu] = useMenuState({ transition: true });
 
-<div ref={ref} onMouseEnter={() => toggleMenu(true)}>
+<div ref={ref} onPointerEnter={() => toggleMenu(true)}>
     Hover to Open
 </div>
 
 <ControlledMenu {...menuProps} anchorRef={ref}
-    onMouseLeave={() => toggleMenu(false)}
+    onPointerLeave={() => toggleMenu(false)}
     onClose={() => toggleMenu(false)}>
     <MenuItem>New File</MenuItem>
     <MenuItem>Save</MenuItem>
@@ -1077,12 +1077,12 @@ export default function Example() {
 
     return (
         <>
-            <div ref={ref} onMouseEnter={() => toggleMenu(true)}>
+            <div ref={ref} onPointerEnter={() => toggleMenu(true)}>
                 Hover to Open
             </div>
 
             <ControlledMenu {...menuProps} anchorRef={ref}
-                onMouseLeave={() => toggleMenu(false)}
+                onPointerLeave={() => toggleMenu(false)}
                 onClose={() => toggleMenu(false)}>
                 <MenuItem>New File</MenuItem>
                 <MenuItem>Save</MenuItem>

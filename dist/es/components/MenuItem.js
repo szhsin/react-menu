@@ -84,7 +84,7 @@ var MenuItem = /*#__PURE__*/withHovering('MenuItem', function MenuItem(_ref) {
     };
   }, [type, isDisabled, isHovering, isChecked, isAnchor]);
   var handlers = attachHandlerProps(_extends({}, stateHandlers, {
-    onMouseDown: setHover,
+    onPointerDown: setHover,
     onKeyDown: handleKeyDown,
     onClick: handleClick
   }), restProps);

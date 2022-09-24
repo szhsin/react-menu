@@ -457,7 +457,7 @@ var useItemState = function useItemState(itemRef, focusRef, isHovering, isDisabl
   var timeoutId = react.useRef(0);
 
   var setHover = function setHover() {
-    if (!isHovering && !isDisabled) dispatch(HoverActionTypes.SET, itemRef.current);
+    !isHovering && !isDisabled && dispatch(HoverActionTypes.SET, itemRef.current);
   };
 
   var unsetHover = function unsetHover() {
@@ -468,7 +468,7 @@ var useItemState = function useItemState(itemRef, focusRef, isHovering, isDisabl
     if (isHovering && !e.currentTarget.contains(e.relatedTarget)) unsetHover();
   };
 
-  var onMouseMove = function onMouseMove() {
+  var onPointerMove = function onPointerMove() {
     if (isSubmenuOpen) {
       if (!timeoutId.current) timeoutId.current = setTimeout(function () {
         timeoutId.current = 0;
@@ -479,7 +479,7 @@ var useItemState = function useItemState(itemRef, focusRef, isHovering, isDisabl
     }
   };
 
-  var onMouseLeave = function onMouseLeave(_, keepHover) {
+  var onPointerLeave = function onPointerLeave(_, keepHover) {
     if (timeoutId.current) {
       clearTimeout(timeoutId.current);
       timeoutId.current = 0;
@@ -502,8 +502,8 @@ var useItemState = function useItemState(itemRef, focusRef, isHovering, isDisabl
   return {
     setHover: setHover,
     onBlur: onBlur,
-    onMouseMove: onMouseMove,
-    onMouseLeave: onMouseLeave
+    onPointerMove: onPointerMove,
+    onPointerLeave: onPointerLeave
   };
 };
 
@@ -1758,6 +1758,7 @@ var SubMenu = /*#__PURE__*/withHovering('SubMenu', function SubMenu(_ref) {
 
   var _openMenu2 = function openMenu() {
     stopTimer();
+    setHover();
     !isDisabled && _openMenu.apply(void 0, arguments);
   };
 
@@ -1772,7 +1773,7 @@ var SubMenu = /*#__PURE__*/withHovering('SubMenu', function SubMenu(_ref) {
     }, Math.max(delay, 0));
   };
 
-  var handleMouseMove = function handleMouseMove() {
+  var handlePointerMove = function handlePointerMove() {
     if (timeoutId.current || isOpen || isDisabled) return;
 
     if (isSubmenuOpen) {
@@ -1784,7 +1785,7 @@ var SubMenu = /*#__PURE__*/withHovering('SubMenu', function SubMenu(_ref) {
     }
   };
 
-  var handleMouseLeave = function handleMouseLeave() {
+  var handlePointerLeave = function handlePointerLeave() {
     stopTimer();
     if (!isOpen) dispatch(HoverActionTypes.UNSET, itemRef.current);
   };
@@ -1847,11 +1848,7 @@ var SubMenu = /*#__PURE__*/withHovering('SubMenu', function SubMenu(_ref) {
   react.useImperativeHandle(instanceRef, function () {
     return {
       openMenu: function openMenu() {
-        if (isParentOpen) {
-          setHover();
-
-          _openMenu2.apply(void 0, arguments);
-        }
+        isParentOpen && _openMenu2.apply(void 0, arguments);
       },
       closeMenu: function closeMenu() {
         if (isOpen) {
@@ -1875,9 +1872,8 @@ var SubMenu = /*#__PURE__*/withHovering('SubMenu', function SubMenu(_ref) {
       restItemProps = _objectWithoutPropertiesLoose(itemProps, _excluded2$1);
 
   var itemHandlers = attachHandlerProps({
-    onMouseMove: handleMouseMove,
-    onMouseLeave: handleMouseLeave,
-    onMouseDown: setHover,
+    onPointerMove: handlePointerMove,
+    onPointerLeave: handlePointerLeave,
     onKeyDown: handleItemKeyDown,
     onClick: function onClick() {
       return openTrigger !== 'none' && _openMenu2();
@@ -2009,7 +2005,7 @@ var MenuItem = /*#__PURE__*/withHovering('MenuItem', function MenuItem(_ref) {
     };
   }, [type, isDisabled, isHovering, isChecked, isAnchor]);
   var handlers = attachHandlerProps(_extends({}, stateHandlers, {
-    onMouseDown: setHover,
+    onPointerDown: setHover,
     onKeyDown: handleKeyDown,
     onClick: handleClick
   }), restProps);
@@ -2067,8 +2063,8 @@ var FocusableItem = /*#__PURE__*/withHovering('FocusableItem', function Focusabl
   var _useItemState = useItemState(itemRef, ref, isHovering, isDisabled),
       setHover = _useItemState.setHover,
       onBlur = _useItemState.onBlur,
-      onMouseMove = _useItemState.onMouseMove,
-      _onMouseLeave = _useItemState.onMouseLeave;
+      onPointerMove = _useItemState.onPointerMove,
+      _onPointerLeave = _useItemState.onPointerLeave;
 
   var _useContext = react.useContext(EventHandlersContext),
       handleClose = _useContext.handleClose;
@@ -2087,9 +2083,9 @@ var FocusableItem = /*#__PURE__*/withHovering('FocusableItem', function Focusabl
     }));
   }, [children, modifiers, handleClose]);
   var handlers = attachHandlerProps({
-    onMouseMove: onMouseMove,
-    onMouseLeave: function onMouseLeave(e) {
-      return _onMouseLeave(e, true);
+    onPointerMove: onPointerMove,
+    onPointerLeave: function onPointerLeave(e) {
+      return _onPointerLeave(e, true);
     },
     onFocus: setHover,
     onBlur: onBlur

@@ -150,19 +150,19 @@ test('Navigate with arrow keys', async () => {
 });
 
 test('Additional props are forwarded to Menu', () => {
-  const onMouseEnter = jest.fn();
+  const onPointerMove = jest.fn();
   const onKeyDown = jest.fn();
   utils.renderMenu({
     ['aria-label']: 'test',
     ['aria-haspopup']: true,
     randomattr: 'random',
-    onMouseEnter,
+    onPointerMove,
     onKeyDown,
     containerProps: {
       'data-testid': 'container',
       id: 'menu-container',
       style: { color: 'blue' },
-      onMouseEnter,
+      onPointerMove,
       onKeyDown
     }
   });
@@ -178,8 +178,8 @@ test('Additional props are forwarded to Menu', () => {
   expect(menu).toHaveAttribute('aria-label', 'test');
   expect(menu).toHaveAttribute('aria-haspopup', 'true');
   expect(menu).toHaveAttribute('randomattr', 'random');
-  fireEvent.mouseEnter(menu);
-  expect(onMouseEnter).toHaveBeenCalledTimes(2);
+  fireEvent.pointerMove(menu);
+  expect(onPointerMove).toHaveBeenCalledTimes(2);
   fireEvent.keyDown(menu, { key: 'm' });
   expect(onKeyDown).toHaveBeenCalledTimes(2);
 });

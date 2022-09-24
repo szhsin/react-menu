@@ -9,7 +9,7 @@ export const useItemState = (itemRef, focusRef, isHovering, isDisabled) => {
   const timeoutId = useRef(0);
 
   const setHover = () => {
-    if (!isHovering && !isDisabled) dispatch(HoverActionTypes.SET, itemRef.current);
+    !isHovering && !isDisabled && dispatch(HoverActionTypes.SET, itemRef.current);
   };
 
   const unsetHover = () => {
@@ -22,7 +22,7 @@ export const useItemState = (itemRef, focusRef, isHovering, isDisabled) => {
     if (isHovering && !e.currentTarget.contains(e.relatedTarget)) unsetHover();
   };
 
-  const onMouseMove = () => {
+  const onPointerMove = () => {
     if (isSubmenuOpen) {
       if (!timeoutId.current)
         timeoutId.current = setTimeout(() => {
@@ -34,7 +34,7 @@ export const useItemState = (itemRef, focusRef, isHovering, isDisabled) => {
     }
   };
 
-  const onMouseLeave = (_, keepHover) => {
+  const onPointerLeave = (_, keepHover) => {
     if (timeoutId.current) {
       clearTimeout(timeoutId.current);
       timeoutId.current = 0;
@@ -56,7 +56,7 @@ export const useItemState = (itemRef, focusRef, isHovering, isDisabled) => {
   return {
     setHover,
     onBlur,
-    onMouseMove,
-    onMouseLeave
+    onPointerMove,
+    onPointerLeave
   };
 };
