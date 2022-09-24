@@ -18,17 +18,21 @@
 - Flexible menu positioning.
 - Comprehensive keyboard interactions.
 - Unstyled components and easy [customisation](https://szhsin.github.io/react-menu/#styling).
-- Supports [React 18 concurrent rendering](https://github.com/szhsin/react-menu/releases/tag/v2.3.2).
+- [Optimal level support](https://github.com/reactwg/react-18/discussions/70) (level 3) of **React 18** concurrent rendering.
 - Works in major browsers without polyfills.
-- Adheres to [WAI-ARIA Authoring Practices](https://www.w3.org/TR/wai-aria-practices/#menu).
+- [WAI-ARIA Authoring Practices](https://www.w3.org/WAI/ARIA/apg/patterns/menu/) compliant.
 
 ## Install
 
-```bash
-# with npm
-npm install @szhsin/react-menu
+with npm
 
-# with Yarn
+```bash
+npm install @szhsin/react-menu
+```
+
+or with Yarn
+
+```bash
 yarn add @szhsin/react-menu
 ```
 
@@ -36,7 +40,6 @@ yarn add @szhsin/react-menu
 
 ```jsx
 import { Menu, MenuItem, MenuButton, SubMenu } from '@szhsin/react-menu';
-import '@szhsin/react-menu/dist/core.css';
 
 export default function App() {
   return (

@@ -2,7 +2,7 @@ import { useContext, useMemo, useRef } from 'react';
 import { bool, func } from 'prop-types';
 import { useBEM, useCombinedRef, useItemState } from '../hooks';
 import {
-  attachHandlerProps,
+  mergeProps,
   commonProps,
   safeCall,
   menuClass,
@@ -25,7 +25,7 @@ export const FocusableItem = withHovering(
   }) {
     const isDisabled = !!disabled;
     const ref = useRef(null);
-    const { setHover, onBlur, onPointerMove, onPointerLeave } = useItemState(
+    const { setHover, onPointerLeave, ...restStateProps } = useItemState(
       itemRef,
       ref,
       isHovering,
@@ -52,12 +52,11 @@ export const FocusableItem = withHovering(
       [children, modifiers, handleClose]
     );
 
-    const handlers = attachHandlerProps(
+    const mergedProps = mergeProps(
       {
-        onPointerMove,
+        ...restStateProps,
         onPointerLeave: (e) => onPointerLeave(e, true),
-        onFocus: setHover,
-        onBlur
+        onFocus: setHover
       },
       restProps
     );
@@ -65,8 +64,7 @@ export const FocusableItem = withHovering(
     return (
       <li
         role="menuitem"
-        {...restProps}
-        {...handlers}
+        {...mergedProps}
         {...commonProps(isDisabled)}
         ref={useCombinedRef(externalRef, itemRef)}
         className={useBEM({ block: menuClass, element: menuItemClass, modifiers, className })}

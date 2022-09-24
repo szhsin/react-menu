@@ -1284,11 +1284,10 @@ export const features = {
       </li>
       <li>Works in major browsers without polyfills.</li>
       <li>
-        Adheres to{' '}
         <ExternalLink href="https://www.w3.org/WAI/ARIA/apg/patterns/menu/">
           WAI-ARIA Practices
-        </ExternalLink>
-        .
+        </ExternalLink>{' '}
+        compliant.
       </li>
     </ul>
   )

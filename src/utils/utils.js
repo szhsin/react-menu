@@ -13,26 +13,22 @@ export const getName = (component) => component[internalKey];
 export const defineName = (name, component) =>
   Object.defineProperty(component, internalKey, { value: name });
 
-export const attachHandlerProps = (handlers, props) => {
-  if (!props) return handlers;
+export const mergeProps = (target, source) => {
+  source &&
+    Object.keys(source).forEach((key) => {
+      const targetProp = target[key];
+      const sourceProp = source[key];
+      if (typeof sourceProp === 'function' && targetProp) {
+        target[key] = (...arg) => {
+          sourceProp(...arg);
+          targetProp(...arg);
+        };
+      } else {
+        target[key] = sourceProp;
+      }
+    });
 
-  const result = {};
-  for (const handlerName of Object.keys(handlers)) {
-    const handler = handlers[handlerName];
-    const propHandler = props[handlerName];
-    let attachedHandler;
-    if (typeof propHandler === 'function') {
-      attachedHandler = (e) => {
-        propHandler(e);
-        handler(e);
-      };
-    } else {
-      attachedHandler = handler;
-    }
-    result[handlerName] = attachedHandler;
-  }
-
-  return result;
+  return target;
 };
 
 export const parsePadding = (paddingStr) => {

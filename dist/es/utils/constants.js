@@ -29,14 +29,14 @@ var Keys = /*#__PURE__*/Object.freeze({
   DOWN: 'ArrowDown'
 });
 var HoverActionTypes = /*#__PURE__*/Object.freeze({
-  RESET: 'RESET',
-  SET: 'SET',
-  UNSET: 'UNSET',
-  INCREASE: 'INCREASE',
-  DECREASE: 'DECREASE',
-  FIRST: 'FIRST',
-  LAST: 'LAST',
-  SET_INDEX: 'SET_INDEX'
+  RESET: 0,
+  SET: 1,
+  UNSET: 2,
+  INCREASE: 3,
+  DECREASE: 4,
+  FIRST: 5,
+  LAST: 6,
+  SET_INDEX: 7
 });
 var CloseReason = /*#__PURE__*/Object.freeze({
   CLICK: 'click',

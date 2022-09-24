@@ -7,7 +7,7 @@ import { jsx } from 'react/jsx-runtime';
 import { useBEM } from '../hooks/useBEM.js';
 import { SettingsContext, ItemSettingsContext, EventHandlersContext, Keys, CloseReason, MenuStateMap, menuContainerClass } from '../utils/constants.js';
 import { rootMenuPropTypes } from '../utils/propTypes.js';
-import { safeCall, getTransition, attachHandlerProps, values, isMenuOpen } from '../utils/utils.js';
+import { safeCall, getTransition, mergeProps, values, isMenuOpen } from '../utils/utils.js';
 
 var _excluded = ["aria-label", "className", "containerProps", "initialMounted", "unmountOnClose", "transition", "transitionTimeout", "boundingBoxRef", "boundingBoxPadding", "reposition", "submenuOpenDelay", "submenuCloseDelay", "skipOpen", "viewScroll", "portal", "theming", "onItemClick", "onClose"];
 var ControlledMenu = /*#__PURE__*/forwardRef(function ControlledMenu(_ref, externalRef) {
@@ -87,7 +87,7 @@ var ControlledMenu = /*#__PURE__*/forwardRef(function ControlledMenu(_ref, exter
     };
   }, [onItemClick, onClose]);
 
-  var handleKeyDown = function handleKeyDown(_ref2) {
+  var onKeyDown = function onKeyDown(_ref2) {
     var key = _ref2.key;
 
     switch (key) {
@@ -100,7 +100,7 @@ var ControlledMenu = /*#__PURE__*/forwardRef(function ControlledMenu(_ref, exter
     }
   };
 
-  var handleBlur = function handleBlur(e) {
+  var onBlur = function onBlur(e) {
     if (isMenuOpen(state) && !e.currentTarget.contains(e.relatedTarget || document.activeElement)) {
       safeCall(onClose, {
         reason: CloseReason.BLUR
@@ -122,12 +122,11 @@ var ControlledMenu = /*#__PURE__*/forwardRef(function ControlledMenu(_ref, exter
       itemTransition: itemTransition
     };
   }, [theming, itemTransition]);
-  var handlers = attachHandlerProps({
-    onKeyDown: handleKeyDown,
-    onBlur: handleBlur
-  }, containerProps);
 
-  var menuList = /*#__PURE__*/jsx("div", _extends({}, containerProps, handlers, {
+  var menuList = /*#__PURE__*/jsx("div", _extends({}, mergeProps({
+    onKeyDown: onKeyDown,
+    onBlur: onBlur
+  }, containerProps), {
     className: useBEM({
       block: menuContainerClass,
       modifiers: modifiers,

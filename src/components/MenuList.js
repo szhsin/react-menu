@@ -3,7 +3,7 @@ import { flushSync } from 'react-dom';
 import { useBEM, useCombinedRef, useLayoutEffect, useItems } from '../hooks';
 import { getPositionHelpers, positionMenu, positionContextMenu } from '../positionUtils';
 import {
-  attachHandlerProps,
+  mergeProps,
   batchedUpdates,
   commonProps,
   floatEqual,
@@ -82,28 +82,22 @@ export const MenuList = ({
   const closeTransition = getTransition(transition, 'close');
   const scrollNodes = scrollNodesRef.current;
 
-  const handleKeyDown = (e) => {
-    let handled = false;
-
+  const onKeyDown = (e) => {
     switch (e.key) {
       case Keys.HOME:
         dispatch(HoverActionTypes.FIRST);
-        handled = true;
         break;
 
       case Keys.END:
         dispatch(HoverActionTypes.LAST);
-        handled = true;
         break;
 
       case Keys.UP:
         dispatch(HoverActionTypes.DECREASE, hoverItem);
-        handled = true;
         break;
 
       case Keys.DOWN:
         dispatch(HoverActionTypes.INCREASE, hoverItem);
-        handled = true;
         break;
 
       // prevent browser from scrolling the page when SPACE is pressed
@@ -112,16 +106,17 @@ export const MenuList = ({
         if (e.target && e.target.className.indexOf(menuClass) !== -1) {
           e.preventDefault();
         }
-        break;
+        return;
+
+      default:
+        return;
     }
 
-    if (handled) {
-      e.preventDefault();
-      e.stopPropagation();
-    }
+    e.preventDefault();
+    e.stopPropagation();
   };
 
-  const handleAnimationEnd = () => {
+  const onAnimationEnd = () => {
     if (state === 'closing') {
       setOverflowData(); // reset overflowData after closing
     }
@@ -404,20 +399,11 @@ export const MenuList = ({
     className: arrowClassName
   });
 
-  const handlers = attachHandlerProps(
-    {
-      onKeyDown: handleKeyDown,
-      onAnimationEnd: handleAnimationEnd
-    },
-    restProps
-  );
-
   return (
     <ul
       role="menu"
       aria-label={ariaLabel}
-      {...restProps}
-      {...handlers}
+      {...mergeProps({ onKeyDown, onAnimationEnd }, restProps)}
       {...commonProps(isDisabled)}
       ref={useCombinedRef(externalRef, menuRef)}
       className={useBEM({ block: menuClass, modifiers, className: menuClassName })}

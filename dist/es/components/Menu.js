@@ -5,7 +5,7 @@ import { ControlledMenu } from './ControlledMenu.js';
 import { jsxs, jsx } from 'react/jsx-runtime';
 import { useMenuStateAndFocus } from '../hooks/useMenuStateAndFocus.js';
 import { useCombinedRef } from '../hooks/useCombinedRef.js';
-import { isMenuOpen, safeCall, attachHandlerProps, getName } from '../utils/utils.js';
+import { isMenuOpen, safeCall, mergeProps, getName } from '../utils/utils.js';
 import { useMenuChange } from '../hooks/useMenuChange.js';
 import { uncontrolledMenuPropTypes, rootMenuPropTypes } from '../utils/propTypes.js';
 import { FocusPositions, Keys } from '../utils/constants.js';
@@ -31,27 +31,26 @@ var Menu = /*#__PURE__*/forwardRef(function Menu(_ref, externalRef) {
     if (e.key) buttonRef.current.focus();
   }, [toggleMenu]);
 
-  var handleClick = function handleClick(e) {
+  var onClick = function onClick(e) {
     if (skipOpen.current) return;
     openMenu(e.detail === 0 ? FocusPositions.FIRST : undefined);
   };
 
-  var handleKeyDown = function handleKeyDown(e) {
-    var handled = false;
-
+  var onKeyDown = function onKeyDown(e) {
     switch (e.key) {
       case Keys.UP:
         openMenu(FocusPositions.LAST);
-        handled = true;
         break;
 
       case Keys.DOWN:
         openMenu(FocusPositions.FIRST);
-        handled = true;
         break;
+
+      default:
+        return;
     }
 
-    if (handled) e.preventDefault();
+    e.preventDefault();
   };
 
   var button = safeCall(menuButton, {
@@ -61,9 +60,9 @@ var Menu = /*#__PURE__*/forwardRef(function Menu(_ref, externalRef) {
 
   var buttonProps = _extends({
     ref: useCombinedRef(button.ref, buttonRef)
-  }, attachHandlerProps({
-    onClick: handleClick,
-    onKeyDown: handleKeyDown
+  }, mergeProps({
+    onClick: onClick,
+    onKeyDown: onKeyDown
   }, button.props));
 
   if (getName(button.type) === 'MenuButton') {
