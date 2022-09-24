@@ -4,7 +4,7 @@ import { flushSync } from 'react-dom';
 import { jsxs, jsx } from 'react/jsx-runtime';
 import { SettingsContext, MenuListContext, HoverActionTypes, MenuListItemContext, HoverItemContext, Keys, menuClass, CloseReason, FocusPositions, menuArrowClass } from '../utils/constants.js';
 import { useItems } from '../hooks/useItems.js';
-import { getScrollAncestor, floatEqual, attachHandlerProps, commonProps, isMenuOpen, getTransition, safeCall, batchedUpdates } from '../utils/utils.js';
+import { getScrollAncestor, floatEqual, mergeProps, commonProps, isMenuOpen, getTransition, safeCall, batchedUpdates } from '../utils/utils.js';
 import { getPositionHelpers } from '../positionUtils/getPositionHelpers.js';
 import { positionContextMenu } from '../positionUtils/positionContextMenu.js';
 import { positionMenu } from '../positionUtils/positionMenu.js';
@@ -109,28 +109,22 @@ var MenuList = function MenuList(_ref) {
   var closeTransition = getTransition(transition, 'close');
   var scrollNodes = scrollNodesRef.current;
 
-  var handleKeyDown = function handleKeyDown(e) {
-    var handled = false;
-
+  var onKeyDown = function onKeyDown(e) {
     switch (e.key) {
       case Keys.HOME:
         dispatch(HoverActionTypes.FIRST);
-        handled = true;
         break;
 
       case Keys.END:
         dispatch(HoverActionTypes.LAST);
-        handled = true;
         break;
 
       case Keys.UP:
         dispatch(HoverActionTypes.DECREASE, hoverItem);
-        handled = true;
         break;
 
       case Keys.DOWN:
         dispatch(HoverActionTypes.INCREASE, hoverItem);
-        handled = true;
         break;
 
       case Keys.SPACE:
@@ -138,16 +132,17 @@ var MenuList = function MenuList(_ref) {
           e.preventDefault();
         }
 
-        break;
+        return;
+
+      default:
+        return;
     }
 
-    if (handled) {
-      e.preventDefault();
-      e.stopPropagation();
-    }
+    e.preventDefault();
+    e.stopPropagation();
   };
 
-  var handleAnimationEnd = function handleAnimationEnd() {
+  var onAnimationEnd = function onAnimationEnd() {
     if (state === 'closing') {
       setOverflowData();
     }
@@ -437,14 +432,13 @@ var MenuList = function MenuList(_ref) {
     className: arrowClassName
   });
 
-  var handlers = attachHandlerProps({
-    onKeyDown: handleKeyDown,
-    onAnimationEnd: handleAnimationEnd
-  }, restProps);
   return /*#__PURE__*/jsxs("ul", _extends({
     role: "menu",
     "aria-label": ariaLabel
-  }, restProps, handlers, commonProps(isDisabled), {
+  }, mergeProps({
+    onKeyDown: onKeyDown,
+    onAnimationEnd: onAnimationEnd
+  }, restProps), commonProps(isDisabled), {
     ref: useCombinedRef(externalRef, menuRef),
     className: useBEM({
       block: menuClass,

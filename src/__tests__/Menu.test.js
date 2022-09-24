@@ -182,6 +182,7 @@ test('Additional props are forwarded to Menu', () => {
   expect(onPointerMove).toHaveBeenCalledTimes(2);
   fireEvent.keyDown(menu, { key: 'm' });
   expect(onKeyDown).toHaveBeenCalledTimes(2);
+  expect(onKeyDown).toHaveBeenLastCalledWith(expect.objectContaining({ key: 'm' }));
 });
 
 test('Portal will render Menu into document.body', () => {

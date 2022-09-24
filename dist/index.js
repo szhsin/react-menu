@@ -16,17 +16,10 @@ var useBEM = function useBEM(_ref) {
   return react.useMemo(function () {
     var blockElement = element ? block + "__" + element : block;
     var classString = blockElement;
-
-    for (var _i2 = 0, _Object$keys2 = Object.keys(modifiers || {}); _i2 < _Object$keys2.length; _i2++) {
-      var name = _Object$keys2[_i2];
+    modifiers && Object.keys(modifiers).forEach(function (name) {
       var value = modifiers[name];
-
-      if (value) {
-        classString += " " + blockElement + "--";
-        classString += value === true ? name : name + "-" + value;
-      }
-    }
-
+      if (value) classString += " " + blockElement + "--" + (value === true ? name : name + "-" + value);
+    });
     var expandedClassName = typeof className === 'function' ? className(modifiers) : className;
 
     if (typeof expandedClassName === 'string') {
@@ -38,21 +31,17 @@ var useBEM = function useBEM(_ref) {
   }, [block, element, modifiers, className]);
 };
 
-var setRef = function setRef(ref, element) {
-  if (typeof ref === 'function') {
-    ref(element);
-  } else if (ref) {
-    ref.current = element;
-  }
-};
+function setRef(ref, instance) {
+  typeof ref === 'function' ? ref(instance) : ref.current = instance;
+}
 
 var useCombinedRef = function useCombinedRef(refA, refB) {
   return react.useMemo(function () {
     if (!refA) return refB;
     if (!refB) return refA;
-    return function (element) {
-      setRef(refA, element);
-      setRef(refB, element);
+    return function (instance) {
+      setRef(refA, instance);
+      setRef(refB, instance);
     };
   }, [refA, refB]);
 };
@@ -88,14 +77,14 @@ var Keys = /*#__PURE__*/Object.freeze({
   DOWN: 'ArrowDown'
 });
 var HoverActionTypes = /*#__PURE__*/Object.freeze({
-  RESET: 'RESET',
-  SET: 'SET',
-  UNSET: 'UNSET',
-  INCREASE: 'INCREASE',
-  DECREASE: 'DECREASE',
-  FIRST: 'FIRST',
-  LAST: 'LAST',
-  SET_INDEX: 'SET_INDEX'
+  RESET: 0,
+  SET: 1,
+  UNSET: 2,
+  INCREASE: 3,
+  DECREASE: 4,
+  FIRST: 5,
+  LAST: 6,
+  SET_INDEX: 7
 });
 var CloseReason = /*#__PURE__*/Object.freeze({
   CLICK: 'click',
@@ -147,33 +136,21 @@ var defineName = function defineName(name, component) {
     value: name
   });
 };
-var attachHandlerProps = function attachHandlerProps(handlers, props) {
-  if (!props) return handlers;
-  var result = {};
+var mergeProps = function mergeProps(target, source) {
+  source && Object.keys(source).forEach(function (key) {
+    var targetProp = target[key];
+    var sourceProp = source[key];
 
-  var _loop = function _loop(_i2, _Object$keys2) {
-    var handlerName = _Object$keys2[_i2];
-    var handler = handlers[handlerName];
-    var propHandler = props[handlerName];
-    var attachedHandler = void 0;
-
-    if (typeof propHandler === 'function') {
-      attachedHandler = function attachedHandler(e) {
-        propHandler(e);
-        handler(e);
+    if (typeof sourceProp === 'function' && targetProp) {
+      target[key] = function () {
+        sourceProp.apply(void 0, arguments);
+        targetProp.apply(void 0, arguments);
       };
     } else {
-      attachedHandler = handler;
+      target[key] = sourceProp;
     }
-
-    result[handlerName] = attachedHandler;
-  };
-
-  for (var _i2 = 0, _Object$keys2 = Object.keys(handlers); _i2 < _Object$keys2.length; _i2++) {
-    _loop(_i2, _Object$keys2);
-  }
-
-  return result;
+  });
+  return target;
 };
 var parsePadding = function parsePadding(paddingStr) {
   if (typeof paddingStr !== 'string') return {
@@ -299,8 +276,8 @@ var uncontrolledMenuPropTypes = {
   onMenuChange: propTypes.func
 };
 
-var withHovering = function withHovering(name, WrapppedComponent) {
-  var Component = /*#__PURE__*/react.memo(WrapppedComponent);
+var withHovering = function withHovering(name, WrappedComponent) {
+  var Component = /*#__PURE__*/react.memo(WrappedComponent);
   var WithHovering = /*#__PURE__*/react.forwardRef(function (props, ref) {
     var itemRef = react.useRef(null);
     return /*#__PURE__*/jsxRuntime.jsx(Component, _extends({}, props, {
@@ -1069,28 +1046,22 @@ var MenuList = function MenuList(_ref) {
   var closeTransition = getTransition(transition, 'close');
   var scrollNodes = scrollNodesRef.current;
 
-  var handleKeyDown = function handleKeyDown(e) {
-    var handled = false;
-
+  var onKeyDown = function onKeyDown(e) {
     switch (e.key) {
       case Keys.HOME:
         dispatch(HoverActionTypes.FIRST);
-        handled = true;
         break;
 
       case Keys.END:
         dispatch(HoverActionTypes.LAST);
-        handled = true;
         break;
 
       case Keys.UP:
         dispatch(HoverActionTypes.DECREASE, hoverItem);
-        handled = true;
         break;
 
       case Keys.DOWN:
         dispatch(HoverActionTypes.INCREASE, hoverItem);
-        handled = true;
         break;
 
       case Keys.SPACE:
@@ -1098,16 +1069,17 @@ var MenuList = function MenuList(_ref) {
           e.preventDefault();
         }
 
-        break;
+        return;
+
+      default:
+        return;
     }
 
-    if (handled) {
-      e.preventDefault();
-      e.stopPropagation();
-    }
+    e.preventDefault();
+    e.stopPropagation();
   };
 
-  var handleAnimationEnd = function handleAnimationEnd() {
+  var onAnimationEnd = function onAnimationEnd() {
     if (state === 'closing') {
       setOverflowData();
     }
@@ -1397,14 +1369,13 @@ var MenuList = function MenuList(_ref) {
     className: arrowClassName
   });
 
-  var handlers = attachHandlerProps({
-    onKeyDown: handleKeyDown,
-    onAnimationEnd: handleAnimationEnd
-  }, restProps);
   return /*#__PURE__*/jsxRuntime.jsxs("ul", _extends({
     role: "menu",
     "aria-label": ariaLabel
-  }, restProps, handlers, commonProps(isDisabled), {
+  }, mergeProps({
+    onKeyDown: onKeyDown,
+    onAnimationEnd: onAnimationEnd
+  }, restProps), commonProps(isDisabled), {
     ref: useCombinedRef(externalRef, menuRef),
     className: useBEM({
       block: menuClass,
@@ -1525,7 +1496,7 @@ var ControlledMenu = /*#__PURE__*/react.forwardRef(function ControlledMenu(_ref,
     };
   }, [onItemClick, onClose]);
 
-  var handleKeyDown = function handleKeyDown(_ref2) {
+  var onKeyDown = function onKeyDown(_ref2) {
     var key = _ref2.key;
 
     switch (key) {
@@ -1538,7 +1509,7 @@ var ControlledMenu = /*#__PURE__*/react.forwardRef(function ControlledMenu(_ref,
     }
   };
 
-  var handleBlur = function handleBlur(e) {
+  var onBlur = function onBlur(e) {
     if (isMenuOpen(state) && !e.currentTarget.contains(e.relatedTarget || document.activeElement)) {
       safeCall(onClose, {
         reason: CloseReason.BLUR
@@ -1560,12 +1531,11 @@ var ControlledMenu = /*#__PURE__*/react.forwardRef(function ControlledMenu(_ref,
       itemTransition: itemTransition
     };
   }, [theming, itemTransition]);
-  var handlers = attachHandlerProps({
-    onKeyDown: handleKeyDown,
-    onBlur: handleBlur
-  }, containerProps);
 
-  var menuList = /*#__PURE__*/jsxRuntime.jsx("div", _extends({}, containerProps, handlers, {
+  var menuList = /*#__PURE__*/jsxRuntime.jsx("div", _extends({}, mergeProps({
+    onKeyDown: onKeyDown,
+    onBlur: onBlur
+  }, containerProps), {
     className: useBEM({
       block: menuContainerClass,
       modifiers: modifiers,
@@ -1637,27 +1607,26 @@ var Menu = /*#__PURE__*/react.forwardRef(function Menu(_ref, externalRef) {
     if (e.key) buttonRef.current.focus();
   }, [toggleMenu]);
 
-  var handleClick = function handleClick(e) {
+  var onClick = function onClick(e) {
     if (skipOpen.current) return;
     openMenu(e.detail === 0 ? FocusPositions.FIRST : undefined);
   };
 
-  var handleKeyDown = function handleKeyDown(e) {
-    var handled = false;
-
+  var onKeyDown = function onKeyDown(e) {
     switch (e.key) {
       case Keys.UP:
         openMenu(FocusPositions.LAST);
-        handled = true;
         break;
 
       case Keys.DOWN:
         openMenu(FocusPositions.FIRST);
-        handled = true;
         break;
+
+      default:
+        return;
     }
 
-    if (handled) e.preventDefault();
+    e.preventDefault();
   };
 
   var button = safeCall(menuButton, {
@@ -1667,9 +1636,9 @@ var Menu = /*#__PURE__*/react.forwardRef(function Menu(_ref, externalRef) {
 
   var buttonProps = _extends({
     ref: useCombinedRef(button.ref, buttonRef)
-  }, attachHandlerProps({
-    onClick: handleClick,
-    onKeyDown: handleKeyDown
+  }, mergeProps({
+    onClick: onClick,
+    onKeyDown: onKeyDown
   }, button.props));
 
   if (getName(button.type) === 'MenuButton') {
@@ -1701,7 +1670,7 @@ process.env.NODE_ENV !== "production" ? Menu.propTypes = /*#__PURE__*/_extends({
 }) : void 0;
 
 var _excluded$6 = ["aria-label", "className", "disabled", "direction", "label", "openTrigger", "onMenuChange", "isHovering", "instanceRef", "itemRef", "captureFocus", "repositionFlag", "itemProps"],
-    _excluded2$1 = ["ref", "className"];
+    _excluded2$2 = ["ref", "className"];
 var SubMenu = /*#__PURE__*/withHovering('SubMenu', function SubMenu(_ref) {
   var ariaLabel = _ref['aria-label'],
       className = _ref.className,
@@ -1869,9 +1838,9 @@ var SubMenu = /*#__PURE__*/withHovering('SubMenu', function SubMenu(_ref) {
 
   var externalItemRef = itemProps.ref,
       itemClassName = itemProps.className,
-      restItemProps = _objectWithoutPropertiesLoose(itemProps, _excluded2$1);
+      restItemProps = _objectWithoutPropertiesLoose(itemProps, _excluded2$2);
 
-  var itemHandlers = attachHandlerProps({
+  var mergedItemProps = mergeProps({
     onPointerMove: handlePointerMove,
     onPointerLeave: handlePointerLeave,
     onKeyDown: handleItemKeyDown,
@@ -1910,7 +1879,7 @@ var SubMenu = /*#__PURE__*/withHovering('SubMenu', function SubMenu(_ref) {
       role: "menuitem",
       "aria-haspopup": true,
       "aria-expanded": isOpen
-    }, restItemProps, itemHandlers, commonProps(isDisabled, isHovering), {
+    }, mergedItemProps, commonProps(isDisabled, isHovering), {
       ref: useCombinedRef(externalItemRef, itemRef),
       className: useBEM({
         block: menuClass,
@@ -1932,7 +1901,7 @@ process.env.NODE_ENV !== "production" ? SubMenu.propTypes = /*#__PURE__*/_extend
 }) : void 0;
 
 var _excluded$5 = ["className", "value", "href", "type", "checked", "disabled", "children", "onClick", "isHovering", "itemRef", "externalRef"],
-    _excluded2 = ["setHover"];
+    _excluded2$1 = ["setHover"];
 var MenuItem = /*#__PURE__*/withHovering('MenuItem', function MenuItem(_ref) {
   var className = _ref.className,
       value = _ref.value,
@@ -1951,7 +1920,7 @@ var MenuItem = /*#__PURE__*/withHovering('MenuItem', function MenuItem(_ref) {
 
   var _useItemState = useItemState(itemRef, itemRef, isHovering, isDisabled),
       setHover = _useItemState.setHover,
-      stateHandlers = _objectWithoutPropertiesLoose(_useItemState, _excluded2);
+      restStateProps = _objectWithoutPropertiesLoose(_useItemState, _excluded2$1);
 
   var eventHandlers = react.useContext(EventHandlersContext);
   var radioGroup = react.useContext(RadioGroupContext);
@@ -2004,7 +1973,7 @@ var MenuItem = /*#__PURE__*/withHovering('MenuItem', function MenuItem(_ref) {
       anchor: isAnchor
     };
   }, [type, isDisabled, isHovering, isChecked, isAnchor]);
-  var handlers = attachHandlerProps(_extends({}, stateHandlers, {
+  var mergedProps = mergeProps(_extends({}, restStateProps, {
     onPointerDown: setHover,
     onKeyDown: handleKeyDown,
     onClick: handleClick
@@ -2013,7 +1982,7 @@ var MenuItem = /*#__PURE__*/withHovering('MenuItem', function MenuItem(_ref) {
   var menuItemProps = _extends({
     role: isRadio ? 'menuitemradio' : isCheckBox ? 'menuitemcheckbox' : 'menuitem',
     'aria-checked': isRadio || isCheckBox ? isChecked : undefined
-  }, restProps, handlers, commonProps(isDisabled, isHovering), {
+  }, mergedProps, commonProps(isDisabled, isHovering), {
     ref: useCombinedRef(externalRef, itemRef),
     className: useBEM({
       block: menuClass,
@@ -2047,7 +2016,8 @@ process.env.NODE_ENV !== "production" ? MenuItem.propTypes = /*#__PURE__*/_exten
   onClick: propTypes.func
 }) : void 0;
 
-var _excluded$4 = ["className", "disabled", "children", "isHovering", "itemRef", "externalRef"];
+var _excluded$4 = ["className", "disabled", "children", "isHovering", "itemRef", "externalRef"],
+    _excluded2 = ["setHover", "onPointerLeave"];
 var FocusableItem = /*#__PURE__*/withHovering('FocusableItem', function FocusableItem(_ref) {
   var className = _ref.className,
       disabled = _ref.disabled,
@@ -2062,9 +2032,8 @@ var FocusableItem = /*#__PURE__*/withHovering('FocusableItem', function Focusabl
 
   var _useItemState = useItemState(itemRef, ref, isHovering, isDisabled),
       setHover = _useItemState.setHover,
-      onBlur = _useItemState.onBlur,
-      onPointerMove = _useItemState.onPointerMove,
-      _onPointerLeave = _useItemState.onPointerLeave;
+      _onPointerLeave = _useItemState.onPointerLeave,
+      restStateProps = _objectWithoutPropertiesLoose(_useItemState, _excluded2);
 
   var _useContext = react.useContext(EventHandlersContext),
       handleClose = _useContext.handleClose;
@@ -2082,17 +2051,15 @@ var FocusableItem = /*#__PURE__*/withHovering('FocusableItem', function Focusabl
       closeMenu: handleClose
     }));
   }, [children, modifiers, handleClose]);
-  var handlers = attachHandlerProps({
-    onPointerMove: onPointerMove,
+  var mergedProps = mergeProps(_extends({}, restStateProps, {
     onPointerLeave: function onPointerLeave(e) {
       return _onPointerLeave(e, true);
     },
-    onFocus: setHover,
-    onBlur: onBlur
-  }, restProps);
+    onFocus: setHover
+  }), restProps);
   return /*#__PURE__*/jsxRuntime.jsx("li", _extends({
     role: "menuitem"
-  }, restProps, handlers, commonProps(isDisabled), {
+  }, mergedProps, commonProps(isDisabled), {
     ref: useCombinedRef(externalRef, itemRef),
     className: useBEM({
       block: menuClass,

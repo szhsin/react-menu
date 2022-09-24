@@ -33,33 +33,21 @@ var defineName = function defineName(name, component) {
     value: name
   });
 };
-var attachHandlerProps = function attachHandlerProps(handlers, props) {
-  if (!props) return handlers;
-  var result = {};
+var mergeProps = function mergeProps(target, source) {
+  source && Object.keys(source).forEach(function (key) {
+    var targetProp = target[key];
+    var sourceProp = source[key];
 
-  var _loop = function _loop(_i2, _Object$keys2) {
-    var handlerName = _Object$keys2[_i2];
-    var handler = handlers[handlerName];
-    var propHandler = props[handlerName];
-    var attachedHandler = void 0;
-
-    if (typeof propHandler === 'function') {
-      attachedHandler = function attachedHandler(e) {
-        propHandler(e);
-        handler(e);
+    if (typeof sourceProp === 'function' && targetProp) {
+      target[key] = function () {
+        sourceProp.apply(void 0, arguments);
+        targetProp.apply(void 0, arguments);
       };
     } else {
-      attachedHandler = handler;
+      target[key] = sourceProp;
     }
-
-    result[handlerName] = attachedHandler;
-  };
-
-  for (var _i2 = 0, _Object$keys2 = Object.keys(handlers); _i2 < _Object$keys2.length; _i2++) {
-    _loop(_i2, _Object$keys2);
-  }
-
-  return result;
+  });
+  return target;
 };
 var parsePadding = function parsePadding(paddingStr) {
   if (typeof paddingStr !== 'string') return {
@@ -105,4 +93,4 @@ function indexOfNode(nodeList, node) {
   return -1;
 }
 
-export { attachHandlerProps, batchedUpdates, commonProps, defineName, floatEqual, getName, getScrollAncestor, getTransition, indexOfNode, isMenuOpen, parsePadding, safeCall, values };
+export { batchedUpdates, commonProps, defineName, floatEqual, getName, getScrollAncestor, getTransition, indexOfNode, isMenuOpen, mergeProps, parsePadding, safeCall, values };

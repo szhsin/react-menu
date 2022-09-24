@@ -2,7 +2,7 @@ import { useContext, useMemo } from 'react';
 import { any, string, bool, func, node, oneOf, oneOfType } from 'prop-types';
 import { useBEM, useItemState, useCombinedRef } from '../hooks';
 import {
-  attachHandlerProps,
+  mergeProps,
   commonProps,
   safeCall,
   stylePropTypes,
@@ -31,7 +31,7 @@ export const MenuItem = withHovering(
     ...restProps
   }) {
     const isDisabled = !!disabled;
-    const { setHover, ...stateHandlers } = useItemState(itemRef, itemRef, isHovering, isDisabled);
+    const { setHover, ...restStateProps } = useItemState(itemRef, itemRef, isHovering, isDisabled);
     const eventHandlers = useContext(EventHandlersContext);
     const radioGroup = useContext(RadioGroupContext);
     const isRadio = type === 'radio';
@@ -81,9 +81,9 @@ export const MenuItem = withHovering(
       [type, isDisabled, isHovering, isChecked, isAnchor]
     );
 
-    const handlers = attachHandlerProps(
+    const mergedProps = mergeProps(
       {
-        ...stateHandlers,
+        ...restStateProps,
         onPointerDown: setHover,
         onKeyDown: handleKeyDown,
         onClick: handleClick
@@ -93,14 +93,12 @@ export const MenuItem = withHovering(
 
     // Order of props overriding (same in all components):
     // 1. Preset props adhering to WAI-ARIA Authoring Practices.
-    // 2. restProps(consuming code overriding)
-    // 3. handlers (with consuming code handlers hooked)
-    // 4. ref, className
+    // 2. Merged outer and local props
+    // 3. ref, className
     const menuItemProps = {
       role: isRadio ? 'menuitemradio' : isCheckBox ? 'menuitemcheckbox' : 'menuitem',
       'aria-checked': isRadio || isCheckBox ? isChecked : undefined,
-      ...restProps,
-      ...handlers,
+      ...mergedProps,
       ...commonProps(isDisabled, isHovering),
       ref: useCombinedRef(externalRef, itemRef),
       className: useBEM({ block: menuClass, element: menuItemClass, modifiers, className }),

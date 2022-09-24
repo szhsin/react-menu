@@ -10,7 +10,7 @@ import {
 } from '../hooks';
 import { MenuList } from './MenuList';
 import {
-  attachHandlerProps,
+  mergeProps,
   batchedUpdates,
   commonProps,
   safeCall,
@@ -184,7 +184,7 @@ export const SubMenu = withHovering(
 
     const { ref: externalItemRef, className: itemClassName, ...restItemProps } = itemProps;
 
-    const itemHandlers = attachHandlerProps(
+    const mergedItemProps = mergeProps(
       {
         onPointerMove: handlePointerMove,
         onPointerLeave: handlePointerLeave,
@@ -225,8 +225,7 @@ export const SubMenu = withHovering(
           role="menuitem"
           aria-haspopup
           aria-expanded={isOpen}
-          {...restItemProps}
-          {...itemHandlers}
+          {...mergedItemProps}
           {...commonProps(isDisabled, isHovering)}
           ref={useCombinedRef(externalItemRef, itemRef)}
           className={useBEM({

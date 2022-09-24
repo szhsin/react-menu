@@ -8,7 +8,7 @@ import { EventHandlersContext, RadioGroupContext, menuClass, menuItemClass, Keys
 import { useCombinedRef } from '../hooks/useCombinedRef.js';
 import { useBEM } from '../hooks/useBEM.js';
 import { stylePropTypes } from '../utils/propTypes.js';
-import { attachHandlerProps, commonProps, safeCall } from '../utils/utils.js';
+import { mergeProps, commonProps, safeCall } from '../utils/utils.js';
 
 var _excluded = ["className", "value", "href", "type", "checked", "disabled", "children", "onClick", "isHovering", "itemRef", "externalRef"],
     _excluded2 = ["setHover"];
@@ -30,7 +30,7 @@ var MenuItem = /*#__PURE__*/withHovering('MenuItem', function MenuItem(_ref) {
 
   var _useItemState = useItemState(itemRef, itemRef, isHovering, isDisabled),
       setHover = _useItemState.setHover,
-      stateHandlers = _objectWithoutPropertiesLoose(_useItemState, _excluded2);
+      restStateProps = _objectWithoutPropertiesLoose(_useItemState, _excluded2);
 
   var eventHandlers = useContext(EventHandlersContext);
   var radioGroup = useContext(RadioGroupContext);
@@ -83,7 +83,7 @@ var MenuItem = /*#__PURE__*/withHovering('MenuItem', function MenuItem(_ref) {
       anchor: isAnchor
     };
   }, [type, isDisabled, isHovering, isChecked, isAnchor]);
-  var handlers = attachHandlerProps(_extends({}, stateHandlers, {
+  var mergedProps = mergeProps(_extends({}, restStateProps, {
     onPointerDown: setHover,
     onKeyDown: handleKeyDown,
     onClick: handleClick
@@ -92,7 +92,7 @@ var MenuItem = /*#__PURE__*/withHovering('MenuItem', function MenuItem(_ref) {
   var menuItemProps = _extends({
     role: isRadio ? 'menuitemradio' : isCheckBox ? 'menuitemcheckbox' : 'menuitem',
     'aria-checked': isRadio || isCheckBox ? isChecked : undefined
-  }, restProps, handlers, commonProps(isDisabled, isHovering), {
+  }, mergedProps, commonProps(isDisabled, isHovering), {
     ref: useCombinedRef(externalRef, itemRef),
     className: useBEM({
       block: menuClass,

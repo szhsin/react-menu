@@ -213,11 +213,13 @@ test('Children of MenuItem is a function', () => {
 });
 
 test('Additional props are forwarded to MenuItem', () => {
+  const onMouseEnter = jest.fn();
   const onPointerMove = jest.fn();
   const onKeyDown = jest.fn();
   utils.renderMenu(null, {
     ['aria-label']: 'test',
     randomattr: 'random',
+    onMouseEnter,
     onPointerMove,
     onKeyDown
   });
@@ -226,10 +228,13 @@ test('Additional props are forwarded to MenuItem', () => {
   const menuItem = screen.queryByText('Middle');
   expect(menuItem).toHaveAttribute('aria-label', 'test');
   expect(menuItem).toHaveAttribute('randomattr', 'random');
+  fireEvent.mouseEnter(menuItem);
+  expect(onMouseEnter).toHaveBeenCalledTimes(1);
   fireEvent.pointerMove(menuItem);
   expect(onPointerMove).toHaveBeenCalledTimes(1);
   fireEvent.keyDown(menuItem, { key: 'Enter' });
   expect(onKeyDown).toHaveBeenCalledTimes(1);
+  expect(onKeyDown).toHaveBeenLastCalledWith(expect.objectContaining({ key: 'Enter' }));
 });
 
 test('FocusableItem', () => {

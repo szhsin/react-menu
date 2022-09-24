@@ -8,9 +8,10 @@ import { useCombinedRef } from '../hooks/useCombinedRef.js';
 import { useBEM } from '../hooks/useBEM.js';
 import { stylePropTypes } from '../utils/propTypes.js';
 import { EventHandlersContext, menuClass, menuItemClass } from '../utils/constants.js';
-import { safeCall, attachHandlerProps, commonProps } from '../utils/utils.js';
+import { safeCall, mergeProps, commonProps } from '../utils/utils.js';
 
-var _excluded = ["className", "disabled", "children", "isHovering", "itemRef", "externalRef"];
+var _excluded = ["className", "disabled", "children", "isHovering", "itemRef", "externalRef"],
+    _excluded2 = ["setHover", "onPointerLeave"];
 var FocusableItem = /*#__PURE__*/withHovering('FocusableItem', function FocusableItem(_ref) {
   var className = _ref.className,
       disabled = _ref.disabled,
@@ -25,9 +26,8 @@ var FocusableItem = /*#__PURE__*/withHovering('FocusableItem', function Focusabl
 
   var _useItemState = useItemState(itemRef, ref, isHovering, isDisabled),
       setHover = _useItemState.setHover,
-      onBlur = _useItemState.onBlur,
-      onPointerMove = _useItemState.onPointerMove,
-      _onPointerLeave = _useItemState.onPointerLeave;
+      _onPointerLeave = _useItemState.onPointerLeave,
+      restStateProps = _objectWithoutPropertiesLoose(_useItemState, _excluded2);
 
   var _useContext = useContext(EventHandlersContext),
       handleClose = _useContext.handleClose;
@@ -45,17 +45,15 @@ var FocusableItem = /*#__PURE__*/withHovering('FocusableItem', function Focusabl
       closeMenu: handleClose
     }));
   }, [children, modifiers, handleClose]);
-  var handlers = attachHandlerProps({
-    onPointerMove: onPointerMove,
+  var mergedProps = mergeProps(_extends({}, restStateProps, {
     onPointerLeave: function onPointerLeave(e) {
       return _onPointerLeave(e, true);
     },
-    onFocus: setHover,
-    onBlur: onBlur
-  }, restProps);
+    onFocus: setHover
+  }), restProps);
   return /*#__PURE__*/jsx("li", _extends({
     role: "menuitem"
-  }, restProps, handlers, commonProps(isDisabled), {
+  }, mergedProps, commonProps(isDisabled), {
     ref: useCombinedRef(externalRef, itemRef),
     className: useBEM({
       block: menuClass,

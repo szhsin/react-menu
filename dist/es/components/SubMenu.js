@@ -12,7 +12,7 @@ import { useMenuChange } from '../hooks/useMenuChange.js';
 import { useBEM } from '../hooks/useBEM.js';
 import { SettingsContext, ItemSettingsContext, MenuListContext, MenuListItemContext, menuClass, subMenuClass, menuItemClass, HoverActionTypes, Keys, FocusPositions } from '../utils/constants.js';
 import { useCombinedRef } from '../hooks/useCombinedRef.js';
-import { attachHandlerProps, commonProps, safeCall, isMenuOpen, batchedUpdates } from '../utils/utils.js';
+import { mergeProps, commonProps, safeCall, isMenuOpen, batchedUpdates } from '../utils/utils.js';
 
 var _excluded = ["aria-label", "className", "disabled", "direction", "label", "openTrigger", "onMenuChange", "isHovering", "instanceRef", "itemRef", "captureFocus", "repositionFlag", "itemProps"],
     _excluded2 = ["ref", "className"];
@@ -185,7 +185,7 @@ var SubMenu = /*#__PURE__*/withHovering('SubMenu', function SubMenu(_ref) {
       itemClassName = itemProps.className,
       restItemProps = _objectWithoutPropertiesLoose(itemProps, _excluded2);
 
-  var itemHandlers = attachHandlerProps({
+  var mergedItemProps = mergeProps({
     onPointerMove: handlePointerMove,
     onPointerLeave: handlePointerLeave,
     onKeyDown: handleItemKeyDown,
@@ -224,7 +224,7 @@ var SubMenu = /*#__PURE__*/withHovering('SubMenu', function SubMenu(_ref) {
       role: "menuitem",
       "aria-haspopup": true,
       "aria-expanded": isOpen
-    }, restItemProps, itemHandlers, commonProps(isDisabled, isHovering), {
+    }, mergedItemProps, commonProps(isDisabled, isHovering), {
       ref: useCombinedRef(externalItemRef, itemRef),
       className: useBEM({
         block: menuClass,

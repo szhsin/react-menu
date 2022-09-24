@@ -11,7 +11,7 @@ import { ControlledMenu } from './ControlledMenu';
 import { useMenuChange, useMenuStateAndFocus, useCombinedRef } from '../hooks';
 import {
   getName,
-  attachHandlerProps,
+  mergeProps,
   safeCall,
   isMenuOpen,
   uncontrolledMenuPropTypes,
@@ -37,28 +37,27 @@ export const Menu = forwardRef(function Menu(
     [toggleMenu]
   );
 
-  const handleClick = (e) => {
+  const onClick = (e) => {
     if (skipOpen.current) return;
     // Focus (hover) the first menu item when onClick event is trigger by keyboard
     openMenu(e.detail === 0 ? FocusPositions.FIRST : undefined);
   };
 
-  const handleKeyDown = (e) => {
-    let handled = false;
-
+  const onKeyDown = (e) => {
     switch (e.key) {
       case Keys.UP:
         openMenu(FocusPositions.LAST);
-        handled = true;
         break;
 
       case Keys.DOWN:
         openMenu(FocusPositions.FIRST);
-        handled = true;
         break;
+
+      default:
+        return;
     }
 
-    if (handled) e.preventDefault();
+    e.preventDefault();
   };
 
   const button = safeCall(menuButton, { open: isOpen });
@@ -66,13 +65,7 @@ export const Menu = forwardRef(function Menu(
 
   const buttonProps = {
     ref: useCombinedRef(button.ref, buttonRef),
-    ...attachHandlerProps(
-      {
-        onClick: handleClick,
-        onKeyDown: handleKeyDown
-      },
-      button.props
-    )
+    ...mergeProps({ onClick, onKeyDown }, button.props)
   };
   if (getName(button.type) === 'MenuButton') {
     buttonProps.isOpen = isOpen;

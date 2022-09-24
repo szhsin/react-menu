@@ -6,7 +6,7 @@ import { useBEM } from '../hooks';
 import {
   rootMenuPropTypes,
   menuContainerClass,
-  attachHandlerProps,
+  mergeProps,
   safeCall,
   isMenuOpen,
   getTransition,
@@ -111,7 +111,7 @@ export const ControlledMenu = forwardRef(function ControlledMenu(
     [onItemClick, onClose]
   );
 
-  const handleKeyDown = ({ key }) => {
+  const onKeyDown = ({ key }) => {
     switch (key) {
       case Keys.ESC:
         safeCall(onClose, { key, reason: CloseReason.CANCEL });
@@ -119,7 +119,7 @@ export const ControlledMenu = forwardRef(function ControlledMenu(
     }
   };
 
-  const handleBlur = (e) => {
+  const onBlur = (e) => {
     if (isMenuOpen(state) && !e.currentTarget.contains(e.relatedTarget || document.activeElement)) {
       safeCall(onClose, { reason: CloseReason.BLUR });
 
@@ -139,18 +139,9 @@ export const ControlledMenu = forwardRef(function ControlledMenu(
   const itemTransition = getTransition(transition, 'item');
   const modifiers = useMemo(() => ({ theme: theming, itemTransition }), [theming, itemTransition]);
 
-  const handlers = attachHandlerProps(
-    {
-      onKeyDown: handleKeyDown,
-      onBlur: handleBlur
-    },
-    containerProps
-  );
-
   const menuList = (
     <div
-      {...containerProps}
-      {...handlers}
+      {...mergeProps({ onKeyDown, onBlur }, containerProps)}
       className={useBEM({
         block: menuContainerClass,
         modifiers,
