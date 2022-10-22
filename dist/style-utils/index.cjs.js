@@ -1,7 +1,5 @@
 'use strict';
 
-Object.defineProperty(exports, '__esModule', { value: true });
-
 var menuContainerClass = 'szh-menu-container';
 var menuClass = 'szh-menu';
 var menuButtonClass = 'szh-menu-button';
