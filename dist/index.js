@@ -1,7 +1,5 @@
 'use strict';
 
-Object.defineProperty(exports, '__esModule', { value: true });
-
 var react = require('react');
 var propTypes = require('prop-types');
 var jsxRuntime = require('react/jsx-runtime');
