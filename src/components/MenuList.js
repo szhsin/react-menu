@@ -1,7 +1,7 @@
 import { useState, useReducer, useEffect, useRef, useMemo, useCallback, useContext } from 'react';
 import { flushSync } from 'react-dom';
 import { useBEM, useCombinedRef, useLayoutEffect, useItems } from '../hooks';
-import { getPositionHelpers, positionMenu, positionContextMenu } from '../positionUtils';
+import { getPositionHelpers, positionMenu, enhancedPositionContextMenu } from '../positionUtils';
 import {
   mergeProps,
   batchedUpdates,
@@ -151,7 +151,17 @@ export const MenuList = ({
       const { menuRect } = positionHelpers;
       let results = { computedDirection: 'bottom' };
       if (anchorPoint) {
-        results = positionContextMenu({ positionHelpers, anchorPoint });
+        results = enhancedPositionContextMenu({
+          arrow,
+          align,
+          direction,
+          offsetX,
+          offsetY,
+          position,
+          anchorPoint,
+          arrowRef,
+          positionHelpers
+        });
       } else if (anchorRef) {
         results = positionMenu({
           arrow,
