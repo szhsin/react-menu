@@ -1,7 +1,7 @@
 import { useState, useReducer, useEffect, useRef, useMemo, useCallback, useContext } from 'react';
 import { flushSync } from 'react-dom';
 import { useBEM, useCombinedRef, useLayoutEffect, useItems } from '../hooks';
-import { getPositionHelpers, positionMenu, positionContextMenu } from '../positionUtils';
+import { getPositionHelpers, positionMenu } from '../positionUtils';
 import {
   mergeProps,
   batchedUpdates,
@@ -135,6 +135,27 @@ export const MenuList = ({
         return;
       }
 
+      const anchorRect = anchorRef
+        ? anchorRef.current.getBoundingClientRect()
+        : anchorPoint
+        ? {
+            left: anchorPoint.x,
+            right: anchorPoint.x,
+            top: anchorPoint.y,
+            bottom: anchorPoint.y,
+            width: 0,
+            height: 0
+          }
+        : null;
+      if (!anchorRect) {
+        if (process.env.NODE_ENV !== 'production') {
+          console.warn(
+            '[React-Menu] Menu might not be positioned properly as one of the anchorRef and anchorPoint prop should be provided.'
+          );
+        }
+        return;
+      }
+
       if (!scrollNodes.menu) {
         scrollNodes.menu =
           (boundingBoxRef
@@ -148,24 +169,20 @@ export const MenuList = ({
         scrollNodes.menu,
         boundingBoxPadding
       );
+
+      let { arrowX, arrowY, x, y, computedDirection } = positionMenu({
+        arrow,
+        align,
+        direction,
+        offsetX,
+        offsetY,
+        position,
+        anchorRect,
+        arrowRef,
+        positionHelpers
+      });
+
       const { menuRect } = positionHelpers;
-      let results = { computedDirection: 'bottom' };
-      if (anchorPoint) {
-        results = positionContextMenu({ positionHelpers, anchorPoint });
-      } else if (anchorRef) {
-        results = positionMenu({
-          arrow,
-          align,
-          direction,
-          offsetX,
-          offsetY,
-          position,
-          anchorRef,
-          arrowRef,
-          positionHelpers
-        });
-      }
-      let { arrowX, arrowY, x, y, computedDirection } = results;
       let menuHeight = menuRect.height;
 
       if (!noOverflowCheck && overflow !== 'visible') {

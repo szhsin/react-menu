@@ -13,16 +13,14 @@ import { FocusPositions, Keys } from '../utils/constants.js';
 var _excluded = ["aria-label", "captureFocus", "menuButton", "instanceRef", "onMenuChange"];
 var Menu = /*#__PURE__*/forwardRef(function Menu(_ref, externalRef) {
   var ariaLabel = _ref['aria-label'],
-      menuButton = _ref.menuButton,
-      instanceRef = _ref.instanceRef,
-      onMenuChange = _ref.onMenuChange,
-      restProps = _objectWithoutPropertiesLoose(_ref, _excluded);
-
+    menuButton = _ref.menuButton,
+    instanceRef = _ref.instanceRef,
+    onMenuChange = _ref.onMenuChange,
+    restProps = _objectWithoutPropertiesLoose(_ref, _excluded);
   var _useMenuStateAndFocus = useMenuStateAndFocus(restProps),
-      stateProps = _useMenuStateAndFocus[0],
-      toggleMenu = _useMenuStateAndFocus[1],
-      openMenu = _useMenuStateAndFocus[2];
-
+    stateProps = _useMenuStateAndFocus[0],
+    toggleMenu = _useMenuStateAndFocus[1],
+    openMenu = _useMenuStateAndFocus[2];
   var isOpen = isMenuOpen(stateProps.state);
   var skipOpen = useRef(false);
   var buttonRef = useRef(null);
@@ -30,45 +28,36 @@ var Menu = /*#__PURE__*/forwardRef(function Menu(_ref, externalRef) {
     toggleMenu(false);
     if (e.key) buttonRef.current.focus();
   }, [toggleMenu]);
-
   var onClick = function onClick(e) {
     if (skipOpen.current) return;
     openMenu(e.detail === 0 ? FocusPositions.FIRST : undefined);
   };
-
   var onKeyDown = function onKeyDown(e) {
     switch (e.key) {
       case Keys.UP:
         openMenu(FocusPositions.LAST);
         break;
-
       case Keys.DOWN:
         openMenu(FocusPositions.FIRST);
         break;
-
       default:
         return;
     }
-
     e.preventDefault();
   };
-
   var button = safeCall(menuButton, {
     open: isOpen
   });
   if (!button || !button.type) throw new Error('Menu requires a menuButton prop.');
-
   var buttonProps = _extends({
     ref: useCombinedRef(button.ref, buttonRef)
   }, mergeProps({
     onClick: onClick,
     onKeyDown: onKeyDown
   }, button.props));
-
   if (getName(button.type) === 'MenuButton') {
     buttonProps.isOpen = isOpen;
   }
-
   var renderButton = /*#__PURE__*/cloneElement(button, buttonProps);
   useMenuChange(onMenuChange, isOpen);
   useImperativeHandle(instanceRef, function () {

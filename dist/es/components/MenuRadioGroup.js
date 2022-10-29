@@ -9,12 +9,11 @@ import { stylePropTypes } from '../utils/propTypes.js';
 var _excluded = ["aria-label", "className", "name", "value", "onRadioChange"];
 var MenuRadioGroup = /*#__PURE__*/forwardRef(function MenuRadioGroup(_ref, externalRef) {
   var ariaLabel = _ref['aria-label'],
-      className = _ref.className,
-      name = _ref.name,
-      value = _ref.value,
-      onRadioChange = _ref.onRadioChange,
-      restProps = _objectWithoutPropertiesLoose(_ref, _excluded);
-
+    className = _ref.className,
+    name = _ref.name,
+    value = _ref.value,
+    onRadioChange = _ref.onRadioChange,
+    restProps = _objectWithoutPropertiesLoose(_ref, _excluded);
   var contextValue = useMemo(function () {
     return {
       name: name,

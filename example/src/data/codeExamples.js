@@ -994,7 +994,8 @@ const [anchorPoint, setAnchorPoint] = useState({ x: 0, y: 0 });
     Right click to open context menu
 
     <ControlledMenu {...menuProps} anchorPoint={anchorPoint}
-        onClose={() => toggleMenu(false)}>
+        direction="right" onClose={() => toggleMenu(false)}
+    >
         <MenuItem>Cut</MenuItem>
         <MenuItem>Copy</MenuItem>
         <MenuItem>Paste</MenuItem>
@@ -1022,7 +1023,8 @@ export default function Example() {
             Right click to open context menu
 
             <ControlledMenu {...menuProps} anchorPoint={anchorPoint}
-                onClose={() => toggleMenu(false)}>
+                direction="right" onClose={() => toggleMenu(false)}
+            >
                 <MenuItem>Cut</MenuItem>
                 <MenuItem>Copy</MenuItem>
                 <MenuItem>Paste</MenuItem>

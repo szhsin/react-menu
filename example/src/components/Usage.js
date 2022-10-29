@@ -748,7 +748,12 @@ function ContextMenuExample() {
       }}
     >
       Right click to open context menu
-      <ControlledMenu {...menuProps} anchorPoint={anchorPoint} onClose={() => toggleMenu(false)}>
+      <ControlledMenu
+        {...menuProps}
+        anchorPoint={anchorPoint}
+        direction="right"
+        onClose={() => toggleMenu(false)}
+      >
         <MenuItem>Cut</MenuItem>
         <MenuItem>Copy</MenuItem>
         <MenuItem>Paste</MenuItem>

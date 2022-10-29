@@ -12,33 +12,32 @@ import { safeCall, getTransition, mergeProps, values, isMenuOpen } from '../util
 var _excluded = ["aria-label", "className", "containerProps", "initialMounted", "unmountOnClose", "transition", "transitionTimeout", "boundingBoxRef", "boundingBoxPadding", "reposition", "submenuOpenDelay", "submenuCloseDelay", "skipOpen", "viewScroll", "portal", "theming", "onItemClick", "onClose"];
 var ControlledMenu = /*#__PURE__*/forwardRef(function ControlledMenu(_ref, externalRef) {
   var ariaLabel = _ref['aria-label'],
-      className = _ref.className,
-      containerProps = _ref.containerProps,
-      initialMounted = _ref.initialMounted,
-      unmountOnClose = _ref.unmountOnClose,
-      transition = _ref.transition,
-      transitionTimeout = _ref.transitionTimeout,
-      boundingBoxRef = _ref.boundingBoxRef,
-      boundingBoxPadding = _ref.boundingBoxPadding,
-      _ref$reposition = _ref.reposition,
-      reposition = _ref$reposition === void 0 ? 'auto' : _ref$reposition,
-      _ref$submenuOpenDelay = _ref.submenuOpenDelay,
-      submenuOpenDelay = _ref$submenuOpenDelay === void 0 ? 300 : _ref$submenuOpenDelay,
-      _ref$submenuCloseDela = _ref.submenuCloseDelay,
-      submenuCloseDelay = _ref$submenuCloseDela === void 0 ? 150 : _ref$submenuCloseDela,
-      skipOpen = _ref.skipOpen,
-      _ref$viewScroll = _ref.viewScroll,
-      viewScroll = _ref$viewScroll === void 0 ? 'initial' : _ref$viewScroll,
-      portal = _ref.portal,
-      theming = _ref.theming,
-      onItemClick = _ref.onItemClick,
-      onClose = _ref.onClose,
-      restProps = _objectWithoutPropertiesLoose(_ref, _excluded);
-
+    className = _ref.className,
+    containerProps = _ref.containerProps,
+    initialMounted = _ref.initialMounted,
+    unmountOnClose = _ref.unmountOnClose,
+    transition = _ref.transition,
+    transitionTimeout = _ref.transitionTimeout,
+    boundingBoxRef = _ref.boundingBoxRef,
+    boundingBoxPadding = _ref.boundingBoxPadding,
+    _ref$reposition = _ref.reposition,
+    reposition = _ref$reposition === void 0 ? 'auto' : _ref$reposition,
+    _ref$submenuOpenDelay = _ref.submenuOpenDelay,
+    submenuOpenDelay = _ref$submenuOpenDelay === void 0 ? 300 : _ref$submenuOpenDelay,
+    _ref$submenuCloseDela = _ref.submenuCloseDelay,
+    submenuCloseDelay = _ref$submenuCloseDela === void 0 ? 150 : _ref$submenuCloseDela,
+    skipOpen = _ref.skipOpen,
+    _ref$viewScroll = _ref.viewScroll,
+    viewScroll = _ref$viewScroll === void 0 ? 'initial' : _ref$viewScroll,
+    portal = _ref.portal,
+    theming = _ref.theming,
+    onItemClick = _ref.onItemClick,
+    onClose = _ref.onClose,
+    restProps = _objectWithoutPropertiesLoose(_ref, _excluded);
   var containerRef = useRef(null);
   var scrollNodesRef = useRef({});
   var anchorRef = restProps.anchorRef,
-      state = restProps.state;
+    state = restProps.state;
   var settings = useMemo(function () {
     return {
       initialMounted: initialMounted,
@@ -65,11 +64,9 @@ var ControlledMenu = /*#__PURE__*/forwardRef(function ControlledMenu(_ref, exter
       handleClick: function handleClick(event, isCheckorRadio) {
         if (!event.stopPropagation) safeCall(onItemClick, event);
         var keepOpen = event.keepOpen;
-
         if (keepOpen === undefined) {
           keepOpen = isCheckorRadio && event.key === Keys.SPACE;
         }
-
         if (!keepOpen) {
           safeCall(onClose, {
             value: event.value,
@@ -86,10 +83,8 @@ var ControlledMenu = /*#__PURE__*/forwardRef(function ControlledMenu(_ref, exter
       }
     };
   }, [onItemClick, onClose]);
-
   var onKeyDown = function onKeyDown(_ref2) {
     var key = _ref2.key;
-
     switch (key) {
       case Keys.ESC:
         safeCall(onClose, {
@@ -99,7 +94,6 @@ var ControlledMenu = /*#__PURE__*/forwardRef(function ControlledMenu(_ref, exter
         break;
     }
   };
-
   var onBlur = function onBlur(e) {
     if (isMenuOpen(state) && !e.currentTarget.contains(e.relatedTarget || document.activeElement)) {
       safeCall(onClose, {
@@ -114,7 +108,6 @@ var ControlledMenu = /*#__PURE__*/forwardRef(function ControlledMenu(_ref, exter
       }
     }
   };
-
   var itemTransition = getTransition(transition, 'item');
   var modifiers = useMemo(function () {
     return {
@@ -122,7 +115,6 @@ var ControlledMenu = /*#__PURE__*/forwardRef(function ControlledMenu(_ref, exter
       itemTransition: itemTransition
     };
   }, [theming, itemTransition]);
-
   var menuList = /*#__PURE__*/jsx("div", _extends({}, mergeProps({
     onKeyDown: onKeyDown,
     onBlur: onBlur
@@ -152,13 +144,11 @@ var ControlledMenu = /*#__PURE__*/forwardRef(function ControlledMenu(_ref, exter
       })
     })
   }));
-
   if (portal === true && typeof document !== 'undefined') {
     return /*#__PURE__*/createPortal(menuList, document.body);
   } else if (portal) {
     return portal.target ? /*#__PURE__*/createPortal(menuList, portal.target) : portal.stablePosition ? null : menuList;
   }
-
   return menuList;
 });
 process.env.NODE_ENV !== "production" ? ControlledMenu.propTypes = /*#__PURE__*/_extends({}, rootMenuPropTypes, {

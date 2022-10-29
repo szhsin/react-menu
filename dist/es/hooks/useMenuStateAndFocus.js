@@ -4,13 +4,11 @@ import { useMenuState } from './useMenuState.js';
 
 var useMenuStateAndFocus = function useMenuStateAndFocus(options) {
   var _useMenuState = useMenuState(options),
-      menuProps = _useMenuState[0],
-      toggleMenu = _useMenuState[1];
-
+    menuProps = _useMenuState[0],
+    toggleMenu = _useMenuState[1];
   var _useState = useState(),
-      menuItemFocus = _useState[0],
-      setMenuItemFocus = _useState[1];
-
+    menuItemFocus = _useState[0],
+    setMenuItemFocus = _useState[1];
   var openMenu = function openMenu(position, alwaysUpdate) {
     setMenuItemFocus({
       position: position,
@@ -18,7 +16,6 @@ var useMenuStateAndFocus = function useMenuStateAndFocus(options) {
     });
     toggleMenu(true);
   };
-
   return [_extends({
     menuItemFocus: menuItemFocus
   }, menuProps), toggleMenu, openMenu];

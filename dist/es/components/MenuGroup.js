@@ -11,28 +11,22 @@ import { stylePropTypes } from '../utils/propTypes.js';
 var _excluded = ["className", "style", "takeOverflow"];
 var MenuGroup = /*#__PURE__*/forwardRef(function MenuGroup(_ref, externalRef) {
   var className = _ref.className,
-      style = _ref.style,
-      takeOverflow = _ref.takeOverflow,
-      restProps = _objectWithoutPropertiesLoose(_ref, _excluded);
-
+    style = _ref.style,
+    takeOverflow = _ref.takeOverflow,
+    restProps = _objectWithoutPropertiesLoose(_ref, _excluded);
   var ref = useRef(null);
-
   var _useState = useState(),
-      overflowStyle = _useState[0],
-      setOverflowStyle = _useState[1];
-
+    overflowStyle = _useState[0],
+    setOverflowStyle = _useState[1];
   var _useContext = useContext(MenuListContext),
-      overflow = _useContext.overflow,
-      overflowAmt = _useContext.overflowAmt;
-
+    overflow = _useContext.overflow,
+    overflowAmt = _useContext.overflowAmt;
   useIsomorphicLayoutEffect(function () {
     var maxHeight;
-
     if (takeOverflow && overflowAmt >= 0) {
       maxHeight = ref.current.getBoundingClientRect().height - overflowAmt;
       if (maxHeight < 0) maxHeight = 0;
     }
-
     setOverflowStyle(maxHeight >= 0 ? {
       maxHeight: maxHeight,
       overflow: overflow
