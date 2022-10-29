@@ -8,7 +8,7 @@ export const positionMenu = ({
   offsetX,
   offsetY,
   position,
-  anchorRef,
+  anchorRect,
   arrowRef,
   positionHelpers
 }) => {
@@ -24,7 +24,6 @@ export const positionMenu = ({
     }
   }
 
-  const anchorRect = anchorRef.current.getBoundingClientRect();
   const placeLeftX = anchorRect.left - containerRect.left - menuRect.width - horizontalOffset;
   const placeRightX = anchorRect.right - containerRect.left + horizontalOffset;
   const placeTopY = anchorRect.top - containerRect.top - menuRect.height - verticalOffset;

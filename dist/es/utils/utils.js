@@ -15,7 +15,6 @@ var floatEqual = function floatEqual(a, b, diff) {
   if (diff === void 0) {
     diff = 0.0001;
   }
-
   return Math.abs(a - b) < diff;
 };
 var getTransition = function getTransition(transition, name) {
@@ -37,7 +36,6 @@ var mergeProps = function mergeProps(target, source) {
   source && Object.keys(source).forEach(function (key) {
     var targetProp = target[key];
     var sourceProp = source[key];
-
     if (typeof sourceProp === 'function' && targetProp) {
       target[key] = function () {
         sourceProp.apply(void 0, arguments);
@@ -66,16 +64,15 @@ var parsePadding = function parsePadding(paddingStr) {
     left: !isNaN(padding[3]) ? padding[3] : right
   };
 };
+
 var getScrollAncestor = function getScrollAncestor(node) {
   while (node) {
     node = node.parentNode;
     if (!node || node === document.body) return;
-
     var _getComputedStyle = getComputedStyle(node),
-        overflow = _getComputedStyle.overflow,
-        overflowX = _getComputedStyle.overflowX,
-        overflowY = _getComputedStyle.overflowY;
-
+      overflow = _getComputedStyle.overflow,
+      overflowX = _getComputedStyle.overflowX,
+      overflowY = _getComputedStyle.overflowY;
     if (/auto|scroll|overlay|hidden/.test(overflow + overflowY + overflowX)) return node;
   }
 };
@@ -89,7 +86,6 @@ function indexOfNode(nodeList, node) {
   for (var i = 0; i < nodeList.length; i++) {
     if (nodeList[i] === node) return i;
   }
-
   return -1;
 }
 

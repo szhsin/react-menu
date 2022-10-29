@@ -19,12 +19,10 @@ var bem = function bem(block) {
     };
   };
 };
-
 var createSelector = function createSelector(blockElement, modifiers) {
   if (modifiers === void 0) {
     modifiers = [];
   }
-
   var selectorObj = {};
   Object.defineProperty(selectorObj, 'name', {
     value: blockElement(),
@@ -41,7 +39,6 @@ var createSelector = function createSelector(blockElement, modifiers) {
   });
   return selectorObj;
 };
-
 var directions = ['dir-left', 'dir-right', 'dir-top', 'dir-bottom'];
 var menuBlock = /*#__PURE__*/bem(menuClass);
 var menuSelector = /*#__PURE__*/createSelector( /*#__PURE__*/menuBlock(), /*#__PURE__*/['state-opening', 'state-open', 'state-closing', 'state-closed'].concat(directions));

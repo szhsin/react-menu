@@ -11,27 +11,23 @@ import { EventHandlersContext, menuClass, menuItemClass } from '../utils/constan
 import { safeCall, mergeProps, commonProps } from '../utils/utils.js';
 
 var _excluded = ["className", "disabled", "children", "isHovering", "itemRef", "externalRef"],
-    _excluded2 = ["setHover", "onPointerLeave"];
+  _excluded2 = ["setHover", "onPointerLeave"];
 var FocusableItem = /*#__PURE__*/withHovering('FocusableItem', function FocusableItem(_ref) {
   var className = _ref.className,
-      disabled = _ref.disabled,
-      children = _ref.children,
-      isHovering = _ref.isHovering,
-      itemRef = _ref.itemRef,
-      externalRef = _ref.externalRef,
-      restProps = _objectWithoutPropertiesLoose(_ref, _excluded);
-
+    disabled = _ref.disabled,
+    children = _ref.children,
+    isHovering = _ref.isHovering,
+    itemRef = _ref.itemRef,
+    externalRef = _ref.externalRef,
+    restProps = _objectWithoutPropertiesLoose(_ref, _excluded);
   var isDisabled = !!disabled;
   var ref = useRef(null);
-
   var _useItemState = useItemState(itemRef, ref, isHovering, isDisabled),
-      setHover = _useItemState.setHover,
-      _onPointerLeave = _useItemState.onPointerLeave,
-      restStateProps = _objectWithoutPropertiesLoose(_useItemState, _excluded2);
-
+    setHover = _useItemState.setHover,
+    _onPointerLeave = _useItemState.onPointerLeave,
+    restStateProps = _objectWithoutPropertiesLoose(_useItemState, _excluded2);
   var _useContext = useContext(EventHandlersContext),
-      handleClose = _useContext.handleClose;
-
+    handleClose = _useContext.handleClose;
   var modifiers = useMemo(function () {
     return {
       disabled: isDisabled,

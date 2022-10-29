@@ -10,11 +10,10 @@ import { menuButtonClass } from '../utils/constants.js';
 var _excluded = ["className", "isOpen", "disabled", "children"];
 var MenuButton = /*#__PURE__*/defineName('MenuButton', /*#__PURE__*/forwardRef(function MenuButton(_ref, ref) {
   var className = _ref.className,
-      isOpen = _ref.isOpen,
-      disabled = _ref.disabled,
-      children = _ref.children,
-      restProps = _objectWithoutPropertiesLoose(_ref, _excluded);
-
+    isOpen = _ref.isOpen,
+    disabled = _ref.disabled,
+    children = _ref.children,
+    restProps = _objectWithoutPropertiesLoose(_ref, _excluded);
   var modifiers = useMemo(function () {
     return {
       open: isOpen

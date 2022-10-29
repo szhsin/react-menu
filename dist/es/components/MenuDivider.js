@@ -8,8 +8,7 @@ import { stylePropTypes } from '../utils/propTypes.js';
 var _excluded = ["className"];
 var MenuDivider = /*#__PURE__*/memo( /*#__PURE__*/forwardRef(function MenuDivider(_ref, externalRef) {
   var className = _ref.className,
-      restProps = _objectWithoutPropertiesLoose(_ref, _excluded);
-
+    restProps = _objectWithoutPropertiesLoose(_ref, _excluded);
   return /*#__PURE__*/jsx("li", _extends({
     role: "separator"
   }, restProps, {

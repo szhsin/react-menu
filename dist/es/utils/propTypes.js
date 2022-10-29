@@ -3,9 +3,9 @@ import { object, bool, oneOfType, exact, number, string, oneOf, func } from 'pro
 
 var stylePropTypes = function stylePropTypes(name) {
   var _ref;
-
   return _ref = {}, _ref[name ? name + "ClassName" : 'className'] = oneOfType([string, func]), _ref;
 };
+
 var menuPropTypes = /*#__PURE__*/_extends({
   className: string
 }, /*#__PURE__*/stylePropTypes('menu'), /*#__PURE__*/stylePropTypes('arrow'), {
@@ -20,6 +20,7 @@ var menuPropTypes = /*#__PURE__*/_extends({
   position: /*#__PURE__*/oneOf(['auto', 'anchor', 'initial']),
   overflow: /*#__PURE__*/oneOf(['auto', 'visible', 'hidden'])
 });
+
 var rootMenuPropTypes = /*#__PURE__*/_extends({}, menuPropTypes, {
   containerProps: object,
   initialMounted: bool,
@@ -44,6 +45,7 @@ var rootMenuPropTypes = /*#__PURE__*/_extends({}, menuPropTypes, {
   theming: string,
   onItemClick: func
 });
+
 var uncontrolledMenuPropTypes = {
   instanceRef: /*#__PURE__*/oneOfType([object, func]),
   onMenuChange: func
