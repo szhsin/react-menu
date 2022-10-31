@@ -669,6 +669,14 @@ export function useMenuState(options?: MenuStateOptions): [
      * Stop transition animation. This function value should be forwarded to `ControlledMenu`.
      */
     endTransition: () => void;
+    /**
+     * anchorRef set with the setAnchor function. This function value should be forwarded to `ControlledMenu`.
+     */
+    anchorRef?: Element;
+    /**
+     * anchorPoint set with the setAnchor function. This function value should be forwarded to `ControlledMenu`.
+     */
+    anchorPoint?: { x: number; y: number };
   },
 
   /**
@@ -677,7 +685,15 @@ export function useMenuState(options?: MenuStateOptions): [
    * - If no parameter is supplied, this function will toggle state between open and close phases.
    * - You can set a boolean parameter to explicitly switch into one of the two phases.
    */
-  (open?: boolean) => void
+  (open?: boolean) => void,
+  /**
+   * Set the menu anchor.
+   *
+   * - If a ref is supplied, this function will set anchorRef
+   * - If a XY point is supplied, this function will set anchorPoint
+   * - If null is supplied, both anchorRef and anchorPoint will be changed to null
+   */
+  (anchor?: Element | { x: number; y: number } | null) => void
 ];
 
 export {};
