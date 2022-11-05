@@ -983,6 +983,19 @@ export const contextMenu = {
     </>
   ),
 
+  note: (
+    <p>
+      <strong>TIP</strong>: sometimes you may want to reuse one menu for both dropdown and context
+      menu. In this case, you can provide <code>ControlledMenu</code> with both the{' '}
+      <code>anchorRef</code> and <code>anchorPoint</code> props and dynamically switch between them,
+      please see{' '}
+      <ExternalLink href="https://codesandbox.io/s/usecontrolledmenu-9u7tol">
+        a CodeSandbox example
+      </ExternalLink>
+      .
+    </p>
+  ),
+
   source: `const [menuProps, toggleMenu] = useMenuState();
 const [anchorPoint, setAnchorPoint] = useState({ x: 0, y: 0 });
 
