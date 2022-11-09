@@ -60,8 +60,8 @@ function NavBarLink({ href, children }) {
       : undefined;
   return (
     <li className={bem(blockName, 'link')}>
-      <Link href={href}>
-        <a {...linkProps}>{children}</a>
+      <Link href={href} {...linkProps}>
+        {children}
       </Link>
     </li>
   );

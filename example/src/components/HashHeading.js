@@ -29,10 +29,8 @@ export const HashHeading = memo(function HashHeading({ id, title, heading = 'h1'
         title
       )}
 
-      <Link href={`#${id}`}>
-        <a className={bem(blockName, 'link', { hover })} style={{ fontSize }}>
-          #
-        </a>
+      <Link href={`#${id}`} className={bem(blockName, 'link', { hover })} style={{ fontSize }}>
+        #
       </Link>
     </div>
   );
