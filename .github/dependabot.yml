@@ -7,9 +7,11 @@ version: 2
 updates:
   - package-ecosystem: 'npm'
     directory: '/'
+    versioning-strategy: increase
     schedule:
       interval: 'daily'
   - package-ecosystem: 'npm'
     directory: '/example'
+    versioning-strategy: increase
     schedule:
       interval: 'daily'
