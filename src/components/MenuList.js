@@ -1,5 +1,6 @@
 import { useState, useReducer, useEffect, useRef, useMemo, useCallback, useContext } from 'react';
 import { flushSync } from 'react-dom';
+import { MenuContainer } from './MenuContainer';
 import { useBEM, useCombinedRef, useLayoutEffect, useItems } from '../hooks';
 import { getPositionHelpers, positionMenu } from '../positionUtils';
 import {
@@ -32,6 +33,7 @@ export const MenuList = ({
   anchorPoint,
   anchorRef,
   containerRef,
+  containerProps,
   externalRef,
   parentScrollingRef,
   arrow,
@@ -126,17 +128,8 @@ export const MenuList = ({
 
   const handlePosition = useCallback(
     (noOverflowCheck) => {
-      if (!containerRef.current) {
-        if (process.env.NODE_ENV !== 'production') {
-          console.error(
-            '[React-Menu] Menu cannot be positioned properly as container ref is null. If you need to initialise `state` prop to "open" for ControlledMenu, please see this solution: https://codesandbox.io/s/initial-open-sp10wn'
-          );
-        }
-        return;
-      }
-
       const anchorRect = anchorRef
-        ? anchorRef.current.getBoundingClientRect()
+        ? anchorRef.current?.getBoundingClientRect()
         : anchorPoint
         ? {
             left: anchorPoint.x,
@@ -150,7 +143,7 @@ export const MenuList = ({
       if (!anchorRect) {
         if (process.env.NODE_ENV !== 'production') {
           console.warn(
-            '[React-Menu] Menu might not be positioned properly as one of the anchorRef and anchorPoint prop should be provided.'
+            '[React-Menu] Menu might not be positioned properly as one of the anchorRef or anchorPoint prop should be provided. If `anchorRef` is provided, the anchor must be mounted before menu is open.'
           );
         }
         return;
@@ -416,7 +409,7 @@ export const MenuList = ({
     className: arrowClassName
   });
 
-  return (
+  const menu = (
     <ul
       role="menu"
       aria-label={ariaLabel}
@@ -454,5 +447,13 @@ export const MenuList = ({
         </MenuListItemContext.Provider>
       </MenuListContext.Provider>
     </ul>
+  );
+
+  return containerProps ? (
+    <MenuContainer {...containerProps} isOpen={isOpen}>
+      {menu}
+    </MenuContainer>
+  ) : (
+    menu
   );
 };

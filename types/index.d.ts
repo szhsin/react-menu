@@ -125,6 +125,10 @@ export type MenuArrowModifiers = Readonly<{
 
 export interface MenuStateOptions {
   /**
+   * Enable menu to be mounted in the open state.
+   */
+  initialOpen?: boolean;
+  /**
    * By default menu isn't mounted into DOM until it's opened for the first time.
    * Setting the prop to `true` will change this behaviour,
    * which also enables menu and its items to be server rendered.
@@ -246,7 +250,7 @@ interface BaseMenuProps extends Omit<BaseProps, 'style'> {
 /**
  * Common props for `Menu` and `ControlledMenu`
  */
-interface RootMenuProps extends BaseMenuProps, MenuStateOptions {
+interface RootMenuProps extends BaseMenuProps, Omit<MenuStateOptions, 'initialOpen'> {
   /**
    * Properties of this object are spread to the root DOM element containing the menu.
    */
