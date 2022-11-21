@@ -75,15 +75,16 @@ test('ControlledMenu with an anchor element; ref is forwarded', async () => {
   utils.expectMenuToBeInTheDocument(false);
 });
 
-test('ControlledMenu warns when open by default', () => {
-  const errorSpy = jest.spyOn(console, 'error').mockImplementation();
-  const warnSpy = jest.spyOn(console, 'warn').mockImplementation();
-  render(getMenu({ state: 'open' }));
-  expect(errorSpy).toHaveBeenCalledWith(expect.stringContaining('container ref is null'));
-  expect(warnSpy).toHaveBeenCalled();
-  errorSpy.mockRestore();
-  warnSpy.mockRestore();
-});
+test.each([undefined, {}])(
+  'ControlledMenu warns when open by default without anchor',
+  (anchorRef) => {
+    const warnSpy = jest.spyOn(console, 'warn').mockImplementation();
+    render(getMenu({ state: 'open', anchorRef }));
+    expect(warnSpy).toHaveBeenCalledWith(expect.stringContaining('anchorRef or anchorPoint'));
+    warnSpy.mockRestore();
+    utils.expectMenuToBeOpen(true);
+  }
+);
 
 test('ControlledMenu as context menu', () => {
   const anchorPoint = { x: 0, y: 0 };

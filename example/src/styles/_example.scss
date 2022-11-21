@@ -169,6 +169,7 @@
 
     .szh-menu-button {
       white-space: nowrap;
+      margin: 0 0.5rem;
     }
 
     .szh-menu {
@@ -186,6 +187,7 @@
   }
 
   .scrollview {
+    position: relative;
     height: 20rem;
     overflow: auto;
     margin-top: 0.75rem;

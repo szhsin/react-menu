@@ -10,6 +10,7 @@ test.each([false, true])(
 
     // menu is unmounted
     utils.expectButtonToBeExpanded(false);
+    utils.expectMenuContainerToBeInTheDocument(false);
     utils.expectMenuToBeInTheDocument(false);
     expect(queryByRole('menuitem')).not.toBeInTheDocument();
 
@@ -18,6 +19,7 @@ test.each([false, true])(
     utils.expectButtonToBeExpanded(true);
     utils.expectMenuToHaveState('opening', false);
     utils.expectMenuToBeOpen(true);
+    utils.expectMenuContainerToBeInTheDocument(true);
     expect(utils.queryMenu()).toHaveAttribute('aria-label', 'Open');
     await waitFor(() => utils.expectMenuToHaveFocus());
     const menuItems = queryAllByRole('menuitem');
@@ -54,18 +56,22 @@ test.each([false, true])(
   async (portal) => {
     utils.renderMenu({ portal, unmountOnClose: true });
     utils.expectMenuToBeInTheDocument(false);
+    utils.expectMenuContainerToBeInTheDocument(false);
 
     utils.clickMenuButton();
     utils.expectMenuToBeInTheDocument(true);
+    utils.expectMenuContainerToBeInTheDocument(true);
     await waitFor(() => utils.expectMenuToHaveFocus());
 
     act(() => queryByRole('button').focus());
     utils.expectMenuToBeInTheDocument(false);
+    utils.expectMenuContainerToBeInTheDocument(false);
   }
 );
 
 test('Menu is in the DOM before first opening when initialMounted is true', () => {
   utils.renderMenu({ initialMounted: true });
+  utils.expectMenuContainerToBeInTheDocument(true);
   utils.expectMenuToBeInTheDocument(true);
   utils.expectMenuToHaveState('closed', true);
 });
@@ -172,7 +178,7 @@ test('Additional props are forwarded to Menu', () => {
 
   const container = screen.getByTestId('container');
   expect(container).toHaveAttribute('id', 'menu-container');
-  expect(container).toHaveStyle({ color: 'blue', position: 'relative' });
+  expect(container).toHaveStyle({ color: 'blue', position: 'absolute' });
 
   const menu = utils.queryMenu();
   expect(menu).toHaveAttribute('aria-label', 'test');

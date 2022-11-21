@@ -1268,6 +1268,7 @@ const menuStateHook = {
       </p>
       <pre>
         <code className="hljs">{`function useMenuState(options?: {
+    initialOpen?: boolean;
     initialMounted?: boolean;
     unmountOnClose?: boolean;
     transition?: boolean | {
