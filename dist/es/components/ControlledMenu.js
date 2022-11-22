@@ -4,12 +4,11 @@ import { createPortal } from 'react-dom';
 import { oneOf, exact, number, object, bool, oneOfType, string, func } from 'prop-types';
 import { MenuList } from './MenuList.js';
 import { jsx } from 'react/jsx-runtime';
-import { useBEM } from '../hooks/useBEM.js';
-import { SettingsContext, ItemSettingsContext, EventHandlersContext, Keys, CloseReason, MenuStateMap, menuContainerClass } from '../utils/constants.js';
+import { SettingsContext, ItemSettingsContext, EventHandlersContext, MenuStateMap, Keys, CloseReason } from '../utils/constants.js';
 import { rootMenuPropTypes } from '../utils/propTypes.js';
-import { safeCall, getTransition, mergeProps, values, isMenuOpen } from '../utils/utils.js';
+import { safeCall, values } from '../utils/utils.js';
 
-var _excluded = ["aria-label", "className", "containerProps", "initialMounted", "unmountOnClose", "transition", "transitionTimeout", "boundingBoxRef", "boundingBoxPadding", "reposition", "submenuOpenDelay", "submenuCloseDelay", "skipOpen", "viewScroll", "portal", "theming", "onItemClick", "onClose"];
+var _excluded = ["aria-label", "className", "containerProps", "initialMounted", "unmountOnClose", "transition", "transitionTimeout", "boundingBoxRef", "boundingBoxPadding", "reposition", "submenuOpenDelay", "submenuCloseDelay", "skipOpen", "viewScroll", "portal", "theming", "onItemClick"];
 var ControlledMenu = /*#__PURE__*/forwardRef(function ControlledMenu(_ref, externalRef) {
   var ariaLabel = _ref['aria-label'],
     className = _ref.className,
@@ -32,12 +31,12 @@ var ControlledMenu = /*#__PURE__*/forwardRef(function ControlledMenu(_ref, exter
     portal = _ref.portal,
     theming = _ref.theming,
     onItemClick = _ref.onItemClick,
-    onClose = _ref.onClose,
     restProps = _objectWithoutPropertiesLoose(_ref, _excluded);
   var containerRef = useRef(null);
   var scrollNodesRef = useRef({});
   var anchorRef = restProps.anchorRef,
-    state = restProps.state;
+    state = restProps.state,
+    onClose = restProps.onClose;
   var settings = useMemo(function () {
     return {
       initialMounted: initialMounted,
@@ -83,67 +82,30 @@ var ControlledMenu = /*#__PURE__*/forwardRef(function ControlledMenu(_ref, exter
       }
     };
   }, [onItemClick, onClose]);
-  var onKeyDown = function onKeyDown(_ref2) {
-    var key = _ref2.key;
-    switch (key) {
-      case Keys.ESC:
-        safeCall(onClose, {
-          key: key,
-          reason: CloseReason.CANCEL
-        });
-        break;
-    }
-  };
-  var onBlur = function onBlur(e) {
-    if (isMenuOpen(state) && !e.currentTarget.contains(e.relatedTarget || document.activeElement)) {
-      safeCall(onClose, {
-        reason: CloseReason.BLUR
-      });
-
-      if (skipOpen) {
-        skipOpen.current = true;
-        setTimeout(function () {
-          return skipOpen.current = false;
-        }, 300);
-      }
-    }
-  };
-  var itemTransition = getTransition(transition, 'item');
-  var modifiers = useMemo(function () {
-    return {
-      theme: theming,
-      itemTransition: itemTransition
-    };
-  }, [theming, itemTransition]);
-  var menuList = /*#__PURE__*/jsx("div", _extends({}, mergeProps({
-    onKeyDown: onKeyDown,
-    onBlur: onBlur
-  }, containerProps), {
-    className: useBEM({
-      block: menuContainerClass,
-      modifiers: modifiers,
-      className: className
-    }),
-    style: _extends({}, containerProps == null ? void 0 : containerProps.style, {
-      position: 'relative'
-    }),
-    ref: containerRef,
-    children: state && /*#__PURE__*/jsx(SettingsContext.Provider, {
-      value: settings,
-      children: /*#__PURE__*/jsx(ItemSettingsContext.Provider, {
-        value: itemSettings,
-        children: /*#__PURE__*/jsx(EventHandlersContext.Provider, {
-          value: eventHandlers,
-          children: /*#__PURE__*/jsx(MenuList, _extends({}, restProps, {
-            ariaLabel: ariaLabel || 'Menu',
-            externalRef: externalRef,
+  if (!state) return null;
+  var menuList = /*#__PURE__*/jsx(SettingsContext.Provider, {
+    value: settings,
+    children: /*#__PURE__*/jsx(ItemSettingsContext.Provider, {
+      value: itemSettings,
+      children: /*#__PURE__*/jsx(EventHandlersContext.Provider, {
+        value: eventHandlers,
+        children: /*#__PURE__*/jsx(MenuList, _extends({}, restProps, {
+          ariaLabel: ariaLabel || 'Menu',
+          externalRef: externalRef,
+          containerRef: containerRef,
+          containerProps: {
+            className: className,
             containerRef: containerRef,
+            containerProps: containerProps,
+            skipOpen: skipOpen,
+            theming: theming,
+            transition: transition,
             onClose: onClose
-          }))
-        })
+          }
+        }))
       })
     })
-  }));
+  });
   if (portal === true && typeof document !== 'undefined') {
     return /*#__PURE__*/createPortal(menuList, document.body);
   } else if (portal) {

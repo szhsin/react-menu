@@ -1,6 +1,7 @@
 import { objectWithoutPropertiesLoose as _objectWithoutPropertiesLoose, extends as _extends } from '../_virtual/_rollupPluginBabelHelpers.js';
 import { useState, useReducer, useContext, useRef, useCallback, useEffect, useMemo } from 'react';
 import { flushSync } from 'react-dom';
+import { MenuContainer } from './MenuContainer.js';
 import { jsxs, jsx } from 'react/jsx-runtime';
 import { SettingsContext, MenuListContext, HoverActionTypes, MenuListItemContext, HoverItemContext, Keys, menuClass, CloseReason, FocusPositions, menuArrowClass } from '../utils/constants.js';
 import { useItems } from '../hooks/useItems.js';
@@ -11,7 +12,7 @@ import { useLayoutEffect as useIsomorphicLayoutEffect } from '../hooks/useIsomor
 import { useBEM } from '../hooks/useBEM.js';
 import { useCombinedRef } from '../hooks/useCombinedRef.js';
 
-var _excluded = ["ariaLabel", "menuClassName", "menuStyle", "arrowClassName", "arrowStyle", "anchorPoint", "anchorRef", "containerRef", "externalRef", "parentScrollingRef", "arrow", "align", "direction", "position", "overflow", "setDownOverflow", "repositionFlag", "captureFocus", "state", "endTransition", "isDisabled", "menuItemFocus", "offsetX", "offsetY", "children", "onClose"];
+var _excluded = ["ariaLabel", "menuClassName", "menuStyle", "arrowClassName", "arrowStyle", "anchorPoint", "anchorRef", "containerRef", "containerProps", "externalRef", "parentScrollingRef", "arrow", "align", "direction", "position", "overflow", "setDownOverflow", "repositionFlag", "captureFocus", "state", "endTransition", "isDisabled", "menuItemFocus", "offsetX", "offsetY", "children", "onClose"];
 var MenuList = function MenuList(_ref) {
   var ariaLabel = _ref.ariaLabel,
     menuClassName = _ref.menuClassName,
@@ -21,6 +22,7 @@ var MenuList = function MenuList(_ref) {
     anchorPoint = _ref.anchorPoint,
     anchorRef = _ref.anchorRef,
     containerRef = _ref.containerRef,
+    containerProps = _ref.containerProps,
     externalRef = _ref.externalRef,
     parentScrollingRef = _ref.parentScrollingRef,
     arrow = _ref.arrow,
@@ -131,13 +133,8 @@ var MenuList = function MenuList(_ref) {
     safeCall(endTransition);
   };
   var handlePosition = useCallback(function (noOverflowCheck) {
-    if (!containerRef.current) {
-      if (process.env.NODE_ENV !== 'production') {
-        console.error('[React-Menu] Menu cannot be positioned properly as container ref is null. If you need to initialise `state` prop to "open" for ControlledMenu, please see this solution: https://codesandbox.io/s/initial-open-sp10wn');
-      }
-      return;
-    }
-    var anchorRect = anchorRef ? anchorRef.current.getBoundingClientRect() : anchorPoint ? {
+    var _anchorRef$current;
+    var anchorRect = anchorRef ? (_anchorRef$current = anchorRef.current) == null ? void 0 : _anchorRef$current.getBoundingClientRect() : anchorPoint ? {
       left: anchorPoint.x,
       right: anchorPoint.x,
       top: anchorPoint.y,
@@ -147,7 +144,7 @@ var MenuList = function MenuList(_ref) {
     } : null;
     if (!anchorRect) {
       if (process.env.NODE_ENV !== 'production') {
-        console.warn('[React-Menu] Menu might not be positioned properly as one of the anchorRef and anchorPoint prop should be provided.');
+        console.warn('[React-Menu] Menu might not be positioned properly as one of the anchorRef or anchorPoint prop should be provided. If `anchorRef` is provided, the anchor must be mounted before menu is open.');
       }
       return;
     }
@@ -386,7 +383,7 @@ var MenuList = function MenuList(_ref) {
     modifiers: arrowModifiers,
     className: arrowClassName
   });
-  return /*#__PURE__*/jsxs("ul", _extends({
+  var menu = /*#__PURE__*/jsxs("ul", _extends({
     role: "menu",
     "aria-label": ariaLabel
   }, mergeProps({
@@ -433,6 +430,10 @@ var MenuList = function MenuList(_ref) {
       })
     })]
   }));
+  return containerProps ? /*#__PURE__*/jsx(MenuContainer, _extends({}, containerProps, {
+    isOpen: isOpen,
+    children: menu
+  })) : menu;
 };
 
 export { MenuList };

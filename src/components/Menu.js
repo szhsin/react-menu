@@ -21,7 +21,15 @@ import {
 } from '../utils';
 
 export const Menu = forwardRef(function Menu(
-  { 'aria-label': ariaLabel, captureFocus: _, menuButton, instanceRef, onMenuChange, ...restProps },
+  {
+    'aria-label': ariaLabel,
+    captureFocus: _,
+    initialOpen: _1,
+    menuButton,
+    instanceRef,
+    onMenuChange,
+    ...restProps
+  },
   externalRef
 ) {
   const [stateProps, toggleMenu, openMenu] = useMenuStateAndFocus(restProps);

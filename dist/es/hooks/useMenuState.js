@@ -4,12 +4,14 @@ import { MenuStateMap } from '../utils/constants.js';
 
 var useMenuState = function useMenuState(_temp) {
   var _ref = _temp === void 0 ? {} : _temp,
+    initialOpen = _ref.initialOpen,
     initialMounted = _ref.initialMounted,
     unmountOnClose = _ref.unmountOnClose,
     transition = _ref.transition,
     _ref$transitionTimeou = _ref.transitionTimeout,
     transitionTimeout = _ref$transitionTimeou === void 0 ? 500 : _ref$transitionTimeou;
   var _useTransition = useTransition({
+      initialEntered: initialOpen,
       mountOnEnter: !initialMounted,
       unmountOnExit: unmountOnClose,
       timeout: transitionTimeout,

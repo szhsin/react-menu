@@ -7,10 +7,10 @@ import { useMenuStateAndFocus } from '../hooks/useMenuStateAndFocus.js';
 import { useCombinedRef } from '../hooks/useCombinedRef.js';
 import { isMenuOpen, safeCall, mergeProps, getName } from '../utils/utils.js';
 import { useMenuChange } from '../hooks/useMenuChange.js';
-import { uncontrolledMenuPropTypes, rootMenuPropTypes } from '../utils/propTypes.js';
+import { rootMenuPropTypes, uncontrolledMenuPropTypes } from '../utils/propTypes.js';
 import { FocusPositions, Keys } from '../utils/constants.js';
 
-var _excluded = ["aria-label", "captureFocus", "menuButton", "instanceRef", "onMenuChange"];
+var _excluded = ["aria-label", "captureFocus", "initialOpen", "menuButton", "instanceRef", "onMenuChange"];
 var Menu = /*#__PURE__*/forwardRef(function Menu(_ref, externalRef) {
   var ariaLabel = _ref['aria-label'],
     menuButton = _ref.menuButton,

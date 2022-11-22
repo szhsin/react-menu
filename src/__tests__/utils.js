@@ -23,6 +23,9 @@ export const expectMenuToHaveFocus = (options) =>
 export const expectMenuToBeInTheDocument = (truthy, options) =>
   expectToBe(queryMenu(options), truthy).toBeInTheDocument();
 
+export const expectMenuContainerToBeInTheDocument = (truthy) =>
+  expectToBe(document.querySelector('.szh-menu-container'), truthy).toBeInTheDocument();
+
 export const expectMenuToBeOpen = (truthy, options) => {
   const menu = queryMenu(options);
   expect(menu).toHaveClass(`szh-menu--state-${truthy ? 'open' : 'closed'}`);

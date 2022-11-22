@@ -834,27 +834,37 @@ export const boundingBox = {
 
   desc: (
     <p>
-      Normally menu positions itself within its nearest ancestor element which has CSS{' '}
-      <code>overflow</code> set to a value other than 'visible', or the browser viewport when such
-      an element is not present. You can use the <code>portal</code> prop to make menu visually
-      “break out” of its scrollable container. Also, you can specify a container in the page as the
-      bounding box for a menu using the <code>boundingBoxRef</code> prop. Menu will try to position
-      itself within that container.
+      By default, menu positions itself within its nearest ancestor element which a CSS{' '}
+      <code>overflow</code> value other than <code>visible</code>, or the browser viewport when such
+      an element is not present. Alternalively, you can use the <code>portal</code> prop to make
+      menu visually “break out” of its scrollable container. Also, you can specify a container in
+      the page as the bounding box for a menu using the <code>boundingBoxRef</code> prop. Menu will
+      try to position itself within that container.
     </p>
   ),
 
   note: (
-    <p>
-      You could render menu into a specified DOM node instead of <code>document.body</code> using
-      the <code>portal</code> prop, please see{' '}
-      <ExternalLink href="https://codesandbox.io/s/react-menu-portal-target-boyxv9">
-        a CodeSandbox example
-      </ExternalLink>
-      .
-    </p>
+    <>
+      <p>
+        <strong>NOTE</strong>: when there is an ancestor element which has a CSS{' '}
+        <code>overflow</code> value other than <code>visible</code> above menu, please ensure at
+        least one element between that overflow element and menu has a CSS <code>position</code>{' '}
+        value other than <code>static</code>. For example, you could add{' '}
+        <code>position: relative</code> to the ancestor element which has{' '}
+        <code>overflow: auto</code>.
+      </p>
+      <p>
+        <strong>TIP</strong>: you could render menu into a specified DOM node instead of{' '}
+        <code>document.body</code> using the <code>portal</code> prop, please see{' '}
+        <ExternalLink href="https://codesandbox.io/s/react-menu-portal-target-boyxv9">
+          a CodeSandbox example
+        </ExternalLink>
+        .
+      </p>
+    </>
   ),
 
-  source: `const ref = useRef(null);
+  source: `const boundingBoxRef = useRef(null);
 const leftAnchor = useRef(null);
 const rightAnchor = useRef(null);
 const [{ state }, toggleMenu] = useMenuState();
@@ -881,7 +891,7 @@ const tooltipProps = {
   Render via portal
 </label>
 
-<div ref={ref}>
+<div ref={boundingBoxRef} style={{ overflow: 'auto', position: 'relative' }}>
     <div ref={leftAnchor} />
     <ControlledMenu {...tooltipProps} portal={portal}
         anchorRef={leftAnchor} direction="top">
@@ -890,7 +900,7 @@ const tooltipProps = {
 
     <div ref={rightAnchor} />
     {/* explicitly set bounding box with the boundingBoxRef prop */}
-    <ControlledMenu {...tooltipProps} boundingBoxRef={ref}
+    <ControlledMenu {...tooltipProps} boundingBoxRef={boundingBoxRef}
         anchorRef={rightAnchor} direction="right">
         I'm a tooltip built with React-Menu
     </ControlledMenu>

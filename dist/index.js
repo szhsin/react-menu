@@ -456,12 +456,14 @@ var useMenuChange = function useMenuChange(onMenuChange, isOpen) {
 
 var useMenuState = function useMenuState(_temp) {
   var _ref = _temp === void 0 ? {} : _temp,
+    initialOpen = _ref.initialOpen,
     initialMounted = _ref.initialMounted,
     unmountOnClose = _ref.unmountOnClose,
     transition = _ref.transition,
     _ref$transitionTimeou = _ref.transitionTimeout,
     transitionTimeout = _ref$transitionTimeou === void 0 ? 500 : _ref$transitionTimeou;
   var _useTransition = reactTransitionState.useTransition({
+      initialEntered: initialOpen,
       mountOnEnter: !initialMounted,
       unmountOnExit: unmountOnClose,
       timeout: transitionTimeout,
@@ -528,6 +530,64 @@ process.env.NODE_ENV !== "production" ? MenuButton.propTypes = /*#__PURE__*/_ext
   isOpen: propTypes.bool,
   disabled: propTypes.bool
 }) : void 0;
+
+var MenuContainer = function MenuContainer(_ref) {
+  var className = _ref.className,
+    containerRef = _ref.containerRef,
+    containerProps = _ref.containerProps,
+    children = _ref.children,
+    isOpen = _ref.isOpen,
+    skipOpen = _ref.skipOpen,
+    theming = _ref.theming,
+    transition = _ref.transition,
+    onClose = _ref.onClose;
+  var itemTransition = getTransition(transition, 'item');
+  var onKeyDown = function onKeyDown(_ref2) {
+    var key = _ref2.key;
+    switch (key) {
+      case Keys.ESC:
+        safeCall(onClose, {
+          key: key,
+          reason: CloseReason.CANCEL
+        });
+        break;
+    }
+  };
+  var onBlur = function onBlur(e) {
+    if (isOpen && !e.currentTarget.contains(e.relatedTarget || document.activeElement)) {
+      safeCall(onClose, {
+        reason: CloseReason.BLUR
+      });
+
+      if (skipOpen) {
+        skipOpen.current = true;
+        setTimeout(function () {
+          return skipOpen.current = false;
+        }, 300);
+      }
+    }
+  };
+  return /*#__PURE__*/jsxRuntime.jsx("div", _extends({}, mergeProps({
+    onKeyDown: onKeyDown,
+    onBlur: onBlur
+  }, containerProps), {
+    className: useBEM({
+      block: menuContainerClass,
+      modifiers: react.useMemo(function () {
+        return {
+          theme: theming,
+          itemTransition: itemTransition
+        };
+      }, [theming, itemTransition]),
+      className: className
+    }),
+    style: _extends({
+      position: 'absolute'
+    }, containerProps == null ? void 0 : containerProps.style),
+    ref: containerRef,
+    children: children
+  }));
+};
 
 var getPositionHelpers = function getPositionHelpers(containerRef, menuRef, menuScroll, boundingBoxPadding) {
   var menuRect = menuRef.current.getBoundingClientRect();
@@ -812,7 +872,7 @@ var positionMenu = function positionMenu(_ref) {
   }
 };
 
-var _excluded$9 = ["ariaLabel", "menuClassName", "menuStyle", "arrowClassName", "arrowStyle", "anchorPoint", "anchorRef", "containerRef", "externalRef", "parentScrollingRef", "arrow", "align", "direction", "position", "overflow", "setDownOverflow", "repositionFlag", "captureFocus", "state", "endTransition", "isDisabled", "menuItemFocus", "offsetX", "offsetY", "children", "onClose"];
+var _excluded$9 = ["ariaLabel", "menuClassName", "menuStyle", "arrowClassName", "arrowStyle", "anchorPoint", "anchorRef", "containerRef", "containerProps", "externalRef", "parentScrollingRef", "arrow", "align", "direction", "position", "overflow", "setDownOverflow", "repositionFlag", "captureFocus", "state", "endTransition", "isDisabled", "menuItemFocus", "offsetX", "offsetY", "children", "onClose"];
 var MenuList = function MenuList(_ref) {
   var ariaLabel = _ref.ariaLabel,
     menuClassName = _ref.menuClassName,
@@ -822,6 +882,7 @@ var MenuList = function MenuList(_ref) {
     anchorPoint = _ref.anchorPoint,
     anchorRef = _ref.anchorRef,
     containerRef = _ref.containerRef,
+    containerProps = _ref.containerProps,
     externalRef = _ref.externalRef,
     parentScrollingRef = _ref.parentScrollingRef,
     arrow = _ref.arrow,
@@ -932,13 +993,8 @@ var MenuList = function MenuList(_ref) {
     safeCall(endTransition);
   };
   var handlePosition = react.useCallback(function (noOverflowCheck) {
-    if (!containerRef.current) {
-      if (process.env.NODE_ENV !== 'production') {
-        console.error('[React-Menu] Menu cannot be positioned properly as container ref is null. If you need to initialise `state` prop to "open" for ControlledMenu, please see this solution: https://codesandbox.io/s/initial-open-sp10wn');
-      }
-      return;
-    }
-    var anchorRect = anchorRef ? anchorRef.current.getBoundingClientRect() : anchorPoint ? {
+    var _anchorRef$current;
+    var anchorRect = anchorRef ? (_anchorRef$current = anchorRef.current) == null ? void 0 : _anchorRef$current.getBoundingClientRect() : anchorPoint ? {
       left: anchorPoint.x,
       right: anchorPoint.x,
       top: anchorPoint.y,
@@ -948,7 +1004,7 @@ var MenuList = function MenuList(_ref) {
     } : null;
     if (!anchorRect) {
       if (process.env.NODE_ENV !== 'production') {
-        console.warn('[React-Menu] Menu might not be positioned properly as one of the anchorRef and anchorPoint prop should be provided.');
+        console.warn('[React-Menu] Menu might not be positioned properly as one of the anchorRef or anchorPoint prop should be provided. If `anchorRef` is provided, the anchor must be mounted before menu is open.');
       }
       return;
     }
@@ -1187,7 +1243,7 @@ var MenuList = function MenuList(_ref) {
     modifiers: arrowModifiers,
     className: arrowClassName
   });
-  return /*#__PURE__*/jsxRuntime.jsxs("ul", _extends({
+  var menu = /*#__PURE__*/jsxRuntime.jsxs("ul", _extends({
     role: "menu",
     "aria-label": ariaLabel
   }, mergeProps({
@@ -1234,9 +1290,13 @@ var MenuList = function MenuList(_ref) {
       })
     })]
   }));
+  return containerProps ? /*#__PURE__*/jsxRuntime.jsx(MenuContainer, _extends({}, containerProps, {
+    isOpen: isOpen,
+    children: menu
+  })) : menu;
 };
 
-var _excluded$8 = ["aria-label", "className", "containerProps", "initialMounted", "unmountOnClose", "transition", "transitionTimeout", "boundingBoxRef", "boundingBoxPadding", "reposition", "submenuOpenDelay", "submenuCloseDelay", "skipOpen", "viewScroll", "portal", "theming", "onItemClick", "onClose"];
+var _excluded$8 = ["aria-label", "className", "containerProps", "initialMounted", "unmountOnClose", "transition", "transitionTimeout", "boundingBoxRef", "boundingBoxPadding", "reposition", "submenuOpenDelay", "submenuCloseDelay", "skipOpen", "viewScroll", "portal", "theming", "onItemClick"];
 var ControlledMenu = /*#__PURE__*/react.forwardRef(function ControlledMenu(_ref, externalRef) {
   var ariaLabel = _ref['aria-label'],
     className = _ref.className,
@@ -1259,12 +1319,12 @@ var ControlledMenu = /*#__PURE__*/react.forwardRef(function ControlledMenu(_ref,
     portal = _ref.portal,
     theming = _ref.theming,
     onItemClick = _ref.onItemClick,
-    onClose = _ref.onClose,
     restProps = _objectWithoutPropertiesLoose(_ref, _excluded$8);
   var containerRef = react.useRef(null);
   var scrollNodesRef = react.useRef({});
   var anchorRef = restProps.anchorRef,
-    state = restProps.state;
+    state = restProps.state,
+    onClose = restProps.onClose;
   var settings = react.useMemo(function () {
     return {
       initialMounted: initialMounted,
@@ -1310,67 +1370,30 @@ var ControlledMenu = /*#__PURE__*/react.forwardRef(function ControlledMenu(_ref,
       }
     };
   }, [onItemClick, onClose]);
-  var onKeyDown = function onKeyDown(_ref2) {
-    var key = _ref2.key;
-    switch (key) {
-      case Keys.ESC:
-        safeCall(onClose, {
-          key: key,
-          reason: CloseReason.CANCEL
-        });
-        break;
-    }
-  };
-  var onBlur = function onBlur(e) {
-    if (isMenuOpen(state) && !e.currentTarget.contains(e.relatedTarget || document.activeElement)) {
-      safeCall(onClose, {
-        reason: CloseReason.BLUR
-      });
-
-      if (skipOpen) {
-        skipOpen.current = true;
-        setTimeout(function () {
-          return skipOpen.current = false;
-        }, 300);
-      }
-    }
-  };
-  var itemTransition = getTransition(transition, 'item');
-  var modifiers = react.useMemo(function () {
-    return {
-      theme: theming,
-      itemTransition: itemTransition
-    };
-  }, [theming, itemTransition]);
-  var menuList = /*#__PURE__*/jsxRuntime.jsx("div", _extends({}, mergeProps({
-    onKeyDown: onKeyDown,
-    onBlur: onBlur
-  }, containerProps), {
-    className: useBEM({
-      block: menuContainerClass,
-      modifiers: modifiers,
-      className: className
-    }),
-    style: _extends({}, containerProps == null ? void 0 : containerProps.style, {
-      position: 'relative'
-    }),
-    ref: containerRef,
-    children: state && /*#__PURE__*/jsxRuntime.jsx(SettingsContext.Provider, {
-      value: settings,
-      children: /*#__PURE__*/jsxRuntime.jsx(ItemSettingsContext.Provider, {
-        value: itemSettings,
-        children: /*#__PURE__*/jsxRuntime.jsx(EventHandlersContext.Provider, {
-          value: eventHandlers,
-          children: /*#__PURE__*/jsxRuntime.jsx(MenuList, _extends({}, restProps, {
-            ariaLabel: ariaLabel || 'Menu',
-            externalRef: externalRef,
+  if (!state) return null;
+  var menuList = /*#__PURE__*/jsxRuntime.jsx(SettingsContext.Provider, {
+    value: settings,
+    children: /*#__PURE__*/jsxRuntime.jsx(ItemSettingsContext.Provider, {
+      value: itemSettings,
+      children: /*#__PURE__*/jsxRuntime.jsx(EventHandlersContext.Provider, {
+        value: eventHandlers,
+        children: /*#__PURE__*/jsxRuntime.jsx(MenuList, _extends({}, restProps, {
+          ariaLabel: ariaLabel || 'Menu',
+          externalRef: externalRef,
+          containerRef: containerRef,
+          containerProps: {
+            className: className,
             containerRef: containerRef,
+            containerProps: containerProps,
+            skipOpen: skipOpen,
+            theming: theming,
+            transition: transition,
             onClose: onClose
-          }))
-        })
+          }
+        }))
       })
     })
-  }));
+  });
   if (portal === true && typeof document !== 'undefined') {
     return /*#__PURE__*/reactDom.createPortal(menuList, document.body);
   } else if (portal) {
@@ -1394,7 +1417,7 @@ process.env.NODE_ENV !== "production" ? ControlledMenu.propTypes = /*#__PURE__*/
   onClose: propTypes.func
 }) : void 0;
 
-var _excluded$7 = ["aria-label", "captureFocus", "menuButton", "instanceRef", "onMenuChange"];
+var _excluded$7 = ["aria-label", "captureFocus", "initialOpen", "menuButton", "instanceRef", "onMenuChange"];
 var Menu = /*#__PURE__*/react.forwardRef(function Menu(_ref, externalRef) {
   var ariaLabel = _ref['aria-label'],
     menuButton = _ref.menuButton,
