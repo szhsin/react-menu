@@ -536,6 +536,10 @@ export interface MenuItemProps extends Omit<BaseProps<MenuItemModifiers>, 'onCli
    */
   checked?: boolean;
   /**
+   * Whether to not focus the item on hover.
+   */
+  disableFocus?: boolean;
+  /**
    * Event fired when the menu item is clicked.
    */
   onClick?: EventHandler<ClickEvent>;

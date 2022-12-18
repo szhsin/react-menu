@@ -176,6 +176,16 @@ test('MenuItem keeps hover after focusing something inside it', () => {
   utils.expectMenuItemToBeHover(menuItem, true);
 });
 
+test('MenuItem is not focused when disableFocus is true', () => {
+  utils.renderMenu({ onItemClick: jest.fn() }, { value: 'Middle', onClick: jest.fn(), disableFocus: true });
+  utils.clickMenuButton();
+
+  const middleItem = utils.queryMenuItem('Middle');
+  fireEvent.pointerMove(middleItem);
+  utils.expectMenuItemToBeHover(middleItem, true);
+  expect(middleItem).not.toHaveFocus();
+});
+
 test('Disabled menu item', () => {
   const onClick = jest.fn();
   utils.renderMenu({ onClick }, { disabled: true });

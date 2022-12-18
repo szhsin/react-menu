@@ -3,7 +3,7 @@ import { ItemSettingsContext, MenuListItemContext, HoverActionTypes } from '../u
 import { useItemEffect } from './useItemEffect';
 
 // This hook includes some common stateful logic in MenuItem and FocusableItem
-export const useItemState = (itemRef, focusRef, isHovering, isDisabled) => {
+export const useItemState = (itemRef, focusRef, isHovering, isDisabled, disableFocus) => {
   const { submenuCloseDelay } = useContext(ItemSettingsContext);
   const { isParentOpen, isSubmenuOpen, dispatch, updateItems } = useContext(MenuListItemContext);
   const timeoutId = useRef(0);
@@ -48,10 +48,10 @@ export const useItemState = (itemRef, focusRef, isHovering, isDisabled) => {
   useEffect(() => {
     // Don't set focus when parent menu is closed, otherwise focus will be lost
     // and onBlur event will be fired with relatedTarget setting as null.
-    if (isHovering && isParentOpen) {
+    if (!disableFocus && isHovering && isParentOpen) {
       focusRef.current && focusRef.current.focus();
     }
-  }, [focusRef, isHovering, isParentOpen]);
+  }, [focusRef, isHovering, isParentOpen, disableFocus]);
 
   return {
     setHover,
