@@ -225,8 +225,8 @@ export const SubMenu = withHovering(
           role="menuitem"
           aria-haspopup
           aria-expanded={isOpen}
-          {...mergedItemProps}
           {...commonProps(isDisabled, isHovering)}
+          {...mergedItemProps}
           ref={useCombinedRef(externalItemRef, itemRef)}
           className={useBEM({
             block: menuClass,

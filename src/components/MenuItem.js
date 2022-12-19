@@ -99,8 +99,8 @@ export const MenuItem = withHovering(
     const menuItemProps = {
       role: isRadio ? 'menuitemradio' : isCheckBox ? 'menuitemcheckbox' : 'menuitem',
       'aria-checked': isRadio || isCheckBox ? isChecked : undefined,
-      ...mergedProps,
       ...commonProps(isDisabled, isHovering),
+      ...mergedProps,
       ref: useCombinedRef(externalRef, itemRef),
       className: useBEM({ block: menuClass, element: menuItemClass, modifiers, className }),
       children: useMemo(() => safeCall(children, modifiers), [children, modifiers])
