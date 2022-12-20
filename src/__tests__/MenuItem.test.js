@@ -176,13 +176,13 @@ test('MenuItem keeps hover after focusing something inside it', () => {
   utils.expectMenuItemToBeHover(menuItem, true);
 });
 
-test('MenuItem is not focused when disableFocus is true', () => {
-  utils.renderMenu({ onItemClick: jest.fn() }, { value: 'Middle', onClick: jest.fn(), disableFocus: true });
+test('MenuItem is not focused when overwriting tabIndex', () => {
+  utils.renderMenu({}, { tabIndex: undefined });
   utils.clickMenuButton();
 
   const middleItem = utils.queryMenuItem('Middle');
   fireEvent.pointerMove(middleItem);
-  utils.expectMenuItemToBeHover(middleItem, true);
+  expect(middleItem).toHaveClass('szh-menu__item--hover');
   expect(middleItem).not.toHaveFocus();
 });
 

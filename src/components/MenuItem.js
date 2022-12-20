@@ -28,11 +28,10 @@ export const MenuItem = withHovering(
     isHovering,
     itemRef,
     externalRef,
-    disableFocus,
     ...restProps
   }) {
     const isDisabled = !!disabled;
-    const { setHover, ...restStateProps } = useItemState(itemRef, itemRef, isHovering, isDisabled, disableFocus);
+    const { setHover, ...restStateProps } = useItemState(itemRef, itemRef, isHovering, isDisabled);
     const eventHandlers = useContext(EventHandlersContext);
     const radioGroup = useContext(RadioGroupContext);
     const isRadio = type === 'radio';
