@@ -64,8 +64,8 @@ export const FocusableItem = withHovering(
     return (
       <li
         role="menuitem"
-        {...mergedProps}
         {...commonProps(isDisabled)}
+        {...mergedProps}
         ref={useCombinedRef(externalRef, itemRef)}
         className={useBEM({ block: menuClass, element: menuItemClass, modifiers, className })}
       >

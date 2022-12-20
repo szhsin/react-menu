@@ -49,7 +49,7 @@ var FocusableItem = /*#__PURE__*/withHovering('FocusableItem', function Focusabl
   }), restProps);
   return /*#__PURE__*/jsx("li", _extends({
     role: "menuitem"
-  }, mergedProps, commonProps(isDisabled), {
+  }, commonProps(isDisabled), mergedProps, {
     ref: useCombinedRef(externalRef, itemRef),
     className: useBEM({
       block: menuClass,

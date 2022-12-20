@@ -162,7 +162,6 @@ var parsePadding = function parsePadding(paddingStr) {
     left: !isNaN(padding[3]) ? padding[3] : right
   };
 };
-
 var getScrollAncestor = function getScrollAncestor(node) {
   while (node) {
     node = node.parentNode;
@@ -218,7 +217,6 @@ var stylePropTypes = function stylePropTypes(name) {
   var _ref;
   return _ref = {}, _ref[name ? name + "ClassName" : 'className'] = propTypes.oneOfType([propTypes.string, propTypes.func]), _ref;
 };
-
 var menuPropTypes = /*#__PURE__*/_extends({
   className: propTypes.string
 }, /*#__PURE__*/stylePropTypes('menu'), /*#__PURE__*/stylePropTypes('arrow'), {
@@ -233,7 +231,6 @@ var menuPropTypes = /*#__PURE__*/_extends({
   position: /*#__PURE__*/propTypes.oneOf(['auto', 'anchor', 'initial']),
   overflow: /*#__PURE__*/propTypes.oneOf(['auto', 'visible', 'hidden'])
 });
-
 var rootMenuPropTypes = /*#__PURE__*/_extends({}, menuPropTypes, {
   containerProps: propTypes.object,
   initialMounted: propTypes.bool,
@@ -258,7 +255,6 @@ var rootMenuPropTypes = /*#__PURE__*/_extends({}, menuPropTypes, {
   theming: propTypes.string,
   onItemClick: propTypes.func
 });
-
 var uncontrolledMenuPropTypes = {
   instanceRef: /*#__PURE__*/propTypes.oneOfType([propTypes.object, propTypes.func]),
   onMenuChange: propTypes.func
@@ -558,7 +554,6 @@ var MenuContainer = function MenuContainer(_ref) {
       safeCall(onClose, {
         reason: CloseReason.BLUR
       });
-
       if (skipOpen) {
         skipOpen.current = true;
         setTimeout(function () {
@@ -599,7 +594,6 @@ var getPositionHelpers = function getPositionHelpers(containerRef, menuRef, menu
     bottom: window.innerHeight
   } : menuScroll.getBoundingClientRect();
   var padding = parsePadding(boundingBoxPadding);
-
   var getLeftOverflow = function getLeftOverflow(x) {
     return x + containerRect.left - boundingRect.left - padding.left;
   };
@@ -973,7 +967,6 @@ var MenuList = function MenuList(_ref) {
       case Keys.DOWN:
         dispatch(HoverActionTypes.INCREASE, hoverItem);
         break;
-
       case Keys.SPACE:
         if (e.target && e.target.className.indexOf(menuClass) !== -1) {
           e.preventDefault();
@@ -989,7 +982,6 @@ var MenuList = function MenuList(_ref) {
     if (state === 'closing') {
       setOverflowData();
     }
-
     safeCall(endTransition);
   };
   var handlePosition = react.useCallback(function (noOverflowCheck) {
@@ -1011,7 +1003,6 @@ var MenuList = function MenuList(_ref) {
     if (!scrollNodes.menu) {
       scrollNodes.menu = (boundingBoxRef ? boundingBoxRef.current : getScrollAncestor(rootMenuRef.current)) || window;
     }
-
     var positionHelpers = getPositionHelpers(containerRef, menuRef, scrollNodes.menu, boundingBoxPadding);
     var _positionMenu = positionMenu({
         arrow: arrow,
@@ -1574,7 +1565,6 @@ var SubMenu = /*#__PURE__*/withHovering('SubMenu', function SubMenu(_ref) {
           handled = true;
         }
         break;
-
       case Keys.RIGHT:
         if (!isOpen) handled = true;
         break;
@@ -1673,7 +1663,7 @@ var SubMenu = /*#__PURE__*/withHovering('SubMenu', function SubMenu(_ref) {
       role: "menuitem",
       "aria-haspopup": true,
       "aria-expanded": isOpen
-    }, mergedItemProps, commonProps(isDisabled, isHovering), {
+    }, commonProps(isDisabled, isHovering), mergedItemProps, {
       ref: useCombinedRef(externalItemRef, itemRef),
       className: useBEM({
         block: menuClass,
@@ -1763,11 +1753,10 @@ var MenuItem = /*#__PURE__*/withHovering('MenuItem', function MenuItem(_ref) {
     onKeyDown: handleKeyDown,
     onClick: handleClick
   }), restProps);
-
   var menuItemProps = _extends({
     role: isRadio ? 'menuitemradio' : isCheckBox ? 'menuitemcheckbox' : 'menuitem',
     'aria-checked': isRadio || isCheckBox ? isChecked : undefined
-  }, mergedProps, commonProps(isDisabled, isHovering), {
+  }, commonProps(isDisabled, isHovering), mergedProps, {
     ref: useCombinedRef(externalRef, itemRef),
     className: useBEM({
       block: menuClass,
@@ -1839,7 +1828,7 @@ var FocusableItem = /*#__PURE__*/withHovering('FocusableItem', function Focusabl
   }), restProps);
   return /*#__PURE__*/jsxRuntime.jsx("li", _extends({
     role: "menuitem"
-  }, mergedProps, commonProps(isDisabled), {
+  }, commonProps(isDisabled), mergedProps, {
     ref: useCombinedRef(externalRef, itemRef),
     className: useBEM({
       block: menuClass,

@@ -79,11 +79,10 @@ var MenuItem = /*#__PURE__*/withHovering('MenuItem', function MenuItem(_ref) {
     onKeyDown: handleKeyDown,
     onClick: handleClick
   }), restProps);
-
   var menuItemProps = _extends({
     role: isRadio ? 'menuitemradio' : isCheckBox ? 'menuitemcheckbox' : 'menuitem',
     'aria-checked': isRadio || isCheckBox ? isChecked : undefined
-  }, mergedProps, commonProps(isDisabled, isHovering), {
+  }, commonProps(isDisabled, isHovering), mergedProps, {
     ref: useCombinedRef(externalRef, itemRef),
     className: useBEM({
       block: menuClass,
