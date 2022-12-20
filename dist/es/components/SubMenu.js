@@ -99,7 +99,6 @@ var SubMenu = /*#__PURE__*/withHovering('SubMenu', function SubMenu(_ref) {
           handled = true;
         }
         break;
-
       case Keys.RIGHT:
         if (!isOpen) handled = true;
         break;
@@ -198,7 +197,7 @@ var SubMenu = /*#__PURE__*/withHovering('SubMenu', function SubMenu(_ref) {
       role: "menuitem",
       "aria-haspopup": true,
       "aria-expanded": isOpen
-    }, mergedItemProps, commonProps(isDisabled, isHovering), {
+    }, commonProps(isDisabled, isHovering), mergedItemProps, {
       ref: useCombinedRef(externalItemRef, itemRef),
       className: useBEM({
         block: menuClass,

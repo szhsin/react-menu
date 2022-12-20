@@ -113,7 +113,6 @@ var MenuList = function MenuList(_ref) {
       case Keys.DOWN:
         dispatch(HoverActionTypes.INCREASE, hoverItem);
         break;
-
       case Keys.SPACE:
         if (e.target && e.target.className.indexOf(menuClass) !== -1) {
           e.preventDefault();
@@ -129,7 +128,6 @@ var MenuList = function MenuList(_ref) {
     if (state === 'closing') {
       setOverflowData();
     }
-
     safeCall(endTransition);
   };
   var handlePosition = useCallback(function (noOverflowCheck) {
@@ -151,7 +149,6 @@ var MenuList = function MenuList(_ref) {
     if (!scrollNodes.menu) {
       scrollNodes.menu = (boundingBoxRef ? boundingBoxRef.current : getScrollAncestor(rootMenuRef.current)) || window;
     }
-
     var positionHelpers = getPositionHelpers(containerRef, menuRef, scrollNodes.menu, boundingBoxPadding);
     var _positionMenu = positionMenu({
         arrow: arrow,

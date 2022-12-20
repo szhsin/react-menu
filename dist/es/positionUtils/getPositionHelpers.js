@@ -10,7 +10,6 @@ var getPositionHelpers = function getPositionHelpers(containerRef, menuRef, menu
     bottom: window.innerHeight
   } : menuScroll.getBoundingClientRect();
   var padding = parsePadding(boundingBoxPadding);
-
   var getLeftOverflow = function getLeftOverflow(x) {
     return x + containerRect.left - boundingRect.left - padding.left;
   };

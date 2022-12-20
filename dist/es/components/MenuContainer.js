@@ -32,7 +32,6 @@ var MenuContainer = function MenuContainer(_ref) {
       safeCall(onClose, {
         reason: CloseReason.BLUR
       });
-
       if (skipOpen) {
         skipOpen.current = true;
         setTimeout(function () {

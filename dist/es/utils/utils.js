@@ -64,7 +64,6 @@ var parsePadding = function parsePadding(paddingStr) {
     left: !isNaN(padding[3]) ? padding[3] : right
   };
 };
-
 var getScrollAncestor = function getScrollAncestor(node) {
   while (node) {
     node = node.parentNode;
