@@ -247,9 +247,12 @@
     background-color: white;
     font-size: 1rem;
     font-weight: 400;
+    margin-bottom: 1rem;
     padding: 0.75rem;
     border-radius: var.$border-radius-medium;
-    @include mixins.border($transition: true);
+    @include mixins.border;
+    @include mixins.transition(border-color);
+
     &:hover {
       text-decoration: none;
       background-color: transparent;
@@ -259,10 +262,24 @@
       }
     }
 
+    &--new {
+      @include mixins.transition(all);
+      background-color: var.$highlight-color;
+      .szh-app--theme-dark & {
+        background: center url('/react-menu/gdbk.jpeg');
+        background-size: cover;
+        color: #f9f9f9;
+        border-color: var.$border-hover-dark;
+        &:hover {
+          border-color: var.$text-dark;
+        }
+      }
+    }
+
     &__label {
       display: flex;
       align-items: center;
-      font-size: 0.875rem;
+      font-size: 1rem;
       font-family: monospace;
       font-weight: bold;
       color: var.$primary-light;
@@ -270,7 +287,14 @@
         color: var.$primary-dark;
       }
       svg {
-        height: 0.9rem;
+        height: 1rem;
+      }
+
+      &--new {
+        color: #e34c26;
+        .szh-app--theme-dark & {
+          color: #fbd06a;
+        }
       }
     }
 

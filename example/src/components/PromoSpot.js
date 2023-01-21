@@ -4,20 +4,21 @@ import { ExternalLinkIcon } from './Icons';
 
 const blockName = 'promo-spot';
 
-export const PromoSpot = memo(function PromoSpot() {
+export const PromoSpot = memo(function PromoSpot({ label, title, desc, link }) {
+  const modifier = { [label.toLowerCase()]: true };
   return (
     <a
-      className={bem(blockName)}
+      className={bem(blockName, null, modifier)}
       target="_blank"
       rel="noopener noreferrer"
-      href="https://szhsin.github.io/react-accordion/"
+      href={link}
     >
-      <div className={bem(blockName, 'label')}>
-        NEW
+      <div className={bem(blockName, 'label', modifier)}>
+        {label}
         <ExternalLinkIcon />
       </div>
-      <strong>React-Accordion</strong>
-      <div className={bem(blockName, 'desc')}>Accessible, unstyled, headless UI accordion</div>
+      <strong>{title}</strong>
+      <div className={bem(blockName, 'desc')}>{desc}</div>
     </a>
   );
 });
