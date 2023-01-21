@@ -1,6 +1,6 @@
 import { memo, useContext } from 'react';
 import { DomInfoContext } from '../utils';
-import { PromoSpot } from './PromoSpot';
+import { Promo } from './Promo';
 
 export const RightSection = memo(function RightSection() {
   return (
@@ -8,7 +8,7 @@ export const RightSection = memo(function RightSection() {
       className="right-section"
       style={{ top: (useContext(DomInfoContext).navbarHeight || 0) + 16 }}
     >
-      <PromoSpot />
+      <Promo />
     </div>
   );
 });

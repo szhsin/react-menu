@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Link from 'next/link';
-import { PromoSpot } from './PromoSpot';
+import { Promo } from './Promo';
 
 export const TableContentsList = React.memo(function TableContentsList({
   list,
@@ -25,7 +25,7 @@ export const TableContentsList = React.memo(function TableContentsList({
   return (
     <ul className={`contents-list-lv${level}`} style={{ maxHeight }}>
       {listElt}
-      {level === 1 && <PromoSpot />}
+      {level === 1 && <Promo />}
     </ul>
   );
 });
