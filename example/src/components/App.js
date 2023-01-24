@@ -1,54 +1,19 @@
-import { useState, useEffect, useMemo, useCallback } from 'react';
+import { useEffect } from 'react';
+import { useSnapshot } from 'reactish-state';
 import { useRouter } from 'next/router';
-import {
-  bem,
-  DomInfoContext,
-  SettingContext,
-  TocContext,
-  ToastContext,
-  useLayoutEffect
-} from '../utils';
+import { bem, useLayoutEffect } from '../utils';
+import { hydrate, domInfoState, isTocOpenState, toastState, showBannerState } from '../store';
 import { Header } from './Header';
 import { Footer } from './Footer';
 
 const App = ({ children }) => {
-  const [showBanner, setShowBanner] = useState(false);
-  const [theme, setTheme] = useState('dark');
-  const setAndSaveTheme = useCallback((theme) => {
-    setTheme(theme);
-    document.body.className = bem('szh-app', null, { theme });
-    try {
-      localStorage.setItem('theme', theme);
-    } catch (err) {
-      console.warn(err);
-    }
-  }, []);
-  const setting = useMemo(
-    () => ({
-      isDark: theme === 'dark',
-      theme,
-      setTheme: setAndSaveTheme,
-      showBanner,
-      setShowBanner
-    }),
-    [theme, setAndSaveTheme, showBanner]
-  );
+  const showBanner = useSnapshot(showBannerState);
+  const toast = useSnapshot(toastState);
+
   useLayoutEffect(() => {
-    try {
-      const theme = localStorage.getItem('theme');
-      if (theme === 'light') {
-        setTheme(theme);
-        document.body.className = bem('szh-app', null, { theme });
-      }
-    } catch (err) {
-      console.warn(err);
-    }
+    hydrate();
   }, []);
 
-  const [isTocOpen, setTocOpen] = useState(false);
-  const tocContext = useMemo(() => ({ isTocOpen, setTocOpen }), [isTocOpen]);
-
-  const [domInfo, setDomInfo] = useState({});
   useEffect(() => {
     const handleResize = () => {
       const info = {
@@ -58,8 +23,8 @@ const App = ({ children }) => {
         navbarHeight: document.querySelector('#header').offsetHeight
       };
 
-      if (info.vWidth > 950) setTocOpen(false);
-      setDomInfo(info);
+      if (info.vWidth > 950) isTocOpenState.set(false);
+      domInfoState.set(info);
     };
 
     handleResize();
@@ -70,37 +35,30 @@ const App = ({ children }) => {
     };
   }, [/* effect dep */ showBanner]);
 
-  const [toast, setToast] = useState(null);
   useEffect(() => {
     if (!toast) return;
-    const id = setTimeout(() => setToast(null), 2500);
+    const id = setTimeout(() => toastState.set(null), 2500);
     return () => clearTimeout(id);
   }, [toast]);
 
   const router = useRouter();
   useEffect(() => {
-    setTocOpen(false);
+    isTocOpenState.set(false);
   }, [/* effect dep */ router]);
 
   return (
-    <DomInfoContext.Provider value={domInfo}>
-      <SettingContext.Provider value={setting}>
-        <TocContext.Provider value={tocContext}>
-          <ToastContext.Provider value={setToast}>
-            <Header />
-            <div id="content" style={showBanner ? { marginTop: 40 } : undefined}>
-              {children}
-            </div>
-            <Footer />
-            {toast && (
-              <div className={bem('szh-app', 'toast')} role="alert">
-                {toast}
-              </div>
-            )}
-          </ToastContext.Provider>
-        </TocContext.Provider>
-      </SettingContext.Provider>
-    </DomInfoContext.Provider>
+    <>
+      <Header />
+      <div id="content" style={showBanner ? { marginTop: 40 } : undefined}>
+        {children}
+      </div>
+      <Footer />
+      {toast && (
+        <div className={bem('szh-app', 'toast')} role="alert">
+          {toast}
+        </div>
+      )}
+    </>
   );
 };
 

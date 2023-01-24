@@ -1,5 +1,7 @@
-import React, { useState, useContext, useEffect, useRef } from 'react';
-import { bem, DomInfoContext, SettingContext, TocContext } from '../utils';
+import React, { useState, useEffect, useRef } from 'react';
+import { useSnapshot } from 'reactish-state';
+import { bem } from '../utils';
+import { isTocOpenState, useDomInfo, useTheme } from '../store';
 import { TableContentsList } from './TableContentsList';
 import { Logo } from './Logo';
 import { ThemeSwitch } from './ThemeSwitch';
@@ -9,9 +11,9 @@ const blockName = 'table-contents';
 export const TableContents = React.memo(function TableContents({ children }) {
   const ref = useRef(null);
   const headerRef = useRef(null);
-  const domInfo = useContext(DomInfoContext);
-  const { theme } = useContext(SettingContext);
-  const { isTocOpen, setTocOpen } = useContext(TocContext);
+  const domInfo = useDomInfo();
+  const { theme } = useTheme();
+  const isTocOpen = useSnapshot(isTocOpenState);
   const [maxHeight, setMaxHeight] = useState();
   const [top, setTop] = useState();
 
@@ -33,7 +35,7 @@ export const TableContents = React.memo(function TableContents({ children }) {
   }, [domInfo, isTocOpen]);
 
   const handleClose = (e) => {
-    if (e.currentTarget === e.target) setTocOpen(false);
+    if (e.currentTarget === e.target) isTocOpenState.set(false);
   };
 
   return (
@@ -42,7 +44,7 @@ export const TableContents = React.memo(function TableContents({ children }) {
       style={{ top }}
       onTouchStart={handleClose}
       onClick={handleClose}
-      onKeyDown={(e) => e.key === 'Escape' && setTocOpen(false)}
+      onKeyDown={(e) => e.key === 'Escape' && isTocOpenState.set(false)}
     >
       <nav aria-label="Table of contents" tabIndex="-1" ref={ref}>
         <div className={bem(blockName, 'header')} ref={headerRef}>

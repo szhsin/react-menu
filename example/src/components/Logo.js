@@ -1,6 +1,7 @@
 import React from 'react';
 import { Menu, MenuItem, MenuDivider, MenuHeader } from '@szhsin/react-menu';
-import { version, SettingContext } from '../utils';
+import { useTheme } from '../store';
+import { version } from '../utils';
 
 export const Logo = React.memo(function Logo() {
   const menuButton = (
@@ -16,7 +17,7 @@ export const Logo = React.memo(function Logo() {
       initialMounted
       menuButton={menuButton}
       offsetY={10}
-      theming={React.useContext(SettingContext).theme}
+      theming={useTheme().theme}
       className="version-menu"
     >
       <MenuHeader>Version history</MenuHeader>
