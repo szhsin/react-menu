@@ -1,6 +1,7 @@
-import React, { useState, useEffect, useRef, useContext } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { ControlledMenu, useMenuState } from '@szhsin/react-menu';
-import { bem, DomInfoContext, SettingContext } from '../utils';
+import { bem } from '../utils';
+import { useDomInfo, useTheme } from '../store';
 import hljs from '../utils/highlight';
 import { CodeSandboxIcon } from './Icons';
 import { HashHeading } from './HashHeading';
@@ -27,7 +28,7 @@ export const Example = React.memo(
     const refSandbox = useRef(null);
     const [anchorRef, setAnchorRef] = useState();
     const [toolTip, setToolTip] = useState();
-    const { navbarHeight } = useContext(DomInfoContext);
+    const { navbarHeight } = useDomInfo();
 
     const handleCopy = () => {
       navigator.clipboard
@@ -99,7 +100,7 @@ export const Example = React.memo(
           )}
 
           <ControlledMenu
-            theming={useContext(SettingContext).theme}
+            theming={useTheme().theme}
             anchorRef={anchorRef}
             state={state}
             captureFocus={false}

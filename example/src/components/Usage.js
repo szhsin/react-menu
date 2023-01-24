@@ -1,4 +1,4 @@
-import React, { useRef, useState, useContext, useEffect, startTransition } from 'react';
+import React, { useRef, useState, useEffect, startTransition } from 'react';
 import {
   Menu as ReactMenu,
   ControlledMenu as ReactControlledMenu,
@@ -12,13 +12,8 @@ import {
   MenuDivider,
   useMenuState
 } from '@szhsin/react-menu';
-import {
-  SettingContext,
-  DomInfoContext,
-  ToastContext,
-  withPresetProps,
-  useLayoutEffect
-} from '../utils';
+import { withPresetProps, useLayoutEffect } from '../utils';
+import { toastState, useDomInfo, useTheme } from '../store';
 import { basePath } from '../../next.config';
 import { TableContents } from './TableContents';
 import { Example } from './Example';
@@ -182,7 +177,7 @@ function EventHandlingExample() {
 
 function RadioGroupExample() {
   const [textColor, setTextColor] = useState('red');
-  const { isDark } = useContext(SettingContext);
+  const { isDark } = useTheme();
 
   return (
     <Example data={codeExamples.radioGroup}>
@@ -245,7 +240,7 @@ function HeaderAndDividerExample() {
     <Example data={codeExamples.headerAndDivider}>
       <Menu
         menuButton={<MenuButton>Open menu</MenuButton>}
-        boundingBoxPadding={`${useContext(DomInfoContext).navbarHeight} 0 0 0`}
+        boundingBoxPadding={`${useDomInfo().navbarHeight} 0 0 0`}
       >
         <MenuItem>New File</MenuItem>
         <MenuItem>Save</MenuItem>
@@ -267,7 +262,7 @@ function CombinedExample() {
   const [isBold, setBold] = useState(true);
   const [isItalic, setItalic] = useState(true);
   const [isUnderline, setUnderline] = useState(false);
-  const { isDark } = useContext(SettingContext);
+  const { isDark } = useTheme();
 
   return (
     <Example data={codeExamples.combined}>
@@ -381,7 +376,7 @@ function HoverItemExample() {
 
 function FocusableItemExample() {
   const [filter, setFilter] = useState('');
-  const { vWidth, navbarHeight } = useContext(DomInfoContext);
+  const { vWidth, navbarHeight } = useDomInfo();
 
   return (
     <Example data={codeExamples.focusableItem}>
@@ -459,7 +454,7 @@ function MenuPlacementExample() {
   const [align, setAlign] = useState('center');
   const [position, setPosition] = useState('anchor');
   const [viewScroll, setViewScroll] = useState('auto');
-  const { navbarHeight } = useContext(DomInfoContext);
+  const { navbarHeight } = useDomInfo();
 
   const menus = ['right', 'top', 'bottom', 'left'].map((direction) => (
     <Menu
@@ -528,7 +523,7 @@ function MenuOverflowExample() {
   const [position, setPosition] = useState('auto');
   const [input, setInput] = useState('');
   const [filter, setFilter] = useState('');
-  const setToast = useContext(ToastContext);
+  const { set: setToast } = toastState;
 
   return (
     <Example data={codeExamples.overflow}>

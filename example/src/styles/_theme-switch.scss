@@ -2,6 +2,8 @@
 @use 'mixins';
 
 .theme-switch {
+  display: flex;
+  align-items: center;
   font-family: 'Material Icons';
   cursor: pointer;
   color: var.$navbar-dark;

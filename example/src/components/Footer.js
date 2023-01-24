@@ -1,9 +1,10 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { basePath } from '../../next.config';
-import { version, build, SettingContext } from '../utils';
+import { useTheme } from '../store';
+import { version, build } from '../utils';
 
 export const Footer = React.memo(function Footer() {
-  const { isDark } = useContext(SettingContext);
+  const { isDark } = useTheme();
   const [starCount, setStarCount] = useState('-');
 
   useEffect(() => {

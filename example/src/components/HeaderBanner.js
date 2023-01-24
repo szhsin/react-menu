@@ -1,8 +1,8 @@
-import { useContext } from 'react';
-import { version, DomInfoContext } from '../utils';
+import { useDomInfo } from '../store';
+import { version } from '../utils';
 
 export function HeaderBanner({ onClose }) {
-  const isFullSize = useContext(DomInfoContext).vWidth > 700;
+  const isFullSize = useDomInfo().vWidth > 700;
 
   return (
     <div className="header-banner" role="alert">
