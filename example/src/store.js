@@ -19,9 +19,17 @@ export const useTheme = () => {
 themeState.subscribe(() => {
   const theme = themeState.get();
   document.body.className = bem('szh-app', null, { theme });
-  localStorage.setItem('theme', theme);
+  try {
+    localStorage.setItem('theme', theme);
+  } catch {
+    // continue regardless of error
+  }
 });
 export const hydrate = () => {
-  const theme = localStorage.getItem('theme');
-  if (theme === 'light') themeState.set(theme);
+  try {
+    const theme = localStorage.getItem('theme');
+    if (theme === 'light') themeState.set(theme);
+  } catch {
+    // continue regardless of error
+  }
 };
