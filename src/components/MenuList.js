@@ -34,6 +34,7 @@ export const MenuList = ({
   anchorRef,
   containerRef,
   containerProps,
+  focusProps,
   externalRef,
   parentScrollingRef,
   arrow,
@@ -413,8 +414,8 @@ export const MenuList = ({
     <ul
       role="menu"
       aria-label={ariaLabel}
-      {...mergeProps({ onKeyDown, onAnimationEnd }, restProps)}
       {...commonProps(isDisabled)}
+      {...mergeProps({ onKeyDown, onAnimationEnd }, restProps)}
       ref={useCombinedRef(externalRef, menuRef)}
       className={useBEM({ block: menuClass, modifiers, className: menuClassName })}
       style={{
@@ -427,7 +428,12 @@ export const MenuList = ({
         top: menuPosition.y
       }}
     >
-      <div ref={focusRef} tabIndex={-1} style={{ position: 'absolute', left: 0, top: 0 }} />
+      <div
+        tabIndex={-1}
+        style={{ position: 'absolute', left: 0, top: 0 }}
+        {...focusProps}
+        ref={focusRef}
+      />
       {arrow && (
         <div
           className={_arrowClass}

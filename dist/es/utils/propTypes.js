@@ -8,6 +8,7 @@ var stylePropTypes = function stylePropTypes(name) {
 var menuPropTypes = /*#__PURE__*/_extends({
   className: string
 }, /*#__PURE__*/stylePropTypes('menu'), /*#__PURE__*/stylePropTypes('arrow'), {
+  focusProps: object,
   menuStyle: object,
   arrowStyle: object,
   arrow: bool,

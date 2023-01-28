@@ -5,14 +5,14 @@ import { MenuContainer } from './MenuContainer.js';
 import { jsxs, jsx } from 'react/jsx-runtime';
 import { SettingsContext, MenuListContext, HoverActionTypes, MenuListItemContext, HoverItemContext, Keys, menuClass, CloseReason, FocusPositions, menuArrowClass } from '../utils/constants.js';
 import { useItems } from '../hooks/useItems.js';
-import { getScrollAncestor, floatEqual, mergeProps, commonProps, isMenuOpen, getTransition, safeCall, batchedUpdates } from '../utils/utils.js';
+import { getScrollAncestor, floatEqual, commonProps, mergeProps, isMenuOpen, getTransition, safeCall, batchedUpdates } from '../utils/utils.js';
 import { getPositionHelpers } from '../positionUtils/getPositionHelpers.js';
 import { positionMenu } from '../positionUtils/positionMenu.js';
 import { useLayoutEffect as useIsomorphicLayoutEffect } from '../hooks/useIsomorphicLayoutEffect.js';
 import { useBEM } from '../hooks/useBEM.js';
 import { useCombinedRef } from '../hooks/useCombinedRef.js';
 
-var _excluded = ["ariaLabel", "menuClassName", "menuStyle", "arrowClassName", "arrowStyle", "anchorPoint", "anchorRef", "containerRef", "containerProps", "externalRef", "parentScrollingRef", "arrow", "align", "direction", "position", "overflow", "setDownOverflow", "repositionFlag", "captureFocus", "state", "endTransition", "isDisabled", "menuItemFocus", "offsetX", "offsetY", "children", "onClose"];
+var _excluded = ["ariaLabel", "menuClassName", "menuStyle", "arrowClassName", "arrowStyle", "anchorPoint", "anchorRef", "containerRef", "containerProps", "focusProps", "externalRef", "parentScrollingRef", "arrow", "align", "direction", "position", "overflow", "setDownOverflow", "repositionFlag", "captureFocus", "state", "endTransition", "isDisabled", "menuItemFocus", "offsetX", "offsetY", "children", "onClose"];
 var MenuList = function MenuList(_ref) {
   var ariaLabel = _ref.ariaLabel,
     menuClassName = _ref.menuClassName,
@@ -23,6 +23,7 @@ var MenuList = function MenuList(_ref) {
     anchorRef = _ref.anchorRef,
     containerRef = _ref.containerRef,
     containerProps = _ref.containerProps,
+    focusProps = _ref.focusProps,
     externalRef = _ref.externalRef,
     parentScrollingRef = _ref.parentScrollingRef,
     arrow = _ref.arrow,
@@ -383,10 +384,10 @@ var MenuList = function MenuList(_ref) {
   var menu = /*#__PURE__*/jsxs("ul", _extends({
     role: "menu",
     "aria-label": ariaLabel
-  }, mergeProps({
+  }, commonProps(isDisabled), mergeProps({
     onKeyDown: onKeyDown,
     onAnimationEnd: onAnimationEnd
-  }, restProps), commonProps(isDisabled), {
+  }, restProps), {
     ref: useCombinedRef(externalRef, menuRef),
     className: useBEM({
       block: menuClass,
@@ -400,15 +401,16 @@ var MenuList = function MenuList(_ref) {
       left: menuPosition.x,
       top: menuPosition.y
     }),
-    children: [/*#__PURE__*/jsx("div", {
-      ref: focusRef,
+    children: [/*#__PURE__*/jsx("div", _extends({
       tabIndex: -1,
       style: {
         position: 'absolute',
         left: 0,
         top: 0
       }
-    }), arrow && /*#__PURE__*/jsx("div", {
+    }, focusProps, {
+      ref: focusRef
+    })), arrow && /*#__PURE__*/jsx("div", {
       className: _arrowClass,
       style: _extends({}, arrowStyle, {
         position: 'absolute',
