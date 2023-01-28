@@ -9,6 +9,7 @@ export const menuPropTypes = {
   className: string,
   ...stylePropTypes('menu'),
   ...stylePropTypes('arrow'),
+  focusProps: object,
   menuStyle: object,
   arrowStyle: object,
   arrow: bool,

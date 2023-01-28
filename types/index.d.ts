@@ -198,6 +198,10 @@ interface BaseMenuProps extends Omit<BaseProps, 'style'> {
    */
   arrow?: boolean;
   /**
+   * Properties of this object are spread to a DOM element which captures focus for the menu.
+   */
+  focusProps?: React.HTMLAttributes<HTMLElement>;
+  /**
    * Set the horizontal distance (in pixels) between menu and its anchor element.
    * The value can be negative.
    * @default 0

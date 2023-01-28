@@ -203,6 +203,15 @@ const sharedMenuProps = [
     )
   },
   {
+    name: 'focusProps',
+    type: 'object',
+    desc: (
+      <p>
+        Properties of this object are spread to a DOM element which captures focus for the menu.
+      </p>
+    )
+  },
+  {
     name: 'offsetX',
     type: 'number',
     defaultVal: 0,
