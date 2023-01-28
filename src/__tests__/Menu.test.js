@@ -162,6 +162,7 @@ test('Additional props are forwarded to Menu', () => {
     ['aria-label']: 'test',
     ['aria-haspopup']: true,
     randomattr: 'random',
+    tabIndex: undefined,
     onPointerMove,
     onKeyDown,
     containerProps: {
@@ -170,6 +171,10 @@ test('Additional props are forwarded to Menu', () => {
       style: { color: 'blue' },
       onPointerMove,
       onKeyDown
+    },
+    focusProps: {
+      'data-testid': 'focus',
+      tabIndex: undefined
     }
   });
   utils.clickMenuButton();
@@ -180,10 +185,13 @@ test('Additional props are forwarded to Menu', () => {
   expect(container).toHaveAttribute('id', 'menu-container');
   expect(container).toHaveStyle({ color: 'blue', position: 'absolute' });
 
+  expect(screen.getByTestId('focus')).not.toHaveAttribute('tabindex');
+
   const menu = utils.queryMenu();
   expect(menu).toHaveAttribute('aria-label', 'test');
   expect(menu).toHaveAttribute('aria-haspopup', 'true');
   expect(menu).toHaveAttribute('randomattr', 'random');
+  expect(menu).not.toHaveAttribute('tabindex');
   fireEvent.pointerMove(menu);
   expect(onPointerMove).toHaveBeenCalledTimes(2);
   fireEvent.keyDown(menu, { key: 'm' });

@@ -288,13 +288,18 @@ test('ref is forwarded to <Menu>, <MenuItem> and <SubMenu>', () => {
   expect(submenuRef.current).toHaveAttribute('aria-label', 'Submenu');
 });
 
-test('Additional props are forwarded to submenu item via itemProps', () => {
+test('Additional props are forwarded to submenu', async () => {
   const onPointerMove = jest.fn();
   renderMenu(null, null, {
+    tabIndex: undefined,
     itemProps: {
       ['aria-haspopup']: false,
       randomattr: 'random',
       onPointerMove
+    },
+    focusProps: {
+      'data-testid': 'focus',
+      tabIndex: undefined
     }
   });
   utils.clickMenuButton();
@@ -304,6 +309,11 @@ test('Additional props are forwarded to submenu item via itemProps', () => {
   expect(menuItem).toHaveAttribute('randomattr', 'random');
   fireEvent.pointerMove(menuItem);
   expect(onPointerMove).toHaveBeenCalledTimes(1);
+
+  const submenuOptions = { name: 'Submenu' };
+  await waitFor(() => utils.expectMenuToBeOpen(true, submenuOptions));
+  expect(utils.queryMenu(submenuOptions)).not.toHaveAttribute('tabindex');
+  expect(screen.getByTestId('focus')).not.toHaveAttribute('tabindex');
 });
 
 test('className props are added to related elements in menu and submenu', () => {
