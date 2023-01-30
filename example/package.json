@@ -6,7 +6,7 @@
   "dependencies": {
     "@szhsin/react-menu": "file:..",
     "highlight.js": "^11.7.0",
-    "next": "^13.1.5",
+    "next": "^13.1.6",
     "react": "file:../node_modules/react",
     "react-dom": "file:../node_modules/react-dom",
     "reactish-state": "0.10.3"
