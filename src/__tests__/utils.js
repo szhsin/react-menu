@@ -68,7 +68,7 @@ export const queryMenuItem = (name) => queryByRole('menuitem', { name });
 export const clickEvent = (event) => ({
   ...event,
   syntheticEvent: expect.objectContaining(
-    event.key ? { type: 'keydown', key: event.key } : { type: 'click' }
+    event?.key ? { type: 'keydown', key: event.key } : { type: 'click' }
   )
 });
 

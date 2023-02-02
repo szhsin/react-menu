@@ -122,6 +122,23 @@ test('Checkbox menu items', () => {
   expect(onItemClick).toHaveBeenCalledTimes(2);
 });
 
+test('Menu item as link', () => {
+  const onItemClick = jest.fn();
+  const onClick = jest.fn();
+  utils.renderMenu({ onItemClick }, { onClick, href: '/' });
+  utils.clickMenuButton();
+
+  const menuItem = utils.queryMenuItem('Middle');
+  expect(menuItem).toHaveAttribute('href', '/');
+  expect(menuItem).toHaveClass('szh-menu__item--anchor');
+  fireEvent.pointerMove(menuItem);
+  fireEvent.keyDown(menuItem, { key: ' ' });
+  expect(onItemClick).toHaveBeenLastCalledWith(utils.clickEvent());
+  expect(onClick).toHaveBeenLastCalledWith(utils.clickEvent());
+  expect(onItemClick).toHaveBeenCalledTimes(1);
+  expect(onClick).toHaveBeenCalledTimes(1);
+});
+
 test('Hover and keyboard click menu items', () => {
   const onItemClick = jest.fn();
   const onClick = jest.fn();
