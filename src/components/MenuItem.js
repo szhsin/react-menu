@@ -61,12 +61,7 @@ export const MenuItem = withHovering(
       switch (e.key) {
         case Keys.ENTER:
         case Keys.SPACE:
-          if (isAnchor) {
-            itemRef.current.click();
-          } else {
-            handleClick(e);
-          }
-          break;
+          isAnchor ? e.key === Keys.SPACE && itemRef.current.click() : handleClick(e);
       }
     };
 
@@ -105,15 +100,13 @@ export const MenuItem = withHovering(
       children: useMemo(() => safeCall(children, modifiers), [children, modifiers])
     };
 
-    if (isAnchor) {
-      return (
-        <li role="presentation">
-          <a href={href} {...menuItemProps} />
-        </li>
-      );
-    } else {
-      return <li {...menuItemProps} />;
-    }
+    return isAnchor ? (
+      <li role="presentation">
+        <a href={href} {...menuItemProps} />
+      </li>
+    ) : (
+      <li {...menuItemProps} />
+    );
   }
 );
 

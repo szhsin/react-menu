@@ -426,7 +426,7 @@ export const linkAndDisabled = {
     <MenuItem href="https://www.google.com/">Google</MenuItem>
     <MenuItem href="https://github.com/szhsin/react-menu/"
         target="_blank" rel="noopener noreferrer">
-        GitHub (new window)
+        GitHub <ExternalLinkIcon />
     </MenuItem>
     <MenuItem>Regular item</MenuItem>
     <MenuItem disabled>Disabled item</MenuItem>
@@ -445,7 +445,7 @@ export default function Example() {
             <MenuItem href="https://www.google.com/">Google</MenuItem>
             <MenuItem href="https://github.com/szhsin/react-menu/"
                 target="_blank" rel="noopener noreferrer">
-                GitHub (new window)
+                GitHub <ExternalLinkIcon />
             </MenuItem>
             <MenuItem>Regular item</MenuItem>
             <MenuItem disabled>Disabled item</MenuItem>

@@ -19,6 +19,7 @@ import { TableContents } from './TableContents';
 import { Example } from './Example';
 import { HashHeading } from './HashHeading';
 import { RightSection } from './RightSection';
+import { ExternalLinkIcon } from './Icons';
 import data, * as codeExamples from '../data/codeExamples';
 
 /**
@@ -324,7 +325,7 @@ function LinkAndDisabledExample() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          GitHub (new window)
+          GitHub <ExternalLinkIcon />
         </MenuItem>
         <MenuItem>Regular item</MenuItem>
         <MenuItem disabled>Disabled item</MenuItem>

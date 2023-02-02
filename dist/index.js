@@ -1734,12 +1734,7 @@ var MenuItem = /*#__PURE__*/withHovering('MenuItem', function MenuItem(_ref) {
     switch (e.key) {
       case Keys.ENTER:
       case Keys.SPACE:
-        if (isAnchor) {
-          itemRef.current.click();
-        } else {
-          handleClick(e);
-        }
-        break;
+        isAnchor ? e.key === Keys.SPACE && itemRef.current.click() : handleClick(e);
     }
   };
   var modifiers = react.useMemo(function () {
@@ -1771,16 +1766,12 @@ var MenuItem = /*#__PURE__*/withHovering('MenuItem', function MenuItem(_ref) {
       return safeCall(children, modifiers);
     }, [children, modifiers])
   });
-  if (isAnchor) {
-    return /*#__PURE__*/jsxRuntime.jsx("li", {
-      role: "presentation",
-      children: /*#__PURE__*/jsxRuntime.jsx("a", _extends({
-        href: href
-      }, menuItemProps))
-    });
-  } else {
-    return /*#__PURE__*/jsxRuntime.jsx("li", _extends({}, menuItemProps));
-  }
+  return isAnchor ? /*#__PURE__*/jsxRuntime.jsx("li", {
+    role: "presentation",
+    children: /*#__PURE__*/jsxRuntime.jsx("a", _extends({
+      href: href
+    }, menuItemProps))
+  }) : /*#__PURE__*/jsxRuntime.jsx("li", _extends({}, menuItemProps));
 });
 process.env.NODE_ENV !== "production" ? MenuItem.propTypes = /*#__PURE__*/_extends({}, /*#__PURE__*/stylePropTypes(), {
   value: propTypes.any,
