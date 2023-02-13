@@ -688,4 +688,39 @@ export function useMenuState(options?: MenuStateOptions): [
   (open?: boolean) => void
 ];
 
+type HoverEventProps = Required<
+  Pick<React.HTMLAttributes<Element>, 'onPointerEnter' | 'onPointerLeave'>
+>;
+
+/**
+ * A Hook which works with `ControlledMenu` to create hover menu.
+ */
+export function useHover(
+  /**
+   * A function that opens or closes the menu.
+   */
+  setOpen: (open: boolean) => void,
+  options?: {
+    /**
+     * Specify an open delay in `ms`.
+     * @default 100
+     */
+    openDelay?: number;
+    /**
+     * Specify a close delay in `ms`.
+     * @default 200
+     */
+    closeDelay?: number;
+  }
+): {
+  /**
+   * Props which should be given to the anchor element.
+   */
+  anchorProps: HoverEventProps;
+  /**
+   * Props which should be given to the menu.
+   */
+  hoverProps: HoverEventProps;
+};
+
 export {};

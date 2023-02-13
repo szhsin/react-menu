@@ -1,4 +1,4 @@
-export { useMenuState } from './hooks';
+export { useHover, useMenuState } from './hooks';
 export { MenuButton } from './components/MenuButton';
 export { Menu } from './components/Menu';
 export { ControlledMenu } from './components/ControlledMenu';
