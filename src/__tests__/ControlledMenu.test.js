@@ -1,6 +1,6 @@
 import { createRef, useState, useRef } from 'react';
 import { ControlledMenu, MenuItem, useHover, useMenuState } from './entry';
-import { screen, fireEvent, waitFor, renderHook } from '@testing-library/react';
+import { screen, fireEvent, waitFor, act } from '@testing-library/react';
 import * as utils from './utils';
 
 const { render } = utils;
@@ -125,26 +125,19 @@ test('Portal will render ControlledMenu into target element', () => {
   expect(screen.getByTestId('portal-container')).toContainElement(utils.queryMenu());
 });
 
-test('useHover', () => {
-  const toggle = jest.fn();
-  const { result, rerender } = renderHook(() => useHover(toggle));
-  const { anchorProps: prevAnchorProps, hoverProps: prevHoverProps } = result.current;
-  rerender();
-  expect(prevAnchorProps).toEqual(result.current.anchorProps);
-  expect(prevHoverProps).toEqual(result.current.hoverProps);
-  expect(toggle).not.toHaveBeenCalled();
-});
-
 const HoverMenu = () => {
   const ref = useRef(null);
   const [menuState, toggleMenu] = useMenuState({ initialMounted: true });
-  const { anchorProps, hoverProps } = useHover(toggleMenu, { openDelay: 100, closeDelay: 200 });
+  const { anchorProps, hoverProps } = useHover(menuState.state, toggleMenu, {
+    openDelay: 100,
+    closeDelay: 200
+  });
 
   return (
     <>
-      <div data-testid="anchor" ref={ref} {...anchorProps}>
+      <button data-testid="anchor" ref={ref} {...anchorProps}>
         Anchor
-      </div>
+      </button>
 
       <ControlledMenu
         {...hoverProps}
@@ -164,44 +157,55 @@ test('Hover menu', async () => {
   const anchor = screen.getByTestId('anchor');
   const menu = utils.queryMenu();
 
-  fireEvent.pointerEnter(anchor);
+  fireEvent.mouseEnter(anchor);
   await waitFor(() => utils.expectMenuToBeOpen(true));
 
-  fireEvent.pointerLeave(anchor);
+  fireEvent.mouseLeave(anchor);
   await utils.delayFor(100);
-  fireEvent.pointerEnter(menu);
+  fireEvent.mouseEnter(menu);
   await utils.delayFor(200);
   utils.expectMenuToBeOpen(true);
 
-  fireEvent.pointerLeave(menu);
+  fireEvent.mouseLeave(menu);
   await utils.delayFor(100);
-  fireEvent.pointerEnter(anchor);
+  fireEvent.mouseEnter(anchor);
   await utils.delayFor(200);
   utils.expectMenuToBeOpen(true);
 
-  fireEvent.pointerLeave(anchor);
+  fireEvent.mouseLeave(anchor);
   await utils.delayFor(100);
-  fireEvent.pointerEnter(anchor);
+  fireEvent.mouseEnter(anchor);
   await utils.delayFor(200);
   utils.expectMenuToBeOpen(true);
 
-  fireEvent.pointerLeave(anchor);
+  fireEvent.mouseLeave(anchor);
   await waitFor(() => utils.expectMenuToBeOpen(false));
 
-  fireEvent.pointerEnter(anchor);
+  fireEvent.mouseEnter(anchor);
   await utils.delayFor(50);
-  fireEvent.pointerLeave(anchor);
+  fireEvent.mouseLeave(anchor);
   await utils.delayFor(100);
   utils.expectMenuToBeOpen(false);
 
-  fireEvent.pointerEnter(anchor);
+  fireEvent.mouseEnter(anchor);
   await waitFor(() => utils.expectMenuToBeOpen(true));
 
-  fireEvent.pointerLeave(anchor);
-  fireEvent.pointerEnter(menu);
+  fireEvent.mouseLeave(anchor);
+  fireEvent.mouseEnter(menu);
   await utils.delayFor(300);
   utils.expectMenuToBeOpen(true);
 
-  fireEvent.pointerLeave(menu);
+  fireEvent.mouseLeave(menu);
   await waitFor(() => utils.expectMenuToBeOpen(false));
+
+  fireEvent.mouseEnter(anchor);
+  await waitFor(() => utils.expectMenuToBeOpen(true));
+  fireEvent.mouseDown(anchor);
+  fireEvent.click(anchor);
+  act(() => anchor.focus());
+  await waitFor(() => utils.expectMenuToBeOpen(false));
+
+  fireEvent.mouseDown(anchor);
+  fireEvent.click(anchor);
+  utils.expectMenuToBeOpen(true);
 });
