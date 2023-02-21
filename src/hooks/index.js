@@ -1,4 +1,5 @@
 export { useBEM } from './useBEM';
+export { useClick } from './useClick';
 export { useCombinedRef } from './useCombinedRef';
 export { useHover } from './useHover';
 export { useLayoutEffect } from './useIsomorphicLayoutEffect';
