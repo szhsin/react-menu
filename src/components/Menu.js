@@ -8,7 +8,7 @@ import {
 } from 'react';
 import { element, func, oneOfType } from 'prop-types';
 import { ControlledMenu } from './ControlledMenu';
-import { useMenuChange, useMenuStateAndFocus, useCombinedRef } from '../hooks';
+import { useMenuChange, useMenuStateAndFocus, useCombinedRef, useClick } from '../hooks';
 import {
   getName,
   mergeProps,
@@ -33,9 +33,14 @@ export const Menu = forwardRef(function Menu(
   externalRef
 ) {
   const [stateProps, toggleMenu, openMenu] = useMenuStateAndFocus(restProps);
-  const isOpen = isMenuOpen(stateProps.state);
-  const skipOpen = useRef(false);
+  const { state } = stateProps;
+  const isOpen = isMenuOpen(state);
   const buttonRef = useRef(null);
+
+  // Focus (hover) the first menu item when onClick event is trigger by keyboard
+  const anchorProps = useClick(state, (_, e) =>
+    openMenu(!e.detail ? FocusPositions.FIRST : undefined)
+  );
 
   const handleClose = useCallback(
     (e) => {
@@ -44,12 +49,6 @@ export const Menu = forwardRef(function Menu(
     },
     [toggleMenu]
   );
-
-  const onClick = (e) => {
-    if (skipOpen.current) return;
-    // Focus (hover) the first menu item when onClick event is trigger by keyboard
-    openMenu(e.detail === 0 ? FocusPositions.FIRST : undefined);
-  };
 
   const onKeyDown = (e) => {
     switch (e.key) {
@@ -73,7 +72,7 @@ export const Menu = forwardRef(function Menu(
 
   const buttonProps = {
     ref: useCombinedRef(button.ref, buttonRef),
-    ...mergeProps({ onClick, onKeyDown }, button.props)
+    ...mergeProps({ onKeyDown, ...anchorProps }, button.props)
   };
   if (getName(button.type) === 'MenuButton') {
     buttonProps.isOpen = isOpen;
@@ -99,7 +98,6 @@ export const Menu = forwardRef(function Menu(
         anchorRef={buttonRef}
         ref={externalRef}
         onClose={handleClose}
-        skipOpen={skipOpen}
       />
     </Fragment>
   );

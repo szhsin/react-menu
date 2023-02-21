@@ -708,7 +708,7 @@ export function useHover(
     openDelay?: number;
     /**
      * Specify a close delay in `ms`.
-     * @default 200
+     * @default 300
      */
     closeDelay?: number;
   }

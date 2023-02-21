@@ -1,28 +1,23 @@
-import { useState, useMemo } from 'react';
+import { useState } from 'react';
+import { useClick } from './useClick';
 
-const useHover = (toggle, { openDelay = 100, closeDelay = 200 } = {}) => {
+const useHover = (isOpen, onToggle, { openDelay = 100, closeDelay = 300 } = {}) => {
   const [config] = useState({});
 
-  return useMemo(() => {
-    if (process.env.NODE_ENV !== 'production' && typeof toggle !== 'function') {
-      throw new Error('[React-Menu] useHover requires a toggle function in the first parameter.');
-    }
+  const clearTimer = () => clearTimeout(config.t);
+  const delayAction = (toOpen) => (e) => {
+    clearTimer();
+    config.t = setTimeout(() => onToggle(toOpen, e), toOpen ? openDelay : closeDelay);
+  };
+  const props = {
+    onMouseEnter: delayAction(true),
+    onMouseLeave: delayAction(false)
+  };
 
-    const clearTimer = () => clearTimeout(config.t);
-    const delayAction = (toOpen) => () => {
-      clearTimer();
-      config.t = setTimeout(() => toggle(toOpen), toOpen ? openDelay : closeDelay);
-    };
-    const props = {
-      onPointerEnter: delayAction(true),
-      onPointerLeave: delayAction(false)
-    };
-
-    return {
-      anchorProps: props,
-      hoverProps: { ...props, onPointerEnter: clearTimer }
-    };
-  }, [toggle, config, openDelay, closeDelay]);
+  return {
+    anchorProps: { ...props, ...useClick(isOpen, onToggle) },
+    hoverProps: { ...props, onMouseEnter: clearTimer }
+  };
 };
 
 export { useHover };
