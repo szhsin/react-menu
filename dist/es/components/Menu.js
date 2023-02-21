@@ -4,6 +4,7 @@ import { oneOfType, element, func } from 'prop-types';
 import { ControlledMenu } from './ControlledMenu.js';
 import { jsxs, jsx } from 'react/jsx-runtime';
 import { useMenuStateAndFocus } from '../hooks/useMenuStateAndFocus.js';
+import { useClick } from '../hooks/useClick.js';
 import { useCombinedRef } from '../hooks/useCombinedRef.js';
 import { isMenuOpen, safeCall, mergeProps, getName } from '../utils/utils.js';
 import { useMenuChange } from '../hooks/useMenuChange.js';
@@ -21,17 +22,16 @@ var Menu = /*#__PURE__*/forwardRef(function Menu(_ref, externalRef) {
     stateProps = _useMenuStateAndFocus[0],
     toggleMenu = _useMenuStateAndFocus[1],
     openMenu = _useMenuStateAndFocus[2];
-  var isOpen = isMenuOpen(stateProps.state);
-  var skipOpen = useRef(false);
+  var state = stateProps.state;
+  var isOpen = isMenuOpen(state);
   var buttonRef = useRef(null);
+  var anchorProps = useClick(state, function (_, e) {
+    return openMenu(!e.detail ? FocusPositions.FIRST : undefined);
+  });
   var handleClose = useCallback(function (e) {
     toggleMenu(false);
     if (e.key) buttonRef.current.focus();
   }, [toggleMenu]);
-  var onClick = function onClick(e) {
-    if (skipOpen.current) return;
-    openMenu(e.detail === 0 ? FocusPositions.FIRST : undefined);
-  };
   var onKeyDown = function onKeyDown(e) {
     switch (e.key) {
       case Keys.UP:
@@ -51,10 +51,9 @@ var Menu = /*#__PURE__*/forwardRef(function Menu(_ref, externalRef) {
   if (!button || !button.type) throw new Error('Menu requires a menuButton prop.');
   var buttonProps = _extends({
     ref: useCombinedRef(button.ref, buttonRef)
-  }, mergeProps({
-    onClick: onClick,
+  }, mergeProps(_extends({
     onKeyDown: onKeyDown
-  }, button.props));
+  }, anchorProps), button.props));
   if (getName(button.type) === 'MenuButton') {
     buttonProps.isOpen = isOpen;
   }
@@ -73,8 +72,7 @@ var Menu = /*#__PURE__*/forwardRef(function Menu(_ref, externalRef) {
       "aria-label": ariaLabel || (typeof button.props.children === 'string' ? button.props.children : 'Menu'),
       anchorRef: buttonRef,
       ref: externalRef,
-      onClose: handleClose,
-      skipOpen: skipOpen
+      onClose: handleClose
     }))]
   });
 });

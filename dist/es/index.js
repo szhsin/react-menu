@@ -8,4 +8,6 @@ export { MenuDivider } from './components/MenuDivider.js';
 export { MenuHeader } from './components/MenuHeader.js';
 export { MenuGroup } from './components/MenuGroup.js';
 export { MenuRadioGroup } from './components/MenuRadioGroup.js';
+export { useClick } from './hooks/useClick.js';
+export { useHover } from './hooks/useHover.js';
 export { useMenuState } from './hooks/useMenuState.js';
