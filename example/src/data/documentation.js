@@ -1314,6 +1314,40 @@ const menuStateHook = {
   ]
 };
 
+const useClick = {
+  id: 'use-click',
+  title: 'useClick',
+  contents: [
+    <>
+      <p>
+        <code>useClick</code> hook can be used with {controlledMenuLink} to create a toggle menu
+        which has a similar experience to the <code>Menu</code> component.
+      </p>
+      <p>
+        The Hook returns an object with props which can be spread to the anchor element. See an{' '}
+        <Link href={'/#controlling-state'}>example</Link>.
+      </p>
+    </>
+  ]
+};
+
+const useHover = {
+  id: 'use-hover',
+  title: 'useHover',
+  contents: [
+    <>
+      <p>
+        <code>useHover</code> hook can be used with {controlledMenuLink} to create a hover menu.
+      </p>
+      <p>
+        The Hook returns an object with <code>anchorProps</code> and <code>hoverProps</code>, which
+        can be spread to the anchor element and menu, respectively. See an{' '}
+        <Link href={'/#hover-menu'}>example</Link>.
+      </p>
+    </>
+  ]
+};
+
 const keyboard = {
   id: 'keyboard',
   title: 'Keyboard',
@@ -1389,7 +1423,7 @@ const components = {
 const hooks = {
   id: 'hooks',
   title: 'Hooks',
-  list: [menuStateHook]
+  list: [menuStateHook, useClick, useHover]
 };
 
 const accessibility = {

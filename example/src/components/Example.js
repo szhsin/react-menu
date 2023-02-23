@@ -74,7 +74,7 @@ export const Example = React.memo(
               <i className="material-icons">content_copy</i>
             </button>
           )}
-          {fullSource && (
+          {(!sourceCode || (source && fullSource)) && (
             <button
               ref={refSource}
               className={bem(blockName, 'action-btn', { on: isFullSource }) + ' btn'}

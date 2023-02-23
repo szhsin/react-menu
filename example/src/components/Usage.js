@@ -10,7 +10,9 @@ import {
   MenuRadioGroup,
   MenuHeader,
   MenuDivider,
-  useMenuState
+  useMenuState,
+  useClick,
+  useHover
 } from '@szhsin/react-menu';
 import { withPresetProps, useLayoutEffect } from '../utils';
 import { toastState, useDomInfo, useTheme } from '../store';
@@ -62,12 +64,13 @@ const Usage = React.memo(function Usage() {
           <BoundingBoxExample />
 
           <GroupingSection data={codeExamples.menuButton} />
-          <OpenStateExample />
+          <ButtonRenderPropExample />
           <CustomisedButtonExample />
 
           <GroupingSection data={codeExamples.controlledMenu} />
-          <ManagingStateExample />
+          <ControllingStateExample />
           <MenuStateHookExample />
+          <HoverMenuExample />
           <ContextMenuExample />
 
           <GroupingSection data={codeExamples.customisedStyle} />
@@ -90,7 +93,7 @@ function GroupingSection({ heading, data: { id, title, desc } }) {
 
 function BasicMenuExample() {
   return (
-    <Example initialFullSource={true} data={codeExamples.basicMenu}>
+    <Example initialFullSource data={codeExamples.basicMenu}>
       <Menu menuButton={<MenuButton>Open menu</MenuButton>}>
         <MenuItem>New File</MenuItem>
         <MenuItem>Save</MenuItem>
@@ -409,9 +412,9 @@ function FocusableItemExample() {
   );
 }
 
-function OpenStateExample() {
+function ButtonRenderPropExample() {
   return (
-    <Example data={codeExamples.openStateButton}>
+    <Example data={codeExamples.buttonRenderProp}>
       <Menu
         menuButton={({ open }) => (
           <MenuButton style={{ minWidth: '5rem' }}>{open ? 'Close' : 'Open'}</MenuButton>
@@ -677,75 +680,131 @@ function BoundingBoxExample() {
   );
 }
 
-function ManagingStateExample() {
+function ControllingStateExample() {
   const ref = useRef(null);
-  const [isOpen, setOpen] = useState();
+  const [isOpen, setOpen] = useState(false);
+  const anchorProps = useClick(isOpen, setOpen);
 
   return (
-    <Example data={codeExamples.managingState} style={{ flexWrap: 'wrap' }}>
-      <div ref={ref} className="btn" onPointerEnter={() => setOpen(true)}>
-        Hover to Open
-      </div>
+    <Example data={codeExamples.controllingState} style={{ flexWrap: 'wrap' }} initialFullSource>
+      <button type="button" className="btn" ref={ref} {...anchorProps}>
+        Menu
+      </button>
 
       <ControlledMenu
         state={isOpen ? 'open' : 'closed'}
         anchorRef={ref}
-        onPointerLeave={() => setOpen(false)}
         onClose={() => setOpen(false)}
       >
-        <MenuItem>New File</MenuItem>
-        <MenuItem>Save</MenuItem>
-        <MenuItem>Close Window</MenuItem>
+        <MenuItem>Cut</MenuItem>
+        <MenuItem>Copy</MenuItem>
+        <MenuItem>Paste</MenuItem>
       </ControlledMenu>
-
-      <i style={{ padding: '0.25rem 1rem' }}>Tip: try the example with a mouse</i>
     </Example>
   );
 }
 
 function MenuStateHookExample() {
   const ref = useRef(null);
-  const [menuProps, toggleMenu] = useMenuState({ transition: true });
+  const [menuState, toggleMenu] = useMenuState({ transition: true });
+  const anchorProps = useClick(menuState.state, toggleMenu);
 
   return (
-    <Example data={codeExamples.menuStateHook}>
-      <div ref={ref} className="btn" onPointerEnter={() => toggleMenu(true)}>
-        Hover to Open
-      </div>
+    <Example data={codeExamples.menuStateHook} initialFullSource>
+      <button type="button" className="btn" ref={ref} {...anchorProps}>
+        Menu
+      </button>
 
-      <ControlledMenu
-        {...menuProps}
-        anchorRef={ref}
-        onPointerLeave={() => toggleMenu(false)}
-        onClose={() => toggleMenu(false)}
-      >
-        <MenuItem>New File</MenuItem>
-        <MenuItem>Save</MenuItem>
-        <MenuItem>Close Window</MenuItem>
+      <ControlledMenu {...menuState} anchorRef={ref} onClose={() => toggleMenu(false)}>
+        <MenuItem>Cut</MenuItem>
+        <MenuItem>Copy</MenuItem>
+        <MenuItem>Paste</MenuItem>
       </ControlledMenu>
     </Example>
   );
 }
 
+const HoverMenu = () => {
+  const ref = useRef(null);
+  const [isOpen, setOpen] = useState(false);
+  const { anchorProps, hoverProps } = useHover(isOpen, setOpen);
+
+  return (
+    <>
+      <div className="btn" style={{ marginRight: '1rem' }} ref={ref} {...anchorProps}>
+        Hover
+      </div>
+      <ControlledMenu
+        {...hoverProps}
+        state={isOpen ? 'open' : 'closed'}
+        arrow
+        align="end"
+        anchorRef={ref}
+        onClose={() => setOpen(false)}
+      >
+        <MenuItem>Cut</MenuItem>
+        <MenuItem>Copy</MenuItem>
+        <MenuItem>Paste</MenuItem>
+      </ControlledMenu>
+    </>
+  );
+};
+
+const HoverMenuWithTransition = () => {
+  const ref = useRef(null);
+  const [menuState, toogle] = useMenuState({ transition: true });
+  const { anchorProps, hoverProps } = useHover(menuState.state, toogle);
+
+  return (
+    <>
+      <div className="btn" ref={ref} {...anchorProps}>
+        Hover with transition
+      </div>
+      <ControlledMenu
+        {...hoverProps}
+        {...menuState}
+        arrow
+        align="end"
+        anchorRef={ref}
+        onClose={() => toogle(false)}
+      >
+        <MenuItem>Cut</MenuItem>
+        <MenuItem>Copy</MenuItem>
+        <MenuItem>Paste</MenuItem>
+      </ControlledMenu>
+    </>
+  );
+};
+
+function HoverMenuExample() {
+  return (
+    <Example data={codeExamples.hoverMenu} initialFullSource>
+      <HoverMenu />
+      <HoverMenuWithTransition />
+    </Example>
+  );
+}
+
 function ContextMenuExample() {
-  const [menuProps, toggleMenu] = useMenuState();
+  const [isOpen, setOpen] = useState(false);
   const [anchorPoint, setAnchorPoint] = useState({ x: 0, y: 0 });
 
   return (
     <Example
+      initialFullSource
       data={codeExamples.contextMenu}
       onContextMenu={(e) => {
         e.preventDefault();
         setAnchorPoint({ x: e.clientX, y: e.clientY });
-        toggleMenu(true);
+        setOpen(true);
       }}
     >
       Right click to open context menu
       <ControlledMenu
-        {...menuProps}
         anchorPoint={anchorPoint}
+        state={isOpen ? 'open' : 'closed'}
         direction="right"
-        onClose={() => toggleMenu(false)}
+        onClose={() => setOpen(false)}
       >
         <MenuItem>Cut</MenuItem>
         <MenuItem>Copy</MenuItem>

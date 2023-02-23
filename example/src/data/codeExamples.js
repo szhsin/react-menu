@@ -20,12 +20,6 @@ export const basicMenu = {
     </p>
   ),
 
-  source: `<Menu menuButton={<MenuButton>Open menu</MenuButton>}>
-    <MenuItem>New File</MenuItem>
-    <MenuItem>Save</MenuItem>
-    <MenuItem>Close Window</MenuItem>
-</Menu>`,
-
   fullSource: `import { Menu, MenuItem, MenuButton } from '@szhsin/react-menu';
 import '@szhsin/react-menu/dist/index.css';
 import '@szhsin/react-menu/dist/transitions/slide.css';
@@ -633,15 +627,15 @@ export default function Example() {
 }`
 };
 
-export const openStateButton = {
-  id: 'open-state',
+export const buttonRenderProp = {
+  id: 'button-render-prop',
 
-  title: 'Menu open state',
+  title: 'Render prop',
 
   desc: (
     <p>
-      If you need to change the contents of a menu button when the menu opens, you could use the{' '}
-      <code>menuButton</code> as a render prop and pass it a callback function.
+      If you need to dynamically render menu button based on menu state, the <code>menuButton</code>{' '}
+      supports the render prop pattern.
     </p>
   ),
 
@@ -907,73 +901,172 @@ const tooltipProps = {
 </div>`
 };
 
-export const managingState = {
-  id: 'managing-state',
+export const controllingState = {
+  id: 'controlling-state',
 
-  title: 'Managing state',
+  title: 'Controlling state',
 
   desc: (
     <>
       <p>
-        In some use cases you may need to control how and when a menu is open or closed, e.g. when
-        something is hovered. This can be implemented using a <code>ControlledMenu</code>.
+        In some use cases you may need to access a menu's state and control how the menu is open or
+        closed. This can be implemented using a <code>ControlledMenu</code>.
       </p>
       <p>
         You need to provide at least a <code>state</code> prop, and a <code>ref</code> of an element
         to which menu will be positioned. You also need to update <code>state</code> in response to
         the <code>onClose</code> event.
       </p>
+      <p>
+        You can optionally leverage a <code>useClick</code> hook which helps create a similar toggle
+        menu experience to the <code>Menu</code> component.
+      </p>
     </>
   ),
 
-  source: `const ref = useRef(null);
-const [isOpen, setOpen] = useState();
+  fullSource: `import { useRef, useState } from 'react';
+import { ControlledMenu, MenuItem, useClick } from '@szhsin/react-menu';
 
-<div ref={ref} className="btn" onPointerEnter={() => setOpen(true)}>
-  Hover to Open
-</div>
+export default function () {
+  const ref = useRef(null);
+  const [isOpen, setOpen] = useState(false);
+  const anchorProps = useClick(isOpen, setOpen);
 
-<ControlledMenu
-  state={isOpen ? 'open' : 'closed'}
-  anchorRef={ref}
-  onPointerLeave={() => setOpen(false)}
-  onClose={() => setOpen(false)}
->
-  <MenuItem>New File</MenuItem>
-  <MenuItem>Save</MenuItem>
-  <MenuItem>Close Window</MenuItem>
-</ControlledMenu>`,
+  return (
+    <>
+      <button type="button" ref={ref} {...anchorProps}>
+        Menu
+      </button>
 
-  fullSource: `import { useState, useRef } from 'react';
-import {
-    ControlledMenu,
-    MenuItem
-} from '@szhsin/react-menu';
-import '@szhsin/react-menu/dist/index.css';
-
-export default function Example() {
-    const ref = useRef(null);
-    const [isOpen, setOpen] = useState();
-
-    return (
-        <>
-          <div ref={ref} className="btn" onPointerEnter={() => setOpen(true)}>
-            Hover to Open
-          </div>
-
-          <ControlledMenu
-            state={isOpen ? 'open' : 'closed'}
-            anchorRef={ref}
-            onPointerLeave={() => setOpen(false)}
-            onClose={() => setOpen(false)}
-          >
-            <MenuItem>New File</MenuItem>
-            <MenuItem>Save</MenuItem>
-            <MenuItem>Close Window</MenuItem>
-          </ControlledMenu>
-        </>
-    );
+      <ControlledMenu
+        state={isOpen ? 'open' : 'closed'}
+        anchorRef={ref}
+        onClose={() => setOpen(false)}
+      >
+        <MenuItem>Cut</MenuItem>
+        <MenuItem>Copy</MenuItem>
+        <MenuItem>Paste</MenuItem>
+      </ControlledMenu>
+    </>
+  );
 }`
+};
+
+export const menuStateHook = {
+  id: 'use-menu-state',
+
+  title: 'useMenuState',
+
+  desc: (
+    <>
+      <p>
+        <code>useMenuState</code> Hook works with <code>ControlledMenu</code> and help you manage
+        the state transition/animation when menu opens and closes.
+      </p>
+      <p>Please see {menuStateHookLink} for more details.</p>
+    </>
+  ),
+
+  fullSource: `import { useRef } from 'react';
+import { ControlledMenu, MenuItem, useClick, useMenuState } from '@szhsin/react-menu';
+import '@szhsin/react-menu/dist/index.css';
+import '@szhsin/react-menu/dist/transitions/slide.css';
+
+export default function () {
+  const ref = useRef(null);
+  const [menuState, toggleMenu] = useMenuState({ transition: true });
+  const anchorProps = useClick(menuState.state, toggleMenu);
+
+  return (
+    <>
+      <button type="button" ref={ref} {...anchorProps}>
+        Menu
+      </button>
+
+      <ControlledMenu {...menuState} anchorRef={ref} onClose={() => toggleMenu(false)}>
+        <MenuItem>Cut</MenuItem>
+        <MenuItem>Copy</MenuItem>
+        <MenuItem>Paste</MenuItem>
+      </ControlledMenu>
+    </>
+  );
+}`
+};
+
+export const hoverMenu = {
+  id: 'hover-menu',
+
+  title: 'Hover menu',
+
+  desc: (
+    <>
+      <p>
+        You can create a hover menu with the <code>useHover</code> hook and{' '}
+        <code>ControlledMenu</code>.
+      </p>
+      <p>
+        A hover menu created using the <code>useHover</code> hook can work on both desktop and touch
+        screens. Keyboard navigation is still supported.
+      </p>
+      <p>
+        Similar to the click menu, you can create menu state using <code>useState</code> (w/o
+        transition), or <code>useMenuState</code> hook (with transition).
+      </p>
+    </>
+  ),
+
+  fullSource: `import { useRef, useState } from 'react';
+import { ControlledMenu, MenuItem, useClick, useMenuState } from '@szhsin/react-menu';
+
+const HoverMenu = () => {
+  const ref = useRef(null);
+  const [isOpen, setOpen] = useState(false);
+  const { anchorProps, hoverProps } = useHover(isOpen, setOpen);
+
+  return (
+    <>
+      <div ref={ref} {...anchorProps}>
+        Hover
+      </div>
+
+      <ControlledMenu
+        {...hoverProps}
+        state={isOpen ? 'open' : 'closed'}
+        anchorRef={ref}
+        onClose={() => setOpen(false)}
+      >
+        <MenuItem>Cut</MenuItem>
+        <MenuItem>Copy</MenuItem>
+        <MenuItem>Paste</MenuItem>
+      </ControlledMenu>
+    </>
+  );
+};
+
+const HoverMenuWithTransition = () => {
+  const ref = useRef(null);
+  const [menuState, toogle] = useMenuState({ transition: true });
+  const { anchorProps, hoverProps } = useHover(menuState.state, toogle);
+
+  return (
+    <>
+      <div ref={ref} {...anchorProps}>
+        Hover with transition
+      </div>
+
+      <ControlledMenu
+        {...hoverProps}
+        {...menuState}
+        anchorRef={ref}
+        onClose={() => toogle(false)}
+      >
+        <MenuItem>Cut</MenuItem>
+        <MenuItem>Copy</MenuItem>
+        <MenuItem>Paste</MenuItem>
+      </ControlledMenu>
+    </>
+  );
+};`
 };
 
 export const contextMenu = {
@@ -1006,115 +1099,34 @@ export const contextMenu = {
     </p>
   ),
 
-  source: `const [menuProps, toggleMenu] = useMenuState();
-const [anchorPoint, setAnchorPoint] = useState({ x: 0, y: 0 });
+  fullSource: `import { useState } from 'react';
+import { ControlledMenu, MenuItem } from '@szhsin/react-menu';
 
-<div onContextMenu={e => {
-    e.preventDefault();
-    setAnchorPoint({ x: e.clientX, y: e.clientY });
-    toggleMenu(true);
-}}>
-    Right click to open context menu
+export default function () {
+  const [isOpen, setOpen] = useState(false);
+  const [anchorPoint, setAnchorPoint] = useState({ x: 0, y: 0 });
 
-    <ControlledMenu {...menuProps} anchorPoint={anchorPoint}
-        direction="right" onClose={() => toggleMenu(false)}
+  return (
+    <div
+      onContextMenu={(e) => {
+        e.preventDefault();
+        setAnchorPoint({ x: e.clientX, y: e.clientY });
+        setOpen(true);
+      }}
     >
+      Right click to open context menu
+      <ControlledMenu
+        anchorPoint={anchorPoint}
+        state={isOpen ? 'open' : 'closed'}
+        direction="right"
+        onClose={() => setOpen(false)}
+      >
         <MenuItem>Cut</MenuItem>
         <MenuItem>Copy</MenuItem>
         <MenuItem>Paste</MenuItem>
-    </ControlledMenu>
-</div >`,
-
-  fullSource: `import { useState } from 'react';
-import {
-    ControlledMenu,
-    MenuItem,
-    useMenuState
-} from '@szhsin/react-menu';
-import '@szhsin/react-menu/dist/index.css';
-
-export default function Example() {
-    const [menuProps, toggleMenu] = useMenuState();
-    const [anchorPoint, setAnchorPoint] = useState({ x: 0, y: 0 });
-
-    return (
-        <div onContextMenu={e => {
-            e.preventDefault();
-            setAnchorPoint({ x: e.clientX, y: e.clientY });
-            toggleMenu(true);
-        }}>
-            Right click to open context menu
-
-            <ControlledMenu {...menuProps} anchorPoint={anchorPoint}
-                direction="right" onClose={() => toggleMenu(false)}
-            >
-                <MenuItem>Cut</MenuItem>
-                <MenuItem>Copy</MenuItem>
-                <MenuItem>Paste</MenuItem>
-            </ControlledMenu>
-        </div >
-    );
-}`
-};
-
-export const menuStateHook = {
-  id: 'use-menu-state',
-
-  title: 'useMenuState',
-
-  desc: (
-    <>
-      <p>
-        <code>useMenuState</code> Hook works with <code>ControlledMenu</code> and help you manage
-        the state transition/animation when menu opens and closes.
-      </p>
-      <p>Please see {menuStateHookLink} for more details.</p>
-    </>
-  ),
-
-  source: `const ref = useRef(null);
-const [menuProps, toggleMenu] = useMenuState({ transition: true });
-
-<div ref={ref} onPointerEnter={() => toggleMenu(true)}>
-    Hover to Open
-</div>
-
-<ControlledMenu {...menuProps} anchorRef={ref}
-    onPointerLeave={() => toggleMenu(false)}
-    onClose={() => toggleMenu(false)}>
-    <MenuItem>New File</MenuItem>
-    <MenuItem>Save</MenuItem>
-    <MenuItem>Close Window</MenuItem>
-</ControlledMenu>`,
-
-  fullSource: `import { useRef } from 'react';
-import {
-    ControlledMenu,
-    MenuItem,
-    useMenuState
-} from '@szhsin/react-menu';
-import '@szhsin/react-menu/dist/index.css';
-import '@szhsin/react-menu/dist/transitions/slide.css';
-
-export default function Example() {
-    const ref = useRef(null);
-    const [menuProps, toggleMenu] = useMenuState({ transition: true });
-
-    return (
-        <>
-            <div ref={ref} onPointerEnter={() => toggleMenu(true)}>
-                Hover to Open
-            </div>
-
-            <ControlledMenu {...menuProps} anchorRef={ref}
-                onPointerLeave={() => toggleMenu(false)}
-                onClose={() => toggleMenu(false)}>
-                <MenuItem>New File</MenuItem>
-                <MenuItem>Save</MenuItem>
-                <MenuItem>Close Window</MenuItem>
-            </ControlledMenu>
-        </>
-    );
+      </ControlledMenu>
+    </div>
+  );
 }`
 };
 
@@ -1226,8 +1238,8 @@ export const menuItem = {
 export const menuButton = {
   id: 'menu-button',
   title: 'Menu button',
-  desc: <p>Change the look and contents of your menu button.</p>,
-  list: [openStateButton, customisedButton]
+  desc: <p>Customising the menu button.</p>,
+  list: [buttonRenderProp, customisedButton]
 };
 
 export const menuOptions = {
@@ -1242,10 +1254,10 @@ export const controlledMenu = {
   title: 'Controlled menu',
   desc: (
     <p>
-      Get more control of the states with <code>ControlledMenu</code>.
+      Get control of menu's open or close state with <code>ControlledMenu</code>.
     </p>
   ),
-  list: [managingState, menuStateHook, contextMenu]
+  list: [controllingState, menuStateHook, hoverMenu, contextMenu]
 };
 
 export const customisedStyle = {
