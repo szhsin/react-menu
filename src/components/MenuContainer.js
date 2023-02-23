@@ -40,6 +40,9 @@ export const MenuContainer = ({
       // If this happen, e.relatedTarget is incorrectly set to null instead of the button in Safari and Firefox,
       // and makes it difficult to determine whether onBlur is fired because of clicking on menu button.
       // This is a workaround approach which sets a flag to skip a following click event.
+      // *** NOTE ***
+      // This workaround is replaced by the useClick hook.
+      // The skipOpen prop will be removed in the next major version.
       if (skipOpen) {
         skipOpen.current = true;
         setTimeout(() => (skipOpen.current = false), 300);

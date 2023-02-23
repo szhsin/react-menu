@@ -418,6 +418,9 @@ export interface ControlledMenuProps extends RootMenuProps {
    * *Don't set this prop for context menu*
    */
   anchorRef?: React.RefObject<Element | RectElement>;
+  /**
+   * @deprecated use the `useClick` hook instead.
+   */
   skipOpen?: React.RefObject<boolean>;
   /**
    * If `true`, the menu list element will gain focus after menu is open.
@@ -687,5 +690,64 @@ export function useMenuState(options?: MenuStateOptions): [
    */
   (open?: boolean) => void
 ];
+
+type ClickEventProps = Required<Pick<React.HTMLAttributes<Element>, 'onMouseDown' | 'onClick'>>;
+
+type HoverEventProps = Required<
+  Pick<React.HTMLAttributes<Element>, 'onMouseEnter' | 'onMouseLeave'>
+>;
+
+type ToggleEvent = (open: boolean, event: Parameters<React.MouseEventHandler>[0]) => void;
+
+/**
+ * A Hook which works with `ControlledMenu` to create click (toggle) menu.
+ *
+ * @returns props which should be given to the anchor element.
+ */
+export function useClick(
+  /**
+   * Menu state can be a boolean or the state returned from `useMenuState`
+   */
+  state: boolean | MenuState | undefined,
+  /**
+   * A callback function that should open or close menu, receiving React synthetic event which triggered the callback.
+   */
+  onToggle: ToggleEvent
+): ClickEventProps;
+
+/**
+ * A Hook which works with `ControlledMenu` to create hover menu.
+ */
+export function useHover(
+  /**
+   * Menu state can be a boolean or the state returned from `useMenuState`
+   */
+  state: boolean | MenuState | undefined,
+  /**
+   * A callback function that should open or close menu, receiving React synthetic event which triggered the callback.
+   */
+  onToggle: ToggleEvent,
+  options?: {
+    /**
+     * Specify an open delay in `ms`.
+     * @default 100
+     */
+    openDelay?: number;
+    /**
+     * Specify a close delay in `ms`.
+     * @default 300
+     */
+    closeDelay?: number;
+  }
+): {
+  /**
+   * Props which should be given to the anchor element.
+   */
+  anchorProps: HoverEventProps & ClickEventProps;
+  /**
+   * Props which should be given to the menu.
+   */
+  hoverProps: HoverEventProps;
+};
 
 export {};

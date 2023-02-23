@@ -27,6 +27,22 @@ var useBEM = function useBEM(_ref) {
   }, [block, element, modifiers, className]);
 };
 
+var useClick = function useClick(state, onToggle) {
+  if (process.env.NODE_ENV !== 'production' && typeof onToggle !== 'function') {
+    throw new Error('[React-Menu] useClick/useHover requires a function in the second parameter.');
+  }
+  var _useState = react.useState({}),
+    skipOpen = _useState[0];
+  return {
+    onMouseDown: function onMouseDown() {
+      skipOpen.v = state && state !== 'closed';
+    },
+    onClick: function onClick(e) {
+      return skipOpen.v ? skipOpen.v = false : onToggle(true, e);
+    }
+  };
+};
+
 function setRef(ref, instance) {
   typeof ref === 'function' ? ref(instance) : ref.current = instance;
 }
@@ -39,6 +55,64 @@ var useCombinedRef = function useCombinedRef(refA, refB) {
       setRef(refB, instance);
     };
   }, [refA, refB]);
+};
+
+function _extends() {
+  _extends = Object.assign ? Object.assign.bind() : function (target) {
+    for (var i = 1; i < arguments.length; i++) {
+      var source = arguments[i];
+      for (var key in source) {
+        if (Object.prototype.hasOwnProperty.call(source, key)) {
+          target[key] = source[key];
+        }
+      }
+    }
+    return target;
+  };
+  return _extends.apply(this, arguments);
+}
+function _objectWithoutPropertiesLoose(source, excluded) {
+  if (source == null) return {};
+  var target = {};
+  var sourceKeys = Object.keys(source);
+  var key, i;
+  for (i = 0; i < sourceKeys.length; i++) {
+    key = sourceKeys[i];
+    if (excluded.indexOf(key) >= 0) continue;
+    target[key] = source[key];
+  }
+  return target;
+}
+
+var useHover = function useHover(isOpen, onToggle, _temp) {
+  var _ref = _temp === void 0 ? {} : _temp,
+    _ref$openDelay = _ref.openDelay,
+    openDelay = _ref$openDelay === void 0 ? 100 : _ref$openDelay,
+    _ref$closeDelay = _ref.closeDelay,
+    closeDelay = _ref$closeDelay === void 0 ? 300 : _ref$closeDelay;
+  var _useState = react.useState({}),
+    config = _useState[0];
+  var clearTimer = function clearTimer() {
+    return clearTimeout(config.t);
+  };
+  var delayAction = function delayAction(toOpen) {
+    return function (e) {
+      clearTimer();
+      config.t = setTimeout(function () {
+        return onToggle(toOpen, e);
+      }, toOpen ? openDelay : closeDelay);
+    };
+  };
+  var props = {
+    onMouseEnter: delayAction(true),
+    onMouseLeave: delayAction(false)
+  };
+  return {
+    anchorProps: _extends({}, props, useClick(isOpen, onToggle)),
+    hoverProps: _extends({}, props, {
+      onMouseEnter: clearTimer
+    })
+  };
 };
 
 var useIsomorphicLayoutEffect = typeof window !== 'undefined' && typeof window.document !== 'undefined' && typeof window.document.createElement !== 'undefined' ? react.useLayoutEffect : react.useEffect;
@@ -184,33 +258,6 @@ function indexOfNode(nodeList, node) {
     if (nodeList[i] === node) return i;
   }
   return -1;
-}
-
-function _extends() {
-  _extends = Object.assign ? Object.assign.bind() : function (target) {
-    for (var i = 1; i < arguments.length; i++) {
-      var source = arguments[i];
-      for (var key in source) {
-        if (Object.prototype.hasOwnProperty.call(source, key)) {
-          target[key] = source[key];
-        }
-      }
-    }
-    return target;
-  };
-  return _extends.apply(this, arguments);
-}
-function _objectWithoutPropertiesLoose(source, excluded) {
-  if (source == null) return {};
-  var target = {};
-  var sourceKeys = Object.keys(source);
-  var key, i;
-  for (i = 0; i < sourceKeys.length; i++) {
-    key = sourceKeys[i];
-    if (excluded.indexOf(key) >= 0) continue;
-    target[key] = source[key];
-  }
-  return target;
 }
 
 var stylePropTypes = function stylePropTypes(name) {
@@ -1422,17 +1469,16 @@ var Menu = /*#__PURE__*/react.forwardRef(function Menu(_ref, externalRef) {
     stateProps = _useMenuStateAndFocus[0],
     toggleMenu = _useMenuStateAndFocus[1],
     openMenu = _useMenuStateAndFocus[2];
-  var isOpen = isMenuOpen(stateProps.state);
-  var skipOpen = react.useRef(false);
+  var state = stateProps.state;
+  var isOpen = isMenuOpen(state);
   var buttonRef = react.useRef(null);
+  var anchorProps = useClick(state, function (_, e) {
+    return openMenu(!e.detail ? FocusPositions.FIRST : undefined);
+  });
   var handleClose = react.useCallback(function (e) {
     toggleMenu(false);
     if (e.key) buttonRef.current.focus();
   }, [toggleMenu]);
-  var onClick = function onClick(e) {
-    if (skipOpen.current) return;
-    openMenu(e.detail === 0 ? FocusPositions.FIRST : undefined);
-  };
   var onKeyDown = function onKeyDown(e) {
     switch (e.key) {
       case Keys.UP:
@@ -1452,10 +1498,9 @@ var Menu = /*#__PURE__*/react.forwardRef(function Menu(_ref, externalRef) {
   if (!button || !button.type) throw new Error('Menu requires a menuButton prop.');
   var buttonProps = _extends({
     ref: useCombinedRef(button.ref, buttonRef)
-  }, mergeProps({
-    onClick: onClick,
+  }, mergeProps(_extends({
     onKeyDown: onKeyDown
-  }, button.props));
+  }, anchorProps), button.props));
   if (getName(button.type) === 'MenuButton') {
     buttonProps.isOpen = isOpen;
   }
@@ -1474,8 +1519,7 @@ var Menu = /*#__PURE__*/react.forwardRef(function Menu(_ref, externalRef) {
       "aria-label": ariaLabel || (typeof button.props.children === 'string' ? button.props.children : 'Menu'),
       anchorRef: buttonRef,
       ref: externalRef,
-      onClose: handleClose,
-      skipOpen: skipOpen
+      onClose: handleClose
     }))]
   });
 });
@@ -1962,4 +2006,6 @@ exports.MenuHeader = MenuHeader;
 exports.MenuItem = MenuItem;
 exports.MenuRadioGroup = MenuRadioGroup;
 exports.SubMenu = SubMenu;
+exports.useClick = useClick;
+exports.useHover = useHover;
 exports.useMenuState = useMenuState;

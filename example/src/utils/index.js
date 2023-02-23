@@ -1,8 +1,8 @@
 import { useEffect, useLayoutEffect } from 'react';
 import { useTheme } from '../store';
 
-export const version = '3.4.1';
-export const build = '123';
+export const version = '3.5.0';
+export const build = '124';
 
 export const bem = (block, element, modifiers = {}) => {
   let blockElement = element ? `${block}__${element}` : block;
@@ -19,7 +19,7 @@ export const bem = (block, element, modifiers = {}) => {
 };
 
 export const withPresetProps = (MenuComponent) => (props) =>
-  <MenuComponent {...props} transition theming={useTheme().theme} />;
+  <MenuComponent transition theming={useTheme().theme} {...props} />;
 
 // Get around a warning when using useLayoutEffect on the server.
 // https://github.com/reduxjs/react-redux/blob/b48d087d76f666e1c6c5a9713bbec112a1631841/src/utils/useIsomorphicLayoutEffect.js#L12
