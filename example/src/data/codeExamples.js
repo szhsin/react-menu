@@ -574,20 +574,28 @@ export default function Example() {
 }`
 };
 
-export const hoverItem = {
-  id: 'hover-item',
+export const itemRenderProp = {
+  id: 'item-render-prop',
 
-  title: 'Hovering items',
+  title: 'Render prop',
 
   desc: (
     <>
       <p>
         <code>MenuItem</code> manages some internal states one of which indicates whether the item
-        is hovered. If you need to render dynamic contents in response to state updates, you are
-        able to use <code>children</code> as a render prop and pass it a callback function.
+        is hovered. If you need to render dynamic contents in response to state updates, you can use{' '}
+        <code>children</code> as a render prop and pass it a callback function.
       </p>
       <p>For more menu item states, please refer to {menuItemLink}.</p>
     </>
+  ),
+
+  note: (
+    <p>
+      The <code>children</code> of menu also supports render prop pattern. When a function is
+      provided to a menu's <code>children</code>, it receives the menu's state and computed
+      direction resulted from bounding box check.
+    </p>
   ),
 
   source: `<Menu menuButton={<MenuButton>Open menu</MenuButton>}>
@@ -1232,7 +1240,7 @@ export const menuItem = {
   id: 'menu-item',
   title: 'Menu item',
   desc: <p>Advanced usage examples with menu items.</p>,
-  list: [linkAndDisabled, iconAndImage, hoverItem, focusableItem]
+  list: [linkAndDisabled, iconAndImage, itemRenderProp, focusableItem]
 };
 
 export const menuButton = {

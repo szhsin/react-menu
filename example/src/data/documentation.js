@@ -303,6 +303,19 @@ const sharedMenuProps = [
         accordingly.
       </p>
     )
+  },
+  {
+    name: 'children',
+    type: 'node | function',
+    desc: (
+      <>
+        <p>
+          Menu items underneath the menu, or a function that returns them. The function will be
+          called by passing an object with the following properties:
+        </p>
+        {menuModifiers}
+      </>
+    )
   }
 ];
 
