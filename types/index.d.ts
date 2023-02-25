@@ -248,7 +248,10 @@ interface BaseMenuProps extends Omit<BaseProps, 'style'> {
    * The `MenuGroup` should have `takeOverflow` prop set as `true` accordingly.
    */
   setDownOverflow?: boolean;
-  children?: React.ReactNode;
+  /**
+   * Any valid React node or a render function that returns one.
+   */
+  children?: RenderProp<MenuModifiers>;
 }
 
 /**

@@ -449,7 +449,9 @@ export const MenuList = ({
 
       <MenuListContext.Provider value={listContext}>
         <MenuListItemContext.Provider value={itemContext}>
-          <HoverItemContext.Provider value={hoverItem}>{children}</HoverItemContext.Provider>
+          <HoverItemContext.Provider value={hoverItem}>
+            {safeCall(children, modifiers)}
+          </HoverItemContext.Provider>
         </MenuListItemContext.Provider>
       </MenuListContext.Provider>
     </ul>

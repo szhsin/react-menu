@@ -1,4 +1,5 @@
 import { screen, fireEvent, waitFor, act } from '@testing-library/react';
+import { Menu, MenuItem, MenuButton } from './entry';
 import * as utils from './utils';
 
 const { queryByRole, queryAllByRole } = screen;
@@ -228,6 +229,29 @@ test('Use keepOpen of onClick to customise when menu is closed', () => {
   utils.expectMenuToBeOpen(true);
   fireEvent.click(utils.queryMenuItem('First'));
   utils.expectMenuToBeOpen(true);
+});
+
+test('Use children as a render prop', () => {
+  utils.render(
+    <Menu menuButton={<MenuButton>Menu</MenuButton>} direction="right">
+      {({ state, dir }) => (
+        <>
+          <MenuItem data-testid="state">{state}</MenuItem>
+          <MenuItem data-testid="dir">{dir}</MenuItem>
+        </>
+      )}
+    </Menu>
+  );
+  utils.clickMenuButton();
+  const stateItem = screen.getByTestId('state');
+  const dirItem = screen.getByTestId('dir');
+  expect(stateItem).toHaveTextContent('open');
+  expect(dirItem).toHaveTextContent('right');
+
+  fireEvent.click(stateItem);
+  utils.expectMenuToBeOpen(false);
+  expect(stateItem).toHaveTextContent('closed');
+  expect(dirItem).toHaveTextContent('right');
 });
 
 test.each([

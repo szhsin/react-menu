@@ -5,7 +5,7 @@ import { MenuContainer } from './MenuContainer.js';
 import { jsxs, jsx } from 'react/jsx-runtime';
 import { SettingsContext, MenuListContext, HoverActionTypes, MenuListItemContext, HoverItemContext, Keys, menuClass, CloseReason, FocusPositions, menuArrowClass } from '../utils/constants.js';
 import { useItems } from '../hooks/useItems.js';
-import { getScrollAncestor, floatEqual, commonProps, mergeProps, isMenuOpen, getTransition, safeCall, batchedUpdates } from '../utils/utils.js';
+import { getScrollAncestor, floatEqual, commonProps, mergeProps, safeCall, isMenuOpen, getTransition, batchedUpdates } from '../utils/utils.js';
 import { getPositionHelpers } from '../positionUtils/getPositionHelpers.js';
 import { positionMenu } from '../positionUtils/positionMenu.js';
 import { useLayoutEffect as useIsomorphicLayoutEffect } from '../hooks/useIsomorphicLayoutEffect.js';
@@ -424,7 +424,7 @@ var MenuList = function MenuList(_ref) {
         value: itemContext,
         children: /*#__PURE__*/jsx(HoverItemContext.Provider, {
           value: hoverItem,
-          children: children
+          children: safeCall(children, modifiers)
         })
       })
     })]

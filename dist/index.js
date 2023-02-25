@@ -1326,7 +1326,7 @@ var MenuList = function MenuList(_ref) {
         value: itemContext,
         children: /*#__PURE__*/jsxRuntime.jsx(HoverItemContext.Provider, {
           value: hoverItem,
-          children: children
+          children: safeCall(children, modifiers)
         })
       })
     })]
