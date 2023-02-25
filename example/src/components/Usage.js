@@ -55,7 +55,7 @@ const Usage = React.memo(function Usage() {
           <GroupingSection data={codeExamples.menuItem} />
           <LinkAndDisabledExample />
           <IconAndImageExample />
-          <HoverItemExample />
+          <ItemRenderPropExample />
           <FocusableItemExample />
 
           <GroupingSection data={codeExamples.menuOptions} />
@@ -360,9 +360,9 @@ function IconAndImageExample() {
   );
 }
 
-function HoverItemExample() {
+function ItemRenderPropExample() {
   return (
-    <Example data={codeExamples.hoverItem}>
+    <Example data={codeExamples.itemRenderProp}>
       <Menu menuButton={<MenuButton>Open menu</MenuButton>}>
         <MenuItem>{({ hover }) => (hover ? 'Hovered!' : 'Hover me')}</MenuItem>
         <MenuDivider />
