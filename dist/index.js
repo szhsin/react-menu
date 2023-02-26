@@ -1477,7 +1477,10 @@ var Menu = /*#__PURE__*/react.forwardRef(function Menu(_ref, externalRef) {
   });
   var handleClose = react.useCallback(function (e) {
     toggleMenu(false);
-    if (e.key) buttonRef.current.focus();
+    if (e.key) setTimeout(function () {
+      var _buttonRef$current;
+      return (_buttonRef$current = buttonRef.current) == null ? void 0 : _buttonRef$current.focus();
+    }, 0);
   }, [toggleMenu]);
   var onKeyDown = function onKeyDown(e) {
     switch (e.key) {
