@@ -45,7 +45,7 @@ export const Menu = forwardRef(function Menu(
   const handleClose = useCallback(
     (e) => {
       toggleMenu(false);
-      if (e.key) buttonRef.current.focus();
+      if (e.key) setTimeout(() => buttonRef.current?.focus(), 0);
     },
     [toggleMenu]
   );
