@@ -60,3 +60,11 @@ export const MenuStateMap = Object.freeze({
   exiting: 'closing',
   exited: 'closed'
 });
+
+export const positionAbsolute = 'absolute';
+export const roleNone = 'presentation';
+export const roleMenuitem = 'menuitem';
+export const dummyItemProps = {
+  'aria-hidden': true,
+  role: roleMenuitem
+};

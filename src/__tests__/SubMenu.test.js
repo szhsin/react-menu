@@ -34,6 +34,7 @@ test('Open and close submenu with mouse', async () => {
   utils.expectMenuToBeOpen(true, submenuOptions);
   expect(utils.queryMenu(submenuOptions)).toHaveClass('szh-menu--dir-right');
   expect(onChange).toHaveBeenLastCalledWith({ open: true });
+  expect(screen.getAllByRole('menuitem')).toHaveLength(6);
   await waitFor(() => utils.expectMenuToHaveFocus(submenuOptions));
 
   // Hovering an item in the parent menu list will close submenu

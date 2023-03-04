@@ -4,6 +4,8 @@ import { useBEM, useItemState, useCombinedRef } from '../hooks';
 import {
   mergeProps,
   commonProps,
+  roleNone,
+  roleMenuitem,
   safeCall,
   stylePropTypes,
   menuClass,
@@ -91,7 +93,7 @@ export const MenuItem = withHovering(
     // 2. Merged outer and local props
     // 3. ref, className
     const menuItemProps = {
-      role: isRadio ? 'menuitemradio' : isCheckBox ? 'menuitemcheckbox' : 'menuitem',
+      role: isRadio ? 'menuitemradio' : isCheckBox ? 'menuitemcheckbox' : roleMenuitem,
       'aria-checked': isRadio || isCheckBox ? isChecked : undefined,
       ...commonProps(isDisabled, isHovering),
       ...mergedProps,
@@ -101,7 +103,7 @@ export const MenuItem = withHovering(
     };
 
     return isAnchor ? (
-      <li role="presentation">
+      <li role={roleNone}>
         <a href={href} {...menuItemProps} />
       </li>
     ) : (

@@ -13,6 +13,8 @@ import {
   mergeProps,
   batchedUpdates,
   commonProps,
+  roleNone,
+  roleMenuitem,
   safeCall,
   stylePropTypes,
   uncontrolledMenuPropTypes,
@@ -217,12 +219,12 @@ export const SubMenu = withHovering(
       <li
         className={useBEM({ block: menuClass, element: subMenuClass, className })}
         style={{ position: 'relative' }}
-        role="presentation"
+        role={roleNone}
         ref={containerRef}
         onKeyDown={handleKeyDown}
       >
         <div
-          role="menuitem"
+          role={roleMenuitem}
           aria-haspopup
           aria-expanded={isOpen}
           {...commonProps(isDisabled, isHovering)}
