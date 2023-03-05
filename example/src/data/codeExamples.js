@@ -26,10 +26,10 @@ import '@szhsin/react-menu/dist/transitions/slide.css';
 
 export default function Example() {
   return (
-    <Menu menuButton={<MenuButton>Open menu</MenuButton>} transition>
-      <MenuItem>New File</MenuItem>
-      <MenuItem>Save</MenuItem>
-      <MenuItem>Close Window</MenuItem>
+    <Menu menuButton={<MenuButton>Menu</MenuButton>} transition>
+      <MenuItem>Cut</MenuItem>
+      <MenuItem>Copy</MenuItem>
+      <MenuItem>Paste</MenuItem>
     </Menu>
   );
 }`
@@ -47,44 +47,45 @@ export const subMenu = {
     </p>
   ),
 
-  source: `<Menu menuButton={<MenuButton>Open menu</MenuButton>}>
-    <MenuItem>New File</MenuItem>
-    <SubMenu label="Open">
-        <MenuItem>index.html</MenuItem>
-        <MenuItem>example.js</MenuItem>
-        <SubMenu label="Styles">
-            <MenuItem>about.css</MenuItem>
-            <MenuItem>home.css</MenuItem>
-            <MenuItem>index.css</MenuItem>
-        </SubMenu>
+  note: (
+    <p>
+      The <code>label</code> prop of submenu accepts not only string type but any valid JSX. Thus,
+      you can render images or icons in the label.
+    </p>
+  ),
+
+  source: `<Menu menuButton={<MenuButton>Menu</MenuButton>}>
+  <MenuItem>New File</MenuItem>
+  <SubMenu label="Edit">
+    <MenuItem>Cut</MenuItem>
+    <MenuItem>Copy</MenuItem>
+    <MenuItem>Paste</MenuItem>
+    <SubMenu label="Find">
+      <MenuItem>Find...</MenuItem>
+      <MenuItem>Find Next</MenuItem>
+      <MenuItem>Find Previous</MenuItem>
     </SubMenu>
-    <MenuItem>Save</MenuItem>
+  </SubMenu>
 </Menu>`,
 
-  fullSource: `import {
-    Menu,
-    MenuItem,
-    MenuButton,
-    SubMenu
-} from '@szhsin/react-menu';
-import '@szhsin/react-menu/dist/index.css';
+  fullSource: `import { Menu, MenuItem, MenuButton, SubMenu } from '@szhsin/react-menu';
 
 export default function Example() {
-    return (
-        <Menu menuButton={<MenuButton>Open menu</MenuButton>}>
-            <MenuItem>New File</MenuItem>
-            <SubMenu label="Open">
-                <MenuItem>index.html</MenuItem>
-                <MenuItem>example.js</MenuItem>
-                <SubMenu label="Styles">
-                    <MenuItem>about.css</MenuItem>
-                    <MenuItem>home.css</MenuItem>
-                    <MenuItem>index.css</MenuItem>
-                </SubMenu>
-            </SubMenu>
-            <MenuItem>Save</MenuItem>
-        </Menu>
-    );
+  return (
+    <Menu menuButton={<MenuButton>Menu</MenuButton>}>
+      <MenuItem>New File</MenuItem>
+      <SubMenu label="Edit">
+        <MenuItem>Cut</MenuItem>
+        <MenuItem>Copy</MenuItem>
+        <MenuItem>Paste</MenuItem>
+        <SubMenu label="Find">
+          <MenuItem>Find...</MenuItem>
+          <MenuItem>Find Next</MenuItem>
+          <MenuItem>Find Previous</MenuItem>
+        </SubMenu>
+      </SubMenu>
+    </Menu>
+  );
 }`
 };
 
@@ -109,7 +110,7 @@ export const eventHandling = {
   codeSandbox: 'https://codesandbox.io/s/react-menu-click-event-1p4604',
 
   source: `<Menu
-  menuButton={<MenuButton>Open menu</MenuButton>}
+  menuButton={<MenuButton>Menu</MenuButton>}
   onItemClick={(e) => console.log(\`[Menu] \${e.value} clicked\`)}
 >
   <MenuItem value="Cut" onClick={(e) => console.log(\`[MenuItem] \${e.value} clicked\`)}>
@@ -149,43 +150,50 @@ export const radioGroup = {
   source: `const [textColor, setTextColor] = useState('red');
 
 <Menu menuButton={<MenuButton>Text color</MenuButton>}>
-    <MenuRadioGroup value={textColor}
-        onRadioChange={e => setTextColor(e.value)}>
-        <MenuItem type="radio" value="red">Red</MenuItem>
-        <MenuItem type="radio" value="green">Green</MenuItem>
-        <MenuItem type="radio" value="blue">Blue</MenuItem>
-    </MenuRadioGroup>
+  <MenuRadioGroup
+    value={textColor}
+    onRadioChange={(e) => setTextColor(e.value)}
+  >
+    <MenuItem type="radio" value="red">
+      Red
+    </MenuItem>
+    <MenuItem type="radio" value="green">
+      Green
+    </MenuItem>
+    <MenuItem type="radio" value="blue">
+      Blue
+    </MenuItem>
+  </MenuRadioGroup>
 </Menu>`,
 
   fullSource: `import { useState } from 'react';
-import {
-    Menu,
-    MenuItem,
-    MenuButton,
-    MenuRadioGroup
-} from '@szhsin/react-menu';
-import '@szhsin/react-menu/dist/index.css';
+import { Menu, MenuItem, MenuButton, MenuRadioGroup } from '@szhsin/react-menu';
 
 export default function Example() {
-    const [textColor, setTextColor] = useState('red');
+  const [textColor, setTextColor] = useState('red');
 
-    return (
-        <>
-            <Menu menuButton={<MenuButton>Text color</MenuButton>}>
-                <MenuRadioGroup value={textColor}
-                    onRadioChange={e => setTextColor(e.value)}>
-                    <MenuItem type="radio" value="red">Red</MenuItem>
-                    <MenuItem type="radio" value="green">Green</MenuItem>
-                    <MenuItem type="radio" value="blue">Blue</MenuItem>
-                </MenuRadioGroup>
-            </Menu>
+  return (
+    <>
+      <Menu menuButton={<MenuButton>Text color</MenuButton>}>
+        <MenuRadioGroup
+          value={textColor}
+          onRadioChange={(e) => setTextColor(e.value)}
+        >
+          <MenuItem type="radio" value="red">
+            Red
+          </MenuItem>
+          <MenuItem type="radio" value="green">
+            Green
+          </MenuItem>
+          <MenuItem type="radio" value="blue">
+            Blue
+          </MenuItem>
+        </MenuRadioGroup>
+      </Menu>
 
-            <div className="sample-text"
-                style={{ color: textColor }}>
-                Sample text
-            </div>
-        </>
-    );
+      <div style={{ color: textColor }}>Sample text</div>
+    </>
+  );
 }`
 };
 
@@ -205,58 +213,76 @@ const [isItalic, setItalic] = useState(true);
 const [isUnderline, setUnderline] = useState(false);
 
 <Menu menuButton={<MenuButton>Text style</MenuButton>}>
-    <MenuItem type="checkbox" checked={isBold}
-        onClick={e => setBold(e.checked)}>
-        Bold
-    </MenuItem>
-    <MenuItem type="checkbox" checked={isItalic}
-        onClick={e => setItalic(e.checked)}>
-        Italic
-    </MenuItem>
-    <MenuItem type="checkbox" checked={isUnderline}
-        onClick={e => setUnderline(e.checked)}>
-        Underline
-    </MenuItem>
+  <MenuItem
+    type="checkbox"
+    checked={isBold}
+    onClick={(e) => setBold(e.checked)}
+  >
+    Bold
+  </MenuItem>
+  <MenuItem
+    type="checkbox"
+    checked={isItalic}
+    onClick={(e) => setItalic(e.checked)}
+  >
+    Italic
+  </MenuItem>
+  <MenuItem
+    type="checkbox"
+    checked={isUnderline}
+    onClick={(e) => setUnderline(e.checked)}
+  >
+    Underline
+  </MenuItem>
 </Menu>`,
 
   fullSource: `import { useState } from 'react';
-import {
-    Menu,
-    MenuItem,
-    MenuButton
-} from '@szhsin/react-menu';
-import '@szhsin/react-menu/dist/index.css';
+import { Menu, MenuItem, MenuButton } from '@szhsin/react-menu';
 
 export default function Example() {
-    const [isBold, setBold] = useState(true);
-    const [isItalic, setItalic] = useState(true);
-    const [isUnderline, setUnderline] = useState(false);
+  const [isBold, setBold] = useState(true);
+  const [isItalic, setItalic] = useState(true);
+  const [isUnderline, setUnderline] = useState(false);
 
-    return (
-        <>
-            <Menu menuButton={<MenuButton>Text style</MenuButton>}>
-                <MenuItem type="checkbox" checked={isBold}
-                    onClick={e => setBold(e.checked)}>
-                    Bold
-                </MenuItem>
-                <MenuItem type="checkbox" checked={isItalic}
-                    onClick={e => setItalic(e.checked)}>
-                    Italic
-                </MenuItem>
-                <MenuItem type="checkbox" checked={isUnderline}
-                    onClick={e => setUnderline(e.checked)}>
-                    Underline
-                </MenuItem>
-            </Menu>
+  return (
+    <>
+      <Menu menuButton={<MenuButton>Text style</MenuButton>}>
+        <MenuItem
+          type="checkbox"
+          checked={isBold}
+          onClick={(e) => setBold(e.checked)}
+        >
+          Bold
+        </MenuItem>
+        <MenuItem
+          type="checkbox"
+          checked={isItalic}
+          onClick={(e) => setItalic(e.checked)}
+        >
+          Italic
+        </MenuItem>
+        <MenuItem
+          type="checkbox"
+          checked={isUnderline}
+          onClick={(e) => setUnderline(e.checked)}
+        >
+          Underline
+        </MenuItem>
+      </Menu>
 
-            <div className="sample-text" style={{
-                fontWeight: isBold ? 'bold' : 'initial',
-                fontStyle: isItalic ? 'italic' : 'initial',
-                textDecoration: isUnderline ? 'underline' : 'initial'
-            }}>Sample text</div>
-        </>
-    );
-}`
+      <div
+        style={{
+          fontWeight: isBold ? 'bold' : 'initial',
+          fontStyle: isItalic ? 'italic' : 'initial',
+          textDecoration: isUnderline ? 'underline' : 'initial'
+        }}
+      >
+        Sample text
+      </div>
+    </>
+  );
+}
+`
 };
 
 export const headerAndDivider = {
@@ -277,45 +303,44 @@ export const headerAndDivider = {
     </p>
   ),
 
-  source: `<Menu menuButton={<MenuButton>Open menu</MenuButton>}>
-    <MenuItem>New File</MenuItem>
-    <MenuItem>Save</MenuItem>
-    <MenuItem>Close Window</MenuItem>
-    <MenuDivider />
-    <MenuHeader>Edit</MenuHeader>
-    <MenuItem>Cut</MenuItem>
-    <MenuItem>Copy</MenuItem>
-    <MenuItem>Paste</MenuItem>
-    <MenuDivider />
-    <MenuItem>Print</MenuItem>
+  source: `<Menu menuButton={<MenuButton>Menu</MenuButton>}>
+  <MenuItem>New File</MenuItem>
+  <MenuItem>Save</MenuItem>
+  <MenuItem>Close Window</MenuItem>
+  <MenuDivider />
+  <MenuHeader>Edit</MenuHeader>
+  <MenuItem>Cut</MenuItem>
+  <MenuItem>Copy</MenuItem>
+  <MenuItem>Paste</MenuItem>
+  <MenuDivider />
+  <MenuItem>Print</MenuItem>
 </Menu>`,
 
   fullSource: `import {
-    Menu,
-    MenuItem,
-    MenuButton,
-    MenuHeader,
-    MenuDivider
+  Menu,
+  MenuItem,
+  MenuButton,
+  MenuHeader,
+  MenuDivider
 } from '@szhsin/react-menu';
-import '@szhsin/react-menu/dist/index.css';
 
 export default function Example() {
-
-    return (
-        <Menu menuButton={<MenuButton>Open menu</MenuButton>}>
-            <MenuItem>New File</MenuItem>
-            <MenuItem>Save</MenuItem>
-            <MenuItem>Close Window</MenuItem>
-            <MenuDivider />
-            <MenuHeader>Edit</MenuHeader>
-            <MenuItem>Cut</MenuItem>
-            <MenuItem>Copy</MenuItem>
-            <MenuItem>Paste</MenuItem>
-            <MenuDivider />
-            <MenuItem>Print</MenuItem>
-        </Menu>
-    );
-}`
+  return (
+    <Menu menuButton={<MenuButton>Menu</MenuButton>}>
+      <MenuItem>New File</MenuItem>
+      <MenuItem>Save</MenuItem>
+      <MenuItem>Close Window</MenuItem>
+      <MenuDivider />
+      <MenuHeader>Edit</MenuHeader>
+      <MenuItem>Cut</MenuItem>
+      <MenuItem>Copy</MenuItem>
+      <MenuItem>Paste</MenuItem>
+      <MenuDivider />
+      <MenuItem>Print</MenuItem>
+    </Menu>
+  );
+}
+`
 };
 
 export const combined = {
@@ -329,65 +354,84 @@ export const combined = {
 
   fullSource: `import { useState } from 'react';
 import {
-    Menu,
-    MenuItem,
-    MenuButton,
-    SubMenu,
-    MenuHeader,
-    MenuDivider,
-    MenuRadioGroup
+  Menu,
+  MenuItem,
+  MenuButton,
+  SubMenu,
+  MenuHeader,
+  MenuDivider,
+  MenuRadioGroup
 } from '@szhsin/react-menu';
 import '@szhsin/react-menu/dist/index.css';
 
 export default function Example() {
+  const [textColor, setTextColor] = useState('red');
+  const [isBold, setBold] = useState(true);
+  const [isItalic, setItalic] = useState(true);
+  const [isUnderline, setUnderline] = useState(false);
 
-    const [textColor, setTextColor] = useState('red');
-    const [isBold, setBold] = useState(true);
-    const [isItalic, setItalic] = useState(true);
-    const [isUnderline, setUnderline] = useState(false);
+  return (
+    <>
+      <Menu menuButton={<MenuButton>Menu</MenuButton>}>
+        <MenuItem>New File</MenuItem>
+        <MenuItem>Save</MenuItem>
+        <MenuDivider />
+        <MenuHeader>Text settings</MenuHeader>
 
-    return (
-        <>
-            <Menu menuButton={<MenuButton>Open menu</MenuButton>}>
-                <MenuItem>New File</MenuItem>
-                <MenuItem>Save</MenuItem>
-                <MenuDivider />
-                <MenuHeader>Text settings</MenuHeader>
+        <SubMenu label="Text color">
+          <MenuRadioGroup
+            value={textColor}
+            onRadioChange={(e) => setTextColor(e.value)}
+          >
+            <MenuItem type="radio" value={'red'}>
+              Red
+            </MenuItem>
+            <MenuItem type="radio" value={'green'}>
+              Green
+            </MenuItem>
+            <MenuItem type="radio" value={'blue'}>
+              Blue
+            </MenuItem>
+          </MenuRadioGroup>
+        </SubMenu>
 
-                <SubMenu label="Text color">
-                    <MenuRadioGroup
-                        value={textColor}
-                        onRadioChange={e => setTextColor(e.value)}>
-                        <MenuItem type="radio" value={'red'}>Red</MenuItem>
-                        <MenuItem type="radio" value={'green'}>Green</MenuItem>
-                        <MenuItem type="radio" value={'blue'}>Blue</MenuItem>
-                    </MenuRadioGroup>
-                </SubMenu>
+        <SubMenu label="Text style">
+          <MenuItem
+            type="checkbox"
+            checked={isBold}
+            onClick={(e) => setBold(e.checked)}
+          >
+            Bold
+          </MenuItem>
+          <MenuItem
+            type="checkbox"
+            checked={isItalic}
+            onClick={(e) => setItalic(e.checked)}
+          >
+            Italic
+          </MenuItem>
+          <MenuItem
+            type="checkbox"
+            checked={isUnderline}
+            onClick={(e) => setUnderline(e.checked)}
+          >
+            Underline
+          </MenuItem>
+        </SubMenu>
+      </Menu>
 
-                <SubMenu label="Text style">
-                    <MenuItem type="checkbox" checked={isBold}
-                        onClick={e => setBold(e.checked)}>
-                        Bold
-                    </MenuItem>
-                    <MenuItem type="checkbox" checked={isItalic}
-                        onClick={e => setItalic(e.checked)}>
-                        Italic
-                    </MenuItem>
-                    <MenuItem type="checkbox" checked={isUnderline}
-                        onClick={e => setUnderline(e.checked)}>
-                        Underline
-                    </MenuItem>
-                </SubMenu>
-            </Menu>
-
-            <div className="sample-text" style={{
-                color: textColor,
-                fontWeight: isBold ? 'bold' : 'initial',
-                fontStyle: isItalic ? 'italic' : 'initial',
-                textDecoration: isUnderline ? 'underline' : 'initial'
-            }}>Sample text</div>
-        </>
-    );
+      <div
+        style={{
+          color: textColor,
+          fontWeight: isBold ? 'bold' : 'initial',
+          fontStyle: isItalic ? 'italic' : 'initial',
+          textDecoration: isUnderline ? 'underline' : 'initial'
+        }}
+      >
+        Sample text
+      </div>
+    </>
+  );
 }`
 };
 
@@ -416,36 +460,18 @@ export const linkAndDisabled = {
     </p>
   ),
 
-  source: `<Menu menuButton={<MenuButton>Open menu</MenuButton>}>
-    <MenuItem href="https://www.google.com/">Google</MenuItem>
-    <MenuItem href="https://github.com/szhsin/react-menu/"
-        target="_blank" rel="noopener noreferrer">
-        GitHub <ExternalLinkIcon />
-    </MenuItem>
-    <MenuItem>Regular item</MenuItem>
-    <MenuItem disabled>Disabled item</MenuItem>
-</Menu>`,
-
-  fullSource: `import {
-    Menu,
-    MenuItem,
-    MenuButton
-} from '@szhsin/react-menu';
-import '@szhsin/react-menu/dist/index.css';
-
-export default function Example() {
-    return (
-        <Menu menuButton={<MenuButton>Open menu</MenuButton>}>
-            <MenuItem href="https://www.google.com/">Google</MenuItem>
-            <MenuItem href="https://github.com/szhsin/react-menu/"
-                target="_blank" rel="noopener noreferrer">
-                GitHub <ExternalLinkIcon />
-            </MenuItem>
-            <MenuItem>Regular item</MenuItem>
-            <MenuItem disabled>Disabled item</MenuItem>
-        </Menu>
-    );
-}`
+  source: `<Menu menuButton={<MenuButton>Menu</MenuButton>}>
+  <MenuItem href="https://www.google.com/">Google</MenuItem>
+  <MenuItem
+    href="https://github.com/szhsin/react-menu/"
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    GitHub <ExternalLinkIcon />
+  </MenuItem>
+  <MenuItem>Regular item</MenuItem>
+  <MenuItem disabled>Disabled item</MenuItem>
+</Menu>`
 };
 
 export const iconAndImage = {
@@ -461,49 +487,32 @@ export const iconAndImage = {
     </p>
   ),
 
-  source: `<Menu menuButton={<MenuButton>Open menu</MenuButton>}>
-    <MenuItem>
-        <i className="material-icons">content_cut</i>Cut
-    </MenuItem>
-    <MenuItem>
-        <i className="material-icons">content_copy</i>Copy
-    </MenuItem>
-    <MenuItem>
-        <i className="material-icons">content_paste</i>Paste
-    </MenuItem>
-    <MenuDivider />
-    <MenuItem href="https://github.com/szhsin/react-menu/">
-        <img src="octocat.png" alt="" role="presentation" />GitHub
-    </MenuItem>
-</Menu>`,
+  source: `<Menu menuButton={<MenuButton>Menu</MenuButton>}>
+  <MenuItem href="https://github.com/szhsin/react-menu/">
+    <img src="octocat.png" alt="octocat" role="presentation" />
+    GitHub
+  </MenuItem>
 
-  fullSource: `import {
-    Menu,
-    MenuItem,
-    MenuButton,
-    MenuDivider
-} from '@szhsin/react-menu';
-import '@szhsin/react-menu/dist/index.css';
+  <MenuDivider />
 
-export default function Example() {
-    return (
-        <Menu menuButton={<MenuButton>Open menu</MenuButton>}>
-            <MenuItem>
-                <i className="material-icons">content_cut</i>Cut
-            </MenuItem>
-            <MenuItem>
-                <i className="material-icons">content_copy</i>Copy
-            </MenuItem>
-            <MenuItem>
-                <i className="material-icons">content_paste</i>Paste
-            </MenuItem>
-            <MenuDivider />
-            <MenuItem href="https://github.com/szhsin/react-menu/">
-                <img src="octocat.png" alt="" role="presentation" />GitHub
-            </MenuItem>
-        </Menu>
-    );
-}`
+  <SubMenu
+    label={
+      <>
+        <i className="material-icons">edit</i>Edit
+      </>
+    }
+  >
+    <MenuItem>
+      <i className="material-icons">content_cut</i>Cut
+    </MenuItem>
+    <MenuItem>
+      <i className="material-icons">content_copy</i>Copy
+    </MenuItem>
+    <MenuItem>
+      <i className="material-icons">content_paste</i>Paste
+    </MenuItem>
+  </SubMenu>
+</Menu>`
 };
 
 export const focusableItem = {
@@ -523,54 +532,37 @@ export const focusableItem = {
     </>
   ),
 
-  source: `const [filter, setFilter] = useState('');
-
-<Menu menuButton={<MenuButton>Open menu</MenuButton>}
-    onMenuChange={e => e.open && setFilter('')}>
-    <FocusableItem>
-        {({ ref }) => (
-            <input ref={ref} type="text" placeholder="Type to filter"
-                value={filter} onChange={e => setFilter(e.target.value)} />
-        )}
-    </FocusableItem>
-    {
-        ['Apple', 'Banana', 'Blueberry', 'Cherry', 'Strawberry']
-            .filter(fruit => fruit.toUpperCase()
-                .includes(filter.trim().toUpperCase()))
-            .map(fruit => <MenuItem key={fruit}>{fruit}</MenuItem>)
-    }
-</Menu>`,
-
   fullSource: `import { useState } from 'react';
-import {
-    Menu,
-    MenuItem,
-    FocusableItem,
-    MenuButton
-} from '@szhsin/react-menu';
-import '@szhsin/react-menu/dist/index.css';
-
+import { Menu, MenuItem, FocusableItem, MenuButton } from '@szhsin/react-menu';
 
 export default function Example() {
-    const [filter, setFilter] = useState('');
+  const [filter, setFilter] = useState('');
 
-    return (
-        <Menu menuButton={<MenuButton>Open menu</MenuButton>}
-            onMenuChange={e => e.open && setFilter('')}>
-            <FocusableItem>
-                {({ ref }) => (
-                    <input ref={ref} type="text" placeholder="Type to filter"
-                        value={filter} onChange={e => setFilter(e.target.value)} />
-                )}
-            </FocusableItem>
-            {
-                ['Apple', 'Banana', 'Blueberry', 'Cherry', 'Strawberry']
-                    .filter(fruit => fruit.toUpperCase()
-                        .includes(filter.trim().toUpperCase()))
-                    .map(fruit => <MenuItem key={fruit}>{fruit}</MenuItem>)
-            }
-        </Menu>
-    );
+  return (
+    <Menu
+      menuButton={<MenuButton>Menu</MenuButton>}
+      onMenuChange={(e) => e.open && setFilter('')}
+    >
+      <FocusableItem>
+        {({ ref }) => (
+          <input
+            ref={ref}
+            type="text"
+            placeholder="Type to filter"
+            value={filter}
+            onChange={(e) => setFilter(e.target.value)}
+          />
+        )}
+      </FocusableItem>
+      {['Apple', 'Banana', 'Blueberry', 'Cherry', 'Strawberry']
+        .filter((fruit) =>
+          fruit.toUpperCase().includes(filter.trim().toUpperCase())
+        )
+        .map((fruit) => (
+          <MenuItem key={fruit}>{fruit}</MenuItem>
+        ))}
+    </Menu>
+  );
 }`
 };
 
@@ -598,7 +590,7 @@ export const itemRenderProp = {
     </p>
   ),
 
-  source: `<Menu menuButton={<MenuButton>Open menu</MenuButton>}>
+  source: `<Menu menuButton={<MenuButton>Menu</MenuButton>}>
   <MenuItem>{({ hover }) => (hover ? 'Hovered!' : 'Hover me')}</MenuItem>
   <MenuDivider />
   <MenuItem style={{ justifyContent: 'center' }}>
@@ -608,31 +600,7 @@ export const itemRenderProp = {
       </i>
     )}
   </MenuItem>
-</Menu>`,
-
-  fullSource: `import {
-    Menu,
-    MenuItem,
-    MenuButton,
-    MenuDivider
-} from '@szhsin/react-menu';
-import '@szhsin/react-menu/dist/index.css';
-
-export default function Example() {
-  return (
-    <Menu menuButton={<MenuButton>Open menu</MenuButton>}>
-      <MenuItem>{({ hover }) => (hover ? 'Hovered!' : 'Hover me')}</MenuItem>
-      <MenuDivider />
-      <MenuItem style={{ justifyContent: 'center' }}>
-        {({ hover }) => (
-          <i className="material-icons md-48">
-            {hover ? 'sentiment_very_satisfied' : 'sentiment_very_dissatisfied'}
-          </i>
-        )}
-      </MenuItem>
-    </Menu>
-  );
-}`
+</Menu>`
 };
 
 export const buttonRenderProp = {
@@ -647,44 +615,25 @@ export const buttonRenderProp = {
     </p>
   ),
 
-  source: `<Menu menuButton={
-    ({ open }) =>
-        <MenuButton>{open ? 'Close' : 'Open'}</MenuButton>}>
-    <MenuItem>New File</MenuItem>
-    <MenuItem>Save</MenuItem>
-    <MenuItem>Close Window</MenuItem>
-</Menu>`,
-
-  fullSource: `import {
-    Menu,
-    MenuItem,
-    MenuButton
-} from '@szhsin/react-menu';
-import '@szhsin/react-menu/dist/index.css';
-
-export default function Example() {
-    return (
-        <Menu menuButton={
-            ({ open }) =>
-                <MenuButton>{open ? 'Close' : 'Open'}</MenuButton>}>
-            <MenuItem>New File</MenuItem>
-            <MenuItem>Save</MenuItem>
-            <MenuItem>Close Window</MenuItem>
-        </Menu>
-    );
-}`
+  source: `<Menu
+  menuButton={({ open }) => <MenuButton>{open ? 'Close' : 'Open'}</MenuButton>}
+>
+  <MenuItem>Cut</MenuItem>
+  <MenuItem>Copy</MenuItem>
+  <MenuItem>Paste</MenuItem>
+</Menu>`
 };
 
 export const customisedButton = {
   id: 'customised-btn',
 
-  title: 'Customised button',
+  title: 'Using any button',
 
   desc: (
     <>
       <p>
-        You are free to use a native button element with <code>Menu</code>, or use your own React
-        button component which implements a forwarding ref and accepts <code>onClick</code> and{' '}
+        You can use a native button element with <code>Menu</code>, or use your own React button
+        component which implements a forwarding ref and accepts <code>onClick</code> and{' '}
         <code>onKeyDown</code> event props.
       </p>
       <p>
@@ -696,34 +645,17 @@ export const customisedButton = {
         .
       </p>
       <p>
-        The benefit of using {menuButtonLink} is it has additional <code>aria</code> attributes.
+        The benefit of using {menuButtonLink} from this package is it has WAI-ARIA compliant
+        attributes.
       </p>
     </>
   ),
 
-  source: `<Menu menuButton={
-    <button className="btn-primary">Open menu</button>}>
-    <MenuItem>New File</MenuItem>
-    <MenuItem>Save</MenuItem>
-    <MenuItem>Close Window</MenuItem>
-</Menu>`,
-
-  fullSource: `import {
-    Menu,
-    MenuItem
-} from '@szhsin/react-menu';
-import '@szhsin/react-menu/dist/index.css';
-
-export default function Example() {
-    return (
-        <Menu menuButton={
-            <button className="btn-primary">Open menu</button>}>
-            <MenuItem>New File</MenuItem>
-            <MenuItem>Save</MenuItem>
-            <MenuItem>Close Window</MenuItem>
-        </Menu>
-    );
-}`
+  source: `<Menu menuButton={<button className="btn-primary">Menu</button>}>
+  <MenuItem>Cut</MenuItem>
+  <MenuItem>Copy</MenuItem>
+  <MenuItem>Paste</MenuItem>
+</Menu>`
 };
 
 export const placement = {
@@ -750,22 +682,31 @@ const [align, setAlign] = useState('center');
 const [position, setPosition] = useState('anchor');
 const [viewScroll, setViewScroll] = useState('auto');
 
-const menus = ['right', 'top', 'bottom', 'left'].map(direction => (
-    <Menu menuButton={<MenuButton>{direction}</MenuButton>}
-        key={direction} direction={direction}
-        align={align} position={position} viewScroll={viewScroll}
-        arrow={display === 'arrow'}
-        offsetX={display === 'offset' &&
-            (direction === 'left' || direction === 'right')
-            ? 12 : 0}
-        offsetY={display === 'offset' &&
-            (direction === 'top' || direction === 'bottom')
-            ? 12 : 0}>
-
-        {['Apple', 'Banana', 'Blueberry', 'Cherry', 'Strawberry']
-            .map(fruit => <MenuItem key={fruit}>{fruit}</MenuItem>)}
-    </Menu>
-));`
+const menus = ['right', 'top', 'bottom', 'left'].map((direction) => (
+  <Menu
+    menuButton={<MenuButton>{direction}</MenuButton>}
+    key={direction}
+    direction={direction}
+    align={align}
+    position={position}
+    viewScroll={viewScroll}
+    arrow={display === 'arrow'}
+    offsetX={
+      display === 'offset' && (direction === 'left' || direction === 'right')
+        ? 12
+        : 0
+    }
+    offsetY={
+      display === 'offset' && (direction === 'top' || direction === 'bottom')
+        ? 12
+        : 0
+    }
+  >
+    {['Apple', 'Banana', 'Blueberry', 'Cherry', 'Strawberry'].map((fruit) => (
+      <MenuItem key={fruit}>{fruit}</MenuItem>
+    ))}
+  </Menu>
+))`
 };
 
 export const overflow = {
@@ -799,33 +740,57 @@ export const overflow = {
     </p>
   ),
 
-  source: `const [overflow, setOverflow] = useState('auto');
+  source: `import {
+  Menu,
+  MenuItem,
+  MenuButton,
+  FocusableItem,
+  MenuGroup
+} from '@szhsin/react-menu';
+
+const [overflow, setOverflow] = useState('auto');
 const [position, setPosition] = useState('auto');
 const [filter, setFilter] = useState('');
 
-<Menu menuButton={<MenuButton>Overflow</MenuButton>}
-    overflow={overflow} position={position}>
-    {new Array(50).fill(0).map(
-        (_, i) => <MenuItem key={i}>Item {i + 1}</MenuItem>)}
+<Menu
+  menuButton={<MenuButton>Overflow</MenuButton>}
+  overflow={overflow}
+  position={position}
+>
+  {new Array(50).fill(0).map((_, i) => (
+    <MenuItem key={i}>Item {i + 1}</MenuItem>
+  ))}
 </Menu>
 
-<Menu menuButton={<MenuButton>Grouping</MenuButton>}
-    overflow={overflow} setDownOverflow
-    position={position} boundingBoxPadding="10"
-    onMenuChange={e => e.open && setFilter('')}>
-    <FocusableItem>
-        {({ ref }) => (
-            <input ref={ref} type="text" placeholder="Type a number"
-                value={filter} onChange={e => setFilter(e.target.value)} />
-        )}
-    </FocusableItem>
-    <MenuGroup takeOverflow>
-        {new Array(50).fill(0)
-            .map((_, i) => \`Item \${i + 1}\`)
-            .filter(item => item.includes(filter.trim()))
-            .map((item, i) => <MenuItem key={i}>{item}</MenuItem>)}
-    </MenuGroup>
-    <MenuItem>Last (fixed)</MenuItem>
+<Menu
+  menuButton={<MenuButton>Grouping</MenuButton>}
+  overflow={overflow}
+  setDownOverflow
+  position={position}
+  boundingBoxPadding="10"
+  onMenuChange={(e) => e.open && setFilter('')}
+>
+  <FocusableItem>
+    {({ ref }) => (
+      <input
+        ref={ref}
+        type="text"
+        placeholder="Type a number"
+        value={filter}
+        onChange={(e) => setFilter(e.target.value)}
+      />
+    )}
+  </FocusableItem>
+  <MenuGroup takeOverflow>
+    {new Array(50)
+      .fill(0)
+      .map((_, i) => \`Item \${i + 1}\`)
+      .filter((item) => item.includes(filter.trim()))
+      .map((item, i) => (
+        <MenuItem key={i}>{item}</MenuItem>
+      ))}
+  </MenuGroup>
+  <MenuItem>Last (fixed)</MenuItem>
 </Menu>`
 };
 
@@ -1157,70 +1122,30 @@ export const classNameProp = {
     </>
   ),
 
-  source: `// If you use the functional form of className prop, 
-// it's advisable to put it outside React component scope whenever possible.
-const menuItemClassName = ({ hover }) => (hover ? 'my-menuitem-hover' : 'my-menuitem');
+  source: `// When using the functional form of className prop,
+// it's advisable to put it outside React component scope.
+const menuItemClassName = ({ hover }) =>
+  hover ? 'my-menuitem-hover' : 'my-menuitem';
 
-<Menu menuButton={<MenuButton>Open menu</MenuButton>}
-    menuClassName="my-menu">
-    <MenuItem>New File</MenuItem>
-    <MenuItem>Save</MenuItem>
-    <MenuItem className={menuItemClassName}>
-        I'm special
-    </MenuItem>
+<Menu menuButton={<MenuButton>Menu</MenuButton>} menuClassName="my-menu">
+  <MenuItem>New File</MenuItem>
+  <MenuItem>Save</MenuItem>
+  <MenuItem className={menuItemClassName}>I'm special</MenuItem>
 </Menu>
 
-// CSS classes
+/* CSS file */
 .my-menu {
-    border: 2px solid green;
+  border: 2px solid green;
 }
 
 .my-menuitem {
-    color: blue;
-    background-color: yellow;
+  color: blue;
+  background-color: yellow;
 }
 
 .my-menuitem-hover {
-    color: yellow;
-    background-color: black;
-}`,
-
-  fullSource: `import {
-    Menu,
-    MenuItem,
-    MenuButton
-} from '@szhsin/react-menu';
-import '@szhsin/react-menu/dist/index.css';
-
-const menuItemClassName = ({ hover }) => (hover ? 'my-menuitem-hover' : 'my-menuitem');
-
-export default function Example() {
-
-    return (
-        <Menu menuButton={<MenuButton>Open menu</MenuButton>}
-            menuClassName="my-menu">
-            <MenuItem>New File</MenuItem>
-            <MenuItem>Save</MenuItem>
-            <MenuItem className={menuItemClassName}>
-                I'm special
-            </MenuItem>
-        </Menu>
-    );
-}
-
-// CSS classes
-.my-menu {
-    border: 2px solid green;
-}
-
-.my-menuitem {
-    color: blue;
-    background-color: yellow;
-}
-
-.my-menuitem-hover {
-    color: yellow;
-    background-color: black;
+  color: yellow;
+  background-color: black;
 }`
 };
 
@@ -1229,8 +1154,7 @@ export const menu = {
   title: 'Menu',
   desc: (
     <p>
-      The group includes common usage examples of <code>Menu</code>, <code>SubMenu</code>, and{' '}
-      <code>MenuItem</code>.
+      Common usage examples of <code>Menu</code>, <code>SubMenu</code>, and <code>MenuItem</code>.
     </p>
   ),
   list: [basicMenu, subMenu, eventHandling, radioGroup, checkBox, headerAndDivider, combined]
@@ -1300,7 +1224,7 @@ export const usageExamples = {
   desc: (
     <p>
       Each of the following sections includes a live example. They are grouped into related
-      categories. You could toggle between the brief and full versions of source code.
+      categories.
     </p>
   ),
   list: [menu, menuItem, menuOptions, menuButton, controlledMenu, customisedStyle]
