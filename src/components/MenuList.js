@@ -10,6 +10,8 @@ import {
   floatEqual,
   getScrollAncestor,
   getTransition,
+  positionAbsolute,
+  dummyItemProps,
   safeCall,
   isMenuOpen,
   menuClass,
@@ -423,27 +425,30 @@ export const MenuList = ({
         ...overflowStyle,
         margin: 0,
         display: state === 'closed' ? 'none' : undefined,
-        position: 'absolute',
+        position: positionAbsolute,
         left: menuPosition.x,
         top: menuPosition.y
       }}
     >
-      <div
+      <li
         tabIndex={-1}
-        style={{ position: 'absolute', left: 0, top: 0 }}
-        {...focusProps}
+        style={{ position: positionAbsolute, left: 0, top: 0, display: 'block', outline: 'none' }}
         ref={focusRef}
+        {...dummyItemProps}
+        {...focusProps}
       />
       {arrow && (
-        <div
+        <li
           className={_arrowClass}
           style={{
-            ...arrowStyle,
-            position: 'absolute',
+            display: 'block',
+            position: positionAbsolute,
             left: arrowPosition.x,
-            top: arrowPosition.y
+            top: arrowPosition.y,
+            ...arrowStyle
           }}
           ref={arrowRef}
+          {...dummyItemProps}
         />
       )}
 

@@ -7,7 +7,7 @@ import { useItemState } from '../hooks/useItemState.js';
 import { useCombinedRef } from '../hooks/useCombinedRef.js';
 import { useBEM } from '../hooks/useBEM.js';
 import { stylePropTypes } from '../utils/propTypes.js';
-import { EventHandlersContext, menuClass, menuItemClass } from '../utils/constants.js';
+import { EventHandlersContext, roleMenuitem, menuClass, menuItemClass } from '../utils/constants.js';
 import { safeCall, mergeProps, commonProps } from '../utils/utils.js';
 
 var _excluded = ["className", "disabled", "children", "isHovering", "itemRef", "externalRef"],
@@ -48,7 +48,7 @@ var FocusableItem = /*#__PURE__*/withHovering('FocusableItem', function Focusabl
     onFocus: setHover
   }), restProps);
   return /*#__PURE__*/jsx("li", _extends({
-    role: "menuitem"
+    role: roleMenuitem
   }, commonProps(isDisabled), mergedProps, {
     ref: useCombinedRef(externalRef, itemRef),
     className: useBEM({

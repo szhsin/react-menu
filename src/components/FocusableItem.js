@@ -7,6 +7,7 @@ import {
   safeCall,
   menuClass,
   menuItemClass,
+  roleMenuitem,
   stylePropTypes,
   withHovering,
   EventHandlersContext
@@ -63,7 +64,7 @@ export const FocusableItem = withHovering(
 
     return (
       <li
-        role="menuitem"
+        role={roleMenuitem}
         {...commonProps(isDisabled)}
         {...mergedProps}
         ref={useCombinedRef(externalRef, itemRef)}

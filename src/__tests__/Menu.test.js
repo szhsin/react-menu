@@ -7,7 +7,7 @@ const { queryByRole, queryAllByRole } = screen;
 test.each([false, true])(
   'Menu is unmounted before opening and closes after losing focus (portal = %s)',
   async (portal) => {
-    utils.renderMenu({ portal });
+    utils.renderMenu({ portal, arrow: true });
 
     // menu is unmounted
     utils.expectButtonToBeExpanded(false);
