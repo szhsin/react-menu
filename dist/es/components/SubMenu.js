@@ -10,7 +10,7 @@ import { useMenuStateAndFocus } from '../hooks/useMenuStateAndFocus.js';
 import { useItemEffect } from '../hooks/useItemEffect.js';
 import { useMenuChange } from '../hooks/useMenuChange.js';
 import { useBEM } from '../hooks/useBEM.js';
-import { SettingsContext, ItemSettingsContext, MenuListContext, MenuListItemContext, menuClass, subMenuClass, menuItemClass, HoverActionTypes, Keys, FocusPositions } from '../utils/constants.js';
+import { SettingsContext, ItemSettingsContext, MenuListContext, MenuListItemContext, menuClass, subMenuClass, roleNone, roleMenuitem, menuItemClass, HoverActionTypes, Keys, FocusPositions } from '../utils/constants.js';
 import { useCombinedRef } from '../hooks/useCombinedRef.js';
 import { mergeProps, commonProps, safeCall, isMenuOpen, batchedUpdates } from '../utils/utils.js';
 
@@ -190,11 +190,11 @@ var SubMenu = /*#__PURE__*/withHovering('SubMenu', function SubMenu(_ref) {
     style: {
       position: 'relative'
     },
-    role: "presentation",
+    role: roleNone,
     ref: containerRef,
     onKeyDown: handleKeyDown,
     children: [/*#__PURE__*/jsx("div", _extends({
-      role: "menuitem",
+      role: roleMenuitem,
       "aria-haspopup": true,
       "aria-expanded": isOpen
     }, commonProps(isDisabled, isHovering), mergedItemProps, {

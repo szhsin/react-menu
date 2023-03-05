@@ -171,6 +171,13 @@ var MenuStateMap = /*#__PURE__*/Object.freeze({
   exiting: 'closing',
   exited: 'closed'
 });
+var positionAbsolute = 'absolute';
+var roleNone = 'presentation';
+var roleMenuitem = 'menuitem';
+var dummyItemProps = {
+  'aria-hidden': true,
+  role: roleMenuitem
+};
 
 var isMenuOpen = function isMenuOpen(state) {
   return !!state && state[0] === 'o';
@@ -1299,28 +1306,30 @@ var MenuList = function MenuList(_ref) {
     style: _extends({}, menuStyle, overflowStyle, {
       margin: 0,
       display: state === 'closed' ? 'none' : undefined,
-      position: 'absolute',
+      position: positionAbsolute,
       left: menuPosition.x,
       top: menuPosition.y
     }),
-    children: [/*#__PURE__*/jsxRuntime.jsx("div", _extends({
+    children: [/*#__PURE__*/jsxRuntime.jsx("li", _extends({
       tabIndex: -1,
       style: {
-        position: 'absolute',
+        position: positionAbsolute,
         left: 0,
-        top: 0
-      }
-    }, focusProps, {
+        top: 0,
+        display: 'block',
+        outline: 'none'
+      },
       ref: focusRef
-    })), arrow && /*#__PURE__*/jsxRuntime.jsx("div", {
+    }, dummyItemProps, focusProps)), arrow && /*#__PURE__*/jsxRuntime.jsx("li", _extends({
       className: _arrowClass,
-      style: _extends({}, arrowStyle, {
-        position: 'absolute',
+      style: _extends({
+        display: 'block',
+        position: positionAbsolute,
         left: arrowPosition.x,
         top: arrowPosition.y
-      }),
+      }, arrowStyle),
       ref: arrowRef
-    }), /*#__PURE__*/jsxRuntime.jsx(MenuListContext.Provider, {
+    }, dummyItemProps)), /*#__PURE__*/jsxRuntime.jsx(MenuListContext.Provider, {
       value: listContext,
       children: /*#__PURE__*/jsxRuntime.jsx(MenuListItemContext.Provider, {
         value: itemContext,
@@ -1706,11 +1715,11 @@ var SubMenu = /*#__PURE__*/withHovering('SubMenu', function SubMenu(_ref) {
     style: {
       position: 'relative'
     },
-    role: "presentation",
+    role: roleNone,
     ref: containerRef,
     onKeyDown: handleKeyDown,
     children: [/*#__PURE__*/jsxRuntime.jsx("div", _extends({
-      role: "menuitem",
+      role: roleMenuitem,
       "aria-haspopup": true,
       "aria-expanded": isOpen
     }, commonProps(isDisabled, isHovering), mergedItemProps, {
@@ -1799,7 +1808,7 @@ var MenuItem = /*#__PURE__*/withHovering('MenuItem', function MenuItem(_ref) {
     onClick: handleClick
   }), restProps);
   var menuItemProps = _extends({
-    role: isRadio ? 'menuitemradio' : isCheckBox ? 'menuitemcheckbox' : 'menuitem',
+    role: isRadio ? 'menuitemradio' : isCheckBox ? 'menuitemcheckbox' : roleMenuitem,
     'aria-checked': isRadio || isCheckBox ? isChecked : undefined
   }, commonProps(isDisabled, isHovering), mergedProps, {
     ref: useCombinedRef(externalRef, itemRef),
@@ -1814,7 +1823,7 @@ var MenuItem = /*#__PURE__*/withHovering('MenuItem', function MenuItem(_ref) {
     }, [children, modifiers])
   });
   return isAnchor ? /*#__PURE__*/jsxRuntime.jsx("li", {
-    role: "presentation",
+    role: roleNone,
     children: /*#__PURE__*/jsxRuntime.jsx("a", _extends({
       href: href
     }, menuItemProps))
@@ -1868,7 +1877,7 @@ var FocusableItem = /*#__PURE__*/withHovering('FocusableItem', function Focusabl
     onFocus: setHover
   }), restProps);
   return /*#__PURE__*/jsxRuntime.jsx("li", _extends({
-    role: "menuitem"
+    role: roleMenuitem
   }, commonProps(isDisabled), mergedProps, {
     ref: useCombinedRef(externalRef, itemRef),
     className: useBEM({
@@ -1907,7 +1916,7 @@ var MenuHeader = /*#__PURE__*/react.memo( /*#__PURE__*/react.forwardRef(function
   var className = _ref.className,
     restProps = _objectWithoutPropertiesLoose(_ref, _excluded$2);
   return /*#__PURE__*/jsxRuntime.jsx("li", _extends({
-    role: "presentation"
+    role: roleNone
   }, restProps, {
     ref: externalRef,
     className: useBEM({
@@ -1978,7 +1987,7 @@ var MenuRadioGroup = /*#__PURE__*/react.forwardRef(function MenuRadioGroup(_ref,
   return /*#__PURE__*/jsxRuntime.jsx(RadioGroupContext.Provider, {
     value: contextValue,
     children: /*#__PURE__*/jsxRuntime.jsx("li", {
-      role: "presentation",
+      role: roleNone,
       children: /*#__PURE__*/jsxRuntime.jsx("ul", _extends({
         role: "group",
         "aria-label": ariaLabel || name || 'Radio group'

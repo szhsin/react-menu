@@ -2,7 +2,7 @@ import { objectWithoutPropertiesLoose as _objectWithoutPropertiesLoose, extends 
 import { memo, forwardRef } from 'react';
 import { jsx } from 'react/jsx-runtime';
 import { useBEM } from '../hooks/useBEM.js';
-import { menuClass, menuHeaderClass } from '../utils/constants.js';
+import { roleNone, menuClass, menuHeaderClass } from '../utils/constants.js';
 import { stylePropTypes } from '../utils/propTypes.js';
 
 var _excluded = ["className"];
@@ -10,7 +10,7 @@ var MenuHeader = /*#__PURE__*/memo( /*#__PURE__*/forwardRef(function MenuHeader(
   var className = _ref.className,
     restProps = _objectWithoutPropertiesLoose(_ref, _excluded);
   return /*#__PURE__*/jsx("li", _extends({
-    role: "presentation"
+    role: roleNone
   }, restProps, {
     ref: externalRef,
     className: useBEM({

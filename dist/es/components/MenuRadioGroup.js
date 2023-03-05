@@ -3,7 +3,7 @@ import { forwardRef, useMemo } from 'react';
 import { string, any, func } from 'prop-types';
 import { jsx } from 'react/jsx-runtime';
 import { useBEM } from '../hooks/useBEM.js';
-import { RadioGroupContext, menuClass, radioGroupClass } from '../utils/constants.js';
+import { RadioGroupContext, roleNone, menuClass, radioGroupClass } from '../utils/constants.js';
 import { stylePropTypes } from '../utils/propTypes.js';
 
 var _excluded = ["aria-label", "className", "name", "value", "onRadioChange"];
@@ -24,7 +24,7 @@ var MenuRadioGroup = /*#__PURE__*/forwardRef(function MenuRadioGroup(_ref, exter
   return /*#__PURE__*/jsx(RadioGroupContext.Provider, {
     value: contextValue,
     children: /*#__PURE__*/jsx("li", {
-      role: "presentation",
+      role: roleNone,
       children: /*#__PURE__*/jsx("ul", _extends({
         role: "group",
         "aria-label": ariaLabel || name || 'Radio group'

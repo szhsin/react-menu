@@ -4,7 +4,7 @@ import { any, string, oneOf, bool, oneOfType, node, func } from 'prop-types';
 import { jsx } from 'react/jsx-runtime';
 import { withHovering } from '../utils/withHovering.js';
 import { useItemState } from '../hooks/useItemState.js';
-import { EventHandlersContext, RadioGroupContext, menuClass, menuItemClass, Keys } from '../utils/constants.js';
+import { EventHandlersContext, RadioGroupContext, roleMenuitem, menuClass, menuItemClass, roleNone, Keys } from '../utils/constants.js';
 import { useCombinedRef } from '../hooks/useCombinedRef.js';
 import { useBEM } from '../hooks/useBEM.js';
 import { stylePropTypes } from '../utils/propTypes.js';
@@ -75,7 +75,7 @@ var MenuItem = /*#__PURE__*/withHovering('MenuItem', function MenuItem(_ref) {
     onClick: handleClick
   }), restProps);
   var menuItemProps = _extends({
-    role: isRadio ? 'menuitemradio' : isCheckBox ? 'menuitemcheckbox' : 'menuitem',
+    role: isRadio ? 'menuitemradio' : isCheckBox ? 'menuitemcheckbox' : roleMenuitem,
     'aria-checked': isRadio || isCheckBox ? isChecked : undefined
   }, commonProps(isDisabled, isHovering), mergedProps, {
     ref: useCombinedRef(externalRef, itemRef),
@@ -90,7 +90,7 @@ var MenuItem = /*#__PURE__*/withHovering('MenuItem', function MenuItem(_ref) {
     }, [children, modifiers])
   });
   return isAnchor ? /*#__PURE__*/jsx("li", {
-    role: "presentation",
+    role: roleNone,
     children: /*#__PURE__*/jsx("a", _extends({
       href: href
     }, menuItemProps))

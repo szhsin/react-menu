@@ -3,7 +3,7 @@ import { useState, useReducer, useContext, useRef, useCallback, useEffect, useMe
 import { flushSync } from 'react-dom';
 import { MenuContainer } from './MenuContainer.js';
 import { jsxs, jsx } from 'react/jsx-runtime';
-import { SettingsContext, MenuListContext, HoverActionTypes, MenuListItemContext, HoverItemContext, Keys, menuClass, CloseReason, FocusPositions, menuArrowClass } from '../utils/constants.js';
+import { SettingsContext, MenuListContext, HoverActionTypes, positionAbsolute, dummyItemProps, MenuListItemContext, HoverItemContext, Keys, menuClass, CloseReason, FocusPositions, menuArrowClass } from '../utils/constants.js';
 import { useItems } from '../hooks/useItems.js';
 import { getScrollAncestor, floatEqual, commonProps, mergeProps, safeCall, isMenuOpen, getTransition, batchedUpdates } from '../utils/utils.js';
 import { getPositionHelpers } from '../positionUtils/getPositionHelpers.js';
@@ -397,28 +397,30 @@ var MenuList = function MenuList(_ref) {
     style: _extends({}, menuStyle, overflowStyle, {
       margin: 0,
       display: state === 'closed' ? 'none' : undefined,
-      position: 'absolute',
+      position: positionAbsolute,
       left: menuPosition.x,
       top: menuPosition.y
     }),
-    children: [/*#__PURE__*/jsx("div", _extends({
+    children: [/*#__PURE__*/jsx("li", _extends({
       tabIndex: -1,
       style: {
-        position: 'absolute',
+        position: positionAbsolute,
         left: 0,
-        top: 0
-      }
-    }, focusProps, {
+        top: 0,
+        display: 'block',
+        outline: 'none'
+      },
       ref: focusRef
-    })), arrow && /*#__PURE__*/jsx("div", {
+    }, dummyItemProps, focusProps)), arrow && /*#__PURE__*/jsx("li", _extends({
       className: _arrowClass,
-      style: _extends({}, arrowStyle, {
-        position: 'absolute',
+      style: _extends({
+        display: 'block',
+        position: positionAbsolute,
         left: arrowPosition.x,
         top: arrowPosition.y
-      }),
+      }, arrowStyle),
       ref: arrowRef
-    }), /*#__PURE__*/jsx(MenuListContext.Provider, {
+    }, dummyItemProps)), /*#__PURE__*/jsx(MenuListContext.Provider, {
       value: listContext,
       children: /*#__PURE__*/jsx(MenuListItemContext.Provider, {
         value: itemContext,

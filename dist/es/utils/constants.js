@@ -54,5 +54,12 @@ var MenuStateMap = /*#__PURE__*/Object.freeze({
   exiting: 'closing',
   exited: 'closed'
 });
+var positionAbsolute = 'absolute';
+var roleNone = 'presentation';
+var roleMenuitem = 'menuitem';
+var dummyItemProps = {
+  'aria-hidden': true,
+  role: roleMenuitem
+};
 
-export { CloseReason, EventHandlersContext, FocusPositions, HoverActionTypes, HoverItemContext, ItemSettingsContext, Keys, MenuListContext, MenuListItemContext, MenuStateMap, RadioGroupContext, SettingsContext, menuArrowClass, menuButtonClass, menuClass, menuContainerClass, menuDividerClass, menuGroupClass, menuHeaderClass, menuItemClass, radioGroupClass, subMenuClass };
+export { CloseReason, EventHandlersContext, FocusPositions, HoverActionTypes, HoverItemContext, ItemSettingsContext, Keys, MenuListContext, MenuListItemContext, MenuStateMap, RadioGroupContext, SettingsContext, dummyItemProps, menuArrowClass, menuButtonClass, menuClass, menuContainerClass, menuDividerClass, menuGroupClass, menuHeaderClass, menuItemClass, positionAbsolute, radioGroupClass, roleMenuitem, roleNone, subMenuClass };

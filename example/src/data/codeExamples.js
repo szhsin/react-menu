@@ -1024,7 +1024,7 @@ export const hoverMenu = {
   ),
 
   fullSource: `import { useRef, useState } from 'react';
-import { ControlledMenu, MenuItem, useClick, useMenuState } from '@szhsin/react-menu';
+import { ControlledMenu, MenuItem, useHover, useMenuState } from '@szhsin/react-menu';
 
 const HoverMenu = () => {
   const ref = useRef(null);
