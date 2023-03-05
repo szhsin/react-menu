@@ -93,7 +93,7 @@ function GroupingSection({ heading, data: { id, title, desc } }) {
 
 function BasicMenuExample() {
   return (
-    <Example initialFullSource data={codeExamples.basicMenu}>
+    <Example data={codeExamples.basicMenu}>
       <Menu menuButton={<MenuButton>Menu</MenuButton>}>
         <MenuItem>Cut</MenuItem>
         <MenuItem>Copy</MenuItem>
@@ -270,7 +270,7 @@ function CombinedExample() {
   const { isDark } = useTheme();
 
   return (
-    <Example data={codeExamples.combined}>
+    <Example data={codeExamples.combined} showSourceOnMount={false}>
       <Menu menuButton={<MenuButton>Menu</MenuButton>} unmountOnClose>
         <MenuItem>New File</MenuItem>
         <MenuItem>Save</MenuItem>
@@ -424,11 +424,7 @@ function FocusableItemExample() {
 function ButtonRenderPropExample() {
   return (
     <Example data={codeExamples.buttonRenderProp}>
-      <Menu
-        menuButton={({ open }) => (
-          <MenuButton style={{ minWidth: '5rem' }}>{open ? 'Close' : 'Open'}</MenuButton>
-        )}
-      >
+      <Menu menuButton={({ open }) => <MenuButton>{open ? 'Close' : 'Open'}</MenuButton>}>
         <MenuItem>Cut</MenuItem>
         <MenuItem>Copy</MenuItem>
         <MenuItem>Paste</MenuItem>
@@ -695,7 +691,7 @@ function ControllingStateExample() {
   const anchorProps = useClick(isOpen, setOpen);
 
   return (
-    <Example data={codeExamples.controllingState} style={{ flexWrap: 'wrap' }} initialFullSource>
+    <Example data={codeExamples.controllingState} style={{ flexWrap: 'wrap' }}>
       <button type="button" className="btn" ref={ref} {...anchorProps}>
         Menu
       </button>
@@ -719,7 +715,7 @@ function MenuStateHookExample() {
   const anchorProps = useClick(menuState.state, toggleMenu);
 
   return (
-    <Example data={codeExamples.menuStateHook} initialFullSource>
+    <Example data={codeExamples.menuStateHook}>
       <button type="button" className="btn" ref={ref} {...anchorProps}>
         Menu
       </button>
@@ -787,7 +783,7 @@ const HoverMenuWithTransition = () => {
 
 function HoverMenuExample() {
   return (
-    <Example data={codeExamples.hoverMenu} initialFullSource>
+    <Example data={codeExamples.hoverMenu}>
       <HoverMenu />
       <HoverMenuWithTransition />
     </Example>
@@ -800,7 +796,6 @@ function ContextMenuExample() {
 
   return (
     <Example
-      initialFullSource
       data={codeExamples.contextMenu}
       onContextMenu={(e) => {
         e.preventDefault();
