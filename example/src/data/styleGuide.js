@@ -55,8 +55,8 @@ const stylesheet = {
           desc: (
             <>
               <p>
-                Includes minimal and mostly functional styles (positioning, arrow, reset). This is
-                usually a starting point for customising styles.
+                Includes minimal styles (arrow, reset). This can be a starting point for customising
+                styles.
               </p>
               <p>
                 You may import this file or copy the CSS into your own stylesheets or CSS-in-JS

@@ -436,7 +436,13 @@ function ButtonRenderPropExample() {
 function CustomisedButtonExample() {
   return (
     <Example data={codeExamples.customisedButton}>
-      <Menu menuButton={<button className="btn btn-primary">Menu</button>}>
+      <Menu
+        menuButton={
+          <button type="button" className="btn btn-primary">
+            Menu
+          </button>
+        }
+      >
         <MenuItem>Cut</MenuItem>
         <MenuItem>Copy</MenuItem>
         <MenuItem>Paste</MenuItem>
@@ -526,6 +532,7 @@ function MenuPlacementExample() {
 }
 
 const overflowOptions = [['visible'], ['auto'], ['hidden']];
+const itemArray = new Array(100).fill(0);
 
 function MenuOverflowExample() {
   const [overflow, setOverflow] = useState('auto');
@@ -560,7 +567,7 @@ function MenuOverflowExample() {
           position={position}
           align="end"
         >
-          {new Array(50).fill(0).map((_, i) => {
+          {itemArray.map((_, i) => {
             const item = `Item ${i + 1}`;
             return (
               <MenuItem key={i} onClick={() => setToast(item + ' clicked')}>
@@ -601,8 +608,7 @@ function MenuOverflowExample() {
             )}
           </FocusableItem>
           <MenuGroup takeOverflow>
-            {new Array(50)
-              .fill(0)
+            {itemArray
               .map((_, i) => `Item ${i + 1}`)
               .filter((item) => item.includes(filter))
               .map((item, i) => (

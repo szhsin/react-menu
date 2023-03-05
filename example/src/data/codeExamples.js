@@ -66,9 +66,11 @@ export const subMenu = {
       <MenuItem>Find Previous</MenuItem>
     </SubMenu>
   </SubMenu>
+  <MenuItem>Print...</MenuItem>
 </Menu>`,
 
   fullSource: `import { Menu, MenuItem, MenuButton, SubMenu } from '@szhsin/react-menu';
+import '@szhsin/react-menu/dist/index.css';
 
 export default function Example() {
   return (
@@ -84,6 +86,7 @@ export default function Example() {
           <MenuItem>Find Previous</MenuItem>
         </SubMenu>
       </SubMenu>
+      <MenuItem>Print...</MenuItem>
     </Menu>
   );
 }`
@@ -168,6 +171,7 @@ export const radioGroup = {
 
   fullSource: `import { useState } from 'react';
 import { Menu, MenuItem, MenuButton, MenuRadioGroup } from '@szhsin/react-menu';
+import '@szhsin/react-menu/dist/index.css';
 
 export default function Example() {
   const [textColor, setTextColor] = useState('red');
@@ -238,6 +242,7 @@ const [isUnderline, setUnderline] = useState(false);
 
   fullSource: `import { useState } from 'react';
 import { Menu, MenuItem, MenuButton } from '@szhsin/react-menu';
+import '@szhsin/react-menu/dist/index.css';
 
 export default function Example() {
   const [isBold, setBold] = useState(true);
@@ -323,6 +328,7 @@ export const headerAndDivider = {
   MenuHeader,
   MenuDivider
 } from '@szhsin/react-menu';
+import '@szhsin/react-menu/dist/index.css';
 
 export default function Example() {
   return (
@@ -534,6 +540,7 @@ export const focusableItem = {
 
   fullSource: `import { useState } from 'react';
 import { Menu, MenuItem, FocusableItem, MenuButton } from '@szhsin/react-menu';
+import '@szhsin/react-menu/dist/index.css';
 
 export default function Example() {
   const [filter, setFilter] = useState('');
@@ -651,7 +658,7 @@ export const customisedButton = {
     </>
   ),
 
-  source: `<Menu menuButton={<button className="btn-primary">Menu</button>}>
+  source: `<Menu menuButton={<button type="button">Menu</button>}>
   <MenuItem>Cut</MenuItem>
   <MenuItem>Copy</MenuItem>
   <MenuItem>Paste</MenuItem>
@@ -722,6 +729,11 @@ export const overflow = {
         property.
       </p>
       <p>
+        Setting the <code>overflow</code> prop could make a menu touch screen edges. If this is
+        visually unpleasant, you may use <code>boundingBoxPadding</code> to add space around the
+        menu.
+      </p>
+      <p>
         If you want to fix some items at the top or bottom, set <code>setDownOverflow</code> prop on{' '}
         <code>Menu</code> and <code>takeOverflow</code> prop on a <code>MenuGroup</code> which makes
         the group scrollable.
@@ -747,6 +759,7 @@ export const overflow = {
   FocusableItem,
   MenuGroup
 } from '@szhsin/react-menu';
+import '@szhsin/react-menu/dist/index.css';
 
 const [overflow, setOverflow] = useState('auto');
 const [position, setPosition] = useState('auto');
@@ -757,7 +770,7 @@ const [filter, setFilter] = useState('');
   overflow={overflow}
   position={position}
 >
-  {new Array(50).fill(0).map((_, i) => (
+  {new Array(100).fill(0).map((_, i) => (
     <MenuItem key={i}>Item {i + 1}</MenuItem>
   ))}
 </Menu>
@@ -782,7 +795,7 @@ const [filter, setFilter] = useState('');
     )}
   </FocusableItem>
   <MenuGroup takeOverflow>
-    {new Array(50)
+    {new Array(100)
       .fill(0)
       .map((_, i) => \`Item \${i + 1}\`)
       .filter((item) => item.includes(filter.trim()))
@@ -899,6 +912,7 @@ export const controllingState = {
 
   fullSource: `import { useRef, useState } from 'react';
 import { ControlledMenu, MenuItem, useClick } from '@szhsin/react-menu';
+import '@szhsin/react-menu/dist/index.css';
 
 export default function () {
   const ref = useRef(null);
@@ -990,6 +1004,8 @@ export const hoverMenu = {
 
   fullSource: `import { useRef, useState } from 'react';
 import { ControlledMenu, MenuItem, useHover, useMenuState } from '@szhsin/react-menu';
+import '@szhsin/react-menu/dist/index.css';
+import '@szhsin/react-menu/dist/transitions/slide.css';
 
 const HoverMenu = () => {
   const ref = useRef(null);
@@ -1074,6 +1090,7 @@ export const contextMenu = {
 
   fullSource: `import { useState } from 'react';
 import { ControlledMenu, MenuItem } from '@szhsin/react-menu';
+import '@szhsin/react-menu/dist/index.css';
 
 export default function () {
   const [isOpen, setOpen] = useState(false);
@@ -1163,7 +1180,7 @@ export const menu = {
 export const menuItem = {
   id: 'menu-item',
   title: 'Menu item',
-  desc: <p>Advanced usage examples with menu items.</p>,
+  desc: <p>More examples with menu items.</p>,
   list: [linkAndDisabled, iconAndImage, itemRenderProp, focusableItem]
 };
 
@@ -1204,10 +1221,10 @@ export const customisedStyle = {
       </p>
       <StyleExamples />
       <p>
-        You will usually import the <code>@szhsin/react-menu/dist/core.css</code> and target
-        different CSS selectors, or you might define all the styles from scratch without importing
-        any css files. There is a <code>style-utils</code> which helps write selectors for
-        CSS-in-JS. You can find a complete list of CSS selectors in the{' '}
+        You may import the <code>@szhsin/react-menu/dist/core.css</code> which contains minimal
+        style and some reset. However, this is optional as you can define everything from scratch
+        without importing any css files. There is a <code>style-utils</code> which helps write
+        selectors for CSS-in-JS. You can find a complete list of CSS selectors in the{' '}
         <Link href={'/style-guide#selectors'}>styling guide</Link>.
       </p>
       <p>
@@ -1266,12 +1283,19 @@ export const install = {
   id: 'install',
   title: 'Install',
   desc: (
-    <div className="install-command">
-      <p className="comment"># with npm</p>
-      <p>npm install @szhsin/react-menu</p>
-      <p className="comment"># with Yarn</p>
-      <p>yarn add @szhsin/react-menu</p>
-    </div>
+    <>
+      <div className="install-command">
+        <p className="comment"># with npm</p>
+        <p>npm install @szhsin/react-menu</p>
+        <p className="comment"># with Yarn</p>
+        <p>yarn add @szhsin/react-menu</p>
+        <div className="sandbox">
+          <ExternalLink href="https://codesandbox.io/s/react-menu-starter-3ez3c">
+            Try on CodeSandbox
+          </ExternalLink>
+        </div>
+      </div>
+    </>
   )
 };
 
