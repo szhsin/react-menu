@@ -670,6 +670,8 @@ export const placement = {
 
   title: 'Placement',
 
+  codeSandbox: 'https://codesandbox.io/s/react-menu-placement-wrvcnt',
+
   desc: (
     <>
       <p>
@@ -720,6 +722,8 @@ export const overflow = {
   id: 'menu-overflow',
 
   title: 'Overflow',
+
+  codeSandbox: 'https://codesandbox.io/s/react-menu-overflow-xxuugg',
 
   desc: (
     <>
@@ -811,6 +815,8 @@ export const boundingBox = {
   id: 'bounding-box',
 
   title: 'Bounding box',
+
+  codeSandbox: 'https://codesandbox.io/s/react-menu-boundingbox-sz0wmy',
 
   desc: (
     <p>
@@ -984,6 +990,8 @@ export const hoverMenu = {
   id: 'hover-menu',
 
   title: 'Hover menu',
+
+  codeSandbox: 'https://codesandbox.io/s/react-hover-menu-boz9dd',
 
   desc: (
     <>
