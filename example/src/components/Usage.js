@@ -93,11 +93,11 @@ function GroupingSection({ heading, data: { id, title, desc } }) {
 
 function BasicMenuExample() {
   return (
-    <Example initialFullSource data={codeExamples.basicMenu}>
-      <Menu menuButton={<MenuButton>Open menu</MenuButton>}>
-        <MenuItem>New File</MenuItem>
-        <MenuItem>Save</MenuItem>
-        <MenuItem>Close Window</MenuItem>
+    <Example data={codeExamples.basicMenu}>
+      <Menu menuButton={<MenuButton>Menu</MenuButton>}>
+        <MenuItem>Cut</MenuItem>
+        <MenuItem>Copy</MenuItem>
+        <MenuItem>Paste</MenuItem>
       </Menu>
     </Example>
   );
@@ -106,18 +106,19 @@ function BasicMenuExample() {
 function SubmenuExample() {
   return (
     <Example data={codeExamples.subMenu}>
-      <Menu menuButton={<MenuButton>Open menu</MenuButton>} transitionTimeout={200}>
+      <Menu menuButton={<MenuButton>Menu</MenuButton>} transitionTimeout={200}>
         <MenuItem>New File</MenuItem>
-        <SubMenu label="Open">
-          <MenuItem>index.html</MenuItem>
-          <MenuItem>example.js</MenuItem>
-          <SubMenu label="Styles">
-            <MenuItem>about.css</MenuItem>
-            <MenuItem>home.css</MenuItem>
-            <MenuItem>index.css</MenuItem>
+        <SubMenu label="Edit">
+          <MenuItem>Cut</MenuItem>
+          <MenuItem>Copy</MenuItem>
+          <MenuItem>Paste</MenuItem>
+          <SubMenu label="Find">
+            <MenuItem>Find...</MenuItem>
+            <MenuItem>Find Next</MenuItem>
+            <MenuItem>Find Previous</MenuItem>
           </SubMenu>
         </SubMenu>
-        <MenuItem>Save</MenuItem>
+        <MenuItem>Print...</MenuItem>
       </Menu>
     </Example>
   );
@@ -155,7 +156,7 @@ function EventHandlingExample() {
   return (
     <Example data={codeExamples.eventHandling}>
       <div className="buttons">
-        <Menu menuButton={<MenuButton>Open menu</MenuButton>} onItemClick={handleMenuClick}>
+        <Menu menuButton={<MenuButton>Menu</MenuButton>} onItemClick={handleMenuClick}>
           <MenuItem value="Cut" onClick={handleCutClick}>
             Cut
           </MenuItem>
@@ -243,7 +244,7 @@ function HeaderAndDividerExample() {
   return (
     <Example data={codeExamples.headerAndDivider}>
       <Menu
-        menuButton={<MenuButton>Open menu</MenuButton>}
+        menuButton={<MenuButton>Menu</MenuButton>}
         boundingBoxPadding={`${useDomInfo().navbarHeight} 0 0 0`}
       >
         <MenuItem>New File</MenuItem>
@@ -269,8 +270,8 @@ function CombinedExample() {
   const { isDark } = useTheme();
 
   return (
-    <Example data={codeExamples.combined}>
-      <Menu menuButton={<MenuButton>Open menu</MenuButton>} unmountOnClose>
+    <Example data={codeExamples.combined} showSourceOnMount={false}>
+      <Menu menuButton={<MenuButton>Menu</MenuButton>} unmountOnClose>
         <MenuItem>New File</MenuItem>
         <MenuItem>Save</MenuItem>
         <MenuDivider />
@@ -321,7 +322,7 @@ function CombinedExample() {
 function LinkAndDisabledExample() {
   return (
     <Example data={codeExamples.linkAndDisabled}>
-      <Menu menuButton={<MenuButton>Open menu</MenuButton>}>
+      <Menu menuButton={<MenuButton>Menu</MenuButton>}>
         <MenuItem href="https://www.google.com/">Google</MenuItem>
         <MenuItem
           href="https://github.com/szhsin/react-menu/"
@@ -340,21 +341,29 @@ function LinkAndDisabledExample() {
 function IconAndImageExample() {
   return (
     <Example data={codeExamples.iconAndImage}>
-      <Menu menuButton={<MenuButton>Open menu</MenuButton>}>
-        <MenuItem>
-          <i className="material-icons">content_cut</i>Cut
-        </MenuItem>
-        <MenuItem>
-          <i className="material-icons">content_copy</i>Copy
-        </MenuItem>
-        <MenuItem>
-          <i className="material-icons">content_paste</i>Paste
-        </MenuItem>
-        <MenuDivider />
+      <Menu menuButton={<MenuButton>Menu</MenuButton>}>
         <MenuItem href="https://github.com/szhsin/react-menu/">
-          <img src={`${basePath}/octocat.png`} alt="" role="presentation" />
+          <img src={`${basePath}/octocat.png`} alt="octocat" role="presentation" />
           GitHub
         </MenuItem>
+        <MenuDivider />
+        <SubMenu
+          label={
+            <>
+              <i className="material-icons">edit</i>Edit
+            </>
+          }
+        >
+          <MenuItem>
+            <i className="material-icons">content_cut</i>Cut
+          </MenuItem>
+          <MenuItem>
+            <i className="material-icons">content_copy</i>Copy
+          </MenuItem>
+          <MenuItem>
+            <i className="material-icons">content_paste</i>Paste
+          </MenuItem>
+        </SubMenu>
       </Menu>
     </Example>
   );
@@ -363,7 +372,7 @@ function IconAndImageExample() {
 function ItemRenderPropExample() {
   return (
     <Example data={codeExamples.itemRenderProp}>
-      <Menu menuButton={<MenuButton>Open menu</MenuButton>}>
+      <Menu menuButton={<MenuButton>Menu</MenuButton>}>
         <MenuItem>{({ hover }) => (hover ? 'Hovered!' : 'Hover me')}</MenuItem>
         <MenuDivider />
         <MenuItem style={{ justifyContent: 'center' }}>
@@ -385,7 +394,7 @@ function FocusableItemExample() {
   return (
     <Example data={codeExamples.focusableItem}>
       <Menu
-        menuButton={<MenuButton>Open menu</MenuButton>}
+        menuButton={<MenuButton>Menu</MenuButton>}
         direction={vWidth < 600 ? 'top' : 'bottom'}
         align="center"
         onMenuChange={(e) => e.open && setFilter('')}
@@ -415,14 +424,10 @@ function FocusableItemExample() {
 function ButtonRenderPropExample() {
   return (
     <Example data={codeExamples.buttonRenderProp}>
-      <Menu
-        menuButton={({ open }) => (
-          <MenuButton style={{ minWidth: '5rem' }}>{open ? 'Close' : 'Open'}</MenuButton>
-        )}
-      >
-        <MenuItem>New File</MenuItem>
-        <MenuItem>Save</MenuItem>
-        <MenuItem>Close Window</MenuItem>
+      <Menu menuButton={({ open }) => <MenuButton>{open ? 'Close' : 'Open'}</MenuButton>}>
+        <MenuItem>Cut</MenuItem>
+        <MenuItem>Copy</MenuItem>
+        <MenuItem>Paste</MenuItem>
       </Menu>
     </Example>
   );
@@ -431,10 +436,16 @@ function ButtonRenderPropExample() {
 function CustomisedButtonExample() {
   return (
     <Example data={codeExamples.customisedButton}>
-      <Menu menuButton={<button className="btn btn-primary">Open menu</button>}>
-        <MenuItem>New File</MenuItem>
-        <MenuItem>Save</MenuItem>
-        <MenuItem>Close Window</MenuItem>
+      <Menu
+        menuButton={
+          <button type="button" className="btn btn-primary">
+            Menu
+          </button>
+        }
+      >
+        <MenuItem>Cut</MenuItem>
+        <MenuItem>Copy</MenuItem>
+        <MenuItem>Paste</MenuItem>
       </Menu>
     </Example>
   );
@@ -521,6 +532,7 @@ function MenuPlacementExample() {
 }
 
 const overflowOptions = [['visible'], ['auto'], ['hidden']];
+const itemArray = new Array(100).fill(0);
 
 function MenuOverflowExample() {
   const [overflow, setOverflow] = useState('auto');
@@ -555,7 +567,7 @@ function MenuOverflowExample() {
           position={position}
           align="end"
         >
-          {new Array(50).fill(0).map((_, i) => {
+          {itemArray.map((_, i) => {
             const item = `Item ${i + 1}`;
             return (
               <MenuItem key={i} onClick={() => setToast(item + ' clicked')}>
@@ -596,8 +608,7 @@ function MenuOverflowExample() {
             )}
           </FocusableItem>
           <MenuGroup takeOverflow>
-            {new Array(50)
-              .fill(0)
+            {itemArray
               .map((_, i) => `Item ${i + 1}`)
               .filter((item) => item.includes(filter))
               .map((item, i) => (
@@ -686,7 +697,7 @@ function ControllingStateExample() {
   const anchorProps = useClick(isOpen, setOpen);
 
   return (
-    <Example data={codeExamples.controllingState} style={{ flexWrap: 'wrap' }} initialFullSource>
+    <Example data={codeExamples.controllingState} style={{ flexWrap: 'wrap' }}>
       <button type="button" className="btn" ref={ref} {...anchorProps}>
         Menu
       </button>
@@ -710,7 +721,7 @@ function MenuStateHookExample() {
   const anchorProps = useClick(menuState.state, toggleMenu);
 
   return (
-    <Example data={codeExamples.menuStateHook} initialFullSource>
+    <Example data={codeExamples.menuStateHook}>
       <button type="button" className="btn" ref={ref} {...anchorProps}>
         Menu
       </button>
@@ -778,7 +789,7 @@ const HoverMenuWithTransition = () => {
 
 function HoverMenuExample() {
   return (
-    <Example data={codeExamples.hoverMenu} initialFullSource>
+    <Example data={codeExamples.hoverMenu}>
       <HoverMenu />
       <HoverMenuWithTransition />
     </Example>
@@ -791,7 +802,6 @@ function ContextMenuExample() {
 
   return (
     <Example
-      initialFullSource
       data={codeExamples.contextMenu}
       onContextMenu={(e) => {
         e.preventDefault();
@@ -819,7 +829,7 @@ const menuItemClassName = ({ hover }) => (hover ? 'my-menuitem-hover' : 'my-menu
 function ClassNamePropExample() {
   return (
     <Example data={codeExamples.classNameProp}>
-      <Menu menuButton={<MenuButton>Open menu</MenuButton>} menuClassName="my-menu" align="center">
+      <Menu menuButton={<MenuButton>Menu</MenuButton>} menuClassName="my-menu" align="center">
         <MenuItem>New File</MenuItem>
         <MenuItem>Save</MenuItem>
         <MenuItem className={menuItemClassName}>I&apos;m special</MenuItem>
