@@ -1042,8 +1042,8 @@ const HoverMenu = () => {
 
 const HoverMenuWithTransition = () => {
   const ref = useRef(null);
-  const [menuState, toogle] = useMenuState({ transition: true });
-  const { anchorProps, hoverProps } = useHover(menuState.state, toogle);
+  const [menuState, toggle] = useMenuState({ transition: true });
+  const { anchorProps, hoverProps } = useHover(menuState.state, toggle);
 
   return (
     <>
@@ -1055,7 +1055,7 @@ const HoverMenuWithTransition = () => {
         {...hoverProps}
         {...menuState}
         anchorRef={ref}
-        onClose={() => toogle(false)}
+        onClose={() => toggle(false)}
       >
         <MenuItem>Cut</MenuItem>
         <MenuItem>Copy</MenuItem>
