@@ -49,7 +49,7 @@ export const parsePadding = (paddingStr) => {
 export const getScrollAncestor = (node) => {
   while (node) {
     node = node.parentNode;
-    if (!node || node === document.body) return;
+    if (!node || node === document.body || !node.parentNode) return;
     const { overflow, overflowX, overflowY } = getComputedStyle(node);
     if (/auto|scroll|overlay|hidden/.test(overflow + overflowY + overflowX)) return node;
   }
