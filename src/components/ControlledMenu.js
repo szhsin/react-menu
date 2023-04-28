@@ -10,8 +10,7 @@ import {
   Keys,
   MenuStateMap,
   EventHandlersContext,
-  SettingsContext,
-  ItemSettingsContext
+  SettingsContext
 } from '../utils';
 
 export const ControlledMenu = forwardRef(function ControlledMenu(
@@ -53,7 +52,9 @@ export const ControlledMenu = forwardRef(function ControlledMenu(
       rootAnchorRef: anchorRef,
       scrollNodesRef,
       reposition,
-      viewScroll
+      viewScroll,
+      submenuOpenDelay,
+      submenuCloseDelay
     }),
     [
       initialMounted,
@@ -64,16 +65,10 @@ export const ControlledMenu = forwardRef(function ControlledMenu(
       boundingBoxRef,
       boundingBoxPadding,
       reposition,
-      viewScroll
-    ]
-  );
-
-  const itemSettings = useMemo(
-    () => ({
+      viewScroll,
       submenuOpenDelay,
       submenuCloseDelay
-    }),
-    [submenuOpenDelay, submenuCloseDelay]
+    ]
   );
 
   const eventHandlers = useMemo(
@@ -109,25 +104,23 @@ export const ControlledMenu = forwardRef(function ControlledMenu(
 
   const menuList = (
     <SettingsContext.Provider value={settings}>
-      <ItemSettingsContext.Provider value={itemSettings}>
-        <EventHandlersContext.Provider value={eventHandlers}>
-          <MenuList
-            {...restProps}
-            ariaLabel={ariaLabel || 'Menu'}
-            externalRef={externalRef}
-            containerRef={containerRef}
-            containerProps={{
-              className,
-              containerRef,
-              containerProps,
-              skipOpen,
-              theming,
-              transition,
-              onClose
-            }}
-          />
-        </EventHandlersContext.Provider>
-      </ItemSettingsContext.Provider>
+      <EventHandlersContext.Provider value={eventHandlers}>
+        <MenuList
+          {...restProps}
+          ariaLabel={ariaLabel || 'Menu'}
+          externalRef={externalRef}
+          containerRef={containerRef}
+          containerProps={{
+            className,
+            containerRef,
+            containerProps,
+            skipOpen,
+            theming,
+            transition,
+            onClose
+          }}
+        />
+      </EventHandlersContext.Provider>
     </SettingsContext.Provider>
   );
 

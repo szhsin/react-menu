@@ -2,10 +2,10 @@ import { extends as _extends, objectWithoutPropertiesLoose as _objectWithoutProp
 import { useRef, useContext, useMemo } from 'react';
 import { bool, func } from 'prop-types';
 import { jsx } from 'react/jsx-runtime';
-import { withHovering } from '../utils/withHovering.js';
 import { useItemState } from '../hooks/useItemState.js';
 import { useCombinedRef } from '../hooks/useCombinedRef.js';
 import { useBEM } from '../hooks/useBEM.js';
+import { withHovering } from '../utils/withHovering.js';
 import { stylePropTypes } from '../utils/propTypes.js';
 import { EventHandlersContext, roleMenuitem, menuClass, menuItemClass } from '../utils/constants.js';
 import { safeCall, mergeProps, commonProps } from '../utils/utils.js';

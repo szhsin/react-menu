@@ -7,6 +7,7 @@ import {
   mergeProps,
   batchedUpdates,
   commonProps,
+  createSubmenuCtx,
   floatEqual,
   getScrollAncestor,
   getTransition,
@@ -61,7 +62,7 @@ export const MenuList = ({
   const [arrowPosition, setArrowPosition] = useState({});
   const [overflowData, setOverflowData] = useState();
   const [expandedDirection, setExpandedDirection] = useState(direction);
-  const [openSubmenuCount, setOpenSubmenuCount] = useState(0);
+  const [submenuCtx] = useState(createSubmenuCtx);
   const [reposSubmenu, forceReposSubmenu] = useReducer((c) => c + 1, 1);
   const {
     transition,
@@ -71,9 +72,13 @@ export const MenuList = ({
     rootAnchorRef,
     scrollNodesRef,
     reposition,
-    viewScroll
+    viewScroll,
+    submenuCloseDelay
   } = useContext(SettingsContext);
-  const reposFlag = useContext(MenuListContext).reposSubmenu || repositionFlag;
+  // Intentionally ignore the repositionFlag in non-top-level menus.
+  // Using top-level repositionFlag to cascade reposition into all descendent menus.
+  const { submenuCtx: parentSubmenuCtx, reposSubmenu: reposFlag = repositionFlag } =
+    useContext(MenuListContext);
   const menuRef = useRef(null);
   const focusRef = useRef();
   const arrowRef = useRef();
@@ -127,6 +132,18 @@ export const MenuList = ({
     }
 
     safeCall(endTransition);
+  };
+
+  const onPointerMove = (e) => {
+    e.stopPropagation();
+    submenuCtx.on(submenuCloseDelay, () => {
+      dispatch(HoverActionTypes.RESET);
+      focusRef.current.focus();
+    });
+  };
+
+  const onPointerLeave = (e) => {
+    if (e.target === e.currentTarget) submenuCtx.off();
   };
 
   const handlePosition = useCallback(
@@ -368,16 +385,14 @@ export const MenuList = ({
     }
   }, [isOpen, openTransition, closeTransition, captureFocus, menuItemFocus, dispatch]);
 
-  const isSubmenuOpen = openSubmenuCount > 0;
   const itemContext = useMemo(
     () => ({
       isParentOpen: isOpen,
-      isSubmenuOpen,
-      setOpenSubmenuCount,
+      submenuCtx,
       dispatch,
       updateItems
     }),
-    [isOpen, isSubmenuOpen, dispatch, updateItems]
+    [isOpen, submenuCtx, dispatch, updateItems]
   );
 
   let maxHeight, overflowAmt;
@@ -388,12 +403,13 @@ export const MenuList = ({
   const listContext = useMemo(
     () => ({
       reposSubmenu,
+      submenuCtx,
       overflow,
       overflowAmt,
       parentMenuRef: menuRef,
       parentDir: expandedDirection
     }),
-    [reposSubmenu, overflow, overflowAmt, expandedDirection]
+    [reposSubmenu, submenuCtx, overflow, overflowAmt, expandedDirection]
   );
   const overflowStyle = maxHeight >= 0 ? { maxHeight, overflow } : undefined;
 
@@ -417,7 +433,16 @@ export const MenuList = ({
       role="menu"
       aria-label={ariaLabel}
       {...commonProps(isDisabled)}
-      {...mergeProps({ onKeyDown, onAnimationEnd }, restProps)}
+      {...mergeProps(
+        {
+          onPointerEnter: parentSubmenuCtx?.off,
+          onPointerMove,
+          onPointerLeave,
+          onKeyDown,
+          onAnimationEnd
+        },
+        restProps
+      )}
       ref={useCombinedRef(externalRef, menuRef)}
       className={useBEM({ block: menuClass, modifiers, className: menuClassName })}
       style={{

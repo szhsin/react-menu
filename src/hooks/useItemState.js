@@ -1,12 +1,11 @@
-import { useRef, useContext, useEffect } from 'react';
-import { ItemSettingsContext, MenuListItemContext, HoverActionTypes } from '../utils';
+import { useContext, useEffect } from 'react';
+import { SettingsContext, MenuListItemContext, HoverActionTypes } from '../utils';
 import { useItemEffect } from './useItemEffect';
 
 // This hook includes some common stateful logic in MenuItem and FocusableItem
 export const useItemState = (itemRef, focusRef, isHovering, isDisabled) => {
-  const { submenuCloseDelay } = useContext(ItemSettingsContext);
-  const { isParentOpen, isSubmenuOpen, dispatch, updateItems } = useContext(MenuListItemContext);
-  const timeoutId = useRef(0);
+  const { submenuCloseDelay } = useContext(SettingsContext);
+  const { isParentOpen, submenuCtx, dispatch, updateItems } = useContext(MenuListItemContext);
 
   const setHover = () => {
     !isHovering && !isDisabled && dispatch(HoverActionTypes.SET, itemRef.current);
@@ -22,29 +21,20 @@ export const useItemState = (itemRef, focusRef, isHovering, isDisabled) => {
     if (isHovering && !e.currentTarget.contains(e.relatedTarget)) unsetHover();
   };
 
-  const onPointerMove = () => {
-    if (isSubmenuOpen) {
-      if (!timeoutId.current)
-        timeoutId.current = setTimeout(() => {
-          timeoutId.current = 0;
-          setHover();
-        }, submenuCloseDelay);
-    } else {
-      setHover();
+  const onPointerMove = (e) => {
+    if (!isDisabled) {
+      e.stopPropagation();
+      submenuCtx.on(submenuCloseDelay, setHover, setHover);
     }
   };
 
   const onPointerLeave = (_, keepHover) => {
-    if (timeoutId.current) {
-      clearTimeout(timeoutId.current);
-      timeoutId.current = 0;
-    }
-
+    submenuCtx.off();
     !keepHover && unsetHover();
   };
 
   useItemEffect(isDisabled, itemRef, updateItems);
-  useEffect(() => () => clearTimeout(timeoutId.current), []);
+
   useEffect(() => {
     // Don't set focus when parent menu is closed, otherwise focus will be lost
     // and onBlur event will be fired with relatedTarget setting as null.

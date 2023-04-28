@@ -1,4 +1,4 @@
-import { useRef, useContext, useEffect, useMemo, useImperativeHandle } from 'react';
+import { useState, useRef, useContext, useEffect, useMemo, useImperativeHandle } from 'react';
 import { createPortal } from 'react-dom';
 import { node, func, bool, shape, oneOf, oneOfType } from 'prop-types';
 import {
@@ -25,7 +25,6 @@ import {
   isMenuOpen,
   withHovering,
   SettingsContext,
-  ItemSettingsContext,
   MenuListContext,
   MenuListItemContext,
   Keys,
@@ -52,25 +51,22 @@ export const SubMenu = withHovering(
     ...restProps
   }) {
     const settings = useContext(SettingsContext);
-    const { rootMenuRef } = settings;
-    const { submenuOpenDelay, submenuCloseDelay } = useContext(ItemSettingsContext);
+    const { rootMenuRef, submenuOpenDelay, submenuCloseDelay } = settings;
     const { parentMenuRef, parentDir, overflow: parentOverflow } = useContext(MenuListContext);
-    const { isParentOpen, isSubmenuOpen, setOpenSubmenuCount, dispatch, updateItems } =
-      useContext(MenuListItemContext);
+    const { isParentOpen, submenuCtx, dispatch, updateItems } = useContext(MenuListItemContext);
     const isPortal = parentOverflow !== 'visible';
-
     const [stateProps, toggleMenu, _openMenu] = useMenuStateAndFocus(settings);
-
     const { state } = stateProps;
     const isDisabled = !!disabled;
     const isOpen = isMenuOpen(state);
     const containerRef = useRef(null);
-    const timeoutId = useRef(0);
+    const [timerId] = useState({ v: 0 });
 
     const stopTimer = () => {
-      if (timeoutId.current) {
-        clearTimeout(timeoutId.current);
-        timeoutId.current = 0;
+      submenuCtx.off();
+      if (timerId.v) {
+        clearTimeout(timerId.v);
+        timerId.v = 0;
       }
     };
 
@@ -85,29 +81,38 @@ export const SubMenu = withHovering(
 
     const delayOpen = (delay) => {
       setHover();
-      if (!openTrigger)
-        timeoutId.current = setTimeout(() => batchedUpdates(openMenu), Math.max(delay, 0));
+      if (!openTrigger) timerId.v = setTimeout(() => batchedUpdates(openMenu), Math.max(delay, 0));
     };
 
-    const handlePointerMove = () => {
-      if (timeoutId.current || isOpen || isDisabled) return;
-
-      if (isSubmenuOpen) {
-        timeoutId.current = setTimeout(
-          () => delayOpen(submenuOpenDelay - submenuCloseDelay),
-          submenuCloseDelay
-        );
-      } else {
-        delayOpen(submenuOpenDelay);
-      }
+    const onPointerMove = (e) => {
+      if (isDisabled) return;
+      e.stopPropagation();
+      if (timerId.v || isOpen) return;
+      submenuCtx.on(
+        submenuCloseDelay,
+        () => delayOpen(submenuOpenDelay - submenuCloseDelay),
+        () => delayOpen(submenuOpenDelay)
+      );
     };
 
-    const handlePointerLeave = () => {
+    const onPointerLeave = () => {
       stopTimer();
       if (!isOpen) dispatch(HoverActionTypes.UNSET, itemRef.current);
     };
 
-    const handleKeyDown = (e) => {
+    const onKeyDown = (e) => {
+      if (!isHovering) return;
+
+      switch (e.key) {
+        case Keys.ENTER:
+        case Keys.SPACE:
+        case Keys.RIGHT:
+          openTrigger !== 'none' && openMenu(FocusPositions.FIRST);
+          break;
+      }
+    };
+
+    const onKeyDownOfRoot = (e) => {
       let handled = false;
 
       switch (e.key) {
@@ -132,22 +137,11 @@ export const SubMenu = withHovering(
       }
     };
 
-    const handleItemKeyDown = (e) => {
-      if (!isHovering) return;
-
-      switch (e.key) {
-        case Keys.ENTER:
-        case Keys.SPACE:
-        case Keys.RIGHT:
-          openTrigger !== 'none' && openMenu(FocusPositions.FIRST);
-          break;
-      }
-    };
-
     useItemEffect(isDisabled, itemRef, updateItems);
     useMenuChange(onMenuChange, isOpen);
 
-    useEffect(() => () => clearTimeout(timeoutId.current), []);
+    useEffect(() => submenuCtx.toggle(isOpen), [submenuCtx, isOpen]);
+    useEffect(() => () => clearTimeout(timerId.v), [timerId]);
     useEffect(() => {
       // Don't set focus when parent menu is closed, otherwise focus will be lost
       // and onBlur event will be fired with relatedTarget setting as null.
@@ -157,10 +151,6 @@ export const SubMenu = withHovering(
         toggleMenu(false);
       }
     }, [isHovering, isParentOpen, toggleMenu, itemRef]);
-
-    useEffect(() => {
-      setOpenSubmenuCount((count) => (isOpen ? count + 1 : Math.max(count - 1, 0)));
-    }, [setOpenSubmenuCount, isOpen]);
 
     useImperativeHandle(instanceRef, () => ({
       openMenu: (...args) => {
@@ -188,9 +178,10 @@ export const SubMenu = withHovering(
 
     const mergedItemProps = mergeProps(
       {
-        onPointerMove: handlePointerMove,
-        onPointerLeave: handlePointerLeave,
-        onKeyDown: handleItemKeyDown,
+        onPointerEnter: submenuCtx.off, // For moving mouse from submenu back to its anchor item
+        onPointerMove,
+        onPointerLeave,
+        onKeyDown,
         onClick: () => openTrigger !== 'none' && openMenu()
       },
       restItemProps
@@ -221,7 +212,7 @@ export const SubMenu = withHovering(
         style={{ position: 'relative' }}
         role={roleNone}
         ref={containerRef}
-        onKeyDown={handleKeyDown}
+        onKeyDown={onKeyDownOfRoot}
       >
         <div
           role={roleMenuitem}

@@ -16,7 +16,6 @@ var MenuListContext = /*#__PURE__*/createContext({});
 var EventHandlersContext = /*#__PURE__*/createContext({});
 var RadioGroupContext = /*#__PURE__*/createContext({});
 var SettingsContext = /*#__PURE__*/createContext({});
-var ItemSettingsContext = /*#__PURE__*/createContext({});
 var Keys = /*#__PURE__*/Object.freeze({
   ENTER: 'Enter',
   ESC: 'Escape',
@@ -62,4 +61,4 @@ var dummyItemProps = {
   role: roleMenuitem
 };
 
-export { CloseReason, EventHandlersContext, FocusPositions, HoverActionTypes, HoverItemContext, ItemSettingsContext, Keys, MenuListContext, MenuListItemContext, MenuStateMap, RadioGroupContext, SettingsContext, dummyItemProps, menuArrowClass, menuButtonClass, menuClass, menuContainerClass, menuDividerClass, menuGroupClass, menuHeaderClass, menuItemClass, positionAbsolute, radioGroupClass, roleMenuitem, roleNone, subMenuClass };
+export { CloseReason, EventHandlersContext, FocusPositions, HoverActionTypes, HoverItemContext, Keys, MenuListContext, MenuListItemContext, MenuStateMap, RadioGroupContext, SettingsContext, dummyItemProps, menuArrowClass, menuButtonClass, menuClass, menuContainerClass, menuDividerClass, menuGroupClass, menuHeaderClass, menuItemClass, positionAbsolute, radioGroupClass, roleMenuitem, roleNone, subMenuClass };

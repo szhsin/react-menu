@@ -133,7 +133,6 @@ var MenuListContext = /*#__PURE__*/react.createContext({});
 var EventHandlersContext = /*#__PURE__*/react.createContext({});
 var RadioGroupContext = /*#__PURE__*/react.createContext({});
 var SettingsContext = /*#__PURE__*/react.createContext({});
-var ItemSettingsContext = /*#__PURE__*/react.createContext({});
 var Keys = /*#__PURE__*/Object.freeze({
   ENTER: 'Enter',
   ESC: 'Escape',
@@ -315,6 +314,33 @@ var uncontrolledMenuPropTypes = {
   onMenuChange: propTypes.func
 };
 
+var createSubmenuCtx = function createSubmenuCtx() {
+  var timer,
+    count = 0;
+  return {
+    toggle: function toggle(isOpen) {
+      isOpen ? count++ : count--;
+      count = Math.max(count, 0);
+    },
+    on: function on(closeDelay, pending, settled) {
+      if (count) {
+        if (!timer) timer = setTimeout(function () {
+          timer = 0;
+          pending();
+        }, closeDelay);
+      } else {
+        settled == null ? void 0 : settled();
+      }
+    },
+    off: function off() {
+      if (timer) {
+        clearTimeout(timer);
+        timer = 0;
+      }
+    }
+  };
+};
+
 var withHovering = function withHovering(name, WrappedComponent) {
   var Component = /*#__PURE__*/react.memo(WrappedComponent);
   var WithHovering = /*#__PURE__*/react.forwardRef(function (props, ref) {
@@ -442,14 +468,13 @@ var useItemEffect = function useItemEffect(isDisabled, itemRef, updateItems) {
 };
 
 var useItemState = function useItemState(itemRef, focusRef, isHovering, isDisabled) {
-  var _useContext = react.useContext(ItemSettingsContext),
+  var _useContext = react.useContext(SettingsContext),
     submenuCloseDelay = _useContext.submenuCloseDelay;
   var _useContext2 = react.useContext(MenuListItemContext),
     isParentOpen = _useContext2.isParentOpen,
-    isSubmenuOpen = _useContext2.isSubmenuOpen,
+    submenuCtx = _useContext2.submenuCtx,
     dispatch = _useContext2.dispatch,
     updateItems = _useContext2.updateItems;
-  var timeoutId = react.useRef(0);
   var setHover = function setHover() {
     !isHovering && !isDisabled && dispatch(HoverActionTypes.SET, itemRef.current);
   };
@@ -459,29 +484,17 @@ var useItemState = function useItemState(itemRef, focusRef, isHovering, isDisabl
   var onBlur = function onBlur(e) {
     if (isHovering && !e.currentTarget.contains(e.relatedTarget)) unsetHover();
   };
-  var onPointerMove = function onPointerMove() {
-    if (isSubmenuOpen) {
-      if (!timeoutId.current) timeoutId.current = setTimeout(function () {
-        timeoutId.current = 0;
-        setHover();
-      }, submenuCloseDelay);
-    } else {
-      setHover();
+  var onPointerMove = function onPointerMove(e) {
+    if (!isDisabled) {
+      e.stopPropagation();
+      submenuCtx.on(submenuCloseDelay, setHover, setHover);
     }
   };
   var onPointerLeave = function onPointerLeave(_, keepHover) {
-    if (timeoutId.current) {
-      clearTimeout(timeoutId.current);
-      timeoutId.current = 0;
-    }
+    submenuCtx.off();
     !keepHover && unsetHover();
   };
   useItemEffect(isDisabled, itemRef, updateItems);
-  react.useEffect(function () {
-    return function () {
-      return clearTimeout(timeoutId.current);
-    };
-  }, []);
   react.useEffect(function () {
     if (isHovering && isParentOpen) {
       focusRef.current && focusRef.current.focus();
@@ -974,9 +987,8 @@ var MenuList = function MenuList(_ref) {
   var _useState4 = react.useState(direction),
     expandedDirection = _useState4[0],
     setExpandedDirection = _useState4[1];
-  var _useState5 = react.useState(0),
-    openSubmenuCount = _useState5[0],
-    setOpenSubmenuCount = _useState5[1];
+  var _useState5 = react.useState(createSubmenuCtx),
+    submenuCtx = _useState5[0];
   var _useReducer = react.useReducer(function (c) {
       return c + 1;
     }, 1),
@@ -990,8 +1002,12 @@ var MenuList = function MenuList(_ref) {
     rootAnchorRef = _useContext.rootAnchorRef,
     scrollNodesRef = _useContext.scrollNodesRef,
     reposition = _useContext.reposition,
-    viewScroll = _useContext.viewScroll;
-  var reposFlag = react.useContext(MenuListContext).reposSubmenu || repositionFlag;
+    viewScroll = _useContext.viewScroll,
+    submenuCloseDelay = _useContext.submenuCloseDelay;
+  var _useContext2 = react.useContext(MenuListContext),
+    parentSubmenuCtx = _useContext2.submenuCtx,
+    _useContext2$reposSub = _useContext2.reposSubmenu,
+    reposFlag = _useContext2$reposSub === void 0 ? repositionFlag : _useContext2$reposSub;
   var menuRef = react.useRef(null);
   var focusRef = react.useRef();
   var arrowRef = react.useRef();
@@ -1039,6 +1055,16 @@ var MenuList = function MenuList(_ref) {
       setOverflowData();
     }
     safeCall(endTransition);
+  };
+  var onPointerMove = function onPointerMove(e) {
+    e.stopPropagation();
+    submenuCtx.on(submenuCloseDelay, function () {
+      dispatch(HoverActionTypes.RESET);
+      focusRef.current.focus();
+    });
+  };
+  var onPointerLeave = function onPointerLeave(e) {
+    if (e.target === e.currentTarget) submenuCtx.off();
   };
   var handlePosition = react.useCallback(function (noOverflowCheck) {
     var _anchorRef$current;
@@ -1246,16 +1272,14 @@ var MenuList = function MenuList(_ref) {
       };
     }
   }, [isOpen, openTransition, closeTransition, captureFocus, menuItemFocus, dispatch]);
-  var isSubmenuOpen = openSubmenuCount > 0;
   var itemContext = react.useMemo(function () {
     return {
       isParentOpen: isOpen,
-      isSubmenuOpen: isSubmenuOpen,
-      setOpenSubmenuCount: setOpenSubmenuCount,
+      submenuCtx: submenuCtx,
       dispatch: dispatch,
       updateItems: updateItems
     };
-  }, [isOpen, isSubmenuOpen, dispatch, updateItems]);
+  }, [isOpen, submenuCtx, dispatch, updateItems]);
   var maxHeight, overflowAmt;
   if (overflowData) {
     setDownOverflow ? overflowAmt = overflowData.overflowAmt : maxHeight = overflowData.height;
@@ -1263,12 +1287,13 @@ var MenuList = function MenuList(_ref) {
   var listContext = react.useMemo(function () {
     return {
       reposSubmenu: reposSubmenu,
+      submenuCtx: submenuCtx,
       overflow: overflow,
       overflowAmt: overflowAmt,
       parentMenuRef: menuRef,
       parentDir: expandedDirection
     };
-  }, [reposSubmenu, overflow, overflowAmt, expandedDirection]);
+  }, [reposSubmenu, submenuCtx, overflow, overflowAmt, expandedDirection]);
   var overflowStyle = maxHeight >= 0 ? {
     maxHeight: maxHeight,
     overflow: overflow
@@ -1294,6 +1319,9 @@ var MenuList = function MenuList(_ref) {
     role: "menu",
     "aria-label": ariaLabel
   }, commonProps(isDisabled), mergeProps({
+    onPointerEnter: parentSubmenuCtx == null ? void 0 : parentSubmenuCtx.off,
+    onPointerMove: onPointerMove,
+    onPointerLeave: onPointerLeave,
     onKeyDown: onKeyDown,
     onAnimationEnd: onAnimationEnd
   }, restProps), {
@@ -1387,15 +1415,11 @@ var ControlledMenu = /*#__PURE__*/react.forwardRef(function ControlledMenu(_ref,
       rootAnchorRef: anchorRef,
       scrollNodesRef: scrollNodesRef,
       reposition: reposition,
-      viewScroll: viewScroll
-    };
-  }, [initialMounted, unmountOnClose, transition, transitionTimeout, anchorRef, boundingBoxRef, boundingBoxPadding, reposition, viewScroll]);
-  var itemSettings = react.useMemo(function () {
-    return {
+      viewScroll: viewScroll,
       submenuOpenDelay: submenuOpenDelay,
       submenuCloseDelay: submenuCloseDelay
     };
-  }, [submenuOpenDelay, submenuCloseDelay]);
+  }, [initialMounted, unmountOnClose, transition, transitionTimeout, anchorRef, boundingBoxRef, boundingBoxPadding, reposition, viewScroll, submenuOpenDelay, submenuCloseDelay]);
   var eventHandlers = react.useMemo(function () {
     return {
       handleClick: function handleClick(event, isCheckorRadio) {
@@ -1423,25 +1447,22 @@ var ControlledMenu = /*#__PURE__*/react.forwardRef(function ControlledMenu(_ref,
   if (!state) return null;
   var menuList = /*#__PURE__*/jsxRuntime.jsx(SettingsContext.Provider, {
     value: settings,
-    children: /*#__PURE__*/jsxRuntime.jsx(ItemSettingsContext.Provider, {
-      value: itemSettings,
-      children: /*#__PURE__*/jsxRuntime.jsx(EventHandlersContext.Provider, {
-        value: eventHandlers,
-        children: /*#__PURE__*/jsxRuntime.jsx(MenuList, _extends({}, restProps, {
-          ariaLabel: ariaLabel || 'Menu',
-          externalRef: externalRef,
+    children: /*#__PURE__*/jsxRuntime.jsx(EventHandlersContext.Provider, {
+      value: eventHandlers,
+      children: /*#__PURE__*/jsxRuntime.jsx(MenuList, _extends({}, restProps, {
+        ariaLabel: ariaLabel || 'Menu',
+        externalRef: externalRef,
+        containerRef: containerRef,
+        containerProps: {
+          className: className,
           containerRef: containerRef,
-          containerProps: {
-            className: className,
-            containerRef: containerRef,
-            containerProps: containerProps,
-            skipOpen: skipOpen,
-            theming: theming,
-            transition: transition,
-            onClose: onClose
-          }
-        }))
-      })
+          containerProps: containerProps,
+          skipOpen: skipOpen,
+          theming: theming,
+          transition: transition,
+          onClose: onClose
+        }
+      }))
     })
   });
   if (portal === true && typeof document !== 'undefined') {
@@ -1556,20 +1577,18 @@ var SubMenu = /*#__PURE__*/withHovering('SubMenu', function SubMenu(_ref) {
     itemProps = _ref$itemProps === void 0 ? {} : _ref$itemProps,
     restProps = _objectWithoutPropertiesLoose(_ref, _excluded$6);
   var settings = react.useContext(SettingsContext);
-  var rootMenuRef = settings.rootMenuRef;
-  var _useContext = react.useContext(ItemSettingsContext),
-    submenuOpenDelay = _useContext.submenuOpenDelay,
-    submenuCloseDelay = _useContext.submenuCloseDelay;
-  var _useContext2 = react.useContext(MenuListContext),
-    parentMenuRef = _useContext2.parentMenuRef,
-    parentDir = _useContext2.parentDir,
-    parentOverflow = _useContext2.overflow;
-  var _useContext3 = react.useContext(MenuListItemContext),
-    isParentOpen = _useContext3.isParentOpen,
-    isSubmenuOpen = _useContext3.isSubmenuOpen,
-    setOpenSubmenuCount = _useContext3.setOpenSubmenuCount,
-    dispatch = _useContext3.dispatch,
-    updateItems = _useContext3.updateItems;
+  var rootMenuRef = settings.rootMenuRef,
+    submenuOpenDelay = settings.submenuOpenDelay,
+    submenuCloseDelay = settings.submenuCloseDelay;
+  var _useContext = react.useContext(MenuListContext),
+    parentMenuRef = _useContext.parentMenuRef,
+    parentDir = _useContext.parentDir,
+    parentOverflow = _useContext.overflow;
+  var _useContext2 = react.useContext(MenuListItemContext),
+    isParentOpen = _useContext2.isParentOpen,
+    submenuCtx = _useContext2.submenuCtx,
+    dispatch = _useContext2.dispatch,
+    updateItems = _useContext2.updateItems;
   var isPortal = parentOverflow !== 'visible';
   var _useMenuStateAndFocus = useMenuStateAndFocus(settings),
     stateProps = _useMenuStateAndFocus[0],
@@ -1579,11 +1598,15 @@ var SubMenu = /*#__PURE__*/withHovering('SubMenu', function SubMenu(_ref) {
   var isDisabled = !!disabled;
   var isOpen = isMenuOpen(state);
   var containerRef = react.useRef(null);
-  var timeoutId = react.useRef(0);
+  var _useState = react.useState({
+      v: 0
+    }),
+    timerId = _useState[0];
   var stopTimer = function stopTimer() {
-    if (timeoutId.current) {
-      clearTimeout(timeoutId.current);
-      timeoutId.current = 0;
+    submenuCtx.off();
+    if (timerId.v) {
+      clearTimeout(timerId.v);
+      timerId.v = 0;
     }
   };
   var _openMenu2 = function openMenu() {
@@ -1596,25 +1619,35 @@ var SubMenu = /*#__PURE__*/withHovering('SubMenu', function SubMenu(_ref) {
   };
   var delayOpen = function delayOpen(delay) {
     setHover();
-    if (!openTrigger) timeoutId.current = setTimeout(function () {
+    if (!openTrigger) timerId.v = setTimeout(function () {
       return batchedUpdates(_openMenu2);
     }, Math.max(delay, 0));
   };
-  var handlePointerMove = function handlePointerMove() {
-    if (timeoutId.current || isOpen || isDisabled) return;
-    if (isSubmenuOpen) {
-      timeoutId.current = setTimeout(function () {
-        return delayOpen(submenuOpenDelay - submenuCloseDelay);
-      }, submenuCloseDelay);
-    } else {
-      delayOpen(submenuOpenDelay);
-    }
+  var onPointerMove = function onPointerMove(e) {
+    if (isDisabled) return;
+    e.stopPropagation();
+    if (timerId.v || isOpen) return;
+    submenuCtx.on(submenuCloseDelay, function () {
+      return delayOpen(submenuOpenDelay - submenuCloseDelay);
+    }, function () {
+      return delayOpen(submenuOpenDelay);
+    });
   };
-  var handlePointerLeave = function handlePointerLeave() {
+  var onPointerLeave = function onPointerLeave() {
     stopTimer();
     if (!isOpen) dispatch(HoverActionTypes.UNSET, itemRef.current);
   };
-  var handleKeyDown = function handleKeyDown(e) {
+  var onKeyDown = function onKeyDown(e) {
+    if (!isHovering) return;
+    switch (e.key) {
+      case Keys.ENTER:
+      case Keys.SPACE:
+      case Keys.RIGHT:
+        openTrigger !== 'none' && _openMenu2(FocusPositions.FIRST);
+        break;
+    }
+  };
+  var onKeyDownOfRoot = function onKeyDownOfRoot(e) {
     var handled = false;
     switch (e.key) {
       case Keys.LEFT:
@@ -1633,23 +1666,16 @@ var SubMenu = /*#__PURE__*/withHovering('SubMenu', function SubMenu(_ref) {
       e.stopPropagation();
     }
   };
-  var handleItemKeyDown = function handleItemKeyDown(e) {
-    if (!isHovering) return;
-    switch (e.key) {
-      case Keys.ENTER:
-      case Keys.SPACE:
-      case Keys.RIGHT:
-        openTrigger !== 'none' && _openMenu2(FocusPositions.FIRST);
-        break;
-    }
-  };
   useItemEffect(isDisabled, itemRef, updateItems);
   useMenuChange(onMenuChange, isOpen);
   react.useEffect(function () {
+    return submenuCtx.toggle(isOpen);
+  }, [submenuCtx, isOpen]);
+  react.useEffect(function () {
     return function () {
-      return clearTimeout(timeoutId.current);
+      return clearTimeout(timerId.v);
     };
-  }, []);
+  }, [timerId]);
   react.useEffect(function () {
     if (isHovering && isParentOpen) {
       itemRef.current.focus();
@@ -1657,11 +1683,6 @@ var SubMenu = /*#__PURE__*/withHovering('SubMenu', function SubMenu(_ref) {
       toggleMenu(false);
     }
   }, [isHovering, isParentOpen, toggleMenu, itemRef]);
-  react.useEffect(function () {
-    setOpenSubmenuCount(function (count) {
-      return isOpen ? count + 1 : Math.max(count - 1, 0);
-    });
-  }, [setOpenSubmenuCount, isOpen]);
   react.useImperativeHandle(instanceRef, function () {
     return {
       openMenu: function openMenu() {
@@ -1687,9 +1708,10 @@ var SubMenu = /*#__PURE__*/withHovering('SubMenu', function SubMenu(_ref) {
     itemClassName = itemProps.className,
     restItemProps = _objectWithoutPropertiesLoose(itemProps, _excluded2$2);
   var mergedItemProps = mergeProps({
-    onPointerMove: handlePointerMove,
-    onPointerLeave: handlePointerLeave,
-    onKeyDown: handleItemKeyDown,
+    onPointerEnter: submenuCtx.off,
+    onPointerMove: onPointerMove,
+    onPointerLeave: onPointerLeave,
+    onKeyDown: onKeyDown,
     onClick: function onClick() {
       return openTrigger !== 'none' && _openMenu2();
     }
@@ -1717,7 +1739,7 @@ var SubMenu = /*#__PURE__*/withHovering('SubMenu', function SubMenu(_ref) {
     },
     role: roleNone,
     ref: containerRef,
-    onKeyDown: handleKeyDown,
+    onKeyDown: onKeyDownOfRoot,
     children: [/*#__PURE__*/jsxRuntime.jsx("div", _extends({
       role: roleMenuitem,
       "aria-haspopup": true,
