@@ -4,7 +4,7 @@ import { createPortal } from 'react-dom';
 import { oneOf, exact, number, object, bool, oneOfType, string, func } from 'prop-types';
 import { MenuList } from './MenuList.js';
 import { jsx } from 'react/jsx-runtime';
-import { SettingsContext, ItemSettingsContext, EventHandlersContext, MenuStateMap, Keys, CloseReason } from '../utils/constants.js';
+import { SettingsContext, EventHandlersContext, MenuStateMap, Keys, CloseReason } from '../utils/constants.js';
 import { rootMenuPropTypes } from '../utils/propTypes.js';
 import { safeCall, values } from '../utils/utils.js';
 
@@ -49,15 +49,11 @@ var ControlledMenu = /*#__PURE__*/forwardRef(function ControlledMenu(_ref, exter
       rootAnchorRef: anchorRef,
       scrollNodesRef: scrollNodesRef,
       reposition: reposition,
-      viewScroll: viewScroll
-    };
-  }, [initialMounted, unmountOnClose, transition, transitionTimeout, anchorRef, boundingBoxRef, boundingBoxPadding, reposition, viewScroll]);
-  var itemSettings = useMemo(function () {
-    return {
+      viewScroll: viewScroll,
       submenuOpenDelay: submenuOpenDelay,
       submenuCloseDelay: submenuCloseDelay
     };
-  }, [submenuOpenDelay, submenuCloseDelay]);
+  }, [initialMounted, unmountOnClose, transition, transitionTimeout, anchorRef, boundingBoxRef, boundingBoxPadding, reposition, viewScroll, submenuOpenDelay, submenuCloseDelay]);
   var eventHandlers = useMemo(function () {
     return {
       handleClick: function handleClick(event, isCheckorRadio) {
@@ -85,25 +81,22 @@ var ControlledMenu = /*#__PURE__*/forwardRef(function ControlledMenu(_ref, exter
   if (!state) return null;
   var menuList = /*#__PURE__*/jsx(SettingsContext.Provider, {
     value: settings,
-    children: /*#__PURE__*/jsx(ItemSettingsContext.Provider, {
-      value: itemSettings,
-      children: /*#__PURE__*/jsx(EventHandlersContext.Provider, {
-        value: eventHandlers,
-        children: /*#__PURE__*/jsx(MenuList, _extends({}, restProps, {
-          ariaLabel: ariaLabel || 'Menu',
-          externalRef: externalRef,
+    children: /*#__PURE__*/jsx(EventHandlersContext.Provider, {
+      value: eventHandlers,
+      children: /*#__PURE__*/jsx(MenuList, _extends({}, restProps, {
+        ariaLabel: ariaLabel || 'Menu',
+        externalRef: externalRef,
+        containerRef: containerRef,
+        containerProps: {
+          className: className,
           containerRef: containerRef,
-          containerProps: {
-            className: className,
-            containerRef: containerRef,
-            containerProps: containerProps,
-            skipOpen: skipOpen,
-            theming: theming,
-            transition: transition,
-            onClose: onClose
-          }
-        }))
-      })
+          containerProps: containerProps,
+          skipOpen: skipOpen,
+          theming: theming,
+          transition: transition,
+          onClose: onClose
+        }
+      }))
     })
   });
   if (portal === true && typeof document !== 'undefined') {

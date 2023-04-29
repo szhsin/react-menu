@@ -3,6 +3,7 @@ import { useState, useReducer, useContext, useRef, useCallback, useEffect, useMe
 import { flushSync } from 'react-dom';
 import { MenuContainer } from './MenuContainer.js';
 import { jsxs, jsx } from 'react/jsx-runtime';
+import { createSubmenuCtx } from '../utils/submenuCtx.js';
 import { SettingsContext, MenuListContext, HoverActionTypes, positionAbsolute, dummyItemProps, MenuListItemContext, HoverItemContext, Keys, menuClass, CloseReason, FocusPositions, menuArrowClass } from '../utils/constants.js';
 import { useItems } from '../hooks/useItems.js';
 import { getScrollAncestor, floatEqual, commonProps, mergeProps, safeCall, isMenuOpen, getTransition, batchedUpdates } from '../utils/utils.js';
@@ -65,9 +66,8 @@ var MenuList = function MenuList(_ref) {
   var _useState4 = useState(direction),
     expandedDirection = _useState4[0],
     setExpandedDirection = _useState4[1];
-  var _useState5 = useState(0),
-    openSubmenuCount = _useState5[0],
-    setOpenSubmenuCount = _useState5[1];
+  var _useState5 = useState(createSubmenuCtx),
+    submenuCtx = _useState5[0];
   var _useReducer = useReducer(function (c) {
       return c + 1;
     }, 1),
@@ -81,8 +81,12 @@ var MenuList = function MenuList(_ref) {
     rootAnchorRef = _useContext.rootAnchorRef,
     scrollNodesRef = _useContext.scrollNodesRef,
     reposition = _useContext.reposition,
-    viewScroll = _useContext.viewScroll;
-  var reposFlag = useContext(MenuListContext).reposSubmenu || repositionFlag;
+    viewScroll = _useContext.viewScroll,
+    submenuCloseDelay = _useContext.submenuCloseDelay;
+  var _useContext2 = useContext(MenuListContext),
+    parentSubmenuCtx = _useContext2.submenuCtx,
+    _useContext2$reposSub = _useContext2.reposSubmenu,
+    reposFlag = _useContext2$reposSub === void 0 ? repositionFlag : _useContext2$reposSub;
   var menuRef = useRef(null);
   var focusRef = useRef();
   var arrowRef = useRef();
@@ -130,6 +134,16 @@ var MenuList = function MenuList(_ref) {
       setOverflowData();
     }
     safeCall(endTransition);
+  };
+  var onPointerMove = function onPointerMove(e) {
+    e.stopPropagation();
+    submenuCtx.on(submenuCloseDelay, function () {
+      dispatch(HoverActionTypes.RESET);
+      focusRef.current.focus();
+    });
+  };
+  var onPointerLeave = function onPointerLeave(e) {
+    if (e.target === e.currentTarget) submenuCtx.off();
   };
   var handlePosition = useCallback(function (noOverflowCheck) {
     var _anchorRef$current;
@@ -337,16 +351,14 @@ var MenuList = function MenuList(_ref) {
       };
     }
   }, [isOpen, openTransition, closeTransition, captureFocus, menuItemFocus, dispatch]);
-  var isSubmenuOpen = openSubmenuCount > 0;
   var itemContext = useMemo(function () {
     return {
       isParentOpen: isOpen,
-      isSubmenuOpen: isSubmenuOpen,
-      setOpenSubmenuCount: setOpenSubmenuCount,
+      submenuCtx: submenuCtx,
       dispatch: dispatch,
       updateItems: updateItems
     };
-  }, [isOpen, isSubmenuOpen, dispatch, updateItems]);
+  }, [isOpen, submenuCtx, dispatch, updateItems]);
   var maxHeight, overflowAmt;
   if (overflowData) {
     setDownOverflow ? overflowAmt = overflowData.overflowAmt : maxHeight = overflowData.height;
@@ -354,12 +366,13 @@ var MenuList = function MenuList(_ref) {
   var listContext = useMemo(function () {
     return {
       reposSubmenu: reposSubmenu,
+      submenuCtx: submenuCtx,
       overflow: overflow,
       overflowAmt: overflowAmt,
       parentMenuRef: menuRef,
       parentDir: expandedDirection
     };
-  }, [reposSubmenu, overflow, overflowAmt, expandedDirection]);
+  }, [reposSubmenu, submenuCtx, overflow, overflowAmt, expandedDirection]);
   var overflowStyle = maxHeight >= 0 ? {
     maxHeight: maxHeight,
     overflow: overflow
@@ -385,6 +398,9 @@ var MenuList = function MenuList(_ref) {
     role: "menu",
     "aria-label": ariaLabel
   }, commonProps(isDisabled), mergeProps({
+    onPointerEnter: parentSubmenuCtx == null ? void 0 : parentSubmenuCtx.off,
+    onPointerMove: onPointerMove,
+    onPointerLeave: onPointerLeave,
     onKeyDown: onKeyDown,
     onAnimationEnd: onAnimationEnd
   }, restProps), {

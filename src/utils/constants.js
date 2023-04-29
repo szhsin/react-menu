@@ -17,7 +17,6 @@ export const MenuListContext = createContext({});
 export const EventHandlersContext = createContext({});
 export const RadioGroupContext = createContext({});
 export const SettingsContext = createContext({});
-export const ItemSettingsContext = createContext({});
 
 export const Keys = Object.freeze({
   ENTER: 'Enter',

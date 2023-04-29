@@ -154,6 +154,7 @@ test('Delay closing submenu when hovering items in parent menu list', async () =
       <MenuItem>One</MenuItem>
       <MenuItem>Two</MenuItem>
       <FocusableItem>{({ ref }) => <input ref={ref} type="text" />}</FocusableItem>
+      <div data-testid="some-text">Some text</div>
     </Menu>
   );
 
@@ -175,14 +176,30 @@ test('Delay closing submenu when hovering items in parent menu list', async () =
     utils.expectMenuToBeOpen(beOpen, submenuOptions1);
   };
 
+  await quickEnterLeave(utils.queryMenuItem('Disabled'));
   await quickEnterLeave(utils.queryMenuItem('Submenu2'));
   await quickEnterLeave(utils.queryMenuItem('Two'));
   await quickEnterLeave(container.querySelector('.szh-menu__item--focusable'));
 
-  fireEvent.pointerMove(utils.queryMenuItem('Disabled'));
-  await utils.delayFor(400);
+  // submenu should stay open when mouse moves over parent menu and then re-enters the submenu
+  fireEvent.pointerMove(screen.getByTestId('some-text'));
+  fireEvent.pointerEnter(utils.queryMenu(submenuOptions1));
+  await utils.delayFor(submenuCloseDelay + 50);
   utils.expectMenuToBeOpen(true, submenuOptions1);
 
+  // moving over a disabled item closes the submenu
+  fireEvent.pointerMove(utils.queryMenuItem('Disabled'));
+  await waitFor(() => utils.expectMenuToBeOpen(false, submenuOptions1));
+
+  // moving over a non-item element within menu closes the submenu
+  fireEvent.click(submenuItem1);
+  utils.expectMenuToBeOpen(true, submenuOptions1);
+  fireEvent.pointerMove(screen.getByTestId('some-text'));
+  await waitFor(() => utils.expectMenuToBeOpen(false, submenuOptions1));
+
+  // moving over another submenu item closes the first submenu
+  fireEvent.click(submenuItem1);
+  utils.expectMenuToBeOpen(true, submenuOptions1);
   fireEvent.pointerMove(utils.queryMenuItem('Submenu2'));
   await waitFor(() => utils.expectMenuToBeOpen(true, submenuOptions2));
   utils.expectMenuToBeOpen(false, submenuOptions1);
@@ -192,6 +209,7 @@ test('Delay closing submenu when hovering items in parent menu list', async () =
   utils.expectMenuItemToBeHover(submenuItem1, true);
   utils.expectMenuToBeOpen(true, submenuOptions1);
   utils.expectMenuToBeOpen(false, submenuOptions2);
+
   // hovering another item longer than submenuCloseDelay will close it
   await quickEnterLeave(utils.queryMenuItem('Two'), 120, false);
 

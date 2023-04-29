@@ -1,5 +1,5 @@
 import { extends as _extends, objectWithoutPropertiesLoose as _objectWithoutPropertiesLoose } from '../_virtual/_rollupPluginBabelHelpers.js';
-import { useContext, useRef, useEffect, useImperativeHandle, useMemo } from 'react';
+import { useContext, useRef, useState, useEffect, useImperativeHandle, useMemo } from 'react';
 import { createPortal } from 'react-dom';
 import { bool, oneOf, oneOfType, node, func, shape } from 'prop-types';
 import { MenuList } from './MenuList.js';
@@ -10,7 +10,7 @@ import { useMenuStateAndFocus } from '../hooks/useMenuStateAndFocus.js';
 import { useItemEffect } from '../hooks/useItemEffect.js';
 import { useMenuChange } from '../hooks/useMenuChange.js';
 import { useBEM } from '../hooks/useBEM.js';
-import { SettingsContext, ItemSettingsContext, MenuListContext, MenuListItemContext, menuClass, subMenuClass, roleNone, roleMenuitem, menuItemClass, HoverActionTypes, Keys, FocusPositions } from '../utils/constants.js';
+import { SettingsContext, MenuListContext, MenuListItemContext, menuClass, subMenuClass, roleNone, roleMenuitem, menuItemClass, HoverActionTypes, Keys, FocusPositions } from '../utils/constants.js';
 import { useCombinedRef } from '../hooks/useCombinedRef.js';
 import { mergeProps, commonProps, safeCall, isMenuOpen, batchedUpdates } from '../utils/utils.js';
 
@@ -31,20 +31,18 @@ var SubMenu = /*#__PURE__*/withHovering('SubMenu', function SubMenu(_ref) {
     itemProps = _ref$itemProps === void 0 ? {} : _ref$itemProps,
     restProps = _objectWithoutPropertiesLoose(_ref, _excluded);
   var settings = useContext(SettingsContext);
-  var rootMenuRef = settings.rootMenuRef;
-  var _useContext = useContext(ItemSettingsContext),
-    submenuOpenDelay = _useContext.submenuOpenDelay,
-    submenuCloseDelay = _useContext.submenuCloseDelay;
-  var _useContext2 = useContext(MenuListContext),
-    parentMenuRef = _useContext2.parentMenuRef,
-    parentDir = _useContext2.parentDir,
-    parentOverflow = _useContext2.overflow;
-  var _useContext3 = useContext(MenuListItemContext),
-    isParentOpen = _useContext3.isParentOpen,
-    isSubmenuOpen = _useContext3.isSubmenuOpen,
-    setOpenSubmenuCount = _useContext3.setOpenSubmenuCount,
-    dispatch = _useContext3.dispatch,
-    updateItems = _useContext3.updateItems;
+  var rootMenuRef = settings.rootMenuRef,
+    submenuOpenDelay = settings.submenuOpenDelay,
+    submenuCloseDelay = settings.submenuCloseDelay;
+  var _useContext = useContext(MenuListContext),
+    parentMenuRef = _useContext.parentMenuRef,
+    parentDir = _useContext.parentDir,
+    parentOverflow = _useContext.overflow;
+  var _useContext2 = useContext(MenuListItemContext),
+    isParentOpen = _useContext2.isParentOpen,
+    submenuCtx = _useContext2.submenuCtx,
+    dispatch = _useContext2.dispatch,
+    updateItems = _useContext2.updateItems;
   var isPortal = parentOverflow !== 'visible';
   var _useMenuStateAndFocus = useMenuStateAndFocus(settings),
     stateProps = _useMenuStateAndFocus[0],
@@ -54,11 +52,15 @@ var SubMenu = /*#__PURE__*/withHovering('SubMenu', function SubMenu(_ref) {
   var isDisabled = !!disabled;
   var isOpen = isMenuOpen(state);
   var containerRef = useRef(null);
-  var timeoutId = useRef(0);
+  var _useState = useState({
+      v: 0
+    }),
+    timerId = _useState[0];
   var stopTimer = function stopTimer() {
-    if (timeoutId.current) {
-      clearTimeout(timeoutId.current);
-      timeoutId.current = 0;
+    submenuCtx.off();
+    if (timerId.v) {
+      clearTimeout(timerId.v);
+      timerId.v = 0;
     }
   };
   var _openMenu2 = function openMenu() {
@@ -71,25 +73,35 @@ var SubMenu = /*#__PURE__*/withHovering('SubMenu', function SubMenu(_ref) {
   };
   var delayOpen = function delayOpen(delay) {
     setHover();
-    if (!openTrigger) timeoutId.current = setTimeout(function () {
+    if (!openTrigger) timerId.v = setTimeout(function () {
       return batchedUpdates(_openMenu2);
     }, Math.max(delay, 0));
   };
-  var handlePointerMove = function handlePointerMove() {
-    if (timeoutId.current || isOpen || isDisabled) return;
-    if (isSubmenuOpen) {
-      timeoutId.current = setTimeout(function () {
-        return delayOpen(submenuOpenDelay - submenuCloseDelay);
-      }, submenuCloseDelay);
-    } else {
-      delayOpen(submenuOpenDelay);
-    }
+  var onPointerMove = function onPointerMove(e) {
+    if (isDisabled) return;
+    e.stopPropagation();
+    if (timerId.v || isOpen) return;
+    submenuCtx.on(submenuCloseDelay, function () {
+      return delayOpen(submenuOpenDelay - submenuCloseDelay);
+    }, function () {
+      return delayOpen(submenuOpenDelay);
+    });
   };
-  var handlePointerLeave = function handlePointerLeave() {
+  var onPointerLeave = function onPointerLeave() {
     stopTimer();
     if (!isOpen) dispatch(HoverActionTypes.UNSET, itemRef.current);
   };
-  var handleKeyDown = function handleKeyDown(e) {
+  var onKeyDown = function onKeyDown(e) {
+    if (!isHovering) return;
+    switch (e.key) {
+      case Keys.ENTER:
+      case Keys.SPACE:
+      case Keys.RIGHT:
+        openTrigger !== 'none' && _openMenu2(FocusPositions.FIRST);
+        break;
+    }
+  };
+  var onKeyDownOfRoot = function onKeyDownOfRoot(e) {
     var handled = false;
     switch (e.key) {
       case Keys.LEFT:
@@ -108,23 +120,16 @@ var SubMenu = /*#__PURE__*/withHovering('SubMenu', function SubMenu(_ref) {
       e.stopPropagation();
     }
   };
-  var handleItemKeyDown = function handleItemKeyDown(e) {
-    if (!isHovering) return;
-    switch (e.key) {
-      case Keys.ENTER:
-      case Keys.SPACE:
-      case Keys.RIGHT:
-        openTrigger !== 'none' && _openMenu2(FocusPositions.FIRST);
-        break;
-    }
-  };
   useItemEffect(isDisabled, itemRef, updateItems);
   useMenuChange(onMenuChange, isOpen);
   useEffect(function () {
+    return submenuCtx.toggle(isOpen);
+  }, [submenuCtx, isOpen]);
+  useEffect(function () {
     return function () {
-      return clearTimeout(timeoutId.current);
+      return clearTimeout(timerId.v);
     };
-  }, []);
+  }, [timerId]);
   useEffect(function () {
     if (isHovering && isParentOpen) {
       itemRef.current.focus();
@@ -132,11 +137,6 @@ var SubMenu = /*#__PURE__*/withHovering('SubMenu', function SubMenu(_ref) {
       toggleMenu(false);
     }
   }, [isHovering, isParentOpen, toggleMenu, itemRef]);
-  useEffect(function () {
-    setOpenSubmenuCount(function (count) {
-      return isOpen ? count + 1 : Math.max(count - 1, 0);
-    });
-  }, [setOpenSubmenuCount, isOpen]);
   useImperativeHandle(instanceRef, function () {
     return {
       openMenu: function openMenu() {
@@ -162,9 +162,10 @@ var SubMenu = /*#__PURE__*/withHovering('SubMenu', function SubMenu(_ref) {
     itemClassName = itemProps.className,
     restItemProps = _objectWithoutPropertiesLoose(itemProps, _excluded2);
   var mergedItemProps = mergeProps({
-    onPointerMove: handlePointerMove,
-    onPointerLeave: handlePointerLeave,
-    onKeyDown: handleItemKeyDown,
+    onPointerEnter: submenuCtx.off,
+    onPointerMove: onPointerMove,
+    onPointerLeave: onPointerLeave,
+    onKeyDown: onKeyDown,
     onClick: function onClick() {
       return openTrigger !== 'none' && _openMenu2();
     }
@@ -192,7 +193,7 @@ var SubMenu = /*#__PURE__*/withHovering('SubMenu', function SubMenu(_ref) {
     },
     role: roleNone,
     ref: containerRef,
-    onKeyDown: handleKeyDown,
+    onKeyDown: onKeyDownOfRoot,
     children: [/*#__PURE__*/jsx("div", _extends({
       role: roleMenuitem,
       "aria-haspopup": true,
