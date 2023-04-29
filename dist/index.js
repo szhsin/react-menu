@@ -245,7 +245,7 @@ var parsePadding = function parsePadding(paddingStr) {
 var getScrollAncestor = function getScrollAncestor(node) {
   while (node) {
     node = node.parentNode;
-    if (!node || node === document.body) return;
+    if (!node || node === document.body || !node.parentNode) return;
     var _getComputedStyle = getComputedStyle(node),
       overflow = _getComputedStyle.overflow,
       overflowX = _getComputedStyle.overflowX,
