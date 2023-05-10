@@ -9,7 +9,7 @@
     "next": "^13.4.0",
     "react": "file:../node_modules/react",
     "react-dom": "file:../node_modules/react-dom",
-    "reactish-state": "0.10.4"
+    "reactish-state": "0.11.0"
   },
   "devDependencies": {
     "eslint-config-next": "^13.4.0"
