@@ -680,14 +680,14 @@ export const placement = {
         <code>viewScroll</code> props.
       </p>
       <p>
-        Optionally, menu can be set to display an arrow pointing to its anchor element or add an
-        offset using the <code>arrow</code>, <code>offsetX</code>, and <code>offsetY</code> props.
+        Menu can be set to display an arrow pointing to its anchor element with the{' '}
+        <code>arrow</code> prop. You can also adjust menu's position relating to its anchor using
+        the <code>gap</code> and <code>shift</code> prop.
       </p>
     </>
   ),
 
-  source: `const [display, setDisplay] = useState('arrow');
-const [align, setAlign] = useState('center');
+  source: `const [align, setAlign] = useState('center');
 const [position, setPosition] = useState('anchor');
 const [viewScroll, setViewScroll] = useState('auto');
 
@@ -699,17 +699,9 @@ const menus = ['right', 'top', 'bottom', 'left'].map((direction) => (
     align={align}
     position={position}
     viewScroll={viewScroll}
-    arrow={display === 'arrow'}
-    offsetX={
-      display === 'offset' && (direction === 'left' || direction === 'right')
-        ? 12
-        : 0
-    }
-    offsetY={
-      display === 'offset' && (direction === 'top' || direction === 'bottom')
-        ? 12
-        : 0
-    }
+    arrow={hasArrow ? true : false}
+    gap={hasGap ? 12 : 0}
+    shift={hasShift ? 12 : 0}
   >
     {['Apple', 'Banana', 'Blueberry', 'Cherry', 'Strawberry'].map((fruit) => (
       <MenuItem key={fruit}>{fruit}</MenuItem>

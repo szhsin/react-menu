@@ -212,24 +212,23 @@ const sharedMenuProps = [
     )
   },
   {
-    name: 'offsetX',
+    name: 'gap',
     type: 'number',
     defaultVal: 0,
     desc: (
       <p>
-        Set the horizontal distance (in pixels) between menu and its anchor element. The value can
-        be negative.
+        Add a gap (gutter) between menu and its anchor element. The value (in pixels) can be
+        negative.
       </p>
     )
   },
   {
-    name: 'offsetY',
+    name: 'shift',
     type: 'number',
     defaultVal: 0,
     desc: (
       <p>
-        Set the vertical distance (in pixels) between menu and its anchor element. The value can be
-        negative.
+        Shift menu's position away from its anchor element. The value (in pixels) can be negative.
       </p>
     )
   },

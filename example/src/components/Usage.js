@@ -452,7 +452,7 @@ function CustomisedButtonExample() {
 }
 
 const alginOptions = [['start'], ['center'], ['end']];
-const displayOptions = [['default'], ['arrow', 'display an arrow'], ['offset', 'display a gap']];
+const displayOptions = [['default'], ['arrow'], ['gap'], ['shift']];
 const positionOptions = [
   ['auto', 'keep in viewport'],
   ['anchor', 'stick to the edges of anchor'],
@@ -481,8 +481,8 @@ function MenuPlacementExample() {
       position={position}
       viewScroll={viewScroll}
       arrow={display === 'arrow'}
-      offsetX={display === 'offset' && (direction === 'left' || direction === 'right') ? 12 : 0}
-      offsetY={display === 'offset' && (direction === 'top' || direction === 'bottom') ? 12 : 0}
+      gap={display === 'gap' ? 12 : 0}
+      shift={display === 'shift' ? 12 : 0}
     >
       {['Apple', 'Banana', 'Blueberry', 'Cherry', 'Strawberry'].map((fruit) => (
         <MenuItem key={fruit}>{fruit}</MenuItem>
