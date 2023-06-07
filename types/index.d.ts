@@ -202,17 +202,17 @@ interface BaseMenuProps extends Omit<BaseProps, 'style'> {
    */
   focusProps?: React.HTMLAttributes<HTMLElement>;
   /**
-   * Set the horizontal distance (in pixels) between menu and its anchor element.
-   * The value can be negative.
+   * Add a gap (gutter) between menu and its anchor element.
+   * The value (in pixels) can be negative.
    * @default 0
    */
-  offsetX?: number;
+  gap?: number;
   /**
-   * Set the vertical distance (in pixels) between menu and its anchor element.
-   * The value can be negative.
+   * Shift menu's position away from its anchor element.
+   * The value (in pixels) can be negative.
    * @default 0
    */
-  offsetY?: number;
+  shift?: number;
   /**
    * Set alignment of menu with anchor element.
    * @default 'start'

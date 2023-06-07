@@ -6,21 +6,23 @@ var positionMenu = function positionMenu(_ref) {
   var arrow = _ref.arrow,
     align = _ref.align,
     direction = _ref.direction,
-    offsetX = _ref.offsetX,
-    offsetY = _ref.offsetY,
+    gap = _ref.gap,
+    shift = _ref.shift,
     position = _ref.position,
     anchorRect = _ref.anchorRect,
     arrowRef = _ref.arrowRef,
     positionHelpers = _ref.positionHelpers;
   var menuRect = positionHelpers.menuRect,
     containerRect = positionHelpers.containerRect;
-  var horizontalOffset = offsetX;
-  var verticalOffset = offsetY;
+  var isHorizontal = direction === 'left' || direction === 'right';
+  var horizontalOffset = isHorizontal ? gap : shift;
+  var verticalOffset = isHorizontal ? shift : gap;
   if (arrow) {
-    if (direction === 'left' || direction === 'right') {
-      horizontalOffset += arrowRef.current.offsetWidth;
+    var arrowElt = arrowRef.current;
+    if (isHorizontal) {
+      horizontalOffset += arrowElt.offsetWidth;
     } else {
-      verticalOffset += arrowRef.current.offsetHeight;
+      verticalOffset += arrowElt.offsetHeight;
     }
   }
   var placeLeftX = anchorRect.left - containerRect.left - menuRect.width - horizontalOffset;

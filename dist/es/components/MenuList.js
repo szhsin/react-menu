@@ -13,7 +13,7 @@ import { useLayoutEffect as useIsomorphicLayoutEffect } from '../hooks/useIsomor
 import { useBEM } from '../hooks/useBEM.js';
 import { useCombinedRef } from '../hooks/useCombinedRef.js';
 
-var _excluded = ["ariaLabel", "menuClassName", "menuStyle", "arrowClassName", "arrowStyle", "anchorPoint", "anchorRef", "containerRef", "containerProps", "focusProps", "externalRef", "parentScrollingRef", "arrow", "align", "direction", "position", "overflow", "setDownOverflow", "repositionFlag", "captureFocus", "state", "endTransition", "isDisabled", "menuItemFocus", "offsetX", "offsetY", "children", "onClose"];
+var _excluded = ["ariaLabel", "menuClassName", "menuStyle", "arrowClassName", "arrowStyle", "anchorPoint", "anchorRef", "containerRef", "containerProps", "focusProps", "externalRef", "parentScrollingRef", "arrow", "align", "direction", "position", "overflow", "setDownOverflow", "repositionFlag", "captureFocus", "state", "endTransition", "isDisabled", "menuItemFocus", "gap", "shift", "children", "onClose"];
 var MenuList = function MenuList(_ref) {
   var ariaLabel = _ref.ariaLabel,
     menuClassName = _ref.menuClassName,
@@ -44,10 +44,10 @@ var MenuList = function MenuList(_ref) {
     endTransition = _ref.endTransition,
     isDisabled = _ref.isDisabled,
     menuItemFocus = _ref.menuItemFocus,
-    _ref$offsetX = _ref.offsetX,
-    offsetX = _ref$offsetX === void 0 ? 0 : _ref$offsetX,
-    _ref$offsetY = _ref.offsetY,
-    offsetY = _ref$offsetY === void 0 ? 0 : _ref$offsetY,
+    _ref$gap = _ref.gap,
+    gap = _ref$gap === void 0 ? 0 : _ref$gap,
+    _ref$shift = _ref.shift,
+    shift = _ref$shift === void 0 ? 0 : _ref$shift,
     children = _ref.children,
     onClose = _ref.onClose,
     restProps = _objectWithoutPropertiesLoose(_ref, _excluded);
@@ -169,8 +169,8 @@ var MenuList = function MenuList(_ref) {
         arrow: arrow,
         align: align,
         direction: direction,
-        offsetX: offsetX,
-        offsetY: offsetY,
+        gap: gap,
+        shift: shift,
         position: position,
         anchorRect: anchorRect,
         arrowRef: arrowRef,
@@ -223,7 +223,7 @@ var MenuList = function MenuList(_ref) {
       width: menuRect.width,
       height: menuHeight
     };
-  }, [arrow, align, boundingBoxPadding, direction, offsetX, offsetY, position, overflow, anchorPoint, anchorRef, containerRef, boundingBoxRef, rootMenuRef, scrollNodes]);
+  }, [arrow, align, boundingBoxPadding, direction, gap, shift, position, overflow, anchorPoint, anchorRef, containerRef, boundingBoxRef, rootMenuRef, scrollNodes]);
   useIsomorphicLayoutEffect(function () {
     if (isOpen) {
       handlePosition();

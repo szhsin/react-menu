@@ -278,8 +278,8 @@ var menuPropTypes = /*#__PURE__*/_extends({
   arrowStyle: propTypes.object,
   arrow: propTypes.bool,
   setDownOverflow: propTypes.bool,
-  offsetX: propTypes.number,
-  offsetY: propTypes.number,
+  gap: propTypes.number,
+  shift: propTypes.number,
   align: /*#__PURE__*/propTypes.oneOf(['start', 'center', 'end']),
   direction: /*#__PURE__*/propTypes.oneOf(['left', 'right', 'top', 'bottom']),
   position: /*#__PURE__*/propTypes.oneOf(['auto', 'anchor', 'initial']),
@@ -876,21 +876,23 @@ var positionMenu = function positionMenu(_ref) {
   var arrow = _ref.arrow,
     align = _ref.align,
     direction = _ref.direction,
-    offsetX = _ref.offsetX,
-    offsetY = _ref.offsetY,
+    gap = _ref.gap,
+    shift = _ref.shift,
     position = _ref.position,
     anchorRect = _ref.anchorRect,
     arrowRef = _ref.arrowRef,
     positionHelpers = _ref.positionHelpers;
   var menuRect = positionHelpers.menuRect,
     containerRect = positionHelpers.containerRect;
-  var horizontalOffset = offsetX;
-  var verticalOffset = offsetY;
+  var isHorizontal = direction === 'left' || direction === 'right';
+  var horizontalOffset = isHorizontal ? gap : shift;
+  var verticalOffset = isHorizontal ? shift : gap;
   if (arrow) {
-    if (direction === 'left' || direction === 'right') {
-      horizontalOffset += arrowRef.current.offsetWidth;
+    var arrowElt = arrowRef.current;
+    if (isHorizontal) {
+      horizontalOffset += arrowElt.offsetWidth;
     } else {
-      verticalOffset += arrowRef.current.offsetHeight;
+      verticalOffset += arrowElt.offsetHeight;
     }
   }
   var placeLeftX = anchorRect.left - containerRect.left - menuRect.width - horizontalOffset;
@@ -934,7 +936,7 @@ var positionMenu = function positionMenu(_ref) {
   }
 };
 
-var _excluded$9 = ["ariaLabel", "menuClassName", "menuStyle", "arrowClassName", "arrowStyle", "anchorPoint", "anchorRef", "containerRef", "containerProps", "focusProps", "externalRef", "parentScrollingRef", "arrow", "align", "direction", "position", "overflow", "setDownOverflow", "repositionFlag", "captureFocus", "state", "endTransition", "isDisabled", "menuItemFocus", "offsetX", "offsetY", "children", "onClose"];
+var _excluded$9 = ["ariaLabel", "menuClassName", "menuStyle", "arrowClassName", "arrowStyle", "anchorPoint", "anchorRef", "containerRef", "containerProps", "focusProps", "externalRef", "parentScrollingRef", "arrow", "align", "direction", "position", "overflow", "setDownOverflow", "repositionFlag", "captureFocus", "state", "endTransition", "isDisabled", "menuItemFocus", "gap", "shift", "children", "onClose"];
 var MenuList = function MenuList(_ref) {
   var ariaLabel = _ref.ariaLabel,
     menuClassName = _ref.menuClassName,
@@ -965,10 +967,10 @@ var MenuList = function MenuList(_ref) {
     endTransition = _ref.endTransition,
     isDisabled = _ref.isDisabled,
     menuItemFocus = _ref.menuItemFocus,
-    _ref$offsetX = _ref.offsetX,
-    offsetX = _ref$offsetX === void 0 ? 0 : _ref$offsetX,
-    _ref$offsetY = _ref.offsetY,
-    offsetY = _ref$offsetY === void 0 ? 0 : _ref$offsetY,
+    _ref$gap = _ref.gap,
+    gap = _ref$gap === void 0 ? 0 : _ref$gap,
+    _ref$shift = _ref.shift,
+    shift = _ref$shift === void 0 ? 0 : _ref$shift,
     children = _ref.children,
     onClose = _ref.onClose,
     restProps = _objectWithoutPropertiesLoose(_ref, _excluded$9);
@@ -1090,8 +1092,8 @@ var MenuList = function MenuList(_ref) {
         arrow: arrow,
         align: align,
         direction: direction,
-        offsetX: offsetX,
-        offsetY: offsetY,
+        gap: gap,
+        shift: shift,
         position: position,
         anchorRect: anchorRect,
         arrowRef: arrowRef,
@@ -1144,7 +1146,7 @@ var MenuList = function MenuList(_ref) {
       width: menuRect.width,
       height: menuHeight
     };
-  }, [arrow, align, boundingBoxPadding, direction, offsetX, offsetY, position, overflow, anchorPoint, anchorRef, containerRef, boundingBoxRef, rootMenuRef, scrollNodes]);
+  }, [arrow, align, boundingBoxPadding, direction, gap, shift, position, overflow, anchorPoint, anchorRef, containerRef, boundingBoxRef, rootMenuRef, scrollNodes]);
   useIsomorphicLayoutEffect(function () {
     if (isOpen) {
       handlePosition();
