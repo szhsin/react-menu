@@ -31,8 +31,8 @@ export const MenuList = ({
   ariaLabel,
   menuClassName,
   menuStyle,
-  arrowClassName,
-  arrowStyle,
+  arrow,
+  arrowProps = {},
   anchorPoint,
   anchorRef,
   containerRef,
@@ -40,7 +40,6 @@ export const MenuList = ({
   focusProps,
   externalRef,
   parentScrollingRef,
-  arrow,
   align = 'start',
   direction = 'bottom',
   position = 'auto',
@@ -421,11 +420,11 @@ export const MenuList = ({
     [state, expandedDirection]
   );
   const arrowModifiers = useMemo(() => ({ dir: expandedDirection }), [expandedDirection]);
-  const _arrowClass = useBEM({
+  const _arrowClassName = useBEM({
     block: menuClass,
     element: menuArrowClass,
     modifiers: arrowModifiers,
-    className: arrowClassName
+    className: arrowProps.className
   });
 
   const menu = (
@@ -464,16 +463,17 @@ export const MenuList = ({
       />
       {arrow && (
         <li
-          className={_arrowClass}
+          {...dummyItemProps}
+          {...arrowProps}
+          className={_arrowClassName}
           style={{
             display: 'block',
             position: positionAbsolute,
             left: arrowPosition.x,
             top: arrowPosition.y,
-            ...arrowStyle
+            ...arrowProps.style
           }}
           ref={arrowRef}
-          {...dummyItemProps}
         />
       )}
 

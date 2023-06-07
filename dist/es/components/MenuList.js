@@ -13,13 +13,14 @@ import { useLayoutEffect as useIsomorphicLayoutEffect } from '../hooks/useIsomor
 import { useBEM } from '../hooks/useBEM.js';
 import { useCombinedRef } from '../hooks/useCombinedRef.js';
 
-var _excluded = ["ariaLabel", "menuClassName", "menuStyle", "arrowClassName", "arrowStyle", "anchorPoint", "anchorRef", "containerRef", "containerProps", "focusProps", "externalRef", "parentScrollingRef", "arrow", "align", "direction", "position", "overflow", "setDownOverflow", "repositionFlag", "captureFocus", "state", "endTransition", "isDisabled", "menuItemFocus", "gap", "shift", "children", "onClose"];
+var _excluded = ["ariaLabel", "menuClassName", "menuStyle", "arrow", "arrowProps", "anchorPoint", "anchorRef", "containerRef", "containerProps", "focusProps", "externalRef", "parentScrollingRef", "align", "direction", "position", "overflow", "setDownOverflow", "repositionFlag", "captureFocus", "state", "endTransition", "isDisabled", "menuItemFocus", "gap", "shift", "children", "onClose"];
 var MenuList = function MenuList(_ref) {
   var ariaLabel = _ref.ariaLabel,
     menuClassName = _ref.menuClassName,
     menuStyle = _ref.menuStyle,
-    arrowClassName = _ref.arrowClassName,
-    arrowStyle = _ref.arrowStyle,
+    arrow = _ref.arrow,
+    _ref$arrowProps = _ref.arrowProps,
+    arrowProps = _ref$arrowProps === void 0 ? {} : _ref$arrowProps,
     anchorPoint = _ref.anchorPoint,
     anchorRef = _ref.anchorRef,
     containerRef = _ref.containerRef,
@@ -27,7 +28,6 @@ var MenuList = function MenuList(_ref) {
     focusProps = _ref.focusProps,
     externalRef = _ref.externalRef,
     parentScrollingRef = _ref.parentScrollingRef,
-    arrow = _ref.arrow,
     _ref$align = _ref.align,
     align = _ref$align === void 0 ? 'start' : _ref$align,
     _ref$direction = _ref.direction,
@@ -388,11 +388,11 @@ var MenuList = function MenuList(_ref) {
       dir: expandedDirection
     };
   }, [expandedDirection]);
-  var _arrowClass = useBEM({
+  var _arrowClassName = useBEM({
     block: menuClass,
     element: menuArrowClass,
     modifiers: arrowModifiers,
-    className: arrowClassName
+    className: arrowProps.className
   });
   var menu = /*#__PURE__*/jsxs("ul", _extends({
     role: "menu",
@@ -427,16 +427,16 @@ var MenuList = function MenuList(_ref) {
         outline: 'none'
       },
       ref: focusRef
-    }, dummyItemProps, focusProps)), arrow && /*#__PURE__*/jsx("li", _extends({
-      className: _arrowClass,
+    }, dummyItemProps, focusProps)), arrow && /*#__PURE__*/jsx("li", _extends({}, dummyItemProps, arrowProps, {
+      className: _arrowClassName,
       style: _extends({
         display: 'block',
         position: positionAbsolute,
         left: arrowPosition.x,
         top: arrowPosition.y
-      }, arrowStyle),
+      }, arrowProps.style),
       ref: arrowRef
-    }, dummyItemProps)), /*#__PURE__*/jsx(MenuListContext.Provider, {
+    })), /*#__PURE__*/jsx(MenuListContext.Provider, {
       value: listContext,
       children: /*#__PURE__*/jsx(MenuListItemContext.Provider, {
         value: itemContext,

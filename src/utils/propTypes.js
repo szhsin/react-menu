@@ -8,10 +8,9 @@ export const stylePropTypes = (name) => ({
 export const menuPropTypes = {
   className: string,
   ...stylePropTypes('menu'),
-  ...stylePropTypes('arrow'),
+  arrowProps: object,
   focusProps: object,
   menuStyle: object,
-  arrowStyle: object,
   arrow: bool,
   setDownOverflow: bool,
   gap: number,

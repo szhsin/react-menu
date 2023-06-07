@@ -7,10 +7,10 @@ var stylePropTypes = function stylePropTypes(name) {
 };
 var menuPropTypes = /*#__PURE__*/_extends({
   className: string
-}, /*#__PURE__*/stylePropTypes('menu'), /*#__PURE__*/stylePropTypes('arrow'), {
+}, /*#__PURE__*/stylePropTypes('menu'), {
+  arrowProps: object,
   focusProps: object,
   menuStyle: object,
-  arrowStyle: object,
   arrow: bool,
   setDownOverflow: bool,
   gap: number,

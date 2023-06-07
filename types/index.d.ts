@@ -186,17 +186,13 @@ interface BaseMenuProps extends Omit<BaseProps, 'style'> {
    */
   menuStyle?: React.CSSProperties;
   /**
-   * Can be a string or a function which receives a modifier object and returns a CSS `class` string.
-   */
-  arrowClassName?: ClassNameProp<MenuArrowModifiers>;
-  /**
-   * This prop is forwarded to the `style` prop of menu arrow DOM element.
-   */
-  arrowStyle?: React.CSSProperties;
-  /**
    * Set `true` to display an arrow pointing to its anchor element.
    */
   arrow?: boolean;
+  /**
+   * Properties of this object are spread to the menu arrow DOM element.
+   */
+  arrowProps?: Omit<BaseProps<MenuArrowModifiers>, 'ref'>;
   /**
    * Properties of this object are spread to a DOM element which captures focus for the menu.
    */

@@ -173,7 +173,7 @@ const styleProps = (target, modifiers, className) => [
 // Menu, SubMenu and ControlledMenu
 const sharedMenuProps = [
   ...styleProps('menu', menuModifiers, 'menuClassName'),
-  ...styleProps('menu arrow', <ul>{dirModifier}</ul>, 'arrowClassName'),
+  ...styleProps('menu arrow', <ul>{dirModifier}</ul>, 'arrowProps.className'),
   {
     name: 'menuStyle',
     type: 'CSSProperties',
@@ -184,21 +184,20 @@ const sharedMenuProps = [
     )
   },
   {
-    name: 'arrowStyle',
-    type: 'CSSProperties',
-    desc: (
-      <p>
-        This value is forwarded to the <code>style</code> prop of <strong>menu arrow</strong> DOM
-        element.
-      </p>
-    )
-  },
-  {
     name: 'arrow',
     type: 'boolean',
     desc: (
       <p>
         Set <code>true</code> to display an arrow pointing to its anchor element.
+      </p>
+    )
+  },
+  {
+    name: 'arrowProps',
+    type: 'object',
+    desc: (
+      <p>
+        Properties of this object are spread to the menu <strong>arrow</strong> DOM element.
       </p>
     )
   },

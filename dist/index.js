@@ -272,10 +272,10 @@ var stylePropTypes = function stylePropTypes(name) {
 };
 var menuPropTypes = /*#__PURE__*/_extends({
   className: propTypes.string
-}, /*#__PURE__*/stylePropTypes('menu'), /*#__PURE__*/stylePropTypes('arrow'), {
+}, /*#__PURE__*/stylePropTypes('menu'), {
+  arrowProps: propTypes.object,
   focusProps: propTypes.object,
   menuStyle: propTypes.object,
-  arrowStyle: propTypes.object,
   arrow: propTypes.bool,
   setDownOverflow: propTypes.bool,
   gap: propTypes.number,
@@ -929,13 +929,14 @@ var positionMenu = function positionMenu(_ref) {
   }
 };
 
-var _excluded$9 = ["ariaLabel", "menuClassName", "menuStyle", "arrowClassName", "arrowStyle", "anchorPoint", "anchorRef", "containerRef", "containerProps", "focusProps", "externalRef", "parentScrollingRef", "arrow", "align", "direction", "position", "overflow", "setDownOverflow", "repositionFlag", "captureFocus", "state", "endTransition", "isDisabled", "menuItemFocus", "gap", "shift", "children", "onClose"];
+var _excluded$9 = ["ariaLabel", "menuClassName", "menuStyle", "arrow", "arrowProps", "anchorPoint", "anchorRef", "containerRef", "containerProps", "focusProps", "externalRef", "parentScrollingRef", "align", "direction", "position", "overflow", "setDownOverflow", "repositionFlag", "captureFocus", "state", "endTransition", "isDisabled", "menuItemFocus", "gap", "shift", "children", "onClose"];
 var MenuList = function MenuList(_ref) {
   var ariaLabel = _ref.ariaLabel,
     menuClassName = _ref.menuClassName,
     menuStyle = _ref.menuStyle,
-    arrowClassName = _ref.arrowClassName,
-    arrowStyle = _ref.arrowStyle,
+    arrow = _ref.arrow,
+    _ref$arrowProps = _ref.arrowProps,
+    arrowProps = _ref$arrowProps === void 0 ? {} : _ref$arrowProps,
     anchorPoint = _ref.anchorPoint,
     anchorRef = _ref.anchorRef,
     containerRef = _ref.containerRef,
@@ -943,7 +944,6 @@ var MenuList = function MenuList(_ref) {
     focusProps = _ref.focusProps,
     externalRef = _ref.externalRef,
     parentScrollingRef = _ref.parentScrollingRef,
-    arrow = _ref.arrow,
     _ref$align = _ref.align,
     align = _ref$align === void 0 ? 'start' : _ref$align,
     _ref$direction = _ref.direction,
@@ -1304,11 +1304,11 @@ var MenuList = function MenuList(_ref) {
       dir: expandedDirection
     };
   }, [expandedDirection]);
-  var _arrowClass = useBEM({
+  var _arrowClassName = useBEM({
     block: menuClass,
     element: menuArrowClass,
     modifiers: arrowModifiers,
-    className: arrowClassName
+    className: arrowProps.className
   });
   var menu = /*#__PURE__*/jsxRuntime.jsxs("ul", _extends({
     role: "menu",
@@ -1343,16 +1343,16 @@ var MenuList = function MenuList(_ref) {
         outline: 'none'
       },
       ref: focusRef
-    }, dummyItemProps, focusProps)), arrow && /*#__PURE__*/jsxRuntime.jsx("li", _extends({
-      className: _arrowClass,
+    }, dummyItemProps, focusProps)), arrow && /*#__PURE__*/jsxRuntime.jsx("li", _extends({}, dummyItemProps, arrowProps, {
+      className: _arrowClassName,
       style: _extends({
         display: 'block',
         position: positionAbsolute,
         left: arrowPosition.x,
         top: arrowPosition.y
-      }, arrowStyle),
+      }, arrowProps.style),
       ref: arrowRef
-    }, dummyItemProps)), /*#__PURE__*/jsxRuntime.jsx(MenuListContext.Provider, {
+    })), /*#__PURE__*/jsxRuntime.jsx(MenuListContext.Provider, {
       value: listContext,
       children: /*#__PURE__*/jsxRuntime.jsx(MenuListItemContext.Provider, {
         value: itemContext,
