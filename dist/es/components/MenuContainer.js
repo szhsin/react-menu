@@ -11,7 +11,6 @@ var MenuContainer = function MenuContainer(_ref) {
     containerProps = _ref.containerProps,
     children = _ref.children,
     isOpen = _ref.isOpen,
-    skipOpen = _ref.skipOpen,
     theming = _ref.theming,
     transition = _ref.transition,
     onClose = _ref.onClose;
@@ -32,12 +31,6 @@ var MenuContainer = function MenuContainer(_ref) {
       safeCall(onClose, {
         reason: CloseReason.BLUR
       });
-      if (skipOpen) {
-        skipOpen.current = true;
-        setTimeout(function () {
-          return skipOpen.current = false;
-        }, 300);
-      }
     }
   };
   return /*#__PURE__*/jsx("div", _extends({}, mergeProps({

@@ -8,7 +8,7 @@ import { SettingsContext, EventHandlersContext, MenuStateMap, Keys, CloseReason 
 import { rootMenuPropTypes } from '../utils/propTypes.js';
 import { safeCall, values } from '../utils/utils.js';
 
-var _excluded = ["aria-label", "className", "containerProps", "initialMounted", "unmountOnClose", "transition", "transitionTimeout", "boundingBoxRef", "boundingBoxPadding", "reposition", "submenuOpenDelay", "submenuCloseDelay", "skipOpen", "viewScroll", "portal", "theming", "onItemClick"];
+var _excluded = ["aria-label", "className", "containerProps", "initialMounted", "unmountOnClose", "transition", "transitionTimeout", "boundingBoxRef", "boundingBoxPadding", "reposition", "submenuOpenDelay", "submenuCloseDelay", "viewScroll", "portal", "theming", "onItemClick"];
 var ControlledMenu = /*#__PURE__*/forwardRef(function ControlledMenu(_ref, externalRef) {
   var ariaLabel = _ref['aria-label'],
     className = _ref.className,
@@ -25,7 +25,6 @@ var ControlledMenu = /*#__PURE__*/forwardRef(function ControlledMenu(_ref, exter
     submenuOpenDelay = _ref$submenuOpenDelay === void 0 ? 300 : _ref$submenuOpenDelay,
     _ref$submenuCloseDela = _ref.submenuCloseDelay,
     submenuCloseDelay = _ref$submenuCloseDela === void 0 ? 150 : _ref$submenuCloseDela,
-    skipOpen = _ref.skipOpen,
     _ref$viewScroll = _ref.viewScroll,
     viewScroll = _ref$viewScroll === void 0 ? 'initial' : _ref$viewScroll,
     portal = _ref.portal,
@@ -91,7 +90,6 @@ var ControlledMenu = /*#__PURE__*/forwardRef(function ControlledMenu(_ref, exter
           className: className,
           containerRef: containerRef,
           containerProps: containerProps,
-          skipOpen: skipOpen,
           theming: theming,
           transition: transition,
           onClose: onClose
@@ -113,7 +111,6 @@ process.env.NODE_ENV !== "production" ? ControlledMenu.propTypes = /*#__PURE__*/
     y: number
   }),
   anchorRef: object,
-  skipOpen: object,
   captureFocus: bool,
   menuItemFocus: /*#__PURE__*/exact({
     position: /*#__PURE__*/oneOfType([string, number]),

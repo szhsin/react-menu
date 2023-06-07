@@ -601,7 +601,6 @@ var MenuContainer = function MenuContainer(_ref) {
     containerProps = _ref.containerProps,
     children = _ref.children,
     isOpen = _ref.isOpen,
-    skipOpen = _ref.skipOpen,
     theming = _ref.theming,
     transition = _ref.transition,
     onClose = _ref.onClose;
@@ -622,12 +621,6 @@ var MenuContainer = function MenuContainer(_ref) {
       safeCall(onClose, {
         reason: CloseReason.BLUR
       });
-      if (skipOpen) {
-        skipOpen.current = true;
-        setTimeout(function () {
-          return skipOpen.current = false;
-        }, 300);
-      }
     }
   };
   return /*#__PURE__*/jsxRuntime.jsx("div", _extends({}, mergeProps({
@@ -1376,7 +1369,7 @@ var MenuList = function MenuList(_ref) {
   })) : menu;
 };
 
-var _excluded$8 = ["aria-label", "className", "containerProps", "initialMounted", "unmountOnClose", "transition", "transitionTimeout", "boundingBoxRef", "boundingBoxPadding", "reposition", "submenuOpenDelay", "submenuCloseDelay", "skipOpen", "viewScroll", "portal", "theming", "onItemClick"];
+var _excluded$8 = ["aria-label", "className", "containerProps", "initialMounted", "unmountOnClose", "transition", "transitionTimeout", "boundingBoxRef", "boundingBoxPadding", "reposition", "submenuOpenDelay", "submenuCloseDelay", "viewScroll", "portal", "theming", "onItemClick"];
 var ControlledMenu = /*#__PURE__*/react.forwardRef(function ControlledMenu(_ref, externalRef) {
   var ariaLabel = _ref['aria-label'],
     className = _ref.className,
@@ -1393,7 +1386,6 @@ var ControlledMenu = /*#__PURE__*/react.forwardRef(function ControlledMenu(_ref,
     submenuOpenDelay = _ref$submenuOpenDelay === void 0 ? 300 : _ref$submenuOpenDelay,
     _ref$submenuCloseDela = _ref.submenuCloseDelay,
     submenuCloseDelay = _ref$submenuCloseDela === void 0 ? 150 : _ref$submenuCloseDela,
-    skipOpen = _ref.skipOpen,
     _ref$viewScroll = _ref.viewScroll,
     viewScroll = _ref$viewScroll === void 0 ? 'initial' : _ref$viewScroll,
     portal = _ref.portal,
@@ -1459,7 +1451,6 @@ var ControlledMenu = /*#__PURE__*/react.forwardRef(function ControlledMenu(_ref,
           className: className,
           containerRef: containerRef,
           containerProps: containerProps,
-          skipOpen: skipOpen,
           theming: theming,
           transition: transition,
           onClose: onClose
@@ -1481,7 +1472,6 @@ process.env.NODE_ENV !== "production" ? ControlledMenu.propTypes = /*#__PURE__*/
     y: propTypes.number
   }),
   anchorRef: propTypes.object,
-  skipOpen: propTypes.object,
   captureFocus: propTypes.bool,
   menuItemFocus: /*#__PURE__*/propTypes.exact({
     position: /*#__PURE__*/propTypes.oneOfType([propTypes.string, propTypes.number]),

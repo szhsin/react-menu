@@ -422,10 +422,6 @@ export interface ControlledMenuProps extends RootMenuProps {
    */
   anchorRef?: React.RefObject<Element | RectElement>;
   /**
-   * @deprecated use the `useClick` hook instead.
-   */
-  skipOpen?: React.RefObject<boolean>;
-  /**
    * If `true`, the menu list element will gain focus after menu is open.
    * @default true
    */
