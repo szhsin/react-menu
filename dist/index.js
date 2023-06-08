@@ -534,11 +534,11 @@ var useMenuState = function useMenuState(_temp) {
       enter: getTransition(transition, 'open'),
       exit: getTransition(transition, 'close')
     }),
-    state = _useTransition[0],
+    status = _useTransition[0].status,
     toggleMenu = _useTransition[1],
     endTransition = _useTransition[2];
   return [{
-    state: MenuStateMap[state],
+    state: MenuStateMap[status],
     endTransition: endTransition
   }, toggleMenu];
 };

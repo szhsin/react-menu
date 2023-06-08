@@ -8,7 +8,7 @@ export const useMenuState = ({
   transition,
   transitionTimeout = 500
 } = {}) => {
-  const [state, toggleMenu, endTransition] = useTransition({
+  const [{ status }, toggleMenu, endTransition] = useTransition({
     initialEntered: initialOpen,
     mountOnEnter: !initialMounted,
     unmountOnExit: unmountOnClose,
@@ -17,5 +17,5 @@ export const useMenuState = ({
     exit: getTransition(transition, 'close')
   });
 
-  return [{ state: MenuStateMap[state], endTransition }, toggleMenu];
+  return [{ state: MenuStateMap[status], endTransition }, toggleMenu];
 };
