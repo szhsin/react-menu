@@ -1,22 +1,23 @@
 import { placeArrowHorizontal } from './placeArrowHorizontal.js';
 
-var placeToporBottom = function placeToporBottom(_ref) {
-  var anchorRect = _ref.anchorRect,
-    containerRect = _ref.containerRect,
-    menuRect = _ref.menuRect,
-    placeToporBottomX = _ref.placeToporBottomX,
-    placeTopY = _ref.placeTopY,
-    placeBottomY = _ref.placeBottomY,
-    getTopOverflow = _ref.getTopOverflow,
-    getBottomOverflow = _ref.getBottomOverflow,
-    confineHorizontally = _ref.confineHorizontally,
-    confineVertically = _ref.confineVertically,
-    arrowRef = _ref.arrowRef,
-    arrow = _ref.arrow,
-    direction = _ref.direction,
-    position = _ref.position;
-  var computedDirection = direction === 'top' ? 'top' : 'bottom';
-  var x = placeToporBottomX;
+const placeToporBottom = ({
+  anchorRect,
+  containerRect,
+  menuRect,
+  placeToporBottomX,
+  placeTopY,
+  placeBottomY,
+  getTopOverflow,
+  getBottomOverflow,
+  confineHorizontally,
+  confineVertically,
+  arrowRef,
+  arrow,
+  direction,
+  position
+}) => {
+  let computedDirection = direction === 'top' ? 'top' : 'bottom';
+  let x = placeToporBottomX;
   if (position !== 'initial') {
     x = confineHorizontally(x);
     if (position === 'anchor') {
@@ -24,7 +25,7 @@ var placeToporBottom = function placeToporBottom(_ref) {
       x = Math.max(x, anchorRect.left - containerRect.left - menuRect.width);
     }
   }
-  var y, topOverflow, bottomOverflow;
+  let y, topOverflow, bottomOverflow;
   if (computedDirection === 'top') {
     y = placeTopY;
     if (position !== 'initial') {
@@ -51,18 +52,18 @@ var placeToporBottom = function placeToporBottom(_ref) {
     }
   }
   if (position === 'auto') y = confineVertically(y);
-  var arrowX = arrow ? placeArrowHorizontal({
+  const arrowX = arrow ? placeArrowHorizontal({
     menuX: x,
-    arrowRef: arrowRef,
-    anchorRect: anchorRect,
-    containerRect: containerRect,
-    menuRect: menuRect
+    arrowRef,
+    anchorRect,
+    containerRect,
+    menuRect
   }) : undefined;
   return {
-    arrowX: arrowX,
-    x: x,
-    y: y,
-    computedDirection: computedDirection
+    arrowX,
+    x,
+    y,
+    computedDirection
   };
 };
 

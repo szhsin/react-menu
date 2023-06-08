@@ -1,4 +1,3 @@
-import { extends as _extends, objectWithoutPropertiesLoose as _objectWithoutPropertiesLoose } from '../_virtual/_rollupPluginBabelHelpers.js';
 import { useContext, useMemo } from 'react';
 import { any, string, oneOf, bool, oneOfType, node, func } from 'prop-types';
 import { jsx } from 'react/jsx-runtime';
@@ -10,39 +9,39 @@ import { withHovering } from '../utils/withHovering.js';
 import { stylePropTypes } from '../utils/propTypes.js';
 import { mergeProps, commonProps, safeCall } from '../utils/utils.js';
 
-var _excluded = ["className", "value", "href", "type", "checked", "disabled", "children", "onClick", "isHovering", "itemRef", "externalRef"],
-  _excluded2 = ["setHover"];
-var MenuItem = /*#__PURE__*/withHovering('MenuItem', function MenuItem(_ref) {
-  var className = _ref.className,
-    value = _ref.value,
-    href = _ref.href,
-    type = _ref.type,
-    checked = _ref.checked,
-    disabled = _ref.disabled,
-    children = _ref.children,
-    onClick = _ref.onClick,
-    isHovering = _ref.isHovering,
-    itemRef = _ref.itemRef,
-    externalRef = _ref.externalRef,
-    restProps = _objectWithoutPropertiesLoose(_ref, _excluded);
-  var isDisabled = !!disabled;
-  var _useItemState = useItemState(itemRef, itemRef, isHovering, isDisabled),
-    setHover = _useItemState.setHover,
-    restStateProps = _objectWithoutPropertiesLoose(_useItemState, _excluded2);
-  var eventHandlers = useContext(EventHandlersContext);
-  var radioGroup = useContext(RadioGroupContext);
-  var isRadio = type === 'radio';
-  var isCheckBox = type === 'checkbox';
-  var isAnchor = !!href && !isDisabled && !isRadio && !isCheckBox;
-  var isChecked = isRadio ? radioGroup.value === value : isCheckBox ? !!checked : false;
-  var handleClick = function handleClick(e) {
+const MenuItem = /*#__PURE__*/withHovering('MenuItem', function MenuItem({
+  className,
+  value,
+  href,
+  type,
+  checked,
+  disabled,
+  children,
+  onClick,
+  isHovering,
+  itemRef,
+  externalRef,
+  ...restProps
+}) {
+  const isDisabled = !!disabled;
+  const {
+    setHover,
+    ...restStateProps
+  } = useItemState(itemRef, itemRef, isHovering, isDisabled);
+  const eventHandlers = useContext(EventHandlersContext);
+  const radioGroup = useContext(RadioGroupContext);
+  const isRadio = type === 'radio';
+  const isCheckBox = type === 'checkbox';
+  const isAnchor = !!href && !isDisabled && !isRadio && !isCheckBox;
+  const isChecked = isRadio ? radioGroup.value === value : isCheckBox ? !!checked : false;
+  const handleClick = e => {
     if (isDisabled) {
       e.stopPropagation();
       e.preventDefault();
       return;
     }
-    var event = {
-      value: value,
+    const event = {
+      value,
       syntheticEvent: e
     };
     if (e.key !== undefined) event.key = e.key;
@@ -52,7 +51,7 @@ var MenuItem = /*#__PURE__*/withHovering('MenuItem', function MenuItem(_ref) {
     if (isRadio) safeCall(radioGroup.onRadioChange, event);
     eventHandlers.handleClick(event, isCheckBox || isRadio);
   };
-  var handleKeyDown = function handleKeyDown(e) {
+  const handleKeyDown = e => {
     if (!isHovering) return;
     switch (e.key) {
       case Keys.ENTER:
@@ -60,43 +59,45 @@ var MenuItem = /*#__PURE__*/withHovering('MenuItem', function MenuItem(_ref) {
         isAnchor ? e.key === Keys.SPACE && itemRef.current.click() : handleClick(e);
     }
   };
-  var modifiers = useMemo(function () {
-    return {
-      type: type,
-      disabled: isDisabled,
-      hover: isHovering,
-      checked: isChecked,
-      anchor: isAnchor
-    };
-  }, [type, isDisabled, isHovering, isChecked, isAnchor]);
-  var mergedProps = mergeProps(_extends({}, restStateProps, {
+  const modifiers = useMemo(() => ({
+    type,
+    disabled: isDisabled,
+    hover: isHovering,
+    checked: isChecked,
+    anchor: isAnchor
+  }), [type, isDisabled, isHovering, isChecked, isAnchor]);
+  const mergedProps = mergeProps({
+    ...restStateProps,
     onPointerDown: setHover,
     onKeyDown: handleKeyDown,
     onClick: handleClick
-  }), restProps);
-  var menuItemProps = _extends({
+  }, restProps);
+  const menuItemProps = {
     role: isRadio ? 'menuitemradio' : isCheckBox ? 'menuitemcheckbox' : roleMenuitem,
-    'aria-checked': isRadio || isCheckBox ? isChecked : undefined
-  }, commonProps(isDisabled, isHovering), mergedProps, {
+    'aria-checked': isRadio || isCheckBox ? isChecked : undefined,
+    ...commonProps(isDisabled, isHovering),
+    ...mergedProps,
     ref: useCombinedRef(externalRef, itemRef),
     className: useBEM({
       block: menuClass,
       element: menuItemClass,
-      modifiers: modifiers,
-      className: className
+      modifiers,
+      className
     }),
-    children: useMemo(function () {
-      return safeCall(children, modifiers);
-    }, [children, modifiers])
-  });
+    children: useMemo(() => safeCall(children, modifiers), [children, modifiers])
+  };
   return isAnchor ? /*#__PURE__*/jsx("li", {
     role: roleNone,
-    children: /*#__PURE__*/jsx("a", _extends({
-      href: href
-    }, menuItemProps))
-  }) : /*#__PURE__*/jsx("li", _extends({}, menuItemProps));
+    children: /*#__PURE__*/jsx("a", {
+      href: href,
+      ...menuItemProps
+    })
+  }) : /*#__PURE__*/jsx("li", {
+    ...menuItemProps
+  });
 });
-process.env.NODE_ENV !== "production" ? MenuItem.propTypes = /*#__PURE__*/_extends({}, /*#__PURE__*/stylePropTypes(), {
+process.env.NODE_ENV !== "production" ? MenuItem.propTypes = {
+  ...stylePropTypes(),
   value: any,
   href: string,
   type: /*#__PURE__*/oneOf(['checkbox', 'radio']),
@@ -104,6 +105,6 @@ process.env.NODE_ENV !== "production" ? MenuItem.propTypes = /*#__PURE__*/_exten
   disabled: bool,
   children: /*#__PURE__*/oneOfType([node, func]),
   onClick: func
-}) : void 0;
+} : void 0;
 
 export { MenuItem };
