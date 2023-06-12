@@ -1,7 +1,7 @@
 import { state, useSnapshot } from 'reactish-state';
 import { bem } from './utils';
 
-export const showBannerState = state(false);
+export const showBannerState = state(true);
 export const isTocOpenState = state(false);
 export const toastState = state(null);
 

@@ -25,10 +25,10 @@ export const Logo = React.memo(function Logo() {
       <MenuItem href="https://szhsin.github.io/react-menu-v1">v1.11.x</MenuItem>
       <MenuDivider />
       <MenuHeader>Migration guide</MenuHeader>
-      <MenuItem href="https://github.com/szhsin/react-menu/wiki/Migration-from-v2-to-v3">
+      <MenuItem href="https://github.com/szhsin/react-menu/blob/master/docs/migration/v3.md">
         v2 to v3
       </MenuItem>
-      <MenuItem href="https://github.com/szhsin/react-menu/wiki/Migration-from-v1-to-v2">
+      <MenuItem href="https://github.com/szhsin/react-menu/blob/master/docs/migration/v2.md">
         v1 to v2
       </MenuItem>
     </Menu>
