@@ -319,6 +319,12 @@ test('Additional props are forwarded to submenu', async () => {
     focusProps: {
       'data-testid': 'focus',
       tabIndex: undefined
+    },
+    arrow: true,
+    arrowProps: {
+      style: { backgroundColor: 'green' },
+      className: ({ dir }) => 'arr-' + dir,
+      'data-testid': 'arrow'
     }
   });
   utils.clickMenuButton();
@@ -333,6 +339,10 @@ test('Additional props are forwarded to submenu', async () => {
   await waitFor(() => utils.expectMenuToBeOpen(true, submenuOptions));
   expect(utils.queryMenu(submenuOptions)).not.toHaveAttribute('tabindex');
   expect(screen.getByTestId('focus')).not.toHaveAttribute('tabindex');
+
+  const arrow = screen.getByTestId('arrow');
+  expect(arrow).toHaveStyle({ backgroundColor: 'green' });
+  expect(arrow).toHaveClass('szh-menu__arrow arr-right');
 });
 
 test('className props are added to related elements in menu and submenu', () => {

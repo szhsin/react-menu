@@ -1,22 +1,23 @@
 import { placeArrowVertical } from './placeArrowVertical.js';
 
-var placeLeftorRight = function placeLeftorRight(_ref) {
-  var anchorRect = _ref.anchorRect,
-    containerRect = _ref.containerRect,
-    menuRect = _ref.menuRect,
-    placeLeftorRightY = _ref.placeLeftorRightY,
-    placeLeftX = _ref.placeLeftX,
-    placeRightX = _ref.placeRightX,
-    getLeftOverflow = _ref.getLeftOverflow,
-    getRightOverflow = _ref.getRightOverflow,
-    confineHorizontally = _ref.confineHorizontally,
-    confineVertically = _ref.confineVertically,
-    arrowRef = _ref.arrowRef,
-    arrow = _ref.arrow,
-    direction = _ref.direction,
-    position = _ref.position;
-  var computedDirection = direction;
-  var y = placeLeftorRightY;
+const placeLeftorRight = ({
+  anchorRect,
+  containerRect,
+  menuRect,
+  placeLeftorRightY,
+  placeLeftX,
+  placeRightX,
+  getLeftOverflow,
+  getRightOverflow,
+  confineHorizontally,
+  confineVertically,
+  arrowRef,
+  arrow,
+  direction,
+  position
+}) => {
+  let computedDirection = direction;
+  let y = placeLeftorRightY;
   if (position !== 'initial') {
     y = confineVertically(y);
     if (position === 'anchor') {
@@ -24,7 +25,7 @@ var placeLeftorRight = function placeLeftorRight(_ref) {
       y = Math.max(y, anchorRect.top - containerRect.top - menuRect.height);
     }
   }
-  var x, leftOverflow, rightOverflow;
+  let x, leftOverflow, rightOverflow;
   if (computedDirection === 'left') {
     x = placeLeftX;
     if (position !== 'initial') {
@@ -51,18 +52,18 @@ var placeLeftorRight = function placeLeftorRight(_ref) {
     }
   }
   if (position === 'auto') x = confineHorizontally(x);
-  var arrowY = arrow ? placeArrowVertical({
+  const arrowY = arrow ? placeArrowVertical({
     menuY: y,
-    arrowRef: arrowRef,
-    anchorRect: anchorRect,
-    containerRect: containerRect,
-    menuRect: menuRect
+    arrowRef,
+    anchorRect,
+    containerRect,
+    menuRect
   }) : undefined;
   return {
-    arrowY: arrowY,
-    x: x,
-    y: y,
-    computedDirection: computedDirection
+    arrowY,
+    x,
+    y,
+    computedDirection
   };
 };
 

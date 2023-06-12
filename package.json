@@ -1,6 +1,6 @@
 {
   "name": "@szhsin/react-menu",
-  "version": "3.5.3",
+  "version": "4.0.0",
   "description": "React component for building accessible menu, dropdown, submenu, context menu and more.",
   "author": "Zheng Song",
   "license": "MIT",
@@ -44,7 +44,7 @@
   },
   "dependencies": {
     "prop-types": "^15.7.2",
-    "react-transition-state": "^1.1.5"
+    "react-transition-state": "^2.1.0"
   },
   "devDependencies": {
     "@babel/core": "^7.22.1",

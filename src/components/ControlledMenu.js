@@ -27,7 +27,6 @@ export const ControlledMenu = forwardRef(function ControlledMenu(
     reposition = 'auto',
     submenuOpenDelay = 300,
     submenuCloseDelay = 150,
-    skipOpen,
     viewScroll = 'initial',
     portal,
     theming,
@@ -114,7 +113,6 @@ export const ControlledMenu = forwardRef(function ControlledMenu(
             className,
             containerRef,
             containerProps,
-            skipOpen,
             theming,
             transition,
             onClose
@@ -144,7 +142,6 @@ ControlledMenu.propTypes /* remove-proptypes */ = {
     y: number
   }),
   anchorRef: object,
-  skipOpen: object,
   captureFocus: bool,
   menuItemFocus: exact({
     position: oneOfType([string, number]),

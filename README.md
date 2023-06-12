@@ -13,13 +13,13 @@
 
 - React menu components for easy and fast web development.
 - Unlimited levels of submenu.
-- Supports dropdown or context menu.
+- Supports dropdown, hover, and context menu.
 - Supports radio and checkbox menu items.
 - Flexible menu positioning.
 - Comprehensive keyboard interactions.
 - Unstyled components and easy [customisation](https://szhsin.github.io/react-menu/#styling).
 - [Optimal level support](https://github.com/reactwg/react-18/discussions/70) (level 3) of **React 18** concurrent rendering.
-- Works in major browsers without polyfills.
+- Supports server-side rendering.
 - [WAI-ARIA Authoring Practices](https://www.w3.org/WAI/ARIA/apg/patterns/menu/) compliant.
 
 ## Install
@@ -57,12 +57,10 @@ export default function App() {
 }
 ```
 
-**[Edit on CodeSandbox](https://codesandbox.io/s/react-menu-starter-3ez3c)**<br>  
+**[Edit on CodeSandbox](https://codesandbox.io/s/react-menu-starter-3ez3c)**<br><br>
 **[Visit more examples and docs](https://szhsin.github.io/react-menu/)**<br><br>
-[Migration from v2 to v3](https://github.com/szhsin/react-menu/wiki/Migration-from-v2-to-v3)<br>
-[Migration from v1 to v2](https://github.com/szhsin/react-menu/wiki/Migration-from-v1-to-v2)
-
-_Please note that React-Menu v3 requires React 16.14.0 or higher. If you are not able to upgrade React, you could install v2/v1 which requires React 16.8.0._
+**[FAQs](docs/FAQs.md)**<br><br>
+Still on older versions? Please checkout our [migration guides](docs/migration/index.md).
 
 ## License
 

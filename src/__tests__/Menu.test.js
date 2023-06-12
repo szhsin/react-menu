@@ -267,8 +267,8 @@ test.each([
     position,
     transition: { open: true, close: true },
     arrow: true,
-    offsetX: 10,
-    offsetY: -10,
+    gap: 10,
+    shift: -10,
     overflow: 'auto'
   });
   utils.clickMenuButton();

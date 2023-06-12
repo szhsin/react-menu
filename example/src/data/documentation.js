@@ -173,23 +173,13 @@ const styleProps = (target, modifiers, className) => [
 // Menu, SubMenu and ControlledMenu
 const sharedMenuProps = [
   ...styleProps('menu', menuModifiers, 'menuClassName'),
-  ...styleProps('menu arrow', <ul>{dirModifier}</ul>, 'arrowClassName'),
+  ...styleProps('menu arrow', <ul>{dirModifier}</ul>, 'arrowProps.className'),
   {
     name: 'menuStyle',
     type: 'CSSProperties',
     desc: (
       <p>
         This value is forwarded to the <code>style</code> prop of <strong>menu</strong> DOM element.
-      </p>
-    )
-  },
-  {
-    name: 'arrowStyle',
-    type: 'CSSProperties',
-    desc: (
-      <p>
-        This value is forwarded to the <code>style</code> prop of <strong>menu arrow</strong> DOM
-        element.
       </p>
     )
   },
@@ -203,6 +193,15 @@ const sharedMenuProps = [
     )
   },
   {
+    name: 'arrowProps',
+    type: 'object',
+    desc: (
+      <p>
+        Properties of this object are spread to the menu <strong>arrow</strong> DOM element.
+      </p>
+    )
+  },
+  {
     name: 'focusProps',
     type: 'object',
     desc: (
@@ -212,24 +211,23 @@ const sharedMenuProps = [
     )
   },
   {
-    name: 'offsetX',
+    name: 'gap',
     type: 'number',
     defaultVal: 0,
     desc: (
       <p>
-        Set the horizontal distance (in pixels) between menu and its anchor element. The value can
-        be negative.
+        Add a gap (gutter) between menu and its anchor element. The value (in pixels) can be
+        negative.
       </p>
     )
   },
   {
-    name: 'offsetY',
+    name: 'shift',
     type: 'number',
     defaultVal: 0,
     desc: (
       <p>
-        Set the vertical distance (in pixels) between menu and its anchor element. The value can be
-        negative.
+        Shift menu's position away from its anchor element. The value (in pixels) can be negative.
       </p>
     )
   },

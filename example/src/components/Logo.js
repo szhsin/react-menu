@@ -16,7 +16,7 @@ export const Logo = React.memo(function Logo() {
     <Menu
       initialMounted
       menuButton={menuButton}
-      offsetY={10}
+      gap={10}
       theming={useTheme().theme}
       className="version-menu"
     >

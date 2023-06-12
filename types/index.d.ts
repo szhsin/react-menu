@@ -170,7 +170,6 @@ export interface MenuStateOptions {
 
 interface Hoverable {
   disabled?: boolean;
-  index?: number;
 }
 
 /**
@@ -186,33 +185,29 @@ interface BaseMenuProps extends Omit<BaseProps, 'style'> {
    */
   menuStyle?: React.CSSProperties;
   /**
-   * Can be a string or a function which receives a modifier object and returns a CSS `class` string.
-   */
-  arrowClassName?: ClassNameProp<MenuArrowModifiers>;
-  /**
-   * This prop is forwarded to the `style` prop of menu arrow DOM element.
-   */
-  arrowStyle?: React.CSSProperties;
-  /**
    * Set `true` to display an arrow pointing to its anchor element.
    */
   arrow?: boolean;
+  /**
+   * Properties of this object are spread to the menu arrow DOM element.
+   */
+  arrowProps?: Omit<BaseProps<MenuArrowModifiers>, 'ref'>;
   /**
    * Properties of this object are spread to a DOM element which captures focus for the menu.
    */
   focusProps?: React.HTMLAttributes<HTMLElement>;
   /**
-   * Set the horizontal distance (in pixels) between menu and its anchor element.
-   * The value can be negative.
+   * Add a gap (gutter) between menu and its anchor element.
+   * The value (in pixels) can be negative.
    * @default 0
    */
-  offsetX?: number;
+  gap?: number;
   /**
-   * Set the vertical distance (in pixels) between menu and its anchor element.
-   * The value can be negative.
+   * Shift menu's position away from its anchor element.
+   * The value (in pixels) can be negative.
    * @default 0
    */
-  offsetY?: number;
+  shift?: number;
   /**
    * Set alignment of menu with anchor element.
    * @default 'start'
@@ -421,10 +416,6 @@ export interface ControlledMenuProps extends RootMenuProps {
    * *Don't set this prop for context menu*
    */
   anchorRef?: React.RefObject<Element | RectElement>;
-  /**
-   * @deprecated use the `useClick` hook instead.
-   */
-  skipOpen?: React.RefObject<boolean>;
   /**
    * If `true`, the menu list element will gain focus after menu is open.
    * @default true

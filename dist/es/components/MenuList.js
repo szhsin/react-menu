@@ -1,10 +1,9 @@
-import { objectWithoutPropertiesLoose as _objectWithoutPropertiesLoose, extends as _extends } from '../_virtual/_rollupPluginBabelHelpers.js';
 import { useState, useReducer, useContext, useRef, useCallback, useEffect, useMemo } from 'react';
 import { flushSync } from 'react-dom';
 import { MenuContainer } from './MenuContainer.js';
 import { jsxs, jsx } from 'react/jsx-runtime';
 import { createSubmenuCtx } from '../utils/submenuCtx.js';
-import { SettingsContext, MenuListContext, HoverActionTypes, positionAbsolute, dummyItemProps, MenuListItemContext, HoverItemContext, Keys, menuClass, CloseReason, FocusPositions, menuArrowClass } from '../utils/constants.js';
+import { SettingsContext, MenuListContext, HoverActionTypes, menuClass, menuArrowClass, positionAbsolute, dummyItemProps, MenuListItemContext, HoverItemContext, Keys, CloseReason, FocusPositions } from '../utils/constants.js';
 import { useItems } from '../hooks/useItems.js';
 import { getScrollAncestor, floatEqual, commonProps, mergeProps, safeCall, isMenuOpen, getTransition, batchedUpdates } from '../utils/utils.js';
 import { getPositionHelpers } from '../positionUtils/getPositionHelpers.js';
@@ -13,98 +12,79 @@ import { useLayoutEffect as useIsomorphicLayoutEffect } from '../hooks/useIsomor
 import { useBEM } from '../hooks/useBEM.js';
 import { useCombinedRef } from '../hooks/useCombinedRef.js';
 
-var _excluded = ["ariaLabel", "menuClassName", "menuStyle", "arrowClassName", "arrowStyle", "anchorPoint", "anchorRef", "containerRef", "containerProps", "focusProps", "externalRef", "parentScrollingRef", "arrow", "align", "direction", "position", "overflow", "setDownOverflow", "repositionFlag", "captureFocus", "state", "endTransition", "isDisabled", "menuItemFocus", "offsetX", "offsetY", "children", "onClose"];
-var MenuList = function MenuList(_ref) {
-  var ariaLabel = _ref.ariaLabel,
-    menuClassName = _ref.menuClassName,
-    menuStyle = _ref.menuStyle,
-    arrowClassName = _ref.arrowClassName,
-    arrowStyle = _ref.arrowStyle,
-    anchorPoint = _ref.anchorPoint,
-    anchorRef = _ref.anchorRef,
-    containerRef = _ref.containerRef,
-    containerProps = _ref.containerProps,
-    focusProps = _ref.focusProps,
-    externalRef = _ref.externalRef,
-    parentScrollingRef = _ref.parentScrollingRef,
-    arrow = _ref.arrow,
-    _ref$align = _ref.align,
-    align = _ref$align === void 0 ? 'start' : _ref$align,
-    _ref$direction = _ref.direction,
-    direction = _ref$direction === void 0 ? 'bottom' : _ref$direction,
-    _ref$position = _ref.position,
-    position = _ref$position === void 0 ? 'auto' : _ref$position,
-    _ref$overflow = _ref.overflow,
-    overflow = _ref$overflow === void 0 ? 'visible' : _ref$overflow,
-    setDownOverflow = _ref.setDownOverflow,
-    repositionFlag = _ref.repositionFlag,
-    _ref$captureFocus = _ref.captureFocus,
-    captureFocus = _ref$captureFocus === void 0 ? true : _ref$captureFocus,
-    state = _ref.state,
-    endTransition = _ref.endTransition,
-    isDisabled = _ref.isDisabled,
-    menuItemFocus = _ref.menuItemFocus,
-    _ref$offsetX = _ref.offsetX,
-    offsetX = _ref$offsetX === void 0 ? 0 : _ref$offsetX,
-    _ref$offsetY = _ref.offsetY,
-    offsetY = _ref$offsetY === void 0 ? 0 : _ref$offsetY,
-    children = _ref.children,
-    onClose = _ref.onClose,
-    restProps = _objectWithoutPropertiesLoose(_ref, _excluded);
-  var _useState = useState({
-      x: 0,
-      y: 0
-    }),
-    menuPosition = _useState[0],
-    setMenuPosition = _useState[1];
-  var _useState2 = useState({}),
-    arrowPosition = _useState2[0],
-    setArrowPosition = _useState2[1];
-  var _useState3 = useState(),
-    overflowData = _useState3[0],
-    setOverflowData = _useState3[1];
-  var _useState4 = useState(direction),
-    expandedDirection = _useState4[0],
-    setExpandedDirection = _useState4[1];
-  var _useState5 = useState(createSubmenuCtx),
-    submenuCtx = _useState5[0];
-  var _useReducer = useReducer(function (c) {
-      return c + 1;
-    }, 1),
-    reposSubmenu = _useReducer[0],
-    forceReposSubmenu = _useReducer[1];
-  var _useContext = useContext(SettingsContext),
-    transition = _useContext.transition,
-    boundingBoxRef = _useContext.boundingBoxRef,
-    boundingBoxPadding = _useContext.boundingBoxPadding,
-    rootMenuRef = _useContext.rootMenuRef,
-    rootAnchorRef = _useContext.rootAnchorRef,
-    scrollNodesRef = _useContext.scrollNodesRef,
-    reposition = _useContext.reposition,
-    viewScroll = _useContext.viewScroll,
-    submenuCloseDelay = _useContext.submenuCloseDelay;
-  var _useContext2 = useContext(MenuListContext),
-    parentSubmenuCtx = _useContext2.submenuCtx,
-    _useContext2$reposSub = _useContext2.reposSubmenu,
-    reposFlag = _useContext2$reposSub === void 0 ? repositionFlag : _useContext2$reposSub;
-  var menuRef = useRef(null);
-  var focusRef = useRef();
-  var arrowRef = useRef();
-  var prevOpen = useRef(false);
-  var latestMenuSize = useRef({
+const MenuList = ({
+  ariaLabel,
+  menuClassName,
+  menuStyle,
+  arrow,
+  arrowProps = {},
+  anchorPoint,
+  anchorRef,
+  containerRef,
+  containerProps,
+  focusProps,
+  externalRef,
+  parentScrollingRef,
+  align = 'start',
+  direction = 'bottom',
+  position = 'auto',
+  overflow = 'visible',
+  setDownOverflow,
+  repositionFlag,
+  captureFocus = true,
+  state,
+  endTransition,
+  isDisabled,
+  menuItemFocus,
+  gap = 0,
+  shift = 0,
+  children,
+  onClose,
+  ...restProps
+}) => {
+  const [menuPosition, setMenuPosition] = useState({
+    x: 0,
+    y: 0
+  });
+  const [arrowPosition, setArrowPosition] = useState({});
+  const [overflowData, setOverflowData] = useState();
+  const [expandedDirection, setExpandedDirection] = useState(direction);
+  const [submenuCtx] = useState(createSubmenuCtx);
+  const [reposSubmenu, forceReposSubmenu] = useReducer(c => c + 1, 1);
+  const {
+    transition,
+    boundingBoxRef,
+    boundingBoxPadding,
+    rootMenuRef,
+    rootAnchorRef,
+    scrollNodesRef,
+    reposition,
+    viewScroll,
+    submenuCloseDelay
+  } = useContext(SettingsContext);
+  const {
+    submenuCtx: parentSubmenuCtx,
+    reposSubmenu: reposFlag = repositionFlag
+  } = useContext(MenuListContext);
+  const menuRef = useRef(null);
+  const focusRef = useRef();
+  const arrowRef = useRef();
+  const prevOpen = useRef(false);
+  const latestMenuSize = useRef({
     width: 0,
     height: 0
   });
-  var latestHandlePosition = useRef(function () {});
-  var _useItems = useItems(menuRef, focusRef),
-    hoverItem = _useItems.hoverItem,
-    dispatch = _useItems.dispatch,
-    updateItems = _useItems.updateItems;
-  var isOpen = isMenuOpen(state);
-  var openTransition = getTransition(transition, 'open');
-  var closeTransition = getTransition(transition, 'close');
-  var scrollNodes = scrollNodesRef.current;
-  var onKeyDown = function onKeyDown(e) {
+  const latestHandlePosition = useRef(() => {});
+  const {
+    hoverItem,
+    dispatch,
+    updateItems
+  } = useItems(menuRef, focusRef);
+  const isOpen = isMenuOpen(state);
+  const openTransition = getTransition(transition, 'open');
+  const closeTransition = getTransition(transition, 'close');
+  const scrollNodes = scrollNodesRef.current;
+  const onKeyDown = e => {
     switch (e.key) {
       case Keys.HOME:
         dispatch(HoverActionTypes.FIRST);
@@ -129,25 +109,25 @@ var MenuList = function MenuList(_ref) {
     e.preventDefault();
     e.stopPropagation();
   };
-  var onAnimationEnd = function onAnimationEnd() {
+  const onAnimationEnd = () => {
     if (state === 'closing') {
       setOverflowData();
     }
     safeCall(endTransition);
   };
-  var onPointerMove = function onPointerMove(e) {
+  const onPointerMove = e => {
     e.stopPropagation();
-    submenuCtx.on(submenuCloseDelay, function () {
+    submenuCtx.on(submenuCloseDelay, () => {
       dispatch(HoverActionTypes.RESET);
       focusRef.current.focus();
     });
   };
-  var onPointerLeave = function onPointerLeave(e) {
+  const onPointerLeave = e => {
     if (e.target === e.currentTarget) submenuCtx.off();
   };
-  var handlePosition = useCallback(function (noOverflowCheck) {
+  const handlePosition = useCallback(noOverflowCheck => {
     var _anchorRef$current;
-    var anchorRect = anchorRef ? (_anchorRef$current = anchorRef.current) == null ? void 0 : _anchorRef$current.getBoundingClientRect() : anchorPoint ? {
+    const anchorRect = anchorRef ? (_anchorRef$current = anchorRef.current) == null ? void 0 : _anchorRef$current.getBoundingClientRect() : anchorPoint ? {
       left: anchorPoint.x,
       right: anchorPoint.x,
       top: anchorPoint.y,
@@ -164,47 +144,52 @@ var MenuList = function MenuList(_ref) {
     if (!scrollNodes.menu) {
       scrollNodes.menu = (boundingBoxRef ? boundingBoxRef.current : getScrollAncestor(rootMenuRef.current)) || window;
     }
-    var positionHelpers = getPositionHelpers(containerRef, menuRef, scrollNodes.menu, boundingBoxPadding);
-    var _positionMenu = positionMenu({
-        arrow: arrow,
-        align: align,
-        direction: direction,
-        offsetX: offsetX,
-        offsetY: offsetY,
-        position: position,
-        anchorRect: anchorRect,
-        arrowRef: arrowRef,
-        positionHelpers: positionHelpers
-      }),
-      arrowX = _positionMenu.arrowX,
-      arrowY = _positionMenu.arrowY,
-      x = _positionMenu.x,
-      y = _positionMenu.y,
-      computedDirection = _positionMenu.computedDirection;
-    var menuRect = positionHelpers.menuRect;
-    var menuHeight = menuRect.height;
+    const positionHelpers = getPositionHelpers(containerRef, menuRef, scrollNodes.menu, boundingBoxPadding);
+    let {
+      arrowX,
+      arrowY,
+      x,
+      y,
+      computedDirection
+    } = positionMenu({
+      arrow,
+      align,
+      direction,
+      gap,
+      shift,
+      position,
+      anchorRect,
+      arrowRef,
+      positionHelpers
+    });
+    const {
+      menuRect
+    } = positionHelpers;
+    let menuHeight = menuRect.height;
     if (!noOverflowCheck && overflow !== 'visible') {
-      var getTopOverflow = positionHelpers.getTopOverflow,
-        getBottomOverflow = positionHelpers.getBottomOverflow;
-      var height, _overflowAmt;
-      var prevHeight = latestMenuSize.current.height;
-      var bottomOverflow = getBottomOverflow(y);
+      const {
+        getTopOverflow,
+        getBottomOverflow
+      } = positionHelpers;
+      let height, overflowAmt;
+      const prevHeight = latestMenuSize.current.height;
+      const bottomOverflow = getBottomOverflow(y);
       if (bottomOverflow > 0 || floatEqual(bottomOverflow, 0) && floatEqual(menuHeight, prevHeight)) {
         height = menuHeight - bottomOverflow;
-        _overflowAmt = bottomOverflow;
+        overflowAmt = bottomOverflow;
       } else {
-        var topOverflow = getTopOverflow(y);
+        const topOverflow = getTopOverflow(y);
         if (topOverflow < 0 || floatEqual(topOverflow, 0) && floatEqual(menuHeight, prevHeight)) {
           height = menuHeight + topOverflow;
-          _overflowAmt = 0 - topOverflow;
+          overflowAmt = 0 - topOverflow;
           if (height >= 0) y -= topOverflow;
         }
       }
       if (height >= 0) {
         menuHeight = height;
         setOverflowData({
-          height: height,
-          overflowAmt: _overflowAmt
+          height,
+          overflowAmt
         });
       } else {
         setOverflowData();
@@ -215,16 +200,16 @@ var MenuList = function MenuList(_ref) {
       y: arrowY
     });
     setMenuPosition({
-      x: x,
-      y: y
+      x,
+      y
     });
     setExpandedDirection(computedDirection);
     latestMenuSize.current = {
       width: menuRect.width,
       height: menuHeight
     };
-  }, [arrow, align, boundingBoxPadding, direction, offsetX, offsetY, position, overflow, anchorPoint, anchorRef, containerRef, boundingBoxRef, rootMenuRef, scrollNodes]);
-  useIsomorphicLayoutEffect(function () {
+  }, [arrow, align, boundingBoxPadding, direction, gap, shift, position, overflow, anchorPoint, anchorRef, containerRef, boundingBoxRef, rootMenuRef, scrollNodes]);
+  useIsomorphicLayoutEffect(() => {
     if (isOpen) {
       handlePosition();
       if (prevOpen.current) forceReposSubmenu();
@@ -232,103 +217,92 @@ var MenuList = function MenuList(_ref) {
     prevOpen.current = isOpen;
     latestHandlePosition.current = handlePosition;
   }, [isOpen, handlePosition, reposFlag]);
-  useIsomorphicLayoutEffect(function () {
+  useIsomorphicLayoutEffect(() => {
     if (overflowData && !setDownOverflow) menuRef.current.scrollTop = 0;
   }, [overflowData, setDownOverflow]);
-  useIsomorphicLayoutEffect(function () {
-    return updateItems;
-  }, [updateItems]);
-  useEffect(function () {
-    var menuScroll = scrollNodes.menu;
+  useIsomorphicLayoutEffect(() => updateItems, [updateItems]);
+  useEffect(() => {
+    let {
+      menu: menuScroll
+    } = scrollNodes;
     if (!isOpen || !menuScroll) return;
     menuScroll = menuScroll.addEventListener ? menuScroll : window;
     if (!scrollNodes.anchors) {
       scrollNodes.anchors = [];
-      var anchorScroll = getScrollAncestor(rootAnchorRef && rootAnchorRef.current);
+      let anchorScroll = getScrollAncestor(rootAnchorRef && rootAnchorRef.current);
       while (anchorScroll && anchorScroll !== menuScroll) {
         scrollNodes.anchors.push(anchorScroll);
         anchorScroll = getScrollAncestor(anchorScroll);
       }
     }
-    var scroll = viewScroll;
+    let scroll = viewScroll;
     if (scrollNodes.anchors.length && scroll === 'initial') scroll = 'auto';
     if (scroll === 'initial') return;
-    var handleScroll = function handleScroll() {
+    const handleScroll = () => {
       if (scroll === 'auto') {
-        batchedUpdates(function () {
-          return handlePosition(true);
-        });
+        batchedUpdates(() => handlePosition(true));
       } else {
         safeCall(onClose, {
           reason: CloseReason.SCROLL
         });
       }
     };
-    var scrollObservers = scrollNodes.anchors.concat(viewScroll !== 'initial' ? menuScroll : []);
-    scrollObservers.forEach(function (o) {
-      return o.addEventListener('scroll', handleScroll);
-    });
-    return function () {
-      return scrollObservers.forEach(function (o) {
-        return o.removeEventListener('scroll', handleScroll);
-      });
-    };
+    const scrollObservers = scrollNodes.anchors.concat(viewScroll !== 'initial' ? menuScroll : []);
+    scrollObservers.forEach(o => o.addEventListener('scroll', handleScroll));
+    return () => scrollObservers.forEach(o => o.removeEventListener('scroll', handleScroll));
   }, [rootAnchorRef, scrollNodes, isOpen, onClose, viewScroll, handlePosition]);
-  var hasOverflow = !!overflowData && overflowData.overflowAmt > 0;
-  useEffect(function () {
+  const hasOverflow = !!overflowData && overflowData.overflowAmt > 0;
+  useEffect(() => {
     if (hasOverflow || !isOpen || !parentScrollingRef) return;
-    var handleScroll = function handleScroll() {
-      return batchedUpdates(handlePosition);
-    };
-    var parentScroll = parentScrollingRef.current;
+    const handleScroll = () => batchedUpdates(handlePosition);
+    const parentScroll = parentScrollingRef.current;
     parentScroll.addEventListener('scroll', handleScroll);
-    return function () {
-      return parentScroll.removeEventListener('scroll', handleScroll);
-    };
+    return () => parentScroll.removeEventListener('scroll', handleScroll);
   }, [isOpen, hasOverflow, parentScrollingRef, handlePosition]);
-  useEffect(function () {
+  useEffect(() => {
     if (typeof ResizeObserver !== 'function' || reposition === 'initial') return;
-    var resizeObserver = new ResizeObserver(function (_ref2) {
-      var entry = _ref2[0];
-      var borderBoxSize = entry.borderBoxSize,
-        target = entry.target;
-      var width, height;
+    const resizeObserver = new ResizeObserver(([entry]) => {
+      const {
+        borderBoxSize,
+        target
+      } = entry;
+      let width, height;
       if (borderBoxSize) {
-        var _ref3 = borderBoxSize[0] || borderBoxSize,
-          inlineSize = _ref3.inlineSize,
-          blockSize = _ref3.blockSize;
+        const {
+          inlineSize,
+          blockSize
+        } = borderBoxSize[0] || borderBoxSize;
         width = inlineSize;
         height = blockSize;
       } else {
-        var borderRect = target.getBoundingClientRect();
+        const borderRect = target.getBoundingClientRect();
         width = borderRect.width;
         height = borderRect.height;
       }
       if (width === 0 || height === 0) return;
       if (floatEqual(width, latestMenuSize.current.width, 1) && floatEqual(height, latestMenuSize.current.height, 1)) return;
-      flushSync(function () {
+      flushSync(() => {
         latestHandlePosition.current();
         forceReposSubmenu();
       });
     });
-    var observeTarget = menuRef.current;
+    const observeTarget = menuRef.current;
     resizeObserver.observe(observeTarget, {
       box: 'border-box'
     });
-    return function () {
-      return resizeObserver.unobserve(observeTarget);
-    };
+    return () => resizeObserver.unobserve(observeTarget);
   }, [reposition]);
-  useEffect(function () {
+  useEffect(() => {
     if (!isOpen) {
       dispatch(HoverActionTypes.RESET);
       if (!closeTransition) setOverflowData();
       return;
     }
-    var _ref4 = menuItemFocus || {},
-      position = _ref4.position,
-      alwaysUpdate = _ref4.alwaysUpdate;
-    var setItemFocus = function setItemFocus() {
+    const {
+      position,
+      alwaysUpdate
+    } = menuItemFocus || {};
+    const setItemFocus = () => {
       if (position === FocusPositions.FIRST) {
         dispatch(HoverActionTypes.FIRST);
       } else if (position === FocusPositions.LAST) {
@@ -340,84 +314,77 @@ var MenuList = function MenuList(_ref) {
     if (alwaysUpdate) {
       setItemFocus();
     } else if (captureFocus) {
-      var id = setTimeout(function () {
+      const id = setTimeout(() => {
         if (!menuRef.current.contains(document.activeElement)) {
           focusRef.current.focus();
           setItemFocus();
         }
       }, openTransition ? 170 : 100);
-      return function () {
-        return clearTimeout(id);
-      };
+      return () => clearTimeout(id);
     }
   }, [isOpen, openTransition, closeTransition, captureFocus, menuItemFocus, dispatch]);
-  var itemContext = useMemo(function () {
-    return {
-      isParentOpen: isOpen,
-      submenuCtx: submenuCtx,
-      dispatch: dispatch,
-      updateItems: updateItems
-    };
-  }, [isOpen, submenuCtx, dispatch, updateItems]);
-  var maxHeight, overflowAmt;
+  const itemContext = useMemo(() => ({
+    isParentOpen: isOpen,
+    submenuCtx,
+    dispatch,
+    updateItems
+  }), [isOpen, submenuCtx, dispatch, updateItems]);
+  let maxHeight, overflowAmt;
   if (overflowData) {
     setDownOverflow ? overflowAmt = overflowData.overflowAmt : maxHeight = overflowData.height;
   }
-  var listContext = useMemo(function () {
-    return {
-      reposSubmenu: reposSubmenu,
-      submenuCtx: submenuCtx,
-      overflow: overflow,
-      overflowAmt: overflowAmt,
-      parentMenuRef: menuRef,
-      parentDir: expandedDirection
-    };
-  }, [reposSubmenu, submenuCtx, overflow, overflowAmt, expandedDirection]);
-  var overflowStyle = maxHeight >= 0 ? {
-    maxHeight: maxHeight,
-    overflow: overflow
+  const listContext = useMemo(() => ({
+    reposSubmenu,
+    submenuCtx,
+    overflow,
+    overflowAmt,
+    parentMenuRef: menuRef,
+    parentDir: expandedDirection
+  }), [reposSubmenu, submenuCtx, overflow, overflowAmt, expandedDirection]);
+  const overflowStyle = maxHeight >= 0 ? {
+    maxHeight,
+    overflow
   } : undefined;
-  var modifiers = useMemo(function () {
-    return {
-      state: state,
-      dir: expandedDirection
-    };
-  }, [state, expandedDirection]);
-  var arrowModifiers = useMemo(function () {
-    return {
-      dir: expandedDirection
-    };
-  }, [expandedDirection]);
-  var _arrowClass = useBEM({
+  const modifiers = useMemo(() => ({
+    state,
+    dir: expandedDirection
+  }), [state, expandedDirection]);
+  const arrowModifiers = useMemo(() => ({
+    dir: expandedDirection
+  }), [expandedDirection]);
+  const _arrowClassName = useBEM({
     block: menuClass,
     element: menuArrowClass,
     modifiers: arrowModifiers,
-    className: arrowClassName
+    className: arrowProps.className
   });
-  var menu = /*#__PURE__*/jsxs("ul", _extends({
+  const menu = /*#__PURE__*/jsxs("ul", {
     role: "menu",
-    "aria-label": ariaLabel
-  }, commonProps(isDisabled), mergeProps({
-    onPointerEnter: parentSubmenuCtx == null ? void 0 : parentSubmenuCtx.off,
-    onPointerMove: onPointerMove,
-    onPointerLeave: onPointerLeave,
-    onKeyDown: onKeyDown,
-    onAnimationEnd: onAnimationEnd
-  }, restProps), {
+    "aria-label": ariaLabel,
+    ...commonProps(isDisabled),
+    ...mergeProps({
+      onPointerEnter: parentSubmenuCtx == null ? void 0 : parentSubmenuCtx.off,
+      onPointerMove,
+      onPointerLeave,
+      onKeyDown,
+      onAnimationEnd
+    }, restProps),
     ref: useCombinedRef(externalRef, menuRef),
     className: useBEM({
       block: menuClass,
-      modifiers: modifiers,
+      modifiers,
       className: menuClassName
     }),
-    style: _extends({}, menuStyle, overflowStyle, {
+    style: {
+      ...menuStyle,
+      ...overflowStyle,
       margin: 0,
       display: state === 'closed' ? 'none' : undefined,
       position: positionAbsolute,
       left: menuPosition.x,
       top: menuPosition.y
-    }),
-    children: [/*#__PURE__*/jsx("li", _extends({
+    },
+    children: [/*#__PURE__*/jsx("li", {
       tabIndex: -1,
       style: {
         position: positionAbsolute,
@@ -426,17 +393,22 @@ var MenuList = function MenuList(_ref) {
         display: 'block',
         outline: 'none'
       },
-      ref: focusRef
-    }, dummyItemProps, focusProps)), arrow && /*#__PURE__*/jsx("li", _extends({
-      className: _arrowClass,
-      style: _extends({
+      ref: focusRef,
+      ...dummyItemProps,
+      ...focusProps
+    }), arrow && /*#__PURE__*/jsx("li", {
+      ...dummyItemProps,
+      ...arrowProps,
+      className: _arrowClassName,
+      style: {
         display: 'block',
         position: positionAbsolute,
         left: arrowPosition.x,
-        top: arrowPosition.y
-      }, arrowStyle),
+        top: arrowPosition.y,
+        ...arrowProps.style
+      },
       ref: arrowRef
-    }, dummyItemProps)), /*#__PURE__*/jsx(MenuListContext.Provider, {
+    }), /*#__PURE__*/jsx(MenuListContext.Provider, {
       value: listContext,
       children: /*#__PURE__*/jsx(MenuListItemContext.Provider, {
         value: itemContext,
@@ -446,11 +418,12 @@ var MenuList = function MenuList(_ref) {
         })
       })
     })]
-  }));
-  return containerProps ? /*#__PURE__*/jsx(MenuContainer, _extends({}, containerProps, {
+  });
+  return containerProps ? /*#__PURE__*/jsx(MenuContainer, {
+    ...containerProps,
     isOpen: isOpen,
     children: menu
-  })) : menu;
+  }) : menu;
 };
 
 export { MenuList };

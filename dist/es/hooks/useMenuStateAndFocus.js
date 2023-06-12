@@ -1,24 +1,20 @@
-import { extends as _extends } from '../_virtual/_rollupPluginBabelHelpers.js';
 import { useState } from 'react';
 import { useMenuState } from './useMenuState.js';
 
-var useMenuStateAndFocus = function useMenuStateAndFocus(options) {
-  var _useMenuState = useMenuState(options),
-    menuProps = _useMenuState[0],
-    toggleMenu = _useMenuState[1];
-  var _useState = useState(),
-    menuItemFocus = _useState[0],
-    setMenuItemFocus = _useState[1];
-  var openMenu = function openMenu(position, alwaysUpdate) {
+const useMenuStateAndFocus = options => {
+  const [menuProps, toggleMenu] = useMenuState(options);
+  const [menuItemFocus, setMenuItemFocus] = useState();
+  const openMenu = (position, alwaysUpdate) => {
     setMenuItemFocus({
-      position: position,
-      alwaysUpdate: alwaysUpdate
+      position,
+      alwaysUpdate
     });
     toggleMenu(true);
   };
-  return [_extends({
-    menuItemFocus: menuItemFocus
-  }, menuProps), toggleMenu, openMenu];
+  return [{
+    menuItemFocus,
+    ...menuProps
+  }, toggleMenu, openMenu];
 };
 
 export { useMenuStateAndFocus };
