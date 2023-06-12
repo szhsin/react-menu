@@ -57,9 +57,10 @@ export default function App() {
 }
 ```
 
-**[Edit on CodeSandbox](https://codesandbox.io/s/react-menu-starter-3ez3c)**<br>  
+**[Edit on CodeSandbox](https://codesandbox.io/s/react-menu-starter-3ez3c)**<br><br>
 **[Visit more examples and docs](https://szhsin.github.io/react-menu/)**<br><br>
-Still on older versions? Please checkout our [migration guides](docs/migration/index.md).<br>
+**[FAQs](docs/FAQs.md)**<br><br>
+Still on older versions? Please checkout our [migration guides](docs/migration/index.md).
 
 ## License
 
