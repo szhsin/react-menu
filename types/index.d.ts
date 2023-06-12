@@ -170,7 +170,6 @@ export interface MenuStateOptions {
 
 interface Hoverable {
   disabled?: boolean;
-  index?: number;
 }
 
 /**
