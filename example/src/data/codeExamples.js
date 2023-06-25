@@ -460,7 +460,7 @@ export const linkAndDisabled = {
       browser to reload the document at the URL specified. If you want to prevent the reload or work
       with <strong>React Router</strong>, please see{' '}
       <ExternalLink href="https://codesandbox.io/s/react-menu-react-router-example-dw4ku">
-        this exmaple
+        this example
       </ExternalLink>
       .
     </p>
