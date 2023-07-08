@@ -127,14 +127,14 @@ test.each([false, true])('Open and close menu with keyboard (portal = %s)', asyn
   await waitFor(() => utils.expectMenuItemToBeHover(firstItem, true));
   fireEvent.keyDown(firstItem, { key: 'Escape' });
   utils.expectMenuToBeOpen(false);
-  await waitFor(() => expect(menuButton).toHaveFocus());
+  expect(menuButton).toHaveFocus();
 
   fireEvent.keyDown(menuButton, { key: 'ArrowUp' });
   const lastItem = utils.queryMenuItem('Last');
   await waitFor(() => utils.expectMenuItemToBeHover(lastItem, true));
   fireEvent.keyDown(lastItem, { key: 'Escape' });
 
-  await waitFor(() => expect(menuButton).toHaveFocus());
+  expect(menuButton).toHaveFocus();
   fireEvent.keyDown(menuButton, { key: 'ArrowDown' });
   await waitFor(() => utils.expectMenuItemToBeHover(firstItem, true));
 });
