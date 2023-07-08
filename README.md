@@ -11,16 +11,16 @@
 
 ## Features
 
-- React menu components for easy and fast web development.
-- Unlimited levels of submenu.
-- Supports dropdown, hover, and context menu.
-- Supports radio and checkbox menu items.
-- Flexible menu positioning.
-- Comprehensive keyboard interactions.
-- Unstyled components and easy [customisation](https://szhsin.github.io/react-menu/#styling).
-- [Optimal level support](https://github.com/reactwg/react-18/discussions/70) (level 3) of **React 18** concurrent rendering.
-- Supports server-side rendering.
-- [WAI-ARIA Authoring Practices](https://www.w3.org/WAI/ARIA/apg/patterns/menu/) compliant.
+- Unstyled and lightweight [(8kB)](https://bundlephobia.com/package/@szhsin/react-menu) React menu components
+- Unlimited levels of submenu
+- Supports dropdown, hover, and context menu
+- Supports radio and checkbox menu items
+- Flexible menu positioning
+- Comprehensive keyboard interactions
+- Customisable [styling](https://szhsin.github.io/react-menu/#styling)
+- [Level 3 support](https://github.com/reactwg/react-18/discussions/70) of React 18 concurrent rendering
+- Supports server-side rendering
+- Implements [WAI-ARIA menu](https://www.w3.org/WAI/ARIA/apg/patterns/menu/) pattern
 
 ## Install
 
@@ -60,7 +60,7 @@ export default function App() {
 **[Edit on CodeSandbox](https://codesandbox.io/s/react-menu-starter-3ez3c)**<br><br>
 **[Visit more examples and docs](https://szhsin.github.io/react-menu/)**<br><br>
 **[FAQs](docs/FAQs.md)**<br><br>
-Still on older versions? Please checkout our [migration guides](docs/migration/index.md).
+Still on an old version? Please checkout our [migration guides](docs/migration/index.md).
 
 ## License
 
