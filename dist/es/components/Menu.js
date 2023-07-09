@@ -28,10 +28,7 @@ const Menu = /*#__PURE__*/forwardRef(function Menu({
   const anchorProps = useClick(state, (_, e) => openMenu(!e.detail ? FocusPositions.FIRST : undefined));
   const handleClose = useCallback(e => {
     toggleMenu(false);
-    if (e.key) setTimeout(() => {
-      var _buttonRef$current;
-      return (_buttonRef$current = buttonRef.current) == null ? void 0 : _buttonRef$current.focus();
-    }, 0);
+    if (e.key) buttonRef.current.focus();
   }, [toggleMenu]);
   const onKeyDown = e => {
     switch (e.key) {

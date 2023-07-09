@@ -88,10 +88,10 @@ const SubMenu = /*#__PURE__*/withHovering('SubMenu', function SubMenu({
     if (!isHovering) return;
     switch (e.key) {
       case Keys.ENTER:
+        e.preventDefault();
       case Keys.SPACE:
       case Keys.RIGHT:
         openTrigger !== 'none' && openMenu(FocusPositions.FIRST);
-        break;
     }
   };
   const onKeyDownOfRoot = e => {

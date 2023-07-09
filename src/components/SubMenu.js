@@ -105,10 +105,10 @@ export const SubMenu = withHovering(
 
       switch (e.key) {
         case Keys.ENTER:
+          e.preventDefault(); // eslint-disable-next-line no-fallthrough
         case Keys.SPACE:
         case Keys.RIGHT:
           openTrigger !== 'none' && openMenu(FocusPositions.FIRST);
-          break;
       }
     };
 

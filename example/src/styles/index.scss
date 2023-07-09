@@ -430,6 +430,10 @@ $toc-animation: 0.22s ease-out;
     @media (max-width: var.$bp-sm) {
       font-size: 1.1rem;
     }
+
+    li {
+      margin-bottom: 0.25rem;
+    }
   }
 
   .install-command {

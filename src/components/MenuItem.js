@@ -62,8 +62,9 @@ export const MenuItem = withHovering(
 
       switch (e.key) {
         case Keys.ENTER:
+          e.preventDefault(); // eslint-disable-next-line no-fallthrough
         case Keys.SPACE:
-          isAnchor ? e.key === Keys.SPACE && itemRef.current.click() : handleClick(e);
+          isAnchor ? itemRef.current.click() : handleClick(e);
       }
     };
 
