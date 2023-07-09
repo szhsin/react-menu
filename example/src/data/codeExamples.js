@@ -1252,28 +1252,30 @@ export const features = {
   title: 'Features',
   desc: (
     <ul className="features">
-      <li>React menu components for easy and fast web development.</li>
-      <li>Unlimited levels of submenu.</li>
-      <li>Supports dropdown or context menu.</li>
-      <li>Supports radio and checkbox menu items.</li>
-      <li>Flexible menu positioning.</li>
-      <li>Comprehensive keyboard interactions.</li>
       <li>
-        Unstyled components and easy <Link href={'#styling'}>customisation</Link>.
+        Unstyled and lightweight{' '}
+        <a href="https://bundlephobia.com/package/@szhsin/react-menu">(8kB)</a> React menu
+        components.
+      </li>
+      <li>Unlimited levels of submenu</li>
+      <li>Supports dropdown, hover, and context menu</li>
+      <li>Supports radio and checkbox menu items</li>
+      <li>Flexible menu positioning</li>
+      <li>Comprehensive keyboard interactions</li>
+      <li>
+        Customisable <Link href={'#styling'}>styling</Link>
       </li>
       <li>
-        Supports{' '}
-        <a href="https://github.com/szhsin/react-menu/releases/tag/v2.3.2">
-          React 18 concurrent rendering
-        </a>
-        .
+        <a href="https://github.com/reactwg/react-18/discussions/70">Level 3 support</a> of React 18
+        concurrent rendering
       </li>
-      <li>Works in major browsers without polyfills.</li>
+      <li>Supports server-side rendering</li>
       <li>
+        Implements{' '}
         <ExternalLink href="https://www.w3.org/WAI/ARIA/apg/patterns/menu/">
-          WAI-ARIA Practices
+          WAI-ARIA menu
         </ExternalLink>{' '}
-        compliant.
+        pattern
       </li>
     </ul>
   )
