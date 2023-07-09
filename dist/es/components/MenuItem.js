@@ -55,8 +55,9 @@ const MenuItem = /*#__PURE__*/withHovering('MenuItem', function MenuItem({
     if (!isHovering) return;
     switch (e.key) {
       case Keys.ENTER:
+        e.preventDefault();
       case Keys.SPACE:
-        isAnchor ? e.key === Keys.SPACE && itemRef.current.click() : handleClick(e);
+        isAnchor ? itemRef.current.click() : handleClick(e);
     }
   };
   const modifiers = useMemo(() => ({

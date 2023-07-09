@@ -1407,10 +1407,7 @@ const Menu = /*#__PURE__*/react.forwardRef(function Menu({
   const anchorProps = useClick(state, (_, e) => openMenu(!e.detail ? FocusPositions.FIRST : undefined));
   const handleClose = react.useCallback(e => {
     toggleMenu(false);
-    if (e.key) setTimeout(() => {
-      var _buttonRef$current;
-      return (_buttonRef$current = buttonRef.current) == null ? void 0 : _buttonRef$current.focus();
-    }, 0);
+    if (e.key) buttonRef.current.focus();
   }, [toggleMenu]);
   const onKeyDown = e => {
     switch (e.key) {
@@ -1537,10 +1534,10 @@ const SubMenu = /*#__PURE__*/withHovering('SubMenu', function SubMenu({
     if (!isHovering) return;
     switch (e.key) {
       case Keys.ENTER:
+        e.preventDefault();
       case Keys.SPACE:
       case Keys.RIGHT:
         openTrigger !== 'none' && openMenu(FocusPositions.FIRST);
-        break;
     }
   };
   const onKeyDownOfRoot = e => {
@@ -1702,8 +1699,9 @@ const MenuItem = /*#__PURE__*/withHovering('MenuItem', function MenuItem({
     if (!isHovering) return;
     switch (e.key) {
       case Keys.ENTER:
+        e.preventDefault();
       case Keys.SPACE:
-        isAnchor ? e.key === Keys.SPACE && itemRef.current.click() : handleClick(e);
+        isAnchor ? itemRef.current.click() : handleClick(e);
     }
   };
   const modifiers = react.useMemo(() => ({
