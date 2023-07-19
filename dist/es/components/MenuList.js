@@ -12,6 +12,7 @@ import { useLayoutEffect as useIsomorphicLayoutEffect } from '../hooks/useIsomor
 import { useBEM } from '../hooks/useBEM.js';
 import { useCombinedRef } from '../hooks/useCombinedRef.js';
 
+const offScreen = -9999;
 const MenuList = ({
   ariaLabel,
   menuClassName,
@@ -43,8 +44,8 @@ const MenuList = ({
   ...restProps
 }) => {
   const [menuPosition, setMenuPosition] = useState({
-    x: 0,
-    y: 0
+    x: offScreen,
+    y: offScreen
   });
   const [arrowPosition, setArrowPosition] = useState({});
   const [overflowData, setOverflowData] = useState();

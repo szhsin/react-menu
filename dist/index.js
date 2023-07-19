@@ -868,6 +868,7 @@ const positionMenu = ({
   }
 };
 
+const offScreen = -9999;
 const MenuList = ({
   ariaLabel,
   menuClassName,
@@ -899,8 +900,8 @@ const MenuList = ({
   ...restProps
 }) => {
   const [menuPosition, setMenuPosition] = react.useState({
-    x: 0,
-    y: 0
+    x: offScreen,
+    y: offScreen
   });
   const [arrowPosition, setArrowPosition] = react.useState({});
   const [overflowData, setOverflowData] = react.useState();
