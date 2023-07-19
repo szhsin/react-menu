@@ -225,16 +225,22 @@ const Test4 = () => {
             height: 400,
             marginTop: 400,
             marginBottom: 500,
-            overflow: 'auto'
+            overflow: 'auto',
+            position: 'relative'
           }}
         >
           <div style={{ width: 1000, paddingTop: 100 }}>
             <Menu
-              menuButton={<MenuButton style={{ marginLeft: 150 }}>Open menu</MenuButton>}
+              menuButton={
+                <MenuButton style={{ display: 'block', marginRight: '80%', marginLeft: 'auto' }}>
+                  Open menu
+                </MenuButton>
+              }
               overflow="auto"
               position="anchor"
               boundingBoxPadding="20"
               portal={portal}
+              align="end"
               key={portal.toString()}
             >
               {items.map((item) => (
