@@ -27,6 +27,8 @@ import {
   HoverItemContext
 } from '../utils';
 
+const offScreen = -9999;
+
 export const MenuList = ({
   ariaLabel,
   menuClassName,
@@ -57,7 +59,7 @@ export const MenuList = ({
   onClose,
   ...restProps
 }) => {
-  const [menuPosition, setMenuPosition] = useState({ x: 0, y: 0 });
+  const [menuPosition, setMenuPosition] = useState({ x: offScreen, y: offScreen });
   const [arrowPosition, setArrowPosition] = useState({});
   const [overflowData, setOverflowData] = useState();
   const [expandedDirection, setExpandedDirection] = useState(direction);
