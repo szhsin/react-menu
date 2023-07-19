@@ -47,11 +47,11 @@ test('className as functions', () => {
   );
 
   // For testing className memorisation
-  fireEvent.mouseMove(queryByRole('menuitem', { name: 'First' }));
-  fireEvent.mouseMove(queryByRole('menuitem', { name: 'Last' }));
+  fireEvent.pointerMove(queryByRole('menuitem', { name: 'First' }));
+  fireEvent.pointerMove(queryByRole('menuitem', { name: 'Last' }));
 
   const menuItem = queryByRole('menuitem', { name: 'Middle' });
-  fireEvent.mouseMove(menuItem);
+  fireEvent.pointerMove(menuItem);
   expect(itemClassName).toHaveBeenLastCalledWith(
     expect.objectContaining({
       hover: true

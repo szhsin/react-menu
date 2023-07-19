@@ -55,8 +55,8 @@ const stylesheet = {
           desc: (
             <>
               <p>
-                Includes only necessary styles that make menu functional (positioning, arrow
-                display). This is usually a starting point for customising styles.
+                Includes minimal styles (arrow, reset). This can be a starting point for customising
+                styles.
               </p>
               <p>
                 You may import this file or copy the CSS into your own stylesheets or CSS-in-JS

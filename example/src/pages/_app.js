@@ -8,7 +8,7 @@ function MyApp({ Component, pageProps }) {
   return (
     <>
       <Head>
-        <title>React menu component - szhsin/react-menu</title>
+        <title>React menu library - szhsin/react-menu</title>
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
       </Head>
       <App>

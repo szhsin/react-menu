@@ -2,11 +2,12 @@ import { useContext, useMemo, useRef } from 'react';
 import { bool, func } from 'prop-types';
 import { useBEM, useCombinedRef, useItemState } from '../hooks';
 import {
-  attachHandlerProps,
+  mergeProps,
   commonProps,
   safeCall,
   menuClass,
   menuItemClass,
+  roleMenuitem,
   stylePropTypes,
   withHovering,
   EventHandlersContext
@@ -25,7 +26,7 @@ export const FocusableItem = withHovering(
   }) {
     const isDisabled = !!disabled;
     const ref = useRef(null);
-    const { setHover, onBlur, onMouseMove, onMouseLeave } = useItemState(
+    const { setHover, onPointerLeave, ...restStateProps } = useItemState(
       itemRef,
       ref,
       isHovering,
@@ -34,12 +35,11 @@ export const FocusableItem = withHovering(
     const { handleClose } = useContext(EventHandlersContext);
 
     const modifiers = useMemo(
-      () =>
-        Object.freeze({
-          disabled: isDisabled,
-          hover: isHovering,
-          focusable: true
-        }),
+      () => ({
+        disabled: isDisabled,
+        hover: isHovering,
+        focusable: true
+      }),
       [isDisabled, isHovering]
     );
 
@@ -53,22 +53,20 @@ export const FocusableItem = withHovering(
       [children, modifiers, handleClose]
     );
 
-    const handlers = attachHandlerProps(
+    const mergedProps = mergeProps(
       {
-        onMouseMove,
-        onMouseLeave: (e) => onMouseLeave(e, true),
-        onFocus: setHover,
-        onBlur
+        ...restStateProps,
+        onPointerLeave: (e) => onPointerLeave(e, true),
+        onFocus: setHover
       },
       restProps
     );
 
     return (
       <li
-        role="menuitem"
-        {...restProps}
-        {...handlers}
+        role={roleMenuitem}
         {...commonProps(isDisabled)}
+        {...mergedProps}
         ref={useCombinedRef(externalRef, itemRef)}
         className={useBEM({ block: menuClass, element: menuItemClass, modifiers, className })}
       >

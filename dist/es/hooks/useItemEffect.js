@@ -1,15 +1,14 @@
-import { useEffect } from 'react';
+import { useLayoutEffect as useIsomorphicLayoutEffect } from './useIsomorphicLayoutEffect.js';
 
-var useItemEffect = function useItemEffect(isDisabled, itemRef, updateItems) {
-  useEffect(function () {
+const useItemEffect = (isDisabled, itemRef, updateItems) => {
+  useIsomorphicLayoutEffect(() => {
     if (process.env.NODE_ENV !== 'production' && !updateItems) {
-      throw new Error("[React-Menu] This menu item or submenu should be rendered under a menu: " + itemRef.current.outerHTML);
+      throw new Error(`[React-Menu] This menu item or submenu should be rendered under a menu: ${itemRef.current.outerHTML}`);
     }
-
     if (isDisabled) return;
-    var item = itemRef.current;
+    const item = itemRef.current;
     updateItems(item, true);
-    return function () {
+    return () => {
       updateItems(item);
     };
   }, [isDisabled, itemRef, updateItems]);

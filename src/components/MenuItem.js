@@ -2,8 +2,10 @@ import { useContext, useMemo } from 'react';
 import { any, string, bool, func, node, oneOf, oneOfType } from 'prop-types';
 import { useBEM, useItemState, useCombinedRef } from '../hooks';
 import {
-  attachHandlerProps,
+  mergeProps,
   commonProps,
+  roleNone,
+  roleMenuitem,
   safeCall,
   stylePropTypes,
   menuClass,
@@ -31,7 +33,7 @@ export const MenuItem = withHovering(
     ...restProps
   }) {
     const isDisabled = !!disabled;
-    const { setHover, ...stateHandlers } = useItemState(itemRef, itemRef, isHovering, isDisabled);
+    const { setHover, ...restStateProps } = useItemState(itemRef, itemRef, isHovering, isDisabled);
     const eventHandlers = useContext(EventHandlersContext);
     const radioGroup = useContext(RadioGroupContext);
     const isRadio = type === 'radio';
@@ -60,32 +62,27 @@ export const MenuItem = withHovering(
 
       switch (e.key) {
         case Keys.ENTER:
+          e.preventDefault(); // eslint-disable-next-line no-fallthrough
         case Keys.SPACE:
-          if (isAnchor) {
-            itemRef.current.click();
-          } else {
-            handleClick(e);
-          }
-          break;
+          isAnchor ? itemRef.current.click() : handleClick(e);
       }
     };
 
     const modifiers = useMemo(
-      () =>
-        Object.freeze({
-          type,
-          disabled: isDisabled,
-          hover: isHovering,
-          checked: isChecked,
-          anchor: isAnchor
-        }),
+      () => ({
+        type,
+        disabled: isDisabled,
+        hover: isHovering,
+        checked: isChecked,
+        anchor: isAnchor
+      }),
       [type, isDisabled, isHovering, isChecked, isAnchor]
     );
 
-    const handlers = attachHandlerProps(
+    const mergedProps = mergeProps(
       {
-        ...stateHandlers,
-        onMouseDown: setHover,
+        ...restStateProps,
+        onPointerDown: setHover,
         onKeyDown: handleKeyDown,
         onClick: handleClick
       },
@@ -94,29 +91,25 @@ export const MenuItem = withHovering(
 
     // Order of props overriding (same in all components):
     // 1. Preset props adhering to WAI-ARIA Authoring Practices.
-    // 2. restProps(consuming code overriding)
-    // 3. handlers (with consuming code handlers hooked)
-    // 4. ref, className
+    // 2. Merged outer and local props
+    // 3. ref, className
     const menuItemProps = {
-      role: isRadio ? 'menuitemradio' : isCheckBox ? 'menuitemcheckbox' : 'menuitem',
+      role: isRadio ? 'menuitemradio' : isCheckBox ? 'menuitemcheckbox' : roleMenuitem,
       'aria-checked': isRadio || isCheckBox ? isChecked : undefined,
-      ...restProps,
-      ...handlers,
       ...commonProps(isDisabled, isHovering),
+      ...mergedProps,
       ref: useCombinedRef(externalRef, itemRef),
       className: useBEM({ block: menuClass, element: menuItemClass, modifiers, className }),
       children: useMemo(() => safeCall(children, modifiers), [children, modifiers])
     };
 
-    if (isAnchor) {
-      return (
-        <li role="presentation">
-          <a href={href} {...menuItemProps} />
-        </li>
-      );
-    } else {
-      return <li {...menuItemProps} />;
-    }
+    return isAnchor ? (
+      <li role={roleNone}>
+        <a href={href} {...menuItemProps} />
+      </li>
+    ) : (
+      <li {...menuItemProps} />
+    );
   }
 );
 

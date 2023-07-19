@@ -1,26 +1,25 @@
-import { extends as _extends } from '../_virtual/_rollupPluginBabelHelpers.js';
 import { oneOfType, string, func, object, bool, number, oneOf, exact } from 'prop-types';
 
-var stylePropTypes = function stylePropTypes(name) {
-  var _ref;
-
-  return _ref = {}, _ref[name ? name + "ClassName" : 'className'] = oneOfType([string, func]), _ref;
-};
-var menuPropTypes = /*#__PURE__*/_extends({
-  className: string
-}, /*#__PURE__*/stylePropTypes('menu'), /*#__PURE__*/stylePropTypes('arrow'), {
+const stylePropTypes = name => ({
+  [name ? `${name}ClassName` : 'className']: oneOfType([string, func])
+});
+const menuPropTypes = {
+  className: string,
+  ...stylePropTypes('menu'),
+  arrowProps: object,
+  focusProps: object,
   menuStyle: object,
-  arrowStyle: object,
   arrow: bool,
   setDownOverflow: bool,
-  offsetX: number,
-  offsetY: number,
+  gap: number,
+  shift: number,
   align: /*#__PURE__*/oneOf(['start', 'center', 'end']),
   direction: /*#__PURE__*/oneOf(['left', 'right', 'top', 'bottom']),
   position: /*#__PURE__*/oneOf(['auto', 'anchor', 'initial']),
   overflow: /*#__PURE__*/oneOf(['auto', 'visible', 'hidden'])
-});
-var rootMenuPropTypes = /*#__PURE__*/_extends({}, menuPropTypes, {
+};
+const rootMenuPropTypes = {
+  ...menuPropTypes,
   containerProps: object,
   initialMounted: bool,
   unmountOnClose: bool,
@@ -43,8 +42,8 @@ var rootMenuPropTypes = /*#__PURE__*/_extends({}, menuPropTypes, {
   })]),
   theming: string,
   onItemClick: func
-});
-var uncontrolledMenuPropTypes = {
+};
+const uncontrolledMenuPropTypes = {
   instanceRef: /*#__PURE__*/oneOfType([object, func]),
   onMenuChange: func
 };

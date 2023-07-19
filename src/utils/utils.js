@@ -5,7 +5,7 @@ export const batchedUpdates = unstable_batchedUpdates || ((callback) => callback
 export const values = Object.values || ((obj) => Object.keys(obj).map((key) => obj[key]));
 export const floatEqual = (a, b, diff = 0.0001) => Math.abs(a - b) < diff;
 export const getTransition = (transition, name) =>
-  !!(transition && transition[name]) || transition === true;
+  transition === true || !!(transition && transition[name]);
 export const safeCall = (fn, arg) => (typeof fn === 'function' ? fn(arg) : fn);
 
 const internalKey = '_szhsinMenu';
@@ -13,26 +13,22 @@ export const getName = (component) => component[internalKey];
 export const defineName = (name, component) =>
   Object.defineProperty(component, internalKey, { value: name });
 
-export const attachHandlerProps = (handlers, props) => {
-  if (!props) return handlers;
+export const mergeProps = (target, source) => {
+  source &&
+    Object.keys(source).forEach((key) => {
+      const targetProp = target[key];
+      const sourceProp = source[key];
+      if (typeof sourceProp === 'function' && targetProp) {
+        target[key] = (...arg) => {
+          sourceProp(...arg);
+          targetProp(...arg);
+        };
+      } else {
+        target[key] = sourceProp;
+      }
+    });
 
-  const result = {};
-  for (const handlerName of Object.keys(handlers)) {
-    const handler = handlers[handlerName];
-    const propHandler = props[handlerName];
-    let attachedHandler;
-    if (typeof propHandler === 'function') {
-      attachedHandler = (e) => {
-        propHandler(e);
-        handler(e);
-      };
-    } else {
-      attachedHandler = handler;
-    }
-    result[handlerName] = attachedHandler;
-  }
-
-  return result;
+  return target;
 };
 
 export const parsePadding = (paddingStr) => {
@@ -53,7 +49,7 @@ export const parsePadding = (paddingStr) => {
 export const getScrollAncestor = (node) => {
   while (node) {
     node = node.parentNode;
-    if (!node || node === document.body) return;
+    if (!node || node === document.body || !node.parentNode) return;
     const { overflow, overflowX, overflowY } = getComputedStyle(node);
     if (/auto|scroll|overlay|hidden/.test(overflow + overflowY + overflowX)) return node;
   }
@@ -62,7 +58,7 @@ export const getScrollAncestor = (node) => {
 export function commonProps(isDisabled, isHovering) {
   return {
     'aria-disabled': isDisabled || undefined,
-    tabIndex: isDisabled ? undefined : isHovering ? 0 : -1
+    tabIndex: isHovering ? 0 : -1
   };
 }
 

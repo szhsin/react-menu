@@ -173,23 +173,13 @@ const styleProps = (target, modifiers, className) => [
 // Menu, SubMenu and ControlledMenu
 const sharedMenuProps = [
   ...styleProps('menu', menuModifiers, 'menuClassName'),
-  ...styleProps('menu arrow', <ul>{dirModifier}</ul>, 'arrowClassName'),
+  ...styleProps('menu arrow', <ul>{dirModifier}</ul>, 'arrowProps.className'),
   {
     name: 'menuStyle',
     type: 'CSSProperties',
     desc: (
       <p>
         This value is forwarded to the <code>style</code> prop of <strong>menu</strong> DOM element.
-      </p>
-    )
-  },
-  {
-    name: 'arrowStyle',
-    type: 'CSSProperties',
-    desc: (
-      <p>
-        This value is forwarded to the <code>style</code> prop of <strong>menu arrow</strong> DOM
-        element.
       </p>
     )
   },
@@ -203,24 +193,41 @@ const sharedMenuProps = [
     )
   },
   {
-    name: 'offsetX',
-    type: 'number',
-    defaultVal: 0,
+    name: 'arrowProps',
+    type: 'object',
     desc: (
       <p>
-        Set the horizontal distance (in pixels) between menu and its anchor element. The value can
-        be negative.
+        Properties of this object are spread to the menu <strong>arrow</strong> DOM element.
       </p>
     )
   },
   {
-    name: 'offsetY',
+    name: 'focusProps',
+    type: 'object',
+    desc: (
+      <p>
+        Properties of this object are spread to a DOM element which captures focus for the menu.
+      </p>
+    )
+  },
+  {
+    name: 'gap',
     type: 'number',
     defaultVal: 0,
     desc: (
       <p>
-        Set the vertical distance (in pixels) between menu and its anchor element. The value can be
+        Add a gap (gutter) between menu and its anchor element. The value (in pixels) can be
         negative.
+      </p>
+    )
+  },
+  {
+    name: 'shift',
+    type: 'number',
+    defaultVal: 0,
+    desc: (
+      <p>
+        Shift menu's position away from its anchor element. The value (in pixels) can be negative.
       </p>
     )
   },
@@ -293,6 +300,19 @@ const sharedMenuProps = [
         <code>MenuGroup</code> should have <code>takeOverflow</code> prop set as <code>true</code>{' '}
         accordingly.
       </p>
+    )
+  },
+  {
+    name: 'children',
+    type: 'node | function',
+    desc: (
+      <>
+        <p>
+          Menu items underneath the menu, or a function that returns them. The function will be
+          called by passing an object with the following properties:
+        </p>
+        {menuModifiers}
+      </>
     )
   }
 ];
@@ -1268,6 +1288,7 @@ const menuStateHook = {
       </p>
       <pre>
         <code className="hljs">{`function useMenuState(options?: {
+    initialOpen?: boolean;
     initialMounted?: boolean;
     unmountOnClose?: boolean;
     transition?: boolean | {
@@ -1300,6 +1321,40 @@ const menuStateHook = {
         <li>You can set a boolean parameter to explicitly switch into one of the two phases.</li>
       </ul>
       <p>The {menuLink} component uses this hook internally to manage its states.</p>
+    </>
+  ]
+};
+
+const useClick = {
+  id: 'use-click',
+  title: 'useClick',
+  contents: [
+    <>
+      <p>
+        <code>useClick</code> hook can be used with {controlledMenuLink} to create a toggle menu
+        which has a similar experience to the <code>Menu</code> component.
+      </p>
+      <p>
+        The Hook returns an object with props which can be spread to the anchor element. See an{' '}
+        <Link href={'/#controlling-state'}>example</Link>.
+      </p>
+    </>
+  ]
+};
+
+const useHover = {
+  id: 'use-hover',
+  title: 'useHover',
+  contents: [
+    <>
+      <p>
+        <code>useHover</code> hook can be used with {controlledMenuLink} to create a hover menu.
+      </p>
+      <p>
+        The Hook returns an object with <code>anchorProps</code> and <code>hoverProps</code>, which
+        can be spread to the anchor element and menu, respectively. See an{' '}
+        <Link href={'/#hover-menu'}>example</Link>.
+      </p>
     </>
   ]
 };
@@ -1379,7 +1434,7 @@ const components = {
 const hooks = {
   id: 'hooks',
   title: 'Hooks',
-  list: [menuStateHook]
+  list: [menuStateHook, useClick, useHover]
 };
 
 const accessibility = {
@@ -1388,7 +1443,7 @@ const accessibility = {
   contents: [
     <p key={0}>
       <LibName /> implements WAI-ARIA roles, states, and properties which adhere to the{' '}
-      <ExternalLink href="https://www.w3.org/TR/wai-aria-practices/#menu">
+      <ExternalLink href="https://www.w3.org/WAI/ARIA/apg/patterns/menu/">
         WAI-ARIA Authoring Practices
       </ExternalLink>
       . For more details, please refer to the website.

@@ -32,9 +32,18 @@ pre {
   margin-bottom: 1rem;
 }
 
+@media (min-width: var.$bp-md) {
+  pre {
+    white-space: pre-wrap;
+  }
+}
+
 a {
   color: var.$primary-light;
   text-decoration: none;
+  border-radius: var.$border-radius-small;
+  @include mixins.remove-focus;
+  @include mixins.focus(2px);
   &:hover {
     text-decoration: underline;
     color: var.$primary-light-lv2;
@@ -65,7 +74,7 @@ input[type='text'] {
     color: inherit;
     background-color: var.$background-dark;
     border-color: var.$border-dark;
-    @include mixins.focus(2px, $color: var.$focus-dark);
+    @include mixins.focus(2px, var.$focus-dark);
   }
 }
 
@@ -99,9 +108,11 @@ label {
 
 .szh-menu-button,
 .btn {
+  box-sizing: border-box;
   cursor: pointer;
   font-size: 1rem;
   font-weight: 500;
+  text-align: center;
   padding: 0.375rem 0.75rem;
   line-height: 1.5;
   color: inherit;
@@ -120,6 +131,10 @@ label {
     border-color: var.$focus-light;
   }
 
+  .example__demo & {
+    min-width: 5rem;
+  }
+
   .szh-app--theme-dark & {
     background-color: var.$btn-dark;
     border-color: var.$border-dark;
@@ -130,7 +145,6 @@ label {
     }
     &:active {
       background-color: var.$block-dark;
-      border-color: var.$focus-dark;
     }
   }
 }
@@ -166,9 +180,12 @@ label {
   text-align: left;
   border-collapse: collapse;
 
-  th:last-of-type {
-    min-width: 20rem;
+  @media (max-width: var.$bp-md) {
+    th:last-of-type {
+      min-width: 20rem;
+    }
   }
+
   tr {
     @include mixins.border(border-bottom);
     .szh-app--theme-dark & {

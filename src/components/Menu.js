@@ -8,10 +8,10 @@ import {
 } from 'react';
 import { element, func, oneOfType } from 'prop-types';
 import { ControlledMenu } from './ControlledMenu';
-import { useMenuChange, useMenuStateAndFocus, useCombinedRef } from '../hooks';
+import { useMenuChange, useMenuStateAndFocus, useCombinedRef, useClick } from '../hooks';
 import {
   getName,
-  attachHandlerProps,
+  mergeProps,
   safeCall,
   isMenuOpen,
   uncontrolledMenuPropTypes,
@@ -21,13 +21,26 @@ import {
 } from '../utils';
 
 export const Menu = forwardRef(function Menu(
-  { 'aria-label': ariaLabel, captureFocus: _, menuButton, instanceRef, onMenuChange, ...restProps },
+  {
+    'aria-label': ariaLabel,
+    captureFocus: _,
+    initialOpen: _1,
+    menuButton,
+    instanceRef,
+    onMenuChange,
+    ...restProps
+  },
   externalRef
 ) {
   const [stateProps, toggleMenu, openMenu] = useMenuStateAndFocus(restProps);
-  const isOpen = isMenuOpen(stateProps.state);
-  const skipOpen = useRef(false);
+  const { state } = stateProps;
+  const isOpen = isMenuOpen(state);
   const buttonRef = useRef(null);
+
+  // Focus (hover) the first menu item when onClick event is trigger by keyboard
+  const anchorProps = useClick(state, (_, e) =>
+    openMenu(!e.detail ? FocusPositions.FIRST : undefined)
+  );
 
   const handleClose = useCallback(
     (e) => {
@@ -37,28 +50,21 @@ export const Menu = forwardRef(function Menu(
     [toggleMenu]
   );
 
-  const handleClick = (e) => {
-    if (skipOpen.current) return;
-    // Focus (hover) the first menu item when onClick event is trigger by keyboard
-    openMenu(e.detail === 0 ? FocusPositions.FIRST : undefined);
-  };
-
-  const handleKeyDown = (e) => {
-    let handled = false;
-
+  const onKeyDown = (e) => {
     switch (e.key) {
       case Keys.UP:
         openMenu(FocusPositions.LAST);
-        handled = true;
         break;
 
       case Keys.DOWN:
         openMenu(FocusPositions.FIRST);
-        handled = true;
         break;
+
+      default:
+        return;
     }
 
-    if (handled) e.preventDefault();
+    e.preventDefault();
   };
 
   const button = safeCall(menuButton, { open: isOpen });
@@ -66,13 +72,7 @@ export const Menu = forwardRef(function Menu(
 
   const buttonProps = {
     ref: useCombinedRef(button.ref, buttonRef),
-    ...attachHandlerProps(
-      {
-        onClick: handleClick,
-        onKeyDown: handleKeyDown
-      },
-      button.props
-    )
+    ...mergeProps({ onKeyDown, ...anchorProps }, button.props)
   };
   if (getName(button.type) === 'MenuButton') {
     buttonProps.isOpen = isOpen;
@@ -98,7 +98,6 @@ export const Menu = forwardRef(function Menu(
         anchorRef={buttonRef}
         ref={externalRef}
         onClose={handleClose}
-        skipOpen={skipOpen}
       />
     </Fragment>
   );

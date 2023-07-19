@@ -2,12 +2,14 @@ import { useTransition } from 'react-transition-state';
 import { MenuStateMap, getTransition } from '../utils';
 
 export const useMenuState = ({
+  initialOpen,
   initialMounted,
   unmountOnClose,
   transition,
   transitionTimeout = 500
 } = {}) => {
-  const [state, toggleMenu, endTransition] = useTransition({
+  const [{ status }, toggleMenu, endTransition] = useTransition({
+    initialEntered: initialOpen,
     mountOnEnter: !initialMounted,
     unmountOnExit: unmountOnClose,
     timeout: transitionTimeout,
@@ -15,5 +17,5 @@ export const useMenuState = ({
     exit: getTransition(transition, 'close')
   });
 
-  return [{ state: MenuStateMap[state], endTransition }, toggleMenu];
+  return [{ state: MenuStateMap[status], endTransition }, toggleMenu];
 };

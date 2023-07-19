@@ -125,6 +125,10 @@ export type MenuArrowModifiers = Readonly<{
 
 export interface MenuStateOptions {
   /**
+   * Enable menu to be mounted in the open state.
+   */
+  initialOpen?: boolean;
+  /**
    * By default menu isn't mounted into DOM until it's opened for the first time.
    * Setting the prop to `true` will change this behaviour,
    * which also enables menu and its items to be server rendered.
@@ -166,7 +170,6 @@ export interface MenuStateOptions {
 
 interface Hoverable {
   disabled?: boolean;
-  index?: number;
 }
 
 /**
@@ -182,29 +185,29 @@ interface BaseMenuProps extends Omit<BaseProps, 'style'> {
    */
   menuStyle?: React.CSSProperties;
   /**
-   * Can be a string or a function which receives a modifier object and returns a CSS `class` string.
-   */
-  arrowClassName?: ClassNameProp<MenuArrowModifiers>;
-  /**
-   * This prop is forwarded to the `style` prop of menu arrow DOM element.
-   */
-  arrowStyle?: React.CSSProperties;
-  /**
    * Set `true` to display an arrow pointing to its anchor element.
    */
   arrow?: boolean;
   /**
-   * Set the horizontal distance (in pixels) between menu and its anchor element.
-   * The value can be negative.
-   * @default 0
+   * Properties of this object are spread to the menu arrow DOM element.
    */
-  offsetX?: number;
+  arrowProps?: Omit<BaseProps<MenuArrowModifiers>, 'ref'>;
   /**
-   * Set the vertical distance (in pixels) between menu and its anchor element.
-   * The value can be negative.
+   * Properties of this object are spread to a DOM element which captures focus for the menu.
+   */
+  focusProps?: React.HTMLAttributes<HTMLElement>;
+  /**
+   * Add a gap (gutter) between menu and its anchor element.
+   * The value (in pixels) can be negative.
    * @default 0
    */
-  offsetY?: number;
+  gap?: number;
+  /**
+   * Shift menu's position away from its anchor element.
+   * The value (in pixels) can be negative.
+   * @default 0
+   */
+  shift?: number;
   /**
    * Set alignment of menu with anchor element.
    * @default 'start'
@@ -240,13 +243,16 @@ interface BaseMenuProps extends Omit<BaseProps, 'style'> {
    * The `MenuGroup` should have `takeOverflow` prop set as `true` accordingly.
    */
   setDownOverflow?: boolean;
-  children?: React.ReactNode;
+  /**
+   * Any valid React node or a render function that returns one.
+   */
+  children?: RenderProp<MenuModifiers>;
 }
 
 /**
  * Common props for `Menu` and `ControlledMenu`
  */
-interface RootMenuProps extends BaseMenuProps, MenuStateOptions {
+interface RootMenuProps extends BaseMenuProps, Omit<MenuStateOptions, 'initialOpen'> {
   /**
    * Properties of this object are spread to the root DOM element containing the menu.
    */
@@ -410,7 +416,6 @@ export interface ControlledMenuProps extends RootMenuProps {
    * *Don't set this prop for context menu*
    */
   anchorRef?: React.RefObject<Element | RectElement>;
-  skipOpen?: React.RefObject<boolean>;
   /**
    * If `true`, the menu list element will gain focus after menu is open.
    * @default true
@@ -679,5 +684,64 @@ export function useMenuState(options?: MenuStateOptions): [
    */
   (open?: boolean) => void
 ];
+
+type ClickEventProps = Required<Pick<React.HTMLAttributes<Element>, 'onMouseDown' | 'onClick'>>;
+
+type HoverEventProps = Required<
+  Pick<React.HTMLAttributes<Element>, 'onMouseEnter' | 'onMouseLeave'>
+>;
+
+type ToggleEvent = (open: boolean, event: Parameters<React.MouseEventHandler>[0]) => void;
+
+/**
+ * A Hook which works with `ControlledMenu` to create click (toggle) menu.
+ *
+ * @returns props which should be given to the anchor element.
+ */
+export function useClick(
+  /**
+   * Menu state can be a boolean or the state returned from `useMenuState`
+   */
+  state: boolean | MenuState | undefined,
+  /**
+   * A callback function that should open or close menu, receiving React synthetic event which triggered the callback.
+   */
+  onToggle: ToggleEvent
+): ClickEventProps;
+
+/**
+ * A Hook which works with `ControlledMenu` to create hover menu.
+ */
+export function useHover(
+  /**
+   * Menu state can be a boolean or the state returned from `useMenuState`
+   */
+  state: boolean | MenuState | undefined,
+  /**
+   * A callback function that should open or close menu, receiving React synthetic event which triggered the callback.
+   */
+  onToggle: ToggleEvent,
+  options?: {
+    /**
+     * Specify an open delay in `ms`.
+     * @default 100
+     */
+    openDelay?: number;
+    /**
+     * Specify a close delay in `ms`.
+     * @default 300
+     */
+    closeDelay?: number;
+  }
+): {
+  /**
+   * Props which should be given to the anchor element.
+   */
+  anchorProps: HoverEventProps & ClickEventProps;
+  /**
+   * Props which should be given to the menu.
+   */
+  hoverProps: HoverEventProps;
+};
 
 export {};

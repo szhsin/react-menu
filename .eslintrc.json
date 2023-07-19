@@ -4,11 +4,14 @@
     "browser": true,
     "node": true,
     "jest": true,
-    "es2021": true
+    "es2022": true
   },
   "parserOptions": {
     "ecmaVersion": "latest",
-    "sourceType": "module"
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true
+    }
   },
   "settings": {
     "react": {

@@ -1,6 +1,6 @@
-import { createRef, useState } from 'react';
-import { ControlledMenu, MenuItem } from './entry';
-import { screen, fireEvent, waitFor } from '@testing-library/react';
+import { createRef, useState, useRef } from 'react';
+import { ControlledMenu, MenuItem, useHover, useMenuState } from './entry';
+import { screen, fireEvent, waitFor, act } from '@testing-library/react';
 import * as utils from './utils';
 
 const { render } = utils;
@@ -49,7 +49,7 @@ test('ControlledMenu with an anchor element; ref is forwarded', async () => {
   // Open menu
   rerender(getMenu({ ...props, state: 'open' }));
   utils.expectMenuToBeOpen(true);
-  await waitFor(() => expect(utils.queryMenu()).toHaveFocus());
+  await waitFor(() => utils.expectMenuToHaveFocus());
 
   // Cause menu to lose focus
   queryByRole('button').focus();
@@ -58,7 +58,7 @@ test('ControlledMenu with an anchor element; ref is forwarded', async () => {
   // Close and re-open menu
   rerender(getMenu({ ...props, state: 'closed' }));
   rerender(getMenu({ ...props, state: 'open' }));
-  await waitFor(() => expect(utils.queryMenu()).toHaveFocus());
+  await waitFor(() => utils.expectMenuToHaveFocus());
 
   // Try to close menu with ESC key
   fireEvent.keyDown(utils.queryMenu(), { key: 'Escape' });
@@ -75,12 +75,16 @@ test('ControlledMenu with an anchor element; ref is forwarded', async () => {
   utils.expectMenuToBeInTheDocument(false);
 });
 
-test('ControlledMenu warns when open by default', () => {
-  const spy = jest.spyOn(console, 'error').mockImplementation();
-  render(getMenu({ state: 'open' }));
-  expect(spy).toHaveBeenCalledWith(expect.stringContaining('container ref is null'));
-  spy.mockRestore();
-});
+test.each([undefined, {}])(
+  'ControlledMenu warns when open by default without anchor',
+  (anchorRef) => {
+    const warnSpy = jest.spyOn(console, 'warn').mockImplementation();
+    render(getMenu({ state: 'open', anchorRef }));
+    expect(warnSpy).toHaveBeenCalledWith(expect.stringContaining('anchorRef or anchorPoint'));
+    warnSpy.mockRestore();
+    utils.expectMenuToBeOpen(true);
+  }
+);
 
 test('ControlledMenu as context menu', () => {
   const anchorPoint = { x: 0, y: 0 };
@@ -119,4 +123,89 @@ test('Portal will render ControlledMenu into target element', () => {
   render(<TestPortal />);
   expect(screen.getByTestId('menu-container')).not.toContainElement(utils.queryMenu());
   expect(screen.getByTestId('portal-container')).toContainElement(utils.queryMenu());
+});
+
+const HoverMenu = () => {
+  const ref = useRef(null);
+  const [menuState, toggleMenu] = useMenuState({ initialMounted: true });
+  const { anchorProps, hoverProps } = useHover(menuState.state, toggleMenu, {
+    openDelay: 100,
+    closeDelay: 200
+  });
+
+  return (
+    <>
+      <button data-testid="anchor" ref={ref} {...anchorProps}>
+        Anchor
+      </button>
+
+      <ControlledMenu
+        {...hoverProps}
+        {...menuState}
+        anchorRef={ref}
+        onClose={() => toggleMenu(false)}
+      >
+        <MenuItem>Item</MenuItem>
+      </ControlledMenu>
+    </>
+  );
+};
+
+test('Hover menu', async () => {
+  render(<HoverMenu />);
+
+  const anchor = screen.getByTestId('anchor');
+  const menu = utils.queryMenu();
+
+  fireEvent.mouseEnter(anchor);
+  await waitFor(() => utils.expectMenuToBeOpen(true));
+
+  fireEvent.mouseLeave(anchor);
+  await utils.delayFor(100);
+  fireEvent.mouseEnter(menu);
+  await utils.delayFor(200);
+  utils.expectMenuToBeOpen(true);
+
+  fireEvent.mouseLeave(menu);
+  await utils.delayFor(100);
+  fireEvent.mouseEnter(anchor);
+  await utils.delayFor(200);
+  utils.expectMenuToBeOpen(true);
+
+  fireEvent.mouseLeave(anchor);
+  await utils.delayFor(100);
+  fireEvent.mouseEnter(anchor);
+  await utils.delayFor(200);
+  utils.expectMenuToBeOpen(true);
+
+  fireEvent.mouseLeave(anchor);
+  await waitFor(() => utils.expectMenuToBeOpen(false));
+
+  fireEvent.mouseEnter(anchor);
+  await utils.delayFor(50);
+  fireEvent.mouseLeave(anchor);
+  await utils.delayFor(100);
+  utils.expectMenuToBeOpen(false);
+
+  fireEvent.mouseEnter(anchor);
+  await waitFor(() => utils.expectMenuToBeOpen(true));
+
+  fireEvent.mouseLeave(anchor);
+  fireEvent.mouseEnter(menu);
+  await utils.delayFor(300);
+  utils.expectMenuToBeOpen(true);
+
+  fireEvent.mouseLeave(menu);
+  await waitFor(() => utils.expectMenuToBeOpen(false));
+
+  fireEvent.mouseEnter(anchor);
+  await waitFor(() => utils.expectMenuToBeOpen(true));
+  fireEvent.mouseDown(anchor);
+  fireEvent.click(anchor);
+  act(() => anchor.focus());
+  await waitFor(() => utils.expectMenuToBeOpen(false));
+
+  fireEvent.mouseDown(anchor);
+  fireEvent.click(anchor);
+  utils.expectMenuToBeOpen(true);
 });

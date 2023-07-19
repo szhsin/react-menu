@@ -22,9 +22,16 @@
 }
 
 @mixin focus($width: 1px, $color: var.$focus-light) {
-  &:focus {
+  &:focus-visible {
     border-color: $color;
     box-shadow: 0 0 0 $width $color;
+  }
+
+  @supports not selector(:focus-visible) {
+    &:focus {
+      border-color: $color;
+      box-shadow: 0 0 0 $width $color;
+    }
   }
 }
 

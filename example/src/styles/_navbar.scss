@@ -80,10 +80,6 @@
     .app-logo {
       margin-left: 1rem;
       margin-right: 5rem;
-      @media (max-width: var.$bp-lg) {
-        margin-left: 0;
-        margin-right: 2rem;
-      }
     }
 
     &__link-list {
@@ -96,6 +92,7 @@
       a {
         padding: 1rem 0;
         border-bottom: 3px solid transparent;
+        border-radius: 0;
       }
 
       .active {

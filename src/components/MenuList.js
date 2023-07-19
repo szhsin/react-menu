@@ -1,14 +1,18 @@
 import { useState, useReducer, useEffect, useRef, useMemo, useCallback, useContext } from 'react';
 import { flushSync } from 'react-dom';
+import { MenuContainer } from './MenuContainer';
 import { useBEM, useCombinedRef, useLayoutEffect, useItems } from '../hooks';
-import { getPositionHelpers, positionMenu, positionContextMenu } from '../positionUtils';
+import { getPositionHelpers, positionMenu } from '../positionUtils';
 import {
-  attachHandlerProps,
+  mergeProps,
   batchedUpdates,
   commonProps,
+  createSubmenuCtx,
   floatEqual,
   getScrollAncestor,
   getTransition,
+  positionAbsolute,
+  dummyItemProps,
   safeCall,
   isMenuOpen,
   menuClass,
@@ -23,18 +27,21 @@ import {
   HoverItemContext
 } from '../utils';
 
+const offScreen = -9999;
+
 export const MenuList = ({
   ariaLabel,
   menuClassName,
   menuStyle,
-  arrowClassName,
-  arrowStyle,
+  arrow,
+  arrowProps = {},
   anchorPoint,
   anchorRef,
   containerRef,
+  containerProps,
+  focusProps,
   externalRef,
   parentScrollingRef,
-  arrow,
   align = 'start',
   direction = 'bottom',
   position = 'auto',
@@ -46,17 +53,17 @@ export const MenuList = ({
   endTransition,
   isDisabled,
   menuItemFocus,
-  offsetX = 0,
-  offsetY = 0,
+  gap = 0,
+  shift = 0,
   children,
   onClose,
   ...restProps
 }) => {
-  const [menuPosition, setMenuPosition] = useState({ x: 0, y: 0 });
+  const [menuPosition, setMenuPosition] = useState({ x: offScreen, y: offScreen });
   const [arrowPosition, setArrowPosition] = useState({});
   const [overflowData, setOverflowData] = useState();
   const [expandedDirection, setExpandedDirection] = useState(direction);
-  const [openSubmenuCount, setOpenSubmenuCount] = useState(0);
+  const [submenuCtx] = useState(createSubmenuCtx);
   const [reposSubmenu, forceReposSubmenu] = useReducer((c) => c + 1, 1);
   const {
     transition,
@@ -66,43 +73,42 @@ export const MenuList = ({
     rootAnchorRef,
     scrollNodesRef,
     reposition,
-    viewScroll
+    viewScroll,
+    submenuCloseDelay
   } = useContext(SettingsContext);
-  const reposFlag = useContext(MenuListContext).reposSubmenu || repositionFlag;
+  // Intentionally ignore the repositionFlag in non-top-level menus.
+  // Using top-level repositionFlag to cascade reposition into all descendent menus.
+  const { submenuCtx: parentSubmenuCtx, reposSubmenu: reposFlag = repositionFlag } =
+    useContext(MenuListContext);
   const menuRef = useRef(null);
-  const arrowRef = useRef(null);
+  const focusRef = useRef();
+  const arrowRef = useRef();
   const prevOpen = useRef(false);
   const latestMenuSize = useRef({ width: 0, height: 0 });
   const latestHandlePosition = useRef(() => {});
-  const { hoverItem, dispatch, updateItems } = useItems(menuRef);
+  const { hoverItem, dispatch, updateItems } = useItems(menuRef, focusRef);
 
   const isOpen = isMenuOpen(state);
   const openTransition = getTransition(transition, 'open');
   const closeTransition = getTransition(transition, 'close');
   const scrollNodes = scrollNodesRef.current;
 
-  const handleKeyDown = (e) => {
-    let handled = false;
-
+  const onKeyDown = (e) => {
     switch (e.key) {
       case Keys.HOME:
         dispatch(HoverActionTypes.FIRST);
-        handled = true;
         break;
 
       case Keys.END:
         dispatch(HoverActionTypes.LAST);
-        handled = true;
         break;
 
       case Keys.UP:
         dispatch(HoverActionTypes.DECREASE, hoverItem);
-        handled = true;
         break;
 
       case Keys.DOWN:
         dispatch(HoverActionTypes.INCREASE, hoverItem);
-        handled = true;
         break;
 
       // prevent browser from scrolling the page when SPACE is pressed
@@ -111,16 +117,17 @@ export const MenuList = ({
         if (e.target && e.target.className.indexOf(menuClass) !== -1) {
           e.preventDefault();
         }
-        break;
+        return;
+
+      default:
+        return;
     }
 
-    if (handled) {
-      e.preventDefault();
-      e.stopPropagation();
-    }
+    e.preventDefault();
+    e.stopPropagation();
   };
 
-  const handleAnimationEnd = () => {
+  const onAnimationEnd = () => {
     if (state === 'closing') {
       setOverflowData(); // reset overflowData after closing
     }
@@ -128,12 +135,36 @@ export const MenuList = ({
     safeCall(endTransition);
   };
 
+  const onPointerMove = (e) => {
+    e.stopPropagation();
+    submenuCtx.on(submenuCloseDelay, () => {
+      dispatch(HoverActionTypes.RESET);
+      focusRef.current.focus();
+    });
+  };
+
+  const onPointerLeave = (e) => {
+    if (e.target === e.currentTarget) submenuCtx.off();
+  };
+
   const handlePosition = useCallback(
     (noOverflowCheck) => {
-      if (!containerRef.current) {
+      const anchorRect = anchorRef
+        ? anchorRef.current?.getBoundingClientRect()
+        : anchorPoint
+        ? {
+            left: anchorPoint.x,
+            right: anchorPoint.x,
+            top: anchorPoint.y,
+            bottom: anchorPoint.y,
+            width: 0,
+            height: 0
+          }
+        : null;
+      if (!anchorRect) {
         if (process.env.NODE_ENV !== 'production') {
-          console.error(
-            '[React-Menu] Menu cannot be positioned properly as container ref is null. If you need to initialise `state` prop to "open" for ControlledMenu, please see this solution: https://codesandbox.io/s/initial-open-sp10wn'
+          console.warn(
+            '[React-Menu] Menu might not be positioned properly as one of the anchorRef or anchorPoint prop should be provided. If `anchorRef` is provided, the anchor must be mounted before menu is open.'
           );
         }
         return;
@@ -152,24 +183,20 @@ export const MenuList = ({
         scrollNodes.menu,
         boundingBoxPadding
       );
+
+      let { arrowX, arrowY, x, y, computedDirection } = positionMenu({
+        arrow,
+        align,
+        direction,
+        gap,
+        shift,
+        position,
+        anchorRect,
+        arrowRef,
+        positionHelpers
+      });
+
       const { menuRect } = positionHelpers;
-      let results = { computedDirection: 'bottom' };
-      if (anchorPoint) {
-        results = positionContextMenu({ positionHelpers, anchorPoint });
-      } else if (anchorRef) {
-        results = positionMenu({
-          arrow,
-          align,
-          direction,
-          offsetX,
-          offsetY,
-          position,
-          anchorRef,
-          arrowRef,
-          positionHelpers
-        });
-      }
-      let { arrowX, arrowY, x, y, computedDirection } = results;
       let menuHeight = menuRect.height;
 
       if (!noOverflowCheck && overflow !== 'visible') {
@@ -219,8 +246,8 @@ export const MenuList = ({
       align,
       boundingBoxPadding,
       direction,
-      offsetX,
-      offsetY,
+      gap,
+      shift,
       position,
       overflow,
       anchorPoint,
@@ -246,7 +273,7 @@ export const MenuList = ({
     if (overflowData && !setDownOverflow) menuRef.current.scrollTop = 0;
   }, [overflowData, setDownOverflow]);
 
-  useEffect(() => updateItems, [updateItems]);
+  useLayoutEffect(() => updateItems, [updateItems]);
 
   useEffect(() => {
     let { menu: menuScroll } = scrollNodes;
@@ -347,8 +374,8 @@ export const MenuList = ({
       const id = setTimeout(
         () => {
           // If focus has already been set to a children element, don't set focus on menu or item
-          if (menuRef.current && !menuRef.current.contains(document.activeElement)) {
-            menuRef.current.focus();
+          if (!menuRef.current.contains(document.activeElement)) {
+            focusRef.current.focus();
             setItemFocus();
           }
         },
@@ -359,16 +386,14 @@ export const MenuList = ({
     }
   }, [isOpen, openTransition, closeTransition, captureFocus, menuItemFocus, dispatch]);
 
-  const isSubmenuOpen = openSubmenuCount > 0;
   const itemContext = useMemo(
     () => ({
       isParentOpen: isOpen,
-      isSubmenuOpen,
-      setOpenSubmenuCount,
+      submenuCtx,
       dispatch,
       updateItems
     }),
-    [isOpen, isSubmenuOpen, dispatch, updateItems]
+    [isOpen, submenuCtx, dispatch, updateItems]
   );
 
   let maxHeight, overflowAmt;
@@ -379,17 +404,16 @@ export const MenuList = ({
   const listContext = useMemo(
     () => ({
       reposSubmenu,
+      submenuCtx,
       overflow,
       overflowAmt,
       parentMenuRef: menuRef,
       parentDir: expandedDirection
     }),
-    [reposSubmenu, overflow, overflowAmt, expandedDirection]
+    [reposSubmenu, submenuCtx, overflow, overflowAmt, expandedDirection]
   );
   const overflowStyle = maxHeight >= 0 ? { maxHeight, overflow } : undefined;
 
-  // Modifier object are shared between this project and client code,
-  // freeze them to prevent client code from accidentally altering them.
   const modifiers = useMemo(
     () => ({
       state,
@@ -397,48 +421,59 @@ export const MenuList = ({
     }),
     [state, expandedDirection]
   );
-  const arrowModifiers = useMemo(
-    () => Object.freeze({ dir: expandedDirection }),
-    [expandedDirection]
-  );
-  const _arrowClass = useBEM({
+  const arrowModifiers = useMemo(() => ({ dir: expandedDirection }), [expandedDirection]);
+  const _arrowClassName = useBEM({
     block: menuClass,
     element: menuArrowClass,
     modifiers: arrowModifiers,
-    className: arrowClassName
+    className: arrowProps.className
   });
 
-  const handlers = attachHandlerProps(
-    {
-      onKeyDown: handleKeyDown,
-      onAnimationEnd: handleAnimationEnd
-    },
-    restProps
-  );
-
-  return (
+  const menu = (
     <ul
       role="menu"
       aria-label={ariaLabel}
-      {...restProps}
-      {...handlers}
       {...commonProps(isDisabled)}
+      {...mergeProps(
+        {
+          onPointerEnter: parentSubmenuCtx?.off,
+          onPointerMove,
+          onPointerLeave,
+          onKeyDown,
+          onAnimationEnd
+        },
+        restProps
+      )}
       ref={useCombinedRef(externalRef, menuRef)}
       className={useBEM({ block: menuClass, modifiers, className: menuClassName })}
       style={{
         ...menuStyle,
         ...overflowStyle,
+        margin: 0,
+        display: state === 'closed' ? 'none' : undefined,
+        position: positionAbsolute,
         left: menuPosition.x,
         top: menuPosition.y
       }}
     >
+      <li
+        tabIndex={-1}
+        style={{ position: positionAbsolute, left: 0, top: 0, display: 'block', outline: 'none' }}
+        ref={focusRef}
+        {...dummyItemProps}
+        {...focusProps}
+      />
       {arrow && (
-        <div
-          className={_arrowClass}
+        <li
+          {...dummyItemProps}
+          {...arrowProps}
+          className={_arrowClassName}
           style={{
-            ...arrowStyle,
+            display: 'block',
+            position: positionAbsolute,
             left: arrowPosition.x,
-            top: arrowPosition.y
+            top: arrowPosition.y,
+            ...arrowProps.style
           }}
           ref={arrowRef}
         />
@@ -446,9 +481,19 @@ export const MenuList = ({
 
       <MenuListContext.Provider value={listContext}>
         <MenuListItemContext.Provider value={itemContext}>
-          <HoverItemContext.Provider value={hoverItem}>{children}</HoverItemContext.Provider>
+          <HoverItemContext.Provider value={hoverItem}>
+            {safeCall(children, modifiers)}
+          </HoverItemContext.Provider>
         </MenuListItemContext.Provider>
       </MenuListContext.Provider>
     </ul>
+  );
+
+  return containerProps ? (
+    <MenuContainer {...containerProps} isOpen={isOpen}>
+      {menu}
+    </MenuContainer>
+  ) : (
+    menu
   );
 };

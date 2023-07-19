@@ -17,7 +17,6 @@ export const MenuListContext = createContext({});
 export const EventHandlersContext = createContext({});
 export const RadioGroupContext = createContext({});
 export const SettingsContext = createContext({});
-export const ItemSettingsContext = createContext({});
 
 export const Keys = Object.freeze({
   ENTER: 'Enter',
@@ -32,14 +31,14 @@ export const Keys = Object.freeze({
 });
 
 export const HoverActionTypes = Object.freeze({
-  RESET: 'RESET',
-  SET: 'SET',
-  UNSET: 'UNSET',
-  INCREASE: 'INCREASE',
-  DECREASE: 'DECREASE',
-  FIRST: 'FIRST',
-  LAST: 'LAST',
-  SET_INDEX: 'SET_INDEX'
+  RESET: 0,
+  SET: 1,
+  UNSET: 2,
+  INCREASE: 3,
+  DECREASE: 4,
+  FIRST: 5,
+  LAST: 6,
+  SET_INDEX: 7
 });
 
 export const CloseReason = Object.freeze({
@@ -60,3 +59,11 @@ export const MenuStateMap = Object.freeze({
   exiting: 'closing',
   exited: 'closed'
 });
+
+export const positionAbsolute = 'absolute';
+export const roleNone = 'presentation';
+export const roleMenuitem = 'menuitem';
+export const dummyItemProps = {
+  'aria-hidden': true,
+  role: roleMenuitem
+};

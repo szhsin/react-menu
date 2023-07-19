@@ -1,4 +1,5 @@
 import { screen, fireEvent, waitFor, act } from '@testing-library/react';
+import { Menu, MenuItem, MenuButton } from './entry';
 import * as utils from './utils';
 
 const { queryByRole, queryAllByRole } = screen;
@@ -6,10 +7,11 @@ const { queryByRole, queryAllByRole } = screen;
 test.each([false, true])(
   'Menu is unmounted before opening and closes after losing focus (portal = %s)',
   async (portal) => {
-    utils.renderMenu({ portal });
+    utils.renderMenu({ portal, arrow: true });
 
     // menu is unmounted
     utils.expectButtonToBeExpanded(false);
+    utils.expectMenuContainerToBeInTheDocument(false);
     utils.expectMenuToBeInTheDocument(false);
     expect(queryByRole('menuitem')).not.toBeInTheDocument();
 
@@ -18,8 +20,9 @@ test.each([false, true])(
     utils.expectButtonToBeExpanded(true);
     utils.expectMenuToHaveState('opening', false);
     utils.expectMenuToBeOpen(true);
+    utils.expectMenuContainerToBeInTheDocument(true);
     expect(utils.queryMenu()).toHaveAttribute('aria-label', 'Open');
-    await waitFor(() => expect(utils.queryMenu()).toHaveFocus());
+    await waitFor(() => utils.expectMenuToHaveFocus());
     const menuItems = queryAllByRole('menuitem');
     expect(menuItems).toHaveLength(3);
     menuItems.forEach((item) => utils.expectMenuItemToBeHover(item, false));
@@ -38,7 +41,7 @@ test.each([false, true])(
     utils.renderMenu({ portal, transition: true, transitionTimeout: 20 });
     utils.clickMenuButton();
     utils.expectMenuToHaveState('opening', true);
-    await waitFor(() => expect(utils.queryMenu()).toHaveFocus());
+    await waitFor(() => utils.expectMenuToHaveFocus());
     utils.expectMenuToHaveState('opening', false);
     utils.expectMenuToHaveState('open', true);
 
@@ -54,18 +57,22 @@ test.each([false, true])(
   async (portal) => {
     utils.renderMenu({ portal, unmountOnClose: true });
     utils.expectMenuToBeInTheDocument(false);
+    utils.expectMenuContainerToBeInTheDocument(false);
 
     utils.clickMenuButton();
     utils.expectMenuToBeInTheDocument(true);
-    await waitFor(() => expect(utils.queryMenu()).toHaveFocus());
+    utils.expectMenuContainerToBeInTheDocument(true);
+    await waitFor(() => utils.expectMenuToHaveFocus());
 
     act(() => queryByRole('button').focus());
     utils.expectMenuToBeInTheDocument(false);
+    utils.expectMenuContainerToBeInTheDocument(false);
   }
 );
 
 test('Menu is in the DOM before first opening when initialMounted is true', () => {
   utils.renderMenu({ initialMounted: true });
+  utils.expectMenuContainerToBeInTheDocument(true);
   utils.expectMenuToBeInTheDocument(true);
   utils.expectMenuToHaveState('closed', true);
 });
@@ -127,6 +134,7 @@ test.each([false, true])('Open and close menu with keyboard (portal = %s)', asyn
   await waitFor(() => utils.expectMenuItemToBeHover(lastItem, true));
   fireEvent.keyDown(lastItem, { key: 'Escape' });
 
+  expect(menuButton).toHaveFocus();
   fireEvent.keyDown(menuButton, { key: 'ArrowDown' });
   await waitFor(() => utils.expectMenuItemToBeHover(firstItem, true));
 });
@@ -134,9 +142,9 @@ test.each([false, true])('Open and close menu with keyboard (portal = %s)', asyn
 test('Navigate with arrow keys', async () => {
   utils.renderMenu();
   utils.clickMenuButton();
-  const menu = utils.queryMenu();
-  await waitFor(() => expect(menu).toHaveFocus());
+  await waitFor(() => utils.expectMenuToHaveFocus());
 
+  const menu = utils.queryMenu();
   fireEvent.keyDown(menu, { key: 'ArrowUp' });
   utils.expectMenuItemToBeHover(utils.queryMenuItem('Last'), true);
   fireEvent.keyDown(menu, { key: 'ArrowUp' });
@@ -150,33 +158,47 @@ test('Navigate with arrow keys', async () => {
 });
 
 test('Additional props are forwarded to Menu', () => {
-  const onMouseEnter = jest.fn();
+  const onPointerEnter = jest.fn();
   const onKeyDown = jest.fn();
   utils.renderMenu({
     ['aria-label']: 'test',
     ['aria-haspopup']: true,
     randomattr: 'random',
-    onMouseEnter,
+    tabIndex: undefined,
+    onPointerEnter,
     onKeyDown,
     containerProps: {
       'data-testid': 'container',
       id: 'menu-container',
-      onMouseEnter,
+      style: { color: 'blue' },
+      onPointerEnter,
       onKeyDown
+    },
+    focusProps: {
+      'data-testid': 'focus',
+      tabIndex: undefined
     }
   });
   utils.clickMenuButton();
 
   expect(screen.getByText('Some texts')).toHaveClass('some-class');
-  expect(screen.getByTestId('container')).toHaveAttribute('id', 'menu-container');
+
+  const container = screen.getByTestId('container');
+  expect(container).toHaveAttribute('id', 'menu-container');
+  expect(container).toHaveStyle({ color: 'blue', position: 'absolute' });
+
+  expect(screen.getByTestId('focus')).not.toHaveAttribute('tabindex');
+
   const menu = utils.queryMenu();
   expect(menu).toHaveAttribute('aria-label', 'test');
   expect(menu).toHaveAttribute('aria-haspopup', 'true');
   expect(menu).toHaveAttribute('randomattr', 'random');
-  fireEvent.mouseEnter(menu);
-  expect(onMouseEnter).toHaveBeenCalledTimes(2);
+  expect(menu).not.toHaveAttribute('tabindex');
+  fireEvent.pointerEnter(menu);
+  expect(onPointerEnter).toHaveBeenCalledTimes(2);
   fireEvent.keyDown(menu, { key: 'm' });
   expect(onKeyDown).toHaveBeenCalledTimes(2);
+  expect(onKeyDown).toHaveBeenLastCalledWith(expect.objectContaining({ key: 'm' }));
 });
 
 test('Portal will render Menu into document.body', () => {
@@ -210,6 +232,29 @@ test('Use keepOpen of onClick to customise when menu is closed', () => {
   utils.expectMenuToBeOpen(true);
 });
 
+test('Use children as a render prop', () => {
+  utils.render(
+    <Menu menuButton={<MenuButton>Menu</MenuButton>} direction="right">
+      {({ state, dir }) => (
+        <>
+          <MenuItem data-testid="state">{state}</MenuItem>
+          <MenuItem data-testid="dir">{dir}</MenuItem>
+        </>
+      )}
+    </Menu>
+  );
+  utils.clickMenuButton();
+  const stateItem = screen.getByTestId('state');
+  const dirItem = screen.getByTestId('dir');
+  expect(stateItem).toHaveTextContent('open');
+  expect(dirItem).toHaveTextContent('right');
+
+  fireEvent.click(stateItem);
+  utils.expectMenuToBeOpen(false);
+  expect(stateItem).toHaveTextContent('closed');
+  expect(dirItem).toHaveTextContent('right');
+});
+
 test.each([
   ['left', 'start', 'auto'],
   ['right', 'center', 'anchor'],
@@ -222,8 +267,8 @@ test.each([
     position,
     transition: { open: true, close: true },
     arrow: true,
-    offsetX: 10,
-    offsetY: -10,
+    gap: 10,
+    shift: -10,
     overflow: 'auto'
   });
   utils.clickMenuButton();

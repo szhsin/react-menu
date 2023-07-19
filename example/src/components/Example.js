@@ -1,6 +1,7 @@
-import React, { useState, useEffect, useRef, useContext } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { ControlledMenu, useMenuState } from '@szhsin/react-menu';
-import { bem, DomInfoContext, SettingContext } from '../utils';
+import { bem } from '../utils';
+import { useDomInfo, useTheme } from '../store';
 import hljs from '../utils/highlight';
 import { CodeSandboxIcon } from './Icons';
 import { HashHeading } from './HashHeading';
@@ -10,7 +11,7 @@ const blockName = 'example';
 export const Example = React.memo(
   React.forwardRef(function Example(
     {
-      initialFullSource,
+      showSourceOnMount = true,
       data: { id, title, desc, note, source, fullSource, codeSandbox },
       children,
       ...restProps
@@ -18,22 +19,26 @@ export const Example = React.memo(
     ref
   ) {
     const refSection = useRef(null);
-    const [isFullSource, setIsFullSource] = useState(initialFullSource);
-    const sourceCode = isFullSource ? fullSource : source;
-    const sourceBtnTitle = `${isFullSource ? 'Hide' : 'Show'} full source code`;
+    const [isFullSource, setIsFullSource] = useState(false);
+    const [isShowSource, setIsShowSource] = useState(showSourceOnMount);
+    const sourceCode =
+      isShowSource && ((isFullSource ? fullSource : source) || fullSource || source);
+    const sourceBtnTitle = `Show ${isFullSource ? 'brief' : 'full'} source code`;
     const [{ state }, toggleMenu] = useMenuState({ unmountOnClose: true });
     const refCopy = useRef(null);
     const refSource = useRef(null);
     const refSandbox = useRef(null);
     const [anchorRef, setAnchorRef] = useState();
     const [toolTip, setToolTip] = useState();
-    const { navbarHeight } = useContext(DomInfoContext);
+    const { navbarHeight } = useDomInfo();
 
-    const handleCopy = () => {
-      navigator.clipboard
-        .writeText(sourceCode)
-        .then(() => setToolTip('Copied!'))
-        .catch(() => setToolTip('Something went wrong.'));
+    const handleCopy = async () => {
+      try {
+        await navigator.clipboard.writeText(sourceCode);
+        setToolTip('Copied!');
+      } catch {
+        setToolTip('Something went wrong.');
+      }
     };
 
     const getBtnMouseEvents = (anchorRef, tooltip) => ({
@@ -50,7 +55,7 @@ export const Example = React.memo(
     useEffect(() => {
       setToolTip(sourceBtnTitle);
       refSection.current.querySelectorAll('pre code').forEach((elt) => hljs.highlightElement(elt));
-    }, [sourceBtnTitle]);
+    }, [/* effect dep */ sourceCode, sourceBtnTitle]);
 
     return (
       <section className={bem(blockName)} ref={refSection} aria-labelledby={id}>
@@ -62,23 +67,15 @@ export const Example = React.memo(
         </div>
 
         <div className={bem(blockName, 'actions')}>
-          {sourceCode && (
-            <button
-              ref={refCopy}
-              className={bem(blockName, 'action-btn') + ' btn'}
-              aria-label="Copy code"
-              onClick={handleCopy}
-              {...getBtnMouseEvents(refCopy, 'Copy code')}
-            >
-              <i className="material-icons">content_copy</i>
-            </button>
-          )}
-          {fullSource && (
+          {((source && fullSource) || !isShowSource) && (
             <button
               ref={refSource}
-              className={bem(blockName, 'action-btn', { on: isFullSource }) + ' btn'}
+              className={bem(blockName, 'action-btn') + ' btn'}
               aria-label={sourceBtnTitle}
-              onClick={() => setIsFullSource((s) => !s)}
+              onClick={() => {
+                setIsShowSource(true);
+                setIsFullSource((s) => !s);
+              }}
               {...getBtnMouseEvents(refSource, sourceBtnTitle)}
             >
               <i className="material-icons">code</i>
@@ -98,8 +95,20 @@ export const Example = React.memo(
             </a>
           )}
 
+          {sourceCode && (
+            <button
+              ref={refCopy}
+              className={bem(blockName, 'action-btn') + ' btn'}
+              aria-label="Copy code"
+              onClick={handleCopy}
+              {...getBtnMouseEvents(refCopy, 'Copy code')}
+            >
+              <i className="material-icons">content_copy</i>
+            </button>
+          )}
+
           <ControlledMenu
-            theming={useContext(SettingContext).theme}
+            theming={useTheme().theme}
             anchorRef={anchorRef}
             state={state}
             captureFocus={false}

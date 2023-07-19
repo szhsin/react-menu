@@ -51,7 +51,8 @@
 
     #content {
       .example__demo,
-      .install-command {
+      .install-command,
+      .promo-spot {
         background-color: var.$block-dark;
         border-color: var.$border-dark;
       }
@@ -148,7 +149,8 @@
 }
 
 #content {
-  @include mixins.flex-center('m');
+  display: flex;
+  align-items: flex-start;
 
   em {
     line-height: 1.75;
@@ -200,19 +202,23 @@
   .table-contents {
     position: sticky;
     left: 0;
-    flex: 1 1 0;
-    @media (max-width: 1350px) {
-      flex: 1 0 auto;
-    }
   }
 
-  main {
-    flex: 0 1 900px;
-    padding: 0 2rem 3rem 2rem;
+  .main-wrap {
+    align-self: stretch;
+    flex-grow: 1;
     @include mixins.border(border-left);
     .szh-app--theme-dark & {
       border-color: var.$border-dark;
     }
+    @media (max-width: var.$bp-md) {
+      border-left: none;
+    }
+  }
+
+  main {
+    margin: 0 auto;
+    padding: 0 2rem 3rem 2rem;
     > .hash-heading:first-child {
       margin-top: -7rem;
     }
@@ -222,8 +228,90 @@
     }
   }
 
-  .place-holder {
-    flex: 1 1 0;
+  .right-section {
+    flex: 0 0 11rem;
+    position: sticky;
+    padding: 1.5rem 0.75rem;
+    @include mixins.border(border-left);
+    @media (max-width: var.$bp-lg) {
+      display: none;
+    }
+    .szh-app--theme-dark & {
+      border-color: var.$border-dark;
+    }
+  }
+
+  .promo-spot {
+    display: block;
+    color: inherit;
+    background-color: white;
+    font-size: 1rem;
+    font-weight: 400;
+    margin-bottom: 1rem;
+    padding: 0.75rem;
+    border-radius: var.$border-radius-medium;
+    @include mixins.border;
+    @include mixins.transition(border-color);
+
+    &:hover {
+      text-decoration: none;
+      background-color: transparent;
+      border-color: var.$border-hover-light;
+      .szh-app--theme-dark & {
+        border-color: var.$border-hover-dark;
+      }
+    }
+
+    &--new {
+      @include mixins.transition(all);
+      background-color: var.$highlight-color;
+      .szh-app--theme-dark & {
+        background: center url('/react-menu/gdbk.jpeg');
+        background-size: cover;
+        color: #f9f9f9;
+        border-color: var.$border-hover-dark;
+        &:hover {
+          border-color: var.$text-dark;
+        }
+      }
+    }
+
+    &__label {
+      display: flex;
+      align-items: center;
+      font-size: 1rem;
+      font-family: monospace;
+      font-weight: bold;
+      color: var.$primary-light;
+      .szh-app--theme-dark & {
+        color: var.$primary-dark;
+      }
+      svg {
+        height: 1rem;
+      }
+
+      &--new {
+        color: #e34c26;
+        .szh-app--theme-dark & {
+          color: #fbd06a;
+        }
+      }
+    }
+
+    &__desc {
+      font-size: 0.9rem;
+      opacity: 0.9;
+    }
+  }
+
+  .table-contents .promo-spot {
+    width: 9.25rem;
+    white-space: normal;
+    margin: 2rem 1rem;
+
+    @media (min-width: var.$bp-lg) {
+      display: none;
+    }
   }
 }
 
@@ -248,7 +336,7 @@ $toc-animation: 0.22s ease-out;
 }
 
 // Hide table of contents
-@media (max-width: 950px) {
+@media (max-width: var.$bp-md) {
   #header .navbar {
     .app-logo,
     .theme-switch {
@@ -304,6 +392,10 @@ $toc-animation: 0.22s ease-out;
         width: 3px;
       }
 
+      .promo-spot {
+        margin-left: 2rem;
+      }
+
       &--open {
         display: flex;
         animation: fade-in $toc-animation;
@@ -332,10 +424,15 @@ $toc-animation: 0.22s ease-out;
 }
 
 #usage {
+  max-width: 1000px;
   .features {
     font-size: 1.2rem;
     @media (max-width: var.$bp-sm) {
       font-size: 1.1rem;
+    }
+
+    li {
+      margin-bottom: 0.25rem;
     }
   }
 
@@ -355,6 +452,11 @@ $toc-animation: 0.22s ease-out;
       &:first-of-type {
         margin-top: 0;
       }
+    }
+
+    .sandbox {
+      font-weight: bold;
+      margin-top: 1.5rem;
     }
   }
 
@@ -427,6 +529,11 @@ $toc-animation: 0.22s ease-out;
       min-width: 13.5rem;
     }
   }
+}
+
+#documentation,
+#style-guide {
+  max-width: 1400px;
 }
 
 #not-found {

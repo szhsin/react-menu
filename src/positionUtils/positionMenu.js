@@ -5,26 +5,27 @@ export const positionMenu = ({
   arrow,
   align,
   direction,
-  offsetX,
-  offsetY,
+  gap,
+  shift,
   position,
-  anchorRef,
+  anchorRect,
   arrowRef,
   positionHelpers
 }) => {
   const { menuRect, containerRect } = positionHelpers;
 
-  let horizontalOffset = offsetX;
-  let verticalOffset = offsetY;
+  const isHorizontal = direction === 'left' || direction === 'right';
+  let horizontalOffset = isHorizontal ? gap : shift;
+  let verticalOffset = isHorizontal ? shift : gap;
   if (arrow) {
-    if (direction === 'left' || direction === 'right') {
-      horizontalOffset += arrowRef.current.offsetWidth;
+    const arrowElt = arrowRef.current;
+    if (isHorizontal) {
+      horizontalOffset += arrowElt.offsetWidth;
     } else {
-      verticalOffset += arrowRef.current.offsetHeight;
+      verticalOffset += arrowElt.offsetHeight;
     }
   }
 
-  const anchorRect = anchorRef.current.getBoundingClientRect();
   const placeLeftX = anchorRect.left - containerRect.left - menuRect.width - horizontalOffset;
   const placeRightX = anchorRect.right - containerRect.left + horizontalOffset;
   const placeTopY = anchorRect.top - containerRect.top - menuRect.height - verticalOffset;

@@ -1,8 +1,10 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
+import { useSnapshot } from 'reactish-state';
 import { basePath } from '../../next.config';
-import { bem, SettingContext, TocContext } from '../utils';
+import { bem } from '../utils';
+import { isTocOpenState, showBannerState, useTheme } from '../store';
 import { Logo } from './Logo';
 import { HeaderBanner } from './HeaderBanner';
 import { ThemeSwitch } from './ThemeSwitch';
@@ -10,17 +12,17 @@ import { ThemeSwitch } from './ThemeSwitch';
 const blockName = 'navbar';
 
 export const Header = React.memo(function Header() {
-  const { theme, isDark, showBanner, setShowBanner } = useContext(SettingContext);
-  const { setTocOpen } = useContext(TocContext);
+  const { theme, isDark } = useTheme();
+  const showBanner = useSnapshot(showBannerState);
 
   return (
     <header id="header">
-      {showBanner && <HeaderBanner onClose={() => setShowBanner(false)} />}
+      {showBanner && <HeaderBanner onClose={() => showBannerState.set(false)} />}
       <nav className={bem(blockName, null, { theme })} aria-label="Site">
         <button
           className={bem(blockName, 'toggle')}
           aria-label="Open table of contents"
-          onClick={() => setTocOpen(true)}
+          onClick={() => isTocOpenState.set(true)}
         >
           <i className="material-icons">menu</i>
         </button>
@@ -60,8 +62,8 @@ function NavBarLink({ href, children }) {
       : undefined;
   return (
     <li className={bem(blockName, 'link')}>
-      <Link href={href}>
-        <a {...linkProps}>{children}</a>
+      <Link href={href} {...linkProps}>
+        {children}
       </Link>
     </li>
   );

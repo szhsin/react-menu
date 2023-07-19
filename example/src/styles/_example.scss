@@ -134,6 +134,7 @@
       display: flex;
       justify-content: space-around;
       align-self: stretch;
+      gap: 0.5rem;
     }
 
     .alert-warning {
@@ -147,6 +148,7 @@
 
     .szh-menu-button {
       flex: 0 1 6rem;
+      min-width: auto;
     }
   }
 }
@@ -169,6 +171,7 @@
 
     .szh-menu-button {
       white-space: nowrap;
+      margin: 0 0.5rem;
     }
 
     .szh-menu {
@@ -186,6 +189,7 @@
   }
 
   .scrollview {
+    position: relative;
     height: 20rem;
     overflow: auto;
     margin-top: 0.75rem;
