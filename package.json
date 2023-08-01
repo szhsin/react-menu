@@ -72,7 +72,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "rollup": "^3.26.3",
-    "sass": "^1.63.6",
+    "sass": "^1.64.2",
     "typescript": "^5.1.6"
   },
   "keywords": [
