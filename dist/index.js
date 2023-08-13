@@ -556,7 +556,7 @@ const MenuContainer = ({
     }
   };
   const onBlur = e => {
-    if (isOpen && !e.currentTarget.contains(e.relatedTarget || document.activeElement)) {
+    if (isOpen && !e.currentTarget.contains(e.relatedTarget)) {
       safeCall(onClose, {
         reason: CloseReason.BLUR
       });
