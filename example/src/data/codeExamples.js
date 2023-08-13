@@ -1099,6 +1099,8 @@ export default function () {
   return (
     <div
       onContextMenu={(e) => {
+        if (typeof document.hasFocus === 'function' && !document.hasFocus()) return;
+        
         e.preventDefault();
         setAnchorPoint({ x: e.clientX, y: e.clientY });
         setOpen(true);
