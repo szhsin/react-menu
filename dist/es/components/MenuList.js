@@ -316,7 +316,8 @@ const MenuList = ({
       setItemFocus();
     } else if (captureFocus) {
       const id = setTimeout(() => {
-        if (!menuRef.current.contains(document.activeElement)) {
+        const menuElt = menuRef.current;
+        if (menuElt && !menuElt.contains(document.activeElement)) {
           focusRef.current.focus();
           setItemFocus();
         }

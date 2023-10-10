@@ -374,7 +374,8 @@ export const MenuList = ({
       const id = setTimeout(
         () => {
           // If focus has already been set to a children element, don't set focus on menu or item
-          if (!menuRef.current.contains(document.activeElement)) {
+          const menuElt = menuRef.current;
+          if (menuElt && !menuElt.contains(document.activeElement)) {
             focusRef.current.focus();
             setItemFocus();
           }

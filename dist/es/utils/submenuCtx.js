@@ -13,7 +13,7 @@ const createSubmenuCtx = () => {
           pending();
         }, closeDelay);
       } else {
-        settled == null ? void 0 : settled();
+        settled == null || settled();
       }
     },
     off: () => {
