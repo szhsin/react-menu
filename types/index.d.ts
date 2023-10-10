@@ -19,11 +19,11 @@ export type CloseReason = 'click' | 'cancel' | 'blur' | 'scroll';
  */
 export type FocusPosition = 'first' | 'last' | number;
 
-type ClassNameProp<M = undefined> = string | ((modifiers: M) => string);
+export type ClassNameProp<M = undefined> = string | ((modifiers: M) => string);
 
-type RenderProp<M, R = React.ReactNode> = R | ((modifiers: M) => R);
+export type RenderProp<M, R = React.ReactNode> = R | ((modifiers: M) => R);
 
-interface BaseProps<M = undefined>
+export interface BaseProps<M = undefined>
   extends Omit<React.HTMLAttributes<HTMLElement>, 'className' | 'children'> {
   ref?: React.Ref<any>;
   /**
@@ -32,7 +32,7 @@ interface BaseProps<M = undefined>
   className?: ClassNameProp<M>;
 }
 
-interface Event {
+export interface Event {
   /**
    * The `value` prop passed to the `MenuItem` being clicked.
    * It's useful for identifying which menu item is clicked.
@@ -85,11 +85,11 @@ export interface MenuChangeEvent {
   open: boolean;
 }
 
-interface EventHandler<E> {
+export interface EventHandler<E> {
   (event: E): void;
 }
 
-interface RectElement {
+export interface RectElement {
   getBoundingClientRect(): {
     left: number;
     right: number;
@@ -168,14 +168,14 @@ export interface MenuStateOptions {
   transitionTimeout?: number;
 }
 
-interface Hoverable {
+export interface Hoverable {
   disabled?: boolean;
 }
 
 /**
  * Common props for `Menu`, `SubMenu` and `ControlledMenu`
  */
-interface BaseMenuProps extends Omit<BaseProps, 'style'> {
+export interface BaseMenuProps extends Omit<BaseProps, 'style'> {
   /**
    * Can be a string or a function which receives a modifier object and returns a CSS `class` string.
    */
@@ -252,7 +252,7 @@ interface BaseMenuProps extends Omit<BaseProps, 'style'> {
 /**
  * Common props for `Menu` and `ControlledMenu`
  */
-interface RootMenuProps extends BaseMenuProps, Omit<MenuStateOptions, 'initialOpen'> {
+export interface RootMenuProps extends BaseMenuProps, Omit<MenuStateOptions, 'initialOpen'> {
   /**
    * Properties of this object are spread to the root DOM element containing the menu.
    */
@@ -351,7 +351,7 @@ export interface MenuInstance {
 /**
  * Common props for `Menu` and `SubMenu`
  */
-interface UncontrolledMenuProps {
+export interface UncontrolledMenuProps {
   /**
    * Menu component ref which can be used to programmatically open or close menu.
    */
@@ -685,13 +685,15 @@ export function useMenuState(options?: MenuStateOptions): [
   (open?: boolean) => void
 ];
 
-type ClickEventProps = Required<Pick<React.HTMLAttributes<Element>, 'onMouseDown' | 'onClick'>>;
+export type ClickEventProps = Required<
+  Pick<React.HTMLAttributes<Element>, 'onMouseDown' | 'onClick'>
+>;
 
-type HoverEventProps = Required<
+export type HoverEventProps = Required<
   Pick<React.HTMLAttributes<Element>, 'onMouseEnter' | 'onMouseLeave'>
 >;
 
-type ToggleEvent = (open: boolean, event: Parameters<React.MouseEventHandler>[0]) => void;
+export type ToggleEvent = (open: boolean, event: Parameters<React.MouseEventHandler>[0]) => void;
 
 /**
  * A Hook which works with `ControlledMenu` to create click (toggle) menu.
