@@ -5,7 +5,7 @@
   "homepage": ".",
   "dependencies": {
     "@szhsin/react-menu": "file:..",
-    "highlight.js": "^11.8.0",
+    "highlight.js": "^11.9.0",
     "next": "^13.5.4",
     "react": "file:../node_modules/react",
     "react-dom": "file:../node_modules/react-dom",
