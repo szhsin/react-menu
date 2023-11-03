@@ -18,8 +18,9 @@ export const bem = (block, element, modifiers = {}) => {
   return className;
 };
 
-export const withPresetProps = (MenuComponent) => (props) =>
-  <MenuComponent transition theming={useTheme().theme} {...props} />;
+export const withPresetProps = (MenuComponent) => (props) => (
+  <MenuComponent transition theming={useTheme().theme} {...props} />
+);
 
 // Get around a warning when using useLayoutEffect on the server.
 // https://github.com/reduxjs/react-redux/blob/b48d087d76f666e1c6c5a9713bbec112a1631841/src/utils/useIsomorphicLayoutEffect.js#L12

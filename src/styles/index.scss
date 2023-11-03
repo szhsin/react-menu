@@ -6,7 +6,9 @@
   color: var.$color;
   border: none;
   border-radius: 0.25rem;
-  box-shadow: 0 3px 7px rgba(0, 0, 0, 0.133), 0 0.6px 2px rgba(0, 0, 0, 0.1);
+  box-shadow:
+    0 3px 7px rgba(0, 0, 0, 0.133),
+    0 0.6px 2px rgba(0, 0, 0, 0.1);
   min-width: 10rem;
   padding: 0.5rem 0;
 

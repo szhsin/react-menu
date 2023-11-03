@@ -26,7 +26,7 @@
     "css": "sass src/styles:dist --no-source-map",
     "clean": "rm -rf dist && mkdir -p dist",
     "start": "run-p \"css -- --watch\" watch",
-    "build": "run-s clean pret lint types css bundle",
+    "build": "run-s clean pret lint css bundle",
     "test": "jest",
     "test:watch": "jest --watch --verbose",
     "test:cov": "jest --coverage=true",
