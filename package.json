@@ -54,7 +54,7 @@
     "@rollup/plugin-node-resolve": "^15.2.3",
     "@testing-library/jest-dom": "^6.1.4",
     "@testing-library/react": "^14.0.0",
-    "@types/jest": "^29.5.7",
+    "@types/jest": "^29.5.8",
     "@types/react": "^18.2.37",
     "babel-plugin-pure-annotations": "^0.1.2",
     "babel-plugin-transform-react-remove-prop-types": "^0.4.24",
