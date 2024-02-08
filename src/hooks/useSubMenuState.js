@@ -42,11 +42,6 @@ export const useSubMenuState = (itemRef, disabled, isHovering, openTrigger, onMe
 
   const invokeMenuOpen = () => {
     if (openDelayTimer.v || isOpen) return;
-    // B.m. first it will see if in the list another sibling SubMenu's menuList is open.
-    // if so, delay it by first closing the other
-    // The second parameter delays the opening of this SubMenu MenuList by the submenuCloseDelay
-    // and then executes the function which delays again by the chosen difference (see below)
-    // The third parameter will get executed immediately (But due to its function (see delayOpen) it delays again)
     submenuCtx.on(
       submenuCloseDelay,
       () => delayOpen(submenuOpenDelay - submenuCloseDelay),
@@ -63,7 +58,7 @@ export const useSubMenuState = (itemRef, disabled, isHovering, openTrigger, onMe
   useMenuChange(onMenuChange, isOpen);
 
   useEffect(() => submenuCtx.toggle(isOpen), [submenuCtx, isOpen]);
-  useEffect(() => () => clearTimeout(openDelayTimer.v), [openDelayTimer]); // b.m.: Maybe for unmounting component, clear the timeout
+  useEffect(() => () => clearTimeout(openDelayTimer.v), [openDelayTimer]);
   useEffect(() => {
     // Don't set focus when parent menu is closed, otherwise focus will be lost
     // and onBlur event will be fired with relatedTarget setting as null.
