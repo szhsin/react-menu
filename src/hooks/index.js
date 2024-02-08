@@ -9,3 +9,4 @@ export { useItemState } from './useItemState';
 export { useMenuChange } from './useMenuChange';
 export { useMenuState } from './useMenuState';
 export { useMenuStateAndFocus } from './useMenuStateAndFocus';
+export { useSubMenuState } from './useSubMenuState';

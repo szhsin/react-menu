@@ -1,17 +1,14 @@
-import { useState, useRef, useContext, useEffect, useMemo, useImperativeHandle } from 'react';
+import { useRef, useContext, useMemo, useImperativeHandle } from 'react';
 import { createPortal } from 'react-dom';
 import { node, func, bool, shape, oneOf, oneOfType } from 'prop-types';
 import {
   useBEM,
   useCombinedRef,
-  useMenuChange,
-  useMenuStateAndFocus,
-  useItemEffect
+  useSubMenuState
 } from '../hooks';
 import { MenuList } from './MenuList';
 import {
   mergeProps,
-  batchedUpdates,
   commonProps,
   roleNone,
   roleMenuitem,
@@ -22,13 +19,11 @@ import {
   menuClass,
   subMenuClass,
   menuItemClass,
-  isMenuOpen,
   withHovering,
   SettingsContext,
   MenuListContext,
   MenuListItemContext,
   Keys,
-  HoverActionTypes,
   FocusPositions
 } from '../utils';
 
@@ -51,53 +46,29 @@ export const SubMenu = withHovering(
     ...restProps
   }) {
     const settings = useContext(SettingsContext);
-    const { rootMenuRef, submenuOpenDelay, submenuCloseDelay } = settings;
+    const { rootMenuRef } = settings;
     const { parentMenuRef, parentDir, overflow: parentOverflow } = useContext(MenuListContext);
-    const { isParentOpen, submenuCtx, dispatch, updateItems } = useContext(MenuListItemContext);
+    const { isParentOpen, submenuCtx } = useContext(MenuListItemContext);
     const isPortal = parentOverflow !== 'visible';
-    const [stateProps, toggleMenu, _openMenu] = useMenuStateAndFocus(settings);
-    const { state } = stateProps;
-    const isDisabled = !!disabled;
-    const isOpen = isMenuOpen(state);
+    const { 
+      isDisabled, 
+      isMounted,
+      isOpen, 
+      invokeMenuOpen, 
+      openMenu, 
+      stateProps, 
+      stopMenuInvocation 
+    } = useSubMenuState(itemRef, disabled, isHovering, openTrigger, onMenuChange);
     const containerRef = useRef(null);
-    const [timerId] = useState({ v: 0 });
-
-    const stopTimer = () => {
-      submenuCtx.off();
-      if (timerId.v) {
-        clearTimeout(timerId.v);
-        timerId.v = 0;
-      }
-    };
-
-    const openMenu = (...args) => {
-      stopTimer();
-      setHover();
-      !isDisabled && _openMenu(...args);
-    };
-
-    const setHover = () =>
-      !isHovering && !isDisabled && dispatch(HoverActionTypes.SET, itemRef.current);
-
-    const delayOpen = (delay) => {
-      setHover();
-      if (!openTrigger) timerId.v = setTimeout(() => batchedUpdates(openMenu), Math.max(delay, 0));
-    };
 
     const onPointerMove = (e) => {
       if (isDisabled) return;
       e.stopPropagation();
-      if (timerId.v || isOpen) return;
-      submenuCtx.on(
-        submenuCloseDelay,
-        () => delayOpen(submenuOpenDelay - submenuCloseDelay),
-        () => delayOpen(submenuOpenDelay)
-      );
+      invokeMenuOpen();
     };
 
     const onPointerLeave = () => {
-      stopTimer();
-      if (!isOpen) dispatch(HoverActionTypes.UNSET, itemRef.current);
+      stopMenuInvocation();      
     };
 
     const onKeyDown = (e) => {
@@ -136,21 +107,6 @@ export const SubMenu = withHovering(
         e.stopPropagation();
       }
     };
-
-    useItemEffect(isDisabled, itemRef, updateItems);
-    useMenuChange(onMenuChange, isOpen);
-
-    useEffect(() => submenuCtx.toggle(isOpen), [submenuCtx, isOpen]);
-    useEffect(() => () => clearTimeout(timerId.v), [timerId]);
-    useEffect(() => {
-      // Don't set focus when parent menu is closed, otherwise focus will be lost
-      // and onBlur event will be fired with relatedTarget setting as null.
-      if (isHovering && isParentOpen) {
-        itemRef.current.focus();
-      } else {
-        toggleMenu(false);
-      }
-    }, [isHovering, isParentOpen, toggleMenu, itemRef]);
 
     useImperativeHandle(instanceRef, () => ({
       openMenu: (...args) => {
@@ -231,7 +187,7 @@ export const SubMenu = withHovering(
           {useMemo(() => safeCall(label, modifiers), [label, modifiers])}
         </div>
 
-        {state && getMenuList()}
+        {isMounted && getMenuList()}
       </li>
     );
   }
