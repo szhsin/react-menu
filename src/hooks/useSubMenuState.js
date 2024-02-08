@@ -1,5 +1,7 @@
 import { useContext, useEffect, useState } from 'react';
-import { useMenuChange, useMenuStateAndFocus, useItemEffect } from '../hooks';
+import { useMenuChange } from './useMenuChange';
+import { useMenuStateAndFocus } from './useMenuStateAndFocus';
+import { useItemEffect } from './useItemEffect';
 import {
   batchedUpdates,
   isMenuOpen,
