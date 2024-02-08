@@ -16,13 +16,13 @@ export const useSubMenuState = (itemRef, disabled, isHovering, openTrigger, onMe
   const { state } = stateProps;
   const isDisabled = !!disabled;
   const isOpen = isMenuOpen(state);
-  const [timerId] = useState({ v: 0 });
+  const [openDelayTimer] = useState({ v: 0 });
 
-  const stopTimer = () => {
+  const clearOpeningDelayPhase = () => {
     submenuCtx.off();
-    if (timerId.v) {
-      clearTimeout(timerId.v);
-      timerId.v = 0;
+    if (openDelayTimer.v) {
+      clearTimeout(openDelayTimer.v);
+      openDelayTimer.v = 0;
     }
   };
 
@@ -30,18 +30,18 @@ export const useSubMenuState = (itemRef, disabled, isHovering, openTrigger, onMe
     !isHovering && !isDisabled && dispatch(HoverActionTypes.SET, itemRef.current);
 
   const openMenu = (...args) => {
-    stopTimer();
+    clearOpeningDelayPhase();
     setHover();
     !isDisabled && _openMenu(...args);
   };
 
   const delayOpen = (delay) => {
     setHover();
-    if (!openTrigger) timerId.v = setTimeout(() => batchedUpdates(openMenu), Math.max(delay, 0));
+    if (!openTrigger) openDelayTimer.v = setTimeout(() => batchedUpdates(openMenu), Math.max(delay, 0));
   };
 
   const invokeMenuOpen = () => {
-    if (timerId.v || isOpen) return;
+    if (openDelayTimer.v || isOpen) return;
     // B.m. first it will see if in the list another sibling SubMenu's menuList is open.
     // if so, delay it by first closing the other
     // The second parameter delays the opening of this SubMenu MenuList by the submenuCloseDelay
@@ -63,7 +63,7 @@ export const useSubMenuState = (itemRef, disabled, isHovering, openTrigger, onMe
   useMenuChange(onMenuChange, isOpen);
 
   useEffect(() => submenuCtx.toggle(isOpen), [submenuCtx, isOpen]);
-  useEffect(() => () => clearTimeout(timerId.v), [timerId]); // b.m.: Maybe for unmounting component, clear the timeout
+  useEffect(() => () => clearTimeout(openDelayTimer.v), [openDelayTimer]); // b.m.: Maybe for unmounting component, clear the timeout
   useEffect(() => {
     // Don't set focus when parent menu is closed, otherwise focus will be lost
     // and onBlur event will be fired with relatedTarget setting as null.
