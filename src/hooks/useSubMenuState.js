@@ -52,7 +52,7 @@ export const useSubMenuState = (itemRef, disabled, isHovering, openTrigger, onMe
   };
 
   const stopMenuInvocation = () => {
-    stopTimer();
+    clearOpeningDelayPhase();
     if (!isOpen) dispatch(HoverActionTypes.UNSET, itemRef.current);
   }
 
