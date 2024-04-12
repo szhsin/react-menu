@@ -59,7 +59,7 @@
     "babel-plugin-pure-annotations": "^0.1.2",
     "babel-plugin-transform-react-remove-prop-types": "^0.4.24",
     "dtslint": "^4.2.1",
-    "eslint": "^8.57.0",
+    "eslint": "^9.0.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-jest": "^27.9.0",
     "eslint-plugin-react": "^7.34.1",
