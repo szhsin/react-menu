@@ -55,7 +55,7 @@
     "@testing-library/jest-dom": "^6.4.2",
     "@testing-library/react": "^14.2.2",
     "@types/jest": "^29.5.12",
-    "@types/react": "^18.2.74",
+    "@types/react": "^18.2.78",
     "babel-plugin-pure-annotations": "^0.1.2",
     "babel-plugin-transform-react-remove-prop-types": "^0.4.24",
     "dtslint": "^4.2.1",
