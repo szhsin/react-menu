@@ -71,7 +71,7 @@
     "prettier": "^3.2.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "rollup": "^4.14.1",
+    "rollup": "^4.14.3",
     "sass": "^1.75.0",
     "typescript": "^5.4.5"
   },
