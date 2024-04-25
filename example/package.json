@@ -12,7 +12,7 @@
     "reactish-state": "0.11.1"
   },
   "devDependencies": {
-    "eslint-config-next": "^14.2.2"
+    "eslint-config-next": "^14.2.3"
   },
   "scripts": {
     "dev": "next dev",
