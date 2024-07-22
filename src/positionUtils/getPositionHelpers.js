@@ -1,7 +1,8 @@
 import { parsePadding } from '../utils';
+import { getNormalizedClientRect } from './getNormalizedClientRect';
 
 export const getPositionHelpers = (containerRef, menuRef, menuScroll, boundingBoxPadding) => {
-  const menuRect = menuRef.current.getBoundingClientRect();
+  const menuRect = getNormalizedClientRect(menuRef.current);
   const containerRect = containerRef.current.getBoundingClientRect();
   const boundingRect =
     menuScroll === window

@@ -2,7 +2,7 @@ import { useState, useReducer, useEffect, useRef, useMemo, useCallback, useConte
 import { flushSync } from 'react-dom';
 import { MenuContainer } from './MenuContainer';
 import { useBEM, useCombinedRef, useLayoutEffect, useItems } from '../hooks';
-import { getPositionHelpers, positionMenu } from '../positionUtils';
+import { getNormalizedClientRect, getPositionHelpers, positionMenu } from '../positionUtils';
 import {
   mergeProps,
   batchedUpdates,
@@ -152,15 +152,15 @@ export const MenuList = ({
       const anchorRect = anchorRef
         ? anchorRef.current?.getBoundingClientRect()
         : anchorPoint
-        ? {
-            left: anchorPoint.x,
-            right: anchorPoint.x,
-            top: anchorPoint.y,
-            bottom: anchorPoint.y,
-            width: 0,
-            height: 0
-          }
-        : null;
+          ? {
+              left: anchorPoint.x,
+              right: anchorPoint.x,
+              top: anchorPoint.y,
+              bottom: anchorPoint.y,
+              width: 0,
+              height: 0
+            }
+          : null;
       if (!anchorRect) {
         if (process.env.NODE_ENV !== 'production') {
           console.warn(
@@ -327,7 +327,7 @@ export const MenuList = ({
         width = inlineSize;
         height = blockSize;
       } else {
-        const borderRect = target.getBoundingClientRect();
+        const borderRect = getNormalizedClientRect(target);
         width = borderRect.width;
         height = borderRect.height;
       }
@@ -418,9 +418,10 @@ export const MenuList = ({
   const modifiers = useMemo(
     () => ({
       state,
+      align,
       dir: expandedDirection
     }),
-    [state, expandedDirection]
+    [state, align, expandedDirection]
   );
   const arrowModifiers = useMemo(() => ({ dir: expandedDirection }), [expandedDirection]);
   const _arrowClassName = useBEM({
