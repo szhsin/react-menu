@@ -91,8 +91,8 @@ const stylesheet = {
           desc: (
             <>
               <p>
-                Different transition animations when menu opens or closes. Currently there is only
-                one as <code>slide.css</code>.
+                CSS animations for menu opening and closing. Currently included are{' '}
+                <code>zoom.css</code> and <code>slide.css</code>.
               </p>
             </>
           )
