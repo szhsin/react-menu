@@ -2,6 +2,7 @@ import { forwardRef, useRef, useState, useContext } from 'react';
 import { bool } from 'prop-types';
 import { jsx } from 'react/jsx-runtime';
 import { useLayoutEffect as useIsomorphicLayoutEffect } from '../hooks/useIsomorphicLayoutEffect.js';
+import { getNormalizedClientRect } from '../positionUtils/getNormalizedClientRect.js';
 import { useCombinedRef } from '../hooks/useCombinedRef.js';
 import { useBEM } from '../hooks/useBEM.js';
 import { MenuListContext, menuClass, menuGroupClass } from '../utils/constants.js';
@@ -22,7 +23,7 @@ const MenuGroup = /*#__PURE__*/forwardRef(function MenuGroup({
   useIsomorphicLayoutEffect(() => {
     let maxHeight;
     if (takeOverflow && overflowAmt >= 0) {
-      maxHeight = ref.current.getBoundingClientRect().height - overflowAmt;
+      maxHeight = getNormalizedClientRect(ref.current).height - overflowAmt;
       if (maxHeight < 0) maxHeight = 0;
     }
     setOverflowStyle(maxHeight >= 0 ? {

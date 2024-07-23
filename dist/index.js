@@ -584,8 +584,16 @@ const MenuContainer = ({
   });
 };
 
+const getNativeDimension = (transformed, untransformed) => Math.round(transformed) === untransformed ? transformed : untransformed;
+const getNormalizedClientRect = element => {
+  const rect = element.getBoundingClientRect();
+  rect.width = getNativeDimension(rect.width, element.offsetWidth);
+  rect.height = getNativeDimension(rect.height, element.offsetHeight);
+  return rect;
+};
+
 const getPositionHelpers = (containerRef, menuRef, menuScroll, boundingBoxPadding) => {
-  const menuRect = menuRef.current.getBoundingClientRect();
+  const menuRect = getNormalizedClientRect(menuRef.current);
   const containerRect = containerRef.current.getBoundingClientRect();
   const boundingRect = menuScroll === window ? {
     left: 0,
@@ -1132,7 +1140,7 @@ const MenuList = ({
         width = inlineSize;
         height = blockSize;
       } else {
-        const borderRect = target.getBoundingClientRect();
+        const borderRect = getNormalizedClientRect(target);
         width = borderRect.width;
         height = borderRect.height;
       }
@@ -1205,8 +1213,9 @@ const MenuList = ({
   } : undefined;
   const modifiers = react.useMemo(() => ({
     state,
+    align,
     dir: expandedDirection
-  }), [state, expandedDirection]);
+  }), [state, align, expandedDirection]);
   const arrowModifiers = react.useMemo(() => ({
     dir: expandedDirection
   }), [expandedDirection]);
@@ -1861,7 +1870,7 @@ const MenuGroup = /*#__PURE__*/react.forwardRef(function MenuGroup({
   useIsomorphicLayoutEffect(() => {
     let maxHeight;
     if (takeOverflow && overflowAmt >= 0) {
-      maxHeight = ref.current.getBoundingClientRect().height - overflowAmt;
+      maxHeight = getNormalizedClientRect(ref.current).height - overflowAmt;
       if (maxHeight < 0) maxHeight = 0;
     }
     setOverflowStyle(maxHeight >= 0 ? {
