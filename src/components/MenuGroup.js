@@ -2,6 +2,7 @@ import { forwardRef, useContext, useRef, useState } from 'react';
 import { bool } from 'prop-types';
 import { useBEM, useLayoutEffect, useCombinedRef } from '../hooks';
 import { menuClass, menuGroupClass, stylePropTypes, MenuListContext } from '../utils';
+import { getNormalizedClientRect } from '../positionUtils';
 
 export const MenuGroup = forwardRef(function MenuGroup(
   { className, style, takeOverflow, ...restProps },
@@ -14,7 +15,7 @@ export const MenuGroup = forwardRef(function MenuGroup(
   useLayoutEffect(() => {
     let maxHeight;
     if (takeOverflow && overflowAmt >= 0) {
-      maxHeight = ref.current.getBoundingClientRect().height - overflowAmt;
+      maxHeight = getNormalizedClientRect(ref.current).height - overflowAmt;
       if (maxHeight < 0) maxHeight = 0;
     }
     setOverflowStyle(maxHeight >= 0 ? { maxHeight, overflow } : undefined);

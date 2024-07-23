@@ -32,9 +32,10 @@ const createSelector = (blockElement, modifiers = []) => {
   });
   return selectorObj;
 };
-const directions = ['dir-left', 'dir-right', 'dir-top', 'dir-bottom'];
+const createModifiers = (name, values) => values.map(value => `${name}-${value}`);
+const directions = /*#__PURE__*/createModifiers('dir', ['left', 'right', 'top', 'bottom']);
 const menuBlock = /*#__PURE__*/bem(menuClass);
-const menuSelector = /*#__PURE__*/createSelector( /*#__PURE__*/menuBlock(), ['state-opening', 'state-open', 'state-closing', 'state-closed', ...directions]);
+const menuSelector = /*#__PURE__*/createSelector( /*#__PURE__*/menuBlock(), [...createModifiers('state', ['opening', 'open', 'closing', 'closed']), ...createModifiers('align', ['start', 'center', 'end']), ...directions]);
 const menuArrowSelector = /*#__PURE__*/createSelector( /*#__PURE__*/menuBlock(menuArrowClass), directions);
 const menuItemSelector = /*#__PURE__*/createSelector( /*#__PURE__*/menuBlock(menuItemClass), ['hover', 'disabled', 'anchor', 'checked', 'open', 'submenu', 'focusable', 'type-radio', 'type-checkbox']);
 const menuDividerSelector = /*#__PURE__*/createSelector( /*#__PURE__*/menuBlock(menuDividerClass));

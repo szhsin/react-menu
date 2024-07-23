@@ -43,6 +43,19 @@ export const menuSelector: Readonly<
        * Menu is closed
        */
       stateClosed: string;
+
+      /**
+       * Aligning start with anchor element
+       */
+      alignStart: string;
+      /**
+       * Aligning center with anchor element
+       */
+      alignCenter: string;
+      /**
+       * Aligning end with anchor element
+       */
+      alignEnd: string;
     }
 >;
 

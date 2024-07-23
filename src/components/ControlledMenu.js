@@ -128,8 +128,8 @@ export const ControlledMenu = forwardRef(function ControlledMenu(
     return portal.target
       ? createPortal(menuList, portal.target)
       : portal.stablePosition
-      ? null
-      : menuList;
+        ? null
+        : menuList;
   }
   return menuList;
 });

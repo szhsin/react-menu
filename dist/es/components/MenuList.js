@@ -9,6 +9,7 @@ import { getScrollAncestor, floatEqual, commonProps, mergeProps, safeCall, isMen
 import { getPositionHelpers } from '../positionUtils/getPositionHelpers.js';
 import { positionMenu } from '../positionUtils/positionMenu.js';
 import { useLayoutEffect as useIsomorphicLayoutEffect } from '../hooks/useIsomorphicLayoutEffect.js';
+import { getNormalizedClientRect } from '../positionUtils/getNormalizedClientRect.js';
 import { useBEM } from '../hooks/useBEM.js';
 import { useCombinedRef } from '../hooks/useCombinedRef.js';
 
@@ -276,7 +277,7 @@ const MenuList = ({
         width = inlineSize;
         height = blockSize;
       } else {
-        const borderRect = target.getBoundingClientRect();
+        const borderRect = getNormalizedClientRect(target);
         width = borderRect.width;
         height = borderRect.height;
       }
@@ -349,8 +350,9 @@ const MenuList = ({
   } : undefined;
   const modifiers = useMemo(() => ({
     state,
+    align,
     dir: expandedDirection
-  }), [state, expandedDirection]);
+  }), [state, align, expandedDirection]);
   const arrowModifiers = useMemo(() => ({
     dir: expandedDirection
   }), [expandedDirection]);

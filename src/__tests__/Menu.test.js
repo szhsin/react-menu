@@ -272,6 +272,7 @@ test.each([
     overflow: 'auto'
   });
   utils.clickMenuButton();
+  expect(utils.queryMenu()).toHaveClass(`szh-menu--align-${align}`);
   expect(utils.queryMenu()).toHaveClass(`szh-menu--dir-${direction}`);
   expect(container.querySelector(`.szh-menu__arrow--dir-${direction}`)).toBeInTheDocument();
 });

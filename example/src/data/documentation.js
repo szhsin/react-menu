@@ -81,7 +81,11 @@ const menuModifiers = (
   <ul>
     <li>
       <code>state: string</code> indicates the state of menu. Can be 'opening', 'open', 'closing',
-      'closed'
+      'closed'.
+    </li>
+    <li>
+      <code>align: string</code> alignment of menu with anchor element. Can be 'start', 'center', or
+      'end'.
     </li>
     {dirModifier}
   </ul>

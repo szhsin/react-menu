@@ -1,0 +1,67 @@
+@keyframes szh-menu-show-zoom {
+  from {
+    opacity: 0.1;
+    transform: scale(0.95);
+  }
+}
+@keyframes szh-menu-hide-zoom {
+  to {
+    opacity: 0.1;
+    transform: scale(0.95);
+  }
+}
+.szh-menu--state-opening {
+  animation: szh-menu-show-zoom 0.125s ease-out;
+}
+
+.szh-menu--state-closing {
+  animation: szh-menu-hide-zoom 0.125s ease-in forwards;
+}
+
+.szh-menu--dir-left.szh-menu--align-start {
+  transform-origin: right top;
+}
+
+.szh-menu--dir-left.szh-menu--align-center {
+  transform-origin: right center;
+}
+
+.szh-menu--dir-left.szh-menu--align-end {
+  transform-origin: right bottom;
+}
+
+.szh-menu--dir-right.szh-menu--align-start {
+  transform-origin: left top;
+}
+
+.szh-menu--dir-right.szh-menu--align-center {
+  transform-origin: left center;
+}
+
+.szh-menu--dir-right.szh-menu--align-end {
+  transform-origin: left bottom;
+}
+
+.szh-menu--dir-top.szh-menu--align-start {
+  transform-origin: left bottom;
+}
+
+.szh-menu--dir-top.szh-menu--align-center {
+  transform-origin: center bottom;
+}
+
+.szh-menu--dir-top.szh-menu--align-end {
+  transform-origin: right bottom;
+}
+
+.szh-menu--dir-bottom.szh-menu--align-start {
+  transform-origin: left top;
+}
+
+.szh-menu--dir-bottom.szh-menu--align-center {
+  transform-origin: center top;
+}
+
+.szh-menu--dir-bottom.szh-menu--align-end {
+  transform-origin: right top;
+}

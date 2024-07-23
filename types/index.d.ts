@@ -109,6 +109,10 @@ export type MenuModifiers = Readonly<{
    */
   state: MenuState;
   /**
+   * Alignment of menu with anchor element.
+   */
+  align: MenuAlign;
+  /**
    * Computed direction in which the menu expands.
    */
   dir: MenuDirection;

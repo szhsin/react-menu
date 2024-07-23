@@ -1,0 +1,56 @@
+@use 'sass:list';
+@use 'sass:string';
+
+$menu: 'szh-menu';
+$duration: 0.125s;
+$scale: 0.95;
+
+$origins: (
+  ('left', 'start', 'right top'),
+  ('left', 'center', 'right center'),
+  ('left', 'end', 'right bottom'),
+  ('right', 'start', 'left top'),
+  ('right', 'center', 'left center'),
+  ('right', 'end', 'left bottom'),
+  ('top', 'start', 'left bottom'),
+  ('top', 'center', 'center bottom'),
+  ('top', 'end', 'right bottom'),
+  ('bottom', 'start', 'left top'),
+  ('bottom', 'center', 'center top'),
+  ('bottom', 'end', 'right top')
+);
+
+@mixin zoom {
+  opacity: 0.1;
+  transform: scale($scale);
+}
+
+@keyframes #{$menu}-show-zoom {
+  from {
+    @include zoom;
+  }
+}
+
+@keyframes #{$menu}-hide-zoom {
+  to {
+    @include zoom;
+  }
+}
+
+.#{$menu}--state-opening {
+  animation: #{$menu}-show-zoom $duration ease-out;
+}
+
+.#{$menu}--state-closing {
+  animation: #{$menu}-hide-zoom $duration ease-in forwards;
+}
+
+@each $item in $origins {
+  $dir: list.nth($item, 1);
+  $align: list.nth($item, 2);
+  $origin: list.nth($item, 3);
+
+  .#{$menu}--dir-#{$dir}.#{$menu}--align-#{$align} {
+    transform-origin: string.unquote($origin);
+  }
+}

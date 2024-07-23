@@ -1,6 +1,6 @@
 import '@szhsin/react-menu/dist/index.css';
 import '@szhsin/react-menu/dist/theme-dark.css';
-import '@szhsin/react-menu/dist/transitions/slide.css';
+import '@szhsin/react-menu/dist/transitions/zoom.css';
 import '../styles/index.scss';
 import Head from 'next/head';
 import App from '../components/App';
