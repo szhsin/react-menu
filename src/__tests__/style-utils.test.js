@@ -17,6 +17,9 @@ test('style-utils menuSelector', () => {
   expect(menuSelector.stateOpen).toBe('.szh-menu--state-open');
   expect(menuSelector.stateClosing).toBe('.szh-menu--state-closing');
   expect(menuSelector.stateClosed).toBe('.szh-menu--state-closed');
+  expect(menuSelector.alignStart).toBe('.szh-menu--align-start');
+  expect(menuSelector.alignCenter).toBe('.szh-menu--align-center');
+  expect(menuSelector.alignEnd).toBe('.szh-menu--align-end');
   expect(menuSelector.dirLeft).toBe('.szh-menu--dir-left');
   expect(menuSelector.dirRight).toBe('.szh-menu--dir-right');
   expect(menuSelector.dirTop).toBe('.szh-menu--dir-top');
