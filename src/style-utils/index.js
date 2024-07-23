@@ -38,13 +38,13 @@ const createSelector = (blockElement, modifiers = []) => {
   return selectorObj;
 };
 
-const directions = ['dir-left', 'dir-right', 'dir-top', 'dir-bottom'];
+const createModifiers = (name, values) => values.map((value) => `${name}-${value}`);
+
+const directions = createModifiers('dir', ['left', 'right', 'top', 'bottom']);
 const menuBlock = bem(menuClass);
 const menuSelector = createSelector(menuBlock(), [
-  'state-opening',
-  'state-open',
-  'state-closing',
-  'state-closed',
+  ...createModifiers('state', ['opening', 'open', 'closing', 'closed']),
+  ...createModifiers('align', ['start', 'center', 'end']),
   ...directions
 ]);
 const menuArrowSelector = createSelector(menuBlock(menuArrowClass), directions);

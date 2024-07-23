@@ -144,6 +144,16 @@ const selectors = {
             {
               name: (
                 <ul>
+                  <li>{menuSelector.alignStart}</li>
+                  <li>{menuSelector.alignCenter}</li>
+                  <li>{menuSelector.alignEnd}</li>
+                </ul>
+              ),
+              desc: 'Alignment of menu with its anchor element.'
+            },
+            {
+              name: (
+                <ul>
                   <li>{menuSelector.dirLeft}</li>
                   <li>{menuSelector.dirRight}</li>
                   <li>{menuSelector.dirTop}</li>
