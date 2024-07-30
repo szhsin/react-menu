@@ -203,24 +203,13 @@ export const MenuList = ({
         const { getTopOverflow, getBottomOverflow } = positionHelpers;
 
         let height, overflowAmt;
-        const prevHeight = latestMenuSize.current.height;
         const bottomOverflow = getBottomOverflow(y);
-        // When bottomOverflow is 0, menu is on the bottom edge of viewport
-        // This might be the result of a previous maxHeight set on the menu.
-        // In this situation, we need to still apply a new maxHeight.
-        // Same reason for the top side
-        if (
-          bottomOverflow > 0 ||
-          (floatEqual(bottomOverflow, 0) && floatEqual(menuHeight, prevHeight))
-        ) {
+        if (bottomOverflow > 0) {
           height = menuHeight - bottomOverflow;
           overflowAmt = bottomOverflow;
         } else {
           const topOverflow = getTopOverflow(y);
-          if (
-            topOverflow < 0 ||
-            (floatEqual(topOverflow, 0) && floatEqual(menuHeight, prevHeight))
-          ) {
+          if (topOverflow < 0) {
             height = menuHeight + topOverflow;
             overflowAmt = 0 - topOverflow; // avoid getting -0
             if (height >= 0) y -= topOverflow;
@@ -231,8 +220,6 @@ export const MenuList = ({
           // To avoid triggering reposition in the next ResizeObserver callback
           menuHeight = height;
           setOverflowData({ height, overflowAmt });
-        } else {
-          setOverflowData();
         }
       }
 

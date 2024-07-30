@@ -174,14 +174,13 @@ const MenuList = ({
         getBottomOverflow
       } = positionHelpers;
       let height, overflowAmt;
-      const prevHeight = latestMenuSize.current.height;
       const bottomOverflow = getBottomOverflow(y);
-      if (bottomOverflow > 0 || floatEqual(bottomOverflow, 0) && floatEqual(menuHeight, prevHeight)) {
+      if (bottomOverflow > 0) {
         height = menuHeight - bottomOverflow;
         overflowAmt = bottomOverflow;
       } else {
         const topOverflow = getTopOverflow(y);
-        if (topOverflow < 0 || floatEqual(topOverflow, 0) && floatEqual(menuHeight, prevHeight)) {
+        if (topOverflow < 0) {
           height = menuHeight + topOverflow;
           overflowAmt = 0 - topOverflow;
           if (height >= 0) y -= topOverflow;
@@ -193,8 +192,6 @@ const MenuList = ({
           height,
           overflowAmt
         });
-      } else {
-        setOverflowData();
       }
     }
     if (arrow) setArrowPosition({
