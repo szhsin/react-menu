@@ -22,7 +22,7 @@ export const basicMenu = {
 
   fullSource: `import { Menu, MenuItem, MenuButton } from '@szhsin/react-menu';
 import '@szhsin/react-menu/dist/index.css';
-import '@szhsin/react-menu/dist/transitions/slide.css';
+import '@szhsin/react-menu/dist/transitions/zoom.css';
 
 export default function Example() {
   return (
@@ -955,7 +955,7 @@ export const menuStateHook = {
   fullSource: `import { useRef } from 'react';
 import { ControlledMenu, MenuItem, useClick, useMenuState } from '@szhsin/react-menu';
 import '@szhsin/react-menu/dist/index.css';
-import '@szhsin/react-menu/dist/transitions/slide.css';
+import '@szhsin/react-menu/dist/transitions/zoom.css';
 
 export default function () {
   const ref = useRef(null);
@@ -1005,7 +1005,7 @@ export const hoverMenu = {
   fullSource: `import { useRef, useState } from 'react';
 import { ControlledMenu, MenuItem, useHover, useMenuState } from '@szhsin/react-menu';
 import '@szhsin/react-menu/dist/index.css';
-import '@szhsin/react-menu/dist/transitions/slide.css';
+import '@szhsin/react-menu/dist/transitions/zoom.css';
 
 const HoverMenu = () => {
   const ref = useRef(null);
