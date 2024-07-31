@@ -306,7 +306,7 @@ export interface RootMenuProps extends BaseMenuProps, Omit<MenuStateOptions, 'in
    * Specify when menu is repositioned:
    * - 'initial' Don't automatically reposition menu. Set to this value when you want
    * to explicitly reposition menu using the `repositionFlag` prop.
-   * - 'auto' Reposition menu whenever its size has changed, using the `ResizeObserver` API.
+   * - 'auto' Reposition menu whenever itself or the anchor has changed in size, using the `ResizeObserver` API.
    * @default 'auto'
    */
   reposition?: MenuReposition;

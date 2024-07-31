@@ -2,13 +2,12 @@ import { useState, useReducer, useEffect, useRef, useMemo, useCallback, useConte
 import { flushSync } from 'react-dom';
 import { MenuContainer } from './MenuContainer';
 import { useBEM, useCombinedRef, useLayoutEffect, useItems } from '../hooks';
-import { getNormalizedClientRect, getPositionHelpers, positionMenu } from '../positionUtils';
+import { getPositionHelpers, positionMenu } from '../positionUtils';
 import {
   mergeProps,
   batchedUpdates,
   commonProps,
   createSubmenuCtx,
-  floatEqual,
   getScrollAncestor,
   getTransition,
   positionAbsolute,
@@ -84,8 +83,6 @@ export const MenuList = ({
   const focusRef = useRef();
   const arrowRef = useRef();
   const prevOpen = useRef(false);
-  const latestMenuSize = useRef({ width: 0, height: 0 });
-  const latestHandlePosition = useRef(() => {});
   const { hoverItem, dispatch, updateItems } = useItems(menuRef, focusRef);
 
   const isOpen = isMenuOpen(state);
@@ -197,7 +194,7 @@ export const MenuList = ({
       });
 
       const { menuRect } = positionHelpers;
-      let menuHeight = menuRect.height;
+      const menuHeight = menuRect.height;
 
       if (!noOverflowCheck && overflow !== 'visible') {
         const { getTopOverflow, getBottomOverflow } = positionHelpers;
@@ -217,8 +214,6 @@ export const MenuList = ({
         }
 
         if (height >= 0) {
-          // To avoid triggering reposition in the next ResizeObserver callback
-          menuHeight = height;
           setOverflowData({ height, overflowAmt });
         }
       }
@@ -226,7 +221,6 @@ export const MenuList = ({
       if (arrow) setArrowPosition({ x: arrowX, y: arrowY });
       setMenuPosition({ x, y });
       setExpandedDirection(computedDirection);
-      latestMenuSize.current = { width: menuRect.width, height: menuHeight };
     },
     [
       arrow,
@@ -253,7 +247,6 @@ export const MenuList = ({
       if (prevOpen.current) forceReposSubmenu();
     }
     prevOpen.current = isOpen;
-    latestHandlePosition.current = handlePosition;
   }, [isOpen, handlePosition, /* effect dep */ reposFlag]);
 
   useLayoutEffect(() => {
@@ -304,37 +297,30 @@ export const MenuList = ({
   }, [isOpen, hasOverflow, parentScrollingRef, handlePosition]);
 
   useEffect(() => {
-    if (typeof ResizeObserver !== 'function' || reposition === 'initial') return;
+    if (!isOpen || typeof ResizeObserver !== 'function' || reposition === 'initial') return;
 
-    const resizeObserver = new ResizeObserver(([entry]) => {
-      const { borderBoxSize, target } = entry;
-      let width, height;
-      if (borderBoxSize) {
-        const { inlineSize, blockSize } = borderBoxSize[0] || borderBoxSize;
-        width = inlineSize;
-        height = blockSize;
-      } else {
-        const borderRect = getNormalizedClientRect(target);
-        width = borderRect.width;
-        height = borderRect.height;
-      }
+    const targetList = [];
+    const resizeObserver = new ResizeObserver((entries) =>
+      entries.forEach(({ target }) => {
+        if (targetList.indexOf(target) < 0) {
+          // ResizeObserver callback fires on initial observe call,
+          // use this workaround to skip the first callback
+          targetList.push(target);
+        } else {
+          flushSync(() => {
+            handlePosition();
+            forceReposSubmenu();
+          });
+        }
+      })
+    );
 
-      if (width === 0 || height === 0) return;
-      if (
-        floatEqual(width, latestMenuSize.current.width, 1) &&
-        floatEqual(height, latestMenuSize.current.height, 1)
-      )
-        return;
-      flushSync(() => {
-        latestHandlePosition.current();
-        forceReposSubmenu();
-      });
-    });
-
-    const observeTarget = menuRef.current;
-    resizeObserver.observe(observeTarget, { box: 'border-box' });
-    return () => resizeObserver.unobserve(observeTarget);
-  }, [reposition]);
+    const resizeObserverOptions = { box: 'border-box' };
+    resizeObserver.observe(menuRef.current, resizeObserverOptions);
+    const anchor = anchorRef?.current;
+    anchor && resizeObserver.observe(anchor, resizeObserverOptions);
+    return () => resizeObserver.disconnect();
+  }, [isOpen, reposition, anchorRef, handlePosition]);
 
   useEffect(() => {
     if (!isOpen) {
