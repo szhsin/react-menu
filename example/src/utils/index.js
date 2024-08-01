@@ -1,8 +1,8 @@
 import { useEffect, useLayoutEffect } from 'react';
 import { useTheme } from '../store';
 
-export const version = '4.2.0';
-export const build = '135';
+export const version = '4.2.1';
+export const build = '136';
 
 export const bem = (block, element, modifiers = {}) => {
   let blockElement = element ? `${block}__${element}` : block;

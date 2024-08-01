@@ -5,11 +5,10 @@ import { jsxs, jsx } from 'react/jsx-runtime';
 import { createSubmenuCtx } from '../utils/submenuCtx.js';
 import { SettingsContext, MenuListContext, HoverActionTypes, menuClass, menuArrowClass, positionAbsolute, dummyItemProps, MenuListItemContext, HoverItemContext, Keys, CloseReason, FocusPositions } from '../utils/constants.js';
 import { useItems } from '../hooks/useItems.js';
-import { getScrollAncestor, floatEqual, commonProps, mergeProps, safeCall, isMenuOpen, getTransition, batchedUpdates } from '../utils/utils.js';
+import { getScrollAncestor, commonProps, mergeProps, safeCall, isMenuOpen, getTransition, batchedUpdates } from '../utils/utils.js';
 import { getPositionHelpers } from '../positionUtils/getPositionHelpers.js';
 import { positionMenu } from '../positionUtils/positionMenu.js';
 import { useLayoutEffect as useIsomorphicLayoutEffect } from '../hooks/useIsomorphicLayoutEffect.js';
-import { getNormalizedClientRect } from '../positionUtils/getNormalizedClientRect.js';
 import { useBEM } from '../hooks/useBEM.js';
 import { useCombinedRef } from '../hooks/useCombinedRef.js';
 
@@ -72,11 +71,6 @@ const MenuList = ({
   const focusRef = useRef();
   const arrowRef = useRef();
   const prevOpen = useRef(false);
-  const latestMenuSize = useRef({
-    width: 0,
-    height: 0
-  });
-  const latestHandlePosition = useRef(() => {});
   const {
     hoverItem,
     dispatch,
@@ -167,34 +161,30 @@ const MenuList = ({
     const {
       menuRect
     } = positionHelpers;
-    let menuHeight = menuRect.height;
+    const menuHeight = menuRect.height;
     if (!noOverflowCheck && overflow !== 'visible') {
       const {
         getTopOverflow,
         getBottomOverflow
       } = positionHelpers;
       let height, overflowAmt;
-      const prevHeight = latestMenuSize.current.height;
       const bottomOverflow = getBottomOverflow(y);
-      if (bottomOverflow > 0 || floatEqual(bottomOverflow, 0) && floatEqual(menuHeight, prevHeight)) {
+      if (bottomOverflow > 0) {
         height = menuHeight - bottomOverflow;
         overflowAmt = bottomOverflow;
       } else {
         const topOverflow = getTopOverflow(y);
-        if (topOverflow < 0 || floatEqual(topOverflow, 0) && floatEqual(menuHeight, prevHeight)) {
+        if (topOverflow < 0) {
           height = menuHeight + topOverflow;
           overflowAmt = 0 - topOverflow;
           if (height >= 0) y -= topOverflow;
         }
       }
       if (height >= 0) {
-        menuHeight = height;
         setOverflowData({
           height,
           overflowAmt
         });
-      } else {
-        setOverflowData();
       }
     }
     if (arrow) setArrowPosition({
@@ -206,10 +196,6 @@ const MenuList = ({
       y
     });
     setExpandedDirection(computedDirection);
-    latestMenuSize.current = {
-      width: menuRect.width,
-      height: menuHeight
-    };
   }, [arrow, align, boundingBoxPadding, direction, gap, shift, position, overflow, anchorPoint, anchorRef, containerRef, boundingBoxRef, rootMenuRef, scrollNodes]);
   useIsomorphicLayoutEffect(() => {
     if (isOpen) {
@@ -217,7 +203,6 @@ const MenuList = ({
       if (prevOpen.current) forceReposSubmenu();
     }
     prevOpen.current = isOpen;
-    latestHandlePosition.current = handlePosition;
   }, [isOpen, handlePosition, reposFlag]);
   useIsomorphicLayoutEffect(() => {
     if (overflowData && !setDownOverflow) menuRef.current.scrollTop = 0;
@@ -262,38 +247,28 @@ const MenuList = ({
     return () => parentScroll.removeEventListener('scroll', handleScroll);
   }, [isOpen, hasOverflow, parentScrollingRef, handlePosition]);
   useEffect(() => {
-    if (typeof ResizeObserver !== 'function' || reposition === 'initial') return;
-    const resizeObserver = new ResizeObserver(([entry]) => {
-      const {
-        borderBoxSize,
-        target
-      } = entry;
-      let width, height;
-      if (borderBoxSize) {
-        const {
-          inlineSize,
-          blockSize
-        } = borderBoxSize[0] || borderBoxSize;
-        width = inlineSize;
-        height = blockSize;
+    if (!isOpen || typeof ResizeObserver !== 'function' || reposition === 'initial') return;
+    const targetList = [];
+    const resizeObserver = new ResizeObserver(entries => entries.forEach(({
+      target
+    }) => {
+      if (targetList.indexOf(target) < 0) {
+        targetList.push(target);
       } else {
-        const borderRect = getNormalizedClientRect(target);
-        width = borderRect.width;
-        height = borderRect.height;
+        flushSync(() => {
+          handlePosition();
+          forceReposSubmenu();
+        });
       }
-      if (width === 0 || height === 0) return;
-      if (floatEqual(width, latestMenuSize.current.width, 1) && floatEqual(height, latestMenuSize.current.height, 1)) return;
-      flushSync(() => {
-        latestHandlePosition.current();
-        forceReposSubmenu();
-      });
-    });
-    const observeTarget = menuRef.current;
-    resizeObserver.observe(observeTarget, {
+    }));
+    const resizeObserverOptions = {
       box: 'border-box'
-    });
-    return () => resizeObserver.unobserve(observeTarget);
-  }, [reposition]);
+    };
+    resizeObserver.observe(menuRef.current, resizeObserverOptions);
+    const anchor = anchorRef == null ? void 0 : anchorRef.current;
+    anchor && resizeObserver.observe(anchor, resizeObserverOptions);
+    return () => resizeObserver.disconnect();
+  }, [isOpen, reposition, anchorRef, handlePosition]);
   useEffect(() => {
     if (!isOpen) {
       dispatch(HoverActionTypes.RESET);

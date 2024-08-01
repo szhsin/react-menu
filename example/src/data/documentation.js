@@ -466,8 +466,8 @@ const rootMenuProps = [
             want to explicitly reposition menu using the <code>repositionFlag</code> prop.
           </li>
           <li>
-            <code>'auto'</code> Reposition menu whenever its size has changed, using the{' '}
-            <code>ResizeObserver</code> API.
+            <code>'auto'</code> Reposition menu whenever itself or the anchor has changed in size,
+            using the <code>ResizeObserver</code> API.
           </li>
         </ul>
       </>

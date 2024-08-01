@@ -123,7 +123,7 @@ export const Example = React.memo(
         </div>
 
         {sourceCode && (
-          <pre className={bem(blockName, 'source')}>
+          <pre key={sourceCode.length} className={bem(blockName, 'source')}>
             <code className="lang-jsx">{sourceCode}</code>
           </pre>
         )}
