@@ -3,7 +3,6 @@ import { unstable_batchedUpdates } from 'react-dom';
 const isMenuOpen = state => !!state && state[0] === 'o';
 const batchedUpdates = unstable_batchedUpdates || (callback => callback());
 const values = Object.values || (obj => Object.keys(obj).map(key => obj[key]));
-const floatEqual = (a, b, diff = 0.0001) => Math.abs(a - b) < diff;
 const getTransition = (transition, name) => transition === true || !!(transition && transition[name]);
 const safeCall = (fn, arg) => typeof fn === 'function' ? fn(arg) : fn;
 const internalKey = '_szhsinMenu';
@@ -68,4 +67,4 @@ function indexOfNode(nodeList, node) {
   return -1;
 }
 
-export { batchedUpdates, commonProps, defineName, floatEqual, getName, getScrollAncestor, getTransition, indexOfNode, isMenuOpen, mergeProps, parsePadding, safeCall, values };
+export { batchedUpdates, commonProps, defineName, getName, getScrollAncestor, getTransition, indexOfNode, isMenuOpen, mergeProps, parsePadding, safeCall, values };

@@ -143,7 +143,6 @@ const dummyItemProps = {
 const isMenuOpen = state => !!state && state[0] === 'o';
 const batchedUpdates = reactDom.unstable_batchedUpdates || (callback => callback());
 const values = Object.values || (obj => Object.keys(obj).map(key => obj[key]));
-const floatEqual = (a, b, diff = 0.0001) => Math.abs(a - b) < diff;
 const getTransition = (transition, name) => transition === true || !!(transition && transition[name]);
 const safeCall = (fn, arg) => typeof fn === 'function' ? fn(arg) : fn;
 const internalKey = '_szhsinMenu';
@@ -935,11 +934,6 @@ const MenuList = ({
   const focusRef = react.useRef();
   const arrowRef = react.useRef();
   const prevOpen = react.useRef(false);
-  const latestMenuSize = react.useRef({
-    width: 0,
-    height: 0
-  });
-  const latestHandlePosition = react.useRef(() => {});
   const {
     hoverItem,
     dispatch,
@@ -1030,7 +1024,7 @@ const MenuList = ({
     const {
       menuRect
     } = positionHelpers;
-    let menuHeight = menuRect.height;
+    const menuHeight = menuRect.height;
     if (!noOverflowCheck && overflow !== 'visible') {
       const {
         getTopOverflow,
@@ -1050,7 +1044,6 @@ const MenuList = ({
         }
       }
       if (height >= 0) {
-        menuHeight = height;
         setOverflowData({
           height,
           overflowAmt
@@ -1066,10 +1059,6 @@ const MenuList = ({
       y
     });
     setExpandedDirection(computedDirection);
-    latestMenuSize.current = {
-      width: menuRect.width,
-      height: menuHeight
-    };
   }, [arrow, align, boundingBoxPadding, direction, gap, shift, position, overflow, anchorPoint, anchorRef, containerRef, boundingBoxRef, rootMenuRef, scrollNodes]);
   useIsomorphicLayoutEffect(() => {
     if (isOpen) {
@@ -1077,7 +1066,6 @@ const MenuList = ({
       if (prevOpen.current) forceReposSubmenu();
     }
     prevOpen.current = isOpen;
-    latestHandlePosition.current = handlePosition;
   }, [isOpen, handlePosition, reposFlag]);
   useIsomorphicLayoutEffect(() => {
     if (overflowData && !setDownOverflow) menuRef.current.scrollTop = 0;
@@ -1122,38 +1110,28 @@ const MenuList = ({
     return () => parentScroll.removeEventListener('scroll', handleScroll);
   }, [isOpen, hasOverflow, parentScrollingRef, handlePosition]);
   react.useEffect(() => {
-    if (typeof ResizeObserver !== 'function' || reposition === 'initial') return;
-    const resizeObserver = new ResizeObserver(([entry]) => {
-      const {
-        borderBoxSize,
-        target
-      } = entry;
-      let width, height;
-      if (borderBoxSize) {
-        const {
-          inlineSize,
-          blockSize
-        } = borderBoxSize[0] || borderBoxSize;
-        width = inlineSize;
-        height = blockSize;
+    if (!isOpen || typeof ResizeObserver !== 'function' || reposition === 'initial') return;
+    const targetList = [];
+    const resizeObserver = new ResizeObserver(entries => entries.forEach(({
+      target
+    }) => {
+      if (targetList.indexOf(target) < 0) {
+        targetList.push(target);
       } else {
-        const borderRect = getNormalizedClientRect(target);
-        width = borderRect.width;
-        height = borderRect.height;
+        reactDom.flushSync(() => {
+          handlePosition();
+          forceReposSubmenu();
+        });
       }
-      if (width === 0 || height === 0) return;
-      if (floatEqual(width, latestMenuSize.current.width, 1) && floatEqual(height, latestMenuSize.current.height, 1)) return;
-      reactDom.flushSync(() => {
-        latestHandlePosition.current();
-        forceReposSubmenu();
-      });
-    });
-    const observeTarget = menuRef.current;
-    resizeObserver.observe(observeTarget, {
+    }));
+    const resizeObserverOptions = {
       box: 'border-box'
-    });
-    return () => resizeObserver.unobserve(observeTarget);
-  }, [reposition]);
+    };
+    resizeObserver.observe(menuRef.current, resizeObserverOptions);
+    const anchor = anchorRef == null ? void 0 : anchorRef.current;
+    anchor && resizeObserver.observe(anchor, resizeObserverOptions);
+    return () => resizeObserver.disconnect();
+  }, [isOpen, reposition, anchorRef, handlePosition]);
   react.useEffect(() => {
     if (!isOpen) {
       dispatch(HoverActionTypes.RESET);
