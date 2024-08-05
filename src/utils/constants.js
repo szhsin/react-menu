@@ -61,9 +61,5 @@ export const MenuStateMap = Object.freeze({
 });
 
 export const positionAbsolute = 'absolute';
-export const roleNone = 'presentation';
+export const roleNone = 'none';
 export const roleMenuitem = 'menuitem';
-export const dummyItemProps = {
-  'aria-hidden': true,
-  role: roleMenuitem
-};

@@ -11,7 +11,7 @@ import {
   getScrollAncestor,
   getTransition,
   positionAbsolute,
-  dummyItemProps,
+  roleNone,
   safeCall,
   isMenuOpen,
   menuClass,
@@ -433,14 +433,14 @@ export const MenuList = ({
     >
       <li
         tabIndex={-1}
+        role={roleNone}
         style={{ position: positionAbsolute, left: 0, top: 0, display: 'block', outline: 'none' }}
         ref={focusRef}
-        {...dummyItemProps}
         {...focusProps}
       />
       {arrow && (
         <li
-          {...dummyItemProps}
+          role={roleNone}
           {...arrowProps}
           className={_arrowClassName}
           style={{

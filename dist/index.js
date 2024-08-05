@@ -133,12 +133,8 @@ const MenuStateMap = /*#__PURE__*/Object.freeze({
   exited: 'closed'
 });
 const positionAbsolute = 'absolute';
-const roleNone = 'presentation';
+const roleNone = 'none';
 const roleMenuitem = 'menuitem';
-const dummyItemProps = {
-  'aria-hidden': true,
-  role: roleMenuitem
-};
 
 const isMenuOpen = state => !!state && state[0] === 'o';
 const batchedUpdates = reactDom.unstable_batchedUpdates || (callback => callback());
@@ -1228,6 +1224,7 @@ const MenuList = ({
     },
     children: [/*#__PURE__*/jsxRuntime.jsx("li", {
       tabIndex: -1,
+      role: roleNone,
       style: {
         position: positionAbsolute,
         left: 0,
@@ -1236,10 +1233,9 @@ const MenuList = ({
         outline: 'none'
       },
       ref: focusRef,
-      ...dummyItemProps,
       ...focusProps
     }), arrow && /*#__PURE__*/jsxRuntime.jsx("li", {
-      ...dummyItemProps,
+      role: roleNone,
       ...arrowProps,
       className: _arrowClassName,
       style: {

@@ -3,7 +3,7 @@ import { flushSync } from 'react-dom';
 import { MenuContainer } from './MenuContainer.js';
 import { jsxs, jsx } from 'react/jsx-runtime';
 import { createSubmenuCtx } from '../utils/submenuCtx.js';
-import { SettingsContext, MenuListContext, HoverActionTypes, menuClass, menuArrowClass, positionAbsolute, dummyItemProps, MenuListItemContext, HoverItemContext, Keys, CloseReason, FocusPositions } from '../utils/constants.js';
+import { SettingsContext, MenuListContext, HoverActionTypes, menuClass, menuArrowClass, positionAbsolute, roleNone, MenuListItemContext, HoverItemContext, Keys, CloseReason, FocusPositions } from '../utils/constants.js';
 import { useItems } from '../hooks/useItems.js';
 import { getScrollAncestor, commonProps, mergeProps, safeCall, isMenuOpen, getTransition, batchedUpdates } from '../utils/utils.js';
 import { getPositionHelpers } from '../positionUtils/getPositionHelpers.js';
@@ -365,6 +365,7 @@ const MenuList = ({
     },
     children: [/*#__PURE__*/jsx("li", {
       tabIndex: -1,
+      role: roleNone,
       style: {
         position: positionAbsolute,
         left: 0,
@@ -373,10 +374,9 @@ const MenuList = ({
         outline: 'none'
       },
       ref: focusRef,
-      ...dummyItemProps,
       ...focusProps
     }), arrow && /*#__PURE__*/jsx("li", {
-      ...dummyItemProps,
+      role: roleNone,
       ...arrowProps,
       className: _arrowClassName,
       style: {

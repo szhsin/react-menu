@@ -54,11 +54,7 @@ const MenuStateMap = /*#__PURE__*/Object.freeze({
   exited: 'closed'
 });
 const positionAbsolute = 'absolute';
-const roleNone = 'presentation';
+const roleNone = 'none';
 const roleMenuitem = 'menuitem';
-const dummyItemProps = {
-  'aria-hidden': true,
-  role: roleMenuitem
-};
 
-export { CloseReason, EventHandlersContext, FocusPositions, HoverActionTypes, HoverItemContext, Keys, MenuListContext, MenuListItemContext, MenuStateMap, RadioGroupContext, SettingsContext, dummyItemProps, menuArrowClass, menuButtonClass, menuClass, menuContainerClass, menuDividerClass, menuGroupClass, menuHeaderClass, menuItemClass, positionAbsolute, radioGroupClass, roleMenuitem, roleNone, subMenuClass };
+export { CloseReason, EventHandlersContext, FocusPositions, HoverActionTypes, HoverItemContext, Keys, MenuListContext, MenuListItemContext, MenuStateMap, RadioGroupContext, SettingsContext, menuArrowClass, menuButtonClass, menuClass, menuContainerClass, menuDividerClass, menuGroupClass, menuHeaderClass, menuItemClass, positionAbsolute, radioGroupClass, roleMenuitem, roleNone, subMenuClass };
