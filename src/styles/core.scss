@@ -3,12 +3,12 @@
 
 .szh-menu {
   @include mixins.reset-list;
-  @include mixins.remove-focus;
   box-sizing: border-box;
   width: max-content;
   z-index: 100;
   border: 1px solid var.$border-color;
   background-color: var.$background-color;
+  @include mixins.remove-focus;
 
   &__arrow {
     box-sizing: border-box;
@@ -42,8 +42,8 @@
   }
 
   &__item {
-    @include mixins.remove-focus;
     cursor: pointer;
+    @include mixins.remove-focus;
 
     &--hover {
       background-color: var.$background-color-hover;
