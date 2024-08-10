@@ -26,7 +26,7 @@
     "css": "sass src/styles:dist --no-source-map",
     "clean": "rm -rf dist && mkdir -p dist",
     "start": "run-p \"css -- --watch\" watch",
-    "build": "run-s pret clean lint css bundle",
+    "build": "run-s pret clean lint types css bundle",
     "test": "jest",
     "test:watch": "jest --watch --verbose",
     "test:cov": "jest --coverage=true",
@@ -34,8 +34,7 @@
     "lint:fix": "eslint --fix .",
     "pret": "prettier -c .",
     "pret:fix": "prettier -w .",
-    "types": "dtslint --localTs node_modules/typescript/lib types",
-    "tsc": "cd types && tsc",
+    "types": "cd types && tsc",
     "eg": "npm run dev --prefix example"
   },
   "peerDependencies": {
