@@ -1,12 +1,45 @@
 {
+  "root": true,
+  "env": {
+    "browser": true,
+    "node": true,
+    "es2022": true
+  },
+  "parserOptions": {
+    "ecmaVersion": "latest",
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true
+    }
+  },
   "settings": {
+    "react": {
+      "version": "detect"
+    },
     "next": {
       "rootDir": "example/"
     }
   },
-  "extends": ["plugin:@next/next/recommended"],
+  "plugins": ["react", "react-hooks", "react-hooks-addons"],
+  "extends": [
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "plugin:@next/next/recommended",
+    "plugin:react-hooks/recommended",
+    "prettier"
+  ],
   "rules": {
+    "no-console": ["error", { "allow": ["warn", "error"] }],
+    "no-unused-vars": [
+      "error",
+      {
+        "argsIgnorePattern": "^_\\d?$"
+      }
+    ],
+    "react/prop-types": 0,
+    "react/display-name": 0,
     "react/react-in-jsx-scope": 0,
+    "react-hooks-addons/no-unused-deps": "warn",
     "@next/next/no-img-element": 0
   }
 }
