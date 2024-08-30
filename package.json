@@ -60,7 +60,7 @@
     "babel-plugin-transform-react-remove-prop-types": "^0.4.24",
     "eslint": "^9.9.1",
     "eslint-config-prettier": "^9.1.0",
-    "eslint-plugin-jest": "^28.8.0",
+    "eslint-plugin-jest": "^28.8.1",
     "eslint-plugin-react": "^7.35.0",
     "eslint-plugin-react-hooks": "^4.6.2",
     "eslint-plugin-react-hooks-addons": "^0.3.1",
