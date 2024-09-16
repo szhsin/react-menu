@@ -72,7 +72,7 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "rollup": "^4.21.2",
-    "sass": "^1.77.8",
+    "sass": "^1.78.0",
     "typescript": "^5.5.4"
   },
   "overrides": {
