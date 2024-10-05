@@ -15,6 +15,7 @@ export default [
   jest.configs['flat/recommended'],
   jest.configs['flat/style'],
   react.configs.flat.recommended,
+  reactHooksAddons.configs.recommended,
   {
     ignores: ['**/dist/', '**/types/', '**/coverage/', '**/example/']
   },
@@ -42,8 +43,7 @@ export default [
       jest,
       react,
       // @ts-ignore
-      ['react-hooks']: fixupPluginRules(reactHooks),
-      ['react-hooks-addons']: fixupPluginRules(reactHooksAddons)
+      ['react-hooks']: fixupPluginRules(reactHooks)
     },
     rules: {
       'no-console': ['error', { allow: ['warn', 'error'] }],
