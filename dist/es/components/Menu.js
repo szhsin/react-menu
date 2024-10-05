@@ -5,9 +5,9 @@ import { jsxs, jsx } from 'react/jsx-runtime';
 import { useMenuStateAndFocus } from '../hooks/useMenuStateAndFocus.js';
 import { useClick } from '../hooks/useClick.js';
 import { useCombinedRef } from '../hooks/useCombinedRef.js';
-import { safeCall, mergeProps, getName, isMenuOpen } from '../utils/utils.js';
 import { useMenuChange } from '../hooks/useMenuChange.js';
 import { rootMenuPropTypes, uncontrolledMenuPropTypes } from '../utils/propTypes.js';
+import { safeCall, mergeProps, getName, isMenuOpen } from '../utils/utils.js';
 import { FocusPositions, Keys } from '../utils/constants.js';
 
 const Menu = /*#__PURE__*/forwardRef(function Menu({
