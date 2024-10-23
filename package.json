@@ -46,7 +46,7 @@
     "react-transition-state": "^2.1.2"
   },
   "devDependencies": {
-    "@babel/core": "^7.25.8",
+    "@babel/core": "^7.25.9",
     "@babel/preset-env": "^7.25.4",
     "@babel/preset-react": "^7.24.7",
     "@eslint/compat": "^1.1.1",
