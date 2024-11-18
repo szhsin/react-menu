@@ -530,6 +530,7 @@ export interface MenuItemProps extends Omit<BaseProps<MenuItemModifiers>, 'onCli
   href?: string;
   rel?: string;
   target?: string;
+  download?: string;
   /**
    * Set this prop to make the item a checkbox or radio menu item.
    */
