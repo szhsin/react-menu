@@ -63,3 +63,4 @@ export const MenuStateMap = Object.freeze({
 export const positionAbsolute = 'absolute';
 export const roleNone = 'none';
 export const roleMenuitem = 'menuitem';
+export const noScrollFocus = { preventScroll: true };

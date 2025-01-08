@@ -1,7 +1,7 @@
 import { useState, useCallback, useRef } from 'react';
-import { HoverActionTypes, indexOfNode } from '../utils';
+import { HoverActionTypes, indexOfNode, noScrollFocus } from '../utils';
 
-export const useItems = (menuRef, focusRef) => {
+export const useItems = (menuRef) => {
   const [hoverItem, setHoverItem] = useState();
   const stateRef = useRef({
     items: [],
@@ -22,7 +22,7 @@ export const useItems = (menuRef, focusRef) => {
         if (index > -1) {
           items.splice(index, 1);
           if (item.contains(document.activeElement)) {
-            focusRef.current.focus();
+            menuRef.current.focus(noScrollFocus);
             setHoverItem();
           }
         }
@@ -30,7 +30,7 @@ export const useItems = (menuRef, focusRef) => {
       mutableState.hoverIndex = -1;
       mutableState.sorted = false;
     },
-    [mutableState, focusRef]
+    [mutableState, menuRef]
   );
 
   const dispatch = useCallback(
