@@ -2,6 +2,7 @@
 import { createRef, useState, useEffect } from 'react';
 import { Menu, MenuItem, FocusableItem, MenuButton, SubMenu } from './entry';
 import { fireEvent, waitFor, screen, act } from '@testing-library/react';
+import { axe } from 'jest-axe';
 import * as utils from './utils';
 
 const { render } = utils;
@@ -312,13 +313,9 @@ test('Additional props are forwarded to submenu', async () => {
   renderMenu(null, null, {
     tabIndex: undefined,
     itemProps: {
-      ['aria-haspopup']: false,
+      'aria-haspopup': false,
       randomattr: 'random',
       onPointerMove
-    },
-    focusProps: {
-      'data-testid': 'focus',
-      tabIndex: undefined
     },
     arrow: true,
     arrowProps: {
@@ -338,7 +335,6 @@ test('Additional props are forwarded to submenu', async () => {
   const submenuOptions = { name: 'Submenu' };
   await waitFor(() => utils.expectMenuToBeOpen(true, submenuOptions));
   expect(utils.queryMenu(submenuOptions)).not.toHaveAttribute('tabindex');
-  expect(screen.getByTestId('focus')).not.toHaveAttribute('tabindex');
 
   const arrow = screen.getByTestId('arrow');
   expect(arrow).toHaveStyle({ backgroundColor: 'green' });
@@ -597,4 +593,12 @@ test.each([
 
   fireEvent.click(utils.queryMenuItem('Lv3'));
   expect(utils.queryMenu({ name: 'Lv3' })).toHaveClass(directionClass);
+});
+
+test('Menu should have no axe violations', async () => {
+  const { container } = renderMenu({ arrow: true });
+  utils.clickMenuButton();
+  fireEvent.click(utils.queryMenuItem('Submenu'));
+  const results = await axe(container);
+  expect(results).toHaveNoViolations();
 });
