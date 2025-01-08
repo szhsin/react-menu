@@ -56,5 +56,8 @@ const MenuStateMap = /*#__PURE__*/Object.freeze({
 const positionAbsolute = 'absolute';
 const roleNone = 'none';
 const roleMenuitem = 'menuitem';
+const noScrollFocus = {
+  preventScroll: true
+};
 
-export { CloseReason, EventHandlersContext, FocusPositions, HoverActionTypes, HoverItemContext, Keys, MenuListContext, MenuListItemContext, MenuStateMap, RadioGroupContext, SettingsContext, menuArrowClass, menuButtonClass, menuClass, menuContainerClass, menuDividerClass, menuGroupClass, menuHeaderClass, menuItemClass, positionAbsolute, radioGroupClass, roleMenuitem, roleNone, subMenuClass };
+export { CloseReason, EventHandlersContext, FocusPositions, HoverActionTypes, HoverItemContext, Keys, MenuListContext, MenuListItemContext, MenuStateMap, RadioGroupContext, SettingsContext, menuArrowClass, menuButtonClass, menuClass, menuContainerClass, menuDividerClass, menuGroupClass, menuHeaderClass, menuItemClass, noScrollFocus, positionAbsolute, radioGroupClass, roleMenuitem, roleNone, subMenuClass };

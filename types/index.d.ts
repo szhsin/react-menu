@@ -197,7 +197,7 @@ export interface BaseMenuProps extends Omit<BaseProps, 'style'> {
    */
   arrowProps?: Omit<BaseProps<MenuArrowModifiers>, 'ref'>;
   /**
-   * Properties of this object are spread to a DOM element which captures focus for the menu.
+   * @deprecated This prop is currently ignored. It will be removed in the next major version.
    */
   focusProps?: React.HTMLAttributes<HTMLElement>;
   /**

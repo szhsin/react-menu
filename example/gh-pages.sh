@@ -8,6 +8,7 @@ if [ -z "$check_str" ]; then
     exit 1
 fi
 
+rm -Rf out/
 npm run build
 
 tmpdir="$HOME/gh-pages"
@@ -27,6 +28,5 @@ rm -Rf _next
 cp -Rf "$tmpdir/out/" .
 git add .
 git commit -m "Updates"
-git push
 rm -Rf "$tmpdir"
-echo "Deployed to gh-pages"
+echo "Ready to push gh-pages"

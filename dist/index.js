@@ -135,6 +135,9 @@ const MenuStateMap = /*#__PURE__*/Object.freeze({
 const positionAbsolute = 'absolute';
 const roleNone = 'none';
 const roleMenuitem = 'menuitem';
+const noScrollFocus = {
+  preventScroll: true
+};
 
 const isMenuOpen = state => !!state && state[0] === 'o';
 const batchedUpdates = reactDom.unstable_batchedUpdates || (callback => callback());
@@ -293,7 +296,7 @@ const withHovering = (name, WrappedComponent) => {
   return WithHovering;
 };
 
-const useItems = (menuRef, focusRef) => {
+const useItems = menuRef => {
   const [hoverItem, setHoverItem] = react.useState();
   const stateRef = react.useRef({
     items: [],
@@ -314,14 +317,14 @@ const useItems = (menuRef, focusRef) => {
       if (index > -1) {
         items.splice(index, 1);
         if (item.contains(document.activeElement)) {
-          focusRef.current.focus();
+          menuRef.current.focus(noScrollFocus);
           setHoverItem();
         }
       }
     }
     mutableState.hoverIndex = -1;
     mutableState.sorted = false;
-  }, [mutableState, focusRef]);
+  }, [mutableState, menuRef]);
   const dispatch = react.useCallback((actionType, item, nextIndex) => {
     const {
       items,
@@ -882,7 +885,6 @@ const MenuList = ({
   anchorRef,
   containerRef,
   containerProps,
-  focusProps,
   externalRef,
   parentScrollingRef,
   align = 'start',
@@ -900,6 +902,7 @@ const MenuList = ({
   shift = 0,
   children,
   onClose,
+  focusProps: _1,
   ...restProps
 }) => {
   const [menuPosition, setMenuPosition] = react.useState({
@@ -926,15 +929,14 @@ const MenuList = ({
     submenuCtx: parentSubmenuCtx,
     reposSubmenu: reposFlag = repositionFlag
   } = react.useContext(MenuListContext);
-  const menuRef = react.useRef(null);
-  const focusRef = react.useRef();
+  const menuRef = react.useRef();
   const arrowRef = react.useRef();
   const prevOpen = react.useRef(false);
   const {
     hoverItem,
     dispatch,
     updateItems
-  } = useItems(menuRef, focusRef);
+  } = useItems(menuRef);
   const isOpen = isMenuOpen(state);
   const openTransition = getTransition(transition, 'open');
   const closeTransition = getTransition(transition, 'close');
@@ -974,7 +976,7 @@ const MenuList = ({
     e.stopPropagation();
     submenuCtx.on(submenuCloseDelay, () => {
       dispatch(HoverActionTypes.RESET);
-      focusRef.current.focus();
+      menuRef.current.focus(noScrollFocus);
     });
   };
   const onPointerLeave = e => {
@@ -1153,7 +1155,7 @@ const MenuList = ({
       const id = setTimeout(() => {
         const menuElt = menuRef.current;
         if (menuElt && !menuElt.contains(document.activeElement)) {
-          focusRef.current.focus();
+          menuElt.focus(noScrollFocus);
           setItemFocus();
         }
       }, openTransition ? 170 : 100);
@@ -1222,20 +1224,8 @@ const MenuList = ({
       left: menuPosition.x,
       top: menuPosition.y
     },
-    children: [/*#__PURE__*/jsxRuntime.jsx("li", {
-      tabIndex: -1,
-      role: roleNone,
-      style: {
-        position: positionAbsolute,
-        left: 0,
-        top: 0,
-        display: 'block',
-        outline: 'none'
-      },
-      ref: focusRef,
-      ...focusProps
-    }), arrow && /*#__PURE__*/jsxRuntime.jsx("li", {
-      role: roleNone,
+    children: [arrow && /*#__PURE__*/jsxRuntime.jsx("li", {
+      "aria-hidden": true,
       ...arrowProps,
       className: _arrowClassName,
       style: {
@@ -1357,7 +1347,7 @@ const ControlledMenu = /*#__PURE__*/react.forwardRef(function ControlledMenu({
 });
 process.env.NODE_ENV !== "production" ? ControlledMenu.propTypes = {
   ...rootMenuPropTypes,
-  state: /*#__PURE__*/propTypes.oneOf( /*#__PURE__*/values(MenuStateMap)),
+  state: /*#__PURE__*/propTypes.oneOf(/*#__PURE__*/values(MenuStateMap)),
   anchorPoint: /*#__PURE__*/propTypes.exact({
     x: propTypes.number,
     y: propTypes.number
@@ -1788,7 +1778,7 @@ process.env.NODE_ENV !== "production" ? FocusableItem.propTypes = {
   children: propTypes.func
 } : void 0;
 
-const MenuDivider = /*#__PURE__*/react.memo( /*#__PURE__*/react.forwardRef(function MenuDivider({
+const MenuDivider = /*#__PURE__*/react.memo(/*#__PURE__*/react.forwardRef(function MenuDivider({
   className,
   ...restProps
 }, externalRef) {
@@ -1807,7 +1797,7 @@ process.env.NODE_ENV !== "production" ? MenuDivider.propTypes = {
   ...stylePropTypes()
 } : void 0;
 
-const MenuHeader = /*#__PURE__*/react.memo( /*#__PURE__*/react.forwardRef(function MenuHeader({
+const MenuHeader = /*#__PURE__*/react.memo(/*#__PURE__*/react.forwardRef(function MenuHeader({
   className,
   ...restProps
 }, externalRef) {

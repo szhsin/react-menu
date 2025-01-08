@@ -100,7 +100,7 @@ const ControlledMenu = /*#__PURE__*/forwardRef(function ControlledMenu({
 });
 process.env.NODE_ENV !== "production" ? ControlledMenu.propTypes = {
   ...rootMenuPropTypes,
-  state: /*#__PURE__*/oneOf( /*#__PURE__*/values(MenuStateMap)),
+  state: /*#__PURE__*/oneOf(/*#__PURE__*/values(MenuStateMap)),
   anchorPoint: /*#__PURE__*/exact({
     x: number,
     y: number

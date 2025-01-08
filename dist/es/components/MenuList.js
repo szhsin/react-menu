@@ -3,7 +3,7 @@ import { flushSync } from 'react-dom';
 import { MenuContainer } from './MenuContainer.js';
 import { jsxs, jsx } from 'react/jsx-runtime';
 import { createSubmenuCtx } from '../utils/submenuCtx.js';
-import { SettingsContext, MenuListContext, HoverActionTypes, menuClass, menuArrowClass, positionAbsolute, roleNone, MenuListItemContext, HoverItemContext, Keys, CloseReason, FocusPositions } from '../utils/constants.js';
+import { SettingsContext, MenuListContext, HoverActionTypes, noScrollFocus, menuClass, menuArrowClass, positionAbsolute, MenuListItemContext, HoverItemContext, Keys, CloseReason, FocusPositions } from '../utils/constants.js';
 import { useItems } from '../hooks/useItems.js';
 import { getScrollAncestor, commonProps, mergeProps, safeCall, isMenuOpen, getTransition, batchedUpdates } from '../utils/utils.js';
 import { getPositionHelpers } from '../positionUtils/getPositionHelpers.js';
@@ -23,7 +23,6 @@ const MenuList = ({
   anchorRef,
   containerRef,
   containerProps,
-  focusProps,
   externalRef,
   parentScrollingRef,
   align = 'start',
@@ -41,6 +40,7 @@ const MenuList = ({
   shift = 0,
   children,
   onClose,
+  focusProps: _1,
   ...restProps
 }) => {
   const [menuPosition, setMenuPosition] = useState({
@@ -67,15 +67,14 @@ const MenuList = ({
     submenuCtx: parentSubmenuCtx,
     reposSubmenu: reposFlag = repositionFlag
   } = useContext(MenuListContext);
-  const menuRef = useRef(null);
-  const focusRef = useRef();
+  const menuRef = useRef();
   const arrowRef = useRef();
   const prevOpen = useRef(false);
   const {
     hoverItem,
     dispatch,
     updateItems
-  } = useItems(menuRef, focusRef);
+  } = useItems(menuRef);
   const isOpen = isMenuOpen(state);
   const openTransition = getTransition(transition, 'open');
   const closeTransition = getTransition(transition, 'close');
@@ -115,7 +114,7 @@ const MenuList = ({
     e.stopPropagation();
     submenuCtx.on(submenuCloseDelay, () => {
       dispatch(HoverActionTypes.RESET);
-      focusRef.current.focus();
+      menuRef.current.focus(noScrollFocus);
     });
   };
   const onPointerLeave = e => {
@@ -294,7 +293,7 @@ const MenuList = ({
       const id = setTimeout(() => {
         const menuElt = menuRef.current;
         if (menuElt && !menuElt.contains(document.activeElement)) {
-          focusRef.current.focus();
+          menuElt.focus(noScrollFocus);
           setItemFocus();
         }
       }, openTransition ? 170 : 100);
@@ -363,20 +362,8 @@ const MenuList = ({
       left: menuPosition.x,
       top: menuPosition.y
     },
-    children: [/*#__PURE__*/jsx("li", {
-      tabIndex: -1,
-      role: roleNone,
-      style: {
-        position: positionAbsolute,
-        left: 0,
-        top: 0,
-        display: 'block',
-        outline: 'none'
-      },
-      ref: focusRef,
-      ...focusProps
-    }), arrow && /*#__PURE__*/jsx("li", {
-      role: roleNone,
+    children: [arrow && /*#__PURE__*/jsx("li", {
+      "aria-hidden": true,
       ...arrowProps,
       className: _arrowClassName,
       style: {

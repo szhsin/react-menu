@@ -17,8 +17,7 @@ export const delayFor = (delay) =>
 export const queryMenu = ({ name } = {}) =>
   document.querySelector(`[role="menu"]${name ? `[aria-label="${name}"]` : ''}`);
 
-export const expectMenuToHaveFocus = (options) =>
-  expect(queryMenu(options).firstChild).toHaveFocus();
+export const expectMenuToHaveFocus = (options) => expect(queryMenu(options)).toHaveFocus();
 
 export const expectMenuToBeInTheDocument = (truthy, options) =>
   expectToBe(queryMenu(options), truthy).toBeInTheDocument();

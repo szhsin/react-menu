@@ -4,7 +4,7 @@ import { useBEM } from '../hooks/useBEM.js';
 import { roleNone, menuClass, menuHeaderClass } from '../utils/constants.js';
 import { stylePropTypes } from '../utils/propTypes.js';
 
-const MenuHeader = /*#__PURE__*/memo( /*#__PURE__*/forwardRef(function MenuHeader({
+const MenuHeader = /*#__PURE__*/memo(/*#__PURE__*/forwardRef(function MenuHeader({
   className,
   ...restProps
 }, externalRef) {

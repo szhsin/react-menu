@@ -161,8 +161,8 @@ test('Additional props are forwarded to Menu', () => {
   const onPointerEnter = jest.fn();
   const onKeyDown = jest.fn();
   utils.renderMenu({
-    ['aria-label']: 'test',
-    ['aria-haspopup']: true,
+    'aria-label': 'test',
+    'aria-haspopup': true,
     randomattr: 'random',
     tabIndex: undefined,
     onPointerEnter,
@@ -175,8 +175,7 @@ test('Additional props are forwarded to Menu', () => {
       onKeyDown
     },
     focusProps: {
-      'data-testid': 'focus',
-      tabIndex: undefined
+      'focus-props': 'focus'
     }
   });
   utils.clickMenuButton();
@@ -187,13 +186,12 @@ test('Additional props are forwarded to Menu', () => {
   expect(container).toHaveAttribute('id', 'menu-container');
   expect(container).toHaveStyle({ color: 'blue', position: 'absolute' });
 
-  expect(screen.getByTestId('focus')).not.toHaveAttribute('tabindex');
-
   const menu = utils.queryMenu();
   expect(menu).toHaveAttribute('aria-label', 'test');
   expect(menu).toHaveAttribute('aria-haspopup', 'true');
   expect(menu).toHaveAttribute('randomattr', 'random');
   expect(menu).not.toHaveAttribute('tabindex');
+  expect(menu).not.toHaveAttribute('focus-props');
   fireEvent.pointerEnter(menu);
   expect(onPointerEnter).toHaveBeenCalledTimes(2);
   fireEvent.keyDown(menu, { key: 'm' });

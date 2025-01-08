@@ -11,7 +11,7 @@ import {
   getScrollAncestor,
   getTransition,
   positionAbsolute,
-  roleNone,
+  noScrollFocus,
   safeCall,
   isMenuOpen,
   menuClass,
@@ -38,7 +38,6 @@ export const MenuList = ({
   anchorRef,
   containerRef,
   containerProps,
-  focusProps,
   externalRef,
   parentScrollingRef,
   align = 'start',
@@ -56,6 +55,7 @@ export const MenuList = ({
   shift = 0,
   children,
   onClose,
+  focusProps: _1,
   ...restProps
 }) => {
   const [menuPosition, setMenuPosition] = useState({ x: offScreen, y: offScreen });
@@ -79,11 +79,10 @@ export const MenuList = ({
   // Using top-level repositionFlag to cascade reposition into all descendent menus.
   const { submenuCtx: parentSubmenuCtx, reposSubmenu: reposFlag = repositionFlag } =
     useContext(MenuListContext);
-  const menuRef = useRef(null);
-  const focusRef = useRef();
+  const menuRef = useRef();
   const arrowRef = useRef();
   const prevOpen = useRef(false);
-  const { hoverItem, dispatch, updateItems } = useItems(menuRef, focusRef);
+  const { hoverItem, dispatch, updateItems } = useItems(menuRef);
 
   const isOpen = isMenuOpen(state);
   const openTransition = getTransition(transition, 'open');
@@ -136,7 +135,7 @@ export const MenuList = ({
     e.stopPropagation();
     submenuCtx.on(submenuCloseDelay, () => {
       dispatch(HoverActionTypes.RESET);
-      focusRef.current.focus();
+      menuRef.current.focus(noScrollFocus);
     });
   };
 
@@ -349,7 +348,7 @@ export const MenuList = ({
           // If focus has already been set to a children element, don't set focus on menu or item
           const menuElt = menuRef.current;
           if (menuElt && !menuElt.contains(document.activeElement)) {
-            focusRef.current.focus();
+            menuElt.focus(noScrollFocus);
             setItemFocus();
           }
         },
@@ -431,16 +430,9 @@ export const MenuList = ({
         top: menuPosition.y
       }}
     >
-      <li
-        tabIndex={-1}
-        role={roleNone}
-        style={{ position: positionAbsolute, left: 0, top: 0, display: 'block', outline: 'none' }}
-        ref={focusRef}
-        {...focusProps}
-      />
       {arrow && (
         <li
-          role={roleNone}
+          aria-hidden
           {...arrowProps}
           className={_arrowClassName}
           style={{
