@@ -66,10 +66,10 @@ input[type='text'] {
   font-size: 1rem;
   padding: 0.375rem 0.75rem;
   border-radius: var.$border-radius-medium;
-  @include mixins.remove-focus;
-  @include mixins.focus(2px);
   @include mixins.border;
   @include mixins.transition((border-color, box-shadow));
+  @include mixins.remove-focus;
+  @include mixins.focus(2px);
   .szh-app--theme-dark & {
     color: inherit;
     background-color: var.$background-dark;
