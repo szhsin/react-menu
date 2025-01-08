@@ -4,7 +4,7 @@ import { useBEM } from '../hooks/useBEM.js';
 import { menuClass, menuDividerClass } from '../utils/constants.js';
 import { stylePropTypes } from '../utils/propTypes.js';
 
-const MenuDivider = /*#__PURE__*/memo( /*#__PURE__*/forwardRef(function MenuDivider({
+const MenuDivider = /*#__PURE__*/memo(/*#__PURE__*/forwardRef(function MenuDivider({
   className,
   ...restProps
 }, externalRef) {
