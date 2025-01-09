@@ -75,6 +75,11 @@
     "sass": "^1.80.3",
     "typescript": "^5.7.2"
   },
+  "overrides": {
+    "whatwg-url@11.0.0": {
+      "tr46": "^4"
+    }
+  },
   "keywords": [
     "react",
     "menu",
