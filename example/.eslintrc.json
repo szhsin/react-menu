@@ -20,12 +20,13 @@
       "rootDir": "example/"
     }
   },
-  "plugins": ["react", "react-hooks", "react-hooks-addons"],
+  "plugins": ["react"],
   "extends": [
     "eslint:recommended",
     "plugin:react/recommended",
     "plugin:@next/next/recommended",
     "plugin:react-hooks/recommended",
+    "plugin:react-hooks-addons/recommended-legacy",
     "prettier"
   ],
   "rules": {
@@ -39,7 +40,6 @@
     "react/prop-types": 0,
     "react/display-name": 0,
     "react/react-in-jsx-scope": 0,
-    "react-hooks-addons/no-unused-deps": "warn",
     "@next/next/no-img-element": 0
   }
 }
