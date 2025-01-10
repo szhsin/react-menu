@@ -15,14 +15,13 @@ module.exports = {
     skipForOfIteratorClosing: true
   },
   shouldPrintComment: (val) => /[@#]__PURE__/.test(val),
-  plugins: ['pure-annotations', ['transform-react-remove-prop-types', { mode: 'unsafe-wrap' }]],
+  plugins: ['pure-annotations'],
   presets: [
     [
       '@babel/preset-env',
       {
         bugfixes: true,
         include: [
-          '@babel/plugin-transform-optional-chaining',
           '@babel/plugin-transform-nullish-coalescing-operator',
           '@babel/plugin-transform-optional-catch-binding'
         ],

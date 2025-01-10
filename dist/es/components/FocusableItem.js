@@ -1,11 +1,9 @@
 import { useRef, useContext, useMemo } from 'react';
-import { bool, func } from 'prop-types';
 import { jsx } from 'react/jsx-runtime';
 import { useItemState } from '../hooks/useItemState.js';
 import { useCombinedRef } from '../hooks/useCombinedRef.js';
 import { useBEM } from '../hooks/useBEM.js';
 import { withHovering } from '../utils/withHovering.js';
-import { stylePropTypes } from '../utils/propTypes.js';
 import { EventHandlersContext, roleMenuitem, menuClass, menuItemClass } from '../utils/constants.js';
 import { safeCall, mergeProps, commonProps } from '../utils/utils.js';
 
@@ -57,10 +55,5 @@ const FocusableItem = /*#__PURE__*/withHovering('FocusableItem', function Focusa
     children: renderChildren
   });
 });
-process.env.NODE_ENV !== "production" ? FocusableItem.propTypes = {
-  ...stylePropTypes(),
-  disabled: bool,
-  children: func
-} : void 0;
 
 export { FocusableItem };

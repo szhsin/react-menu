@@ -1,17 +1,7 @@
 import { forwardRef, useRef, useMemo } from 'react';
 import { createPortal } from 'react-dom';
-import { string, number, bool, func, object, oneOf, oneOfType, exact } from 'prop-types';
 import { MenuList } from './MenuList';
-import {
-  rootMenuPropTypes,
-  safeCall,
-  values,
-  CloseReason,
-  Keys,
-  MenuStateMap,
-  EventHandlersContext,
-  SettingsContext
-} from '../utils';
+import { safeCall, CloseReason, Keys, EventHandlersContext, SettingsContext } from '../utils';
 
 export const ControlledMenu = forwardRef(function ControlledMenu(
   {
@@ -133,19 +123,3 @@ export const ControlledMenu = forwardRef(function ControlledMenu(
   }
   return menuList;
 });
-
-ControlledMenu.propTypes /* remove-proptypes */ = {
-  ...rootMenuPropTypes,
-  state: oneOf(values(MenuStateMap)),
-  anchorPoint: exact({
-    x: number,
-    y: number
-  }),
-  anchorRef: object,
-  captureFocus: bool,
-  menuItemFocus: exact({
-    position: oneOfType([string, number]),
-    alwaysUpdate: bool
-  }),
-  onClose: func
-};

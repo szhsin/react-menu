@@ -1,7 +1,6 @@
 'use strict';
 
 var react = require('react');
-var propTypes = require('prop-types');
 var jsxRuntime = require('react/jsx-runtime');
 var reactDom = require('react-dom');
 var reactTransitionState = require('react-transition-state');
@@ -141,7 +140,6 @@ const noScrollFocus = {
 
 const isMenuOpen = state => !!state && state[0] === 'o';
 const batchedUpdates = reactDom.unstable_batchedUpdates || (callback => callback());
-const values = Object.values || (obj => Object.keys(obj).map(key => obj[key]));
 const getTransition = (transition, name) => transition === true || !!(transition && transition[name]);
 const safeCall = (fn, arg) => typeof fn === 'function' ? fn(arg) : fn;
 const internalKey = '_szhsinMenu';
@@ -206,54 +204,6 @@ function indexOfNode(nodeList, node) {
   return -1;
 }
 
-const stylePropTypes = name => ({
-  [name ? `${name}ClassName` : 'className']: propTypes.oneOfType([propTypes.string, propTypes.func])
-});
-const menuPropTypes = {
-  className: propTypes.string,
-  ...stylePropTypes('menu'),
-  arrowProps: propTypes.object,
-  focusProps: propTypes.object,
-  menuStyle: propTypes.object,
-  arrow: propTypes.bool,
-  setDownOverflow: propTypes.bool,
-  gap: propTypes.number,
-  shift: propTypes.number,
-  align: /*#__PURE__*/propTypes.oneOf(['start', 'center', 'end']),
-  direction: /*#__PURE__*/propTypes.oneOf(['left', 'right', 'top', 'bottom']),
-  position: /*#__PURE__*/propTypes.oneOf(['auto', 'anchor', 'initial']),
-  overflow: /*#__PURE__*/propTypes.oneOf(['auto', 'visible', 'hidden'])
-};
-const rootMenuPropTypes = {
-  ...menuPropTypes,
-  containerProps: propTypes.object,
-  initialMounted: propTypes.bool,
-  unmountOnClose: propTypes.bool,
-  transition: /*#__PURE__*/propTypes.oneOfType([propTypes.bool, /*#__PURE__*/propTypes.exact({
-    open: propTypes.bool,
-    close: propTypes.bool,
-    item: propTypes.bool
-  })]),
-  transitionTimeout: propTypes.number,
-  boundingBoxRef: propTypes.object,
-  boundingBoxPadding: propTypes.string,
-  reposition: /*#__PURE__*/propTypes.oneOf(['auto', 'initial']),
-  repositionFlag: /*#__PURE__*/propTypes.oneOfType([propTypes.string, propTypes.number]),
-  viewScroll: /*#__PURE__*/propTypes.oneOf(['auto', 'close', 'initial']),
-  submenuOpenDelay: propTypes.number,
-  submenuCloseDelay: propTypes.number,
-  portal: /*#__PURE__*/propTypes.oneOfType([propTypes.bool, /*#__PURE__*/propTypes.exact({
-    target: propTypes.object,
-    stablePosition: propTypes.bool
-  })]),
-  theming: propTypes.string,
-  onItemClick: propTypes.func
-};
-const uncontrolledMenuPropTypes = {
-  instanceRef: /*#__PURE__*/propTypes.oneOfType([propTypes.object, propTypes.func]),
-  onMenuChange: propTypes.func
-};
-
 const createSubmenuCtx = () => {
   let timer,
     count = 0;
@@ -269,7 +219,7 @@ const createSubmenuCtx = () => {
           pending();
         }, closeDelay);
       } else {
-        settled == null || settled();
+        settled?.();
       }
     },
     off: () => {
@@ -524,11 +474,6 @@ const MenuButton = /*#__PURE__*/defineName('MenuButton', /*#__PURE__*/react.forw
     children: children
   });
 }));
-process.env.NODE_ENV !== "production" ? MenuButton.propTypes = {
-  ...stylePropTypes(),
-  isOpen: propTypes.bool,
-  disabled: propTypes.bool
-} : void 0;
 
 const MenuContainer = ({
   className,
@@ -575,7 +520,7 @@ const MenuContainer = ({
     }),
     style: {
       position: 'absolute',
-      ...(containerProps == null ? void 0 : containerProps.style)
+      ...containerProps?.style
     },
     ref: containerRef,
     children: children
@@ -983,8 +928,7 @@ const MenuList = ({
     if (e.target === e.currentTarget) submenuCtx.off();
   };
   const handlePosition = react.useCallback(noOverflowCheck => {
-    var _anchorRef$current;
-    const anchorRect = anchorRef ? (_anchorRef$current = anchorRef.current) == null ? void 0 : _anchorRef$current.getBoundingClientRect() : anchorPoint ? {
+    const anchorRect = anchorRef ? anchorRef.current?.getBoundingClientRect() : anchorPoint ? {
       left: anchorPoint.x,
       right: anchorPoint.x,
       top: anchorPoint.y,
@@ -1126,7 +1070,7 @@ const MenuList = ({
       box: 'border-box'
     };
     resizeObserver.observe(menuRef.current, resizeObserverOptions);
-    const anchor = anchorRef == null ? void 0 : anchorRef.current;
+    const anchor = anchorRef?.current;
     anchor && resizeObserver.observe(anchor, resizeObserverOptions);
     return () => resizeObserver.disconnect();
   }, [isOpen, reposition, anchorRef, handlePosition]);
@@ -1203,7 +1147,7 @@ const MenuList = ({
     "aria-label": ariaLabel,
     ...commonProps(isDisabled),
     ...mergeProps({
-      onPointerEnter: parentSubmenuCtx == null ? void 0 : parentSubmenuCtx.off,
+      onPointerEnter: parentSubmenuCtx?.off,
       onPointerMove,
       onPointerLeave,
       onKeyDown,
@@ -1345,21 +1289,6 @@ const ControlledMenu = /*#__PURE__*/react.forwardRef(function ControlledMenu({
   }
   return menuList;
 });
-process.env.NODE_ENV !== "production" ? ControlledMenu.propTypes = {
-  ...rootMenuPropTypes,
-  state: /*#__PURE__*/propTypes.oneOf(/*#__PURE__*/values(MenuStateMap)),
-  anchorPoint: /*#__PURE__*/propTypes.exact({
-    x: propTypes.number,
-    y: propTypes.number
-  }),
-  anchorRef: propTypes.object,
-  captureFocus: propTypes.bool,
-  menuItemFocus: /*#__PURE__*/propTypes.exact({
-    position: /*#__PURE__*/propTypes.oneOfType([propTypes.string, propTypes.number]),
-    alwaysUpdate: propTypes.bool
-  }),
-  onClose: propTypes.func
-} : void 0;
 
 const Menu = /*#__PURE__*/react.forwardRef(function Menu({
   'aria-label': ariaLabel,
@@ -1425,11 +1354,6 @@ const Menu = /*#__PURE__*/react.forwardRef(function Menu({
     })]
   });
 });
-process.env.NODE_ENV !== "production" ? Menu.propTypes = {
-  ...rootMenuPropTypes,
-  ...uncontrolledMenuPropTypes,
-  menuButton: propTypes.oneOfType([propTypes.element, propTypes.func]).isRequired
-} : void 0;
 
 const SubMenu = /*#__PURE__*/withHovering('SubMenu', function SubMenu({
   'aria-label': ariaLabel,
@@ -1614,16 +1538,6 @@ const SubMenu = /*#__PURE__*/withHovering('SubMenu', function SubMenu({
     }), state && getMenuList()]
   });
 });
-process.env.NODE_ENV !== "production" ? SubMenu.propTypes = {
-  ...menuPropTypes,
-  ...uncontrolledMenuPropTypes,
-  disabled: propTypes.bool,
-  openTrigger: /*#__PURE__*/propTypes.oneOf(['none', 'clickOnly']),
-  label: /*#__PURE__*/propTypes.oneOfType([propTypes.node, propTypes.func]),
-  itemProps: /*#__PURE__*/propTypes.shape({
-    ...stylePropTypes()
-  })
-} : void 0;
 
 const MenuItem = /*#__PURE__*/withHovering('MenuItem', function MenuItem({
   className,
@@ -1713,16 +1627,6 @@ const MenuItem = /*#__PURE__*/withHovering('MenuItem', function MenuItem({
     ...menuItemProps
   });
 });
-process.env.NODE_ENV !== "production" ? MenuItem.propTypes = {
-  ...stylePropTypes(),
-  value: propTypes.any,
-  href: propTypes.string,
-  type: /*#__PURE__*/propTypes.oneOf(['checkbox', 'radio']),
-  checked: propTypes.bool,
-  disabled: propTypes.bool,
-  children: /*#__PURE__*/propTypes.oneOfType([propTypes.node, propTypes.func]),
-  onClick: propTypes.func
-} : void 0;
 
 const FocusableItem = /*#__PURE__*/withHovering('FocusableItem', function FocusableItem({
   className,
@@ -1772,11 +1676,6 @@ const FocusableItem = /*#__PURE__*/withHovering('FocusableItem', function Focusa
     children: renderChildren
   });
 });
-process.env.NODE_ENV !== "production" ? FocusableItem.propTypes = {
-  ...stylePropTypes(),
-  disabled: propTypes.bool,
-  children: propTypes.func
-} : void 0;
 
 const MenuDivider = /*#__PURE__*/react.memo(/*#__PURE__*/react.forwardRef(function MenuDivider({
   className,
@@ -1793,9 +1692,6 @@ const MenuDivider = /*#__PURE__*/react.memo(/*#__PURE__*/react.forwardRef(functi
     })
   });
 }));
-process.env.NODE_ENV !== "production" ? MenuDivider.propTypes = {
-  ...stylePropTypes()
-} : void 0;
 
 const MenuHeader = /*#__PURE__*/react.memo(/*#__PURE__*/react.forwardRef(function MenuHeader({
   className,
@@ -1812,9 +1708,6 @@ const MenuHeader = /*#__PURE__*/react.memo(/*#__PURE__*/react.forwardRef(functio
     })
   });
 }));
-process.env.NODE_ENV !== "production" ? MenuHeader.propTypes = {
-  ...stylePropTypes()
-} : void 0;
 
 const MenuGroup = /*#__PURE__*/react.forwardRef(function MenuGroup({
   className,
@@ -1856,10 +1749,6 @@ const MenuGroup = /*#__PURE__*/react.forwardRef(function MenuGroup({
     }
   });
 });
-process.env.NODE_ENV !== "production" ? MenuGroup.propTypes = {
-  ...stylePropTypes(),
-  takeOverflow: propTypes.bool
-} : void 0;
 
 const MenuRadioGroup = /*#__PURE__*/react.forwardRef(function MenuRadioGroup({
   'aria-label': ariaLabel,
@@ -1892,12 +1781,6 @@ const MenuRadioGroup = /*#__PURE__*/react.forwardRef(function MenuRadioGroup({
     })
   });
 });
-process.env.NODE_ENV !== "production" ? MenuRadioGroup.propTypes = {
-  ...stylePropTypes(),
-  name: propTypes.string,
-  value: propTypes.any,
-  onRadioChange: propTypes.func
-} : void 0;
 
 exports.ControlledMenu = ControlledMenu;
 exports.FocusableItem = FocusableItem;

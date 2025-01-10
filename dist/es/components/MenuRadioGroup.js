@@ -1,9 +1,7 @@
 import { forwardRef, useMemo } from 'react';
-import { string, any, func } from 'prop-types';
 import { jsx } from 'react/jsx-runtime';
 import { useBEM } from '../hooks/useBEM.js';
 import { RadioGroupContext, roleNone, menuClass, radioGroupClass } from '../utils/constants.js';
-import { stylePropTypes } from '../utils/propTypes.js';
 
 const MenuRadioGroup = /*#__PURE__*/forwardRef(function MenuRadioGroup({
   'aria-label': ariaLabel,
@@ -36,11 +34,5 @@ const MenuRadioGroup = /*#__PURE__*/forwardRef(function MenuRadioGroup({
     })
   });
 });
-process.env.NODE_ENV !== "production" ? MenuRadioGroup.propTypes = {
-  ...stylePropTypes(),
-  name: string,
-  value: any,
-  onRadioChange: func
-} : void 0;
 
 export { MenuRadioGroup };

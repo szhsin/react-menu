@@ -1,10 +1,8 @@
 import { useContext, useRef, useState, useEffect, useImperativeHandle, useMemo } from 'react';
 import { createPortal } from 'react-dom';
-import { bool, oneOf, oneOfType, node, func, shape } from 'prop-types';
 import { MenuList } from './MenuList.js';
 import { jsxs, jsx } from 'react/jsx-runtime';
 import { withHovering } from '../utils/withHovering.js';
-import { menuPropTypes, uncontrolledMenuPropTypes, stylePropTypes } from '../utils/propTypes.js';
 import { useMenuStateAndFocus } from '../hooks/useMenuStateAndFocus.js';
 import { useItemEffect } from '../hooks/useItemEffect.js';
 import { useMenuChange } from '../hooks/useMenuChange.js';
@@ -196,15 +194,5 @@ const SubMenu = /*#__PURE__*/withHovering('SubMenu', function SubMenu({
     }), state && getMenuList()]
   });
 });
-process.env.NODE_ENV !== "production" ? SubMenu.propTypes = {
-  ...menuPropTypes,
-  ...uncontrolledMenuPropTypes,
-  disabled: bool,
-  openTrigger: /*#__PURE__*/oneOf(['none', 'clickOnly']),
-  label: /*#__PURE__*/oneOfType([node, func]),
-  itemProps: /*#__PURE__*/shape({
-    ...stylePropTypes()
-  })
-} : void 0;
 
 export { SubMenu };

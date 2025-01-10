@@ -6,19 +6,9 @@ import {
   useCallback,
   useImperativeHandle
 } from 'react';
-import { element, func, oneOfType } from 'prop-types';
 import { ControlledMenu } from './ControlledMenu';
 import { useMenuChange, useMenuStateAndFocus, useCombinedRef, useClick } from '../hooks';
-import {
-  getName,
-  mergeProps,
-  safeCall,
-  isMenuOpen,
-  uncontrolledMenuPropTypes,
-  rootMenuPropTypes,
-  Keys,
-  FocusPositions
-} from '../utils';
+import { getName, mergeProps, safeCall, isMenuOpen, Keys, FocusPositions } from '../utils';
 
 export const Menu = forwardRef(function Menu(
   {
@@ -102,9 +92,3 @@ export const Menu = forwardRef(function Menu(
     </Fragment>
   );
 });
-
-Menu.propTypes = {
-  ...rootMenuPropTypes,
-  ...uncontrolledMenuPropTypes,
-  menuButton: oneOfType([element, func]).isRequired
-};

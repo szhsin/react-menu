@@ -1,7 +1,6 @@
 import { forwardRef, useMemo } from 'react';
-import { any, string, func } from 'prop-types';
 import { useBEM } from '../hooks';
-import { stylePropTypes, menuClass, radioGroupClass, RadioGroupContext, roleNone } from '../utils';
+import { menuClass, radioGroupClass, RadioGroupContext, roleNone } from '../utils';
 
 export const MenuRadioGroup = forwardRef(function MenuRadioGroup(
   { 'aria-label': ariaLabel, className, name, value, onRadioChange, ...restProps },
@@ -26,10 +25,3 @@ export const MenuRadioGroup = forwardRef(function MenuRadioGroup(
     </RadioGroupContext.Provider>
   );
 });
-
-MenuRadioGroup.propTypes = {
-  ...stylePropTypes(),
-  name: string,
-  value: any,
-  onRadioChange: func
-};

@@ -49,7 +49,7 @@ const MenuContainer = ({
     }),
     style: {
       position: 'absolute',
-      ...(containerProps == null ? void 0 : containerProps.style)
+      ...containerProps?.style
     },
     ref: containerRef,
     children: children

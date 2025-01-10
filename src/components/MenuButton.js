@@ -1,7 +1,6 @@
 import { forwardRef, useMemo } from 'react';
-import { bool } from 'prop-types';
 import { useBEM } from '../hooks';
-import { defineName, menuButtonClass, stylePropTypes } from '../utils';
+import { defineName, menuButtonClass } from '../utils';
 
 export const MenuButton = defineName(
   'MenuButton',
@@ -24,9 +23,3 @@ export const MenuButton = defineName(
     );
   })
 );
-
-MenuButton.propTypes = {
-  ...stylePropTypes(),
-  isOpen: bool,
-  disabled: bool
-};

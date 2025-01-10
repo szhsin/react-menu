@@ -1,5 +1,4 @@
 import { useContext, useMemo } from 'react';
-import { any, string, bool, func, node, oneOf, oneOfType } from 'prop-types';
 import { useBEM, useItemState, useCombinedRef } from '../hooks';
 import {
   mergeProps,
@@ -7,7 +6,6 @@ import {
   roleNone,
   roleMenuitem,
   safeCall,
-  stylePropTypes,
   menuClass,
   menuItemClass,
   withHovering,
@@ -112,14 +110,3 @@ export const MenuItem = withHovering(
     );
   }
 );
-
-MenuItem.propTypes = {
-  ...stylePropTypes(),
-  value: any,
-  href: string,
-  type: oneOf(['checkbox', 'radio']),
-  checked: bool,
-  disabled: bool,
-  children: oneOfType([node, func]),
-  onClick: func
-};

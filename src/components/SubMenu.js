@@ -1,6 +1,5 @@
 import { useState, useRef, useContext, useEffect, useMemo, useImperativeHandle } from 'react';
 import { createPortal } from 'react-dom';
-import { node, func, bool, shape, oneOf, oneOfType } from 'prop-types';
 import {
   useBEM,
   useCombinedRef,
@@ -16,9 +15,6 @@ import {
   roleNone,
   roleMenuitem,
   safeCall,
-  stylePropTypes,
-  uncontrolledMenuPropTypes,
-  menuPropTypes,
   menuClass,
   subMenuClass,
   menuItemClass,
@@ -236,14 +232,3 @@ export const SubMenu = withHovering(
     );
   }
 );
-
-SubMenu.propTypes = {
-  ...menuPropTypes,
-  ...uncontrolledMenuPropTypes,
-  disabled: bool,
-  openTrigger: oneOf(['none', 'clickOnly']),
-  label: oneOfType([node, func]),
-  itemProps: shape({
-    ...stylePropTypes()
-  })
-};

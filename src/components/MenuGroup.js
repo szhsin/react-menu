@@ -1,7 +1,6 @@
 import { forwardRef, useContext, useRef, useState } from 'react';
-import { bool } from 'prop-types';
 import { useBEM, useLayoutEffect, useCombinedRef } from '../hooks';
-import { menuClass, menuGroupClass, stylePropTypes, MenuListContext } from '../utils';
+import { menuClass, menuGroupClass, MenuListContext } from '../utils';
 import { getNormalizedClientRect } from '../positionUtils';
 
 export const MenuGroup = forwardRef(function MenuGroup(
@@ -34,8 +33,3 @@ export const MenuGroup = forwardRef(function MenuGroup(
     />
   );
 });
-
-MenuGroup.propTypes = {
-  ...stylePropTypes(),
-  takeOverflow: bool
-};

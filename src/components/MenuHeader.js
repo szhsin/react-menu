@@ -1,6 +1,6 @@
 import { memo, forwardRef } from 'react';
 import { useBEM } from '../hooks';
-import { menuClass, menuHeaderClass, stylePropTypes, roleNone } from '../utils';
+import { menuClass, menuHeaderClass, roleNone } from '../utils';
 
 export const MenuHeader = memo(
   forwardRef(function MenuHeader({ className, ...restProps }, externalRef) {
@@ -14,7 +14,3 @@ export const MenuHeader = memo(
     );
   })
 );
-
-MenuHeader.propTypes = {
-  ...stylePropTypes()
-};

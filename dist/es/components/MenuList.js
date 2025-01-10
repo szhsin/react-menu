@@ -121,8 +121,7 @@ const MenuList = ({
     if (e.target === e.currentTarget) submenuCtx.off();
   };
   const handlePosition = useCallback(noOverflowCheck => {
-    var _anchorRef$current;
-    const anchorRect = anchorRef ? (_anchorRef$current = anchorRef.current) == null ? void 0 : _anchorRef$current.getBoundingClientRect() : anchorPoint ? {
+    const anchorRect = anchorRef ? anchorRef.current?.getBoundingClientRect() : anchorPoint ? {
       left: anchorPoint.x,
       right: anchorPoint.x,
       top: anchorPoint.y,
@@ -264,7 +263,7 @@ const MenuList = ({
       box: 'border-box'
     };
     resizeObserver.observe(menuRef.current, resizeObserverOptions);
-    const anchor = anchorRef == null ? void 0 : anchorRef.current;
+    const anchor = anchorRef?.current;
     anchor && resizeObserver.observe(anchor, resizeObserverOptions);
     return () => resizeObserver.disconnect();
   }, [isOpen, reposition, anchorRef, handlePosition]);
@@ -341,7 +340,7 @@ const MenuList = ({
     "aria-label": ariaLabel,
     ...commonProps(isDisabled),
     ...mergeProps({
-      onPointerEnter: parentSubmenuCtx == null ? void 0 : parentSubmenuCtx.off,
+      onPointerEnter: parentSubmenuCtx?.off,
       onPointerMove,
       onPointerLeave,
       onKeyDown,

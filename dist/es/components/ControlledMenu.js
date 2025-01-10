@@ -1,11 +1,9 @@
 import { forwardRef, useRef, useMemo } from 'react';
 import { createPortal } from 'react-dom';
-import { oneOf, exact, number, object, bool, oneOfType, string, func } from 'prop-types';
 import { MenuList } from './MenuList.js';
 import { jsx } from 'react/jsx-runtime';
-import { rootMenuPropTypes } from '../utils/propTypes.js';
-import { safeCall, values } from '../utils/utils.js';
-import { MenuStateMap, Keys, CloseReason, SettingsContext, EventHandlersContext } from '../utils/constants.js';
+import { Keys, CloseReason, SettingsContext, EventHandlersContext } from '../utils/constants.js';
+import { safeCall } from '../utils/utils.js';
 
 const ControlledMenu = /*#__PURE__*/forwardRef(function ControlledMenu({
   'aria-label': ariaLabel,
@@ -98,20 +96,5 @@ const ControlledMenu = /*#__PURE__*/forwardRef(function ControlledMenu({
   }
   return menuList;
 });
-process.env.NODE_ENV !== "production" ? ControlledMenu.propTypes = {
-  ...rootMenuPropTypes,
-  state: /*#__PURE__*/oneOf(/*#__PURE__*/values(MenuStateMap)),
-  anchorPoint: /*#__PURE__*/exact({
-    x: number,
-    y: number
-  }),
-  anchorRef: object,
-  captureFocus: bool,
-  menuItemFocus: /*#__PURE__*/exact({
-    position: /*#__PURE__*/oneOfType([string, number]),
-    alwaysUpdate: bool
-  }),
-  onClose: func
-} : void 0;
 
 export { ControlledMenu };
