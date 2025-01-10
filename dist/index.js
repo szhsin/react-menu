@@ -139,7 +139,7 @@ const noScrollFocus = {
 };
 
 const isMenuOpen = state => !!state && state[0] === 'o';
-const batchedUpdates = reactDom.unstable_batchedUpdates || (callback => callback());
+const batchedUpdates = reactDom.unstable_batchedUpdates;
 const getTransition = (transition, name) => transition === true || !!(transition && transition[name]);
 const safeCall = (fn, arg) => typeof fn === 'function' ? fn(arg) : fn;
 const internalKey = '_szhsinMenu';

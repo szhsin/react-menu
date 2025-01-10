@@ -1,7 +1,7 @@
 import { unstable_batchedUpdates } from 'react-dom';
 
 export const isMenuOpen = (state) => !!state && state[0] === 'o';
-export const batchedUpdates = unstable_batchedUpdates || ((callback) => callback());
+export const batchedUpdates = unstable_batchedUpdates;
 export const floatEqual = (a, b, diff = 0.0001) => Math.abs(a - b) < diff;
 export const getTransition = (transition, name) =>
   transition === true || !!(transition && transition[name]);
