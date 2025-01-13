@@ -14,6 +14,7 @@ export default [
   jest.configs['flat/recommended'],
   jest.configs['flat/style'],
   react.configs.flat.recommended,
+  react.configs.flat['jsx-runtime'],
   reactHooksAddons.configs.recommended,
   {
     ignores: ['**/dist/', '**/types/', '**/coverage/', '**/example/']
@@ -39,8 +40,6 @@ export default [
       }
     },
     plugins: {
-      jest,
-      react,
       'react-hooks': reactHooks
     },
     rules: {
@@ -57,7 +56,6 @@ export default [
           assertFunctionNames: ['expect', 'utils.expect*']
         }
       ],
-      'react/react-in-jsx-scope': 0,
       'react/prop-types': 0,
       'react-hooks/rules-of-hooks': 'error',
       'react-hooks/exhaustive-deps': 'error',
