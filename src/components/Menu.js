@@ -4,11 +4,14 @@ import {
   forwardRef,
   useRef,
   useCallback,
-  useImperativeHandle
+  useImperativeHandle,
+  version as REACT_VERSION
 } from 'react';
 import { ControlledMenu } from './ControlledMenu';
 import { useMenuChange, useMenuStateAndFocus, useCombinedRef, useClick } from '../hooks';
 import { getName, mergeProps, safeCall, isMenuOpen, Keys, FocusPositions } from '../utils';
+
+const isLegacyReact = parseInt(REACT_VERSION) < 19;
 
 export const Menu = forwardRef(function Menu(
   {
@@ -61,8 +64,8 @@ export const Menu = forwardRef(function Menu(
   if (!button || !button.type) throw new Error('Menu requires a menuButton prop.');
 
   const buttonProps = {
-    ref: useCombinedRef(button.ref, buttonRef),
-    ...mergeProps({ onKeyDown, ...anchorProps }, button.props)
+    ...mergeProps({ onKeyDown, ...anchorProps }, button.props),
+    ref: useCombinedRef(isLegacyReact ? button.ref : button.props.ref, buttonRef)
   };
   if (getName(button.type) === 'MenuButton') {
     buttonProps.isOpen = isOpen;
