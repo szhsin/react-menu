@@ -1,13 +1,6 @@
 import { useState, useRef, useContext, useEffect, useMemo, useImperativeHandle } from 'react';
 import { createPortal } from 'react-dom';
-import { node, func, bool, shape, oneOf, oneOfType } from 'prop-types';
-import {
-  useBEM,
-  useCombinedRef,
-  useMenuChange,
-  useMenuStateAndFocus,
-  useItemEffect
-} from '../hooks';
+import { useBEM, useCombinedRef, useMenuStateAndFocus, useItemEffect } from '../hooks';
 import { MenuList } from './MenuList';
 import {
   mergeProps,
@@ -16,9 +9,6 @@ import {
   roleNone,
   roleMenuitem,
   safeCall,
-  stylePropTypes,
-  uncontrolledMenuPropTypes,
-  menuPropTypes,
   menuClass,
   subMenuClass,
   menuItemClass,
@@ -55,7 +45,7 @@ export const SubMenu = withHovering(
     const { parentMenuRef, parentDir, overflow: parentOverflow } = useContext(MenuListContext);
     const { isParentOpen, submenuCtx, dispatch, updateItems } = useContext(MenuListItemContext);
     const isPortal = parentOverflow !== 'visible';
-    const [stateProps, toggleMenu, _openMenu] = useMenuStateAndFocus(settings);
+    const [stateProps, toggleMenu, _openMenu] = useMenuStateAndFocus({ ...settings, onMenuChange });
     const { state } = stateProps;
     const isDisabled = !!disabled;
     const isOpen = isMenuOpen(state);
@@ -138,8 +128,6 @@ export const SubMenu = withHovering(
     };
 
     useItemEffect(isDisabled, itemRef, updateItems);
-    useMenuChange(onMenuChange, isOpen);
-
     useEffect(() => submenuCtx.toggle(isOpen), [submenuCtx, isOpen]);
     useEffect(() => () => clearTimeout(timerId.v), [timerId]);
     useEffect(() => {
@@ -236,14 +224,3 @@ export const SubMenu = withHovering(
     );
   }
 );
-
-SubMenu.propTypes = {
-  ...menuPropTypes,
-  ...uncontrolledMenuPropTypes,
-  disabled: bool,
-  openTrigger: oneOf(['none', 'clickOnly']),
-  label: oneOfType([node, func]),
-  itemProps: shape({
-    ...stylePropTypes()
-  })
-};

@@ -1,8 +1,6 @@
 import { forwardRef, useMemo } from 'react';
-import { bool } from 'prop-types';
 import { jsx } from 'react/jsx-runtime';
 import { defineName } from '../utils/utils.js';
-import { stylePropTypes } from '../utils/propTypes.js';
 import { useBEM } from '../hooks/useBEM.js';
 import { menuButtonClass } from '../utils/constants.js';
 
@@ -32,10 +30,5 @@ const MenuButton = /*#__PURE__*/defineName('MenuButton', /*#__PURE__*/forwardRef
     children: children
   });
 }));
-process.env.NODE_ENV !== "production" ? MenuButton.propTypes = {
-  ...stylePropTypes(),
-  isOpen: bool,
-  disabled: bool
-} : void 0;
 
 export { MenuButton };

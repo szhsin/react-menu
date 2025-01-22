@@ -2,7 +2,6 @@ import { memo, forwardRef } from 'react';
 import { jsx } from 'react/jsx-runtime';
 import { useBEM } from '../hooks/useBEM.js';
 import { roleNone, menuClass, menuHeaderClass } from '../utils/constants.js';
-import { stylePropTypes } from '../utils/propTypes.js';
 
 const MenuHeader = /*#__PURE__*/memo(/*#__PURE__*/forwardRef(function MenuHeader({
   className,
@@ -19,8 +18,5 @@ const MenuHeader = /*#__PURE__*/memo(/*#__PURE__*/forwardRef(function MenuHeader
     })
   });
 }));
-process.env.NODE_ENV !== "production" ? MenuHeader.propTypes = {
-  ...stylePropTypes()
-} : void 0;
 
 export { MenuHeader };

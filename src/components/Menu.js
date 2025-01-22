@@ -4,21 +4,14 @@ import {
   forwardRef,
   useRef,
   useCallback,
-  useImperativeHandle
+  useImperativeHandle,
+  version as REACT_VERSION
 } from 'react';
-import { element, func, oneOfType } from 'prop-types';
 import { ControlledMenu } from './ControlledMenu';
-import { useMenuChange, useMenuStateAndFocus, useCombinedRef, useClick } from '../hooks';
-import {
-  getName,
-  mergeProps,
-  safeCall,
-  isMenuOpen,
-  uncontrolledMenuPropTypes,
-  rootMenuPropTypes,
-  Keys,
-  FocusPositions
-} from '../utils';
+import { useMenuStateAndFocus, useCombinedRef, useClick } from '../hooks';
+import { getName, mergeProps, safeCall, isMenuOpen, Keys, FocusPositions } from '../utils';
+
+const isLegacyReact = parseInt(REACT_VERSION) < 19;
 
 export const Menu = forwardRef(function Menu(
   {
@@ -32,7 +25,7 @@ export const Menu = forwardRef(function Menu(
   },
   externalRef
 ) {
-  const [stateProps, toggleMenu, openMenu] = useMenuStateAndFocus(restProps);
+  const [stateProps, toggleMenu, openMenu] = useMenuStateAndFocus({ ...restProps, onMenuChange });
   const { state } = stateProps;
   const isOpen = isMenuOpen(state);
   const buttonRef = useRef(null);
@@ -71,15 +64,13 @@ export const Menu = forwardRef(function Menu(
   if (!button || !button.type) throw new Error('Menu requires a menuButton prop.');
 
   const buttonProps = {
-    ref: useCombinedRef(button.ref, buttonRef),
-    ...mergeProps({ onKeyDown, ...anchorProps }, button.props)
+    ...mergeProps({ onKeyDown, ...anchorProps }, button.props),
+    ref: useCombinedRef(isLegacyReact ? button.ref : button.props.ref, buttonRef)
   };
   if (getName(button.type) === 'MenuButton') {
     buttonProps.isOpen = isOpen;
   }
   const renderButton = cloneElement(button, buttonProps);
-
-  useMenuChange(onMenuChange, isOpen);
 
   useImperativeHandle(instanceRef, () => ({
     openMenu,
@@ -102,9 +93,3 @@ export const Menu = forwardRef(function Menu(
     </Fragment>
   );
 });
-
-Menu.propTypes = {
-  ...rootMenuPropTypes,
-  ...uncontrolledMenuPropTypes,
-  menuButton: oneOfType([element, func]).isRequired
-};

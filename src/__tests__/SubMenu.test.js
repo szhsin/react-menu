@@ -7,9 +7,13 @@ import * as utils from './utils';
 
 const { render } = utils;
 
-const renderMenu = (props, itemProps, submenuProps) =>
+const renderMenu = (props, itemProps, submenuProps, buttonProps) =>
   render(
-    <Menu menuButton={<MenuButton>Menu</MenuButton>} submenuOpenDelay={90} {...props}>
+    <Menu
+      menuButton={<MenuButton {...buttonProps}>Menu</MenuButton>}
+      submenuOpenDelay={90}
+      {...props}
+    >
       <MenuItem>One</MenuItem>
       <SubMenu label="Submenu" {...submenuProps}>
         <MenuItem>First</MenuItem>
@@ -281,29 +285,40 @@ test('Submenu is disabled', () => {
   utils.expectMenuItemToBeHover(submenuItem, false);
 });
 
-test('ref is forwarded to <Menu>, <MenuItem> and <SubMenu>', () => {
-  let menu, item;
+test('ref is forwarded to <Menu>, <MenuButton>, <MenuItem> and <SubMenu>', () => {
+  let menu, item, button;
   const ref = jest.fn((elt) => (menu = elt));
+  const buttonRef = jest.fn((elt) => (button = elt));
   const itemRef = jest.fn((elt) => (item = elt));
   const submenuRef = {};
   const submenuItemRef = {};
 
-  renderMenu({ ref }, { ref: itemRef }, { ref: submenuRef, itemProps: { ref: submenuItemRef } });
+  renderMenu(
+    { ref },
+    { ref: itemRef },
+    { ref: submenuRef, itemProps: { ref: submenuItemRef } },
+    { ref: buttonRef }
+  );
+
+  expect(buttonRef).toHaveBeenCalled();
+  expect(button).toHaveAttribute('type', 'button');
+
+  expect(ref).not.toHaveBeenCalled();
+  expect(submenuItemRef.current).toBeUndefined();
   utils.clickMenuButton();
-  expect(ref).toHaveBeenCalledTimes(1);
+  expect(ref).toHaveBeenCalled();
   expect(menu).toHaveAttribute('role', 'menu');
   expect(menu).toHaveAttribute('aria-label', 'Menu');
   expect(submenuItemRef.current).toHaveAttribute('role', 'menuitem');
   expect(submenuItemRef.current).toHaveTextContent('Submenu');
 
-  expect(itemRef).toHaveBeenCalledTimes(0);
+  expect(itemRef).not.toHaveBeenCalled();
   expect(submenuRef.current).toBeUndefined();
 
   fireEvent.click(utils.queryMenuItem('Submenu'));
-  expect(itemRef).toHaveBeenCalledTimes(1);
+  expect(itemRef).toHaveBeenCalled();
   expect(item).toHaveAttribute('role', 'menuitem');
   expect(item).toHaveTextContent('Middle');
-
   expect(submenuRef.current).toHaveAttribute('role', 'menu');
   expect(submenuRef.current).toHaveAttribute('aria-label', 'Submenu');
 });

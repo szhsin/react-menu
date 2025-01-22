@@ -1,15 +1,13 @@
-import { forwardRef, useRef, useCallback, useImperativeHandle, Fragment, cloneElement } from 'react';
-import { oneOfType, element, func } from 'prop-types';
+import { forwardRef, useRef, useCallback, useImperativeHandle, Fragment, cloneElement, version } from 'react';
 import { ControlledMenu } from './ControlledMenu.js';
 import { jsxs, jsx } from 'react/jsx-runtime';
 import { useMenuStateAndFocus } from '../hooks/useMenuStateAndFocus.js';
 import { useClick } from '../hooks/useClick.js';
 import { useCombinedRef } from '../hooks/useCombinedRef.js';
-import { useMenuChange } from '../hooks/useMenuChange.js';
-import { rootMenuPropTypes, uncontrolledMenuPropTypes } from '../utils/propTypes.js';
 import { safeCall, mergeProps, getName, isMenuOpen } from '../utils/utils.js';
 import { FocusPositions, Keys } from '../utils/constants.js';
 
+const isLegacyReact = parseInt(version) < 19;
 const Menu = /*#__PURE__*/forwardRef(function Menu({
   'aria-label': ariaLabel,
   captureFocus: _,
@@ -19,7 +17,10 @@ const Menu = /*#__PURE__*/forwardRef(function Menu({
   onMenuChange,
   ...restProps
 }, externalRef) {
-  const [stateProps, toggleMenu, openMenu] = useMenuStateAndFocus(restProps);
+  const [stateProps, toggleMenu, openMenu] = useMenuStateAndFocus({
+    ...restProps,
+    onMenuChange
+  });
   const {
     state
   } = stateProps;
@@ -48,17 +49,16 @@ const Menu = /*#__PURE__*/forwardRef(function Menu({
   });
   if (!button || !button.type) throw new Error('Menu requires a menuButton prop.');
   const buttonProps = {
-    ref: useCombinedRef(button.ref, buttonRef),
     ...mergeProps({
       onKeyDown,
       ...anchorProps
-    }, button.props)
+    }, button.props),
+    ref: useCombinedRef(isLegacyReact ? button.ref : button.props.ref, buttonRef)
   };
   if (getName(button.type) === 'MenuButton') {
     buttonProps.isOpen = isOpen;
   }
   const renderButton = /*#__PURE__*/cloneElement(button, buttonProps);
-  useMenuChange(onMenuChange, isOpen);
   useImperativeHandle(instanceRef, () => ({
     openMenu,
     closeMenu: () => toggleMenu(false)
@@ -74,10 +74,5 @@ const Menu = /*#__PURE__*/forwardRef(function Menu({
     })]
   });
 });
-process.env.NODE_ENV !== "production" ? Menu.propTypes = {
-  ...rootMenuPropTypes,
-  ...uncontrolledMenuPropTypes,
-  menuButton: oneOfType([element, func]).isRequired
-} : void 0;
 
 export { Menu };

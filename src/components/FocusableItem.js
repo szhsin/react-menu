@@ -1,5 +1,4 @@
 import { useContext, useMemo, useRef } from 'react';
-import { bool, func } from 'prop-types';
 import { useBEM, useCombinedRef, useItemState } from '../hooks';
 import {
   mergeProps,
@@ -8,7 +7,6 @@ import {
   menuClass,
   menuItemClass,
   roleMenuitem,
-  stylePropTypes,
   withHovering,
   EventHandlersContext
 } from '../utils';
@@ -75,9 +73,3 @@ export const FocusableItem = withHovering(
     );
   }
 );
-
-FocusableItem.propTypes = {
-  ...stylePropTypes(),
-  disabled: bool,
-  children: func
-};

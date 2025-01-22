@@ -1,6 +1,6 @@
 import { memo, forwardRef } from 'react';
 import { useBEM } from '../hooks';
-import { menuClass, menuDividerClass, stylePropTypes } from '../utils';
+import { menuClass, menuDividerClass } from '../utils';
 
 export const MenuDivider = memo(
   forwardRef(function MenuDivider({ className, ...restProps }, externalRef) {
@@ -14,7 +14,3 @@ export const MenuDivider = memo(
     );
   })
 );
-
-MenuDivider.propTypes = {
-  ...stylePropTypes()
-};

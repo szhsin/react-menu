@@ -1,12 +1,10 @@
 import { useContext, useMemo } from 'react';
-import { any, string, oneOf, bool, oneOfType, node, func } from 'prop-types';
 import { jsx } from 'react/jsx-runtime';
 import { useItemState } from '../hooks/useItemState.js';
 import { EventHandlersContext, RadioGroupContext, roleMenuitem, menuClass, menuItemClass, roleNone, Keys } from '../utils/constants.js';
 import { useCombinedRef } from '../hooks/useCombinedRef.js';
 import { useBEM } from '../hooks/useBEM.js';
 import { withHovering } from '../utils/withHovering.js';
-import { stylePropTypes } from '../utils/propTypes.js';
 import { mergeProps, commonProps, safeCall } from '../utils/utils.js';
 
 const MenuItem = /*#__PURE__*/withHovering('MenuItem', function MenuItem({
@@ -97,15 +95,5 @@ const MenuItem = /*#__PURE__*/withHovering('MenuItem', function MenuItem({
     ...menuItemProps
   });
 });
-process.env.NODE_ENV !== "production" ? MenuItem.propTypes = {
-  ...stylePropTypes(),
-  value: any,
-  href: string,
-  type: /*#__PURE__*/oneOf(['checkbox', 'radio']),
-  checked: bool,
-  disabled: bool,
-  children: /*#__PURE__*/oneOfType([node, func]),
-  onClick: func
-} : void 0;
 
 export { MenuItem };
