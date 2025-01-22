@@ -8,7 +8,7 @@ import {
   version as REACT_VERSION
 } from 'react';
 import { ControlledMenu } from './ControlledMenu';
-import { useMenuChange, useMenuStateAndFocus, useCombinedRef, useClick } from '../hooks';
+import { useMenuStateAndFocus, useCombinedRef, useClick } from '../hooks';
 import { getName, mergeProps, safeCall, isMenuOpen, Keys, FocusPositions } from '../utils';
 
 const isLegacyReact = parseInt(REACT_VERSION) < 19;
@@ -25,7 +25,7 @@ export const Menu = forwardRef(function Menu(
   },
   externalRef
 ) {
-  const [stateProps, toggleMenu, openMenu] = useMenuStateAndFocus(restProps);
+  const [stateProps, toggleMenu, openMenu] = useMenuStateAndFocus({ ...restProps, onMenuChange });
   const { state } = stateProps;
   const isOpen = isMenuOpen(state);
   const buttonRef = useRef(null);
@@ -71,8 +71,6 @@ export const Menu = forwardRef(function Menu(
     buttonProps.isOpen = isOpen;
   }
   const renderButton = cloneElement(button, buttonProps);
-
-  useMenuChange(onMenuChange, isOpen);
 
   useImperativeHandle(instanceRef, () => ({
     openMenu,

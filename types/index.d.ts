@@ -127,7 +127,14 @@ export type MenuArrowModifiers = Readonly<{
   dir: MenuDirection;
 }>;
 
-export interface MenuStateOptions {
+export interface MenuStateEvents {
+  /**
+   * An event is fired whenever the menu is opened or closed.
+   */
+  onMenuChange?: EventHandler<MenuChangeEvent>;
+}
+
+export interface MenuStateOptions extends MenuStateEvents {
   /**
    * Enable menu to be mounted in the open state.
    */
@@ -256,7 +263,9 @@ export interface BaseMenuProps extends Omit<BaseProps, 'style'> {
 /**
  * Common props for `Menu` and `ControlledMenu`
  */
-export interface RootMenuProps extends BaseMenuProps, Omit<MenuStateOptions, 'initialOpen'> {
+export interface RootMenuProps
+  extends BaseMenuProps,
+    Omit<MenuStateOptions, 'initialOpen' | 'onMenuChange'> {
   /**
    * Properties of this object are spread to the root DOM element containing the menu.
    */
@@ -355,15 +364,11 @@ export interface MenuInstance {
 /**
  * Common props for `Menu` and `SubMenu`
  */
-export interface UncontrolledMenuProps {
+export interface UncontrolledMenuProps extends MenuStateEvents {
   /**
    * Menu component ref which can be used to programmatically open or close menu.
    */
   instanceRef?: React.Ref<MenuInstance>;
-  /**
-   * Event fired after menu is open or closed.
-   */
-  onMenuChange?: EventHandler<MenuChangeEvent>;
 }
 
 //

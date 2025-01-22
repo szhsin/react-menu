@@ -1292,6 +1292,7 @@ const menuStateHook = {
         item?: boolean;
     };
     transitionTimeout?: number;
+    onMenuChange?: (event: { open: boolean }) => void;
 }): [
   // Menu props object which can be spread to <ControlledMenu/>
   {
