@@ -399,32 +399,38 @@ const useItemState = (itemRef, focusRef, isHovering, isDisabled) => {
   };
 };
 
-const useMenuChange = (onMenuChange, isOpen) => {
-  const prevOpen = react.useRef(isOpen);
-  react.useEffect(() => {
-    if (prevOpen.current !== isOpen) safeCall(onMenuChange, {
-      open: isOpen
-    });
-    prevOpen.current = isOpen;
-  }, [onMenuChange, isOpen]);
-};
-
 const useMenuState = ({
   initialOpen,
   initialMounted,
   unmountOnClose,
   transition,
-  transitionTimeout = 500
+  transitionTimeout = 500,
+  onMenuChange
 } = {}) => {
+  const enter = getTransition(transition, 'open');
+  const exit = getTransition(transition, 'close');
   const [{
     status
-  }, toggleMenu, endTransition] = reactTransitionState.useTransition({
+  }, toggleMenu, endTransition] = reactTransitionState.useTransitionState({
     initialEntered: initialOpen,
     mountOnEnter: !initialMounted,
     unmountOnExit: unmountOnClose,
     timeout: transitionTimeout,
-    enter: getTransition(transition, 'open'),
-    exit: getTransition(transition, 'close')
+    enter,
+    exit,
+    onStateChange: react.useCallback(({
+      current: {
+        isEnter,
+        isResolved
+      }
+    }) => {
+      if (!onMenuChange || isEnter && enter && isResolved || !isEnter && exit && isResolved) {
+        return;
+      }
+      onMenuChange({
+        open: isEnter
+      });
+    }, [onMenuChange, enter, exit])
   });
   return [{
     state: MenuStateMap[status],
@@ -1290,6 +1296,7 @@ const ControlledMenu = /*#__PURE__*/react.forwardRef(function ControlledMenu({
   return menuList;
 });
 
+const isLegacyReact = parseInt(react.version) < 19;
 const Menu = /*#__PURE__*/react.forwardRef(function Menu({
   'aria-label': ariaLabel,
   captureFocus: _,
@@ -1299,7 +1306,10 @@ const Menu = /*#__PURE__*/react.forwardRef(function Menu({
   onMenuChange,
   ...restProps
 }, externalRef) {
-  const [stateProps, toggleMenu, openMenu] = useMenuStateAndFocus(restProps);
+  const [stateProps, toggleMenu, openMenu] = useMenuStateAndFocus({
+    ...restProps,
+    onMenuChange
+  });
   const {
     state
   } = stateProps;
@@ -1328,17 +1338,16 @@ const Menu = /*#__PURE__*/react.forwardRef(function Menu({
   });
   if (!button || !button.type) throw new Error('Menu requires a menuButton prop.');
   const buttonProps = {
-    ref: useCombinedRef(button.ref, buttonRef),
     ...mergeProps({
       onKeyDown,
       ...anchorProps
-    }, button.props)
+    }, button.props),
+    ref: useCombinedRef(isLegacyReact ? button.ref : button.props.ref, buttonRef)
   };
   if (getName(button.type) === 'MenuButton') {
     buttonProps.isOpen = isOpen;
   }
   const renderButton = /*#__PURE__*/react.cloneElement(button, buttonProps);
-  useMenuChange(onMenuChange, isOpen);
   react.useImperativeHandle(instanceRef, () => ({
     openMenu,
     closeMenu: () => toggleMenu(false)
@@ -1389,7 +1398,10 @@ const SubMenu = /*#__PURE__*/withHovering('SubMenu', function SubMenu({
     updateItems
   } = react.useContext(MenuListItemContext);
   const isPortal = parentOverflow !== 'visible';
-  const [stateProps, toggleMenu, _openMenu] = useMenuStateAndFocus(settings);
+  const [stateProps, toggleMenu, _openMenu] = useMenuStateAndFocus({
+    ...settings,
+    onMenuChange
+  });
   const {
     state
   } = stateProps;
@@ -1456,7 +1468,6 @@ const SubMenu = /*#__PURE__*/withHovering('SubMenu', function SubMenu({
     }
   };
   useItemEffect(isDisabled, itemRef, updateItems);
-  useMenuChange(onMenuChange, isOpen);
   react.useEffect(() => submenuCtx.toggle(isOpen), [submenuCtx, isOpen]);
   react.useEffect(() => () => clearTimeout(timerId.v), [timerId]);
   react.useEffect(() => {

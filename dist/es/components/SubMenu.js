@@ -5,7 +5,6 @@ import { jsxs, jsx } from 'react/jsx-runtime';
 import { withHovering } from '../utils/withHovering.js';
 import { useMenuStateAndFocus } from '../hooks/useMenuStateAndFocus.js';
 import { useItemEffect } from '../hooks/useItemEffect.js';
-import { useMenuChange } from '../hooks/useMenuChange.js';
 import { useBEM } from '../hooks/useBEM.js';
 import { SettingsContext, MenuListContext, MenuListItemContext, menuClass, subMenuClass, roleNone, roleMenuitem, menuItemClass, HoverActionTypes, Keys, FocusPositions } from '../utils/constants.js';
 import { useCombinedRef } from '../hooks/useCombinedRef.js';
@@ -45,7 +44,10 @@ const SubMenu = /*#__PURE__*/withHovering('SubMenu', function SubMenu({
     updateItems
   } = useContext(MenuListItemContext);
   const isPortal = parentOverflow !== 'visible';
-  const [stateProps, toggleMenu, _openMenu] = useMenuStateAndFocus(settings);
+  const [stateProps, toggleMenu, _openMenu] = useMenuStateAndFocus({
+    ...settings,
+    onMenuChange
+  });
   const {
     state
   } = stateProps;
@@ -112,7 +114,6 @@ const SubMenu = /*#__PURE__*/withHovering('SubMenu', function SubMenu({
     }
   };
   useItemEffect(isDisabled, itemRef, updateItems);
-  useMenuChange(onMenuChange, isOpen);
   useEffect(() => submenuCtx.toggle(isOpen), [submenuCtx, isOpen]);
   useEffect(() => () => clearTimeout(timerId.v), [timerId]);
   useEffect(() => {
