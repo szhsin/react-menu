@@ -1469,7 +1469,10 @@ const SubMenu = /*#__PURE__*/withHovering('SubMenu', function SubMenu({
   };
   useItemEffect(isDisabled, itemRef, updateItems);
   react.useEffect(() => submenuCtx.toggle(isOpen), [submenuCtx, isOpen]);
-  react.useEffect(() => () => clearTimeout(timerId.v), [timerId]);
+  react.useEffect(() => () => {
+    clearTimeout(timerId.v);
+    submenuCtx.toggle(false);
+  }, [timerId, submenuCtx]);
   react.useEffect(() => {
     if (isHovering && isParentOpen) {
       itemRef.current.focus();

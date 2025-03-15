@@ -2,8 +2,8 @@ import { forwardRef, useRef, useState, useContext } from 'react';
 import { jsx } from 'react/jsx-runtime';
 import { useLayoutEffect as useIsomorphicLayoutEffect } from '../hooks/useIsomorphicLayoutEffect.js';
 import { getNormalizedClientRect } from '../positionUtils/getNormalizedClientRect.js';
-import { useCombinedRef } from '../hooks/useCombinedRef.js';
 import { useBEM } from '../hooks/useBEM.js';
+import { useCombinedRef } from '../hooks/useCombinedRef.js';
 import { MenuListContext, menuClass, menuGroupClass } from '../utils/constants.js';
 
 const MenuGroup = /*#__PURE__*/forwardRef(function MenuGroup({

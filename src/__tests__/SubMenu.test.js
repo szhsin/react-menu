@@ -226,6 +226,33 @@ test('Delay closing submenu when hovering items in parent menu list', async () =
   utils.expectMenuToBeOpen(false, submenuOptions1);
 });
 
+test('Unmounting an open submenu should reset the internal state and stop introducing delays when hovering over sibling items.', () => {
+  const { rerender } = render(
+    <Menu menuButton={<MenuButton>Menu</MenuButton>}>
+      <MenuItem>1</MenuItem>
+      <SubMenu label="Submenu">
+        <MenuItem>1.1</MenuItem>
+        <MenuItem>1.2</MenuItem>
+      </SubMenu>
+    </Menu>
+  );
+
+  utils.clickMenuButton();
+  fireEvent.click(utils.queryMenuItem('Submenu'));
+  utils.expectMenuToBeOpen(true, { name: 'Submenu' });
+
+  rerender(
+    <Menu menuButton={<MenuButton>Menu</MenuButton>}>
+      <MenuItem>1</MenuItem>
+      <MenuItem>2</MenuItem>
+    </Menu>
+  );
+
+  const item = utils.queryMenuItem('1');
+  fireEvent.pointerMove(item);
+  utils.expectMenuItemToBeHover(item, true);
+});
+
 test('openTrigger is "clickOnly"', async () => {
   renderMenu(null, null, { openTrigger: 'clickOnly' });
   utils.clickMenuButton();

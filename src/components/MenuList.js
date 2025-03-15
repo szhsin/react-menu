@@ -410,6 +410,8 @@ export const MenuList = ({
       {...commonProps(isDisabled)}
       {...mergeProps(
         {
+          // Moves the cursor from a non-item area in the parent menu to the current menu,
+          // without fully leaving any menu, so the onPointerLeave event is not triggered.
           onPointerEnter: parentSubmenuCtx?.off,
           onPointerMove,
           onPointerLeave,

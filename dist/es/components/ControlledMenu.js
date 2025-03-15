@@ -2,7 +2,7 @@ import { forwardRef, useRef, useMemo } from 'react';
 import { createPortal } from 'react-dom';
 import { MenuList } from './MenuList.js';
 import { jsx } from 'react/jsx-runtime';
-import { Keys, CloseReason, SettingsContext, EventHandlersContext } from '../utils/constants.js';
+import { SettingsContext, EventHandlersContext, CloseReason, Keys } from '../utils/constants.js';
 import { safeCall } from '../utils/utils.js';
 
 const ControlledMenu = /*#__PURE__*/forwardRef(function ControlledMenu({
