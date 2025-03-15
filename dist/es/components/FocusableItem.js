@@ -1,8 +1,8 @@
 import { useRef, useContext, useMemo } from 'react';
 import { jsx } from 'react/jsx-runtime';
 import { useItemState } from '../hooks/useItemState.js';
-import { useCombinedRef } from '../hooks/useCombinedRef.js';
 import { useBEM } from '../hooks/useBEM.js';
+import { useCombinedRef } from '../hooks/useCombinedRef.js';
 import { withHovering } from '../utils/withHovering.js';
 import { EventHandlersContext, roleMenuitem, menuClass, menuItemClass } from '../utils/constants.js';
 import { safeCall, mergeProps, commonProps } from '../utils/utils.js';

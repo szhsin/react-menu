@@ -1,11 +1,11 @@
 import { useContext, useMemo } from 'react';
 import { jsx } from 'react/jsx-runtime';
 import { useItemState } from '../hooks/useItemState.js';
-import { EventHandlersContext, RadioGroupContext, roleMenuitem, menuClass, menuItemClass, roleNone, Keys } from '../utils/constants.js';
-import { useCombinedRef } from '../hooks/useCombinedRef.js';
+import { EventHandlersContext, RadioGroupContext, menuClass, menuItemClass, roleNone, roleMenuitem, Keys } from '../utils/constants.js';
 import { useBEM } from '../hooks/useBEM.js';
+import { useCombinedRef } from '../hooks/useCombinedRef.js';
 import { withHovering } from '../utils/withHovering.js';
-import { mergeProps, commonProps, safeCall } from '../utils/utils.js';
+import { mergeProps, safeCall, commonProps } from '../utils/utils.js';
 
 const MenuItem = /*#__PURE__*/withHovering('MenuItem', function MenuItem({
   className,

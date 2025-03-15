@@ -5,10 +5,10 @@ import { jsxs, jsx } from 'react/jsx-runtime';
 import { withHovering } from '../utils/withHovering.js';
 import { useMenuStateAndFocus } from '../hooks/useMenuStateAndFocus.js';
 import { useItemEffect } from '../hooks/useItemEffect.js';
+import { SettingsContext, MenuListContext, MenuListItemContext, roleNone, roleMenuitem, menuClass, menuItemClass, subMenuClass, HoverActionTypes, Keys, FocusPositions } from '../utils/constants.js';
 import { useBEM } from '../hooks/useBEM.js';
-import { SettingsContext, MenuListContext, MenuListItemContext, menuClass, subMenuClass, roleNone, roleMenuitem, menuItemClass, HoverActionTypes, Keys, FocusPositions } from '../utils/constants.js';
 import { useCombinedRef } from '../hooks/useCombinedRef.js';
-import { mergeProps, commonProps, safeCall, isMenuOpen, batchedUpdates } from '../utils/utils.js';
+import { isMenuOpen, mergeProps, commonProps, safeCall, batchedUpdates } from '../utils/utils.js';
 
 const SubMenu = /*#__PURE__*/withHovering('SubMenu', function SubMenu({
   'aria-label': ariaLabel,
@@ -115,7 +115,10 @@ const SubMenu = /*#__PURE__*/withHovering('SubMenu', function SubMenu({
   };
   useItemEffect(isDisabled, itemRef, updateItems);
   useEffect(() => submenuCtx.toggle(isOpen), [submenuCtx, isOpen]);
-  useEffect(() => () => clearTimeout(timerId.v), [timerId]);
+  useEffect(() => () => {
+    clearTimeout(timerId.v);
+    submenuCtx.toggle(false);
+  }, [timerId, submenuCtx]);
   useEffect(() => {
     if (isHovering && isParentOpen) {
       itemRef.current.focus();

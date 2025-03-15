@@ -4,7 +4,7 @@ import { jsxs, jsx } from 'react/jsx-runtime';
 import { useMenuStateAndFocus } from '../hooks/useMenuStateAndFocus.js';
 import { useClick } from '../hooks/useClick.js';
 import { useCombinedRef } from '../hooks/useCombinedRef.js';
-import { safeCall, mergeProps, getName, isMenuOpen } from '../utils/utils.js';
+import { safeCall, mergeProps, isMenuOpen, getName } from '../utils/utils.js';
 import { FocusPositions, Keys } from '../utils/constants.js';
 
 const isLegacyReact = parseInt(version) < 19;

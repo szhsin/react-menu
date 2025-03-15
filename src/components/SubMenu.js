@@ -129,7 +129,13 @@ export const SubMenu = withHovering(
 
     useItemEffect(isDisabled, itemRef, updateItems);
     useEffect(() => submenuCtx.toggle(isOpen), [submenuCtx, isOpen]);
-    useEffect(() => () => clearTimeout(timerId.v), [timerId]);
+    useEffect(
+      () => () => {
+        clearTimeout(timerId.v);
+        submenuCtx.toggle(false);
+      },
+      [timerId, submenuCtx]
+    );
     useEffect(() => {
       // Don't set focus when parent menu is closed, otherwise focus will be lost
       // and onBlur event will be fired with relatedTarget setting as null.
@@ -166,7 +172,10 @@ export const SubMenu = withHovering(
 
     const mergedItemProps = mergeProps(
       {
-        onPointerEnter: submenuCtx.off, // For moving mouse from submenu back to its anchor item
+        // For moving the cursor from a submenu back to its anchor item,
+        // crossing over a non-item area in the parent menu.
+        onPointerEnter: submenuCtx.off,
+
         onPointerMove,
         onPointerLeave,
         onKeyDown,
