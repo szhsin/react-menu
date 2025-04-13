@@ -1,3 +1,5 @@
+
+'use client';
 export { MenuButton } from './components/MenuButton.mjs';
 export { Menu } from './components/Menu.mjs';
 export { ControlledMenu } from './components/ControlledMenu.mjs';
