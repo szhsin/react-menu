@@ -1,8 +1,11 @@
 import { nodeResolve } from '@rollup/plugin-node-resolve';
 import { babel } from '@rollup/plugin-babel';
 
+/**
+ * @type {import('rollup').RollupOptions}
+ */
 const sharedConfig = {
-  external: ['react', 'react-dom', 'react/jsx-runtime', 'prop-types', 'react-transition-state'],
+  external: ['react', 'react-dom', 'react/jsx-runtime', 'react-transition-state'],
   plugins: [nodeResolve(), babel({ babelHelpers: 'bundled' })],
   treeshake: {
     moduleSideEffects: false,
@@ -11,7 +14,7 @@ const sharedConfig = {
 };
 
 /**
- * @type {import('rollup').RollupOptions}
+ * @type {import('rollup').RollupOptions[]}
  */
 export default [
   {
@@ -19,14 +22,17 @@ export default [
     input: 'src/index.js',
     output: [
       {
-        file: 'dist/index.js',
+        dir: 'dist/cjs',
         format: 'cjs',
-        interop: 'default'
+        interop: 'default',
+        entryFileNames: '[name].cjs',
+        preserveModules: true
       },
       {
-        preserveModules: true,
-        dir: 'dist/es',
-        format: 'es'
+        dir: 'dist/esm',
+        format: 'es',
+        entryFileNames: '[name].mjs',
+        preserveModules: true
       }
     ]
   },
@@ -35,11 +41,11 @@ export default [
     input: 'src/style-utils/index.js',
     output: [
       {
-        file: 'dist/style-utils/index.cjs.js',
+        file: 'dist/style-utils/index.cjs',
         format: 'cjs'
       },
       {
-        file: 'dist/style-utils/index.js',
+        file: 'dist/style-utils/index.mjs',
         format: 'es'
       }
     ]

@@ -6,9 +6,9 @@
   "license": "MIT",
   "repository": "szhsin/react-menu",
   "homepage": "https://szhsin.github.io/react-menu/",
-  "main": "dist/index.js",
-  "module": "dist/es/index.js",
-  "types": "types/index.d.ts",
+  "main": "./dist/cjs/index.cjs",
+  "module": "./dist/esm/index.mjs",
+  "types": "./types/index.d.ts",
   "publishConfig": {
     "access": "public"
   },
