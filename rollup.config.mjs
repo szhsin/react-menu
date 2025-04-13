@@ -1,12 +1,14 @@
+// @ts-check
+
 import { nodeResolve } from '@rollup/plugin-node-resolve';
 import { babel } from '@rollup/plugin-babel';
+import { addDirective } from 'rollup-plugin-add-directive';
 
 /**
  * @type {import('rollup').RollupOptions}
  */
 const sharedConfig = {
   external: ['react', 'react-dom', 'react/jsx-runtime', 'react-transition-state'],
-  plugins: [nodeResolve(), babel({ babelHelpers: 'bundled' })],
   treeshake: {
     moduleSideEffects: false,
     propertyReadSideEffects: false
@@ -19,6 +21,11 @@ const sharedConfig = {
 export default [
   {
     ...sharedConfig,
+    plugins: [
+      nodeResolve(),
+      babel({ babelHelpers: 'bundled' }),
+      addDirective({ pattern: 'index' })
+    ],
     input: 'src/index.js',
     output: [
       {
@@ -38,6 +45,7 @@ export default [
   },
   {
     ...sharedConfig,
+    plugins: [nodeResolve(), babel({ babelHelpers: 'bundled' })],
     input: 'src/style-utils/index.js',
     output: [
       {

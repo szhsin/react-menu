@@ -6,13 +6,13 @@
   "dependencies": {
     "@szhsin/react-menu": "file:..",
     "highlight.js": "^11.11.1",
-    "next": "^15.1.5",
+    "next": "^15.3.0",
     "react": "file:../node_modules/react",
     "react-dom": "file:../node_modules/react-dom",
     "reactish-state": "0.11.1"
   },
   "devDependencies": {
-    "eslint-config-next": "^15.1.5"
+    "eslint-config-next": "^15.3.0"
   },
   "scripts": {
     "dev": "next dev",

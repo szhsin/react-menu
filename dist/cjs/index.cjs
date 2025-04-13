@@ -1,3 +1,5 @@
+
+'use client';
 'use strict';
 
 var MenuButton = require('./components/MenuButton.cjs');
