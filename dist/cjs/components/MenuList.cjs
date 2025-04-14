@@ -123,6 +123,9 @@ const MenuList = ({
     if (e.target === e.currentTarget) submenuCtx$1.off();
   };
   const handlePosition = react.useCallback(noOverflowCheck => {
+    const menuElt = menuRef.current;
+    const containerElt = containerRef.current;
+    if (!menuElt || !containerElt) return;
     const anchorRect = anchorRef ? anchorRef.current?.getBoundingClientRect() : anchorPoint ? {
       left: anchorPoint.x,
       right: anchorPoint.x,
@@ -140,7 +143,7 @@ const MenuList = ({
     if (!scrollNodes.menu) {
       scrollNodes.menu = (boundingBoxRef ? boundingBoxRef.current : utils.getScrollAncestor(rootMenuRef.current)) || window;
     }
-    const positionHelpers = getPositionHelpers.getPositionHelpers(containerRef, menuRef, scrollNodes.menu, boundingBoxPadding);
+    const positionHelpers = getPositionHelpers.getPositionHelpers(containerElt, menuElt, scrollNodes.menu, boundingBoxPadding);
     let {
       arrowX,
       arrowY,

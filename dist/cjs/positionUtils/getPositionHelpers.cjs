@@ -3,9 +3,9 @@
 var getNormalizedClientRect = require('./getNormalizedClientRect.cjs');
 var utils = require('../utils/utils.cjs');
 
-const getPositionHelpers = (containerRef, menuRef, menuScroll, boundingBoxPadding) => {
-  const menuRect = getNormalizedClientRect.getNormalizedClientRect(menuRef.current);
-  const containerRect = containerRef.current.getBoundingClientRect();
+const getPositionHelpers = (containerElt, menuElt, menuScroll, boundingBoxPadding) => {
+  const menuRect = getNormalizedClientRect.getNormalizedClientRect(menuElt);
+  const containerRect = containerElt.getBoundingClientRect();
   const boundingRect = menuScroll === window ? {
     left: 0,
     top: 0,
