@@ -145,6 +145,10 @@ export const MenuList = ({
 
   const handlePosition = useCallback(
     (noOverflowCheck) => {
+      const menuElt = menuRef.current;
+      const containerElt = containerRef.current;
+      if (!menuElt || !containerElt) return;
+
       const anchorRect = anchorRef
         ? anchorRef.current?.getBoundingClientRect()
         : anchorPoint
@@ -174,8 +178,8 @@ export const MenuList = ({
       }
 
       const positionHelpers = getPositionHelpers(
-        containerRef,
-        menuRef,
+        containerElt,
+        menuElt,
         scrollNodes.menu,
         boundingBoxPadding
       );

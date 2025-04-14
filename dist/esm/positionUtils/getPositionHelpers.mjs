@@ -1,9 +1,9 @@
 import { getNormalizedClientRect } from './getNormalizedClientRect.mjs';
 import { parsePadding } from '../utils/utils.mjs';
 
-const getPositionHelpers = (containerRef, menuRef, menuScroll, boundingBoxPadding) => {
-  const menuRect = getNormalizedClientRect(menuRef.current);
-  const containerRect = containerRef.current.getBoundingClientRect();
+const getPositionHelpers = (containerElt, menuElt, menuScroll, boundingBoxPadding) => {
+  const menuRect = getNormalizedClientRect(menuElt);
+  const containerRect = containerElt.getBoundingClientRect();
   const boundingRect = menuScroll === window ? {
     left: 0,
     top: 0,
