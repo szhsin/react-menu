@@ -1,6 +1,12 @@
 import { useState, useRef, useContext, useEffect, useMemo, useImperativeHandle } from 'react';
 import { createPortal } from 'react-dom';
-import { useBEM, useCombinedRef, useMenuStateAndFocus, useItemEffect } from '../hooks';
+import {
+  useBEM,
+  useCombinedRef,
+  useMenuStateAndFocus,
+  useItemEffect,
+  useMouseOver
+} from '../hooks';
 import { MenuList } from './MenuList';
 import {
   mergeProps,
@@ -46,6 +52,7 @@ export const SubMenu = withHovering(
     const { isParentOpen, submenuCtx, dispatch, updateItems } = useContext(MenuListItemContext);
     const isPortal = parentOverflow !== 'visible';
     const [stateProps, toggleMenu, _openMenu] = useMenuStateAndFocus({ ...settings, onMenuChange });
+    const [mouseOver, mouseOverStart, mouseOverEnd] = useMouseOver(isHovering);
     const { state } = stateProps;
     const isDisabled = !!disabled;
     const isOpen = isMenuOpen(state);
@@ -77,6 +84,7 @@ export const SubMenu = withHovering(
     const onPointerMove = (e) => {
       if (isDisabled) return;
       e.stopPropagation();
+      mouseOverStart();
       if (timerId.v || isOpen) return;
       submenuCtx.on(
         submenuCloseDelay,
@@ -86,6 +94,7 @@ export const SubMenu = withHovering(
     };
 
     const onPointerLeave = () => {
+      mouseOverEnd();
       stopTimer();
       if (!isOpen) dispatch(HoverActionTypes.UNSET, itemRef.current);
     };
@@ -161,11 +170,11 @@ export const SubMenu = withHovering(
     const modifiers = useMemo(
       () => ({
         open: isOpen,
-        hover: isHovering,
+        hover: mouseOver || isHovering,
         disabled: isDisabled,
         submenu: true
       }),
-      [isOpen, isHovering, isDisabled]
+      [isOpen, isHovering, isDisabled, mouseOver]
     );
 
     const { ref: externalItemRef, className: itemClassName, ...restItemProps } = itemProps;

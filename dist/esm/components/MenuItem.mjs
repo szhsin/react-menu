@@ -23,6 +23,7 @@ const MenuItem = /*#__PURE__*/withHovering('MenuItem', function MenuItem({
 }) {
   const isDisabled = !!disabled;
   const {
+    mouseOver,
     setHover,
     ...restStateProps
   } = useItemState(itemRef, itemRef, isHovering, isDisabled);
@@ -61,10 +62,10 @@ const MenuItem = /*#__PURE__*/withHovering('MenuItem', function MenuItem({
   const modifiers = useMemo(() => ({
     type,
     disabled: isDisabled,
-    hover: isHovering,
+    hover: mouseOver || isHovering,
     checked: isChecked,
     anchor: isAnchor
-  }), [type, isDisabled, isHovering, isChecked, isAnchor]);
+  }), [type, isDisabled, mouseOver, isHovering, isChecked, isAnchor]);
   const mergedProps = mergeProps({
     ...restStateProps,
     onPointerDown: setHover,

@@ -8,3 +8,4 @@ export { useItemEffect } from './useItemEffect';
 export { useItemState } from './useItemState';
 export { useMenuState } from './useMenuState';
 export { useMenuStateAndFocus } from './useMenuStateAndFocus';
+export { useMouseOver } from './useMouseOver';

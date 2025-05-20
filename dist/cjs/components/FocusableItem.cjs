@@ -21,6 +21,7 @@ const FocusableItem = /*#__PURE__*/withHovering.withHovering('FocusableItem', fu
   const isDisabled = !!disabled;
   const ref = react.useRef(null);
   const {
+    mouseOver,
     setHover,
     onPointerLeave,
     ...restStateProps
@@ -30,9 +31,9 @@ const FocusableItem = /*#__PURE__*/withHovering.withHovering('FocusableItem', fu
   } = react.useContext(constants.EventHandlersContext);
   const modifiers = react.useMemo(() => ({
     disabled: isDisabled,
-    hover: isHovering,
+    hover: mouseOver || isHovering,
     focusable: true
-  }), [isDisabled, isHovering]);
+  }), [isDisabled, isHovering, mouseOver]);
   const renderChildren = react.useMemo(() => utils.safeCall(children, {
     ...modifiers,
     ref,

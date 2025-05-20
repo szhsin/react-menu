@@ -24,7 +24,7 @@ export const FocusableItem = withHovering(
   }) {
     const isDisabled = !!disabled;
     const ref = useRef(null);
-    const { setHover, onPointerLeave, ...restStateProps } = useItemState(
+    const { mouseOver, setHover, onPointerLeave, ...restStateProps } = useItemState(
       itemRef,
       ref,
       isHovering,
@@ -35,10 +35,10 @@ export const FocusableItem = withHovering(
     const modifiers = useMemo(
       () => ({
         disabled: isDisabled,
-        hover: isHovering,
+        hover: mouseOver || isHovering,
         focusable: true
       }),
-      [isDisabled, isHovering]
+      [isDisabled, isHovering, mouseOver]
     );
 
     const renderChildren = useMemo(

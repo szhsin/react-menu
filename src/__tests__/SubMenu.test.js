@@ -173,10 +173,12 @@ test('Delay closing submenu when hovering items in parent menu list', async () =
 
   const quickEnterLeave = async (item, delay = submenuCloseDelay - 25, beOpen = true) => {
     fireEvent.pointerMove(item);
+    utils.expectMenuItemToBeMouseOver(item, true);
     await utils.delayFor(10);
     fireEvent.pointerMove(item);
     await utils.delayFor(delay - 10);
     fireEvent.pointerLeave(item);
+    utils.expectMenuItemToBeMouseOver(item, false);
     await utils.delayFor(submenuCloseDelay - delay + 25);
     utils.expectMenuToBeOpen(beOpen, submenuOptions1);
   };

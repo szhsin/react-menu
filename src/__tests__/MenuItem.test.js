@@ -308,7 +308,7 @@ test('FocusableItem', () => {
   expect(button).toHaveFocus();
   expect(button).toHaveClass('hover');
   expect(renderFn).toHaveBeenLastCalledWith(true);
-  expect(renderFn).toHaveBeenCalledTimes(8);
+  expect(renderFn).toHaveBeenCalledTimes(10);
 
   fireEvent.click(button);
   utils.expectMenuToBeOpen(false);

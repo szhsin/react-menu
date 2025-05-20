@@ -1,9 +1,11 @@
 import { useContext, useEffect } from 'react';
 import { SettingsContext, MenuListItemContext, HoverActionTypes } from '../utils';
 import { useItemEffect } from './useItemEffect';
+import { useMouseOver } from './useMouseOver';
 
 // This hook includes some common stateful logic in MenuItem and FocusableItem
 export const useItemState = (itemRef, focusRef, isHovering, isDisabled) => {
+  const [mouseOver, mouseOverStart, mouseOverEnd] = useMouseOver(isHovering);
   const { submenuCloseDelay } = useContext(SettingsContext);
   const { isParentOpen, submenuCtx, dispatch, updateItems } = useContext(MenuListItemContext);
 
@@ -24,11 +26,13 @@ export const useItemState = (itemRef, focusRef, isHovering, isDisabled) => {
   const onPointerMove = (e) => {
     if (!isDisabled) {
       e.stopPropagation();
+      mouseOverStart();
       submenuCtx.on(submenuCloseDelay, setHover, setHover);
     }
   };
 
   const onPointerLeave = (_, keepHover) => {
+    mouseOverEnd();
     submenuCtx.off();
     !keepHover && unsetHover();
   };
@@ -44,6 +48,7 @@ export const useItemState = (itemRef, focusRef, isHovering, isDisabled) => {
   }, [focusRef, isHovering, isParentOpen]);
 
   return {
+    mouseOver,
     setHover,
     onBlur,
     onPointerMove,

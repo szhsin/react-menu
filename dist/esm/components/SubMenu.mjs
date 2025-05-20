@@ -4,6 +4,7 @@ import { MenuList } from './MenuList.mjs';
 import { jsxs, jsx } from 'react/jsx-runtime';
 import { withHovering } from '../utils/withHovering.mjs';
 import { useMenuStateAndFocus } from '../hooks/useMenuStateAndFocus.mjs';
+import { useMouseOver } from '../hooks/useMouseOver.mjs';
 import { useItemEffect } from '../hooks/useItemEffect.mjs';
 import { SettingsContext, MenuListContext, MenuListItemContext, roleNone, roleMenuitem, menuClass, menuItemClass, subMenuClass, HoverActionTypes, Keys, FocusPositions } from '../utils/constants.mjs';
 import { useBEM } from '../hooks/useBEM.mjs';
@@ -48,6 +49,7 @@ const SubMenu = /*#__PURE__*/withHovering('SubMenu', function SubMenu({
     ...settings,
     onMenuChange
   });
+  const [mouseOver, mouseOverStart, mouseOverEnd] = useMouseOver(isHovering);
   const {
     state
   } = stateProps;
@@ -77,10 +79,12 @@ const SubMenu = /*#__PURE__*/withHovering('SubMenu', function SubMenu({
   const onPointerMove = e => {
     if (isDisabled) return;
     e.stopPropagation();
+    mouseOverStart();
     if (timerId.v || isOpen) return;
     submenuCtx.on(submenuCloseDelay, () => delayOpen(submenuOpenDelay - submenuCloseDelay), () => delayOpen(submenuOpenDelay));
   };
   const onPointerLeave = () => {
+    mouseOverEnd();
     stopTimer();
     if (!isOpen) dispatch(HoverActionTypes.UNSET, itemRef.current);
   };
@@ -139,10 +143,10 @@ const SubMenu = /*#__PURE__*/withHovering('SubMenu', function SubMenu({
   }));
   const modifiers = useMemo(() => ({
     open: isOpen,
-    hover: isHovering,
+    hover: mouseOver || isHovering,
     disabled: isDisabled,
     submenu: true
-  }), [isOpen, isHovering, isDisabled]);
+  }), [isOpen, isHovering, isDisabled, mouseOver]);
   const {
     ref: externalItemRef,
     className: itemClassName,

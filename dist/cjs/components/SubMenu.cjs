@@ -6,6 +6,7 @@ var MenuList = require('./MenuList.cjs');
 var jsxRuntime = require('react/jsx-runtime');
 var withHovering = require('../utils/withHovering.cjs');
 var useMenuStateAndFocus = require('../hooks/useMenuStateAndFocus.cjs');
+var useMouseOver = require('../hooks/useMouseOver.cjs');
 var useItemEffect = require('../hooks/useItemEffect.cjs');
 var constants = require('../utils/constants.cjs');
 var useBEM = require('../hooks/useBEM.cjs');
@@ -50,6 +51,7 @@ const SubMenu = /*#__PURE__*/withHovering.withHovering('SubMenu', function SubMe
     ...settings,
     onMenuChange
   });
+  const [mouseOver, mouseOverStart, mouseOverEnd] = useMouseOver.useMouseOver(isHovering);
   const {
     state
   } = stateProps;
@@ -79,10 +81,12 @@ const SubMenu = /*#__PURE__*/withHovering.withHovering('SubMenu', function SubMe
   const onPointerMove = e => {
     if (isDisabled) return;
     e.stopPropagation();
+    mouseOverStart();
     if (timerId.v || isOpen) return;
     submenuCtx.on(submenuCloseDelay, () => delayOpen(submenuOpenDelay - submenuCloseDelay), () => delayOpen(submenuOpenDelay));
   };
   const onPointerLeave = () => {
+    mouseOverEnd();
     stopTimer();
     if (!isOpen) dispatch(constants.HoverActionTypes.UNSET, itemRef.current);
   };
@@ -141,10 +145,10 @@ const SubMenu = /*#__PURE__*/withHovering.withHovering('SubMenu', function SubMe
   }));
   const modifiers = react.useMemo(() => ({
     open: isOpen,
-    hover: isHovering,
+    hover: mouseOver || isHovering,
     disabled: isDisabled,
     submenu: true
-  }), [isOpen, isHovering, isDisabled]);
+  }), [isOpen, isHovering, isDisabled, mouseOver]);
   const {
     ref: externalItemRef,
     className: itemClassName,
