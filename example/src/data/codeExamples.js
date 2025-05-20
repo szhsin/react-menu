@@ -1255,22 +1255,15 @@ export const features = {
   desc: (
     <ul className="features">
       <li>
-        Unstyled and lightweight{' '}
-        <a href="https://bundlephobia.com/package/@szhsin/react-menu">(8kB)</a> React menu
-        components.
+        <a href="https://bundlephobia.com/package/@szhsin/react-menu">Lightweight</a>, unstyled
+        React menu components
       </li>
-      <li>Unlimited levels of submenu</li>
-      <li>Supports dropdown, hover, and context menu</li>
-      <li>Supports radio and checkbox menu items</li>
-      <li>Flexible menu positioning</li>
-      <li>Comprehensive keyboard interactions</li>
-      <li>
-        Customisable <Link href={'#styling'}>styling</Link>
-      </li>
-      <li>
-        <a href="https://github.com/reactwg/react-18/discussions/70">Level 3 support</a> of React 18
-        concurrent rendering
-      </li>
+      <li>Unlimited submenu nesting</li>
+      <li>Supports dropdown, hover, and context menus</li>
+      <li>Radio and checkbox menu items</li>
+      <li>Flexible positioning options</li>
+      <li>Full keyboard interaction support</li>
+      <li>Compatible with React 18+ concurrent rendering</li>
       <li>Supports server-side rendering</li>
       <li>
         Implements{' '}

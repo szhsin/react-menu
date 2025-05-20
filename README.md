@@ -1,24 +1,23 @@
 # React-Menu
 
-> An accessible and keyboard-friendly React menu library.
+> An accessible, keyboard-friendly React menu library
 
 **[Live examples and docs](https://szhsin.github.io/react-menu/)**
 
 [![NPM](https://img.shields.io/npm/v/@szhsin/react-menu.svg)](https://www.npmjs.com/package/@szhsin/react-menu)
 [![NPM](https://img.shields.io/npm/dm/@szhsin/react-menu)](https://www.npmjs.com/package/@szhsin/react-menu)
-[![TypeScript](https://img.shields.io/badge/TypeScript-.d.ts-blue.svg)](https://github.com/szhsin/react-menu/blob/master/types/index.d.ts)
+[![bundlephobia](https://img.shields.io/bundlephobia/minzip/@szhsin/react-menu)](https://bundlephobia.com/package/@szhsin/react-menu)
 [![Known Vulnerabilities](https://snyk.io/test/github/szhsin/react-menu/badge.svg)](https://snyk.io/test/github/szhsin/react-menu)
 
 ## Features
 
-- Unstyled and lightweight [(8kB)](https://bundlephobia.com/package/@szhsin/react-menu) React menu components
-- Unlimited levels of submenu
-- Supports dropdown, hover, and context menu
-- Supports radio and checkbox menu items
-- Flexible menu positioning
-- Comprehensive keyboard interactions
-- Customisable [styling](https://szhsin.github.io/react-menu/#styling)
-- [Level 3 support](https://github.com/reactwg/react-18/discussions/70) of React 18 concurrent rendering
+- [Lightweight](https://bundlephobia.com/package/@szhsin/react-menu), unstyled React menu components
+- Unlimited submenu nesting
+- Supports dropdown, hover, and context menus
+- Radio and checkbox menu items
+- Flexible positioning options
+- Full keyboard interaction support
+- Compatible with React 18+ concurrent rendering
 - Supports server-side rendering
 - Implements [WAI-ARIA menu](https://www.w3.org/WAI/ARIA/apg/patterns/menu/) pattern
 

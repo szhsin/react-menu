@@ -47,6 +47,12 @@ export const expectMenuItemToBeHover = (menuItem, truthy) => {
   expect(menuItem).toHaveAttribute('tabindex', truthy ? '0' : '-1');
 };
 
+export const expectMenuItemToBeMouseOver = (menuItem, truthy) => {
+  const disabled = menuItem.className.includes('szh-menu__item--disabled');
+  expectToBe(menuItem, disabled ? false : truthy).toHaveClass('szh-menu__item--hover');
+  expect(menuItem).toHaveAttribute('tabindex', '-1');
+};
+
 export const expectMenuItemToBeChecked = (menuItem, truthy) => {
   expectToBe(menuItem, truthy).toHaveClass('szh-menu__item--checked');
   if (truthy !== undefined) {

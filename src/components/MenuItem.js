@@ -31,7 +31,12 @@ export const MenuItem = withHovering(
     ...restProps
   }) {
     const isDisabled = !!disabled;
-    const { setHover, ...restStateProps } = useItemState(itemRef, itemRef, isHovering, isDisabled);
+    const { mouseOver, setHover, ...restStateProps } = useItemState(
+      itemRef,
+      itemRef,
+      isHovering,
+      isDisabled
+    );
     const eventHandlers = useContext(EventHandlersContext);
     const radioGroup = useContext(RadioGroupContext);
     const isRadio = type === 'radio';
@@ -70,11 +75,11 @@ export const MenuItem = withHovering(
       () => ({
         type,
         disabled: isDisabled,
-        hover: isHovering,
+        hover: mouseOver || isHovering,
         checked: isChecked,
         anchor: isAnchor
       }),
-      [type, isDisabled, isHovering, isChecked, isAnchor]
+      [type, isDisabled, mouseOver, isHovering, isChecked, isAnchor]
     );
 
     const mergedProps = mergeProps(

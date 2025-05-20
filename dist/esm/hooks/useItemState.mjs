@@ -1,8 +1,10 @@
 import { useContext, useEffect } from 'react';
 import { useItemEffect } from './useItemEffect.mjs';
+import { useMouseOver } from './useMouseOver.mjs';
 import { SettingsContext, MenuListItemContext, HoverActionTypes } from '../utils/constants.mjs';
 
 const useItemState = (itemRef, focusRef, isHovering, isDisabled) => {
+  const [mouseOver, mouseOverStart, mouseOverEnd] = useMouseOver(isHovering);
   const {
     submenuCloseDelay
   } = useContext(SettingsContext);
@@ -24,10 +26,12 @@ const useItemState = (itemRef, focusRef, isHovering, isDisabled) => {
   const onPointerMove = e => {
     if (!isDisabled) {
       e.stopPropagation();
+      mouseOverStart();
       submenuCtx.on(submenuCloseDelay, setHover, setHover);
     }
   };
   const onPointerLeave = (_, keepHover) => {
+    mouseOverEnd();
     submenuCtx.off();
     !keepHover && unsetHover();
   };
@@ -38,6 +42,7 @@ const useItemState = (itemRef, focusRef, isHovering, isDisabled) => {
     }
   }, [focusRef, isHovering, isParentOpen]);
   return {
+    mouseOver,
     setHover,
     onBlur,
     onPointerMove,

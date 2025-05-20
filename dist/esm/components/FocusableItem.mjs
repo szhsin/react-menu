@@ -19,6 +19,7 @@ const FocusableItem = /*#__PURE__*/withHovering('FocusableItem', function Focusa
   const isDisabled = !!disabled;
   const ref = useRef(null);
   const {
+    mouseOver,
     setHover,
     onPointerLeave,
     ...restStateProps
@@ -28,9 +29,9 @@ const FocusableItem = /*#__PURE__*/withHovering('FocusableItem', function Focusa
   } = useContext(EventHandlersContext);
   const modifiers = useMemo(() => ({
     disabled: isDisabled,
-    hover: isHovering,
+    hover: mouseOver || isHovering,
     focusable: true
-  }), [isDisabled, isHovering]);
+  }), [isDisabled, isHovering, mouseOver]);
   const renderChildren = useMemo(() => safeCall(children, {
     ...modifiers,
     ref,
