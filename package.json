@@ -72,7 +72,7 @@
     "react-dom": "^19.1.0",
     "rollup": "^4.41.0",
     "rollup-plugin-add-directive": "^1.0.0",
-    "sass": "^1.87.0",
+    "sass": "^1.89.0",
     "typescript": "^5.8.3"
   },
   "overrides": {
