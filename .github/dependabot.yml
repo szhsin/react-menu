@@ -10,8 +10,14 @@ updates:
     versioning-strategy: increase
     schedule:
       interval: 'daily'
+    groups:
+      all-dependencies:
+        patterns: ['*']
   - package-ecosystem: 'npm'
     directory: '/example'
     versioning-strategy: increase
     schedule:
-      interval: 'daily'
+      interval: 'weekly'
+    groups:
+      all-dependencies:
+        patterns: ['*']
