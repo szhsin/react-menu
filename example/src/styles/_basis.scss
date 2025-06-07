@@ -1,6 +1,10 @@
 @use 'var';
 @use 'mixins';
 
+:root {
+  --mono-font: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+}
+
 body {
   margin: 0;
   padding: 0;
@@ -16,7 +20,7 @@ pre {
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+  font-family: var(--mono-font);
   background-color: var.$code-light;
   border-radius: var.$border-radius-medium;
   padding: 0.2rem 0.4rem;
