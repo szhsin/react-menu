@@ -1,11 +1,10 @@
 import { memo } from 'react';
 import { bem } from '../utils';
-import { ExternalLinkIcon } from './Icons';
 
 const blockName = 'promo-spot';
 
 export const PromoSpot = memo(function PromoSpot({ label, title, desc, link }) {
-  const modifier = { [label.toLowerCase()]: true };
+  const modifier = { ...(label && { [label.toLowerCase()]: true }) };
   return (
     <a
       className={bem(blockName, null, modifier)}
@@ -13,11 +12,7 @@ export const PromoSpot = memo(function PromoSpot({ label, title, desc, link }) {
       rel="noopener noreferrer"
       href={link}
     >
-      <div className={bem(blockName, 'label', modifier)}>
-        {label}
-        <ExternalLinkIcon />
-      </div>
-      <strong>{title}</strong>
+      <strong className={bem(blockName, 'title')}>{title}</strong>
       <div className={bem(blockName, 'desc')}>{desc}</div>
     </a>
   );

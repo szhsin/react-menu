@@ -312,7 +312,7 @@ const zIndex = {
         E.g., set <code>z-index</code> to 1000:
       </p>
       <pre>
-        <code className="hljs">
+        <code className="prism-code">
           {`${menuSelector.name} {
   z-index: 1000;
 }`}
