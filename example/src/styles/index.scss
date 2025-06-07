@@ -373,7 +373,8 @@ $toc-animation: 0.22s ease-out;
       &__header {
         display: flex;
         align-items: center;
-        padding: 1rem;
+        gap: 2rem;
+        padding: 1rem 1.5rem;
         @include mixins.border(border-bottom);
       }
 
