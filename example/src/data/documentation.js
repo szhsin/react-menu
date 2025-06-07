@@ -1211,7 +1211,7 @@ const controlledMenu = {
               <p>You will usually set this prop when the menu is opened by keyboard events.</p>
               <p>It's an object with the shape of:</p>
               <pre>
-                <code className="hljs">{`{
+                <code className="prism-code">{`{
     position?: 'first' | 'last' | number;
     alwaysUpdate?: boolean;
 }`}</code>
@@ -1282,7 +1282,7 @@ const menuStateHook = {
         spread to its props. See an <Link href={'/#use-menu-state'}>example</Link>.
       </p>
       <pre>
-        <code className="hljs">{`function useMenuState(options?: {
+        <code className="prism-code">{`function useMenuState(options?: {
     initialOpen?: boolean;
     initialMounted?: boolean;
     unmountOnClose?: boolean;

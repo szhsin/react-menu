@@ -1,0 +1,32 @@
+@use 'var';
+@use 'mixins';
+
+.prism-code {
+  @include mixins.scrollbar(10px, height);
+  background-color: #f2f2f3 !important;
+  display: block;
+  overflow-x: auto;
+  font-size: 90%;
+  color: inherit;
+  border-radius: var.$border-radius-medium;
+  padding: 1rem 1.25rem;
+
+  .token-line {
+    width: fit-content;
+  }
+}
+
+.szh-app--theme-dark .prism-code {
+  @include mixins.scrollbar-dark;
+  background-color: var.$block-dark !important;
+}
+
+.szh-app--theme-light .prism-code .token {
+  &.comment {
+    color: #028000 !important;
+    font-style: normal !important;
+  }
+  &.attr-name {
+    color: #235dbe !important;
+  }
+}

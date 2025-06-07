@@ -48,9 +48,9 @@
   }
 }
 
-@mixin scrollbar($width: 7px) {
+@mixin scrollbar($size: 7px, $dimension: 'width') {
   &::-webkit-scrollbar {
-    width: $width;
+    #{$dimension}: $size;
   }
   &::-webkit-scrollbar-thumb {
     background-color: color.scale(var.$border-light, $lightness: -15%);

@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { Highlight, themes } from 'prism-react-renderer';
 import { ControlledMenu, useMenuState } from '@szhsin/react-menu';
 import { bem } from '../utils';
 import { useDomInfo, useTheme } from '../store';
-import hljs from '../utils/highlight';
 import { CodeSandboxIcon } from './Icons';
 import { HashHeading } from './HashHeading';
 
@@ -31,6 +31,7 @@ export const Example = React.memo(
     const [anchorRef, setAnchorRef] = useState();
     const [toolTip, setToolTip] = useState();
     const { navbarHeight } = useDomInfo();
+    const { isDark, theme } = useTheme();
 
     const handleCopy = async () => {
       try {
@@ -54,8 +55,7 @@ export const Example = React.memo(
 
     useEffect(() => {
       setToolTip(sourceBtnTitle);
-      refSection.current.querySelectorAll('pre code').forEach((elt) => hljs.highlightElement(elt));
-    }, [/* effect dep */ sourceCode, sourceBtnTitle]);
+    }, [sourceBtnTitle]);
 
     return (
       <section className={bem(blockName)} ref={refSection} aria-labelledby={id}>
@@ -108,7 +108,7 @@ export const Example = React.memo(
           )}
 
           <ControlledMenu
-            theming={useTheme().theme}
+            theming={theme}
             anchorRef={anchorRef}
             state={state}
             captureFocus={false}
@@ -123,10 +123,27 @@ export const Example = React.memo(
         </div>
 
         {sourceCode && (
-          <pre key={sourceCode.length} className={bem(blockName, 'source')}>
-            <code className="lang-jsx">{sourceCode}</code>
-          </pre>
+          <Highlight
+            theme={isDark ? themes.vsDark : themes.github}
+            code={sourceCode}
+            language="jsx"
+          >
+            {({ className, style, tokens, getLineProps, getTokenProps }) => (
+              <pre>
+                <code className={className} style={style}>
+                  {tokens.map((line, i) => (
+                    <div key={i} {...getLineProps({ line })}>
+                      {line.map((token, key) => (
+                        <span key={key} {...getTokenProps({ token })} />
+                      ))}
+                    </div>
+                  ))}
+                </code>
+              </pre>
+            )}
+          </Highlight>
         )}
+
         {note}
       </section>
     );
