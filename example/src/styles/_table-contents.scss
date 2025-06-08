@@ -40,10 +40,15 @@
     box-sizing: border-box;
     padding: 0.5rem 1rem 2rem 1rem;
 
-    &:hover::-webkit-scrollbar {
-      width: 6px;
+    @include mixins.scrollbar(6px);
+    &:not(:hover) {
+      &::-webkit-scrollbar-thumb {
+        background-color: transparent;
+      }
+      &::-webkit-scrollbar-track {
+        background-color: transparent;
+      }
     }
-    @include mixins.scrollbar(0);
     > li {
       margin: 0.5rem 0;
     }
