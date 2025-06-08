@@ -49,6 +49,7 @@
 }
 
 @mixin scrollbar($size: 7px, $dimension: 'width') {
+  // Chrome, Safari, Edge
   &::-webkit-scrollbar {
     #{$dimension}: $size;
   }
