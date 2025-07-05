@@ -5,14 +5,14 @@
   "homepage": ".",
   "dependencies": {
     "@szhsin/react-menu": "file:..",
-    "next": "^15.3.3",
+    "next": "^15.3.5",
     "prism-react-renderer": "^2.4.1",
     "react": "file:../node_modules/react",
     "react-dom": "file:../node_modules/react-dom",
     "reactish-state": "^1.0.0"
   },
   "devDependencies": {
-    "eslint-config-next": "^15.3.3"
+    "eslint-config-next": "^15.3.5"
   },
   "scripts": {
     "dev": "next dev",
