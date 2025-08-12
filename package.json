@@ -53,11 +53,11 @@
     "@testing-library/jest-dom": "^6.6.4",
     "@testing-library/react": "^16.3.0",
     "@types/jest": "^30.0.0",
-    "@types/react": "^19.1.9",
+    "@types/react": "^19.1.10",
     "@types/react-dom": "^19.1.7",
     "babel-plugin-pure-annotations": "^0.1.2",
     "deplift": "^1.0.1",
-    "eslint": "^9.32.0",
+    "eslint": "^9.33.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-jest": "^29.0.1",
     "eslint-plugin-react": "^7.37.5",
@@ -74,8 +74,8 @@
     "react-dom": "^19.1.1",
     "rollup": "^4.46.2",
     "rollup-plugin-add-directive": "^1.0.0",
-    "sass": "^1.89.2",
-    "typescript": "^5.8.3"
+    "sass": "^1.90.0",
+    "typescript": "^5.9.2"
   },
   "keywords": [
     "react",
