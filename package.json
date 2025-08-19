@@ -72,7 +72,7 @@
     "prettier": "^3.6.2",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
-    "rollup": "^4.46.2",
+    "rollup": "^4.46.3",
     "rollup-plugin-add-directive": "^1.0.0",
     "sass": "^1.90.0",
     "typescript": "^5.9.2"
