@@ -44,13 +44,14 @@ export const SubMenu = withHovering(
     captureFocus: _1,
     repositionFlag: _2,
     itemProps = {},
+    portal = true,
     ...restProps
   }) {
     const settings = useContext(SettingsContext);
     const { rootMenuRef, submenuOpenDelay, submenuCloseDelay } = settings;
     const { parentMenuRef, parentDir, overflow: parentOverflow } = useContext(MenuListContext);
     const { isParentOpen, submenuCtx, dispatch, updateItems } = useContext(MenuListItemContext);
-    const isPortal = parentOverflow !== 'visible';
+    const isPortal = portal || parentOverflow !== 'visible';
     const [stateProps, toggleMenu, _openMenu] = useMenuStateAndFocus({ ...settings, onMenuChange });
     const [mouseOver, mouseOverStart, mouseOverEnd] = useMouseOver(isHovering);
     const { state } = stateProps;
