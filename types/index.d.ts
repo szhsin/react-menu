@@ -491,6 +491,12 @@ export interface SubMenuProps extends BaseMenuProps, Hoverable, UncontrolledMenu
    * you can call the `openMenu` function on `instanceRef` to open submenu programmatically.
    */
   openTrigger?: 'none' | 'clickOnly';
+  /**
+   * If true, the submenu will be rendered directly under the root container
+   * instead of nested inside its parent menu.
+   * @default false
+   */
+  portal?: boolean;
 }
 
 export const SubMenu: React.NamedExoticComponent<SubMenuProps>;

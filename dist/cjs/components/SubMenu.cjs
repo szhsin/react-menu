@@ -27,6 +27,7 @@ const SubMenu = /*#__PURE__*/withHovering.withHovering('SubMenu', function SubMe
   captureFocus: _1,
   repositionFlag: _2,
   itemProps = {},
+  portal = false,
   ...restProps
 }) {
   const settings = react.useContext(constants.SettingsContext);
@@ -46,7 +47,7 @@ const SubMenu = /*#__PURE__*/withHovering.withHovering('SubMenu', function SubMe
     dispatch,
     updateItems
   } = react.useContext(constants.MenuListItemContext);
-  const isPortal = parentOverflow !== 'visible';
+  const isPortal = portal || parentOverflow !== 'visible';
   const [stateProps, toggleMenu, _openMenu] = useMenuStateAndFocus.useMenuStateAndFocus({
     ...settings,
     onMenuChange
