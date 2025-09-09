@@ -44,7 +44,7 @@ export const SubMenu = withHovering(
     captureFocus: _1,
     repositionFlag: _2,
     itemProps = {},
-    portal = true,
+    portal = false,
     ...restProps
   }) {
     const settings = useContext(SettingsContext);
