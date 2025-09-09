@@ -467,8 +467,33 @@ test('Open and close menu with instanceRef', async () => {
   expect(utils.queryMenuItem('Submenu')).toHaveFocus();
 });
 
+test.each([false, true])('Submenu renders correctly in DOM when portal is %s', (portal) => {
+  renderMenu(
+    {
+      'data-testid': 'menu',
+      containerProps: { 'data-testid': 'container' }
+    },
+    null,
+    { 'data-testid': 'submenu', portal }
+  );
+  utils.clickMenuButton();
+  const submenuItem = utils.queryMenuItem('Submenu');
+  fireEvent.click(submenuItem);
+
+  const menu = screen.getByTestId('menu');
+  const submenu = screen.getByTestId('submenu');
+  expect(screen.getByTestId('container')).toContainElement(submenu);
+  /* eslint-disable jest/no-conditional-expect */
+  if (portal) {
+    expect(menu).not.toContainElement(submenu);
+  } else {
+    expect(menu).toContainElement(submenu);
+  }
+  /* eslint-enable jest/no-conditional-expect */
+});
+
 test.each([false, true])(
-  'Submenu renders differently when parent menu overflow is %s',
+  'Submenu renders correctly in DOM when parent menu overflow is %s',
   (overflow) => {
     renderMenu(
       {
