@@ -386,7 +386,7 @@ export interface MenuButtonProps extends BaseProps<MenuButtonModifiers> {
   children?: React.ReactNode;
 }
 
-export const MenuButton: React.ElementType<MenuButtonProps>;
+export const MenuButton: React.ForwardRefExoticComponent<MenuButtonProps>;
 
 //
 // Menu
@@ -404,7 +404,7 @@ export interface MenuProps extends RootMenuProps, UncontrolledMenuProps {
   menuButton: RenderProp<MenuButtonModifiers, React.ReactElement>;
 }
 
-export const Menu: React.ElementType<MenuProps>;
+export const Menu: React.ForwardRefExoticComponent<MenuProps>;
 
 //
 // ControlledMenu
@@ -455,7 +455,7 @@ export interface ControlledMenuProps extends RootMenuProps {
   onClose?: EventHandler<MenuCloseEvent>;
 }
 
-export const ControlledMenu: React.ElementType<ControlledMenuProps>;
+export const ControlledMenu: React.ForwardRefExoticComponent<ControlledMenuProps>;
 
 //
 // SubMenu
@@ -499,7 +499,7 @@ export interface SubMenuProps extends BaseMenuProps, Hoverable, UncontrolledMenu
   portal?: boolean;
 }
 
-export const SubMenu: React.ElementType<SubMenuProps>;
+export const SubMenu: React.ForwardRefExoticComponent<SubMenuProps>;
 
 //
 // MenuItem
@@ -562,7 +562,7 @@ export interface MenuItemProps extends Omit<BaseProps<MenuItemModifiers>, 'onCli
   children?: RenderProp<MenuItemModifiers>;
 }
 
-export const MenuItem: React.ElementType<MenuItemProps>;
+export const MenuItem: React.ForwardRefExoticComponent<MenuItemProps>;
 
 //
 // FocusableItem
@@ -615,12 +615,12 @@ export interface FocusableItemProps extends BaseProps<FocusableItemModifiers>, H
  *
  * @example https://szhsin.github.io/react-menu/#focusable-item
  */
-export const FocusableItem: React.ElementType<FocusableItemProps>;
+export const FocusableItem: React.ForwardRefExoticComponent<FocusableItemProps>;
 
 //
 // MenuDivider
 // ----------------------------------------------------------------------
-export const MenuDivider: React.ElementType<BaseProps>;
+export const MenuDivider: React.ForwardRefExoticComponent<BaseProps>;
 
 //
 // MenuHeader
@@ -629,7 +629,7 @@ export interface MenuHeaderProps extends BaseProps {
   children?: React.ReactNode;
 }
 
-export const MenuHeader: React.ElementType<MenuHeaderProps>;
+export const MenuHeader: React.ForwardRefExoticComponent<MenuHeaderProps>;
 
 //
 // MenuGroup
@@ -648,7 +648,7 @@ export interface MenuGroupProps extends BaseProps {
  *
  * @example https://szhsin.github.io/react-menu/#menu-overflow
  */
-export const MenuGroup: React.ElementType<MenuGroupProps>;
+export const MenuGroup: React.ForwardRefExoticComponent<MenuGroupProps>;
 
 //
 // MenuRadioGroup
@@ -675,7 +675,7 @@ export interface MenuRadioGroupProps extends BaseProps {
   onRadioChange?: EventHandler<RadioChangeEvent>;
 }
 
-export const MenuRadioGroup: React.ElementType<MenuRadioGroupProps>;
+export const MenuRadioGroup: React.ForwardRefExoticComponent<MenuRadioGroupProps>;
 
 /**
  * A custom Hook which helps manage the states of `ControlledMenu`.
