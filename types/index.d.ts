@@ -23,8 +23,10 @@ export type ClassNameProp<M = undefined> = string | ((modifiers: M) => string);
 
 export type RenderProp<M, R = React.ReactNode> = R | ((modifiers: M) => R);
 
-export interface BaseProps<M = undefined>
-  extends Omit<React.HTMLAttributes<HTMLElement>, 'className' | 'children'> {
+export interface BaseProps<M = undefined> extends Omit<
+  React.HTMLAttributes<HTMLElement>,
+  'className' | 'children'
+> {
   ref?: React.Ref<any>;
   /**
    * Can be a string or a function which receives a modifier object and returns a CSS `class` string.
@@ -264,8 +266,7 @@ export interface BaseMenuProps extends Omit<BaseProps, 'style'> {
  * Common props for `Menu` and `ControlledMenu`
  */
 export interface RootMenuProps
-  extends BaseMenuProps,
-    Omit<MenuStateOptions, 'initialOpen' | 'onMenuChange'> {
+  extends BaseMenuProps, Omit<MenuStateOptions, 'initialOpen' | 'onMenuChange'> {
   /**
    * Properties of this object are spread to the root DOM element containing the menu.
    */
