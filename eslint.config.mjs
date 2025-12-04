@@ -17,7 +17,15 @@ export default [
   react.configs.flat['jsx-runtime'],
   reactHooksAddons.configs.recommended,
   {
-    ignores: ['**/dist/', '**/types/', '**/coverage/', '**/example/']
+    ignores: [
+      '**/coverage/',
+      '**/dist/',
+      '**/types/',
+      '**/build/',
+      '**/static/',
+      '**/.next/',
+      '**/*.d.ts'
+    ]
   },
   {
     languageOptions: {
@@ -60,6 +68,12 @@ export default [
       'react-hooks/rules-of-hooks': 'error',
       'react-hooks/exhaustive-deps': 'error',
       'react-hooks-addons/no-unused-deps': 'error'
+    }
+  },
+  {
+    files: ['example/**/*'],
+    rules: {
+      'react/display-name': 0
     }
   }
 ];

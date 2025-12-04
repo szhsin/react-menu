@@ -1,8 +1,10 @@
+const path = require('node:path');
+
 module.exports = {
   reactStrictMode: true,
   output: 'export',
   basePath: '/react-menu',
-  eslint: {
-    dirs: ['src']
+  turbopack: {
+    root: path.join(__dirname, '..')
   }
 };
