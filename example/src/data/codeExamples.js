@@ -640,8 +640,8 @@ export const customisedButton = {
     <>
       <p>
         You can use a native button element with <code>Menu</code>, or use your own React button
-        component which implements a forwarding ref and accepts <code>onClick</code> and{' '}
-        <code>onKeyDown</code> event props.
+        component which implements a forwarding ref and accepts <code>onClick</code>,{' '}
+        <code>onKeyDown</code> and <code>onMouseDown</code> event props.
       </p>
       <p>
         <code>Menu</code> also works well with popular React libraries, such as the{' '}
