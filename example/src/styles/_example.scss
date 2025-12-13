@@ -10,7 +10,9 @@
   }
 
   &__action-btn {
-    @include mixins.flex-center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     border-radius: 50%;
     width: 2.25rem;
     height: 2.25rem;
@@ -31,7 +33,9 @@
   }
 
   &__demo {
-    @include mixins.flex-center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     background-color: white;
     padding: 1rem;
     border-radius: var.$border-radius-medium;

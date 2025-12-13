@@ -13,14 +13,6 @@
   }
 }
 
-// $axis: 'b' -- both, 'm' -- main axis, 'c' -- cross axis
-@mixin flex-center($axis: 'b', $column: false) {
-  display: flex;
-  flex-direction: if($column, column, row);
-  justify-content: if($axis == 'b' or $axis == 'm', center, flex-start);
-  align-items: if($axis == 'b' or $axis == 'c', center, flex-start);
-}
-
 @mixin focus($width: 1px, $color: var.$focus-light) {
   &:focus-visible {
     border-color: $color;
