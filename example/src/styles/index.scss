@@ -72,7 +72,9 @@
 }
 
 #footer {
-  @include mixins.flex-center('c', true);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   font-size: 0.9em;
   color: var.$secondary-light;
   padding: 2rem 1.5rem;
@@ -94,9 +96,10 @@
 
   .github-btn {
     @include mixins.remove-focus;
-    @include mixins.flex-center('c');
     @include mixins.border;
     @include mixins.transition((background-color, border-color));
+    display: flex;
+    align-items: center;
     color: inherit;
     font-size: 0.75rem;
     font-weight: 600;
