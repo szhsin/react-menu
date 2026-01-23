@@ -9,7 +9,7 @@ import { useItemEffect } from '../hooks/useItemEffect.mjs';
 import { SettingsContext, MenuListContext, MenuListItemContext, roleNone, roleMenuitem, menuClass, menuItemClass, subMenuClass, HoverActionTypes, Keys, FocusPositions } from '../utils/constants.mjs';
 import { useBEM } from '../hooks/useBEM.mjs';
 import { useCombinedRef } from '../hooks/useCombinedRef.mjs';
-import { isMenuOpen, mergeProps, commonProps, safeCall, batchedUpdates } from '../utils/utils.mjs';
+import { mergeProps, safeCall, commonProps, isMenuOpen, batchedUpdates } from '../utils/utils.mjs';
 
 const SubMenu = /*#__PURE__*/withHovering('SubMenu', function SubMenu({
   'aria-label': ariaLabel,

@@ -2,8 +2,8 @@
 
 var react = require('react');
 var reactTransitionState = require('react-transition-state');
-var utils = require('../utils/utils.cjs');
 var constants = require('../utils/constants.cjs');
+var utils = require('../utils/utils.cjs');
 
 const useMenuState = ({
   initialOpen,

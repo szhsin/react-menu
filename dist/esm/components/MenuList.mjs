@@ -5,7 +5,7 @@ import { jsxs, jsx } from 'react/jsx-runtime';
 import { createSubmenuCtx } from '../utils/submenuCtx.mjs';
 import { SettingsContext, MenuListContext, HoverActionTypes, noScrollFocus, menuClass, menuArrowClass, positionAbsolute, MenuListItemContext, HoverItemContext, CloseReason, FocusPositions, Keys } from '../utils/constants.mjs';
 import { useItems } from '../hooks/useItems.mjs';
-import { getScrollAncestor, isMenuOpen, batchedUpdates, getTransition, mergeProps, commonProps, safeCall } from '../utils/utils.mjs';
+import { getScrollAncestor, safeCall, mergeProps, commonProps, isMenuOpen, batchedUpdates, getTransition } from '../utils/utils.mjs';
 import { getPositionHelpers } from '../positionUtils/getPositionHelpers.mjs';
 import { positionMenu } from '../positionUtils/positionMenu.mjs';
 import { useLayoutEffect as useIsomorphicLayoutEffect } from '../hooks/useIsomorphicLayoutEffect.mjs';

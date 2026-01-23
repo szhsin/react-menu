@@ -1,8 +1,8 @@
 import { useMemo } from 'react';
 import { jsx } from 'react/jsx-runtime';
 import { useBEM } from '../hooks/useBEM.mjs';
-import { mergeProps, getTransition, safeCall } from '../utils/utils.mjs';
 import { menuContainerClass, CloseReason, Keys } from '../utils/constants.mjs';
+import { mergeProps, getTransition, safeCall } from '../utils/utils.mjs';
 
 const MenuContainer = ({
   className,
