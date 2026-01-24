@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 import { useTransitionState } from 'react-transition-state';
-import { getTransition } from '../utils/utils.mjs';
 import { MenuStateMap } from '../utils/constants.mjs';
+import { getTransition } from '../utils/utils.mjs';
 
 const useMenuState = ({
   initialOpen,

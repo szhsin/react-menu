@@ -3,8 +3,8 @@
 var react = require('react');
 var jsxRuntime = require('react/jsx-runtime');
 var useBEM = require('../hooks/useBEM.cjs');
-var utils = require('../utils/utils.cjs');
 var constants = require('../utils/constants.cjs');
+var utils = require('../utils/utils.cjs');
 
 const MenuContainer = ({
   className,
