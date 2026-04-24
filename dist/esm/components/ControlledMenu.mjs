@@ -2,8 +2,8 @@ import { forwardRef, useRef, useMemo } from 'react';
 import { createPortal } from 'react-dom';
 import { MenuList } from './MenuList.mjs';
 import { jsx } from 'react/jsx-runtime';
-import { SettingsContext, EventHandlersContext, CloseReason, Keys } from '../utils/constants.mjs';
 import { safeCall } from '../utils/utils.mjs';
+import { SettingsContext, EventHandlersContext, CloseReason, Keys } from '../utils/constants.mjs';
 
 const ControlledMenu = /*#__PURE__*/forwardRef(function ControlledMenu({
   'aria-label': ariaLabel,

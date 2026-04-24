@@ -3,9 +3,9 @@ import { ControlledMenu } from './ControlledMenu.mjs';
 import { jsxs, jsx } from 'react/jsx-runtime';
 import { useMenuStateAndFocus } from '../hooks/useMenuStateAndFocus.mjs';
 import { useClick } from '../hooks/useClick.mjs';
-import { useCombinedRef } from '../hooks/useCombinedRef.mjs';
-import { safeCall, mergeProps, isMenuOpen, getName } from '../utils/utils.mjs';
 import { FocusPositions, Keys } from '../utils/constants.mjs';
+import { safeCall, mergeProps, isMenuOpen, getName } from '../utils/utils.mjs';
+import { useCombinedRef } from '../hooks/useCombinedRef.mjs';
 
 const isLegacyReact = parseInt(version) < 19;
 const Menu = /*#__PURE__*/forwardRef(function Menu({

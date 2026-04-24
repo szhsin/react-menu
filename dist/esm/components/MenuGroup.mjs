@@ -1,10 +1,10 @@
 import { forwardRef, useRef, useState, useContext } from 'react';
 import { jsx } from 'react/jsx-runtime';
+import { MenuListContext, menuClass, menuGroupClass } from '../utils/constants.mjs';
 import { useLayoutEffect as useIsomorphicLayoutEffect } from '../hooks/useIsomorphicLayoutEffect.mjs';
 import { getNormalizedClientRect } from '../positionUtils/getNormalizedClientRect.mjs';
 import { useBEM } from '../hooks/useBEM.mjs';
 import { useCombinedRef } from '../hooks/useCombinedRef.mjs';
-import { MenuListContext, menuClass, menuGroupClass } from '../utils/constants.mjs';
 
 const MenuGroup = /*#__PURE__*/forwardRef(function MenuGroup({
   className,

@@ -3,13 +3,13 @@ import { createPortal } from 'react-dom';
 import { MenuList } from './MenuList.mjs';
 import { jsxs, jsx } from 'react/jsx-runtime';
 import { withHovering } from '../utils/withHovering.mjs';
+import { SettingsContext, MenuListContext, MenuListItemContext, roleNone, roleMenuitem, menuClass, menuItemClass, subMenuClass, HoverActionTypes, Keys, FocusPositions } from '../utils/constants.mjs';
 import { useMenuStateAndFocus } from '../hooks/useMenuStateAndFocus.mjs';
 import { useMouseOver } from '../hooks/useMouseOver.mjs';
 import { useItemEffect } from '../hooks/useItemEffect.mjs';
-import { SettingsContext, MenuListContext, MenuListItemContext, roleNone, roleMenuitem, menuClass, menuItemClass, subMenuClass, HoverActionTypes, Keys, FocusPositions } from '../utils/constants.mjs';
+import { mergeProps, safeCall, commonProps, isMenuOpen, batchedUpdates } from '../utils/utils.mjs';
 import { useBEM } from '../hooks/useBEM.mjs';
 import { useCombinedRef } from '../hooks/useCombinedRef.mjs';
-import { mergeProps, safeCall, commonProps, isMenuOpen, batchedUpdates } from '../utils/utils.mjs';
 
 const SubMenu = /*#__PURE__*/withHovering('SubMenu', function SubMenu({
   'aria-label': ariaLabel,

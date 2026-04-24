@@ -1,11 +1,11 @@
 import { useRef, useContext, useMemo } from 'react';
 import { jsx } from 'react/jsx-runtime';
-import { useItemState } from '../hooks/useItemState.mjs';
-import { useBEM } from '../hooks/useBEM.mjs';
-import { useCombinedRef } from '../hooks/useCombinedRef.mjs';
 import { withHovering } from '../utils/withHovering.mjs';
+import { useItemState } from '../hooks/useItemState.mjs';
 import { EventHandlersContext, roleMenuitem, menuClass, menuItemClass } from '../utils/constants.mjs';
 import { safeCall, mergeProps, commonProps } from '../utils/utils.mjs';
+import { useBEM } from '../hooks/useBEM.mjs';
+import { useCombinedRef } from '../hooks/useCombinedRef.mjs';
 
 const FocusableItem = /*#__PURE__*/withHovering('FocusableItem', function FocusableItem({
   className,

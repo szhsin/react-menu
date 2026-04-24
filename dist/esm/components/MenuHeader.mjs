@@ -1,7 +1,7 @@
 import { memo, forwardRef } from 'react';
 import { jsx } from 'react/jsx-runtime';
-import { useBEM } from '../hooks/useBEM.mjs';
 import { roleNone, menuClass, menuHeaderClass } from '../utils/constants.mjs';
+import { useBEM } from '../hooks/useBEM.mjs';
 
 const MenuHeader = /*#__PURE__*/memo(/*#__PURE__*/forwardRef(function MenuHeader({
   className,

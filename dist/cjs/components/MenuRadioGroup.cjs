@@ -2,8 +2,8 @@
 
 var react = require('react');
 var jsxRuntime = require('react/jsx-runtime');
-var useBEM = require('../hooks/useBEM.cjs');
 var constants = require('../utils/constants.cjs');
+var useBEM = require('../hooks/useBEM.cjs');
 
 const MenuRadioGroup = /*#__PURE__*/react.forwardRef(function MenuRadioGroup({
   'aria-label': ariaLabel,
