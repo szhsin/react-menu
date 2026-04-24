@@ -5,9 +5,9 @@ var ControlledMenu = require('./ControlledMenu.cjs');
 var jsxRuntime = require('react/jsx-runtime');
 var useMenuStateAndFocus = require('../hooks/useMenuStateAndFocus.cjs');
 var useClick = require('../hooks/useClick.cjs');
-var useCombinedRef = require('../hooks/useCombinedRef.cjs');
-var utils = require('../utils/utils.cjs');
 var constants = require('../utils/constants.cjs');
+var utils = require('../utils/utils.cjs');
+var useCombinedRef = require('../hooks/useCombinedRef.cjs');
 
 const isLegacyReact = parseInt(react.version) < 19;
 const Menu = /*#__PURE__*/react.forwardRef(function Menu({

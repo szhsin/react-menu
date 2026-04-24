@@ -4,8 +4,8 @@ var react = require('react');
 var reactDom = require('react-dom');
 var MenuList = require('./MenuList.cjs');
 var jsxRuntime = require('react/jsx-runtime');
-var constants = require('../utils/constants.cjs');
 var utils = require('../utils/utils.cjs');
+var constants = require('../utils/constants.cjs');
 
 const ControlledMenu = /*#__PURE__*/react.forwardRef(function ControlledMenu({
   'aria-label': ariaLabel,

@@ -2,11 +2,11 @@
 
 var react = require('react');
 var jsxRuntime = require('react/jsx-runtime');
+var constants = require('../utils/constants.cjs');
 var useIsomorphicLayoutEffect = require('../hooks/useIsomorphicLayoutEffect.cjs');
 var getNormalizedClientRect = require('../positionUtils/getNormalizedClientRect.cjs');
 var useBEM = require('../hooks/useBEM.cjs');
 var useCombinedRef = require('../hooks/useCombinedRef.cjs');
-var constants = require('../utils/constants.cjs');
 
 const MenuGroup = /*#__PURE__*/react.forwardRef(function MenuGroup({
   className,
