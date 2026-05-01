@@ -5,13 +5,13 @@ var reactDom = require('react-dom');
 var MenuList = require('./MenuList.cjs');
 var jsxRuntime = require('react/jsx-runtime');
 var withHovering = require('../utils/withHovering.cjs');
+var constants = require('../utils/constants.cjs');
 var useMenuStateAndFocus = require('../hooks/useMenuStateAndFocus.cjs');
 var useMouseOver = require('../hooks/useMouseOver.cjs');
 var useItemEffect = require('../hooks/useItemEffect.cjs');
-var constants = require('../utils/constants.cjs');
+var utils = require('../utils/utils.cjs');
 var useBEM = require('../hooks/useBEM.cjs');
 var useCombinedRef = require('../hooks/useCombinedRef.cjs');
-var utils = require('../utils/utils.cjs');
 
 const SubMenu = /*#__PURE__*/withHovering.withHovering('SubMenu', function SubMenu({
   'aria-label': ariaLabel,

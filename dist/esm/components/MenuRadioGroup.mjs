@@ -1,7 +1,7 @@
 import { forwardRef, useMemo } from 'react';
 import { jsx } from 'react/jsx-runtime';
-import { useBEM } from '../hooks/useBEM.mjs';
 import { RadioGroupContext, roleNone, menuClass, radioGroupClass } from '../utils/constants.mjs';
+import { useBEM } from '../hooks/useBEM.mjs';
 
 const MenuRadioGroup = /*#__PURE__*/forwardRef(function MenuRadioGroup({
   'aria-label': ariaLabel,

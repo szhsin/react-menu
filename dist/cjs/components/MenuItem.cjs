@@ -2,12 +2,12 @@
 
 var react = require('react');
 var jsxRuntime = require('react/jsx-runtime');
+var withHovering = require('../utils/withHovering.cjs');
 var useItemState = require('../hooks/useItemState.cjs');
 var constants = require('../utils/constants.cjs');
+var utils = require('../utils/utils.cjs');
 var useBEM = require('../hooks/useBEM.cjs');
 var useCombinedRef = require('../hooks/useCombinedRef.cjs');
-var withHovering = require('../utils/withHovering.cjs');
-var utils = require('../utils/utils.cjs');
 
 const MenuItem = /*#__PURE__*/withHovering.withHovering('MenuItem', function MenuItem({
   className,
