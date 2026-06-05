@@ -1,4 +1,3 @@
-/* eslint-disable react/no-unescaped-entities, react/jsx-key */
 import Link from 'next/link';
 import {
   menuContainerSelector,

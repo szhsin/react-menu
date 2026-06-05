@@ -1,4 +1,3 @@
-/* eslint-disable react/no-unescaped-entities */
 import Link from 'next/link';
 import { LibName } from '../components/LibName';
 import { ExternalLink } from '../components/ExternalLink';
