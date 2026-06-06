@@ -7,7 +7,7 @@
 [![NPM](https://img.shields.io/npm/v/@szhsin/react-menu.svg)](https://www.npmjs.com/package/@szhsin/react-menu)
 [![NPM](https://img.shields.io/npm/dm/@szhsin/react-menu)](https://www.npmjs.com/package/@szhsin/react-menu)
 [![bundlephobia](https://img.shields.io/bundlephobia/minzip/@szhsin/react-menu)](https://bundlephobia.com/package/@szhsin/react-menu)
-[![Known Vulnerabilities](https://snyk.io/test/github/szhsin/react-menu/badge.svg)](https://snyk.io/test/github/szhsin/react-menu)
+[![Snyk Vulnerability Badge](https://snyk.io/test/github/szhsin/react-menu/badge.svg)](https://snyk.io/test/github/szhsin/react-menu)
 
 ## Features
 

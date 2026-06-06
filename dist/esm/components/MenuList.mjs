@@ -255,7 +255,7 @@ const MenuList = ({
     }) => {
       if (targetList.indexOf(target) < 0) {
         targetList.push(target);
-      } else {
+      } else if (target.offsetWidth && target.offsetHeight) {
         flushSync(() => {
           handlePosition();
           forceReposSubmenu();
