@@ -4,7 +4,6 @@ import eslint from '@eslint/js';
 import globals from 'globals';
 import prettier from 'eslint-config-prettier';
 import jest from 'eslint-plugin-jest';
-import react from 'eslint-plugin-react';
 import reactHooks from 'eslint-plugin-react-hooks';
 import reactHooksAddons from 'eslint-plugin-react-hooks-addons';
 
@@ -13,8 +12,6 @@ export default [
   prettier,
   jest.configs['flat/recommended'],
   jest.configs['flat/style'],
-  react.configs.flat.recommended,
-  react.configs.flat['jsx-runtime'],
   reactHooksAddons.configs.recommended,
   {
     ignores: [
@@ -42,11 +39,6 @@ export default [
         ...globals.jest
       }
     },
-    settings: {
-      react: {
-        version: 'detect'
-      }
-    },
     plugins: {
       'react-hooks': reactHooks
     },
@@ -64,7 +56,6 @@ export default [
           assertFunctionNames: ['expect', 'utils.expect*']
         }
       ],
-      'react/prop-types': 0,
       'react-hooks/rules-of-hooks': 'error',
       'react-hooks/exhaustive-deps': 'error',
       'react-hooks-addons/no-unused-deps': 'error'
