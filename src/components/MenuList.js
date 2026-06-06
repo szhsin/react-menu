@@ -309,7 +309,7 @@ export const MenuList = ({
           // ResizeObserver callback fires on initial observe call,
           // use this workaround to skip the first callback
           targetList.push(target);
-        } else {
+        } else if (target.offsetWidth && target.offsetHeight) {
           flushSync(() => {
             handlePosition();
             forceReposSubmenu();
