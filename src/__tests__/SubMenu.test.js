@@ -293,6 +293,38 @@ test('openTrigger is "none"', async () => {
   utils.expectMenuToBeInTheDocument(false, submenuOptions);
 });
 
+test.each([false, true])(
+  'Disabling an open submenu closes it (transition=%s)',
+  async (transition) => {
+    const onClick = jest.fn();
+    const menu = (disabled) => (
+      <Menu menuButton={<MenuButton>Menu</MenuButton>} transition={transition}>
+        <SubMenu label="Submenu" disabled={disabled}>
+          <MenuItem onClick={onClick}>Action</MenuItem>
+        </SubMenu>
+        <MenuItem>Sibling</MenuItem>
+      </Menu>
+    );
+    const { rerender } = render(menu(false));
+    utils.clickMenuButton();
+    fireEvent.click(screen.getByRole('menuitem', { name: 'Submenu' }));
+    await waitFor(() => utils.expectMenuToHaveFocus({ name: 'Submenu' }));
+
+    rerender(menu(true));
+    expect(screen.getByRole('menuitem', { name: 'Submenu' })).toHaveAttribute(
+      'aria-expanded',
+      'false'
+    );
+    expect(screen.queryByRole('menuitem', { name: 'Action' })).not.toBeInTheDocument();
+    expect(screen.getByRole('menuitem', { name: 'Sibling' })).toBeInTheDocument();
+
+    rerender(menu(false));
+    fireEvent.click(screen.getByRole('menuitem', { name: 'Submenu' }));
+    fireEvent.click(screen.getByRole('menuitem', { name: 'Action' }));
+    expect(onClick).toHaveBeenCalledTimes(1);
+  }
+);
+
 test('Submenu is disabled', () => {
   const { container } = renderMenu(null, null, { disabled: true });
   utils.clickMenuButton();

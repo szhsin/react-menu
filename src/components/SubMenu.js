@@ -56,7 +56,7 @@ export const SubMenu = withHovering(
     const [mouseOver, mouseOverStart, mouseOverEnd] = useMouseOver(isHovering);
     const { state } = stateProps;
     const isDisabled = !!disabled;
-    const isOpen = isMenuOpen(state);
+    const isOpen = !isDisabled && isMenuOpen(state);
     const containerRef = useRef(null);
     const [timerId] = useState({ v: 0 });
 
@@ -149,12 +149,12 @@ export const SubMenu = withHovering(
     useEffect(() => {
       // Don't set focus when parent menu is closed, otherwise focus will be lost
       // and onBlur event will be fired with relatedTarget setting as null.
-      if (isHovering && isParentOpen) {
+      if (!isDisabled && isHovering && isParentOpen) {
         itemRef.current.focus();
       } else {
         toggleMenu(false);
       }
-    }, [isHovering, isParentOpen, toggleMenu, itemRef]);
+    }, [isDisabled, isHovering, isParentOpen, toggleMenu, itemRef]);
 
     useImperativeHandle(instanceRef, () => ({
       openMenu: (...args) => {
@@ -238,7 +238,7 @@ export const SubMenu = withHovering(
           {useMemo(() => safeCall(label, modifiers), [label, modifiers])}
         </div>
 
-        {state && getMenuList()}
+        {state && !isDisabled && getMenuList()}
       </li>
     );
   }
